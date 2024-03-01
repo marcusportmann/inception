@@ -1,0 +1,81 @@
+<form [formGroup]="errorReportForm" autocomplete="off" class="d-flex flex-column flex-fill">
+  <mat-card class="flex flex-column flex-auto">
+    <mat-card-content class="d-flex flex-column flex-fill">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_id">ID</mat-label>
+            <input type="text" matInput formControlName="id">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_created">Created</mat-label>
+            <input type="text" matInput formControlName="created">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_who">Who</mat-label>
+            <input type="text" matInput formControlName="who">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_device_id">Device ID</mat-label>
+            <input type="text" matInput formControlName="deviceId">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_application_id">Application ID</mat-label>
+            <input type="text" matInput formControlName="applicationId">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_application_version">Application Version</mat-label>
+            <input type="text" matInput formControlName="applicationVersion">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_description">Description</mat-label>
+            <input type="text" matInput formControlName="description">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_detail">Detail</mat-label>
+            <textarea rows="5"  matInput formControlName="detail"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@error_error_report_component_label_feedback">Feedback</mat-label>
+            <textarea rows="5"  matInput formControlName="feedback"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button type="button" mat-flat-button color="primary" (click)="ok()" i18n="@@error_error_report_component_button_ok">OK</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

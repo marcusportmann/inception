@@ -1,0 +1,62 @@
+<mat-card class="flex flex-column flex-auto">
+  <div class="mat-mdc-table-header">
+    <button mat-flat-button color="primary" (click)="newPolicy()" i18n="@@security_policies_component_button_new">New</button>
+    <table-filter></table-filter>
+  </div>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_policies_component_table_header_id">ID</mat-header-cell>
+      <mat-cell *matCellDef="let row"><span class="ellipsis">{{row.id}}</span></mat-cell>
+    </ng-container>
+
+    <!-- Version Column -->
+    <ng-container matColumnDef="version">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_policies_component_table_header_version">Version</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.version}}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell class="d-none d-md-flex" *matHeaderCellDef mat-sort-header i18n="@@security_policies_component_table_header_name">Name</mat-header-cell>
+      <mat-cell class="d-none d-md-flex" *matCellDef="let row">{{row.name}}</mat-cell>
+    </ng-container>
+
+    <!-- Type Column -->
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_policies_component_table_header_type">Type</mat-header-cell>
+      <mat-cell *matCellDef="let row"><span class="ellipsis">{{getPolicyTypeName(row.type)}}</span></mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@security_policies_component_table_header_actions">Actions</mat-header-cell>
+      <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row">
+        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{policyId: row.id}">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="dataSource.total$ | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+
+  <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
+    <ng-template matMenuContent let-policyId="policyId">
+      <button mat-menu-item (click)="editPolicy(policyId)">
+        <i class="fas fa-edit"></i>
+        <span i18n="@@security_policies_component_menu_item_edit">Edit</span>
+      </button>
+      <button mat-menu-item (click)="deletePolicy(policyId)">
+        <i class="far fa-trash-alt"></i>
+        <span i18n="@@security_policies_component_menu_item_delete">Delete</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+</mat-card>

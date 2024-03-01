@@ -1,0 +1,15 @@
+
+inception:
+  resource-server:
+    jwt:
+#      rsa-public-key: classpath:META-INF/jwt-key.pub
+#      secret-key: $R:ru//0a`~@CK9|5{K^{DJczk#IE-=-r|WUh(sfG++TZ*1{j@zy/?6*zx%#1])
+      keys:
+        - id: demo
+          algorithm: RS256
+          location: classpath:META-INF/jwt-key.pub
+        - id: legacy-portal
+          algorithm: HS256
+          data: "$R:ru//0a`~@CK9|5{K^{DJczk#IE-=-r|WUh(sfG++TZ*1{j@zy/?6*zx%#1])"
+
+

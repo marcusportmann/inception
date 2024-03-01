@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://inception.digital/xmlns/pdp/ext"
+  xmlns="http://inception.digital/xmlns/pdp/ext"
+  xmlns:authz-ext="http://authzforce.github.io/xmlns/pdp/ext/3">
+
+  <xs:import namespace="http://authzforce.github.io/xmlns/pdp/ext/3"></xs:import>
+
+  <xs:annotation>
+    <xs:documentation xml:lang="en">
+      Import here the schema(s) of any XSD-defined PDP extension that you want to use in a PDP
+      configuration: attribute finders, policy finders, etc. Indicate only the namespace here and
+      use the XML catalog to resolve the schema location.
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:complexType name="PolicyDecisionPointPolicyProvider">
+    <xs:complexContent>
+      <xs:extension base="authz-ext:AbstractPolicyProvider">
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="policyLocation" type="xs:anyURI">
+            <xs:annotation>
+              <xs:documentation>
+                <p>
+                  Location of the XML file that is expected to contain the Policy or PolicySet
+                  element to be referenced by a Policy(Set)IdReference in the root PolicySet loaded
+                  by a root policy Provider. The location may also be a file pattern in the form
+                  <i>file://DIRECTORY_PATH/*SUFFIX</i>
+                  or
+                  <i>file://DIRECTORY_PATH/**...*SUFFIX</i>
+                  , etc. (arbitrarily long sequence of wildcard characters) in which case the
+                  location is expanded to all regular files in the directory located at
+                  <i>DIRECTORY_PATH</i>
+                  with suffix
+                  <i>SUFFIX</i>
+                  , not crossing directory boundaries if using a single wildcard; but crossing
+                  directory boundaries if using more than a single wildcard (there may not be a
+                  SUFFIX; in other words, SUFFIX may be an empty string). The number of wildcards in
+                  the sequence
+                  <i>**....*</i>
+                  defines the maximum number of directory levels to search.
+                </p>
+                <p>
+                  In the location, you may use placeholders enclosed between
+                  <i>${</i>
+                  and
+                  <i>}</i>
+                  for the following properties:
+                </p>
+                <ul>
+                  <li>
+                    The global property
+                    <i>PARENT_DIR</i>
+                    for defining - in a generic way - a path relative to the parent directory to the
+                    XML file where this is used;
+                  </li>
+                  <li>Java system properties;</li>
+                  <li>System environment variables.</li>
+                </ul>
+                <p>
+                  You may use
+                  <i>!</i>
+                  (exclamation mark) as a separating character between the placeholder property name
+                  and a default value that is used if the property is undefined.
+                  E.g.
+                  <i>${PARENT_DIR!/home/foo/conf}</i>
+                  will be replaced with <i>/home/foo/conf</i> if
+                  <i>PARENT_DIR</i>
+                  is undefined.
+                </p>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

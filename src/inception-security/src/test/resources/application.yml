@@ -1,0 +1,14 @@
+inception:
+  debug:
+    enabled: true
+
+  security:
+    jwt:
+      rsa-key-id: inception-test
+      rsa-private-key: classpath:META-INF/jwt-key
+      rsa-public-key: classpath:META-INF/jwt-key.pub
+    policy-data-store-type: internal
+
+spring:
+  application:
+    name: inception-test

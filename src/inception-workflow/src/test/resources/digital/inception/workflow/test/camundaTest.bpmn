@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q4aoq2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.17.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:process id="camundaTest" name="Camunda Test" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="startEvent">
+      <bpmn:outgoing>Flow_01sp0io</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="endEvent">
+      <bpmn:incoming>Flow_0qhvlix</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="testUserTask" name="Test User Task" camunda:candidateUsers="Test User" camunda:candidateGroups="Test Group">
+      <bpmn:incoming>Flow_0tejivb</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qhvlix</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0qhvlix" sourceRef="testUserTask" targetRef="endEvent" />
+    <bpmn:sequenceFlow id="Flow_0tejivb" sourceRef="testScriptTask" targetRef="testUserTask" />
+    <bpmn:sequenceFlow id="Flow_01sp0io" sourceRef="startEvent" targetRef="testScriptTask" />
+    <bpmn:scriptTask id="testScriptTask" name="Test Script Task" scriptFormat="Groovy">
+      <bpmn:incoming>Flow_01sp0io</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tejivb</bpmn:outgoing>
+      <bpmn:script>System.out.println("Hello World!");</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="camundaTest">
+      <bpmndi:BPMNShape id="Event_0lxntah_di" bpmnElement="endEvent">
+        <dc:Bounds x="662" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1uaama9_di" bpmnElement="testUserTask">
+        <dc:Bounds x="440" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="startEvent">
+        <dc:Bounds x="179" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1oynadc_di" bpmnElement="testScriptTask">
+        <dc:Bounds x="280" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0qhvlix_di" bpmnElement="Flow_0qhvlix">
+        <di:waypoint x="540" y="120" />
+        <di:waypoint x="662" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tejivb_di" bpmnElement="Flow_0tejivb">
+        <di:waypoint x="380" y="120" />
+        <di:waypoint x="440" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01sp0io_di" bpmnElement="Flow_01sp0io">
+        <di:waypoint x="215" y="120" />
+        <di:waypoint x="280" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

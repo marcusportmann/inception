@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>inception-demo-client</artifactId>
+  <name>inception-demo-client</name>
+
+  <parent>
+    <groupId>digital.inception</groupId>
+    <artifactId>inception-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <dependencies>
+    <!-- Inception Dependencies -->
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-json</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-ws</artifactId>
+    </dependency>
+
+    <!-- Dependencies -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+      <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-codes-service-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>${basedir}/src/main/resources/META-INF/wsdl/CodesService.wsdl</wsdl>
+                  <bindingFiles>
+                    <bindingFile>${basedir}/src/main/resources/META-INF/wsdl/inception-bindings.xjb</bindingFile>
+                  </bindingFiles>
+                  <extraargs>
+                    <extraarg>-xjc-Xxew</extraarg>
+                    <extraarg>-xjc-Xxew:instantiate lazy</extraarg>
+                    <extraarg>-xjc-Xxew:plural</extraarg>
+                  </extraargs>
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.jaxb-xew-plugin</groupId>
+            <artifactId>jaxb-xew-plugin</artifactId>
+            <version>${jaxb-xew-plugin.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <!-- Generate the Demo API and Reference API client libraries -->
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-demo-api-sources</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/META-INF/swagger/DemoAPI.json</inputSpec>
+              <output>${project.build.directory}/generated-sources/swagger/demo</output>
+              <configOptions>
+                <groupId>digital.inception</groupId>
+                <artifactId>inception-demo-api-client</artifactId>
+                <artifactVersion>1.0.0-SNAPSHOT</artifactVersion>
+                <artifactDescription>Inception Demo API Client</artifactDescription>
+
+                <dateLibrary>java8</dateLibrary>
+                <interfaceOnly>true</interfaceOnly>
+                <notNullJacksonAnnotation>true</notNullJacksonAnnotation>
+                <serializableModel>true</serializableModel>
+                <sourceFolder>src/main/java</sourceFolder>
+                <useBeanValidation>true</useBeanValidation>
+                <useJakartaEe>true</useJakartaEe>
+                <useSpringBoot3>true</useSpringBoot3>
+                <useTags>true</useTags>
+              </configOptions>
+              <generateApiDocumentation>true</generateApiDocumentation>
+              <generateApiTests>false</generateApiTests>
+              <generateModelTests>false</generateModelTests>
+              <generateModelDocumentation>true</generateModelDocumentation>
+              <generatorName>java</generatorName>
+              <library>resttemplate</library>
+
+              <apiPackage>digital.inception.demo.api</apiPackage>
+              <invokerPackage>digital.inception.demo.invoker</invokerPackage>
+              <modelPackage>digital.inception.demo.model</modelPackage>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-reference-api-sources</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/META-INF/swagger/ReferenceAPI.json</inputSpec>
+              <output>${project.build.directory}/generated-sources/swagger/reference</output>
+              <configOptions>
+                <groupId>digital.inception</groupId>
+                <artifactId>inception-reference-api-client</artifactId>
+                <artifactVersion>1.0.0-SNAPSHOT</artifactVersion>
+                <artifactDescription>Inception Reference API Client</artifactDescription>
+
+                <dateLibrary>java8</dateLibrary>
+                <interfaceOnly>true</interfaceOnly>
+                <notNullJacksonAnnotation>true</notNullJacksonAnnotation>
+                <serializableModel>true</serializableModel>
+                <sourceFolder>src/main/java</sourceFolder>
+                <useBeanValidation>true</useBeanValidation>
+                <useJakartaEe>true</useJakartaEe>
+                <useSpringBoot3>true</useSpringBoot3>
+                <useTags>true</useTags>
+              </configOptions>
+              <generateApiDocumentation>true</generateApiDocumentation>
+              <generateApiTests>false</generateApiTests>
+              <generateModelTests>false</generateModelTests>
+              <generateModelDocumentation>true</generateModelDocumentation>
+              <generatorName>java</generatorName>
+              <library>resttemplate</library>
+
+              <apiPackage>digital.inception.reference.api</apiPackage>
+              <invokerPackage>digital.inception.reference.invoker</invokerPackage>
+              <modelPackage>digital.inception.reference.model</modelPackage>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+

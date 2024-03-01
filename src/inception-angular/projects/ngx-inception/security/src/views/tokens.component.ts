@@ -1,0 +1,259 @@
+/*
+ * Copyright Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSelect} from '@angular/material/select';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
+  InvalidArgumentError, ServiceUnavailableError, SortDirection, SpinnerService, TableFilterComponent
+} from 'ngx-inception/core';
+import {merge, Subscription} from 'rxjs';
+import {finalize, first} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {TokenStatus} from '../services/token-status';
+import {TokenSummary} from '../services/token-summary';
+import {TokenSummaryDatasource} from '../services/token-summary.datasource';
+import {TokenType} from '../services/token-type';
+
+/**
+ * The TokensComponent class implements the tokens component.
+ *
+ * @author Marcus Portmann
+ */
+@Component({
+  templateUrl: 'tokens.component.html',
+  styleUrls: ['tokens.component.css']
+})
+export class TokensComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+
+  dataSource: TokenSummaryDatasource;
+
+  displayedColumns = ['name', 'type', 'status', 'actions'];
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
+
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
+
+  @ViewChild('tokenStatusSelect', {static: true}) tokenStatusSelect!: MatSelect;
+
+  protected readonly TokenStatus = TokenStatus;
+
+  protected readonly TokenType = TokenType;
+
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private securityService: SecurityService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
+    super();
+
+    this.dataSource = new TokenSummaryDatasource(this.securityService);
+  }
+
+  get title(): string {
+    return $localize`:@@security_tokens_title:Tokens`
+  }
+
+  deleteToken(tokenId: string): void {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {
+        message: $localize`:@@security_tokens_confirm_delete_token:Are you sure you want to delete the token?`
+      });
+
+    dialogRef.afterClosed()
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
+
+        this.securityService.deleteToken(tokenId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadTokenSummaries();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
+  }
+
+  getTokenStatusName(tokenSummary: TokenSummary): string {
+    switch (tokenSummary.status) {
+      case TokenStatus.Active:
+        return $localize`:@@security_token_status_active:Active`;
+      case TokenStatus.Expired:
+        return $localize`:@@security_token_status_expired:Expired`;
+      case TokenStatus.Revoked:
+        return $localize`:@@security_token_status_revoked:Revoked`;
+      case TokenStatus.Pending:
+        return $localize`:@@security_token_status_pending:Pending`;
+      default:
+        return $localize`:@@security_token_status_unknown:Unknown`;
+    }
+  }
+
+  getTokenTypeName(tokenType: TokenType): string {
+    if (tokenType == TokenType.JWT) {
+      return $localize`:@@security_token_type_jwt:JWT`;
+    } else {
+      return $localize`:@@security_token_type_unknown:Unknown`;
+    }
+  }
+
+  loadTokenSummaries(): void {
+    let filter = '';
+
+    if (!!this.tableFilter.filter) {
+      filter = this.tableFilter.filter;
+      filter = filter.trim();
+      filter = filter.toLowerCase();
+    }
+
+    const sortDirection = this.sort.direction === 'asc' ? SortDirection.Ascending :
+      SortDirection.Descending;
+
+    this.dataSource.load(this.tokenStatusSelect.value as TokenStatus, filter, sortDirection,
+      this.paginator.pageIndex, this.paginator.pageSize);
+  }
+
+  newToken(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
+  }
+
+  ngAfterViewInit(): void {
+    this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
+      if (next) {
+        this.spinnerService.showSpinner();
+      } else {
+        this.spinnerService.hideSpinner();
+      }
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    }));
+
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+    }));
+
+    this.subscriptions.add(this.tableFilter.changed.subscribe(() => {
+      this.paginator.pageIndex = 0;
+    }));
+
+    this.subscriptions.add(
+      merge(this.sort.sortChange, this.tokenStatusSelect.selectionChange, this.tableFilter.changed,
+        this.paginator.page)
+      .subscribe(() => {
+        this.loadTokenSummaries();
+      }));
+
+    this.loadTokenSummaries();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  reinstateToken(tokenId: string): void {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {
+        message: $localize`:@@security_tokens_confirm_reinstate_token:Are you sure you want to reinstate the token?`
+      });
+
+    dialogRef.afterClosed()
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
+
+        this.securityService.reinstateToken(tokenId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadTokenSummaries();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
+  }
+
+  reissueToken(tokenId: string): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['reissue/' + encodeURIComponent(tokenId)],
+      {relativeTo: this.activatedRoute});
+  }
+
+  revokeToken(tokenId: string): void {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {
+        message: $localize`:@@security_tokens_confirm_revoke_token:Are you sure you want to revoke the token?`
+      });
+
+    dialogRef.afterClosed()
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
+
+        this.securityService.revokeToken(tokenId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadTokenSummaries();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
+  }
+
+  viewToken(tokenId: string): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate([encodeURIComponent(tokenId) + '/view'],
+      {relativeTo: this.activatedRoute});
+  }
+}

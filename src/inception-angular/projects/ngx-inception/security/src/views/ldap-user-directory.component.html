@@ -1,0 +1,327 @@
+<ng-container [formGroup]="ldapUserDirectoryForm">
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_host">Host</mat-label>
+        <input type="text" matInput formControlName="host">
+        <mat-error *ngIf="hostControl.errors && !hostControl.untouched">
+          <span *ngIf="hostControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_host_required">The host is required.</span>
+          <span *ngIf="hostControl.errors?.['maxlength']" i18n="@@security_edit_user_directory_component_error_name_maxlength">Host must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_port">Port</mat-label>
+        <input type="text" matInput formControlName="port">
+        <mat-error *ngIf="portControl.errors && !portControl.untouched">
+          <span *ngIf="portControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_port_required">The port is required.</span>
+          <span *ngIf="portControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_port_pattern">A valid number is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_use_ssl">Use SSL</mat-label>
+        <input type="text" matInput formControlName="useSSL">
+        <mat-error *ngIf="useSSLControl.errors && !useSSLControl.untouched">
+          <span *ngIf="useSSLControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_use_ssl_required">Select whether to use SSL.</span>
+          <span *ngIf="useSSLControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_use_ssl_pattern">Must be true or false.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_bind_dn">Bind DN</mat-label>
+        <input type="text" matInput formControlName="bindDN">
+        <mat-error *ngIf="bindDNControl.errors && !bindDNControl.untouched">
+          <span *ngIf="bindDNControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_bind_dn_required">The bind DN is required.</span>
+          <span *ngIf="bindDNControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_bind_dn_maxlength">Bind DN must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_bind_password">Bind Password</mat-label>
+        <input type="text" matInput formControlName="bindPassword">
+        <mat-error *ngIf="bindPasswordControl.errors && !bindPasswordControl.untouched">
+          <span *ngIf="bindPasswordControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_bind_password_required">The bind password is required.</span>
+          <span *ngIf="bindPasswordControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_bind_password_maxlength">Bind password must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_base_dn">Base DN</mat-label>
+        <input type="text" matInput formControlName="baseDN">
+        <mat-error *ngIf="baseDNControl.errors && !baseDNControl.untouched">
+          <span *ngIf="baseDNControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_base_dn_required">The base DN is required.</span>
+          <span *ngIf="baseDNControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_base_dn_maxlength">Base DN must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_base_dn">User Base DN</mat-label>
+        <input type="text" matInput formControlName="userBaseDN">
+        <mat-error *ngIf="userBaseDNControl.errors && !userBaseDNControl.untouched">
+          <span *ngIf="userBaseDNControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_base_dn_required">The user base DN is required.</span>
+          <span *ngIf="userBaseDNControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_base_dn_maxlength">User base DN must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_group_base_dn">Group Base DN</mat-label>
+        <input type="text" matInput formControlName="groupBaseDN">
+        <mat-error *ngIf="groupBaseDNControl.errors && !groupBaseDNControl.untouched">
+          <span *ngIf="groupBaseDNControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_group_base_dn_required">The group base DN is required.</span>
+          <span *ngIf="groupBaseDNControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_group_base_dn_maxlength">Group base DN must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_object_class">User Object Class</mat-label>
+        <input type="text" matInput formControlName="userObjectClass">
+        <mat-error *ngIf="userObjectClassControl.errors && !userObjectClassControl.untouched">
+          <span *ngIf="userObjectClassControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_object_class_required">The user object class is required.</span>
+          <span *ngIf="userObjectClassControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_object_class_maxlength">User object class must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_username_attribute">User Username Attribute</mat-label>
+        <input type="text" matInput formControlName="userUsernameAttribute">
+        <mat-error *ngIf="userUsernameAttributeControl.errors && !userUsernameAttributeControl.untouched">
+          <span *ngIf="userUsernameAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_username_attribute_required">The user username userAttribute is required.</span>
+          <span *ngIf="userUsernameAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_username_attribute_maxlength">User username userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_name_attribute">User Name Attribute</mat-label>
+        <input type="text" matInput formControlName="userNameAttribute">
+        <mat-error *ngIf="userNameAttributeControl.errors && !userNameAttributeControl.untouched">
+          <span *ngIf="userNameAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_name_attribute_required">The user name userAttribute is required.</span>
+          <span *ngIf="userNameAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_name_attribute_maxlength">User name userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_preferred_name_attribute">User Preferred Name Attribute</mat-label>
+        <input type="text" matInput formControlName="userPreferredNameAttribute">
+        <mat-error *ngIf="userPreferredNameAttributeControl.errors && !userPreferredNameAttributeControl.untouched">
+          <span *ngIf="userPreferredNameAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_preferred_name_attribute_required">The user preferred name userAttribute is required.</span>
+          <span *ngIf="userPreferredNameAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_preferred_name_attribute_maxlength">User preferred name userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_phone_number_attribute">User Phone Number Attribute</mat-label>
+        <input type="text" matInput formControlName="userPhoneNumberAttribute">
+        <mat-error *ngIf="userPhoneNumberAttributeControl.errors && !userPhoneNumberAttributeControl.untouched">
+          <span *ngIf="userPhoneNumberAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_phone_number_attribute_required">The user phone number userAttribute is required.</span>
+          <span *ngIf="userPhoneNumberAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_phone_number_attribute_maxlength">User phone number userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_mobile_number_attribute">User Mobile Number Attribute</mat-label>
+        <input type="text" matInput formControlName="userMobileNumberAttribute">
+        <mat-error *ngIf="userMobileNumberAttributeControl.errors && !userMobileNumberAttributeControl.untouched">
+          <span *ngIf="userMobileNumberAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_mobile_number_attribute_required">The user mobile number userAttribute is required.</span>
+          <span *ngIf="userMobileNumberAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_mobile_number_attribute_maxlength">User mobile number userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_email_attribute">User E-mail Attribute</mat-label>
+        <input type="text" matInput formControlName="userEmailAttribute">
+        <mat-error *ngIf="userEmailAttributeControl.errors && !userEmailAttributeControl.untouched">
+          <span *ngIf="userEmailAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_user_email_attribute_required">The user e-mail userAttribute is required.</span>
+          <span *ngIf="userEmailAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_user_email_attribute_maxlength">User e-mail userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_group_object_class">Group Object Class</mat-label>
+        <input type="text" matInput formControlName="groupObjectClass">
+        <mat-error *ngIf="groupObjectClassControl.errors && !groupObjectClassControl.untouched">
+          <span *ngIf="groupObjectClassControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_group_object_class_required">The group object class is required.</span>
+          <span *ngIf="groupObjectClassControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_group_object_class_maxlength">Group object class must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_group_name_attribute">Group Name Attribute</mat-label>
+        <input type="text" matInput formControlName="groupNameAttribute">
+        <mat-error *ngIf="groupNameAttributeControl.errors && !groupNameAttributeControl.untouched">
+          <span *ngIf="groupNameAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_group_name_attribute_required">The group name userAttribute is required.</span>
+          <span *ngIf="groupNameAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_group_name_attribute_maxlength">Group name userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_group_member_attribute">Group Member Attribute</mat-label>
+        <input type="text" matInput formControlName="groupMemberAttribute">
+        <mat-error *ngIf="groupMemberAttributeControl.errors && !groupMemberAttributeControl.untouched">
+          <span *ngIf="groupMemberAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_group_member_attribute_required">The group member userAttribute is required.</span>
+          <span *ngIf="groupMemberAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_group_member_attribute_maxlength">Group member userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_group_description_attribute">Group Description Attribute</mat-label>
+        <input type="text" matInput formControlName="groupDescriptionAttribute">
+        <mat-error *ngIf="groupDescriptionAttributeControl.errors && !groupDescriptionAttributeControl.untouched">
+          <span *ngIf="groupDescriptionAttributeControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_group_description_attribute_required">The group description userAttribute is required.</span>
+          <span *ngIf="groupDescriptionAttributeControl.errors?.['maxlength']" i18n="@@security_ldap_user_directory_component_error_group_description_attribute_maxlength">Group description userAttribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_max_filtered_users">Max Filtered Users</mat-label>
+        <input type="text" matInput formControlName="maxFilteredUsers">
+        <mat-error *ngIf="maxFilteredUsersControl.errors && !maxFilteredUsersControl.untouched">
+          <span *ngIf="maxFilteredUsersControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_max_filtered_users_required">The max filtered users is required.</span>
+          <span *ngIf="maxFilteredUsersControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_max_filtered_users_pattern">A valid number is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_max_filtered_groups">Max Filtered Groups</mat-label>
+        <input type="text" matInput formControlName="maxFilteredGroups">
+        <mat-error *ngIf="maxFilteredGroupsControl.errors && !maxFilteredGroupsControl.untouched">
+          <span *ngIf="maxFilteredGroupsControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_max_filtered_groups_required">The max filtered groups is required.</span>
+          <span *ngIf="maxFilteredGroupsControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_max_filtered_groups_pattern">A valid number is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_max_filtered_group_members">Max Filtered Group Members</mat-label>
+        <input type="text" matInput formControlName="maxFilteredGroupMembers">
+        <mat-error *ngIf="maxFilteredGroupMembersControl.errors && !maxFilteredGroupMembersControl.untouched">
+          <span *ngIf="maxFilteredGroupMembersControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_max_filtered_group_members_required">The max filtered group members is required.</span>
+          <span *ngIf="maxFilteredGroupMembersControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_max_filtered_group_members_pattern">A valid number is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_supports_admin_change_password">Supports Admin Change Password</mat-label>
+        <input type="text" matInput formControlName="supportsAdminChangePassword">
+        <mat-error *ngIf="supportsAdminChangePasswordControl.errors && !supportsAdminChangePasswordControl.untouched">
+          <span *ngIf="supportsAdminChangePasswordControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_supports_admin_change_password_required">A true or false value is required.</span>
+          <span *ngIf="supportsAdminChangePasswordControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_supports_admin_change_password_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_supports_change_password">Supports Change Password</mat-label>
+        <input type="text" matInput formControlName="supportsChangePassword">
+        <mat-error *ngIf="supportsChangePasswordControl.errors && !supportsChangePasswordControl.untouched">
+          <span *ngIf="supportsChangePasswordControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_supports_change_password_required">A true or false value is required.</span>
+          <span *ngIf="supportsChangePasswordControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_supports_change_password_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_supports_group_administration">Supports Group Administration</mat-label>
+        <input type="text" matInput formControlName="supportsGroupAdministration">
+        <mat-error *ngIf="supportsGroupAdministrationControl.errors && !supportsGroupAdministrationControl.untouched">
+          <span *ngIf="supportsGroupAdministrationControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_supports_group_administration_required">The supports group administration is required.</span>
+          <span *ngIf="supportsGroupAdministrationControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_supports_group_administration_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_support_group_member_administration">Supports Group Member Administration</mat-label>
+        <input type="text" matInput formControlName="supportsGroupMemberAdministration">
+        <mat-error *ngIf="supportsGroupMemberAdministrationControl.errors && !supportsGroupMemberAdministrationControl.untouched">
+          <span *ngIf="supportsGroupMemberAdministrationControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_support_group_member_administration_required">A true or false value is required.</span>
+          <span *ngIf="supportsGroupMemberAdministrationControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_support_group_member_administration_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_supports_user_administration">Supports User Administration</mat-label>
+        <input type="text" matInput formControlName="supportsUserAdministration">
+        <mat-error *ngIf="supportsUserAdministrationControl.errors && !supportsUserAdministrationControl.untouched">
+          <span *ngIf="supportsUserAdministrationControl.errors?.['required']" i18n="@@security_ldap_user_directory_component_error_supports_user_administration_required">A true or false value is required.</span>
+          <span *ngIf="supportsUserAdministrationControl.errors?.['pattern']" i18n="@@security_ldap_user_directory_component_error_supports_user_administration_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</ng-container>

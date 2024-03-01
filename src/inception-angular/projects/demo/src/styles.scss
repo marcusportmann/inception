@@ -1,0 +1,29 @@
+.brand-full {
+  display: inline-block;
+  width: 100px;
+  height: 15px;
+
+  background-image: url("assets/images/demo-logo.png");
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+.brand-minimized {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+
+  background-image: url("assets/images/demo-logo-symbol.png");
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+.logo-login {
+  background-image: url("assets/images/demo-logo.png");
+}
+
+span.copyright-name:before
+{
+  content: "Marcus Portmann";
+}
+

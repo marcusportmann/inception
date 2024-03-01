@@ -1,0 +1,40 @@
+<mat-card class="flex flex-column flex-auto">
+  <div class="mat-mdc-table-header">
+    <table-filter (changed)="applyFilter($event)"></table-filter>
+  </div>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort
+             matSortActive="key" matSortDirection="asc" matSortDisableClear>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <!-- String Value Column -->
+    <ng-container matColumnDef="stringValue">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>String Value</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.stringValue}}</mat-cell>
+    </ng-container>
+
+    <!-- Date Value Column -->
+    <ng-container matColumnDef="dateValue">
+      <mat-header-cell class="d-none d-md-flex" *matHeaderCellDef mat-sort-header>Date Value</mat-header-cell>
+      <mat-cell class="d-none d-md-flex" *matCellDef="let row">{{row.dateValue}}</mat-cell>
+    </ng-container>
+
+    <!-- Integer Value Column -->
+    <ng-container matColumnDef="integerValue">
+      <mat-header-cell class="d-none d-md-flex" *matHeaderCellDef mat-sort-header>Integer Value</mat-header-cell>
+      <mat-cell class="d-none d-md-flex" *matCellDef="let row">{{row.integerValue}}</mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true"
+                 [showFirstLastButtons]="true"></mat-paginator>
+
+</mat-card>

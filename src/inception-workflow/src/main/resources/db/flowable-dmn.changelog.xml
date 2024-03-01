@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <!--
+  Extracted from the following file:
+
+  https://raw.githubusercontent.com/flowable/flowable-engine/flowable-7.0.0/modules/flowable-dmn-engine/src/main/resources/org/flowable/dmn/db/liquibase/flowable-dmn-db-changelog.xml
+
+  -->
+  <changeSet id="flowable-dmn-7.0.0" author="Marcus Portmann">
+    <comment>Flowable - DMN - 7.0.0</comment>
+
+    <createTable tableName="ACT_DMN_DEPLOYMENT">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOY_TIME_" type="datetime">
+        <constraints nullable="true" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="PARENT_DEPLOYMENT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <createTable tableName="ACT_DMN_DEPLOYMENT_RESOURCE">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="RESOURCE_BYTES_" type="${blob_type}">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <createTable tableName="ACT_DMN_DECISION">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="VERSION_" type="int" />
+      <column name="KEY_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="RESOURCE_NAME_" type="nvarchar(255)" />
+      <column name="DESCRIPTION_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DECISION_TYPE_" type="nvarchar(255)" />
+    </createTable>
+
+    <createTable tableName="ACT_DMN_HI_DECISION_EXECUTION">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="DECISION_DEFINITION_ID_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="START_TIME_" type="datetime" />
+      <column name="END_TIME_" type="datetime">
+        <constraints nullable="true" />
+      </column>
+      <column name="INSTANCE_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="EXECUTION_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="ACTIVITY_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="FAILED_" type="boolean" defaultValueBoolean="false" />
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="EXECUTION_JSON_" type="longtext">
+        <constraints nullable="true" />
+      </column>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)" />
+    </createTable>
+
+    <createIndex tableName="ACT_DMN_DECISION" indexName="ACT_IDX_DMN_DEC_UNIQ" unique="true">
+      <column name="KEY_" />
+      <column name="VERSION_" />
+      <column name="TENANT_ID_" />
+    </createIndex>
+
+    <createIndex tableName="ACT_DMN_HI_DECISION_EXECUTION" indexName="ACT_IDX_DMN_INSTANCE_ID">
+      <column name="INSTANCE_ID_" />
+    </createIndex>
+
+    <rollback>
+      <dropIndex tableName="ACT_DMN_HI_DECISION_EXECUTION" indexName="ACT_IDX_DMN_INSTANCE_ID"/>
+      <dropIndex tableName="ACT_DMN_DECISION" indexName="ACT_IDX_DMN_DEC_UNIQ"/>
+
+      <dropTable tableName="ACT_DMN_HI_DECISION_EXECUTION"/>
+
+      <dropTable tableName="ACT_DMN_DECISION"/>
+
+      <dropTable tableName="ACT_DMN_DEPLOYMENT_RESOURCE"/>
+
+      <dropTable tableName="ACT_DMN_DEPLOYMENT"/>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>
+
+
+<!--
+<changeSet id="5" author="flowable" dbms="mysql,mariadb">
+
+<modifyDataType tableName="ACT_DMN_DEPLOYMENT" columnName="DEPLOY_TIME_" newDataType="datetime(3)" />
+<modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="START_TIME_" newDataType="datetime(3)" />
+<modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="END_TIME_" newDataType="datetime(3)" />
+
+</changeSet>
+-->

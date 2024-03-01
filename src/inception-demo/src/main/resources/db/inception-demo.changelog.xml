@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <changeSet id="inception-demo-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Demo - 1.0.0</comment>
+
+    <createTable tableName="data" remarks="Data">
+      <column name="id" type="bigint" remarks="The ID for the data">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="integer_value" type="int" remarks="The integer value for the data"/>
+      <column name="string_value" type="nvarchar(2000)" remarks="The string value for the data"/>
+      <column name="date_value" type="date" remarks="The date value for the data"/>
+      <column name="timestamp_value" type="timestamp with time zone" remarks="The timestamp value for the data"/>
+    </createTable>
+
+    <createTable tableName="vehicles" remarks="Vehicles">
+      <column name="id" type="uuid" remarks="The ID for the vehicle">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the vehicle">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the vehicle type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="vehicles_type_ix"
+      tableName="vehicles">
+      <column name="type"/>
+    </createIndex>
+
+    <createTable tableName="cars" remarks="Cars">
+      <column name="id" type="uuid" remarks="The ID for the car">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="number_of_doors" type="int" remarks="The number of doors for the car">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="cars_vehicle_fk"
+      baseTableName="cars" baseColumnNames="id"
+      referencedTableName="vehicles" referencedColumnNames="id"/>
+
+    <createTable tableName="vehicle_attribute_types" remarks="Vehicle Attribute Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the vehicle attribute type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(50)" remarks="The name of the vehicle attribute type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the vehicle attribute type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="vehicle_attributes" remarks="Vehicle Attributes">
+      <column name="vehicle_id" type="uuid" remarks="The ID for the vehicle the vehicle attribute is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the vehicle attribute type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="value" type="nvarchar(100)" remarks="The value for the vehicle attribute">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="vehicle_attributes_vehicle_fk"
+      baseTableName="vehicle_attributes" baseColumnNames="vehicle_id"
+      referencedTableName="vehicles" referencedColumnNames="id"/>
+    <addForeignKeyConstraint constraintName="vehicle_attributes_vehicle_attribute_type_fk"
+      baseTableName="vehicle_attributes" baseColumnNames="type"
+      referencedTableName="vehicle_attribute_types" referencedColumnNames="code"/>
+
+    <rollback>
+      <dropAllForeignKeyConstraints baseTableName="vehicle_attributes"/>
+      <dropTable tableName="vehicle_attributes"/>
+
+      <dropTable tableName="vehicle_attribute_types"/>
+
+      <dropAllForeignKeyConstraints baseTableName="cars"/>
+      <dropTable tableName="cars"/>
+
+      <dropIndex tableName="vehicles" indexName="vehicles_type_ix"/>
+      <dropTable tableName="vehicles"/>
+
+      <dropTable tableName="data"/>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,76 @@
+<Policy xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17" PolicyId="DemoPolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable" Version="1.0">
+  <Description>Demo Policy</Description>
+  <Target/>
+  <Rule Effect="Permit" RuleId="test-test-pdp-authorization-rule">
+    <Target>
+      <AnyOf>
+        <AllOf>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/api/test/test-pdp-authorization/{pathVariable}/{anotherPathVariable}</AttributeValue>
+            <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+              DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"/>
+          </Match>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">GET</AttributeValue>
+            <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action"
+              DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"/>
+          </Match>
+        </AllOf>
+      </AnyOf>
+    </Target>
+    <Condition>
+      <!-- Both of the nested conditions must be valid -->
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+        <!-- CONDITION 1: The user must have the "ANONYMOUS" role -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-at-least-one-member-of">
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">ANONYMOUS</AttributeValue>
+          </Apply>
+          <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+            Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+            DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="false"/>
+        </Apply>
+        <!-- CONDITION 2: The user must have a "pathVariable" path variable with the value "XXX" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-subset">
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">XXX</AttributeValue>
+          </Apply>
+          <AttributeDesignator AttributeId="pathVariable" Category="urn:inception:xacml:attribute-category:path-variables"
+            DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="false"/>
+        </Apply>
+      </Apply>
+    </Condition>
+  </Rule>
+  <Rule Effect="Permit" RuleId="data-process-rule">
+    <Target>
+      <AnyOf>
+        <AllOf>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/api/data/process</AttributeValue>
+            <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+              DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"/>
+          </Match>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">POST</AttributeValue>
+            <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action"
+              DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"/>
+          </Match>
+        </AllOf>
+      </AnyOf>
+    </Target>
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-subset">
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">ANONYMOUS</AttributeValue>
+        </Apply>
+        <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role" Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+          DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"/>
+      </Apply>
+    </Condition>
+  </Rule>
+  <Rule Effect="Deny" RuleId="deny-rule"/>
+</Policy>

@@ -1,0 +1,100 @@
+.group-form-field {
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        .mat-mdc-radio-group {
+          .mat-mdc-radio-button {
+            .mdc-radio {
+              --mdc-radio-state-layer-size: 20px;
+              padding: 0px 4px 0px 0px;
+            }
+
+            .mdc-label {
+              color: rgba(0, 0, 0, 0.87);
+            }
+          }
+        }
+
+        .mat-mdc-radio-button:not(:last-child) {
+          margin-right: 1rem;
+        }
+
+        .mat-mdc-checkbox {
+          .mdc-checkbox {
+            padding: 0px;
+
+            margin-right: 4px;
+
+            .mdc-checkbox__background {
+              left: 0;
+              top: 0;
+            }
+
+            .mdc-checkbox__native-control {
+              --mdc-checkbox-state-layer-size: 20px;
+            }
+          }
+
+          .mdc-label {
+            padding-left: 4px;
+            color: rgba(0, 0, 0, 0.87);
+          }
+        }
+
+        .mat-mdc-checkbox:not(:last-child) {
+          margin-right: 1rem;
+        }
+      }
+    }
+  }
+
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        padding-top: 28px !important;
+        padding-bottom: 4px !important;
+      }
+    }
+  }
+}
+
+.mat-mdc-form-field {
+  &.mat-form-field-invalid {
+
+    .mdc-notched-outline__leading {
+      border-color: #f44336 !important;
+    }
+
+    .mdc-notched-outline__notch {
+      border-color: #f44336 !important;
+
+      label {
+        color: #f44336 !important;
+      }
+    }
+
+    .mat-mdc-form-field-infix {
+      label {
+        color: #f44336 !important;
+      }
+    }
+
+    .mdc-notched-outline__trailing {
+      border-color: #f44336 !important;
+    }
+
+    .mdc-line-ripple::before {
+      border-bottom-color: #f44336 !important;
+    }
+
+    .mat-mdc-radio-button {
+      .mdc-label {
+        color: #f44336 !important;
+      }
+    }
+  }
+}
+
+
+
+

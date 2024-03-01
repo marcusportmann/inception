@@ -1,0 +1,62 @@
+<mat-card class="flex flex-column flex-auto">
+  <div class="mat-mdc-table-header">
+    <div class="date-range-container">
+      <mat-date-range-input [rangePicker]="dateRangePicker" [dateFilter]="dateRangeFilter">
+        <input matStartDate [formControl]="fromDateControl" (dateChange)="dateRangeChanged()" placeholder="From Date" readonly>
+        <input matEndDate [formControl]="toDateControl" (dateChange)="dateRangeChanged()" placeholder="To Date" readonly>
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="dateRangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #dateRangePicker></mat-date-range-picker>
+    </div>
+    <div class="date-range-container-padding"></div>
+    <table-filter></table-filter>
+  </div>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+
+    <!-- Created Column -->
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@error_error_reports_component_table_header_created">Created</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.created | date:'yyyy-MM-dd HH:mm:ss' }}</mat-cell>
+    </ng-container>
+
+    <!-- Who Column -->
+    <ng-container matColumnDef="who">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@eror_error_reports_component_table_header_who">Who</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.who }}</mat-cell>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <mat-header-cell class="d-none d-md-flex" *matHeaderCellDef mat-sort-header i18n="@@eror_error_reports_component_table_header_description">Description</mat-header-cell>
+      <mat-cell class="d-none d-md-flex" *matCellDef="let row">{{ row.description }}</mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@error_error_reports_component_table_header_actions">Actions</mat-header-cell>
+      <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row">
+        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{errorReportId: row.id}">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+
+  <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
+    <ng-template matMenuContent let-errorReportId="errorReportId">
+      <button mat-menu-item (click)="viewErrorReport(errorReportId)">
+        <i class="fas fa-eye"></i>
+        <span i18n="@@error_error_reports_component_menu_item_view">View</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+</mat-card>
+
+

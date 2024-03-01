@@ -1,0 +1,37 @@
+spring:
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    processor-active-logging-interval: 180000
+    ssl:
+      protocol: TLS
+#      key-store-type: JKS
+#      key-store-location: classpath:key-store.jks
+#      key-store-password: Password1
+#      trust-store-type: JKS
+#      trust-store-location: classpath:trust-store.jks
+#      trust-store-password: Password1
+    security:
+      protocol: SASL_SSL
+    properties:
+      sasl:
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='username' password='password';
+        mechanism: PLAIN
+      linger:
+        ms: 100
+    consumer:
+      auto-commit-interval: 1000
+      commit-failure-pause: 5000
+      critical-error-pause: 30000
+      group-id: test_consumer_group
+      metrics-enabled: true
+      poll-timeout: 30000
+      record-processing-failure-pause: 30000
+
+logging:
+  level:
+    root: INFO
+    org.apache.kafka.clients: INFO
+    digital.inception.kafka: TRACE
+

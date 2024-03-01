@@ -1,0 +1,81 @@
+<mat-card class="flex flex-column flex-auto">
+  <div class="mat-mdc-table-header">
+    <button mat-flat-button color="primary" (click)="newToken()" i18n="@@security_tokens_component_button_new">New</button>
+    <div class="table-header-right-container">
+      <mat-select class="select-align-right-125px" #tokenStatusSelect value="active">
+        <mat-option value="all">All</mat-option>
+        <mat-option value="active">Active</mat-option>
+        <mat-option value="expired">Expired</mat-option>
+        <mat-option value="revoked">Revoked</mat-option>
+        <mat-option value="pending">Pending</mat-option>
+      </mat-select>
+      <table-filter></table-filter>
+    </div>
+  </div>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_tokens_component_table_header_name">Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"><span class="ellipsis">{{row.name}}</span></mat-cell>
+    </ng-container>
+
+    <!-- Type Column -->
+    <ng-container matColumnDef="type">
+      <mat-header-cell class="d-none d-md-flex" *matHeaderCellDef mat-sort-header i18n="@@security_tokens_component_table_header_type">Type</mat-header-cell>
+      <mat-cell class="d-none d-md-flex" *matCellDef="let row">{{getTokenTypeName(row.type)}}</mat-cell>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_tokens_component_table_header_status">Status</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{getTokenStatusName(row)}}</mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@security_tokens_component_table_header_actions">Actions</mat-header-cell>
+      <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row">
+        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{tokenId: row.id, tokenStatus: row.status}">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="dataSource.total$ | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+
+  <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
+    <ng-template matMenuContent let-tokenId="tokenId" let-tokenStatus="tokenStatus">
+      <button mat-menu-item (click)="deleteToken(tokenId)">
+        <i class="far fa-trash-alt"></i>
+        <span i18n="@@security_tokens_component_menu_item_delete">Delete</span>
+      </button>
+      <ng-container *ngIf="tokenStatus === TokenStatus.Revoked">
+        <button mat-menu-item (click)="reinstateToken(tokenId)">
+          <i class="fa-solid fa-lock-open"></i>
+          <span i18n="@@security_tokens_component_menu_item_reinstate">Reinstate</span>
+        </button>
+      </ng-container>
+      <button mat-menu-item (click)="reissueToken(tokenId)">
+        <i class="fa-solid fa-arrow-rotate-right"></i>
+        <span i18n="@@security_tokens_component_menu_item_reissue">Reissue</span>
+      </button>
+      <ng-container *ngIf="tokenStatus !== TokenStatus.Revoked">
+        <button mat-menu-item (click)="revokeToken(tokenId)">
+          <i class="fa-solid fa-ban"></i>
+          <span i18n="@@security_tokens_component_menu_item_revoke">Revoke</span>
+        </button>
+      </ng-container>
+      <button mat-menu-item (click)="viewToken(tokenId)">
+        <i class="fas fa-eye"></i>
+        <span i18n="@@security_tokens_component_menu_item_view">View</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+</mat-card>

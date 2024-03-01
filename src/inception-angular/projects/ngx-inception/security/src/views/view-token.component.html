@@ -1,0 +1,108 @@
+<form autocomplete="off" class="d-flex flex-column flex-fill">
+  <mat-card class="flex flex-column flex-auto">
+    <mat-card-content class="d-flex flex-column flex-fill">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@security_view_token_component_label_id">ID</mat-label>
+            <input type="text" matInput [value]="token?.id" [disabled]="true">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@security_view_token_component_label_name">Name</mat-label>
+            <input type="text" matInput [value]="token?.name" [disabled]="true">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@security_view_token_component_label_type">Type</mat-label>
+            <input type="text" matInput [value]="getTokenTypeName(token?.type)" [disabled]="true">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@security_view_token_component_label_description">Description</mat-label>
+            <input type="text" matInput [value]="token?.description" [disabled]="true">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@security_view_token_component_label_issued">Issued</mat-label>
+            <input type="text" matInput [value]="token?.issued" [disabled]="true">
+          </mat-form-field>
+        </div>
+      </div>
+      <ng-container *ngIf="token?.validFrom">
+        <div class="row">
+          <div class="col-sm">
+            <mat-form-field class="static">
+              <mat-label i18n="@@security_view_token_component_label_valid_from">Valid From</mat-label>
+              <input type="text" matInput [value]="token?.validFrom" [disabled]="true">
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="token?.expires">
+        <div class="row">
+          <div class="col-sm">
+            <mat-form-field class="static">
+              <mat-label i18n="@@security_view_token_component_label_expires">Expires</mat-label>
+              <input type="text" matInput [value]="token?.expires" [disabled]="true">
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="token?.revoked">
+        <div class="row">
+          <div class="col-sm">
+            <mat-form-field class="static">
+              <mat-label i18n="@@security_view_token_component_label_revoked">Revoked</mat-label>
+              <input type="text" matInput [value]="token?.revoked" [disabled]="true">
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@security_view_token_component_label_data">Data</mat-label>
+            <textarea matInput [value]="token?.data" [disabled]="true" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="mat-mdc-nested-table-header">
+            <span class="mat-subtitle-1 mb-0 mt-2">Claims</span>
+          </div>
+          <table class="mat-mdc-nested-table flex-fill">
+            <tr class="mat-mdc-nested-header-row">
+              <th class="mat-mdc-nested-header-cell" i18n="@@security_view_token_component_claims_table_header_name">Name</th>
+              <th class="mat-mdc-nested-header-cell" i18n="@@security_view_token_component_claims_table_header_value">Value</th>
+            </tr>
+            <tr class="mat-mdc-nested-row" *ngFor="let claim of token?.claims; index as index">
+              <td class="mat-mdc-nested-cell">
+                {{claim.name}}
+              </td>
+              <td class="mat-mdc-nested-cell">
+                {{claim.values.join(',')}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button type="button" mat-flat-button color="link" (click)="back()" i18n="@@security_view_token_component_button_back">Back</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
