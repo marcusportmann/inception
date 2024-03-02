@@ -18,8 +18,8 @@ package digital.inception.workflow;
 
 import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
 
 /**

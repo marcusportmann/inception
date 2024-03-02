@@ -75,7 +75,7 @@
         </exclusion>
         <!-- Optional -->
         <exclusion>
-          <groupId>javax.persistence</groupId>
+          <groupId>jakarta.persistence</groupId>
           <artifactId>persistence-api</artifactId>
         </exclusion>
         <!-- Optional -->

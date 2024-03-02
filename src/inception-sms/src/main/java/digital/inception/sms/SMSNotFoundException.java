@@ -14,41 +14,42 @@
  * limitations under the License.
  */
 
-package digital.inception.workflow;
+package digital.inception.sms;
 
 import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
+import java.util.UUID;
 
 /**
- * The <b>ProcessDefinitionNotFoundException</b> exception is thrown to indicate an error condition
- * as a result of a process definition that could not be found.
+ * The <b>SMSNotFoundException</b> exception is thrown to indicate an error condition as a result of
+ * a SMS that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/workflow/process-definition-not-found",
-    title = "The process definition could not be found.",
+    type = "http://inception.digital/problems/sms/sms-not-found",
+    title = "The SMS could not be found.",
     status = 404)
 @WebFault(
-    name = "ProcessDefinitionNotFoundException",
-    targetNamespace = "http://inception.digital/workflow",
+    name = "SMSNotFoundException",
+    targetNamespace = "http://inception.digital/sms",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class ProcessDefinitionNotFoundException extends ServiceException {
+public class SMSNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <b>ProcessDefinitionNotFoundException</b>.
+   * Constructs a new <b>SMSNotFoundException</b>.
    *
-   * @param processDefinitionId the ID for the process definition
+   * @param smsId the ID for the SMS
    */
-  public ProcessDefinitionNotFoundException(String processDefinitionId) {
-    super("The process definition with ID (" + processDefinitionId + ") could not be found");
+  public SMSNotFoundException(UUID smsId) {
+    super("The SMS with ID (" + smsId + ") could not be found");
   }
 }
