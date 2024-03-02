@@ -121,7 +121,7 @@
     <ojdbc11.version>23.3.0.23.09</ojdbc11.version>
     <org.glassfish.jakarta-el.version>4.0.2</org.glassfish.jakarta-el.version>
     <org.glassfish.jaxb>4.0.4</org.glassfish.jaxb>
-    <postgresql.version>42.7.1</postgresql.version>
+    <postgresql.version>42.7.2</postgresql.version>
     <spring-boot.version>3.2.2</spring-boot.version>
     <spring-shell-starter.version>3.2.1</spring-shell-starter.version>
     <springdoc-openapi.version>2.3.0</springdoc-openapi.version>
