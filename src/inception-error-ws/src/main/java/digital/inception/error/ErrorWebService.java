@@ -90,8 +90,8 @@ public class ErrorWebService {
    * Retrieve the error report summaries.
    *
    * @param filter the optional filter to apply to the error report summaries
-   * @param dateFrom the date to retrieve the error report summaries from
-   * @param dateTo the date to retrieve the error report summaries to
+   * @param fromDate the date to retrieve the error report summaries from
+   * @param toDate the date to retrieve the error report summaries to
    * @param sortBy the optional method used to sort the error report summaries e.g. by who submitted
    *     them
    * @param sortDirection the optional sort direction to apply to the error report summaries
@@ -105,10 +105,10 @@ public class ErrorWebService {
   @WebResult(name = "ErrorReportSummaries")
   public ErrorReportSummaries getErrorReportSummaries(
       @WebParam(name = "Filter") @XmlElement String filter,
-      @WebParam(name = "DateFrom") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
-          LocalDate dateFrom,
-      @WebParam(name = "DateTo") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
-          LocalDate dateTo,
+      @WebParam(name = "FromDate") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
+          LocalDate fromDate,
+      @WebParam(name = "ToDate") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
+          LocalDate toDate,
       @WebParam(name = "SortBy") @XmlElement ErrorReportSortBy sortBy,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
@@ -122,6 +122,6 @@ public class ErrorWebService {
     }
 
     return errorService.getErrorReportSummaries(
-        filter, dateFrom, dateTo, sortBy, sortDirection, pageIndex, pageSize);
+        filter, fromDate, toDate, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

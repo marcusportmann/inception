@@ -85,8 +85,8 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    */
   @Query(
       "select new digital.inception.security.RevokedToken(t.id, t.type, t.name, t.issued, "
-          + "t.validFrom, t.expires, t.revoked) from Token t "
-          + "where t.revoked is not null order by t.revoked desc")
+          + "t.validFromDate, t.expiryDate, t.revocationDate) from Token t "
+          + "where t.revocationDate is not null order by t.revocationDate desc")
   List<RevokedToken> getRevokedTokens();
 
   /**
@@ -96,7 +96,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @return the number of tokens reinstated
    */
   @Modifying
-  @Query("update Token t set t.revoked = null where t.id = :tokenId")
+  @Query("update Token t set t.revocationDate = null where t.id = :tokenId")
   int reinstateToken(@Param("tokenId") String tokenId);
 
   /**
@@ -107,6 +107,6 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @return the number of tokens revoked
    */
   @Modifying
-  @Query("update Token t set t.revoked = :revoked where t.id = :tokenId")
+  @Query("update Token t set t.revocationDate = :revoked where t.id = :tokenId")
   int revokeToken(@Param("tokenId") String tokenId, @Param("revoked") LocalDate revoked);
 }

@@ -14,31 +14,24 @@
  * limitations under the License.
  */
 
-import * as moment from 'moment';
 import {map} from 'rxjs/operators';
+import {ISO8601Util} from './iso-8601-util';
 
 function convertStringValuesToTypes(value: any): any {
   if (value) {
     if ((typeof (value) === 'string') && ((value.length == 23) || (value.length == 29))) {
-      let m = moment.parseZone(value, moment.ISO_8601, true);
-
-      if (m.isValid()) {
-        return m.local(true).toDate();
-      } else {
-        return value;
-      }
+      return ISO8601Util.toDate(value);
     } else if (Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
         value[i] = convertStringValuesToTypes(value[i]);
       }
     } else if (typeof (value) === 'object') {
-      Object.entries(value).forEach(
-        ([entryKey, entryValue]) => {
-          if (entryValue) {
-            // @ts-ignore
-            value[entryKey] = convertStringValuesToTypes(entryValue);
-          }
-        });
+      Object.entries(value).forEach(([entryKey, entryValue]) => {
+        if (entryValue) {
+          // @ts-ignore
+          value[entryKey] = convertStringValuesToTypes(entryValue);
+        }
+      });
     }
   }
 
@@ -65,38 +58,3 @@ export function ResponseConverter(target: any, propertyKey: string,
 
   return descriptor;
 }
-
-
-//
-//
-// Object.entries(object).forEach(
-//   ([key, value]) => {
-//     if (value) {
-//       if (Array.isArray(value)) {
-//         value.forEach((item: any) => {
-//           if (typeof (item) === 'string') {
-//             let m = moment.parseZone(value, moment.ISO_8601, true);
-//
-//             if (m.isValid()) {
-//               // @ts-ignore
-//               object[key] = m.toDate();
-//             }
-//           } else if (typeof (value) === 'object') {
-//             convertObject(value);
-//           }
-//         });
-//       } else if (typeof (value) === 'string') {
-//         let m = moment.parseZone(value, moment.ISO_8601, true);
-//
-//         if (m.isValid()) {
-//           // @ts-ignore
-//           object[key] = m.toDate();
-//         }
-//       } else if (typeof (value) === 'object') {
-//         convertObject(value);
-//       }
-//     }
-//   }
-// );
-//
-// return object;

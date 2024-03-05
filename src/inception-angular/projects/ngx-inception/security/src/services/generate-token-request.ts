@@ -35,9 +35,9 @@ export class GenerateTokenRequest {
   description: string | null = null;
 
   /**
-   * The date the token expires.
+   * The ISO 8601 format date value for the date the token expires.
    */
-  expires: Date | null;
+  expiryDate: string | null;
 
   /**
    * The name of the token.
@@ -50,27 +50,27 @@ export class GenerateTokenRequest {
   type: TokenType;
 
   /**
-   * The date the token is valid from.
+   * The ISO 8601 format date value for the date the token is valid from.
    */
-  validFrom: Date | null;
+  validFromDate: string | null;
 
   /**
    * Constructs a new GenerateTokenRequest.
    *
-   * @param type        The token type.
-   * @param name        The name of the token.
-   * @param description The description for the token.
-   * @param claims      The claims for the token.
-   * @param expires     The date the token expires.
-   * @param validFrom   The date the token is valid from.
+   * @param type          The token type.
+   * @param name          The name of the token.
+   * @param description   The description for the token.
+   * @param claims        The claims for the token.
+   * @param expiryDate    The ISO 8601 format date value for the date the token expires.
+   * @param validFromDate The ISO 8601 format date value for the date the token is valid from.
    */
   constructor(type: TokenType, name: string, description: string, claims: TokenClaim[],
-              expires?: Date, validFrom?: Date) {
+              expiryDate?: string, validFromDate?: string) {
     this.type = type;
     this.name = name;
     this.description = description;
     this.claims = claims;
-    this.expires = !!expires ? expires : null;
-    this.validFrom = !!validFrom ? validFrom : null;
+    this.expiryDate = !!expiryDate ? expiryDate : null;
+    this.validFromDate = !!validFromDate ? validFromDate : null;
   }
 }

@@ -17,13 +17,12 @@
     "@angular/forms": ">= 17 < 18",
     "@angular/localize": ">= 17 < 18",
     "@angular/material": ">= 17 < 18",
-    "@angular/material-moment-adapter": ">= 17 < 18",
     "@angular/router": ">= 17 < 18",
     "@auth0/angular-jwt": ">= 5.2 < 6",
     "@fortawesome/fontawesome-free": ">= 6.4 < 7",
-    "moment": ">= 2.29 < 3",
-    "ngx-om-perfect-scrollbar": ">= 16 < 17",
     "es6-template-string": ">= 1 < 2",
+    "date-fns": ">= 3.3 < 4",
+    "ngx-om-perfect-scrollbar": ">= 16 < 17",
     "uuid": ">= 9 < 10"
   },
   "dependencies": {

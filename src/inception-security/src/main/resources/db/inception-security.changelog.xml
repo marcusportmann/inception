@@ -346,9 +346,9 @@
       <column name="issued" type="timestamp with time zone" remarks="The date and time the token was issued">
         <constraints nullable="false"/>
       </column>
-      <column name="valid_from" type="date" remarks="The date the token is valid from"/>
-      <column name="expires" type="date" remarks="The date the token expires"/>
-      <column name="revoked" type="date" remarks="The date the token was revoked"/>
+      <column name="valid_from_date" type="date" remarks="The date the token is valid from"/>
+      <column name="expiry_date" type="date" remarks="The date the token expires"/>
+      <column name="revocation_date" type="date" remarks="The date the token was revoked"/>
       <column name="claims_json" type="clob" remarks="The JSON representation of the claims for the token">
         <constraints nullable="false"/>
       </column>

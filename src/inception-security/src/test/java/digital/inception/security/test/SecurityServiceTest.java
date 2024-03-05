@@ -1457,13 +1457,13 @@ public class SecurityServiceTest {
 
     Token validFromToken = securityService.generateToken(generateValidFromTokenRequest);
 
-    assertNotNull(validFromToken.getValidFrom());
+    assertNotNull(validFromToken.getValidFromDate());
 
     GenerateTokenRequest generateExpiringTokenRequest = getGenerateExpiringTokenRequest();
 
     Token expiringToken = securityService.generateToken(generateExpiringTokenRequest);
 
-    assertNotNull(expiringToken.getExpires());
+    assertNotNull(expiringToken.getExpiryDate());
 
     retrievedTokens = securityService.getTokens();
 
@@ -1473,7 +1473,7 @@ public class SecurityServiceTest {
 
     Token retrievedRevokedToken = securityService.getToken(token.getId());
 
-    assertNotNull(retrievedRevokedToken.getRevoked());
+    assertNotNull(retrievedRevokedToken.getRevocationDate());
 
     List<RevokedToken> revokedTokens = securityService.getRevokedTokens();
 
@@ -1864,17 +1864,17 @@ public class SecurityServiceTest {
         revokedToken.getIssued(),
         "The issued values for the token and revoked token do not match");
     assertEquals(
-        token.getValidFrom(),
-        revokedToken.getValidFrom(),
-        "The valid from values for the token and revoked token do not match");
+        token.getValidFromDate(),
+        revokedToken.getValidFromDate(),
+        "The valid from date values for the token and revoked token do not match");
     assertEquals(
-        token.getExpires(),
-        revokedToken.getExpires(),
-        "The expires values for the token and revoked token do not match");
+        token.getExpiryDate(),
+        revokedToken.getExpiryDate(),
+        "The expiry date values for the token and revoked token do not match");
     assertEquals(
-        token.getRevoked(),
-        revokedToken.getRevoked(),
-        "The revoked values for the token and revoked token do not match");
+        token.getRevocationDate(),
+        revokedToken.getRevocationDate(),
+        "The revocation date values for the token and revoked token do not match");
   }
 
   private void compareTokenToTokenSummary(Token token, TokenSummary tokenSummary) {
@@ -1899,17 +1899,17 @@ public class SecurityServiceTest {
         tokenSummary.getIssued(),
         "The issued values for the token and token summary do not match");
     assertEquals(
-        token.getValidFrom(),
-        tokenSummary.getValidFrom(),
-        "The valid from values for the token and token summary do not match");
+        token.getValidFromDate(),
+        tokenSummary.getValidFromDate(),
+        "The valid from date values for the token and token summary do not match");
     assertEquals(
-        token.getExpires(),
-        tokenSummary.getExpires(),
-        "The expires values for the token and token summary do not match");
+        token.getExpiryDate(),
+        tokenSummary.getExpiryDate(),
+        "The expiry date values for the token and token summary do not match");
     assertEquals(
-        token.getRevoked(),
-        tokenSummary.getRevoked(),
-        "The revoked values for the token and token summary do not match");
+        token.getRevocationDate(),
+        tokenSummary.getRevocationDate(),
+        "The revocation date values for the token and token summary do not match");
   }
 
   private void compareTokens(Token token1, Token token2) {
@@ -1923,13 +1923,17 @@ public class SecurityServiceTest {
     assertEquals(
         token1.getIssued(), token2.getIssued(), "The issued values for the tokens do not match");
     assertEquals(
-        token1.getValidFrom(),
-        token2.getValidFrom(),
-        "The valid from values for the tokens do not match");
+        token1.getValidFromDate(),
+        token2.getValidFromDate(),
+        "The valid from date values for the tokens do not match");
     assertEquals(
-        token1.getExpires(), token2.getExpires(), "The expires values for the tokens do not match");
+        token1.getExpiryDate(),
+        token2.getExpiryDate(),
+        "The expiry date values for the tokens do not match");
     assertEquals(
-        token1.getRevoked(), token2.getRevoked(), "The revoked values for the tokens do not match");
+        token1.getRevocationDate(),
+        token2.getRevocationDate(),
+        "The revocation date values for the tokens do not match");
     assertEquals(token1.getData(), token2.getData(), "The data values for the tokens do not match");
     assertEquals(
         token1.getClaims().size(),

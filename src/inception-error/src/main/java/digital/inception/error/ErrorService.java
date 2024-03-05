@@ -188,19 +188,19 @@ public class ErrorService implements IErrorService {
   @Override
   public ErrorReportSummaries getErrorReportSummaries(
       String filter,
-      LocalDate dateFrom,
-      LocalDate dateTo,
+      LocalDate fromDate,
+      LocalDate toDate,
       ErrorReportSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (dateFrom == null) {
-      dateFrom = LocalDate.now().minusMonths(1);
+    if (fromDate == null) {
+      fromDate = LocalDate.now().minusMonths(1);
     }
 
-    if (dateTo == null) {
-      dateTo = LocalDate.now();
+    if (toDate == null) {
+      toDate = LocalDate.now();
     }
 
     if ((pageIndex != null) && (pageIndex < 0)) {
@@ -255,14 +255,14 @@ public class ErrorService implements IErrorService {
         errorReportSummaryPage =
             errorReportSummaryRepository.findFiltered(
                 "%" + filter + "%",
-                dateFrom.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
-                dateTo.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
+                fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
+                toDate.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
                 pageRequest);
       } else {
         errorReportSummaryPage =
             errorReportSummaryRepository.findFiltered(
-                dateFrom.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
-                dateTo.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
+                fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
+                toDate.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
                 pageRequest);
       }
 
@@ -270,8 +270,8 @@ public class ErrorService implements IErrorService {
           errorReportSummaryPage.toList(),
           errorReportSummaryPage.getTotalElements(),
           filter,
-          dateFrom,
-          dateTo,
+          fromDate,
+          toDate,
           sortBy,
           sortDirection,
           pageIndex,

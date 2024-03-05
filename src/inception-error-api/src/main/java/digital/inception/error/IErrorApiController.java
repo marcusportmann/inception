@@ -159,9 +159,9 @@ public interface IErrorApiController {
    * Retrieve the error report summaries.
    *
    * @param filter the optional filter to apply to the error report summaries
-   * @param dateFrom the ISO 8601 format date value for the date to retrieve the error report
+   * @param fromDate the ISO 8601 format date value for the date to retrieve the error report
    *     summaries from
-   * @param dateTo the ISO 8601 format date value for the date to retrieve the error report
+   * @param toDate the ISO 8601 format date value for the date to retrieve the error report
    *     summaries from
    * @param sortBy the optional method used to sort the error report summaries e.g. by who submitted
    *     them
@@ -215,19 +215,19 @@ public interface IErrorApiController {
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
-              name = "dateFrom",
+              name = "fromDate",
               description =
                   "The ISO 8601 format date value for the date to retrieve the error report summaries from",
               example = "2015-01-01")
-          @RequestParam(value = "dateFrom", required = false)
-          LocalDate dateFrom,
+          @RequestParam(value = "fromDate", required = false)
+          LocalDate fromDate,
       @Parameter(
-              name = "dateTo",
+              name = "toDate",
               description =
                   "The ISO 8601 format date value for the date to retrieve the error report summaries to",
               example = "2030-12-31")
-          @RequestParam(value = "dateTo", required = false)
-          LocalDate dateTo,
+          @RequestParam(value = "toDate", required = false)
+          LocalDate toDate,
       @Parameter(
               name = "sortBy",
               description =

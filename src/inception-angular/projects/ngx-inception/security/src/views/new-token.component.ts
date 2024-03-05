@@ -20,7 +20,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  ISO8601Util, ServiceUnavailableError, SpinnerService
 } from 'ngx-inception/core';
 import {finalize, first} from 'rxjs/operators';
 import {GenerateTokenRequest} from '../services/generate-token-request';
@@ -45,7 +45,7 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
 
   existingTokenId: string | null = null;
 
-  expiresControl: FormControl;
+  expiryDateControl: FormControl;
 
   nameControl: FormControl;
 
@@ -55,7 +55,7 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
 
   typeControl: FormControl;
 
-  validFromControl: FormControl;
+  validFromDateControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private securityService: SecurityService, private dialogService: DialogService,
@@ -66,25 +66,30 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
     this.existingTokenId = this.activatedRoute.snapshot.paramMap.get('existingTokenId');
 
     // Initialise the form controls
-    this.expiresControl = new FormControl('');
+    this.expiryDateControl = new FormControl('');
     this.descriptionControl = new FormControl('', [Validators.maxLength(200)]);
     this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.typeControl = new FormControl('', [Validators.required]);
-    this.validFromControl = new FormControl('');
+    this.validFromDateControl = new FormControl('');
 
     // Initialise the form
     this.newTokenForm = new FormGroup({
       description: this.descriptionControl,
-      expires: this.expiresControl,
+      expiryDate: this.expiryDateControl,
       name: this.nameControl,
       type: this.typeControl,
-      validFrom: this.validFromControl
+      validFromDate: this.validFromDateControl
     });
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_new_token_back_navigation:Tokens`, ['..'],
-      {relativeTo: this.activatedRoute});
+    if (!!this.existingTokenId) {
+      return new BackNavigation($localize`:@@security_new_token_back_navigation:Tokens`, ['../..'],
+        {relativeTo: this.activatedRoute});
+    } else {
+      return new BackNavigation($localize`:@@security_new_token_back_navigation:Tokens`, ['..'],
+        {relativeTo: this.activatedRoute});
+    }
   }
 
   get title(): string {
@@ -93,7 +98,11 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    if (!!this.existingTokenId) {
+      this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+    } else {
+      this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    }
   }
 
   deleteTokenClaim(existingTokenClaim: TokenClaim): void {
@@ -182,11 +191,11 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
         this.nameControl.setValue(existingToken.name);
         this.typeControl.setValue(existingToken.type);
         this.descriptionControl.setValue(existingToken.description);
-        if (!!existingToken.validFrom) {
-          this.validFromControl.setValue(new Date(existingToken.validFrom));
+        if (!!existingToken.validFromDate) {
+          this.validFromDateControl.setValue(ISO8601Util.toDate(existingToken.validFromDate));
         }
-        if (!!existingToken.expires) {
-          this.expiresControl.setValue(new Date(existingToken.expires));
+        if (!!existingToken.expiryDate) {
+          this.expiryDateControl.setValue(ISO8601Util.toDate(existingToken.expiryDate));
         }
         this.tokenClaims = existingToken.claims;
       }, (error: Error) => {
@@ -213,15 +222,17 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
         generateTokenRequest.description = this.descriptionControl.value;
       }
 
-      if (!!this.validFromControl.value) {
-        generateTokenRequest.validFrom = this.validFromControl.value.format("YYYY-MM-DD");
+      if (!!this.validFromDateControl.value) {
+        generateTokenRequest.validFromDate = ISO8601Util.toString(this.validFromDateControl.value);
       }
 
-      if (!!this.expiresControl.value) {
-        generateTokenRequest.expires = this.expiresControl.value.format("YYYY-MM-DD");
+      if (!!this.expiryDateControl.value) {
+        generateTokenRequest.expiryDate = ISO8601Util.toString(this.expiryDateControl.value);
       }
 
       generateTokenRequest.claims = this.tokenClaims;
+
+      console.log('generateTokenRequest = ', generateTokenRequest);
 
       this.spinnerService.showSpinner();
 

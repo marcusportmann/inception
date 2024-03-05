@@ -41,32 +41,32 @@
           </mat-form-field>
         </div>
       </div>
-      <ng-container *ngIf="token?.validFrom">
+      <ng-container *ngIf="token?.validFromDate">
         <div class="row">
           <div class="col-sm">
             <mat-form-field class="static">
-              <mat-label i18n="@@security_view_token_component_label_valid_from">Valid From</mat-label>
-              <input type="text" matInput [value]="token?.validFrom" [disabled]="true">
+              <mat-label i18n="@@security_view_token_component_label_valid_from">Valid From Date</mat-label>
+              <input type="text" matInput [value]="token?.validFromDate" [disabled]="true">
             </mat-form-field>
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="token?.expires">
+      <ng-container *ngIf="token?.expiryDate">
         <div class="row">
           <div class="col-sm">
             <mat-form-field class="static">
-              <mat-label i18n="@@security_view_token_component_label_expires">Expires</mat-label>
-              <input type="text" matInput [value]="token?.expires" [disabled]="true">
+              <mat-label i18n="@@security_view_token_component_label_expires">Expiry Date</mat-label>
+              <input type="text" matInput [value]="token?.expiryDate" [disabled]="true">
             </mat-form-field>
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="token?.revoked">
+      <ng-container *ngIf="token?.revocationDate">
         <div class="row">
           <div class="col-sm">
             <mat-form-field class="static">
-              <mat-label i18n="@@security_view_token_component_label_revoked">Revoked</mat-label>
-              <input type="text" matInput [value]="token?.revoked" [disabled]="true">
+              <mat-label i18n="@@security_view_token_component_label_revoked">Revocation Date</mat-label>
+              <input type="text" matInput [value]="token?.revocationDate" [disabled]="true">
             </mat-form-field>
           </div>
         </div>

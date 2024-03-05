@@ -64,9 +64,9 @@ export class ErrorReportSummaryDatasource implements DataSource<ErrorReportSumma
    * Load the error report summaries.
    *
    * @param filter        The optional filter to apply to the error report summaries.
-   * @param dateFrom      ISO 8601 format date value for the date to retrieve the error report
+   * @param fromDate      ISO 8601 format date value for the date to retrieve the error report
    *                      summaries from.
-   * @param dateTo        ISO 8601 format date value for the date to retrieve the error report
+   * @param toDate        ISO 8601 format date value for the date to retrieve the error report
    *                      summaries to.
    * @param sortBy        The optional method used to sort the error report summaries e.g. by who
    *                      submitted them.
@@ -74,11 +74,11 @@ export class ErrorReportSummaryDatasource implements DataSource<ErrorReportSumma
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
-  load(filter?: string, dateFrom?: string, dateTo?: string, sortBy?: ErrorReportSortBy,
+  load(filter?: string, fromDate?: string, toDate?: string, sortBy?: ErrorReportSortBy,
        sortDirection?: SortDirection, pageIndex?: number, pageSize?: number): void {
     this.loadingSubject$.next(true);
 
-    this.errorService.getErrorReportSummaries(filter, dateFrom, dateTo, sortBy, sortDirection,
+    this.errorService.getErrorReportSummaries(filter, fromDate, toDate, sortBy, sortDirection,
       pageIndex, pageSize)
     .pipe(first())
     .subscribe((errorReportSummaries: ErrorReportSummaries) => {

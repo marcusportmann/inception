@@ -45,12 +45,12 @@ import java.util.List;
  */
 @Schema(description = "A request to generate a token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "name", "description", "validFrom", "expires", "claims"})
+@JsonPropertyOrder({"type", "name", "description", "validFromDate", "expiryDate", "claims"})
 @XmlRootElement(name = "GenerateTokenRequest", namespace = "http://inception.digital/security")
 @XmlType(
     name = "GenerateTokenRequest",
     namespace = "http://inception.digital/security",
-    propOrder = {"type", "name", "description", "validFrom", "expires", "claims"})
+    propOrder = {"type", "name", "description", "validFromDate", "expiryDate", "claims"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenerateTokenRequest implements Serializable {
 
@@ -71,13 +71,13 @@ public class GenerateTokenRequest implements Serializable {
   private String description;
 
   /** The date the token expires. */
-  @Schema(description = "The date the token expires")
+  @Schema(description = "The ISO 8601 format date value for the date the token expires")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "Expires")
+  @XmlElement(name = "ExpiryDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  private LocalDate expires;
+  private LocalDate expiryDate;
 
   /** The name of the token. */
   @Schema(description = "The name of the token", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -95,13 +95,13 @@ public class GenerateTokenRequest implements Serializable {
   private TokenType type;
 
   /** The date the token is valid from. */
-  @Schema(description = "The date the token is valid from")
+  @Schema(description = "The ISO 8601 format date value for the date the token is valid from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "ValidFrom")
+  @XmlElement(name = "ValidFromDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  private LocalDate validFrom;
+  private LocalDate validFromDate;
 
   /** Constructs a new <b>GenerateTokenRequest</b>. */
   public GenerateTokenRequest() {}
@@ -112,22 +112,22 @@ public class GenerateTokenRequest implements Serializable {
    * @param type the token type
    * @param name the name of the token
    * @param description the description for the token
-   * @param validFrom the date the token is valid from
-   * @param expires the date the token expires
+   * @param validFromDate the date the token is valid from
+   * @param expiryDate the date the token expires
    * @param claims the claims for the token
    */
   public GenerateTokenRequest(
       TokenType type,
       String name,
       String description,
-      LocalDate validFrom,
-      LocalDate expires,
+      LocalDate validFromDate,
+      LocalDate expiryDate,
       List<TokenClaim> claims) {
     this.type = type;
     this.name = name;
     this.description = description;
-    this.validFrom = validFrom;
-    this.expires = expires;
+    this.validFromDate = validFromDate;
+    this.expiryDate = expiryDate;
     this.claims = claims;
   }
 
@@ -137,19 +137,19 @@ public class GenerateTokenRequest implements Serializable {
    * @param type the token type
    * @param name the name of the token
    * @param description the description for the token
-   * @param validFrom the date the token is valid from
+   * @param validFromDate the date the token is valid from
    * @param claims the claims for the token
    */
   public GenerateTokenRequest(
       TokenType type,
       String name,
       String description,
-      LocalDate validFrom,
+      LocalDate validFromDate,
       List<TokenClaim> claims) {
     this.type = type;
     this.name = name;
     this.description = description;
-    this.validFrom = validFrom;
+    this.validFromDate = validFromDate;
     this.claims = claims;
   }
 
@@ -192,8 +192,8 @@ public class GenerateTokenRequest implements Serializable {
    *
    * @return the date the token expires
    */
-  public LocalDate getExpires() {
-    return expires;
+  public LocalDate getExpiryDate() {
+    return expiryDate;
   }
 
   /**
@@ -219,8 +219,8 @@ public class GenerateTokenRequest implements Serializable {
    *
    * @return the date the token is valid from
    */
-  public LocalDate getValidFrom() {
-    return validFrom;
+  public LocalDate getValidFromDate() {
+    return validFromDate;
   }
 
   /**
@@ -244,10 +244,10 @@ public class GenerateTokenRequest implements Serializable {
   /**
    * Set the date the token expires.
    *
-   * @param expires the date the token expires
+   * @param expiryDate the date the token expires
    */
-  public void setExpires(LocalDate expires) {
-    this.expires = expires;
+  public void setExpiryDate(LocalDate expiryDate) {
+    this.expiryDate = expiryDate;
   }
 
   /**
@@ -271,9 +271,9 @@ public class GenerateTokenRequest implements Serializable {
   /**
    * Set the date the token is valid from.
    *
-   * @param validFrom the date the token is valid from
+   * @param validFromDate the date the token is valid from
    */
-  public void setValidFrom(LocalDate validFrom) {
-    this.validFrom = validFrom;
+  public void setValidFromDate(LocalDate validFromDate) {
+    this.validFromDate = validFromDate;
   }
 }

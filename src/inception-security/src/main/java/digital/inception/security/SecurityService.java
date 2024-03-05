@@ -943,20 +943,20 @@ public class SecurityService implements ISecurityService {
 
         jwtClaimsSetBuilder.claim("jti", jwtId);
 
-        if (generateTokenRequest.getValidFrom() != null) {
+        if (generateTokenRequest.getValidFromDate() != null) {
           jwtClaimsSetBuilder.notBeforeTime(
               Date.from(
                   generateTokenRequest
-                      .getValidFrom()
+                      .getValidFromDate()
                       .atStartOfDay(ZoneId.systemDefault())
                       .toInstant()));
         }
 
-        if (generateTokenRequest.getExpires() != null) {
+        if (generateTokenRequest.getExpiryDate() != null) {
           jwtClaimsSetBuilder.expirationTime(
               Date.from(
                   generateTokenRequest
-                      .getExpires()
+                      .getExpiryDate()
                       .atStartOfDay(ZoneId.systemDefault())
                       .toInstant()));
         }
@@ -979,8 +979,8 @@ public class SecurityService implements ISecurityService {
                 generateTokenRequest.getName(),
                 generateTokenRequest.getDescription(),
                 issuedAt,
-                generateTokenRequest.getValidFrom(),
-                generateTokenRequest.getExpires(),
+                generateTokenRequest.getValidFromDate(),
+                generateTokenRequest.getExpiryDate(),
                 generateTokenRequest.getClaims(),
                 signedJWT.serialize());
 

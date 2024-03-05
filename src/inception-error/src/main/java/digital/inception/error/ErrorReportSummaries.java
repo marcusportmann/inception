@@ -48,8 +48,8 @@ import java.util.List;
 @JsonPropertyOrder({
   "errorReportSummaries",
   "total",
-  "dateFrom",
-  "dateTo",
+  "fromDate",
+  "toDate",
   "sortBy",
   "sortDirection",
   "pageIndex",
@@ -63,8 +63,8 @@ import java.util.List;
     propOrder = {
       "errorReportSummaries",
       "total",
-      "dateFrom",
-      "dateTo",
+      "fromDate",
+      "toDate",
       "sortBy",
       "sortDirection",
       "pageIndex",
@@ -76,30 +76,6 @@ import java.util.List;
 public class ErrorReportSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The date to retrieve the error report summaries from. */
-  @Schema(
-      description =
-          "The ISO 8601 format date value for the date to retrieve the error report summaries from",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateFrom", required = true)
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  private LocalDate dateFrom;
-
-  /** The date to retrieve the error report summaries to. */
-  @Schema(
-      description =
-          "The ISO 8601 format date value for the date to retrieve the error report summaries to",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateTo", required = true)
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  private LocalDate dateTo;
 
   /** The error report summaries. */
   @Schema(description = "The error report summaries", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -113,6 +89,18 @@ public class ErrorReportSummaries implements Serializable {
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
+
+  /** The date to retrieve the error report summaries from. */
+  @Schema(
+      description =
+          "The ISO 8601 format date value for the date to retrieve the error report summaries from",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @XmlElement(name = "FromDate", required = true)
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  private LocalDate fromDate;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -142,6 +130,18 @@ public class ErrorReportSummaries implements Serializable {
   @XmlElement(name = "SortDirection", required = true)
   private SortDirection sortDirection;
 
+  /** The date to retrieve the error report summaries to. */
+  @Schema(
+      description =
+          "The ISO 8601 format date value for the date to retrieve the error report summaries to",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @XmlElement(name = "ToDate", required = true)
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  private LocalDate toDate;
+
   /** The total number of error report summaries. */
   @Schema(
       description = "The total number of error report summaries",
@@ -159,8 +159,8 @@ public class ErrorReportSummaries implements Serializable {
    * @param errorReportSummaries the error report summaries
    * @param total the total number of error report summaries
    * @param filter the optional filter that was applied to the error report summaries
-   * @param dateFrom the date to retrieve the error report summaries from
-   * @param dateTo the date to retrieve the error report summaries to
+   * @param fromDate the date to retrieve the error report summaries from
+   * @param toDate the date to retrieve the error report summaries to
    * @param sortBy the method used to sort the error report summaries e.g. by who submitted them
    * @param sortDirection the sort direction that was applied to the error report summaries
    * @param pageIndex the page index
@@ -170,8 +170,8 @@ public class ErrorReportSummaries implements Serializable {
       List<ErrorReportSummary> errorReportSummaries,
       long total,
       String filter,
-      LocalDate dateFrom,
-      LocalDate dateTo,
+      LocalDate fromDate,
+      LocalDate toDate,
       ErrorReportSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
@@ -179,30 +179,12 @@ public class ErrorReportSummaries implements Serializable {
     this.errorReportSummaries = errorReportSummaries;
     this.total = total;
     this.filter = filter;
-    this.dateFrom = dateFrom;
-    this.dateTo = dateTo;
+    this.fromDate = fromDate;
+    this.toDate = toDate;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the date to retrieve the error report summaries from.
-   *
-   * @return the date to retrieve the error report summaries from
-   */
-  public LocalDate getDateFrom() {
-    return dateFrom;
-  }
-
-  /**
-   * Returns the date to retrieve the error report summaries to.
-   *
-   * @return the date to retrieve the error report summaries to
-   */
-  public LocalDate getDateTo() {
-    return dateTo;
   }
 
   /**
@@ -221,6 +203,15 @@ public class ErrorReportSummaries implements Serializable {
    */
   public String getFilter() {
     return filter;
+  }
+
+  /**
+   * Returns the date to retrieve the error report summaries from.
+   *
+   * @return the date to retrieve the error report summaries from
+   */
+  public LocalDate getFromDate() {
+    return fromDate;
   }
 
   /**
@@ -257,6 +248,15 @@ public class ErrorReportSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
+  }
+
+  /**
+   * Returns the date to retrieve the error report summaries to.
+   *
+   * @return the date to retrieve the error report summaries to
+   */
+  public LocalDate getToDate() {
+    return toDate;
   }
 
   /**

@@ -27,16 +27,6 @@ import {ErrorReportSummary} from './error-report-summary';
 export class ErrorReportSummaries {
 
   /**
-   * The ISO 8601 format date value for the date to retrieve the error report summaries from.
-   */
-  dateFrom: string;
-
-  /**
-   * The ISO 8601 format date value for the date to retrieve the error report summaries to.
-   */
-  dateTo: string;
-
-  /**
    * The error report summaries.
    */
   errorReportSummaries: ErrorReportSummary[];
@@ -45,6 +35,11 @@ export class ErrorReportSummaries {
    * The optional filter that was applied to the error report summaries.
    */
   filter: string | null = null;
+
+  /**
+   * The ISO 8601 format date value for the date to retrieve the error report summaries from.
+   */
+  fromDate: string;
 
   /**
    * The page index.
@@ -67,6 +62,11 @@ export class ErrorReportSummaries {
   sortDirection: SortDirection;
 
   /**
+   * The ISO 8601 format date value for the date to retrieve the error report summaries to.
+   */
+  toDate: string;
+
+  /**
    * The total number of error report summaries.
    */
   total: number;
@@ -76,9 +76,9 @@ export class ErrorReportSummaries {
    *
    * @param errorReportSummaries The error report summaries.
    * @param total                The total number of error report summaries.
-   * @param dateFrom             The ISO 8601 format date value for the date to retrieve the error
+   * @param fromDate             The ISO 8601 format date value for the date to retrieve the error
    *                             report summaries from.
-   * @param dateTo               The ISO 8601 format date value for the date to retrieve the error
+   * @param toDate               The ISO 8601 format date value for the date to retrieve the error
    *                             report summaries to.
    * @param sortBy               The method used to sort the error report summaries e.g. by who
    *                             submitted them.
@@ -88,12 +88,12 @@ export class ErrorReportSummaries {
    * @param filter               The optional filter that was applied to the error report
    *                             summaries.
    */
-  constructor(errorReportSummaries: ErrorReportSummary[], total: number, dateFrom: string,
-              dateTo: string, sortBy: ErrorReportSortBy, sortDirection: SortDirection,
+  constructor(errorReportSummaries: ErrorReportSummary[], total: number, fromDate: string,
+              toDate: string, sortBy: ErrorReportSortBy, sortDirection: SortDirection,
               pageIndex: number, pageSize: number, filter?: string) {
     this.errorReportSummaries = errorReportSummaries;
-    this.dateFrom = dateFrom;
-    this.dateTo = dateTo;
+    this.fromDate = fromDate;
+    this.toDate = toDate;
     this.total = total;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;

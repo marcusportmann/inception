@@ -26,7 +26,7 @@ import {ErrorReport} from '../services/error-report';
 import {ErrorService} from '../services/error.service';
 
 /**
- * The ErrorReportComponent class implements the view error report component.
+ * The ErrorReportComponent class implements the error report component.
  *
  * @author Marcus Portmann
  */

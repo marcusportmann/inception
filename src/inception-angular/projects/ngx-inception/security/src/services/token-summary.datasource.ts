@@ -62,13 +62,13 @@ export class TokenSummaryDatasource implements DataSource<TokenSummary> {
   }
 
   getTokenStatus(tokenSummary: TokenSummary): TokenStatus {
-    if (!!tokenSummary.revoked) {
+    if (!!tokenSummary.revocationDate) {
       return TokenStatus.Revoked;
-    } else if ((!!tokenSummary.expires) && (new Date().getTime() > Date.parse(
-      tokenSummary.expires))) {
+    } else if ((!!tokenSummary.expiryDate) && (new Date().getTime() > Date.parse(
+      tokenSummary.expiryDate))) {
       return TokenStatus.Expired;
-    } else if ((!!tokenSummary.validFrom) && (Date.parse(
-      tokenSummary.validFrom) > new Date().getTime())) {
+    } else if ((!!tokenSummary.validFromDate) && (Date.parse(
+      tokenSummary.validFromDate) > new Date().getTime())) {
       return TokenStatus.Pending;
     } else {
       return TokenStatus.Active;

@@ -78,8 +78,8 @@ public class ErrorApiController extends SecureApiController implements IErrorApi
   @Override
   public ErrorReportSummaries getErrorReportSummaries(
       String filter,
-      LocalDate dateFrom,
-      LocalDate dateTo,
+      LocalDate fromDate,
+      LocalDate toDate,
       ErrorReportSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
@@ -93,6 +93,6 @@ public class ErrorApiController extends SecureApiController implements IErrorApi
     }
 
     return errorService.getErrorReportSummaries(
-        filter, dateFrom, dateTo, sortBy, sortDirection, pageIndex, pageSize);
+        filter, fromDate, toDate, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

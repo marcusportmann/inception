@@ -58,9 +58,10 @@ public interface IErrorService {
    * Retrieve the error report summaries.
    *
    * @param filter the optional filter to apply to the error report summaries
-   * @param dateFrom the date to retrieve the error report summaries from
-   * @param dateTo the date to retrieve the error report summaries to
-   * @param sortBy the optional method used to sort the error report summaries e.g. by who submitted them
+   * @param fromDate the date to retrieve the error report summaries from
+   * @param toDate the date to retrieve the error report summaries to
+   * @param sortBy the optional method used to sort the error report summaries e.g. by who submitted
+   *     them
    * @param sortDirection the optional sort direction to apply to the error report summaries
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -70,8 +71,8 @@ public interface IErrorService {
    */
   ErrorReportSummaries getErrorReportSummaries(
       String filter,
-      LocalDate dateFrom,
-      LocalDate dateTo,
+      LocalDate fromDate,
+      LocalDate toDate,
       ErrorReportSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,

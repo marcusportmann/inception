@@ -57,8 +57,7 @@ export class ErrorService {
    *
    * @return The error report.
    */
-  @ResponseConverter
-  getErrorReport(errorReportId: string): Observable<ErrorReport> {
+  @ResponseConverter getErrorReport(errorReportId: string): Observable<ErrorReport> {
     return this.httpClient.get<ErrorReport>(
       this.config.apiUrlPrefix + '/error/error-reports/' + encodeURIComponent(errorReportId),
       {reportProgress: true})
@@ -84,9 +83,9 @@ export class ErrorService {
    * Retrieve the error report summaries.
    *
    * @param filter        The optional filter to apply to the error report summaries.
-   * @param dateFrom      ISO 8601 format date value for the date to retrieve the error report
+   * @param fromDate      ISO 8601 format date value for the date to retrieve the error report
    *                      summaries from.
-   * @param dateTo        ISO 8601 format date value for the date to retrieve the error report
+   * @param toDate        ISO 8601 format date value for the date to retrieve the error report
    *                      summaries to.
    * @param sortBy        The optional method used to sort the error report summaries e.g. by who
    *                      submitted them.
@@ -96,10 +95,10 @@ export class ErrorService {
    *
    * @return The users.
    */
-  @ResponseConverter
-  getErrorReportSummaries(filter?: string, dateFrom?: string, dateTo?: string,
-                          sortBy?: ErrorReportSortBy, sortDirection?: SortDirection,
-                          pageIndex?: number, pageSize?: number): Observable<ErrorReportSummaries> {
+  @ResponseConverter getErrorReportSummaries(filter?: string, fromDate?: string, toDate?: string,
+                                             sortBy?: ErrorReportSortBy,
+                                             sortDirection?: SortDirection, pageIndex?: number,
+                                             pageSize?: number): Observable<ErrorReportSummaries> {
 
     let params = new HttpParams();
 
@@ -107,12 +106,12 @@ export class ErrorService {
       params = params.append('filter', filter);
     }
 
-    if (dateFrom != null) {
-      params = params.append('dateFrom', dateFrom);
+    if (fromDate != null) {
+      params = params.append('fromDate', fromDate);
     }
 
-    if (dateTo != null) {
-      params = params.append('dateTo', dateTo);
+    if (toDate != null) {
+      params = params.append('toDate', toDate);
     }
 
     if (sortBy != null) {
@@ -161,13 +160,11 @@ export class ErrorService {
    */
   sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {
     const errorReport: ErrorReport = new ErrorReport(uuid(), this.config.applicationId,
-      this.config.applicationVersion,
-      error.message, error.cause ? JSON.stringify(error.cause) : '', error.timestamp, email,
-      feedback);
+      this.config.applicationVersion, error.message, error.cause ? JSON.stringify(error.cause) : '',
+      error.timestamp, email, feedback);
 
     return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/error/error-reports',
-      errorReport,
-      {observe: 'response'})
+      errorReport, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {

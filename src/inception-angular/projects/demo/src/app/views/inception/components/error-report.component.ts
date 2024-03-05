@@ -23,7 +23,7 @@ import {first} from 'rxjs/operators';
 import {TestService} from '../../../services/test.service';
 
 /**
- * The Menu1Component class implements the menu 1 component.
+ * The ErrorReportComponent class implements the error report component.
  *
  * @author Marcus Portmann
  */

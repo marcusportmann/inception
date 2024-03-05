@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as moment from 'moment';
+import {formatISO, parseISO} from 'date-fns';
 
 /**
  * The ISO8601Util class.
@@ -30,14 +30,17 @@ export class ISO8601Util {
    * @return the <b>Date</b> instance for the ISO 8601 format string
    */
   static toDate(iso8601string: string): Date {
-    let m = moment.parseZone(iso8601string, moment.ISO_8601, true);
+    return parseISO(iso8601string);
+  }
 
-    if (m.isValid()) {
-      return m.local(true).toDate();
-    } else {
-      throw new Error(
-        'Failed to convert the invalid ISO 8601 format string (' + iso8601string + ')');
-    }
+  /**
+   * Transform a <b>Date</b> instance into an ISO 8601 format string.
+   *
+   * @param date the <b>Date</b> instance
+   * @return the ISO 8601 format string for the <b>Date</b> insatnce
+   */
+  static toString(date: Date): string {
+    return formatISO(date, {representation: 'date'});
   }
 }
 

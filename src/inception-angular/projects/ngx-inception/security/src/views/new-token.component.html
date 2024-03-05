@@ -41,26 +41,26 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Valid From</mat-label>
-            <input matInput [matDatepicker]="validFromDatePicker" (focus)="validFromDatePicker.open()" formControlName="validFrom" readonly>
-            <button type="button" matIconSuffix class="mat-datepicker-clear" (click)="$event.stopPropagation(); validFromControl.setValue(null)">
+            <mat-label>Valid From Date</mat-label>
+            <input matInput [matDatepicker]="validFromDateDatePicker" (focus)="validFromDateDatePicker.open()" formControlName="validFromDate" readonly>
+            <button type="button" matIconSuffix class="mat-datepicker-clear" (click)="$event.stopPropagation(); validFromDateControl.setValue(null)">
               <mat-icon>clear</mat-icon>
             </button>
-            <mat-datepicker-toggle matSuffix [for]="validFromDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #validFromDatePicker></mat-datepicker>
+            <mat-datepicker-toggle matSuffix [for]="validFromDateDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #validFromDateDatePicker></mat-datepicker>
           </mat-form-field>
         </div>
       </div>
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Expires</mat-label>
-            <input matInput [matDatepicker]="expiresDatePicker" (focus)="expiresDatePicker.open()" formControlName="expires" readonly>
-            <button type="button" matIconSuffix class="mat-datepicker-clear" (click)="$event.stopPropagation(); expiresControl.setValue(null)">
+            <mat-label>Expiry Date</mat-label>
+            <input matInput [matDatepicker]="expiryDateDatePicker" (focus)="expiryDateDatePicker.open()" formControlName="expiryDate" readonly>
+            <button type="button" matIconSuffix class="mat-datepicker-clear" (click)="$event.stopPropagation(); expiryDateControl.setValue(null)">
               <mat-icon>clear</mat-icon>
             </button>
-            <mat-datepicker-toggle matSuffix [for]="expiresDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #expiresDatePicker></mat-datepicker>
+            <mat-datepicker-toggle matSuffix [for]="expiryDateDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #expiryDateDatePicker></mat-datepicker>
           </mat-form-field>
         </div>
       </div>

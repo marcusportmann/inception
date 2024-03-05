@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.2</version>
+    <version>3.2.3</version>
   </parent>
 
   <repositories>
@@ -100,7 +100,7 @@
     <agroal-pool.version>2.3</agroal-pool.version>
     <authzforce-ce-core-pdp-engine.version>21.0.1</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.11.3</avro.version>
-    <azure-identity.version>1.11.2</azure-identity.version>
+    <azure-identity.version>1.11.3</azure-identity.version>
     <com.ibm.icu.icu4j.version>74.2</com.ibm.icu.icu4j.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-io.version>2.15.1</commons-io.version>
@@ -108,8 +108,9 @@
     <easymock.version>5.2.0</easymock.version>
     <flowable.version>7.0.1</flowable.version>
     <freemarker.version>2.3.32</freemarker.version>
-    <groovy.version>4.0.18</groovy.version>
+    <groovy.version>4.0.19</groovy.version>
     <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
+    <jakarta.el.jakarta.el-api.version>5.0.0</jakarta.el.jakarta.el-api.version>
     <jakarta.xml.bind.version>4.0.1</jakarta.xml.bind.version>
     <jakarta.xml.ws-api.version>4.0.1</jakarta.xml.ws-api.version>
     <jasperreports.version>6.21.2</jasperreports.version>
@@ -117,18 +118,17 @@
     <jboss-transaction-spi.version>8.0.0.Final</jboss-transaction-spi.version>
     <liquibase-slf4j.version>5.0.0</liquibase-slf4j.version>
     <mssql-jdbc.version>12.4.2.jre11</mssql-jdbc.version>
-    <narayana.version>7.0.0.Final</narayana.version>
+    <narayana.version>7.0.1.Final</narayana.version>
     <ojdbc11.version>23.3.0.23.09</ojdbc11.version>
-    <org.glassfish.jakarta-el.version>4.0.2</org.glassfish.jakarta-el.version>
     <org.glassfish.jaxb>4.0.4</org.glassfish.jaxb>
     <postgresql.version>42.7.2</postgresql.version>
-    <spring-boot.version>3.2.2</spring-boot.version>
-    <spring-shell-starter.version>3.2.1</spring-shell-starter.version>
+    <spring-boot.version>3.2.3</spring-boot.version>
+    <spring-shell-starter.version>3.2.2</spring-shell-starter.version>
     <springdoc-openapi.version>2.3.0</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
     <swagger.version>2.2.20</swagger.version>
     <uuid-creator.version>5.3.7</uuid-creator.version>
-    <wss4j-ws-security-common.version>2.4.3</wss4j-ws-security-common.version>
+    <wss4j-ws-security-common.version>3.0.3</wss4j-ws-security-common.version>
 
     <node.version>v21.6.2</node.version>
     <npm.version>10.2.3</npm.version>
@@ -137,14 +137,14 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.github.f4b6a3</groupId>
-        <artifactId>uuid-creator</artifactId>
-        <version>${uuid-creator.version}</version>
-      </dependency>
-      <dependency>
         <groupId>com.azure</groupId>
         <artifactId>azure-identity</artifactId>
         <version>${azure-identity.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.f4b6a3</groupId>
+        <artifactId>uuid-creator</artifactId>
+        <version>${uuid-creator.version}</version>
       </dependency>
       <dependency>
         <groupId>com.ibm.icu</groupId>
@@ -200,6 +200,11 @@
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-models-jakarta</artifactId>
         <version>${swagger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>jakarta.el</groupId>
+        <artifactId>jakarta.el-api</artifactId>
+        <version>${jakarta.el.jakarta.el-api.version}</version>
       </dependency>
       <dependency>
         <groupId>jakarta.xml.bind</groupId>
@@ -270,11 +275,6 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>${freemarker.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish</groupId>
-        <artifactId>jakarta.el</artifactId>
-        <version>${org.glassfish.jakarta-el.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate.validator</groupId>
@@ -625,6 +625,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.4.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>3.3.0</version>
         </plugin>
@@ -723,6 +728,34 @@
             <phase>deploy</phase>
             <goals>
               <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <configuration>
+              <rules>
+                <dependencyConvergence>
+                  <excludes>
+                    <exclude>com.google.guava:guava:[32,33)</exclude>
+                    <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
+                    <exclude>com.google.guava:guava:[31,32]</exclude>
+                    <exclude>net.java.dev.jna:jna-platform:[5,6)</exclude>
+                    <exclude>org.apache.commons:commons-collections4:[4,5)</exclude>
+                    <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
+                    <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
+                    <exclude>org.ow2.asm:asm:[9,10)</exclude>
+                  </excludes>
+                </dependencyConvergence>
+              </rules>
+            </configuration>
+            <goals>
+              <goal>enforce</goal>
             </goals>
           </execution>
         </executions>

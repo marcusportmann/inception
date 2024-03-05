@@ -59,25 +59,25 @@ import java.util.Objects;
   "name",
   "description",
   "issued",
-  "validFrom",
-  "expires",
-  "revoked",
+  "validFromDate",
+  "expiryDate",
+  "revocationDate",
   "claims",
   "data"
 })
-@XmlRootElement(name = "Token", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "Token", namespace = "http://nova.discovery.co.za/security")
 @XmlType(
     name = "Token",
-    namespace = "http://inception.digital/security",
+    namespace = "http://nova.discovery.co.za/security",
     propOrder = {
       "id",
       "type",
       "name",
       "description",
       "issued",
-      "validFrom",
-      "expires",
-      "revoked",
+      "validFromDate",
+      "expiryDate",
+      "revocationDate",
       "claims",
       "data"
     })
@@ -102,7 +102,7 @@ public class Token implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
   @NotNull
-  @Size(min =1, max = 32768)
+  @Size(min = 1, max = 32768)
   @Column(name = "data", length = 32768, nullable = false)
   private String data;
 
@@ -118,11 +118,11 @@ public class Token implements Serializable {
   @Schema(description = "The ISO 8601 format date value for the date the token expires")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue")
+  @XmlElement(name = "ExpiryDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @Column(name = "expires")
-  private LocalDate expires;
+  @Column(name = "expiry_date")
+  private LocalDate expiryDate;
 
   /** The ID for the token. */
   @Schema(description = "The ID for the token", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -159,11 +159,11 @@ public class Token implements Serializable {
   @Schema(description = "The ISO 8601 format date value for the date the token was revoked")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue")
+  @XmlElement(name = "RevocationDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @Column(name = "revoked")
-  private LocalDate revoked;
+  @Column(name = "revocation_date")
+  private LocalDate revocationDate;
 
   /** The token type. */
   @Schema(description = "The token type", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -177,11 +177,11 @@ public class Token implements Serializable {
   @Schema(description = "The ISO 8601 format date value for the date the token is valid from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue")
+  @XmlElement(name = "ValidFromDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @Column(name = "valid_from")
-  private LocalDate validFrom;
+  @Column(name = "valid_from_date")
+  private LocalDate validFromDate;
 
   /** Constructs a new <b>Token</b>. */
   public Token() {}
@@ -194,8 +194,8 @@ public class Token implements Serializable {
    * @param name the name of the token
    * @param description the description for the token
    * @param issued the date and time the token was issued
-   * @param validFrom the date the token is valid from
-   * @param expires the date the token expires
+   * @param validFromDate the date the token is valid from
+   * @param expiryDate the date the token expires
    * @param claims the claims for the token
    * @param data the data for the token
    */
@@ -205,8 +205,8 @@ public class Token implements Serializable {
       String name,
       String description,
       OffsetDateTime issued,
-      LocalDate validFrom,
-      LocalDate expires,
+      LocalDate validFromDate,
+      LocalDate expiryDate,
       List<TokenClaim> claims,
       String data) {
     this.id = id;
@@ -214,8 +214,8 @@ public class Token implements Serializable {
     this.name = name;
     this.description = description;
     this.issued = issued;
-    this.validFrom = validFrom;
-    this.expires = expires;
+    this.validFromDate = validFromDate;
+    this.expiryDate = expiryDate;
     this.claims = claims;
     this.data = data;
   }
@@ -228,7 +228,7 @@ public class Token implements Serializable {
    * @param name the name of the token
    * @param description the description for the token
    * @param issued the date and time the token was issued
-   * @param validFrom the date the token is valid from
+   * @param validFromDate the date the token is valid from
    * @param claims the claims for the token
    * @param data the data for the token
    */
@@ -238,7 +238,7 @@ public class Token implements Serializable {
       String name,
       String description,
       OffsetDateTime issued,
-      LocalDate validFrom,
+      LocalDate validFromDate,
       List<TokenClaim> claims,
       String data) {
     this.id = id;
@@ -246,7 +246,7 @@ public class Token implements Serializable {
     this.name = name;
     this.description = description;
     this.issued = issued;
-    this.validFrom = validFrom;
+    this.validFromDate = validFromDate;
     this.claims = claims;
     this.data = data;
   }
@@ -287,9 +287,9 @@ public class Token implements Serializable {
    * @param name the name of the token
    * @param description the description for the token
    * @param issued the date and time the token was issued
-   * @param validFrom the date the token is valid from
-   * @param expires the date the token expires
-   * @param revoked the date the token was revoked
+   * @param validFromDate the date the token is valid from
+   * @param expiryDate the date the token expires
+   * @param revocationDate the date the token was revoked
    * @param claims the claims for the token
    * @param data the data for the token
    */
@@ -299,9 +299,9 @@ public class Token implements Serializable {
       String name,
       String description,
       OffsetDateTime issued,
-      LocalDate validFrom,
-      LocalDate expires,
-      LocalDate revoked,
+      LocalDate validFromDate,
+      LocalDate expiryDate,
+      LocalDate revocationDate,
       List<TokenClaim> claims,
       String data) {
     this.id = id;
@@ -309,9 +309,9 @@ public class Token implements Serializable {
     this.name = name;
     this.description = description;
     this.issued = issued;
-    this.validFrom = validFrom;
-    this.expires = expires;
-    this.revoked = revoked;
+    this.validFromDate = validFromDate;
+    this.expiryDate = expiryDate;
+    this.revocationDate = revocationDate;
     this.claims = claims;
     this.data = data;
   }
@@ -373,8 +373,8 @@ public class Token implements Serializable {
    *
    * @return the date the token expires
    */
-  public LocalDate getExpires() {
-    return expires;
+  public LocalDate getExpiryDate() {
+    return expiryDate;
   }
 
   /**
@@ -409,8 +409,8 @@ public class Token implements Serializable {
    *
    * @return the date the token was revoked
    */
-  public LocalDate getRevoked() {
-    return revoked;
+  public LocalDate getRevocationDate() {
+    return revocationDate;
   }
 
   /**
@@ -427,8 +427,8 @@ public class Token implements Serializable {
    *
    * @return the date the token is valid from
    */
-  public LocalDate getValidFrom() {
-    return validFrom;
+  public LocalDate getValidFromDate() {
+    return validFromDate;
   }
 
   /**
@@ -461,10 +461,10 @@ public class Token implements Serializable {
   /**
    * Set the date the token expires.
    *
-   * @param expires the date the token expires
+   * @param expiryDate the date the token expires
    */
-  public void setExpires(LocalDate expires) {
-    this.expires = expires;
+  public void setExpiryDate(LocalDate expiryDate) {
+    this.expiryDate = expiryDate;
   }
 
   /**
@@ -497,10 +497,10 @@ public class Token implements Serializable {
   /**
    * Set the date the token was revoked.
    *
-   * @param revoked the date the token was revoked
+   * @param revocationDate the date the token was revoked
    */
-  public void setRevoked(LocalDate revoked) {
-    this.revoked = revoked;
+  public void setRevocationDate(LocalDate revocationDate) {
+    this.revocationDate = revocationDate;
   }
 
   /**
@@ -515,9 +515,9 @@ public class Token implements Serializable {
   /**
    * Set the date the token is valid from.
    *
-   * @param validFrom the date the token is valid from
+   * @param validFromDate the date the token is valid from
    */
-  public void setValidFrom(LocalDate validFrom) {
-    this.validFrom = validFrom;
+  public void setValidFromDate(LocalDate validFromDate) {
+    this.validFromDate = validFromDate;
   }
 }

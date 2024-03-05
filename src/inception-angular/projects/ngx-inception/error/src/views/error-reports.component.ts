@@ -19,10 +19,9 @@ import {FormControl, Validators} from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
-import * as moment from 'moment';
-import {Moment} from 'moment';
+import {add, isWithinInterval} from 'date-fns';
 import {
-  AccessDeniedError, AdminContainerView, DialogService, Error, InvalidArgumentError,
+  AccessDeniedError, AdminContainerView, DialogService, Error, InvalidArgumentError, ISO8601Util,
   ServiceUnavailableError, SortDirection, SpinnerService, TableFilterComponent
 } from 'ngx-inception/core';
 import {merge, Subscription} from 'rxjs';
@@ -31,7 +30,7 @@ import {ErrorReportSummaryDatasource} from '../services/error-report-summary.dat
 import {ErrorService} from '../services/error.service';
 
 /**
- * The ErrorReportsComponent class implements the user directories component.
+ * The ErrorReportsComponent class implements the error reports component.
  *
  * @author Marcus Portmann
  */
@@ -65,12 +64,12 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
     super();
 
     this.fromDateControl = new FormControl({
-      value: moment.utc().local().subtract(1, 'months'),
+      value: add(new Date(), {months: -1}),
       disabled: false
     }, [Validators.required]);
 
     this.toDateControl = new FormControl({
-      value: moment.utc().local(),
+      value: new Date(),
       disabled: false
     }, [Validators.required]);
 
@@ -85,16 +84,20 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
     this.loadErrorReportSummaries();
   }
 
-  dateRangeFilter(dateToCheck: Moment | null): boolean {
-    let minDate: Moment = moment.utc().local().subtract(1, 'years');
-    let maxDate: Moment = moment.utc().local();
+  dateRangeFilter(toDateCheck: Date | null): boolean {
+    let minDate: Date = add(new Date, {years: -1});
+    let maxDate: Date = new Date();
 
-    if (!dateToCheck) {
-      dateToCheck = moment.utc().local();
+    if (!toDateCheck) {
+      toDateCheck = maxDate;
     }
 
-    return dateToCheck.isBetween(minDate, maxDate);
+    return isWithinInterval(toDateCheck, {
+      start: minDate,
+      end: maxDate
+    });
   }
+
 
   loadErrorReportSummaries(): void {
     let filter = '';
@@ -127,17 +130,17 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
       if (typeof this.fromDateControl.value === 'string') {
         fromDate = this.fromDateControl.value;
       } else {
-        fromDate = this.fromDateControl.value.local().format('YYYY-MM-DD');
+        fromDate = ISO8601Util.toString(this.fromDateControl.value);
       }
 
       if (typeof this.toDateControl.value === 'string') {
         toDate = this.toDateControl.value;
       } else {
-        toDate = this.toDateControl.value.local().format('YYYY-MM-DD');
+        toDate = ISO8601Util.toString(this.toDateControl.value);
       }
     } else {
-      fromDate = moment.utc().local().subtract(1, 'months').format('YYYY-MM-DD');
-      toDate = moment.utc().local().format('YYYY-MM-DD');
+      fromDate = ISO8601Util.toString(add(new Date(), {months: -1}));
+      toDate = ISO8601Util.toString(new Date());
     }
 
     this.dataSource.load(filter, fromDate, toDate, sortBy, sortDirection, this.paginator.pageIndex,
@@ -153,8 +156,7 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {

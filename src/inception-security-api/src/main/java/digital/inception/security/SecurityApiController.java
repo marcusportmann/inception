@@ -85,6 +85,10 @@ public class SecurityApiController extends SecureApiController implements ISecur
           GroupNotFoundException,
           UserNotFoundException,
           ServiceUnavailableException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -124,6 +128,10 @@ public class SecurityApiController extends SecureApiController implements ISecur
           GroupNotFoundException,
           RoleNotFoundException,
           ServiceUnavailableException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -209,6 +217,10 @@ public class SecurityApiController extends SecureApiController implements ISecur
           UserDirectoryNotFoundException,
           UserNotFoundException,
           ServiceUnavailableException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -332,6 +344,10 @@ public class SecurityApiController extends SecureApiController implements ISecur
           UserDirectoryNotFoundException,
           DuplicateGroupException,
           ServiceUnavailableException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -371,6 +387,10 @@ public class SecurityApiController extends SecureApiController implements ISecur
           UserDirectoryNotFoundException,
           DuplicateUserException,
           ServiceUnavailableException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");

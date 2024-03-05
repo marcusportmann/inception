@@ -20,6 +20,7 @@ import digital.inception.api.ApiUtil;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
@@ -58,11 +59,15 @@ public class CodesApiController extends SecureApiController implements ICodesApi
           DuplicateCodeException,
           CodeCategoryNotFoundException,
           ServiceUnavailableException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     if (code == null) {
       throw new InvalidArgumentException("code");
     }
 
-    if (!code.getCodeCategoryId().equals(codeCategoryId)) {
+    if (!codeCategoryId.equals(code.getCodeCategoryId())) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 

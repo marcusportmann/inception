@@ -32,7 +32,7 @@ export class TokenSummary {
   /**
    * The ISO 8601 format date value for the date the token expires.
    */
-  expires: string | null = null;
+  expiryDate: string | null = null;
 
   /**
    * The ID for the token.
@@ -52,7 +52,7 @@ export class TokenSummary {
   /**
    * The ISO 8601 format date value for the date the token was revoked.
    */
-  revoked: string | null = null;
+  revocationDate: string | null = null;
 
   /**
    * The token status.
@@ -67,7 +67,7 @@ export class TokenSummary {
   /**
    * The ISO 8601 format date value for the date the token is valid from.
    */
-  validFrom: string | null = null;
+  validFromDate: string | null = null;
 
   /**
    * Constructs a new TokenSummary.
