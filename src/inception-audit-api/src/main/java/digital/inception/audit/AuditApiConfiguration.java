@@ -39,7 +39,7 @@ public class AuditApiConfiguration {
    * @return the grouped Open API for the Audit API
    */
   @Bean
-  public GroupedOpenApi codesOpenApi() {
+  public GroupedOpenApi auditOpenApi() {
     return GroupedOpenApi.builder()
         .group("audit")
         .packagesToScan("digital.inception.audit")
