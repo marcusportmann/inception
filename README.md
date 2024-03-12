@@ -88,35 +88,13 @@ Complete the following steps to setup MailSlurper on MacOS.
 
 1. Download the MailSlurper package from *https://github.com/mailslurper/mailslurper/releases*.
 2. Create a directory named *mailslurper* and extract the MailSlurper package under it.
-3. Create a directory named *build* under the *mailslurper* directory.
-4. Open a Terminal window, switch to the *mailslurper/build* directory and execute the following commands to build MailSlurper on MacOS:
-   ```
-   brew install go
-
-   export GOPROXY=direct
-   export PATH=$PATH:~/go/bin
-   
-   git clone https://github.com/mailslurper/mailslurper.git
-   cd mailslurper/cmd/mailslurper
-   
-   go install github.com/mjibson/esc
-   CGO_ENABLED=1 go install github.com/mattn/go-sqlite3
-   
-   go get
-   go generate
-   go build
-   ```
-5. Copy the *mailslurper* binary built in step 3 over the one in the downloaded package.
-   ```
-   cp mailslurper ../../../..
-   ```
-6. Edit the *config.json* file and set the *wwwPort* value to *8090*.
-7. Launch the *createcredentials* binary in a Terminal window and enter the username as
+3. Edit the *config.json* file and set the *wwwPort* value to *8090*.
+4. Launch the *createcredentials* binary in a Terminal window and enter the username as
    *nova* and password as *nova* when prompted.
 
    **NOTE:** You may need to enable the execution of the *mailslurper* binary under
    *System Preferences > Security & Privacy > General*
-8. Launch the *mailslurper* binary in a Terminal window.
+5. Launch the *mailslurper* binary in a Terminal window.
 
    **NOTE:** You may need to enable the execution of the *mailslurper* binary under
    *System Preferences > Security & Privacy > General*

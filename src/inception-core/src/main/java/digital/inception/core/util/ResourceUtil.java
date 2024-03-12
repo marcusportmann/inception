@@ -30,6 +30,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>ResourceUtil</b> class is a utility class which provides methods for working with
@@ -39,7 +41,7 @@ import org.springframework.core.io.Resource;
  */
 public final class ResourceUtil {
 
-  /** Private constructor to prevent instantiation. */
+  /** Private default constructor to prevent instantiation. */
   private ResourceUtil() {}
 
   /**
@@ -114,18 +116,46 @@ public final class ResourceUtil {
   /**
    * Retrieves the RSA private key resource.
    *
-   * @param resource the resource
+   * <p>The key location can be a reference to a file on the file system (file:), a reference to a
+   * file on the classpath (classpath:) or base-64 encoded text data (base64:).
+   *
+   * @param resourceLoader the Spring resource loader
+   * @param keyLocation the key location
    * @return the RSA private key
    */
-  public static RSAPrivateKey getRSAPrivateKeyResource(Resource resource) {
-    if (!resource.exists()) {
+  public static RSAPrivateKey getRSAPrivateKeyResource(
+      ResourceLoader resourceLoader, String keyLocation) {
+    if (!StringUtils.hasText(keyLocation)) {
       throw new ResourceException(
-          "The RSA private key resource (" + resource.getFilename() + ") does not exist");
+          "The key location for the RSA private key resource is invalid (" + keyLocation + ")");
+    }
+
+    String keyData;
+
+    if (keyLocation.startsWith("base64:") && (keyLocation.length() > 7)) {
+      keyData = new String(Base64.getDecoder().decode(keyLocation.substring("base64:".length())));
+    } else if (keyLocation.startsWith("file:") || keyLocation.startsWith("classpath:")) {
+      try {
+        Resource resource = resourceLoader.getResource(keyLocation);
+
+        if (!resource.exists()) {
+          throw new ResourceException(
+              "The RSA private key resource (" + resource.getFilename() + ") does not exist");
+        }
+
+        keyData = resource.getContentAsString(Charset.defaultCharset());
+      } catch (Throwable e) {
+        throw new ResourceException(
+            "Failed to retrieve the key data for the RSA private key from the file ("
+                + keyLocation
+                + ")");
+      }
+    } else {
+      throw new ResourceException(
+          "The key location for the RSA private key resource is invalid (" + keyLocation + ")");
     }
 
     try {
-      String keyData = resource.getContentAsString(Charset.defaultCharset());
-
       StringBuilder pemData = new StringBuilder();
       try (BufferedReader reader = new BufferedReader(new StringReader(keyData))) {
         String line;
@@ -145,25 +175,52 @@ public final class ResourceUtil {
       return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
     } catch (Throwable e) {
       throw new ResourceException(
-          "Failed to retrieve the RSA private key resource (" + resource.getFilename() + ")", e);
+          "Failed to retrieve the RSA private key (" + keyLocation + ")", e);
     }
   }
 
   /**
    * Retrieves the RSA public key resource.
    *
-   * @param resource the resource
+   * <p>The key location can be a reference to a file on the file system (file:), a reference to a
+   * file on the classpath (classpath:), base-64 encoded text data (base64:), an HTTP URL (http:) or
+   * an HTTPS (https:) URL.
+   *
+   * @param resourceLoader the Spring resource loader
+   * @param keyLocation the key location
    * @return the RSA public key
    */
-  public static RSAPublicKey getRSAPublicKeyResource(Resource resource) {
-    if (!resource.exists()) {
+  public static RSAPublicKey getRSAPublicKeyResource(
+      ResourceLoader resourceLoader, String keyLocation) {
+    if (!StringUtils.hasText(keyLocation)) {
       throw new ResourceException(
-          "The RSA public key resource (" + resource.getFilename() + ") does not exist");
+          "The key location for the RSA public key resource is invalid (" + keyLocation + ")");
+    }
+
+    String keyData;
+
+    if (keyLocation.startsWith("base64:") && (keyLocation.length() > 7)) {
+      keyData =
+          new String(Base64.getDecoder().decode(keyLocation.substring("base64:".length())));
+    } else if (keyLocation.startsWith("file:") || keyLocation.startsWith("classpath:")) {
+      try {
+        Resource resource = resourceLoader.getResource(keyLocation);
+
+        if (!resource.exists()) {
+          throw new ResourceException(
+              "The RSA public key resource (" + resource.getFilename() + ") does not exist");
+        }
+
+        keyData = resource.getContentAsString(Charset.defaultCharset());
+      } catch (Throwable e) {
+        throw new ResourceException("Failed to retrieve the RSA public key (" + keyLocation + ")");
+      }
+    } else {
+      throw new ResourceException(
+          "The key location for the RSA public key resource is invalid (" + keyLocation + ")");
     }
 
     try {
-      String keyData = resource.getContentAsString(Charset.defaultCharset());
-
       StringBuilder pemData = new StringBuilder();
       try (BufferedReader reader = new BufferedReader(new StringReader(keyData))) {
         String line;
@@ -182,8 +239,7 @@ public final class ResourceUtil {
       X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
       return (RSAPublicKey) keyFactory.generatePublic(keySpec);
     } catch (Throwable e) {
-      throw new ResourceException(
-          "Failed to retrieve the RSA public key resource (" + resource.getFilename() + ")", e);
+      throw new ResourceException("Failed to retrieve the RSA public key (" + keyLocation + ")", e);
     }
   }
 

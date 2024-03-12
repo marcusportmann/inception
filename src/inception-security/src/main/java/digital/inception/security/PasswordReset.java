@@ -81,9 +81,11 @@ public class PasswordReset implements Serializable {
   private OffsetDateTime expired;
 
   /** The date and time the password reset was requested. */
-  @Schema(description = "The date and time the password reset was requested")
-  @JsonProperty
-  @XmlElement(name = "Requested")
+  @Schema(
+      description = "The date and time the password reset was requested",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Requested", required = true)
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @Id

@@ -67,7 +67,7 @@ import javax.xml.validation.SchemaFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -127,6 +127,9 @@ public class SecurityService implements ISecurityService {
   /** The Policy Data Store. */
   private final IPolicyDataStore policyDataStore;
 
+  /** The Spring resource loader. */
+  private final ResourceLoader resourceLoader;
+
   /** The Role Repository. */
   private final RoleRepository roleRepository;
 
@@ -175,6 +178,7 @@ public class SecurityService implements ISecurityService {
    * Constructs a new <b>SecurityService</b>.
    *
    * @param applicationContext the Spring application context
+   * @param resourceLoader the Spring resource loader
    * @param validator the JSR-380 validator
    * @param mailService the Mail Service
    * @param policyDataStore the Policy Data Store
@@ -192,6 +196,7 @@ public class SecurityService implements ISecurityService {
    */
   public SecurityService(
       ApplicationContext applicationContext,
+      ResourceLoader resourceLoader,
       Validator validator,
       IMailService mailService,
       IPolicyDataStore policyDataStore,
@@ -207,6 +212,7 @@ public class SecurityService implements ISecurityService {
       UserDirectoryTypeRepository userDirectoryTypeRepository,
       UserRepository userRepository) {
     this.applicationContext = applicationContext;
+    this.resourceLoader = resourceLoader;
     this.validator = validator;
     this.mailService = mailService;
     this.policyDataStore = policyDataStore;
@@ -225,31 +231,29 @@ public class SecurityService implements ISecurityService {
     this.jwtRsaKeyId =
         applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-key-id");
 
-    String jwtRsaPrivateKeyPath =
+    String jwtRsaPrivateKeyLocation =
         applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-private-key");
 
-    if (StringUtils.hasText(jwtRsaPrivateKeyPath)) {
+    if (StringUtils.hasText(jwtRsaPrivateKeyLocation)) {
       try {
-        Resource resource = applicationContext.getResource(jwtRsaPrivateKeyPath);
-
-        this.jwtRsaPrivateKey = ResourceUtil.getRSAPrivateKeyResource(resource);
+        this.jwtRsaPrivateKey =
+            ResourceUtil.getRSAPrivateKeyResource(resourceLoader, jwtRsaPrivateKeyLocation);
       } catch (ResourceException e) {
         logger.error(
-            "Failed to initialize the JWT RSA private key (" + jwtRsaPrivateKeyPath + ")", e);
+            "Failed to initialize the JWT RSA private key (" + jwtRsaPrivateKeyLocation + ")", e);
       }
     }
 
-    String jwtRsaPublicKeyPath =
+    String jwtRsaPublicKeyLocation =
         applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-public-key");
 
-    if (StringUtils.hasText(jwtRsaPublicKeyPath)) {
+    if (StringUtils.hasText(jwtRsaPublicKeyLocation)) {
       try {
-        Resource resource = applicationContext.getResource(jwtRsaPublicKeyPath);
-
-        this.jwtRsaPublicKey = ResourceUtil.getRSAPublicKeyResource(resource);
+        this.jwtRsaPublicKey =
+            ResourceUtil.getRSAPublicKeyResource(resourceLoader, jwtRsaPublicKeyLocation);
       } catch (Throwable e) {
         logger.error(
-            "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyPath + ")", e);
+            "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyLocation + ")", e);
       }
     }
   }

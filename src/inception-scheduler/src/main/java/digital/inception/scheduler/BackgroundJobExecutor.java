@@ -54,6 +54,9 @@ public class BackgroundJobExecutor {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
+  private final LinkedBlockingQueue<Runnable> jobExecutorQueue =
+      new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH);
+
   /** The Scheduler Service. */
   private final ISchedulerService schedulerService;
 
@@ -82,6 +85,14 @@ public class BackgroundJobExecutor {
     while (true) {
       // Retrieve the next job scheduled for execution
       try {
+        if (jobExecutorQueue.size() == DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH) {
+          logger.warn(
+              "The maximum number of jobs queued for execution has been reached ("
+                  + DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH
+                  + ")");
+          return;
+        }
+
         jobOptional = schedulerService.getNextJobScheduledForExecution();
 
         if (jobOptional.isEmpty()) {
@@ -117,7 +128,7 @@ public class BackgroundJobExecutor {
               DEFAULT_MAXIMUM_PROCESSING_THREADS,
               DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME,
               TimeUnit.MINUTES,
-              new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH));
+              jobExecutorQueue);
 
       // Reset any locks for jobs that were previously being executed
       try {

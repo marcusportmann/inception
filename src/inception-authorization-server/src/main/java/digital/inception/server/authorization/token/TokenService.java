@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -83,9 +83,13 @@ public class TokenService implements ITokenService {
    * Constructs a new <b>TokenService</b>.
    *
    * @param applicationContext the Spring application context
+   * @param resourceLoader the Spring resource loader
    * @param securityService the Security Service
    */
-  public TokenService(ApplicationContext applicationContext, ISecurityService securityService) {
+  public TokenService(
+      ApplicationContext applicationContext,
+      ResourceLoader resourceLoader,
+      ISecurityService securityService) {
     this.securityService = securityService;
 
     this.jwtRsaKeyId =
@@ -102,45 +106,43 @@ public class TokenService implements ITokenService {
       this.jwtRsaKeyId = "inception";
     }
 
-    String jwtRsaPrivateKeyPath =
+    String jwtRsaPrivateKeyLocation =
         applicationContext
             .getEnvironment()
             .getProperty("inception.authorization-server.jwt.rsa-private-key");
 
-    if (!StringUtils.hasText(jwtRsaPrivateKeyPath)) {
-      jwtRsaPrivateKeyPath =
+    if (!StringUtils.hasText(jwtRsaPrivateKeyLocation)) {
+      jwtRsaPrivateKeyLocation =
           applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-private-key");
     }
 
-    if (StringUtils.hasText(jwtRsaPrivateKeyPath)) {
+    if (StringUtils.hasText(jwtRsaPrivateKeyLocation)) {
       try {
-        Resource resource = applicationContext.getResource(jwtRsaPrivateKeyPath);
-
-        this.jwtRsaPrivateKey = ResourceUtil.getRSAPrivateKeyResource(resource);
+        this.jwtRsaPrivateKey =
+            ResourceUtil.getRSAPrivateKeyResource(resourceLoader, jwtRsaPrivateKeyLocation);
       } catch (ResourceException e) {
         logger.error(
-            "Failed to initialize the JWT RSA private key (" + jwtRsaPrivateKeyPath + ")", e);
+            "Failed to initialize the JWT RSA private key (" + jwtRsaPrivateKeyLocation + ")", e);
       }
     }
 
-    String jwtRsaPublicKeyPath =
+    String jwtRsaPublicKeyLocation =
         applicationContext
             .getEnvironment()
             .getProperty("inception.authorization-server.jwt.rsa-public-key");
 
-    if (!StringUtils.hasText(jwtRsaPublicKeyPath)) {
-      jwtRsaPublicKeyPath =
+    if (!StringUtils.hasText(jwtRsaPublicKeyLocation)) {
+      jwtRsaPublicKeyLocation =
           applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-public-key");
     }
 
-    if (StringUtils.hasText(jwtRsaPublicKeyPath)) {
+    if (StringUtils.hasText(jwtRsaPublicKeyLocation)) {
       try {
-        Resource resource = applicationContext.getResource(jwtRsaPublicKeyPath);
-
-        this.jwtRsaPublicKey = ResourceUtil.getRSAPublicKeyResource(resource);
+        this.jwtRsaPublicKey =
+            ResourceUtil.getRSAPublicKeyResource(resourceLoader, jwtRsaPublicKeyLocation);
       } catch (Throwable e) {
         logger.error(
-            "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyPath + ")", e);
+            "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyLocation + ")", e);
       }
     }
   }

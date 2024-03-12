@@ -18,15 +18,11 @@ package digital.inception.server.resource;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+import digital.inception.core.util.ResourceUtil;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import java.io.BufferedReader;
-import java.io.StringReader;
-import java.nio.charset.Charset;
-import java.security.KeyFactory;
+import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +39,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.Customizer;
@@ -58,10 +53,11 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ResourceServerConfiguration</b> class provides the Spring configuration for the Inception
+ * The <b>ResourceServerConfiguration</b> class provides the Spring configuration for the Nova
  * Resource Server module.
  *
  * @author Marcus Portmann
@@ -171,7 +167,10 @@ public class ResourceServerConfiguration {
     if (jwtConfiguration.getRsaPublicKey() != null) {
       logger.info("Using a RS256 RSA public key JWT decoder");
 
-      return NimbusJwtDecoder.withPublicKey(jwtConfiguration.getRsaPublicKey())
+      RSAPublicKey jwtRsaPublicKey =
+          ResourceUtil.getRSAPublicKeyResource(resourceLoader, jwtConfiguration.getRsaPublicKey());
+
+      return NimbusJwtDecoder.withPublicKey(jwtRsaPublicKey)
           .signatureAlgorithm(SignatureAlgorithm.from("RS256"))
           .build();
     } else if (StringUtils.hasText(jwtConfiguration.getSecretKey())) {
@@ -185,65 +184,19 @@ public class ResourceServerConfiguration {
 
       for (JwtKeyConfiguration jwtKeyConfiguration : jwtConfiguration.getKeys()) {
         try {
-          String keyData;
-
-          if (StringUtils.hasText(jwtKeyConfiguration.getLocation())) {
-            Resource resource = resourceLoader.getResource(jwtKeyConfiguration.getLocation());
-
-            if (!resource.exists()) {
-              throw new BeanInitializationException(
-                  "Failed to initialize the JWT decoder for the key ("
-                      + jwtKeyConfiguration.getId()
-                      + ") with the invalid key data location ("
-                      + jwtKeyConfiguration.getLocation()
-                      + ")");
-            }
-
-            keyData = resource.getContentAsString(Charset.defaultCharset());
-
-          } else if (StringUtils.hasText(jwtKeyConfiguration.getData())) {
-            keyData = jwtKeyConfiguration.getData();
-          } else {
-            throw new BeanInitializationException(
-                "Failed to initialize the JWT decoder for the key ("
-                    + jwtKeyConfiguration.getId()
-                    + ") with no key data and no key data location");
-          }
-
           switch (jwtKeyConfiguration.getAlgorithm()) {
             case "RS256":
-
-              // Retrieve the RSA public key used to verify the JWTs
-              RSAPublicKey jwtRsaPublicKey;
-
-              try {
-                StringBuilder pemData = new StringBuilder();
-                try (BufferedReader reader = new BufferedReader(new StringReader(keyData))) {
-                  String line;
-                  while ((line = reader.readLine()) != null) {
-                    if (line.contains("-----BEGIN PUBLIC KEY-----")
-                        || line.contains("-----END PUBLIC KEY-----")) {
-                      continue;
-                    }
-                    pemData.append(line);
-                  }
-                }
-
-                byte[] encodedKey = Base64.getDecoder().decode(pemData.toString());
-
-                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-                X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
-                jwtRsaPublicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
-              } catch (Throwable e) {
+              if (!StringUtils.hasText(jwtKeyConfiguration.getLocation())) {
                 throw new BeanInitializationException(
-                    "Failed to initialize the JWT decoder for the key ("
-                        + jwtKeyConfiguration.getId()
-                        + ") because the PEM-encoded RSA public key is invalid",
-                    e);
+                    "No location specified for the JWT key (" + jwtKeyConfiguration.id + ")");
               }
 
               // Initialize and store the JWT decoder using the RSA public key
               try {
+                RSAPublicKey jwtRsaPublicKey =
+                    ResourceUtil.getRSAPublicKeyResource(
+                        resourceLoader, jwtKeyConfiguration.getLocation());
+
                 jwtDecoders.put(
                     jwtKeyConfiguration.getId(),
                     NimbusJwtDecoder.withPublicKey(jwtRsaPublicKey)
@@ -261,8 +214,25 @@ public class ResourceServerConfiguration {
 
             case "HS256":
               try {
-                SecretKeySpec secretKeySpec =
-                    new SecretKeySpec(keyData.getBytes(), MacAlgorithm.HS256.name());
+                SecretKeySpec secretKeySpec;
+                if (StringUtils.hasText(jwtKeyConfiguration.getData())) {
+                  secretKeySpec =
+                      new SecretKeySpec(
+                          jwtKeyConfiguration.getData().getBytes(), MacAlgorithm.HS256.name());
+                } else if (StringUtils.hasText(jwtKeyConfiguration.getLocation())) {
+                  String keyData =
+                      StreamUtils.copyToString(
+                          resourceLoader
+                              .getResource(jwtKeyConfiguration.getLocation())
+                              .getInputStream(),
+                          StandardCharsets.UTF_8);
+                  secretKeySpec = new SecretKeySpec(keyData.getBytes(), MacAlgorithm.HS256.name());
+                } else {
+                  throw new BeanInitializationException(
+                      "No data or location specified for the JWT key ("
+                          + jwtKeyConfiguration.id
+                          + ")");
+                }
 
                 jwtDecoders.put(
                     jwtKeyConfiguration.getId(),
@@ -437,8 +407,8 @@ public class ResourceServerConfiguration {
     /** The configuration for managing revoked tokens. */
     private JwtRevokedTokensConfiguration revokedTokens;
 
-    /* The RSA public key used to verify the JWTs. */
-    private RSAPublicKey rsaPublicKey;
+    /* The location of the RSA public key used to verify the JWTs. */
+    private String rsaPublicKey;
 
     /* The secret key used to verify the JWTs. */
     private String secretKey;
@@ -465,11 +435,11 @@ public class ResourceServerConfiguration {
     }
 
     /**
-     * Returns the RSA public key used to verify the JWT.
+     * Returns the location of the RSA public key used to verify the JWT.
      *
-     * @return the RSA public key used to verify the JWT
+     * @return the location of the RSA public key used to verify the JWT
      */
-    public RSAPublicKey getRsaPublicKey() {
+    public String getRsaPublicKey() {
       return rsaPublicKey;
     }
 
@@ -501,11 +471,11 @@ public class ResourceServerConfiguration {
     }
 
     /**
-     * Set the RSA public key used to verify the JWT.
+     * Set the location of the RSA public key used to verify the JWT.
      *
-     * @param rsaPublicKey the RSA public key used to verify the JWT
+     * @param rsaPublicKey the location of the RSA public key used to verify the JWT
      */
-    public void setRsaPublicKey(RSAPublicKey rsaPublicKey) {
+    public void setRsaPublicKey(String rsaPublicKey) {
       this.rsaPublicKey = rsaPublicKey;
     }
 

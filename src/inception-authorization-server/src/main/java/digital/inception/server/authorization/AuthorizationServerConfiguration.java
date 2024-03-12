@@ -16,9 +16,6 @@
 
 package digital.inception.server.authorization;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -29,14 +26,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class AuthorizationServerConfiguration {
-
-  /* The RSA private key used to sign the JWTs. */
-  @Value("${inception.authorization-server.jwt.rsa-private-key}")
-  private RSAPrivateKey jwtRsaPrivateKey;
-
-  /* The RSA public key used to verify the JWTs. */
-  @Value("${inception.authorization-server.jwt.rsa-public-key}")
-  private RSAPublicKey jwtRsaPublicKey;
 
   /** Constructs a new <b>AuthorizationServerConfiguration</b>. */
   public AuthorizationServerConfiguration() {}
