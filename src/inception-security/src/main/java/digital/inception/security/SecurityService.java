@@ -228,11 +228,33 @@ public class SecurityService implements ISecurityService {
     this.userDirectoryTypeRepository = userDirectoryTypeRepository;
     this.userRepository = userRepository;
 
-    this.jwtRsaKeyId =
-        applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-key-id");
+    if (StringUtils.hasText(
+        applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-key-id"))) {
+      this.jwtRsaKeyId =
+          applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-key-id");
+    } else if (StringUtils.hasText(
+        applicationContext
+            .getEnvironment()
+            .getProperty("inception.authorization-server.jwt.rsa-key-id"))) {
+      this.jwtRsaKeyId =
+          applicationContext
+              .getEnvironment()
+              .getProperty("inception.authorization-server.jwt.rsa-key-id");
+    } else {
+      this.jwtRsaKeyId = "inception";
+    }
+
+    logger.info("Using the JWT RSA key ID (" + jwtRsaKeyId + ") when issuing JWT tokens");
 
     String jwtRsaPrivateKeyLocation =
         applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-private-key");
+
+    if (!StringUtils.hasText(jwtRsaPrivateKeyLocation)) {
+      jwtRsaPrivateKeyLocation =
+          applicationContext
+              .getEnvironment()
+              .getProperty("inception.authorization-server.jwt.rsa-private-key");
+    }
 
     if (StringUtils.hasText(jwtRsaPrivateKeyLocation)) {
       try {
@@ -246,6 +268,13 @@ public class SecurityService implements ISecurityService {
 
     String jwtRsaPublicKeyLocation =
         applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-public-key");
+
+    if (!StringUtils.hasText(jwtRsaPublicKeyLocation)) {
+      jwtRsaPublicKeyLocation =
+          applicationContext
+              .getEnvironment()
+              .getProperty("inception.authorization-server.jwt.rsa-public-key");
+    }
 
     if (StringUtils.hasText(jwtRsaPublicKeyLocation)) {
       try {

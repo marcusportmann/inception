@@ -2,8 +2,8 @@
 #   keytool -genkeypair -keystore demo.p12 -storetype pkcs12 -storepass demo -alias demo -keyalg RSA -keysize 2048 -keypass demo -validity 7300 -dname "CN=demo" -ext san=dns:demo.local,dns:localhost,ip:127.0.0.1
 #
 # To generate a RSA PKCS8 key-pair to sign JWTs, execute the following commands:
-#   openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > rsa-2048-private-key.p8
-#   openssl pkey -pubout -inform pem -outform pem -in rsa-2048-private-key.p8 -out rsa-2048-public-key.p8
+#   openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > jwt-key-non-prod
+#   openssl pkey -pubout -inform pem -outform pem -in jwt-key-non-prod -out jwt-key-non-prod.pub
 
 spring:
   application:
