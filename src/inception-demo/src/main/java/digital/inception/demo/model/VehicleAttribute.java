@@ -56,7 +56,7 @@ import java.util.Objects;
     propOrder = {"type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "vehicle_attributes")
+@Table(name = "demo_vehicle_attributes")
 @IdClass(VehicleAttributeId.class)
 public class VehicleAttribute implements Serializable {
 
@@ -69,9 +69,9 @@ public class VehicleAttribute implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
+  @Size(min = 1, max = 50)
   @Id
-  @Column(name = "type", length = 30, nullable = false)
+  @Column(name = "type", length = 50, nullable = false)
   private String type;
 
   /** The value for the vehicle attribute. */

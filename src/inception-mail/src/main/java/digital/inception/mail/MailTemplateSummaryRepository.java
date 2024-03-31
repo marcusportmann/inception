@@ -16,6 +16,7 @@
 
 package digital.inception.mail;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -24,4 +25,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {}
+public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {
+  /**
+   * Retrieve the mail template summaries ordered by name ascending.
+   *
+   * @return the mail template summaries ordered by name ascending
+   */
+  List<MailTemplateSummary> findAllByOrderByNameAsc();
+}

@@ -21,6 +21,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,7 +84,11 @@ public class ReferenceApiController extends SecureApiController implements IRefe
   @Override
   public List<Region> getRegions(String localeId, String country)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getRegions(localeId, country);
+    if (StringUtils.hasText(country)) {
+      return referenceService.getRegions(localeId, country);
+    } else {
+      return referenceService.getRegions();
+    }
   }
 
   @Override

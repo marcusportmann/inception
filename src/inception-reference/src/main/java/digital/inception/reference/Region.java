@@ -53,7 +53,7 @@ import java.util.Objects;
     propOrder = {"country", "code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "regions")
+@Table(name = "reference_regions")
 @IdClass(RegionId.class)
 public class Region implements Serializable {
 
@@ -68,7 +68,7 @@ public class Region implements Serializable {
   @NotNull
   @Size(min = 4, max = 6)
   @Id
-  @Column(name = "code", length = 30, nullable = false)
+  @Column(name = "code", length = 6, nullable = false)
   private String code;
 
   /** The ISO 3166-1 alpha-2 code for the country the region is associated with. */

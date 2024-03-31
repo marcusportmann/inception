@@ -18,7 +18,7 @@
   <changeSet id="inception-codes-1.0.0" author="Marcus Portmann">
     <comment>Inception - Codes - 1.0.0</comment>
 
-    <createTable tableName="code_categories" remarks="Code Categories">
+    <createTable tableName="codes_code_categories" remarks="Code Categories">
       <column name="id" type="nvarchar(100)" remarks="The ID for the code category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -29,7 +29,7 @@
       <column name="last_modified" type="timestamp with time zone" remarks="The date and time the code category was last modified"/>
     </createTable>
 
-    <createTable tableName="codes" remarks="Codes">
+    <createTable tableName="codes_codes" remarks="Codes">
       <column name="id" type="nvarchar(100)" remarks="The ID for the code">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -43,21 +43,21 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="codes_code_category_fk"
-      baseTableName="codes" baseColumnNames="code_category_id"
-      referencedTableName="code_categories" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="codes_codes_code_category_fk"
+      baseTableName="codes_codes" baseColumnNames="code_category_id"
+      referencedTableName="codes_code_categories" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <createIndex indexName="codes_code_category_id_ix"
-      tableName="codes">
+    <createIndex indexName="codes_codes_code_category_id_ix"
+      tableName="codes_codes">
       <column name="code_category_id"/>
     </createIndex>
 
     <rollback>
-      <dropIndex tableName="codes" indexName="codes_code_category_id_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="codes"/>
-      <dropTable tableName="codes"/>
+      <dropIndex tableName="codes_codes" indexName="codes_codes_code_category_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="codes_codes"/>
+      <dropTable tableName="codes_codes"/>
 
-      <dropTable tableName="code_categories"/>
+      <dropTable tableName="codes_code_categories"/>
     </rollback>
   </changeSet>
 

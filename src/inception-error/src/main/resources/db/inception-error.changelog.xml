@@ -18,7 +18,7 @@
   <changeSet id="inception-error-1.0.0" author="Marcus Portmann">
     <comment>Inception - Error - 1.0.0</comment>
 
-    <createTable tableName="error_reports" remarks="Error Reports">
+    <createTable tableName="error_error_reports" remarks="Error Reports">
       <column name="id" type="uuid" remarks="The ID for the error report">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -42,24 +42,24 @@
       <column name="feedback" type="nvarchar(2000)" remarks="The optional feedback provided by the user for the error"/>
       <column name="data" type="clob" remarks="The optional base-64 encoded data associated with the error report"/>
     </createTable>
-    <createIndex indexName="error_reports_application_id_ix"
-      tableName="error_reports">
+    <createIndex indexName="error_error_reports_application_id_ix"
+      tableName="error_error_reports">
       <column name="application_id"/>
     </createIndex>
-    <createIndex indexName="error_reports_created_ix"
-      tableName="error_reports">
+    <createIndex indexName="error_error_reports_created_ix"
+      tableName="error_error_reports">
       <column name="created"/>
     </createIndex>
-    <createIndex indexName="error_reports_who_ix"
-      tableName="error_reports">
+    <createIndex indexName="error_error_reports_who_ix"
+      tableName="error_error_reports">
       <column name="who"/>
     </createIndex>
 
     <rollback>
-      <dropIndex tableName="error_reports" indexName="error_reports_who_ix"/>
-      <dropIndex tableName="error_reports" indexName="error_reports_created_ix"/>
-      <dropIndex tableName="error_reports" indexName="error_reports_application_id_ix"/>
-      <dropTable tableName="error_reports"/>
+      <dropIndex tableName="error_error_reports" indexName="error_error_reports_who_ix"/>
+      <dropIndex tableName="error_error_reports" indexName="error_error_reports_created_ix"/>
+      <dropIndex tableName="error_error_reports" indexName="error_error_reports_application_id_ix"/>
+      <dropTable tableName="error_error_reports"/>
     </rollback>
   </changeSet>
 

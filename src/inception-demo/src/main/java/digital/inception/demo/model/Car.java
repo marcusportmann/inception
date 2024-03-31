@@ -54,7 +54,7 @@ import java.util.UUID;
     propOrder = {"id", "name", "numberOfDoors"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
-@Table(name = "cars")
+@Table(name = "demo_cars")
 public class Car extends VehicleBase implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;

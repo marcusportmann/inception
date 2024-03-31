@@ -191,7 +191,7 @@ public class ConfigService implements IConfigService {
   @Override
   public List<ConfigSummary> getConfigSummaries() throws ServiceUnavailableException {
     try {
-      return configSummaryRepository.findAllByOrderByKeyDesc();
+      return configSummaryRepository.findAllByOrderByKeyAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the config summaries", e);
     }
@@ -200,7 +200,7 @@ public class ConfigService implements IConfigService {
   @Override
   public List<Config> getConfigs() throws ServiceUnavailableException {
     try {
-      return configRepository.findAllByOrderByKeyDesc();
+      return configRepository.findAllByOrderByKeyAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the configs", e);
     }
@@ -253,7 +253,7 @@ public class ConfigService implements IConfigService {
       if (StringUtils.hasText(filter)) {
         return configSummaryRepository.findByKeyIgnoreCaseContaining(filter);
       } else {
-        return configSummaryRepository.findAllByOrderByKeyDesc();
+        return configSummaryRepository.findAllByOrderByKeyAsc();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -267,7 +267,7 @@ public class ConfigService implements IConfigService {
       if (StringUtils.hasText(filter)) {
         return configRepository.findByKeyIgnoreCaseContaining(filter);
       } else {
-        return configRepository.findAllByOrderByKeyDesc();
+        return configRepository.findAllByOrderByKeyAsc();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

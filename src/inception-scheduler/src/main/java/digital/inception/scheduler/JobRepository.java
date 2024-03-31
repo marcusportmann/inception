@@ -44,6 +44,13 @@ public interface JobRepository extends JpaRepository<Job, String> {
   void deleteById(@Param("jobId") String jobId);
 
   /**
+   * Retrieve the jobs ordered by name ascending.
+   *
+   * @return the jobs ordered by name ascending
+   */
+  List<Job> findAllByOrderByNameAsc();
+
+  /**
    * Retrieve the filtered jobs.
    *
    * @param filter the filter to apply to the jobs

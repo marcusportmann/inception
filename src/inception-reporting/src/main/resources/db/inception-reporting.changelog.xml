@@ -18,7 +18,7 @@
   <changeSet id="inception-reporting-1.0.0" author="Marcus Portmann">
     <comment>Inception - Reporting - 1.0.0</comment>
 
-    <createTable tableName="report_definitions" remarks="Report Definitions">
+    <createTable tableName="reporting_report_definitions" remarks="Report Definitions">
       <column name="id" type="nvarchar(100)" remarks="The ID for the report definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -31,7 +31,7 @@
     </createTable>
 
     <rollback>
-      <dropTable tableName="report_definitions"/>
+      <dropTable tableName="reporting_report_definitions"/>
     </rollback>
   </changeSet>
 

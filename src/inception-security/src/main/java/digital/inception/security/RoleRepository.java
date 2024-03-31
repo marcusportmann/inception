@@ -16,6 +16,7 @@
 
 package digital.inception.security;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,4 +32,11 @@ public interface RoleRepository extends JpaRepository<Role, String> {
   @Modifying
   @Query("delete from Role r where r.code = :roleCode")
   void deleteById(@Param("roleCode") String roleCode);
+
+  /**
+   * Retrieve the roles ordered by name ascending.
+   *
+   * @return the roles ordered by name ascending
+   */
+  List<Role> findAllByOrderByNameAsc();
 }

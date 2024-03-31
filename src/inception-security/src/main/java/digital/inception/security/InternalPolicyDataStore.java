@@ -96,7 +96,7 @@ public class InternalPolicyDataStore implements IPolicyDataStore {
   @Override
   public List<Policy> getPolicies() throws ServiceUnavailableException {
     try {
-      return policyRepository.findAll();
+      return policyRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the policies", e);
     }

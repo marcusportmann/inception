@@ -71,7 +71,7 @@ import java.util.UUID;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "error_reports")
+@Table(name = "error_error_reports")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ErrorReportSummary implements Serializable {
 

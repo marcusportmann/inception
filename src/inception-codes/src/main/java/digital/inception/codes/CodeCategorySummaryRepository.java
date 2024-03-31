@@ -16,6 +16,7 @@
 
 package digital.inception.codes;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -24,4 +25,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String> {}
+public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String> {
+
+  /**
+   * Retrieve the code category summaries ordered by name ascending.
+   *
+   * @return the code category summaries ordered by name ascending
+   */
+  List<CodeCategorySummary> findAllByOrderByNameAsc();
+}

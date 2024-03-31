@@ -18,7 +18,7 @@
   <changeSet id="inception-mail-1.0.0" author="Marcus Portmann">
     <comment>Inception - Mail - 1.0.0</comment>
 
-    <createTable tableName="mail_templates" remarks="Mail Templates">
+    <createTable tableName="mail_mail_templates" remarks="Mail Templates">
       <column name="id" type="nvarchar(100)" remarks="The ID for the mail template">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -33,7 +33,7 @@
     </createTable>
 
     <rollback>
-      <dropTable tableName="mail_templates"/>
+      <dropTable tableName="mail_mail_templates"/>
     </rollback>
   </changeSet>
 

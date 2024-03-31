@@ -90,7 +90,7 @@ public class ReferenceService implements IReferenceService {
   @Cacheable(cacheNames = "reference", key = "'countries.ALL'")
   public List<Country> getCountries() throws ServiceUnavailableException {
     try {
-      return countryRepository.findAll();
+      return countryRepository.getAllCountries();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the country reference data", e);
     }
@@ -115,7 +115,7 @@ public class ReferenceService implements IReferenceService {
   @Cacheable(cacheNames = "reference", key = "'languages.ALL'")
   public List<Language> getLanguages() throws ServiceUnavailableException {
     try {
-      return languageRepository.findAll();
+      return languageRepository.getAllLanguages();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the language reference data", e);
     }
@@ -141,7 +141,7 @@ public class ReferenceService implements IReferenceService {
   @Cacheable(cacheNames = "reference", key = "'measurementSystems.ALL'")
   public List<MeasurementSystem> getMeasurementSystems() throws ServiceUnavailableException {
     try {
-      return measurementSystemRepository.findAll();
+      return measurementSystemRepository.getAllMeasurementSystems();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the measurement system reference data", e);
@@ -168,7 +168,7 @@ public class ReferenceService implements IReferenceService {
   @Cacheable(cacheNames = "reference", key = "'measurementUnitTypes.ALL'")
   public List<MeasurementUnitType> getMeasurementUnitTypes() throws ServiceUnavailableException {
     try {
-      return measurementUnitTypeRepository.findAll();
+      return measurementUnitTypeRepository.getAllMeasurementUnitTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the measurement unit type reference data", e);
@@ -195,7 +195,7 @@ public class ReferenceService implements IReferenceService {
   @Cacheable(cacheNames = "reference", key = "'measurementUnits.ALL'")
   public List<MeasurementUnit> getMeasurementUnits() throws ServiceUnavailableException {
     try {
-      return measurementUnitRepository.findAll();
+      return measurementUnitRepository.getAllMeasurementUnits();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the measurement unit reference data", e);
@@ -222,7 +222,7 @@ public class ReferenceService implements IReferenceService {
   @Cacheable(cacheNames = "reference", key = "'regions.ALL'")
   public List<Region> getRegions() throws ServiceUnavailableException {
     try {
-      return regionRepository.findAll();
+      return regionRepository.getAllRegions();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the region reference data", e);
     }

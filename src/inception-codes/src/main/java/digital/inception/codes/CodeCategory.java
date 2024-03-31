@@ -56,7 +56,7 @@ import java.util.Objects;
     propOrder = {"id", "name", "data", "lastModified"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "code_categories")
+@Table(name = "codes_code_categories")
 public class CodeCategory implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;

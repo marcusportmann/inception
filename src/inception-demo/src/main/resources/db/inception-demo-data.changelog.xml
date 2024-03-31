@@ -23,13 +23,13 @@
     <!--    | | | |  _| | |\/| | | | | \___ \|  _|| |   | | | | |_) || |  | |  \ V /      -->
     <!--    | |_| | |___| |  | | |_| |  ___) | |__| |___| |_| |  _ < | |  | |   | |       -->
     <!--    |____/|_____|_|  |_|\___/  |____/|_____\____|\___/|_| \_\___| |_|   |_|       -->
-    <insert tableName="tenants">
+    <insert tableName="security_tenants">
       <column name="id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="name" value="Demo"/>
       <column name="status" value="1"/>
     </insert>
 
-    <insert tableName="user_directories">
+    <insert tableName="security_user_directories">
       <column name="id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="type" value="InternalUserDirectory"/>
       <column name="name" value="Demo Internal User Directory"/>
@@ -37,7 +37,7 @@
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>]]>
       </column>
     </insert>
-    <!--    <insert tableName="user_directories">-->
+    <!--    <insert tableName="security_user_directories">-->
     <!--      <column name="id" value="595d13ac-22d6-4ce2-b898-3add4658a748"/>-->
     <!--      <column name="type" value="LDAPUserDirectory"/>-->
     <!--      <column name="name" value="Demo LDAP User Directory"/>-->
@@ -48,17 +48,17 @@
     <!--      </column>-->
     <!--    </insert>-->
 
-    <insert tableName="user_directory_to_tenant_map">
+    <insert tableName="security_user_directory_to_tenant_map">
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
     </insert>
 
-    <!--    <insert tableName="user_directory_to_tenant_map">-->
+    <!--    <insert tableName="security_user_directory_to_tenant_map">-->
     <!--      <column name="user_directory_id" value="595d13ac-22d6-4ce2-b898-3add4658a748"/>-->
     <!--      <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>-->
     <!--    </insert>-->
 
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jack')"/>
@@ -72,7 +72,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jill')"/>
@@ -86,7 +86,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="00166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('sally')"/>
@@ -100,7 +100,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="01166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('bob')"/>
@@ -114,7 +114,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="02166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jamiya.Stuart@advantageepic.com')"/>
@@ -128,7 +128,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="03166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Melany.Reed@bulkmailsweetpotato.com')"/>
@@ -142,7 +142,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="04166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Brendan.Best@chromaticvalley.com')"/>
@@ -156,7 +156,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="05166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Reuben.Ali@cove.com')"/>
@@ -170,7 +170,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="06166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jairo.Hull@turbineluster.com')"/>
@@ -184,7 +184,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="07166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Sampson@leafblower.com')"/>
@@ -198,7 +198,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="08166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amiah.Sanford@dating.com')"/>
@@ -212,7 +212,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="09166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Janae.Reeves@jollyfracture.com')"/>
@@ -226,7 +226,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="10166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Sara.Meza@bestsellerprices.com')"/>
@@ -240,7 +240,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="11166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gauge.Barrera@perspectivedealer.com')"/>
@@ -254,7 +254,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="12166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Stone@healing.com')"/>
@@ -268,7 +268,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="13166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nayeli.Mcknight@retro.com')"/>
@@ -282,7 +282,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="14166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Cristofer.Singleton@glowing.com')"/>
@@ -296,7 +296,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="15166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gunnar.Manning@assets.com')"/>
@@ -310,7 +310,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="16166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Adalyn.Doyle@tadpole.com')"/>
@@ -324,7 +324,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="17166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Oliver.Hoffman@beam.com')"/>
@@ -338,7 +338,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="18166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Ayana.Mccarty@cucumber.com')"/>
@@ -352,7 +352,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="19166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nigel.Cohen@recordplayer.com')"/>
@@ -366,7 +366,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="20166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Andrew.Wheeler@greatplainsfinances.com')"/>
@@ -380,7 +380,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amelia.May@opera.com')"/>
@@ -394,7 +394,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="22166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amir.Wells@refrigeratorsignal.com')"/>
@@ -409,38 +409,38 @@
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
 
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="956c5550-cd3d-42de-8660-7749e1b4df52"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="name" value="Tenant Administrators"/>
       <column name="description" value="Tenant Administrators"/>
     </insert>
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="146c5550-cd3d-42de-8660-7749e1b4df52"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="name" value="Password Resetters"/>
       <column name="description" value="Password Resetters"/>
     </insert>
 
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="group_id" value="956c5550-cd3d-42de-8660-7749e1b4df52"/>
     </insert>
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="00166574-6564-468a-b845-8a5c127a4345"/>
       <column name="group_id" value="146c5550-cd3d-42de-8660-7749e1b4df52"/>
     </insert>
 
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="TenantAdministrator"/>
       <column name="group_id" value="956c5550-cd3d-42de-8660-7749e1b4df52"/>
     </insert>
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="PasswordResetter"/>
       <column name="group_id" value="146c5550-cd3d-42de-8660-7749e1b4df52"/>
     </insert>
 
-    <insert tableName="user_directories">
+    <insert tableName="security_user_directories">
       <column name="id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="type" value="InternalUserDirectory"/>
       <column name="name" value="Another Internal User Directory"/>
@@ -449,12 +449,12 @@
       </column>
     </insert>
 
-    <insert tableName="user_directory_to_tenant_map">
+    <insert tableName="security_user_directory_to_tenant_map">
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
     </insert>
 
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="f4292748-7b98-4b6b-94bf-2abed5ccb0eb"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="username" value="jonas"/>
@@ -468,7 +468,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="963c604a-bcaf-4262-9e94-a2f2c55c029d"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="username" value="denise"/>
@@ -482,7 +482,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="606112a5-5a01-45d6-a29b-cea8d22e592d"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="username" value="davis"/>
@@ -497,33 +497,33 @@
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
 
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="69aea0f3-5798-4ee8-9082-6c41feba3472"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="name" value="Tenant Administrators"/>
       <column name="description" value="Tenant Administrators"/>
     </insert>
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="name" value="Password Resetters"/>
       <column name="description" value="Password Resetters"/>
     </insert>
 
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="f4292748-7b98-4b6b-94bf-2abed5ccb0eb"/>
       <column name="group_id" value="69aea0f3-5798-4ee8-9082-6c41feba3472"/>
     </insert>
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="606112a5-5a01-45d6-a29b-cea8d22e592d"/>
       <column name="group_id" value="dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d"/>
     </insert>
 
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="TenantAdministrator"/>
       <column name="group_id" value="69aea0f3-5798-4ee8-9082-6c41feba3472"/>
     </insert>
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="PasswordResetter"/>
       <column name="group_id" value="dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d"/>
     </insert>
@@ -534,7 +534,7 @@
     <!--    | | | |  _| | |\/| | | | |  _  | | | | |  _ \___ \     -->
     <!--    | |_| | |___| |  | | |_| | | |_| | |_| | |_) |__) |    -->
     <!--    |____/|_____|_|  |_|\___/   \___/ \___/|____/____/     -->
-    <insert tableName="jobs">
+    <insert tableName="scheduler_jobs">
       <column name="id" value="DemoJob"/>
       <column name="name" value="Demo Job"/>
       <column name="scheduling_pattern" value="* * * * *"/>
@@ -548,105 +548,105 @@
     <!--    | | | |  _| | |\/| | | | | | | | |/ _ \ | | / _ \      -->
     <!--    | |_| | |___| |  | | |_| | | |_| / ___ \| |/ ___ \     -->
     <!--    |____/|_____|_|  |_|\___/  |____/_/   \_\_/_/   \_\    -->
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="1"/>
       <column name="integer_value" value="1000001"/>
       <column name="string_value" value="Demo Value 1"/>
       <column name="date_value" value="now()"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="2"/>
       <column name="integer_value" value="2000002"/>
       <column name="string_value" value="Demo Value 2"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="3"/>
       <column name="integer_value" value="3000003"/>
       <column name="string_value" value="Demo Value 3"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="4"/>
       <column name="integer_value" value="4000004"/>
       <column name="string_value" value="Demo Value 4"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="5"/>
       <column name="integer_value" value="5000005"/>
       <column name="string_value" value="Demo Value 5"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="6"/>
       <column name="integer_value" value="6000006"/>
       <column name="string_value" value="Demo Value 6"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="7"/>
       <column name="integer_value" value="7000007"/>
       <column name="string_value" value="Demo Value 7"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="8"/>
       <column name="integer_value" value="8000000"/>
       <column name="string_value" value="Demo Value 8"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="9"/>
       <column name="integer_value" value="9000009"/>
       <column name="string_value" value="Demo Value 9"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="10"/>
       <column name="integer_value" value="1000010"/>
       <column name="string_value" value="Demo Value 10"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="11"/>
       <column name="integer_value" value="1100011"/>
       <column name="string_value" value="Demo Value 11"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="12"/>
       <column name="integer_value" value="1200012"/>
       <column name="string_value" value="Demo Value 12"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="13"/>
       <column name="integer_value" value="1300013"/>
       <column name="string_value" value="Demo Value 13"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="14"/>
       <column name="integer_value" value="1400014"/>
       <column name="string_value" value="Demo Value 14"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="15"/>
       <column name="integer_value" value="1500015"/>
       <column name="string_value" value="Demo Value 15"/>
@@ -660,7 +660,7 @@
     <!--    | |  | | | | | | |  _| \___ \     -->
     <!--    | |__| |_| | |_| | |___ ___) |    -->
     <!--    \____\___/|____/|_____|____/      -->
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Category 01"/>
       <column name="data">
@@ -668,26 +668,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode011"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.1"/>
       <column name="value" value="Test Code Value 1.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode012"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.2"/>
       <column name="value" value="Test Code Value 1.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode013"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.3"/>
       <column name="value" value="Test Code Value 1.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Category 02"/>
       <column name="data">
@@ -695,26 +695,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode021"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.1"/>
       <column name="value" value="Test Code Value 2.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode022"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.2"/>
       <column name="value" value="Test Code Value 2.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode023"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.3"/>
       <column name="value" value="Test Code Value 2.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Category 03"/>
       <column name="data">
@@ -722,26 +722,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode031"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.1"/>
       <column name="value" value="Test Code Value 3.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode032"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.2"/>
       <column name="value" value="Test Code Value 3.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode033"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.3"/>
       <column name="value" value="Test Code Value 3.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Category 04"/>
       <column name="data">
@@ -749,26 +749,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode041"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.1"/>
       <column name="value" value="Test Code Value 4.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode042"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.2"/>
       <column name="value" value="Test Code Value 4.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode043"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.3"/>
       <column name="value" value="Test Code Value 4.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Category 05"/>
       <column name="data">
@@ -776,26 +776,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode051"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.1"/>
       <column name="value" value="Test Code Value 5.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode052"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.2"/>
       <column name="value" value="Test Code Value 5.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode053"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.3"/>
       <column name="value" value="Test Code Value 5.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Category 06"/>
       <column name="data">
@@ -803,26 +803,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode061"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.1"/>
       <column name="value" value="Test Code Value 6.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode062"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.2"/>
       <column name="value" value="Test Code Value 6.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode063"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.3"/>
       <column name="value" value="Test Code Value 6.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Category 07"/>
       <column name="data">
@@ -830,26 +830,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode071"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.1"/>
       <column name="value" value="Test Code Value 7.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode072"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.2"/>
       <column name="value" value="Test Code Value 7.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode073"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.3"/>
       <column name="value" value="Test Code Value 7.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Category 08"/>
       <column name="data">
@@ -857,26 +857,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode081"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.1"/>
       <column name="value" value="Test Code Value 8.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode082"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.2"/>
       <column name="value" value="Test Code Value 8.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode083"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.3"/>
       <column name="value" value="Test Code Value 8.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Category 09"/>
       <column name="data">
@@ -884,26 +884,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode091"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.1"/>
       <column name="value" value="Test Code Value 9.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode092"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.2"/>
       <column name="value" value="Test Code Value 9.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode093"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.3"/>
       <column name="value" value="Test Code Value 9.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Category 10"/>
       <column name="data">
@@ -911,26 +911,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode101"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.1"/>
       <column name="value" value="Test Code Value 10.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode102"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.2"/>
       <column name="value" value="Test Code Value 10.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode103"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.3"/>
       <column name="value" value="Test Code Value 10.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Category 11"/>
       <column name="data">
@@ -938,19 +938,19 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode111"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.1"/>
       <column name="value" value="Test Code Value 11.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode112"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.2"/>
       <column name="value" value="Test Code Value 11.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode113"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.3"/>
@@ -963,19 +963,23 @@
     <!--    | |  | | | |  \| | |_   | | |  _     -->
     <!--    | |__| |_| | |\  |  _|  | | |_| |    -->
     <!--    \____\___/|_| \_|_|   |___\____|     -->
-    <insert tableName="config">
+    <insert tableName="config_config">
       <column name="key" value="TestKey"/>
       <column name="value" value="TestValue"/>
       <column name="description" value="TestDescription"/>
     </insert>
-
+    <insert tableName="config_config">
+      <column name="key" value="AnotherTestKey"/>
+      <column name="value" value="AnotherTestValue"/>
+      <column name="description" value="AnotherTestDescription"/>
+    </insert>
 
     <!--    ____  _____ __  __  ___    __     _______ _   _ ___ ____ _     _____ ____       -->
     <!--    |  _ \| ____|  \/  |/ _ \   \ \   / / ____| | | |_ _/ ___| |   | ____/ ___|     -->
     <!--    | | | |  _| | |\/| | | | |   \ \ / /|  _| | |_| || | |   | |   |  _| \___ \     -->
     <!--    | |_| | |___| |  | | |_| |    \ V / | |___|  _  || | |___| |___| |___ ___) |    -->
     <!--    |____/|_____|_|  |_|\___/      \_/  |_____|_| |_|___\____|_____|_____|____/     -->
-    <insert tableName="vehicle_attribute_types">
+    <insert tableName="demo_vehicle_attribute_types">
       <column name="code" value="color"/>
       <column name="name" value="Color"/>
       <column name="description" value="The vehicle color"/>
@@ -983,46 +987,49 @@
 
 
     <rollback>
-      <delete tableName="vehicle_attribute_types">
+      <delete tableName="demo_vehicle_attribute_types">
         <where>code = 'color'</where>
       </delete>
 
-      <delete tableName="config">
+      <delete tableName="config_config">
         <where>key = 'TestKey'</where>
       </delete>
+      <delete tableName="config_config">
+        <where>key = 'AnotherTestKey'</where>
+      </delete>
 
-      <delete tableName="code_categories">
+      <delete tableName="codes_code_categories">
         <where>id IN ('TestCodeCategory01', 'TestCodeCategory02', 'TestCodeCategory03', 'TestCodeCategory04', 'TestCodeCategory05', 'TestCodeCategory06', 'TestCodeCategory07', 'TestCodeCategory08', 'TestCodeCategory09', 'TestCodeCategory10', 'TestCodeCategory11')</where>
       </delete>
 
-      <delete tableName="data"/>
+      <delete tableName="demo_data"/>
 
-      <delete tableName="jobs">
+      <delete tableName="scheduler_jobs">
         <where>id = 'DemoJob'</where>
       </delete>
 
-      <delete tableName="users">
+      <delete tableName="security_users">
         <where>user_directory_id = '34ccdbc9-4a01-46f5-a284-ba13e095675c'</where>
       </delete>
-      <delete tableName="users">
+      <delete tableName="security_users">
         <where>user_directory_id = '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e'</where>
       </delete>
 
-      <delete tableName="groups">
+      <delete tableName="security_groups">
         <where>user_directory_id = '34ccdbc9-4a01-46f5-a284-ba13e095675c'</where>
       </delete>
-      <delete tableName="groups">
+      <delete tableName="security_groups">
         <where>user_directory_id = '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e'</where>
       </delete>
 
-      <delete tableName="user_directories">
+      <delete tableName="security_user_directories">
         <where>id = '34ccdbc9-4a01-46f5-a284-ba13e095675c'</where>
       </delete>
-      <delete tableName="user_directories">
+      <delete tableName="security_user_directories">
         <where>id = '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e'</where>
       </delete>
 
-      <delete tableName="tenants">
+      <delete tableName="security_tenants">
         <where>id = '204e5b8f-48e7-4354-bd15-753e6543b64d'</where>
       </delete>
     </rollback>
@@ -1038,13 +1045,13 @@
     <!--    | | | |  _| | |\/| | | | | \___ \|  _|| |   | | | | |_) || |  | |  \ V /      -->
     <!--    | |_| | |___| |  | | |_| |  ___) | |__| |___| |_| |  _ < | |  | |   | |       -->
     <!--    |____/|_____|_|  |_|\___/  |____/|_____\____|\___/|_| \_\___| |_|   |_|       -->
-    <insert tableName="tenants">
+    <insert tableName="security_tenants">
       <column name="id" value="204e5b8f48e74354bd15753e6543b64d"/>
       <column name="name" value="Demo"/>
       <column name="status" value="1"/>
     </insert>
 
-    <insert tableName="user_directories">
+    <insert tableName="security_user_directories">
       <column name="id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="type" value="InternalUserDirectory"/>
       <column name="name" value="Demo Internal User Directory"/>
@@ -1052,7 +1059,7 @@
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>]]>
       </column>
     </insert>
-    <!--    <insert tableName="user_directories">-->
+    <!--    <insert tableName="security_user_directories">-->
     <!--      <column name="id" value="595d13ac22d64ce2b8983add4658a748"/>-->
     <!--      <column name="type" value="LDAPUserDirectory"/>-->
     <!--      <column name="name" value="Demo LDAP User Directory"/>-->
@@ -1063,17 +1070,17 @@
     <!--      </column>-->
     <!--    </insert>-->
 
-    <insert tableName="user_directory_to_tenant_map">
+    <insert tableName="security_user_directory_to_tenant_map">
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="tenant_id" value="204e5b8f48e74354bd15753e6543b64d"/>
     </insert>
 
-    <!--    <insert tableName="user_directory_to_tenant_map">-->
+    <!--    <insert tableName="security_user_directory_to_tenant_map">-->
     <!--      <column name="user_directory_id" value="595d13ac22d64ce2b8983add4658a748"/>-->
     <!--      <column name="tenant_id" value="204e5b8f48e74354bd15753e6543b64d"/>-->
     <!--    </insert>-->
 
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="541665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jack')"/>
@@ -1087,7 +1094,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="641665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jill')"/>
@@ -1101,7 +1108,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="001665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('sally')"/>
@@ -1115,7 +1122,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="011665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('bob')"/>
@@ -1129,7 +1136,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="021665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jamiya.Stuart@advantageepic.com')"/>
@@ -1143,7 +1150,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="031665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Melany.Reed@bulkmailsweetpotato.com')"/>
@@ -1157,7 +1164,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="041665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Brendan.Best@chromaticvalley.com')"/>
@@ -1171,7 +1178,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="051665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Reuben.Ali@cove.com')"/>
@@ -1185,7 +1192,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="061665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jairo.Hull@turbineluster.com')"/>
@@ -1199,7 +1206,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="071665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Sampson@leafblower.com')"/>
@@ -1213,7 +1220,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="081665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amiah.Sanford@dating.com')"/>
@@ -1227,7 +1234,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="091665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Janae.Reeves@jollyfracture.com')"/>
@@ -1241,7 +1248,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="101665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Sara.Meza@bestsellerprices.com')"/>
@@ -1255,7 +1262,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="111665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gauge.Barrera@perspectivedealer.com')"/>
@@ -1269,7 +1276,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="121665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Stone@healing.com')"/>
@@ -1283,7 +1290,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="131665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nayeli.Mcknight@retro.com')"/>
@@ -1297,7 +1304,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="141665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Cristofer.Singleton@glowing.com')"/>
@@ -1311,7 +1318,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="151665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gunnar.Manning@assets.com')"/>
@@ -1325,7 +1332,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="161665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Adalyn.Doyle@tadpole.com')"/>
@@ -1339,7 +1346,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="171665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Oliver.Hoffman@beam.com')"/>
@@ -1353,7 +1360,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="181665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Ayana.Mccarty@cucumber.com')"/>
@@ -1367,7 +1374,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="191665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nigel.Cohen@recordplayer.com')"/>
@@ -1381,7 +1388,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="201665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Andrew.Wheeler@greatplainsfinances.com')"/>
@@ -1395,7 +1402,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="211665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amelia.May@opera.com')"/>
@@ -1409,7 +1416,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="221665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amir.Wells@refrigeratorsignal.com')"/>
@@ -1424,38 +1431,38 @@
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
 
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="956c5550cd3d42de86607749e1b4df52"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="name" value="Tenant Administrators"/>
       <column name="description" value="Tenant Administrators"/>
     </insert>
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="146c5550cd3d42de86607749e1b4df52"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="name" value="Password Resetters"/>
       <column name="description" value="Password Resetters"/>
     </insert>
 
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="541665746564468ab8458a5c127a4345"/>
       <column name="group_id" value="956c5550cd3d42de86607749e1b4df52"/>
     </insert>
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="001665746564468ab8458a5c127a4345"/>
       <column name="group_id" value="146c5550cd3d42de86607749e1b4df52"/>
     </insert>
 
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="TenantAdministrator"/>
       <column name="group_id" value="956c5550cd3d42de86607749e1b4df52"/>
     </insert>
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="PasswordResetter"/>
       <column name="group_id" value="146c5550cd3d42de86607749e1b4df52"/>
     </insert>
 
-    <insert tableName="user_directories">
+    <insert tableName="security_user_directories">
       <column name="id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="type" value="InternalUserDirectory"/>
       <column name="name" value="Another Internal User Directory"/>
@@ -1464,12 +1471,12 @@
       </column>
     </insert>
 
-    <insert tableName="user_directory_to_tenant_map">
+    <insert tableName="security_user_directory_to_tenant_map">
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="tenant_id" value="204e5b8f48e74354bd15753e6543b64d"/>
     </insert>
 
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="f42927487b984b6b94bf2abed5ccb0eb"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="username" value="jonas"/>
@@ -1483,7 +1490,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="963c604abcaf42629e94a2f2c55c029d"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="username" value="denise"/>
@@ -1497,7 +1504,7 @@
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
-    <insert tableName="users">
+    <insert tableName="security_users">
       <column name="id" value="606112a55a0145d6a29bcea8d22e592d"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="username" value="davis"/>
@@ -1512,33 +1519,33 @@
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
 
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="69aea0f357984ee890826c41feba3472"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="name" value="Tenant Administrators"/>
       <column name="description" value="Tenant Administrators"/>
     </insert>
-    <insert tableName="groups">
+    <insert tableName="security_groups">
       <column name="id" value="dd9c3e265c864ef9b7c7f7856c2f836d"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="name" value="Password Resetters"/>
       <column name="description" value="Password Resetters"/>
     </insert>
 
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="f42927487b984b6b94bf2abed5ccb0eb"/>
       <column name="group_id" value="69aea0f357984ee890826c41feba3472"/>
     </insert>
-    <insert tableName="user_to_group_map">
+    <insert tableName="security_user_to_group_map">
       <column name="user_id" value="606112a55a0145d6a29bcea8d22e592d"/>
       <column name="group_id" value="dd9c3e265c864ef9b7c7f7856c2f836d"/>
     </insert>
 
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="TenantAdministrator"/>
       <column name="group_id" value="69aea0f357984ee890826c41feba3472"/>
     </insert>
-    <insert tableName="role_to_group_map">
+    <insert tableName="security_role_to_group_map">
       <column name="role_code" value="PasswordResetter"/>
       <column name="group_id" value="dd9c3e265c864ef9b7c7f7856c2f836d"/>
     </insert>
@@ -1549,7 +1556,7 @@
     <!--    | | | |  _| | |\/| | | | |  _  | | | | |  _ \___ \     -->
     <!--    | |_| | |___| |  | | |_| | | |_| | |_| | |_) |__) |    -->
     <!--    |____/|_____|_|  |_|\___/   \___/ \___/|____/____/     -->
-    <insert tableName="jobs">
+    <insert tableName="scheduler_jobs">
       <column name="id" value="DemoJob"/>
       <column name="name" value="Demo Job"/>
       <column name="scheduling_pattern" value="* * * * *"/>
@@ -1563,105 +1570,105 @@
     <!--    | | | |  _| | |\/| | | | | | | | |/ _ \ | | / _ \      -->
     <!--    | |_| | |___| |  | | |_| | | |_| / ___ \| |/ ___ \     -->
     <!--    |____/|_____|_|  |_|\___/  |____/_/   \_\_/_/   \_\    -->
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" value="1"/>
       <column name="integer_value" value="1000001"/>
       <column name="string_value" value="Demo Value 1"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="2"/>
       <column name="integer_value" type="int" value="2000002"/>
       <column name="string_value" value="Demo Value 2"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="3"/>
       <column name="integer_value" type="int" value="3000003"/>
       <column name="string_value" value="Demo Value 3"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="4"/>
       <column name="integer_value" type="int" value="4000004"/>
       <column name="string_value" value="Demo Value 4"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="5"/>
       <column name="integer_value" type="int" value="5000005"/>
       <column name="string_value" value="Demo Value 5"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="6"/>
       <column name="integer_value" type="int" value="6000006"/>
       <column name="string_value" value="Demo Value 6"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="7"/>
       <column name="integer_value" type="int" value="7000007"/>
       <column name="string_value" value="Demo Value 7"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="8"/>
       <column name="integer_value" type="int" value="8000000"/>
       <column name="string_value" value="Demo Value 8"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="9"/>
       <column name="integer_value" type="int" value="9000009"/>
       <column name="string_value" value="Demo Value 9"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="10"/>
       <column name="integer_value" type="int" value="1000010"/>
       <column name="string_value" value="Demo Value 10"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="11"/>
       <column name="integer_value" type="int" value="1100011"/>
       <column name="string_value" value="Demo Value 11"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="12"/>
       <column name="integer_value" type="int" value="1200012"/>
       <column name="string_value" value="Demo Value 12"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="13"/>
       <column name="integer_value" type="int" value="1300013"/>
       <column name="string_value" value="Demo Value 13"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="14"/>
       <column name="integer_value" type="int" value="1400014"/>
       <column name="string_value" value="Demo Value 14"/>
       <column name="date_value" valueComputed="${now}"/>
       <column name="timestamp_value" valueComputed="${now}"/>
     </insert>
-    <insert tableName="data">
+    <insert tableName="demo_data">
       <column name="id" type="bigint" value="15"/>
       <column name="integer_value" type="int" value="1500015"/>
       <column name="string_value" value="Demo Value 15"/>
@@ -1675,7 +1682,7 @@
     <!--    | |  | | | | | | |  _| \___ \     -->
     <!--    | |__| |_| | |_| | |___ ___) |    -->
     <!--    \____\___/|____/|_____|____/      -->
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Category 01"/>
       <column name="data">
@@ -1683,26 +1690,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode011"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.1"/>
       <column name="value" value="Test Code Value 1.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode012"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.2"/>
       <column name="value" value="Test Code Value 1.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode013"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.3"/>
       <column name="value" value="Test Code Value 1.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Category 02"/>
       <column name="data">
@@ -1710,26 +1717,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode021"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.1"/>
       <column name="value" value="Test Code Value 2.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode022"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.2"/>
       <column name="value" value="Test Code Value 2.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode023"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.3"/>
       <column name="value" value="Test Code Value 2.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Category 03"/>
       <column name="data">
@@ -1737,26 +1744,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode031"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.1"/>
       <column name="value" value="Test Code Value 3.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode032"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.2"/>
       <column name="value" value="Test Code Value 3.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode033"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.3"/>
       <column name="value" value="Test Code Value 3.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Category 04"/>
       <column name="data">
@@ -1764,26 +1771,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode041"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.1"/>
       <column name="value" value="Test Code Value 4.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode042"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.2"/>
       <column name="value" value="Test Code Value 4.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode043"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.3"/>
       <column name="value" value="Test Code Value 4.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Category 05"/>
       <column name="data">
@@ -1791,26 +1798,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode051"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.1"/>
       <column name="value" value="Test Code Value 5.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode052"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.2"/>
       <column name="value" value="Test Code Value 5.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode053"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.3"/>
       <column name="value" value="Test Code Value 5.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Category 06"/>
       <column name="data">
@@ -1818,26 +1825,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode061"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.1"/>
       <column name="value" value="Test Code Value 6.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode062"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.2"/>
       <column name="value" value="Test Code Value 6.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode063"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.3"/>
       <column name="value" value="Test Code Value 6.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Category 07"/>
       <column name="data">
@@ -1845,26 +1852,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode071"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.1"/>
       <column name="value" value="Test Code Value 7.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode072"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.2"/>
       <column name="value" value="Test Code Value 7.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode073"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.3"/>
       <column name="value" value="Test Code Value 7.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Category 08"/>
       <column name="data">
@@ -1872,26 +1879,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode081"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.1"/>
       <column name="value" value="Test Code Value 8.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode082"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.2"/>
       <column name="value" value="Test Code Value 8.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode083"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.3"/>
       <column name="value" value="Test Code Value 8.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Category 09"/>
       <column name="data">
@@ -1899,26 +1906,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode091"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.1"/>
       <column name="value" value="Test Code Value 9.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode092"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.2"/>
       <column name="value" value="Test Code Value 9.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode093"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.3"/>
       <column name="value" value="Test Code Value 9.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Category 10"/>
       <column name="data">
@@ -1926,26 +1933,26 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode101"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.1"/>
       <column name="value" value="Test Code Value 10.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode102"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.2"/>
       <column name="value" value="Test Code Value 10.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode103"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.3"/>
       <column name="value" value="Test Code Value 10.3"/>
     </insert>
 
-    <insert tableName="code_categories">
+    <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Category 11"/>
       <column name="data">
@@ -1953,19 +1960,19 @@
       </column>
       <column name="last_modified" valueComputed="${now}"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode111"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.1"/>
       <column name="value" value="Test Code Value 11.1"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode112"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.2"/>
       <column name="value" value="Test Code Value 11.2"/>
     </insert>
-    <insert tableName="codes">
+    <insert tableName="codes_codes">
       <column name="id" value="TestCode113"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.3"/>
@@ -1978,10 +1985,15 @@
     <!--    | |  | | | |  \| | |_   | | |  _     -->
     <!--    | |__| |_| | |\  |  _|  | | |_| |    -->
     <!--    \____\___/|_| \_|_|   |___\____|     -->
-    <insert tableName="config">
+    <insert tableName="config_config">
       <column name="key" value="TestKey"/>
       <column name="value" value="TestValue"/>
       <column name="description" value="TestDescription"/>
+    </insert>
+    <insert tableName="config_config">
+      <column name="key" value="AnotherTestKey"/>
+      <column name="value" value="AnotherTestValue"/>
+      <column name="description" value="AnotherTestDescription"/>
     </insert>
 
 
@@ -1990,7 +2002,7 @@
     <!--    | | | |  _| | |\/| | | | |   \ \ / /|  _| | |_| || | |   | |   |  _| \___ \     -->
     <!--    | |_| | |___| |  | | |_| |    \ V / | |___|  _  || | |___| |___| |___ ___) |    -->
     <!--    |____/|_____|_|  |_|\___/      \_/  |_____|_| |_|___\____|_____|_____|____/     -->
-    <insert tableName="vehicle_attribute_types">
+    <insert tableName="demo_vehicle_attribute_types">
       <column name="code" value="color"/>
       <column name="name" value="Color"/>
       <column name="description" value="The vehicle color"/>
@@ -1998,46 +2010,49 @@
 
 
     <rollback>
-      <delete tableName="vehicle_attribute_types">
+      <delete tableName="demo_vehicle_attribute_types">
         <where>code = 'color'</where>
       </delete>
 
-      <delete tableName="config">
+      <delete tableName="config_config">
         <where>key = 'TestKey'</where>
       </delete>
+      <delete tableName="config_config">
+        <where>key = 'AnotherTestKey'</where>
+      </delete>
 
-      <delete tableName="code_categories">
+      <delete tableName="codes_code_categories">
         <where>id IN ('TestCodeCategory01', 'TestCodeCategory02', 'TestCodeCategory03', 'TestCodeCategory04', 'TestCodeCategory05', 'TestCodeCategory06', 'TestCodeCategory07', 'TestCodeCategory08', 'TestCodeCategory09', 'TestCodeCategory10', 'TestCodeCategory11')</where>
       </delete>
 
-      <delete tableName="data"/>
+      <delete tableName="demo_data"/>
 
-      <delete tableName="jobs">
+      <delete tableName="scheduler_jobs">
         <where>id = 'DemoJob'</where>
       </delete>
 
-      <delete tableName="users">
+      <delete tableName="security_users">
         <where>user_directory_id = HEXTORAW('34ccdbc94a0146f5a284ba13e095675c')</where>
       </delete>
-      <delete tableName="users">
+      <delete tableName="security_users">
         <where>user_directory_id = HEXTORAW('2a935e0dac7e44c4aa44e986aeb8c00e')</where>
       </delete>
 
-      <delete tableName="groups">
+      <delete tableName="security_groups">
         <where>user_directory_id = HEXTORAW('34ccdbc94a0146f5a284ba13e095675c')</where>
       </delete>
-      <delete tableName="groups">
+      <delete tableName="security_groups">
         <where>user_directory_id = HEXTORAW('2a935e0dac7e44c4aa44e986aeb8c00e')</where>
       </delete>
 
-      <delete tableName="user_directories">
+      <delete tableName="security_user_directories">
         <where>id = HEXTORAW('34ccdbc94a0146f5a284ba13e095675c')</where>
       </delete>
-      <delete tableName="user_directories">
+      <delete tableName="security_user_directories">
         <where>id = HEXTORAW('2a935e0dac7e44c4aa44e986aeb8c00e')</where>
       </delete>
 
-      <delete tableName="tenants">
+      <delete tableName="security_tenants">
         <where>id = HEXTORAW('204e5b8f48e74354bd15753e6543b64d')</where>
       </delete>
     </rollback>

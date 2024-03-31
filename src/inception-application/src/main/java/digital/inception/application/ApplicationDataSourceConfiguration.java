@@ -24,12 +24,10 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.Properties;
 import javax.sql.DataSource;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
-import liquibase.Liquibase;
+import liquibase.command.CommandScope;
+import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
@@ -159,36 +157,13 @@ public class ApplicationDataSourceConfiguration {
         TransactionIntegration transactionIntegration =
             applicationContext.getBean(TransactionIntegration.class);
 
-        if (transactionIntegration != null) {
-          agroalDataSourceConfigurationSupplier
-              .connectionPoolConfiguration()
-              .transactionIntegration(transactionIntegration);
-        }
+        agroalDataSourceConfigurationSupplier
+            .connectionPoolConfiguration()
+            .transactionIntegration(transactionIntegration);
       } catch (NoSuchBeanDefinitionException ignored) {
       }
 
       DataSource dataSource = AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
-
-      //    /*
-      //     * The SAP JDBC driver does not return a DataSource, instead it provides connections so
-      // we
-      //     * make use of the DriverManagerDataSource.
-      //     */
-      //    if (dataSourceClass.equals("com.sap.db.jdbc.Driver"))
-      //    {
-      //      DriverManagerDataSource ds = new DriverManagerDataSource();
-      //      ds.setDriverClassName(dataSourceClass);
-      //      ds.setUrl(url);
-      //      dataSource = ds;
-      //    }
-      //    else
-      //    {
-      //      Class<? extends DataSource> dataSourceClass =
-      // Thread.currentThread().getContextClassLoader()
-      //          .loadClass(this.dataSourceClass).asSubclass(DataSource.class);
-      //
-      //      dataSource = DataSourceBuilder.create().type(dataSourceClass).url(url).build();
-      //    }
 
       boolean isInMemoryH2Database = false;
 
@@ -201,19 +176,13 @@ public class ApplicationDataSourceConfiguration {
                 + " application database with version "
                 + metaData.getDatabaseProductVersion());
 
-        switch (metaData.getDatabaseProductName()) {
-          case "H2":
-            isInMemoryH2Database = true;
-
-            break;
-
-          default:
-            logger.info(
-                "The default database tables will not be populated for the database type ("
-                    + metaData.getDatabaseProductName()
-                    + ")");
-
-            break;
+        if (metaData.getDatabaseProductName().equals("H2")) {
+          isInMemoryH2Database = true;
+        } else {
+          logger.info(
+              "The default database tables will not be populated for the database type ("
+                  + metaData.getDatabaseProductName()
+                  + ")");
         }
       }
 
@@ -229,28 +198,33 @@ public class ApplicationDataSourceConfiguration {
                   .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
           for (Resource changelogResource : liquibaseChangelogResources) {
-            if (!changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
-              String changelogFile = "db/" + changelogResource.getFilename();
+            if (StringUtils.hasText(changelogResource.getFilename())) {
+              if (!changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+                String changelogFile = "db/" + changelogResource.getFilename();
 
-              logger.info("Applying Liquibase changelog: " + changelogResource.getFilename());
+                logger.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
-              Liquibase liquibase =
-                  new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-              liquibase.update(new Contexts(), new LabelExpression());
+                new CommandScope("update")
+                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue("changeLogFile", changelogFile)
+                    .execute();
+              }
             }
           }
 
           for (Resource changelogResource : liquibaseChangelogResources) {
-            if (changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
-              String changelogFile = "db/" + changelogResource.getFilename();
+            if (StringUtils.hasText(changelogResource.getFilename())) {
+              if (changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+                String changelogFile = "db/" + changelogResource.getFilename();
 
-              logger.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
+                logger.info(
+                    "Applying Liquibase data changelog: " + changelogResource.getFilename());
 
-              Liquibase liquibase =
-                  new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-              liquibase.update(new Contexts(), new LabelExpression());
+                new CommandScope("update")
+                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue("changeLogFile", changelogFile)
+                    .execute();
+              }
             }
           }
         }

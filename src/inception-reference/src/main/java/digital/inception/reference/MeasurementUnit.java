@@ -51,7 +51,7 @@ import java.util.Objects;
     propOrder = {"code", "localeId", "sortIndex", "name", "description", "system", "type"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "measurement_units")
+@Table(name = "reference_measurement_units")
 @IdClass(MeasurementUnitId.class)
 public class MeasurementUnit implements Serializable {
 
@@ -64,9 +64,9 @@ public class MeasurementUnit implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
+  @Size(min = 1, max = 50)
   @Id
-  @Column(name = "code", length = 30, nullable = false)
+  @Column(name = "code", length = 50, nullable = false)
   private String code;
 
   /** The description for the measurement unit. */
@@ -117,8 +117,8 @@ public class MeasurementUnit implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "System", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "system", length = 30, nullable = false)
+  @Size(min = 1, max = 50)
+  @Column(name = "system", length = 50, nullable = false)
   private String system;
 
   /** The code for the measurement unit type. */
@@ -128,8 +128,8 @@ public class MeasurementUnit implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "type", length = 30, nullable = false)
+  @Size(min = 1, max = 50)
+  @Column(name = "type", length = 50, nullable = false)
   private String type;
 
   /** Constructs a new <b>MeasurementUnit</b>. */

@@ -42,7 +42,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    */
   @Modifying
   @Query(
-      value = "insert into role_to_group_map(role_code, group_id) values (:roleCode, :groupId)",
+      value = "insert into security_role_to_group_map(role_code, group_id) values (:roleCode, :groupId)",
       nativeQuery = true)
   void addRoleToGroup(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
 
@@ -54,7 +54,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    */
   @Modifying
   @Query(
-      value = "insert into user_to_group_map(user_id, group_id) values (:userId, :groupId)",
+      value = "insert into security_user_to_group_map(user_id, group_id) values (:userId, :groupId)",
       nativeQuery = true)
   void addUserToGroup(@Param("groupId") UUID groupId, @Param("userId") UUID userId);
 
@@ -248,7 +248,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    */
   @Modifying
   @Query(
-      value = "delete from role_to_group_map where group_id=:groupId and role_code = :roleCode",
+      value = "delete from security_role_to_group_map where group_id=:groupId and role_code = :roleCode",
       nativeQuery = true)
   int removeRoleFromGroup(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
 
@@ -260,7 +260,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    */
   @Modifying
   @Query(
-      value = "delete from user_to_group_map where group_id=:groupId and user_id = :userId",
+      value = "delete from security_user_to_group_map where group_id=:groupId and user_id = :userId",
       nativeQuery = true)
   void removeUserFromGroup(@Param("groupId") UUID groupId, @Param("userId") UUID userId);
 
@@ -273,7 +273,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    */
   @Query(
       value =
-          "select (count(role_code) > 0) from role_to_group_map where "
+          "select (count(role_code) > 0) from security_role_to_group_map where "
               + "role_code = :roleCode and group_id = :groupId",
       nativeQuery = true)
   boolean roleToGroupMappingExists(

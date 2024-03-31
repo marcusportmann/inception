@@ -45,11 +45,11 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   boolean existsByKeyIgnoreCase(String key);
 
   /**
-   * Retrieve all the configs ordered by key descending.
+   * Retrieve all the configs ordered by key ascending.
    *
-   * @return all the configs ordered by key descending
+   * @return all the configs ordered by key ascending
    */
-  List<Config> findAllByOrderByKeyDesc();
+  List<Config> findAllByOrderByKeyAsc();
 
   /**
    * Retrieve the config.

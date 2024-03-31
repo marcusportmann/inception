@@ -18,7 +18,7 @@
   <changeSet id="inception-reference-1.0.0" author="Marcus Portmann">
     <comment>Inception - Reference - 1.0.0</comment>
 
-    <createTable tableName="countries" remarks="Countries">
+    <createTable tableName="reference_countries" remarks="Countries">
       <column name="code" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -29,10 +29,10 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="sort_index" type="int" remarks="The sort index for the country"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the country">
+      <column name="name" type="nvarchar(100)" remarks="The name of the country">
         <constraints nullable="false"/>
       </column>
-      <column name="short_name" type="nvarchar(30)" remarks="The short name for the country">
+      <column name="short_name" type="nvarchar(50)" remarks="The short name for the country">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the country">
@@ -45,16 +45,16 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <createIndex indexName="countries_iso3_code_ix"
-      tableName="countries">
+    <createIndex indexName="reference_countries_iso3_code_ix"
+      tableName="reference_countries">
       <column name="iso3_code"/>
     </createIndex>
-    <createIndex indexName="countries_locale_id_ix"
-      tableName="countries">
+    <createIndex indexName="reference_countries_locale_id_ix"
+      tableName="reference_countries">
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable tableName="languages" remarks="Languages">
+    <createTable tableName="reference_languages" remarks="Languages">
       <column name="code" type="nvarchar(2)" remarks="The ISO 639-1 alpha-2 code for the language">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -65,92 +65,92 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="sort_index" type="int" remarks="The sort index for the language"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the language">
+      <column name="name" type="nvarchar(100)" remarks="The name of the language">
         <constraints nullable="false"/>
       </column>
-      <column name="short_name" type="nvarchar(30)" remarks="The short name for the language">
+      <column name="short_name" type="nvarchar(50)" remarks="The short name for the language">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the language">
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <createIndex indexName="languages_locale_id_ix"
-      tableName="languages">
+    <createIndex indexName="reference_languages_locale_id_ix"
+      tableName="reference_languages">
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable tableName="measurement_systems" remarks="Measurement Systems">
-      <column name="code" type="nvarchar(30)" remarks="The code for the measurement system">
+    <createTable tableName="reference_measurement_systems" remarks="Measurement Systems">
+      <column name="code" type="nvarchar(50)" remarks="The code for the measurement system">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the measurement system">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="sort_index" type="int" remarks="The sort index for the measurement system"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the measurement system">
+      <column name="name" type="nvarchar(100)" remarks="The name of the measurement system">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the measurement system">
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <createIndex indexName="measurement_systems_locale_id_ix"
-      tableName="measurement_systems">
+    <createIndex indexName="reference_measurement_systems_locale_id_ix"
+      tableName="reference_measurement_systems">
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable tableName="measurement_unit_types" remarks="Measurement Unit Types">
-      <column name="code" type="nvarchar(30)" remarks="The code for the measurement unit type">
+    <createTable tableName="reference_measurement_unit_types" remarks="Measurement Unit Types">
+      <column name="code" type="nvarchar(50)" remarks="The code for the measurement unit type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the measurement unit type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="sort_index" type="int" remarks="The sort index for the measurement unit type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the measurement unit type">
+      <column name="name" type="nvarchar(100)" remarks="The name of the measurement unit type">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the measurement unit type">
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <createIndex indexName="measurement_unit_types_locale_id_ix"
-      tableName="measurement_unit_types">
+    <createIndex indexName="reference_measurement_unit_types_locale_id_ix"
+      tableName="reference_measurement_unit_types">
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable tableName="measurement_units" remarks="Measurement Units">
-      <column name="code" type="nvarchar(30)" remarks="The code for the measurement unit">
+    <createTable tableName="reference_measurement_units" remarks="Measurement Units">
+      <column name="code" type="nvarchar(50)" remarks="The code for the measurement unit">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the measurement unit">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="sort_index" type="int" remarks="The sort index for the measurement unit"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the measurement unit">
+      <column name="name" type="nvarchar(100)" remarks="The name of the measurement unit">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the measurement unit">
         <constraints nullable="false"/>
       </column>
-      <column name="system" type="nvarchar(30)" remarks="The code for the measurement system"/>
-      <column name="type" type="nvarchar(30)" remarks="The code for the measurement unit type"/>
+      <column name="system" type="nvarchar(50)" remarks="The code for the measurement system"/>
+      <column name="type" type="nvarchar(50)" remarks="The code for the measurement unit type"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="measurement_units_measurement_system_fk"
-      baseTableName="measurement_units" baseColumnNames="system,locale_id"
-      referencedTableName="measurement_systems" referencedColumnNames="code,locale_id"
+    <addForeignKeyConstraint constraintName="reference_measurement_units_measurement_system_fk"
+      baseTableName="reference_measurement_units" baseColumnNames="system,locale_id"
+      referencedTableName="reference_measurement_systems" referencedColumnNames="code,locale_id"
       onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="measurement_units_measurement_unit_type_fk"
-      baseTableName="measurement_units" baseColumnNames="type,locale_id"
-      referencedTableName="measurement_unit_types"  referencedColumnNames="code,locale_id"
+    <addForeignKeyConstraint constraintName="reference_measurement_units_measurement_unit_type_fk"
+      baseTableName="reference_measurement_units" baseColumnNames="type,locale_id"
+      referencedTableName="reference_measurement_unit_types"  referencedColumnNames="code,locale_id"
       onDelete="CASCADE"/>
-    <createIndex indexName="measurement_units_locale_id_ix"
-      tableName="measurement_units">
+    <createIndex indexName="reference_measurement_units_locale_id_ix"
+      tableName="reference_measurement_units">
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable tableName="regions" remarks="Regions">
+    <createTable tableName="reference_regions" remarks="Regions">
       <column name="country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country the region is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -161,48 +161,48 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="sort_index" type="int" remarks="The sort index for the region"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the region">
+      <column name="name" type="nvarchar(100)" remarks="The name of the region">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the region">
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="regions_country_fk"
-      baseTableName="regions" baseColumnNames="country,locale_id"
-      referencedTableName="countries" referencedColumnNames="code,locale_id"
+    <addForeignKeyConstraint constraintName="reference_regions_country_fk"
+      baseTableName="reference_regions" baseColumnNames="country,locale_id"
+      referencedTableName="reference_countries" referencedColumnNames="code,locale_id"
       onDelete="CASCADE"/>
-    <createIndex indexName="regions_country_ix"
-      tableName="regions">
+    <createIndex indexName="reference_regions_country_ix"
+      tableName="reference_regions">
       <column name="country"/>
     </createIndex>
-    <createIndex indexName="regions_locale_id_ix"
-      tableName="regions">
+    <createIndex indexName="reference_regions_locale_id_ix"
+      tableName="reference_regions">
       <column name="locale_id"/>
     </createIndex>
 
     <rollback>
-      <dropIndex tableName="regions" indexName="regions_locale_id_ix"/>
-      <dropIndex tableName="regions" indexName="regions_country_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="regions"/>
-      <dropTable tableName="regions"/>
+      <dropIndex tableName="reference_regions" indexName="reference_regions_locale_id_ix"/>
+      <dropIndex tableName="reference_regions" indexName="reference_regions_country_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="reference_regions"/>
+      <dropTable tableName="reference_regions"/>
 
-      <dropIndex tableName="measurement_units" indexName="measurement_units_locale_id_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="measurement_units"/>
-      <dropTable tableName="measurement_units"/>
+      <dropIndex tableName="reference_measurement_units" indexName="reference_measurement_units_locale_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="reference_measurement_units"/>
+      <dropTable tableName="reference_measurement_units"/>
 
-      <dropIndex tableName="measurement_unit_types" indexName="measurement_unit_types_locale_id_ix"/>
-      <dropTable tableName="measurement_unit_types"/>
+      <dropIndex tableName="reference_measurement_unit_types" indexName="reference_measurement_unit_types_locale_id_ix"/>
+      <dropTable tableName="reference_measurement_unit_types"/>
 
-      <dropIndex tableName="measurement_systems" indexName="measurement_systems_locale_id_ix"/>
-      <dropTable tableName="measurement_systems"/>
+      <dropIndex tableName="reference_measurement_systems" indexName="reference_measurement_systems_locale_id_ix"/>
+      <dropTable tableName="reference_measurement_systems"/>
 
-      <dropIndex tableName="languages" indexName="languages_locale_id_ix"/>
-      <dropTable tableName="languages"/>
+      <dropIndex tableName="reference_languages" indexName="reference_languages_locale_id_ix"/>
+      <dropTable tableName="reference_languages"/>
 
-      <dropIndex tableName="countries" indexName="countries_locale_id_ix"/>
-      <dropIndex tableName="countries" indexName="countries_iso3_code_ix"/>
-      <dropTable tableName="countries"/>
+      <dropIndex tableName="reference_countries" indexName="reference_countries_locale_id_ix"/>
+      <dropIndex tableName="reference_countries" indexName="reference_countries_iso3_code_ix"/>
+      <dropTable tableName="reference_countries"/>
     </rollback>
   </changeSet>
 

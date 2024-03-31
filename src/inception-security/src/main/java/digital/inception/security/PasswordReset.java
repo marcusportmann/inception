@@ -56,7 +56,7 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 @Entity
-@Table(name = "password_resets")
+@Table(name = "security_password_resets")
 @IdClass(PasswordResetId.class)
 public class PasswordReset implements Serializable {
 

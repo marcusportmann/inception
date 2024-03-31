@@ -16,6 +16,7 @@
 
 package digital.inception.reporting;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -25,4 +26,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Marcus Portmann
  */
 public interface ReportDefinitionSummaryRepository
-    extends JpaRepository<ReportDefinitionSummary, String> {}
+    extends JpaRepository<ReportDefinitionSummary, String> {
+
+  /**
+   * Retrieve the report definition summaries ordered by name ascending.
+   *
+   * @return the report definition summaries ordered by name ascending
+   */
+  List<ReportDefinitionSummary> findAllByOrderByNameAsc();
+}

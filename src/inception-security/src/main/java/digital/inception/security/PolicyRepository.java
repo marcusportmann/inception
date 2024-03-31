@@ -16,6 +16,7 @@
 
 package digital.inception.security;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,12 +40,11 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the policies.
+   * Retrieve the policies ordered by name ascending.
    *
-   * @param pageable the pagination information
-   * @return the policies
+   * @return the policies ordered by name ascending
    */
-  Page<Policy> findAll(Pageable pageable);
+  List<Policy> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the filtered policies.

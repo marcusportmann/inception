@@ -83,7 +83,7 @@ import java.util.Objects;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "tokens")
+@Table(name = "security_tokens")
 public class Token implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;

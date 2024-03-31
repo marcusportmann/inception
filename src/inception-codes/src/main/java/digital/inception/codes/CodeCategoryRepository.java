@@ -17,6 +17,7 @@
 package digital.inception.codes;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -39,6 +40,13 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
   @Modifying
   @Query("delete from CodeCategory cc where cc.id = :codeCategoryId")
   void deleteById(@Param("codeCategoryId") String codeCategoryId);
+
+  /**
+   * Retrieve the code categories ordered by name ascending.
+   *
+   * @return the code categories ordered by name ascending
+   */
+  List<CodeCategory> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the data for the code category.

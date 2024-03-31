@@ -328,7 +328,7 @@ public class ReportingService implements IReportingService {
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
       throws ServiceUnavailableException {
     try {
-      return reportDefinitionSummaryRepository.findAll();
+      return reportDefinitionSummaryRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the report definitions", e);
@@ -365,7 +365,7 @@ public class ReportingService implements IReportingService {
   @Override
   public List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException {
     try {
-      return reportDefinitionRepository.findAll();
+      return reportDefinitionRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the report definitions", e);
     }

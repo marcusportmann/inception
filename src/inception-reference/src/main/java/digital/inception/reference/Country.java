@@ -46,7 +46,7 @@ import java.util.Objects;
 @JsonPropertyOrder({
   "code",
   "iso3Code",
-  "locale",
+  "localeId",
   "sortIndex",
   "name",
   "shortName",
@@ -71,7 +71,7 @@ import java.util.Objects;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "countries")
+@Table(name = "reference_countries")
 @IdClass(CountryId.class)
 public class Country implements Serializable {
 

@@ -50,7 +50,7 @@ import java.util.Objects;
     propOrder = {"key", "value", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "config")
+@Table(name = "config_config")
 public class Config implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;

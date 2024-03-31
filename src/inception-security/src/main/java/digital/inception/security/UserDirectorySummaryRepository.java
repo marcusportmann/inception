@@ -33,12 +33,11 @@ import org.springframework.data.repository.query.Param;
 public interface UserDirectorySummaryRepository extends JpaRepository<UserDirectorySummary, UUID> {
 
   /**
-   * Retrieve the user directory summaries.
+   * Retrieve the user directory summaries ordered by name ascending.
    *
-   * @param pageable the pagination information
-   * @return the user directory summaries
+   * @return the user directory summaries ordered by name ascending
    */
-  Page<UserDirectorySummary> findAll(Pageable pageable);
+  List<UserDirectorySummary> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the user directory summaries for the tenant.

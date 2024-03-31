@@ -1578,8 +1578,7 @@ public class SecurityServiceTest {
       fail(
           "Failed to find the user directory ("
               + userDirectory.getId()
-              + ") in the list of "
-              + "tenants");
+              + ") in the list of user directories");
     }
 
     UserDirectories filteredUserDirectories =
@@ -1683,16 +1682,16 @@ public class SecurityServiceTest {
         userDirectoryIdOptional.get(),
         "The correct user directory ID was not retrieved for the user");
 
-    List<UUID> userDirectorIds = securityService.getUserDirectoryIdsForUser(user.getUsername());
+    List<UUID> userDirectoryIds = securityService.getUserDirectoryIdsForUser(user.getUsername());
 
     assertEquals(
         1,
-        userDirectorIds.size(),
-        "The correct number of user director IDs was not retrieved for the user");
+        userDirectoryIds.size(),
+        "The correct number of user directory IDs was not retrieved for the user");
 
     assertEquals(
         userDirectory.getId(),
-        userDirectorIds.get(0),
+        userDirectoryIds.get(0),
         "The correct user directory ID was not retrieved for the user");
 
     User retrievedUser = securityService.getUser(userDirectory.getId(), user.getUsername());

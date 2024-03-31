@@ -75,7 +75,7 @@ import org.xml.sax.InputSource;
     propOrder = {"id", "type", "name", "parameters"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "user_directories")
+@Table(name = "security_user_directories")
 @SuppressWarnings({"unused"})
 public class UserDirectory implements Serializable {
 

@@ -62,7 +62,7 @@ import java.util.Objects;
     propOrder = {"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "languages")
+@Table(name = "reference_languages")
 @IdClass(LanguageId.class)
 public class Language implements Serializable {
 
@@ -75,9 +75,9 @@ public class Language implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
+  @Size(min = 2, max = 2)
   @Id
-  @Column(name = "code", length = 30, nullable = false)
+  @Column(name = "code", length = 2, nullable = false)
   private String code;
 
   /** The description for the language. */

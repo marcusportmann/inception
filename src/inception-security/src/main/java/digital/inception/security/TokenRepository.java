@@ -51,12 +51,11 @@ public interface TokenRepository extends JpaRepository<Token, String> {
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the tokens.
+   * Retrieve the tokens ordered by name ascending.
    *
-   * @param pageable the pagination information
-   * @return the tokens
+   * @return the tokens ordered by name ascending
    */
-  Page<Token> findAll(Pageable pageable);
+  List<Token> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the filtered tokens.

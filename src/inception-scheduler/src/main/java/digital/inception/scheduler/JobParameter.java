@@ -56,7 +56,7 @@ import java.util.Objects;
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "job_parameters")
+@Table(name = "scheduler_job_parameters")
 @IdClass(JobParameterId.class)
 @SuppressWarnings({"unused"})
 public class JobParameter implements Serializable {

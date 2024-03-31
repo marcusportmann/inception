@@ -36,5 +36,5 @@ public interface MeasurementUnitTypeRepository
    */
   @Query(
       "select mut from MeasurementUnitType mut order by mut.localeId, -mut.sortIndex DESC, mut.name")
-  List<MeasurementUnitType> findAll();
+  List<MeasurementUnitType> getAllMeasurementUnitTypes();
 }

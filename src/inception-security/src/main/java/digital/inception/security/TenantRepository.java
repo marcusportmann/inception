@@ -42,7 +42,7 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
   @Modifying
   @Query(
       value =
-          "insert into user_directory_to_tenant_map(tenant_id, user_directory_id) "
+          "insert into security_user_directory_to_tenant_map(tenant_id, user_directory_id) "
               + "values (:tenantId, :userDirectoryId)",
       nativeQuery = true)
   void addUserDirectoryToTenant(
@@ -66,12 +66,11 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the tenants.
+   * Retrieve the tenants ordered by name ascending.
    *
-   * @param pageable the pagination information
-   * @return the tenants
+   * @return the tenants ordered by name ascending
    */
-  Page<Tenant> findAll(Pageable pageable);
+  List<Tenant> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the tenants for the user directory.
@@ -120,7 +119,7 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
   @Modifying
   @Query(
       value =
-          "delete from user_directory_to_tenant_map "
+          "delete from security_user_directory_to_tenant_map "
               + "where tenant_id=:tenantId and user_directory_id = :userDirectoryId",
       nativeQuery = true)
   void removeUserDirectoryFromTenant(
@@ -135,7 +134,7 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
    */
   @Query(
       value =
-          "select (case when count(*) > 0 then 1 else 0 end) from user_directory_to_tenant_map where "
+          "select (case when count(*) > 0 then 1 else 0 end) from security_user_directory_to_tenant_map where "
               + "tenant_id = :tenantId and user_directory_id = :userDirectoryId",
       nativeQuery = true)
   int userDirectoryToTenantMappingExists(

@@ -847,7 +847,7 @@ public class SecurityWebService {
    * @param tokenId the ID for the token
    * @return the name of the token
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws TokenNotFoundException if the tenant could not be found
+   * @throws TokenNotFoundException if the token could not be found
    * @throws ServiceUnavailableException if the name of the token could not be retrieved
    */
   @WebMethod(operationName = "GetTokenName")

@@ -164,7 +164,7 @@ public class VehicleService implements IVehicleService {
       if (StringUtils.hasText(filter)) {
         carPage = carRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        carPage = carRepository.findAll(pageRequest);
+        carPage = carRepository.findAllByOrderByNameAsc(pageRequest);
       }
 
       return new Cars(
@@ -202,7 +202,7 @@ public class VehicleService implements IVehicleService {
       if (StringUtils.hasText(filter)) {
         vehiclePage = vehicleRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        vehiclePage = vehicleRepository.findAll(pageRequest);
+        vehiclePage = vehicleRepository.findAllByOrderByNameAsc(pageRequest);
       }
 
       return new Vehicles(

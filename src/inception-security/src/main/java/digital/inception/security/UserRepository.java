@@ -187,7 +187,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    */
   @Query(
       value =
-          "select encoded_password from users_password_history "
+          "select encoded_password from security_users_password_history "
               + "where user_id = :userId and changed > :after",
       nativeQuery = true)
   List<String> getPasswordHistory(
@@ -255,7 +255,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    * @param userId the ID for the user
    */
   @Modifying
-  @Query(value = "delete from users_password_history where user_id = :userId", nativeQuery = true)
+  @Query(value = "delete from security_users_password_history where user_id = :userId", nativeQuery = true)
   void resetPasswordHistory(@Param("userId") UUID userId);
 
   /**
@@ -267,7 +267,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   @Modifying
   @Query(
       value =
-          "insert into users_password_history(user_id, changed, encoded_password) "
+          "insert into security_users_password_history(user_id, changed, encoded_password) "
               + "values (:userId, current_timestamp, :encodedPassword)",
       nativeQuery = true)
   void savePasswordInPasswordHistory(

@@ -245,7 +245,7 @@ public class MailService implements IMailService {
   @Override
   public List<MailTemplateSummary> getMailTemplateSummaries() throws ServiceUnavailableException {
     try {
-      return mailTemplateSummaryRepository.findAll();
+      return mailTemplateSummaryRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the mail templates", e);
@@ -279,7 +279,7 @@ public class MailService implements IMailService {
   @Override
   public List<MailTemplate> getMailTemplates() throws ServiceUnavailableException {
     try {
-      return mailTemplateRepository.findAll();
+      return mailTemplateRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the mail templates", e);
     }

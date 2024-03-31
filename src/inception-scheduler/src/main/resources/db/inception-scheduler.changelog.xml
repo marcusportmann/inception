@@ -18,7 +18,7 @@
   <changeSet id="inception-scheduler-1.0.0" author="Marcus Portmann">
     <comment>Inception - Scheduler - 1.0.0</comment>
 
-    <createTable tableName="jobs" remarks="Jobs">
+    <createTable tableName="scheduler_jobs" remarks="Jobs">
       <column name="id" type="nvarchar(100)" remarks="The ID for the job">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -45,7 +45,7 @@
       <column name="next_execution" type="timestamp with time zone" remarks="The date and time the job will next be executed"/>
     </createTable>
 
-    <createTable tableName="job_parameters" remarks="Job Parameters">
+    <createTable tableName="scheduler_job_parameters" remarks="Job Parameters">
       <column name="job_id" type="nvarchar(100)" remarks="The ID for the job">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -56,26 +56,26 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="job_parameters_job_fk"
-      baseTableName="job_parameters" baseColumnNames="job_id"
-      referencedTableName="jobs" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="scheduler_job_parameters_job_fk"
+      baseTableName="scheduler_job_parameters" baseColumnNames="job_id"
+      referencedTableName="scheduler_jobs" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <createIndex indexName="job_parameters_job_id_ix"
-      tableName="job_parameters">
+    <createIndex indexName="scheduler_job_parameters_job_id_ix"
+      tableName="scheduler_job_parameters">
       <column name="job_id"/>
     </createIndex>
-    <createIndex indexName="job_parameters_name_ix"
-      tableName="job_parameters">
+    <createIndex indexName="scheduler_job_parameters_name_ix"
+      tableName="scheduler_job_parameters">
       <column name="name"/>
     </createIndex>
 
     <rollback>
-      <dropIndex tableName="job_parameters" indexName="job_parameters_name_ix"/>
-      <dropIndex tableName="job_parameters" indexName="job_parameters_job_id_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="job_parameters"/>
-      <dropTable tableName="job_parameters"/>
+      <dropIndex tableName="scheduler_job_parameters" indexName="scheduler_job_parameters_name_ix"/>
+      <dropIndex tableName="scheduler_job_parameters" indexName="scheduler_job_parameters_job_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="scheduler_job_parameters"/>
+      <dropTable tableName="scheduler_job_parameters"/>
 
-      <dropTable tableName="jobs"/>
+      <dropTable tableName="scheduler_jobs"/>
     </rollback>
   </changeSet>
 

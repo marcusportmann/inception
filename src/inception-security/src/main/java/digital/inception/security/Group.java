@@ -59,7 +59,7 @@ import java.util.UUID;
     propOrder = {"userDirectoryId", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "groups")
+@Table(name = "security_groups")
 @SuppressWarnings({"unused"})
 public class Group implements Serializable {
 
@@ -94,7 +94,7 @@ public class Group implements Serializable {
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
-      name = "role_to_group_map",
+      name = "security_role_to_group_map",
       joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"))
   private Set<Role> roles = new HashSet<>();
@@ -114,7 +114,7 @@ public class Group implements Serializable {
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
-      name = "user_to_group_map",
+      name = "security_user_to_group_map",
       joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private Set<User> users = new HashSet<>();

@@ -28,11 +28,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ConfigSummaryRepository extends JpaRepository<ConfigSummary, String> {
 
   /**
-   * Retrieve all the config summaries ordered by key descending.
+   * Retrieve all the config summaries ordered by key ascending.
    *
-   * @return all the config summaries ordered by key descending
+   * @return all the config summaries ordered by key ascending
    */
-  List<ConfigSummary> findAllByOrderByKeyDesc();
+  List<ConfigSummary> findAllByOrderByKeyAsc();
 
   /**
    * Retrieve the filtered config summaries.

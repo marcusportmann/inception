@@ -50,7 +50,7 @@ import java.util.Objects;
     propOrder = {"id", "name", "template"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "report_definitions")
+@Table(name = "reporting_report_definitions")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ReportDefinition implements Serializable {
 

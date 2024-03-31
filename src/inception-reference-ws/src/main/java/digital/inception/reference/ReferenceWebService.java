@@ -25,6 +25,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>ReferenceWebService</b> class.
@@ -144,6 +145,7 @@ public class ReferenceWebService {
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
    *     data for
+   * @param country the optional ISO 3166-1 alpha-2 code for the country to retrieve the regions for
    * @return the region reference data
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the region reference data could not be retrieved
@@ -151,9 +153,14 @@ public class ReferenceWebService {
   @WebMethod(operationName = "GetRegions")
   @WebResult(name = "Region")
   public List<Region> getRegions(
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId,
+      @WebParam(name = "Country") @XmlElement String country)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getRegions(localeId);
+    if (StringUtils.hasText(country)) {
+      return referenceService.getRegions(localeId, country);
+    } else {
+      return referenceService.getRegions(localeId);
+    }
   }
 
   /**

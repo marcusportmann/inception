@@ -53,12 +53,11 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the user directories.
+   * Retrieve the user directories ordered by name ascending.
    *
-   * @param pageable the pagination information
-   * @return the user directories
+   * @return the user directories ordered by name ascending
    */
-  Page<UserDirectory> findAll(Pageable pageable);
+  List<UserDirectory> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the user directories for the tenant.

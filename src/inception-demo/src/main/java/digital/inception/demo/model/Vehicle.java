@@ -63,7 +63,7 @@ import java.util.UUID;
     propOrder = {"id", "name", "type"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
-@Table(name = "vehicles")
+@Table(name = "demo_vehicles")
 public class Vehicle implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -91,7 +91,7 @@ public class Vehicle implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", length = 30, nullable = false)
+  @Column(name = "type", length = 50, nullable = false)
   private VehicleType type;
 
   /** Constructs a new <b>Vehicle</b>. */

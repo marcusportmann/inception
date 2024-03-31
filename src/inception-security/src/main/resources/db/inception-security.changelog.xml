@@ -18,7 +18,7 @@
   <changeSet id="inception-security-1.0.0" author="Marcus Portmann">
     <comment>Inception - Security - 1.0.0</comment>
 
-    <createTable tableName="tenants" remarks="Tenants">
+    <createTable tableName="security_tenants" remarks="Tenants">
       <column name="id" type="uuid" remarks="The ID for the tenant">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -29,12 +29,12 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <createIndex indexName="tenants_name_ix"
-      tableName="tenants">
+    <createIndex indexName="security_tenants_name_ix"
+      tableName="security_tenants">
       <column name="name"/>
     </createIndex>
 
-    <createTable tableName="user_directory_types" remarks="User Directory Types">
+    <createTable tableName="security_user_directory_types" remarks="User Directory Types">
       <column name="code" type="nvarchar(100)" remarks="The code for the user directory type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -46,7 +46,7 @@
       </column>
     </createTable>
 
-    <createTable tableName="user_directories" remarks="User Directories">
+    <createTable tableName="security_user_directories" remarks="User Directories">
       <column name="id" type="uuid" remarks="The ID for the user directory">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -60,16 +60,16 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="user_directories_user_directory_type_fk"
-      baseTableName="user_directories" baseColumnNames="type"
-      referencedTableName="user_directory_types" referencedColumnNames="code"
+    <addForeignKeyConstraint constraintName="security_user_directories_user_directory_type_fk"
+      baseTableName="security_user_directories" baseColumnNames="type"
+      referencedTableName="security_user_directory_types" referencedColumnNames="code"
       onDelete="CASCADE"/>
-    <createIndex indexName="user_directories_name_ix"
-      tableName="user_directories">
+    <createIndex indexName="security_user_directories_name_ix"
+      tableName="security_user_directories">
       <column name="name"/>
     </createIndex>
 
-    <createTable tableName="user_directory_to_tenant_map" remarks="User Directory To Tenant Mappings">
+    <createTable tableName="security_user_directory_to_tenant_map" remarks="User Directory To Tenant Mappings">
       <column name="user_directory_id" type="uuid" remarks="The ID for the user directory">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -77,24 +77,24 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_user_directory_fk"
-      baseTableName="user_directory_to_tenant_map" baseColumnNames="user_directory_id"
-      referencedTableName="user_directories" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="security_user_directory_to_tenant_map_user_directory_fk"
+      baseTableName="security_user_directory_to_tenant_map" baseColumnNames="user_directory_id"
+      referencedTableName="security_user_directories" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_tenant_fk"
-      baseTableName="user_directory_to_tenant_map" baseColumnNames="tenant_id"
-      referencedTableName="tenants" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="security_user_directory_to_tenant_map_tenant_fk"
+      baseTableName="security_user_directory_to_tenant_map" baseColumnNames="tenant_id"
+      referencedTableName="security_tenants" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <createIndex indexName="user_directory_to_tenant_map_user_directory_id_ix"
-      tableName="user_directory_to_tenant_map">
+    <createIndex indexName="security_user_directory_to_tenant_map_user_directory_id_ix"
+      tableName="security_user_directory_to_tenant_map">
       <column name="user_directory_id"/>
     </createIndex>
-    <createIndex indexName="user_directory_to_tenant_map_tenant_id_ix"
-      tableName="user_directory_to_tenant_map">
+    <createIndex indexName="security_user_directory_to_tenant_map_tenant_id_ix"
+      tableName="security_user_directory_to_tenant_map">
       <column name="tenant_id"/>
     </createIndex>
 
-    <createTable tableName="users" remarks="Users">
+    <createTable tableName="security_users" remarks="Users">
       <column name="id" type="uuid" remarks="The ID for the user">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -124,31 +124,31 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="users_user_directory_fk"
-      baseTableName="users" baseColumnNames="user_directory_id"
-      referencedTableName="user_directories" referencedColumnNames="id"/>
-    <createIndex indexName="users_username_ix"
-      tableName="users" unique="true">
+    <addForeignKeyConstraint constraintName="security_users_user_directory_fk"
+      baseTableName="security_users" baseColumnNames="user_directory_id"
+      referencedTableName="security_user_directories" referencedColumnNames="id"/>
+    <createIndex indexName="security_users_username_ix"
+      tableName="security_users" unique="true">
       <column name="username"/>
     </createIndex>
-    <createIndex indexName="users_email_ix"
-      tableName="users" unique="false">
+    <createIndex indexName="security_users_email_ix"
+      tableName="security_users" unique="false">
       <column name="email"/>
     </createIndex>
-    <createIndex indexName="users_mobile_number_ix"
-      tableName="users" unique="false">
+    <createIndex indexName="security_users_mobile_number_ix"
+      tableName="security_users" unique="false">
       <column name="mobile_number"/>
     </createIndex>
-    <createIndex indexName="users_name_ix"
-      tableName="users" unique="false">
+    <createIndex indexName="security_users_name_ix"
+      tableName="security_users" unique="false">
       <column name="name"/>
     </createIndex>
-    <createIndex indexName="users_user_directory_id_ix"
-      tableName="users">
+    <createIndex indexName="security_users_user_directory_id_ix"
+      tableName="security_users">
       <column name="user_directory_id"/>
     </createIndex>
 
-    <createTable tableName="users_password_history" remarks="User Password History">
+    <createTable tableName="security_users_password_history" remarks="User Password History">
       <column name="user_id" type="uuid" remarks="The ID for the user">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -159,20 +159,20 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="users_password_history_user_id_fk"
-      baseTableName="users_password_history" baseColumnNames="user_id"
-      referencedTableName="users" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="security_users_password_history_user_id_fk"
+      baseTableName="security_users_password_history" baseColumnNames="user_id"
+      referencedTableName="security_users" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <createIndex indexName="users_password_history_user_id_ix"
-      tableName="users_password_history">
+    <createIndex indexName="security_users_password_history_user_id_ix"
+      tableName="security_users_password_history">
       <column name="user_id"/>
     </createIndex>
-    <createIndex indexName="users_password_history_changed_ix"
-      tableName="users_password_history">
+    <createIndex indexName="security_users_password_history_changed_ix"
+      tableName="security_users_password_history">
       <column name="changed"/>
     </createIndex>
 
-    <createTable tableName="groups" remarks="Groups">
+    <createTable tableName="security_groups" remarks="Groups">
       <column name="id" type="uuid" remarks="The ID for the group">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -184,20 +184,20 @@
       </column>
       <column name="description" type="nvarchar(100)" remarks="A description for the group"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="groups_user_directory_fk"
-      baseTableName="groups" baseColumnNames="user_directory_id"
-      referencedTableName="user_directories" referencedColumnNames="id"/>
-    <createIndex indexName="groups_user_directory_id_ix"
-      tableName="groups">
+    <addForeignKeyConstraint constraintName="security_groups_user_directory_fk"
+      baseTableName="security_groups" baseColumnNames="user_directory_id"
+      referencedTableName="security_user_directories" referencedColumnNames="id"/>
+    <createIndex indexName="security_groups_user_directory_id_ix"
+      tableName="security_groups">
       <column name="user_directory_id"/>
     </createIndex>
-    <createIndex indexName="groups_user_directory_id_name_ix"
-      tableName="groups" unique="true">
+    <createIndex indexName="security_groups_user_directory_id_name_ix"
+      tableName="security_groups" unique="true">
       <column name="user_directory_id"/>
       <column name="name"/>
     </createIndex>
 
-    <createTable tableName="user_to_group_map" remarks="User To Group Mappings">
+    <createTable tableName="security_user_to_group_map" remarks="User To Group Mappings">
       <column name="user_id" type="uuid" remarks="The ID for the user">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -205,24 +205,24 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="user_to_group_map_user_fk"
-      baseTableName="user_to_group_map" baseColumnNames="user_id"
-      referencedTableName="users" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="security_user_to_group_map_user_fk"
+      baseTableName="security_user_to_group_map" baseColumnNames="user_id"
+      referencedTableName="security_users" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="user_to_group_map_group_fk"
-      baseTableName="user_to_group_map" baseColumnNames="group_id"
-      referencedTableName="groups" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="security_user_to_group_map_group_fk"
+      baseTableName="security_user_to_group_map" baseColumnNames="group_id"
+      referencedTableName="security_groups" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <createIndex indexName="user_to_group_map_user_id_ix"
-      tableName="user_to_group_map">
+    <createIndex indexName="security_user_to_group_map_user_id_ix"
+      tableName="security_user_to_group_map">
       <column name="user_id"/>
     </createIndex>
-    <createIndex indexName="user_to_group_map_group_id_ix"
-      tableName="user_to_group_map">
+    <createIndex indexName="security_user_to_group_map_group_id_ix"
+      tableName="security_user_to_group_map">
       <column name="group_id"/>
     </createIndex>
 
-    <createTable tableName="functions" remarks="Functions">
+    <createTable tableName="security_functions" remarks="Functions">
       <column name="code" type="nvarchar(100)" remarks="The code for the function">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -232,7 +232,7 @@
       <column name="description" type="nvarchar(100)" remarks="A description for the function'"/>
     </createTable>
 
-    <createTable tableName="roles" remarks="Roles">
+    <createTable tableName="security_roles" remarks="Roles">
       <column name="code" type="nvarchar(100)" remarks="The code for the role">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -242,7 +242,7 @@
       <column name="description" type="nvarchar(100)" remarks="The description for the role"/>
     </createTable>
 
-    <createTable tableName="function_to_role_map" remarks="Function To Role Mappings">
+    <createTable tableName="security_function_to_role_map" remarks="Function To Role Mappings">
       <column name="function_code" type="nvarchar(100)" remarks="The code for the function">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -250,24 +250,24 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="function_to_role_map_function_fk"
-      baseTableName="function_to_role_map" baseColumnNames="function_code"
-      referencedTableName="functions" referencedColumnNames="code"
+    <addForeignKeyConstraint constraintName="security_function_to_role_map_function_fk"
+      baseTableName="security_function_to_role_map" baseColumnNames="function_code"
+      referencedTableName="security_functions" referencedColumnNames="code"
       onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="function_to_role_map_role_fk"
-      baseTableName="function_to_role_map" baseColumnNames="role_code"
-      referencedTableName="roles" referencedColumnNames="code"
+    <addForeignKeyConstraint constraintName="security_function_to_role_map_role_fk"
+      baseTableName="security_function_to_role_map" baseColumnNames="role_code"
+      referencedTableName="security_roles" referencedColumnNames="code"
       onDelete="CASCADE"/>
-    <createIndex indexName="function_to_role_map_function_code_ix"
-      tableName="function_to_role_map">
+    <createIndex indexName="security_function_to_role_map_function_code_ix"
+      tableName="security_function_to_role_map">
       <column name="function_code"/>
     </createIndex>
-    <createIndex indexName="function_to_role_map_role_code_ix"
-      tableName="function_to_role_map">
+    <createIndex indexName="security_function_to_role_map_role_code_ix"
+      tableName="security_function_to_role_map">
       <column name="role_code"/>
     </createIndex>
 
-    <createTable tableName="role_to_group_map" remarks="Role To Group Mappings">
+    <createTable tableName="security_role_to_group_map" remarks="Role To Group Mappings">
       <column name="role_code" type="nvarchar(100)" remarks="The code for the role">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -275,24 +275,24 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="role_to_group_map_role_fk"
-      baseTableName="role_to_group_map" baseColumnNames="role_code"
-      referencedTableName="roles" referencedColumnNames="code"
+    <addForeignKeyConstraint constraintName="security_role_to_group_map_role_fk"
+      baseTableName="security_role_to_group_map" baseColumnNames="role_code"
+      referencedTableName="security_roles" referencedColumnNames="code"
       onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="role_to_group_map_group_fk"
-      baseTableName="role_to_group_map" baseColumnNames="group_id"
-      referencedTableName="groups" referencedColumnNames="id"
+    <addForeignKeyConstraint constraintName="security_role_to_group_map_group_fk"
+      baseTableName="security_role_to_group_map" baseColumnNames="group_id"
+      referencedTableName="security_groups" referencedColumnNames="id"
       onDelete="CASCADE"/>
-    <createIndex indexName="role_to_group_map_role_code_ix"
-      tableName="role_to_group_map">
+    <createIndex indexName="security_role_to_group_map_role_code_ix"
+      tableName="security_role_to_group_map">
       <column name="role_code"/>
     </createIndex>
-    <createIndex indexName="role_to_group_map_group_id_ix"
-      tableName="role_to_group_map">
+    <createIndex indexName="security_role_to_group_map_group_id_ix"
+      tableName="security_role_to_group_map">
       <column name="group_id"/>
     </createIndex>
 
-    <createTable tableName="password_resets" remarks="Password Resets">
+    <createTable tableName="security_password_resets" remarks="Password Resets">
       <column name="username" type="nvarchar(100)" remarks="The username for the user associated with the password reset">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -308,22 +308,22 @@
       <column name="completed" type="timestamp with time zone" remarks="The date and time the password reset was completed"/>
       <column name="expired" type="timestamp with time zone" remarks="The date and time the password reset expired"/>
     </createTable>
-    <createIndex indexName="password_resets_username_ix"
-      tableName="password_resets">
+    <createIndex indexName="security_password_resets_username_ix"
+      tableName="security_password_resets">
       <column name="username"/>
     </createIndex>
 
-    <createTable tableName="policies" remarks="Policies">
+    <createTable tableName="security_policies" remarks="Policies">
       <column name="id" type="nvarchar(100)" remarks="The ID for the policy">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="version" type="nvarchar(30)" remarks="The version of the policy">
+      <column name="version" type="nvarchar(50)" remarks="The version of the policy">
         <constraints nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the policy">
         <constraints nullable="false"/>
       </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the policy type">
+      <column name="type" type="nvarchar(50)" remarks="The code for the policy type">
         <constraints nullable="false"/>
       </column>
       <column name="data" type="clob" remarks="The policy data">
@@ -332,11 +332,11 @@
       <column name="last_modified" type="timestamp with time zone" remarks="The date and time the policy was last modified"/>
     </createTable>
 
-    <createTable tableName="tokens" remarks="Tokens">
+    <createTable tableName="security_tokens" remarks="Tokens">
       <column name="id" type="nvarchar(50)" remarks="The ID for the token">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the token type">
+      <column name="type" type="nvarchar(50)" remarks="The code for the token type">
         <constraints nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the token">
@@ -357,30 +357,30 @@
       </column>
     </createTable>
 
-    <insert tableName="tenants" dbms="!oracle">
+    <insert tableName="security_tenants" dbms="!oracle">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Default"/>
       <column name="status" value="1"/>
     </insert>
 
-    <insert tableName="tenants" dbms="oracle">
+    <insert tableName="security_tenants" dbms="oracle">
       <column name="id" value="00000000000000000000000000000000"/>
       <column name="name" value="Default"/>
       <column name="status" value="1"/>
     </insert>
 
-    <insert tableName="user_directory_types">
+    <insert tableName="security_user_directory_types">
       <column name="code" value="InternalUserDirectory"/>
       <column name="name" value="Internal User Directory"/>
       <column name="user_directory_class" value="digital.inception.security.InternalUserDirectory"/>
     </insert>
-    <insert tableName="user_directory_types">
+    <insert tableName="security_user_directory_types">
       <column name="code" value="LDAPUserDirectory"/>
       <column name="name" value="LDAP User Directory"/>
       <column name="user_directory_class" value="digital.inception.security.LDAPUserDirectory"/>
     </insert>
 
-    <insert tableName="user_directories" dbms="!oracle">
+    <insert tableName="security_user_directories" dbms="!oracle">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="type" value="InternalUserDirectory"/>
       <column name="name" value="Default Internal User Directory"/>
@@ -388,7 +388,7 @@
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>]]></column>
     </insert>
 
-    <insert tableName="user_directories" dbms="oracle">
+    <insert tableName="security_user_directories" dbms="oracle">
       <column name="id" value="00000000000000000000000000000000"/>
       <column name="type" value="InternalUserDirectory"/>
       <column name="name" value="Default Internal User Directory"/>
@@ -396,17 +396,17 @@
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>]]></column>
     </insert>
 
-    <insert tableName="user_directory_to_tenant_map" dbms="!oracle">
+    <insert tableName="security_user_directory_to_tenant_map" dbms="!oracle">
       <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
     </insert>
 
-    <insert tableName="user_directory_to_tenant_map" dbms="oracle">
+    <insert tableName="security_user_directory_to_tenant_map" dbms="oracle">
       <column name="user_directory_id" value="00000000000000000000000000000000"/>
       <column name="tenant_id" value="00000000000000000000000000000000"/>
     </insert>
 
-    <insert tableName="users" dbms="!oracle">
+    <insert tableName="security_users" dbms="!oracle">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="username" value="administrator"/>
@@ -421,7 +421,7 @@
       <column name="password_expiry" value="2050-12-31T00:00:00"/>
     </insert>
 
-    <insert tableName="users" dbms="oracle">
+    <insert tableName="security_users" dbms="oracle">
       <column name="id" value="00000000000000000000000000000000"/>
       <column name="user_directory_id" value="00000000000000000000000000000000"/>
       <column name="username" value="administrator"/>
@@ -436,294 +436,294 @@
       <column name="password_expiry" valueComputed="TIMESTAMP '2050-12-31 00:00:00 GMT'"/>
     </insert>
 
-    <insert tableName="groups" dbms="!oracle">
+    <insert tableName="security_groups" dbms="!oracle">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Administrators"/>
       <column name="description" value="Administrators"/>
     </insert>
 
-    <insert tableName="groups" dbms="oracle">
+    <insert tableName="security_groups" dbms="oracle">
       <column name="id" value="00000000000000000000000000000000"/>
       <column name="user_directory_id" value="00000000000000000000000000000000"/>
       <column name="name" value="Administrators"/>
       <column name="description" value="Administrators"/>
     </insert>
 
-    <insert tableName="user_to_group_map" dbms="!oracle">
+    <insert tableName="security_user_to_group_map" dbms="!oracle">
       <column name="user_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="group_id" value="00000000-0000-0000-0000-000000000000"/>
     </insert>
 
-    <insert tableName="user_to_group_map" dbms="oracle">
+    <insert tableName="security_user_to_group_map" dbms="oracle">
       <column name="user_id" value="00000000000000000000000000000000"/>
       <column name="group_id" value="00000000000000000000000000000000"/>
     </insert>
 
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Dashboard.Dashboard"/>
       <column name="name" value="Dashboard"/>
       <column name="description" value="Dashboard"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="SecureHome.SecureHome"/>
       <column name="name" value="Secure Home"/>
       <column name="description" value="Secure Home"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Codes.CodeAdministration"/>
       <column name="name" value="Code Administration"/>
       <column name="description" value="Code Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Configuration.ConfigurationAdministration"/>
       <column name="name" value="Configuration Administration"/>
       <column name="description" value="Configuration Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Error.ErrorReportAdministration"/>
       <column name="name" value="Error Report Administration"/>
       <column name="description" value="Error Report Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Error.ViewErrorReport"/>
       <column name="name" value="View Error Report"/>
       <column name="description" value="View Error Report"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Mail.MailTemplateAdministration"/>
       <column name="name" value="Mail Template Administration"/>
       <column name="description" value="Mail Template Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Process.ProcessDefinitionAdministration"/>
       <column name="name" value="Process Definition Administration"/>
       <column name="description" value="Process Definition Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Process.ViewProcess"/>
       <column name="name" value="View Process"/>
       <column name="description" value="View Process"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Reporting.ReportingAdministration"/>
       <column name="name" value="Reporting Administration"/>
       <column name="description" value="Reporting Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Reporting.ReportDefinitionAdministration"/>
       <column name="name" value="Report Definition Administration"/>
       <column name="description" value="Report Definition Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Reporting.ViewReport"/>
       <column name="name" value="View Report"/>
       <column name="description" value="View Report"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Scheduler.SchedulerAdministration"/>
       <column name="name" value="Scheduler Administration"/>
       <column name="description" value="Scheduler Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Scheduler.JobAdministration"/>
       <column name="name" value="Job Administration"/>
       <column name="description" value="Job Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.GroupAdministration"/>
       <column name="name" value="Group Administration"/>
       <column name="description" value="Group Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.PolicyAdministration"/>
       <column name="name" value="Policy Administration"/>
       <column name="description" value="Policy Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.ResetUserPassword"/>
       <column name="name" value="Reset User Password"/>
       <column name="description" value="Reset User Password"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.SecurityAdministration"/>
       <column name="name" value="Security Administration"/>
       <column name="description" value="Security Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.TenantAdministration"/>
       <column name="name" value="Tenant Administration"/>
       <column name="description" value="Tenant Administration'"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.TokenAdministration"/>
       <column name="name" value="Token Administration"/>
       <column name="description" value="Token Administration'"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.UserAdministration"/>
       <column name="name" value="User Administration"/>
       <column name="description" value="User Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.UserDirectoryAdministration"/>
       <column name="name" value="User Directory Administration"/>
       <column name="description" value="User Directory Administration"/>
     </insert>
-    <insert tableName="functions">
+    <insert tableName="security_functions">
       <column name="code" value="Security.UserGroups"/>
       <column name="name" value="User Groups"/>
       <column name="description" value="User Groups"/>
     </insert>
 
-    <insert tableName="roles">
+    <insert tableName="security_roles">
       <column name="code" value="Administrator"/>
       <column name="name" value="Administrator"/>
       <column name="description" value="Administrator"/>
     </insert>
-    <insert tableName="roles">
+    <insert tableName="security_roles">
       <column name="code" value="TenantAdministrator"/>
       <column name="name" value="Tenant Administrator"/>
       <column name="description" value="Tenant Administrator"/>
     </insert>
-    <insert tableName="roles">
+    <insert tableName="security_roles">
       <column name="code" value="PasswordResetter"/>
       <column name="name" value="Password Resetter"/>
       <column name="description" value="Password Resetter"/>
     </insert>
 
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="SecureHome.SecureHome"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Dashboard.Dashboard"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Reporting.ViewReport"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Security.ResetUserPassword"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Security.UserAdministration"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Security.UserGroups"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Security.GroupAdministration"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
 
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="SecureHome.SecureHome"/>
       <column name="role_code" value="PasswordResetter"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Dashboard.Dashboard"/>
       <column name="role_code" value="PasswordResetter"/>
     </insert>
-    <insert tableName="function_to_role_map">
+    <insert tableName="security_function_to_role_map">
       <column name="function_code" value="Security.ResetUserPassword"/>
       <column name="role_code" value="PasswordResetter"/>
     </insert>
 
-    <insert tableName="role_to_group_map" dbms="!oracle">
+    <insert tableName="security_role_to_group_map" dbms="!oracle">
       <column name="role_code" value="Administrator"/>
       <column name="group_id" value="00000000-0000-0000-0000-000000000000"/>
     </insert>
 
-    <insert tableName="role_to_group_map" dbms="oracle">
+    <insert tableName="security_role_to_group_map" dbms="oracle">
       <column name="role_code" value="Administrator"/>
       <column name="group_id" value="00000000000000000000000000000000"/>
     </insert>
 
     <rollback>
-      <delete tableName="role_to_group_map"/>
+      <delete tableName="security_role_to_group_map"/>
 
-      <delete tableName="function_to_role_map"/>
+      <delete tableName="security_function_to_role_map"/>
 
-      <delete tableName="roles"/>
+      <delete tableName="security_roles"/>
 
-      <delete tableName="functions"/>
+      <delete tableName="security_functions"/>
 
-      <delete tableName="user_to_group_map"/>
+      <delete tableName="security_user_to_group_map"/>
 
-      <delete tableName="groups"/>
+      <delete tableName="security_groups"/>
 
-      <delete tableName="users"/>
+      <delete tableName="security_users"/>
 
-      <delete tableName="user_directory_to_tenant_map"/>
+      <delete tableName="security_user_directory_to_tenant_map"/>
 
-      <delete tableName="user_directories"/>
+      <delete tableName="security_user_directories"/>
 
-      <delete tableName="user_directory_types"/>
+      <delete tableName="security_user_directory_types"/>
 
-      <delete tableName="tenants"/>
+      <delete tableName="security_tenants"/>
 
-      <dropTable tableName="tokens"/>
+      <dropTable tableName="security_tokens"/>
 
-      <dropTable tableName="policies"/>
+      <dropTable tableName="security_policies"/>
 
-      <dropIndex tableName="password_resets" indexName="password_resets_username_ix"/>
-      <dropTable tableName="password_resets"/>
+      <dropIndex tableName="security_password_resets" indexName="security_password_resets_username_ix"/>
+      <dropTable tableName="security_password_resets"/>
 
-      <dropIndex tableName="role_to_group_map" indexName="role_to_group_map_group_id_ix"/>
-      <dropIndex tableName="role_to_group_map" indexName="role_to_group_map_role_code_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="role_to_group_map"/>
-      <dropTable tableName="role_to_group_map"/>
+      <dropIndex tableName="security_role_to_group_map" indexName="security_role_to_group_map_group_id_ix"/>
+      <dropIndex tableName="security_role_to_group_map" indexName="security_role_to_group_map_role_code_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_role_to_group_map"/>
+      <dropTable tableName="security_role_to_group_map"/>
 
-      <dropIndex tableName="function_to_role_map" indexName="function_to_role_map_role_code_ix"/>
-      <dropIndex tableName="function_to_role_map" indexName="function_to_role_map_function_code_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="function_to_role_map"/>
-      <dropTable tableName="function_to_role_map"/>
+      <dropIndex tableName="security_function_to_role_map" indexName="security_function_to_role_map_role_code_ix"/>
+      <dropIndex tableName="security_function_to_role_map" indexName="security_function_to_role_map_function_code_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_function_to_role_map"/>
+      <dropTable tableName="security_function_to_role_map"/>
 
-      <dropTable tableName="roles"/>
+      <dropTable tableName="security_roles"/>
 
-      <dropTable tableName="functions"/>
+      <dropTable tableName="security_functions"/>
 
-      <dropIndex tableName="user_to_group_map" indexName="user_to_group_map_user_id_ix"/>
-      <dropIndex tableName="user_to_group_map" indexName="user_to_group_map_group_id_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="user_to_group_map"/>
-      <dropTable tableName="user_to_group_map"/>
+      <dropIndex tableName="security_user_to_group_map" indexName="security_user_to_group_map_user_id_ix"/>
+      <dropIndex tableName="security_user_to_group_map" indexName="security_user_to_group_map_group_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_user_to_group_map"/>
+      <dropTable tableName="security_user_to_group_map"/>
 
-      <dropIndex tableName="groups" indexName="groups_user_directory_id_name_ix"/>
-      <dropIndex tableName="groups" indexName="groups_user_directory_id_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="groups"/>
-      <dropTable tableName="groups"/>
+      <dropIndex tableName="security_groups" indexName="security_groups_user_directory_id_name_ix"/>
+      <dropIndex tableName="security_groups" indexName="security_groups_user_directory_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_groups"/>
+      <dropTable tableName="security_groups"/>
 
-      <dropIndex tableName="users_password_history" indexName="users_password_history_changed_ix"/>
-      <dropIndex tableName="users_password_history" indexName="users_password_history_user_id_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="users_password_history"/>
-      <dropTable tableName="users_password_history"/>
+      <dropIndex tableName="security_users_password_history" indexName="security_users_password_history_changed_ix"/>
+      <dropIndex tableName="security_users_password_history" indexName="security_users_password_history_user_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_users_password_history"/>
+      <dropTable tableName="security_users_password_history"/>
 
-      <dropIndex tableName="users" indexName="users_user_directory_id_ix"/>
-      <dropIndex tableName="users" indexName="users_name_ix"/>
-      <dropIndex tableName="users" indexName="users_mobile_number_ix"/>
-      <dropIndex tableName="users" indexName="users_email_ix"/>
-      <dropIndex tableName="users" indexName="users_username_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="users"/>
-      <dropTable tableName="users"/>
+      <dropIndex tableName="security_users" indexName="security_users_user_directory_id_ix"/>
+      <dropIndex tableName="security_users" indexName="security_users_name_ix"/>
+      <dropIndex tableName="security_users" indexName="security_users_mobile_number_ix"/>
+      <dropIndex tableName="security_users" indexName="security_users_email_ix"/>
+      <dropIndex tableName="security_users" indexName="security_users_username_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_users"/>
+      <dropTable tableName="security_users"/>
 
-      <dropIndex tableName="user_directory_to_tenant_map" indexName="user_directory_to_tenant_map_tenant_id_ix"/>
-      <dropIndex tableName="user_directory_to_tenant_map" indexName="user_directory_to_tenant_map_user_directory_id_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="user_directory_to_tenant_map"/>
-      <dropTable tableName="user_directory_to_tenant_map"/>
+      <dropIndex tableName="security_user_directory_to_tenant_map" indexName="security_user_directory_to_tenant_map_tenant_id_ix"/>
+      <dropIndex tableName="security_user_directory_to_tenant_map" indexName="security_user_directory_to_tenant_map_user_directory_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_user_directory_to_tenant_map"/>
+      <dropTable tableName="security_user_directory_to_tenant_map"/>
 
-      <dropIndex tableName="user_directories" indexName="user_directories_name_ix"/>
-      <dropAllForeignKeyConstraints baseTableName="user_directories"/>
-      <dropTable tableName="user_directories"/>
+      <dropIndex tableName="security_user_directories" indexName="security_user_directories_name_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="security_user_directories"/>
+      <dropTable tableName="security_user_directories"/>
 
-      <dropTable tableName="user_directory_types"/>
+      <dropTable tableName="security_user_directory_types"/>
 
-      <dropIndex tableName="tenants" indexName="tenants_name_ix"/>
-      <dropTable tableName="tenants"/>
+      <dropIndex tableName="security_tenants" indexName="security_tenants_name_ix"/>
+      <dropTable tableName="security_tenants"/>
     </rollback>
   </changeSet>
 

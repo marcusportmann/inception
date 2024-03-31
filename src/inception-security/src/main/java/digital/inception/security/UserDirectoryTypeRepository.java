@@ -16,6 +16,7 @@
 
 package digital.inception.security;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -32,4 +33,11 @@ public interface UserDirectoryTypeRepository extends JpaRepository<UserDirectory
   @Modifying
   @Query("delete from UserDirectoryType udt where udt.code = :userDirectoryTypeCode")
   void deleteById(@Param("userDirectoryTypeCode") String userDirectoryTypeCode);
+
+  /**
+   * Retrieve the user directory types ordered by name ascending.
+   *
+   * @return the user directory types ordered by name ascending
+   */
+  List<UserDirectoryType> findAllByOrderByNameAsc();
 }

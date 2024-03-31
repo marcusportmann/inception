@@ -61,7 +61,7 @@ import java.util.UUID;
     propOrder = {"id", "name", "status"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "tenants")
+@Table(name = "security_tenants")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Tenant implements Serializable {
 
@@ -98,7 +98,7 @@ public class Tenant implements Serializable {
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
-      name = "user_directory_to_tenant_map",
+      name = "security_user_directory_to_tenant_map",
       joinColumns = @JoinColumn(name = "tenant_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
   private Set<UserDirectory> userDirectories = new HashSet<>();

@@ -33,12 +33,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import javax.sql.DataSource;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
-import liquibase.Liquibase;
+import liquibase.command.CommandScope;
+import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -174,10 +172,10 @@ public class TestConfiguration {
 
                 logger.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
-                Liquibase liquibase =
-                    new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-                liquibase.update(new Contexts(), new LabelExpression());
+                new CommandScope("update")
+                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue("changeLogFile", changelogFile)
+                    .execute();
               }
             }
 
@@ -188,10 +186,10 @@ public class TestConfiguration {
                 logger.info(
                     "Applying Liquibase data changelog: " + changelogResource.getFilename());
 
-                Liquibase liquibase =
-                    new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-                liquibase.update(new Contexts(), new LabelExpression());
+                new CommandScope("update")
+                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue("changeLogFile", changelogFile)
+                    .execute();
               }
             }
 

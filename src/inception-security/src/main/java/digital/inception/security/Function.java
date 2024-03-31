@@ -57,7 +57,7 @@ import java.util.Set;
     propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "functions")
+@Table(name = "security_functions")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Function implements java.io.Serializable {
 

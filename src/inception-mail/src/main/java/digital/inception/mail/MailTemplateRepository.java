@@ -17,6 +17,7 @@
 package digital.inception.mail;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -39,6 +40,13 @@ public interface MailTemplateRepository extends JpaRepository<MailTemplate, Stri
   @Modifying
   @Query("delete from MailTemplate mt where mt.id = :mailTemplateId")
   void deleteById(@Param("mailTemplateId") String mailTemplateId);
+
+  /**
+   * Retrieve the mail templates ordered by name ascending.
+   *
+   * @return the mail templates ordered by name ascending
+   */
+  List<MailTemplate> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the date and time the mail template was last modified.

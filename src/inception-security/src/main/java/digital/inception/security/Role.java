@@ -59,7 +59,7 @@ import java.util.Set;
     propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "roles")
+@Table(name = "security_roles")
 @SuppressWarnings({"unused"})
 public class Role implements java.io.Serializable {
 
@@ -88,7 +88,7 @@ public class Role implements java.io.Serializable {
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
-      name = "function_to_role_map",
+      name = "security_function_to_role_map",
       joinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"),
       inverseJoinColumns = @JoinColumn(name = "function_code", referencedColumnName = "code"))
   private Set<Function> functions = new HashSet<>();

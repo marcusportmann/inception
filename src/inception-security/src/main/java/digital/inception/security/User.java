@@ -85,7 +85,7 @@ import java.util.UUID;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "users")
+@Table(name = "security_users")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class User implements Serializable {
 

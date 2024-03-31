@@ -51,7 +51,7 @@ import java.util.Objects;
     propOrder = {"code", "name", "userDirectoryClassName"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "user_directory_types")
+@Table(name = "security_user_directory_types")
 @SuppressWarnings({"unused"})
 public class UserDirectoryType implements java.io.Serializable {
 

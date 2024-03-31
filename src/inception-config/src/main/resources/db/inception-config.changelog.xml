@@ -18,7 +18,7 @@
   <changeSet id="inception-config-1.0.0" author="Marcus Portmann">
     <comment>Inception - Configuration - 1.0.0</comment>
 
-    <createTable tableName="config" remarks="Config">
+    <createTable tableName="config_config" remarks="Config">
       <column name="key" type="nvarchar(100)" remarks="The key for the config">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -31,7 +31,7 @@
     </createTable>
 
     <rollback>
-      <dropTable tableName="config"/>
+      <dropTable tableName="config_config"/>
     </rollback>
   </changeSet>
 

@@ -55,7 +55,7 @@ import java.util.Objects;
     propOrder = {"id", "name", "contentType", "template"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "mail_templates")
+@Table(name = "mail_mail_templates")
 @SuppressWarnings({"unused"})
 public class MailTemplate implements Serializable {
 

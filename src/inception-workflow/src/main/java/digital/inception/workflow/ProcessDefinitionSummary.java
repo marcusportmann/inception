@@ -22,13 +22,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Objects;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * The <b>ProcessDefinitionSummary</b> class holds the summary information for a process definition.
@@ -50,7 +50,9 @@ public class ProcessDefinitionSummary implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The ID for the process definition. */
-  @Schema(description = "The ID for the process definition", required = true)
+  @Schema(
+      description = "The ID for the process definition",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -58,7 +60,9 @@ public class ProcessDefinitionSummary implements Serializable {
   private String id;
 
   /** The name of the process definition. */
-  @Schema(description = "The name of the process definition", required = true)
+  @Schema(
+      description = "The name of the process definition",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -66,7 +70,9 @@ public class ProcessDefinitionSummary implements Serializable {
   private String name;
 
   /** The version of the process definition. */
-  @Schema(description = "The version of the process definition", required = true)
+  @Schema(
+      description = "The version of the process definition",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Version", required = true)
   @NotNull

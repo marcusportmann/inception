@@ -16,6 +16,7 @@
 
 package digital.inception.security;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -32,4 +33,11 @@ public interface FunctionRepository extends JpaRepository<Function, String> {
   @Modifying
   @Query("delete from Function f where f.code = :functionCode")
   void deleteById(@Param("functionCode") String functionCode);
+
+  /**
+   * Retrieve the functions ordered by name ascending.
+   *
+   * @return the functions ordered by name ascending
+   */
+  List<Function> findAllByOrderByNameAsc();
 }

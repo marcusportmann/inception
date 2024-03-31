@@ -51,7 +51,7 @@ import java.util.Objects;
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "measurement_unit_types")
+@Table(name = "reference_measurement_unit_types")
 @IdClass(MeasurementUnitTypeId.class)
 public class MeasurementUnitType implements Serializable {
 
@@ -64,9 +64,9 @@ public class MeasurementUnitType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
+  @Size(min = 1, max = 50)
   @Id
-  @Column(name = "code", length = 30, nullable = false)
+  @Column(name = "code", length = 50, nullable = false)
   private String code;
 
   /** The description for the measurement unit type. */
@@ -100,7 +100,7 @@ public class MeasurementUnitType implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", length = 50, nullable = false)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The sort index for the measurement unit type. */

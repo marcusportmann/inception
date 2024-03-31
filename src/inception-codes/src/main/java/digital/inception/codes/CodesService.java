@@ -298,7 +298,7 @@ public class CodesService implements ICodesService {
   @Override
   public List<CodeCategory> getCodeCategories() throws ServiceUnavailableException {
     try {
-      return codeCategoryRepository.findAll();
+      return codeCategoryRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the code categories", e);
     }
@@ -467,7 +467,7 @@ public class CodesService implements ICodesService {
   @Override
   public List<CodeCategorySummary> getCodeCategorySummaries() throws ServiceUnavailableException {
     try {
-      return codeCategorySummaryRepository.findAll();
+      return codeCategorySummaryRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the code categories", e);

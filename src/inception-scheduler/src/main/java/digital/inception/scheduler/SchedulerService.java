@@ -253,7 +253,7 @@ public class SchedulerService implements ISchedulerService {
       if (StringUtils.hasText(filter)) {
         return jobRepository.findFiltered("%" + filter + "%");
       } else {
-        return jobRepository.findAll();
+        return jobRepository.findAllByOrderByNameAsc();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -264,7 +264,7 @@ public class SchedulerService implements ISchedulerService {
   @Override
   public List<Job> getJobs() throws ServiceUnavailableException {
     try {
-      return jobRepository.findAll();
+      return jobRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the jobs", e);
     }

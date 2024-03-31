@@ -86,7 +86,7 @@ import java.util.Set;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "jobs")
+@Table(name = "scheduler_jobs")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Job implements Serializable {
 

@@ -16,6 +16,7 @@
 
 package digital.inception.reporting;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,6 +39,13 @@ public interface ReportDefinitionRepository extends JpaRepository<ReportDefiniti
   @Modifying
   @Query("delete from ReportDefinition rd where rd.id = :reportDefinitionId")
   void deleteById(@Param("reportDefinitionId") String reportDefinitionId);
+
+  /**
+   * Retrieve the report definitions ordered by name ascending.
+   *
+   * @return the report definitions ordered by name ascending
+   */
+  List<ReportDefinition> findAllByOrderByNameAsc();
 
   /**
    * Retrieve the name for the report definition.

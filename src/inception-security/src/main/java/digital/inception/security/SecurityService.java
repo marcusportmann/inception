@@ -1090,7 +1090,7 @@ public class SecurityService implements ISecurityService {
   @Override
   public List<Function> getFunctions() throws ServiceUnavailableException {
     try {
-      return functionRepository.findAll();
+      return functionRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the functions", e);
     }
@@ -1381,7 +1381,7 @@ public class SecurityService implements ISecurityService {
   @Override
   public List<Role> getRoles() throws ServiceUnavailableException {
     try {
-      return roleRepository.findAll();
+      return roleRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the roles", e);
     }
@@ -1482,7 +1482,7 @@ public class SecurityService implements ISecurityService {
   @Override
   public List<Tenant> getTenants() throws ServiceUnavailableException {
     try {
-      return tenantRepository.findAll();
+      return tenantRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the tenants", e);
     }
@@ -1724,7 +1724,7 @@ public class SecurityService implements ISecurityService {
   @Override
   public List<Token> getTokens() throws ServiceUnavailableException {
     try {
-      return tokenRepository.findAll();
+      return tokenRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the tokens", e);
     }
@@ -1756,7 +1756,7 @@ public class SecurityService implements ISecurityService {
   @Override
   public List<UserDirectory> getUserDirectories() throws ServiceUnavailableException {
     try {
-      return userDirectoryRepository.findAll();
+      return userDirectoryRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the user directories", e);
     }
@@ -2117,7 +2117,7 @@ public class SecurityService implements ISecurityService {
   @Override
   public List<UserDirectoryType> getUserDirectoryTypes() throws ServiceUnavailableException {
     try {
-      return userDirectoryTypeRepository.findAll();
+      return userDirectoryTypeRepository.findAllByOrderByNameAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the user directory types", e);
     }

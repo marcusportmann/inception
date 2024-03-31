@@ -18,7 +18,7 @@
   <changeSet id="inception-demo-1.0.0" author="Marcus Portmann">
     <comment>Inception - Demo - 1.0.0</comment>
 
-    <createTable tableName="data" remarks="Data">
+    <createTable tableName="demo_data" remarks="Data">
       <column name="id" type="bigint" remarks="The ID for the data">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -28,23 +28,23 @@
       <column name="timestamp_value" type="timestamp with time zone" remarks="The timestamp value for the data"/>
     </createTable>
 
-    <createTable tableName="vehicles" remarks="Vehicles">
+    <createTable tableName="demo_vehicles" remarks="Vehicles">
       <column name="id" type="uuid" remarks="The ID for the vehicle">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the vehicle">
         <constraints nullable="false"/>
       </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the vehicle type">
+      <column name="type" type="nvarchar(50)" remarks="The code for the vehicle type">
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <createIndex indexName="vehicles_type_ix"
-      tableName="vehicles">
+    <createIndex indexName="demo_vehicles_type_ix"
+      tableName="demo_vehicles">
       <column name="type"/>
     </createIndex>
 
-    <createTable tableName="cars" remarks="Cars">
+    <createTable tableName="demo_cars" remarks="Cars">
       <column name="id" type="uuid" remarks="The ID for the car">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -52,15 +52,15 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="cars_vehicle_fk"
-      baseTableName="cars" baseColumnNames="id"
-      referencedTableName="vehicles" referencedColumnNames="id"/>
+    <addForeignKeyConstraint constraintName="demo_cars_vehicle_fk"
+      baseTableName="demo_cars" baseColumnNames="id"
+      referencedTableName="demo_vehicles" referencedColumnNames="id"/>
 
-    <createTable tableName="vehicle_attribute_types" remarks="Vehicle Attribute Types">
-      <column name="code" type="nvarchar(30)" remarks="The code for the vehicle attribute type">
+    <createTable tableName="demo_vehicle_attribute_types" remarks="Vehicle Attribute Types">
+      <column name="code" type="nvarchar(50)" remarks="The code for the vehicle attribute type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="name" type="nvarchar(50)" remarks="The name of the vehicle attribute type">
+      <column name="name" type="nvarchar(100)" remarks="The name of the vehicle attribute type">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the vehicle attribute type">
@@ -68,37 +68,37 @@
       </column>
     </createTable>
 
-    <createTable tableName="vehicle_attributes" remarks="Vehicle Attributes">
+    <createTable tableName="demo_vehicle_attributes" remarks="Vehicle Attributes">
       <column name="vehicle_id" type="uuid" remarks="The ID for the vehicle the vehicle attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the vehicle attribute type">
+      <column name="type" type="nvarchar(50)" remarks="The code for the vehicle attribute type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(100)" remarks="The value for the vehicle attribute">
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="vehicle_attributes_vehicle_fk"
-      baseTableName="vehicle_attributes" baseColumnNames="vehicle_id"
-      referencedTableName="vehicles" referencedColumnNames="id"/>
-    <addForeignKeyConstraint constraintName="vehicle_attributes_vehicle_attribute_type_fk"
-      baseTableName="vehicle_attributes" baseColumnNames="type"
-      referencedTableName="vehicle_attribute_types" referencedColumnNames="code"/>
+    <addForeignKeyConstraint constraintName="demo_vehicle_attributes_vehicle_fk"
+      baseTableName="demo_vehicle_attributes" baseColumnNames="vehicle_id"
+      referencedTableName="demo_vehicles" referencedColumnNames="id"/>
+    <addForeignKeyConstraint constraintName="demo_vehicle_attributes_vehicle_attribute_type_fk"
+      baseTableName="demo_vehicle_attributes" baseColumnNames="type"
+      referencedTableName="demo_vehicle_attribute_types" referencedColumnNames="code"/>
 
     <rollback>
-      <dropAllForeignKeyConstraints baseTableName="vehicle_attributes"/>
-      <dropTable tableName="vehicle_attributes"/>
+      <dropAllForeignKeyConstraints baseTableName="demo_vehicle_attributes"/>
+      <dropTable tableName="demo_vehicle_attributes"/>
 
-      <dropTable tableName="vehicle_attribute_types"/>
+      <dropTable tableName="demo_vehicle_attribute_types"/>
 
-      <dropAllForeignKeyConstraints baseTableName="cars"/>
-      <dropTable tableName="cars"/>
+      <dropAllForeignKeyConstraints baseTableName="demo_cars"/>
+      <dropTable tableName="demo_cars"/>
 
-      <dropIndex tableName="vehicles" indexName="vehicles_type_ix"/>
-      <dropTable tableName="vehicles"/>
+      <dropIndex tableName="demo_vehicles" indexName="demo_vehicles_type_ix"/>
+      <dropTable tableName="demo_vehicles"/>
 
-      <dropTable tableName="data"/>
+      <dropTable tableName="demo_data"/>
     </rollback>
   </changeSet>
 

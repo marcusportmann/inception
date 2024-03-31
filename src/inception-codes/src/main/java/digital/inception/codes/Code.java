@@ -53,7 +53,7 @@ import java.util.Objects;
     propOrder = {"id", "codeCategoryId", "name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "codes")
+@Table(name = "codes_codes")
 @IdClass(CodeId.class)
 public class Code implements Serializable {
 

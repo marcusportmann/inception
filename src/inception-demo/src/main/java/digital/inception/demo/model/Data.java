@@ -57,7 +57,7 @@ import java.util.Objects;
     propOrder = {"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "data")
+@Table(name = "demo_data")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Data implements Serializable {
 

@@ -56,7 +56,7 @@ import java.util.Objects;
     propOrder = {"id", "version", "name", "type", "data", "lastModified"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "policies")
+@Table(name = "security_policies")
 public class Policy implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -111,8 +111,8 @@ public class Policy implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Version", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "version", length = 30, nullable = false)
+  @Size(min = 1, max = 50)
+  @Column(name = "version", length = 50, nullable = false)
   private String version;
 
   /** Constructs a new <b>Policy</b>. */

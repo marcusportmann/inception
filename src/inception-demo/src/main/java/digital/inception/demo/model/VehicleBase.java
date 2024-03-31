@@ -56,7 +56,7 @@ import java.util.UUID;
 @XmlTransient
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "vehicles")
+@Table(name = "demo_vehicles")
 public class VehicleBase implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -75,7 +75,7 @@ public class VehicleBase implements Serializable {
 
   /** The vehicle type. */
   @NotNull
-  @Column(name = "type", length = 30, nullable = false)
+  @Column(name = "type", length = 50, nullable = false)
   private VehicleType type;
 
   /** Constructs a new <b>VehicleBase</b>. */
