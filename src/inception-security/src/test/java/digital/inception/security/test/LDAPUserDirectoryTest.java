@@ -24,21 +24,21 @@
 // import static org.junit.Assert.fail;
 //
 // import digital.inception.security.Attribute;
-// import digital.inception.security.AuthenticationFailedException;
-// import digital.inception.security.Group;
-// import digital.inception.security.GroupMember;
-// import digital.inception.security.GroupMemberType;
-// import digital.inception.security.GroupMembers;
-// import digital.inception.security.GroupRole;
-// import digital.inception.security.Groups;
-// import digital.inception.security.ISecurityService;
-// import digital.inception.security.PasswordChangeReason;
-// import digital.inception.security.SecurityService;
+// import digital.inception.security.model.AuthenticationFailedException;
+// import digital.inception.security.model.Group;
+// import digital.inception.security.model.GroupMember;
+// import digital.inception.security.model.GroupMemberType;
+// import digital.inception.security.model.GroupMembers;
+// import digital.inception.security.model.GroupRole;
+// import digital.inception.security.model.Groups;
+// import digital.inception.security.service.ISecurityService;
+// import digital.inception.security.model.PasswordChangeReason;
+// import digital.inception.security.service.SecurityService;
 // import digital.inception.security.SortDirection;
-// import digital.inception.security.User;
-// import digital.inception.security.UserSortBy;
-// import digital.inception.security.UserStatus;
-// import digital.inception.security.Users;
+// import digital.inception.security.model.User;
+// import digital.inception.security.model.UserSortBy;
+// import digital.inception.security.model.UserStatus;
+// import digital.inception.security.model.Users;
 // import digital.inception.test.TestClassRunner;
 // import digital.inception.test.TestConfiguration;
 // import java.util.ArrayList;
@@ -165,7 +165,7 @@
 //  }
 //
 //  /** Test the delete invalid user functionality. */
-//  @Test(expected = digital.inception.security.UserNotFoundException.class)
+//  @Test(expected = digital.inception.security.model.UserNotFoundException.class)
 //  public void deleteInvalidUserTest() throws Exception {
 //    securityService.deleteUser(SAMPLE_LDAP_USER_DIRECTORY_ID, "INVALID");
 //  }

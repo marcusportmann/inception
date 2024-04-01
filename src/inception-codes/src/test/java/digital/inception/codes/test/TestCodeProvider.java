@@ -16,13 +16,13 @@
 
 package digital.inception.codes.test;
 
-import digital.inception.codes.Code;
-import digital.inception.codes.CodeCategory;
-import digital.inception.codes.CodeCategoryNotFoundException;
-import digital.inception.codes.CodeNotFoundException;
-import digital.inception.codes.CodeProviderConfig;
-import digital.inception.codes.CodeProviderException;
-import digital.inception.codes.ICodeProvider;
+import digital.inception.codes.model.Code;
+import digital.inception.codes.model.CodeCategory;
+import digital.inception.codes.model.CodeCategoryNotFoundException;
+import digital.inception.codes.model.CodeNotFoundException;
+import digital.inception.codes.model.CodeProviderConfig;
+import digital.inception.codes.model.CodeProviderException;
+import digital.inception.codes.model.ICodeProvider;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;

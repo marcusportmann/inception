@@ -17,7 +17,7 @@
 package digital.inception.demo.persistence;
 
 /**
- * The <b>DataRepository</b> interface declares the repository for the <b>Data</b> domain type.
+ * The <b>DataRepository</b> interface declares the persistence for the <b>Data</b> domain type.
  *
  * @author Marcus Portmann
  */

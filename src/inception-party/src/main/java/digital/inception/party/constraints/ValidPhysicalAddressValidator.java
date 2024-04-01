@@ -16,10 +16,10 @@
 //
 // package digital.inception.party.constraints;
 //
-// import digital.inception.party.IPartyReferenceService;
-// import digital.inception.party.PhysicalAddress;
-// import digital.inception.party.PhysicalAddressType;
-// import digital.inception.reference.IReferenceService;
+// import digital.inception.party.service.IPartyReferenceService;
+// import digital.inception.party.model.PhysicalAddress;
+// import digital.inception.party.model.PhysicalAddressType;
+// import digital.inception.reference.service.IReferenceService;
 // import java.util.Objects;
 // import jakarta.validation.ConstraintValidator;
 // import jakarta.validation.ConstraintValidatorContext;

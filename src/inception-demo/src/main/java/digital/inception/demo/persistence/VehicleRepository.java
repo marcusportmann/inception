@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>VehicleRepository</b> interface declares the repository for the <b>Vehicle</b> domain
+ * The <b>VehicleRepository</b> interface declares the persistence for the <b>Vehicle</b> domain
  * type.
  *
  * @author Marcus Portmann

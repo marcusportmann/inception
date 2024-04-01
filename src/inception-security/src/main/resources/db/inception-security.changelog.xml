@@ -25,7 +25,7 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the tenant">
         <constraints nullable="false"/>
       </column>
-      <column name="status" type="int" remarks="The status for the tenant">
+      <column name="status" type="nvarchar(50)" remarks="The code for the status for the tenant">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -104,7 +104,7 @@
       <column name="username" type="nvarchar(100)" remarks="The username for the user">
         <constraints nullable="false"/>
       </column>
-      <column name="status" type="int" remarks="The status for the user">
+      <column name="status" type="nvarchar(50)" remarks="The code for the status for the user">
         <constraints nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" defaultValue="" remarks="The name of the user">
@@ -299,7 +299,7 @@
       <column name="requested" type="timestamptz" remarks="The date and time the password reset was requested">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="status" type="int" remarks="The status of the password reset">
+      <column name="status" type="nvarchar(50)" remarks="The code for the status of the password reset">
         <constraints nullable="false"/>
       </column>
       <column name="security_code_hash" type="nvarchar(100)" remarks="The security code hash">
@@ -360,24 +360,24 @@
     <insert tableName="security_tenants" dbms="!oracle">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Default"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
     </insert>
 
     <insert tableName="security_tenants" dbms="oracle">
       <column name="id" value="00000000000000000000000000000000"/>
       <column name="name" value="Default"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
     </insert>
 
     <insert tableName="security_user_directory_types">
       <column name="code" value="InternalUserDirectory"/>
       <column name="name" value="Internal User Directory"/>
-      <column name="user_directory_class" value="digital.inception.security.InternalUserDirectory"/>
+      <column name="user_directory_class" value="digital.inception.security.model.InternalUserDirectory"/>
     </insert>
     <insert tableName="security_user_directory_types">
       <column name="code" value="LDAPUserDirectory"/>
       <column name="name" value="LDAP User Directory"/>
-      <column name="user_directory_class" value="digital.inception.security.LDAPUserDirectory"/>
+      <column name="user_directory_class" value="digital.inception.security.model.LDAPUserDirectory"/>
     </insert>
 
     <insert tableName="security_user_directories" dbms="!oracle">
@@ -410,7 +410,7 @@
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="username" value="administrator"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Administrator"/>
       <column name="preferred_name" value=""/>
       <column name="phone_number" value=""/>
@@ -425,7 +425,7 @@
       <column name="id" value="00000000000000000000000000000000"/>
       <column name="user_directory_id" value="00000000000000000000000000000000"/>
       <column name="username" value="administrator"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Administrator"/>
       <column name="preferred_name" value=""/>
       <column name="phone_number" value=""/>

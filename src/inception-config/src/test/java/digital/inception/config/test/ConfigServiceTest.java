@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import digital.inception.config.Config;
-import digital.inception.config.ConfigSummary;
-import digital.inception.config.IConfigService;
+import digital.inception.config.model.Config;
+import digital.inception.config.model.ConfigSummary;
+import digital.inception.config.service.IConfigService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;

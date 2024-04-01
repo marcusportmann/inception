@@ -21,10 +21,8 @@ import javax.sql.DataSource;
 //import org.camunda.bpm.engine.ProcessEngine;
 //import org.camunda.bpm.engine.ProcessEngineConfiguration;
 //import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**

@@ -200,8 +200,7 @@ public final class ResourceUtil {
     String keyData;
 
     if (keyLocation.startsWith("base64:") && (keyLocation.length() > 7)) {
-      keyData =
-          new String(Base64.getDecoder().decode(keyLocation.substring("base64:".length())));
+      keyData = new String(Base64.getDecoder().decode(keyLocation.substring("base64:".length())));
     } else if (keyLocation.startsWith("file:") || keyLocation.startsWith("classpath:")) {
       try {
         Resource resource = resourceLoader.getResource(keyLocation);

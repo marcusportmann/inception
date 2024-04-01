@@ -16,13 +16,13 @@
 
 package digital.inception.party.constraints;
 
-import digital.inception.party.Association;
-import digital.inception.party.AssociationProperty;
-import digital.inception.party.AssociationPropertyType;
-import digital.inception.party.AssociationType;
-import digital.inception.party.IPartyReferenceService;
-import digital.inception.party.IPartyService;
-import digital.inception.party.PartyType;
+import digital.inception.party.model.Association;
+import digital.inception.party.model.AssociationProperty;
+import digital.inception.party.model.AssociationPropertyType;
+import digital.inception.party.model.AssociationType;
+import digital.inception.party.model.PartyType;
+import digital.inception.party.service.IPartyReferenceService;
+import digital.inception.party.service.IPartyService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;

@@ -26,7 +26,7 @@
     <insert tableName="security_tenants">
       <column name="id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="name" value="Demo"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
     </insert>
 
     <insert tableName="security_user_directories">
@@ -62,7 +62,7 @@
       <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jack')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jack Hill"/>
       <column name="preferred_name" value="Jack"/>
       <column name="phone_number" value=""/>
@@ -76,7 +76,7 @@
       <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jill')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jill Hill"/>
       <column name="preferred_name" value="Jill"/>
       <column name="phone_number" value=""/>
@@ -90,7 +90,7 @@
       <column name="id" value="00166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('sally')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Sally Smith"/>
       <column name="preferred_name" value="Sally"/>
       <column name="phone_number" value=""/>
@@ -104,7 +104,7 @@
       <column name="id" value="01166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('bob')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Bob Smith"/>
       <column name="preferred_name" value="Bob"/>
       <column name="phone_number" value=""/>
@@ -118,7 +118,7 @@
       <column name="id" value="02166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jamiya.Stuart@advantageepic.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jamiya Stuart"/>
       <column name="preferred_name" value="Jamiya"/>
       <column name="phone_number" value=""/>
@@ -132,7 +132,7 @@
       <column name="id" value="03166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Melany.Reed@bulkmailsweetpotato.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Melany Reed"/>
       <column name="preferred_name" value="Melany"/>
       <column name="phone_number" value=""/>
@@ -146,7 +146,7 @@
       <column name="id" value="04166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Brendan.Best@chromaticvalley.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Brendan Best"/>
       <column name="preferred_name" value="Brendan"/>
       <column name="phone_number" value=""/>
@@ -160,7 +160,7 @@
       <column name="id" value="05166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Reuben.Ali@cove.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Reuben Ali"/>
       <column name="preferred_name" value="Reuben"/>
       <column name="phone_number" value=""/>
@@ -174,7 +174,7 @@
       <column name="id" value="06166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jairo.Hull@turbineluster.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jairo Hull"/>
       <column name="preferred_name" value="Jairo"/>
       <column name="phone_number" value=""/>
@@ -188,7 +188,7 @@
       <column name="id" value="07166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Sampson@leafblower.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nickolas Sampson"/>
       <column name="preferred_name" value="Nickolas"/>
       <column name="phone_number" value=""/>
@@ -202,7 +202,7 @@
       <column name="id" value="08166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amiah.Sanford@dating.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Amiah Sanford"/>
       <column name="preferred_name" value="Amiah"/>
       <column name="phone_number" value=""/>
@@ -216,7 +216,7 @@
       <column name="id" value="09166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Janae.Reeves@jollyfracture.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Janae Reeves"/>
       <column name="preferred_name" value="Janae"/>
       <column name="phone_number" value=""/>
@@ -230,7 +230,7 @@
       <column name="id" value="10166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Sara.Meza@bestsellerprices.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Sara Meza"/>
       <column name="preferred_name" value="Sara"/>
       <column name="phone_number" value=""/>
@@ -244,7 +244,7 @@
       <column name="id" value="11166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gauge.Barrera@perspectivedealer.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Gauge Barrera"/>
       <column name="preferred_name" value="Gauge"/>
       <column name="phone_number" value=""/>
@@ -258,7 +258,7 @@
       <column name="id" value="12166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Stone@healing.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nickolas Stone"/>
       <column name="preferred_name" value="Nickolas"/>
       <column name="phone_number" value=""/>
@@ -272,7 +272,7 @@
       <column name="id" value="13166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nayeli.Mcknight@retro.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nayeli Mcknight"/>
       <column name="preferred_name" value="Nayeli"/>
       <column name="phone_number" value=""/>
@@ -286,7 +286,7 @@
       <column name="id" value="14166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Cristofer.Singleton@glowing.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Cristofer Singleton"/>
       <column name="preferred_name" value="Cristofer"/>
       <column name="phone_number" value=""/>
@@ -300,7 +300,7 @@
       <column name="id" value="15166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gunnar.Manning@assets.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Gunnar Manning"/>
       <column name="preferred_name" value="Gunnar"/>
       <column name="phone_number" value=""/>
@@ -314,7 +314,7 @@
       <column name="id" value="16166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Adalyn.Doyle@tadpole.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Adalyn Doyle"/>
       <column name="preferred_name" value="Adalyn"/>
       <column name="phone_number" value=""/>
@@ -328,7 +328,7 @@
       <column name="id" value="17166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Oliver.Hoffman@beam.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Oliver Hoffman"/>
       <column name="preferred_name" value="Oliver"/>
       <column name="phone_number" value=""/>
@@ -342,7 +342,7 @@
       <column name="id" value="18166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Ayana.Mccarty@cucumber.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Ayana Mccarty"/>
       <column name="preferred_name" value="Ayana"/>
       <column name="phone_number" value=""/>
@@ -356,7 +356,7 @@
       <column name="id" value="19166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nigel.Cohen@recordplayer.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nigel Cohen"/>
       <column name="preferred_name" value="Nigel"/>
       <column name="phone_number" value=""/>
@@ -370,7 +370,7 @@
       <column name="id" value="20166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Andrew.Wheeler@greatplainsfinances.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Andrew Wheeler"/>
       <column name="preferred_name" value="Andrew"/>
       <column name="phone_number" value=""/>
@@ -384,7 +384,7 @@
       <column name="id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amelia.May@opera.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Amelia May"/>
       <column name="preferred_name" value="Amelia"/>
       <column name="phone_number" value=""/>
@@ -398,7 +398,7 @@
       <column name="id" value="22166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amir.Wells@refrigeratorsignal.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Amir Wells"/>
       <column name="preferred_name" value="Amir"/>
       <column name="phone_number" value=""/>
@@ -458,7 +458,7 @@
       <column name="id" value="f4292748-7b98-4b6b-94bf-2abed5ccb0eb"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="username" value="jonas"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jonas Lang"/>
       <column name="preferred_name" value="Jonas"/>
       <column name="phone_number" value=""/>
@@ -472,7 +472,7 @@
       <column name="id" value="963c604a-bcaf-4262-9e94-a2f2c55c029d"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="username" value="denise"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Denise Rasmussen"/>
       <column name="preferred_name" value="Denise"/>
       <column name="phone_number" value=""/>
@@ -486,7 +486,7 @@
       <column name="id" value="606112a5-5a01-45d6-a29b-cea8d22e592d"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="username" value="davis"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Davis Parks"/>
       <column name="preferred_name" value="Davis"/>
       <column name="phone_number" value=""/>
@@ -540,7 +540,7 @@
       <column name="scheduling_pattern" value="* * * * *"/>
       <column name="job_class" value="digital.inception.demo.job.DemoJob"/>
       <column name="enabled" value="true"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
     </insert>
 
     <!--    ____  _____ __  __  ___    ____    _  _____  _         -->
@@ -1048,7 +1048,7 @@
     <insert tableName="security_tenants">
       <column name="id" value="204e5b8f48e74354bd15753e6543b64d"/>
       <column name="name" value="Demo"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
     </insert>
 
     <insert tableName="security_user_directories">
@@ -1084,7 +1084,7 @@
       <column name="id" value="541665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jack')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jack Hill"/>
       <column name="preferred_name" value="Jack"/>
       <column name="phone_number" value=""/>
@@ -1098,7 +1098,7 @@
       <column name="id" value="641665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('jill')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jill Hill"/>
       <column name="preferred_name" value="Jill"/>
       <column name="phone_number" value=""/>
@@ -1112,7 +1112,7 @@
       <column name="id" value="001665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('sally')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Sally Smith"/>
       <column name="preferred_name" value="Sally"/>
       <column name="phone_number" value=""/>
@@ -1126,7 +1126,7 @@
       <column name="id" value="011665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('bob')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Bob Smith"/>
       <column name="preferred_name" value="Bob"/>
       <column name="phone_number" value=""/>
@@ -1140,7 +1140,7 @@
       <column name="id" value="021665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jamiya.Stuart@advantageepic.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jamiya Stuart"/>
       <column name="preferred_name" value="Jamiya"/>
       <column name="phone_number" value=""/>
@@ -1154,7 +1154,7 @@
       <column name="id" value="031665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Melany.Reed@bulkmailsweetpotato.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Melany Reed"/>
       <column name="preferred_name" value="Melany"/>
       <column name="phone_number" value=""/>
@@ -1168,7 +1168,7 @@
       <column name="id" value="041665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Brendan.Best@chromaticvalley.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Brendan Best"/>
       <column name="preferred_name" value="Brendan"/>
       <column name="phone_number" value=""/>
@@ -1182,7 +1182,7 @@
       <column name="id" value="051665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Reuben.Ali@cove.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Reuben Ali"/>
       <column name="preferred_name" value="Reuben"/>
       <column name="phone_number" value=""/>
@@ -1196,7 +1196,7 @@
       <column name="id" value="061665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Jairo.Hull@turbineluster.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jairo Hull"/>
       <column name="preferred_name" value="Jairo"/>
       <column name="phone_number" value=""/>
@@ -1210,7 +1210,7 @@
       <column name="id" value="071665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Sampson@leafblower.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nickolas Sampson"/>
       <column name="preferred_name" value="Nickolas"/>
       <column name="phone_number" value=""/>
@@ -1224,7 +1224,7 @@
       <column name="id" value="081665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amiah.Sanford@dating.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Amiah Sanford"/>
       <column name="preferred_name" value="Amiah"/>
       <column name="phone_number" value=""/>
@@ -1238,7 +1238,7 @@
       <column name="id" value="091665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Janae.Reeves@jollyfracture.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Janae Reeves"/>
       <column name="preferred_name" value="Janae"/>
       <column name="phone_number" value=""/>
@@ -1252,7 +1252,7 @@
       <column name="id" value="101665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Sara.Meza@bestsellerprices.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Sara Meza"/>
       <column name="preferred_name" value="Sara"/>
       <column name="phone_number" value=""/>
@@ -1266,7 +1266,7 @@
       <column name="id" value="111665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gauge.Barrera@perspectivedealer.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Gauge Barrera"/>
       <column name="preferred_name" value="Gauge"/>
       <column name="phone_number" value=""/>
@@ -1280,7 +1280,7 @@
       <column name="id" value="121665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nickolas.Stone@healing.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nickolas Stone"/>
       <column name="preferred_name" value="Nickolas"/>
       <column name="phone_number" value=""/>
@@ -1294,7 +1294,7 @@
       <column name="id" value="131665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nayeli.Mcknight@retro.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nayeli Mcknight"/>
       <column name="preferred_name" value="Nayeli"/>
       <column name="phone_number" value=""/>
@@ -1308,7 +1308,7 @@
       <column name="id" value="141665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Cristofer.Singleton@glowing.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Cristofer Singleton"/>
       <column name="preferred_name" value="Cristofer"/>
       <column name="phone_number" value=""/>
@@ -1322,7 +1322,7 @@
       <column name="id" value="151665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Gunnar.Manning@assets.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Gunnar Manning"/>
       <column name="preferred_name" value="Gunnar"/>
       <column name="phone_number" value=""/>
@@ -1336,7 +1336,7 @@
       <column name="id" value="161665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Adalyn.Doyle@tadpole.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Adalyn Doyle"/>
       <column name="preferred_name" value="Adalyn"/>
       <column name="phone_number" value=""/>
@@ -1350,7 +1350,7 @@
       <column name="id" value="171665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Oliver.Hoffman@beam.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Oliver Hoffman"/>
       <column name="preferred_name" value="Oliver"/>
       <column name="phone_number" value=""/>
@@ -1364,7 +1364,7 @@
       <column name="id" value="181665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Ayana.Mccarty@cucumber.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Ayana Mccarty"/>
       <column name="preferred_name" value="Ayana"/>
       <column name="phone_number" value=""/>
@@ -1378,7 +1378,7 @@
       <column name="id" value="191665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Nigel.Cohen@recordplayer.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Nigel Cohen"/>
       <column name="preferred_name" value="Nigel"/>
       <column name="phone_number" value=""/>
@@ -1392,7 +1392,7 @@
       <column name="id" value="201665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Andrew.Wheeler@greatplainsfinances.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Andrew Wheeler"/>
       <column name="preferred_name" value="Andrew"/>
       <column name="phone_number" value=""/>
@@ -1406,7 +1406,7 @@
       <column name="id" value="211665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amelia.May@opera.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Amelia May"/>
       <column name="preferred_name" value="Amelia"/>
       <column name="phone_number" value=""/>
@@ -1420,7 +1420,7 @@
       <column name="id" value="221665746564468ab8458a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc94a0146f5a284ba13e095675c"/>
       <column name="username" valueComputed="LOWER('Amir.Wells@refrigeratorsignal.com')"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Amir Wells"/>
       <column name="preferred_name" value="Amir"/>
       <column name="phone_number" value=""/>
@@ -1480,7 +1480,7 @@
       <column name="id" value="f42927487b984b6b94bf2abed5ccb0eb"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="username" value="jonas"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Jonas Lang"/>
       <column name="preferred_name" value="Jonas"/>
       <column name="phone_number" value=""/>
@@ -1494,7 +1494,7 @@
       <column name="id" value="963c604abcaf42629e94a2f2c55c029d"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="username" value="denise"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Denise Rasmussen"/>
       <column name="preferred_name" value="Denise"/>
       <column name="phone_number" value=""/>
@@ -1508,7 +1508,7 @@
       <column name="id" value="606112a55a0145d6a29bcea8d22e592d"/>
       <column name="user_directory_id" value="2a935e0dac7e44c4aa44e986aeb8c00e"/>
       <column name="username" value="davis"/>
-      <column name="status" value="1"/>
+      <column name="status" value="active"/>
       <column name="name" value="Davis Parks"/>
       <column name="preferred_name" value="Davis"/>
       <column name="phone_number" value=""/>

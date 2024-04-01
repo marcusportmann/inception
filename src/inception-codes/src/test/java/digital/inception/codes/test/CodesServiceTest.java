@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import digital.inception.codes.Code;
-import digital.inception.codes.CodeCategory;
-import digital.inception.codes.ICodesService;
+import digital.inception.codes.model.Code;
+import digital.inception.codes.model.CodeCategory;
+import digital.inception.codes.service.ICodesService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.OffsetDateTime;

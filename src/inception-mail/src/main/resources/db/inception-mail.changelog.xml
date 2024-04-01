@@ -25,7 +25,7 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the mail template">
         <constraints nullable="false"/>
       </column>
-      <column name="content_type" type="int" remarks="The content type for the mail template">
+      <column name="content_type" type="nvarchar(50)" remarks="The code for the content type for the mail template">
         <constraints nullable="false"/>
       </column>
       <column name="template" type="${blob_type}" remarks="The Apache FreeMarker template for the mail template"/>

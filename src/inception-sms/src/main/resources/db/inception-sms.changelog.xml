@@ -28,7 +28,7 @@
       <column name="message" type="nvarchar(1000)" remarks="The message to send">
         <constraints nullable="false"/>
       </column>
-      <column name="status" type="int" remarks="The status of the SMS">
+      <column name="status" type="nvarchar(50)" remarks="The code for the status of the SMS">
         <constraints nullable="false"/>
       </column>
       <column name="send_attempts" type="int" remarks="The number of times that the sending of the SMS was attempted"/>

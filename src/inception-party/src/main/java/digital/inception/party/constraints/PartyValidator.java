@@ -16,12 +16,12 @@
 
 package digital.inception.party.constraints;
 
-import digital.inception.party.Attribute;
-import digital.inception.party.IPartyReferenceService;
-import digital.inception.party.PhysicalAddress;
-import digital.inception.party.PhysicalAddressType;
-import digital.inception.party.Preference;
-import digital.inception.reference.IReferenceService;
+import digital.inception.party.model.Attribute;
+import digital.inception.party.model.PhysicalAddress;
+import digital.inception.party.model.PhysicalAddressType;
+import digital.inception.party.model.Preference;
+import digital.inception.party.service.IPartyReferenceService;
+import digital.inception.reference.service.IReferenceService;
 import jakarta.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.Objects;

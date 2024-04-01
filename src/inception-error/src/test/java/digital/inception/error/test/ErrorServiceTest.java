@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.error.ErrorReport;
-import digital.inception.error.ErrorReportSortBy;
-import digital.inception.error.ErrorReportSummaries;
-import digital.inception.error.ErrorReportSummary;
-import digital.inception.error.IErrorService;
+import digital.inception.error.model.ErrorReport;
+import digital.inception.error.model.ErrorReportSortBy;
+import digital.inception.error.model.ErrorReportSummaries;
+import digital.inception.error.model.ErrorReportSummary;
+import digital.inception.error.service.IErrorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;

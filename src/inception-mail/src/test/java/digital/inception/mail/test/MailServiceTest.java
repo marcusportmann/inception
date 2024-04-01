@@ -22,11 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.core.util.ResourceUtil;
-import digital.inception.mail.IMailService;
-import digital.inception.mail.MailTemplate;
-import digital.inception.mail.MailTemplateContentType;
-import digital.inception.mail.MailTemplateNotFoundException;
-import digital.inception.mail.MailTemplateSummary;
+import digital.inception.mail.model.MailTemplate;
+import digital.inception.mail.model.MailTemplateContentType;
+import digital.inception.mail.model.MailTemplateNotFoundException;
+import digital.inception.mail.model.MailTemplateSummary;
+import digital.inception.mail.service.IMailService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.Collections;

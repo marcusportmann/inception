@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
-import digital.inception.sms.ISMSService;
-import digital.inception.sms.SMS;
-import digital.inception.sms.SMSStatus;
+import digital.inception.sms.model.SMS;
+import digital.inception.sms.model.SMSStatus;
+import digital.inception.sms.service.ISMSService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.Optional;

@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.core.util.ResourceUtil;
-import digital.inception.reporting.IReportingService;
-import digital.inception.reporting.ReportDefinition;
-import digital.inception.reporting.ReportDefinitionNotFoundException;
-import digital.inception.reporting.ReportDefinitionSummary;
+import digital.inception.reporting.model.ReportDefinition;
+import digital.inception.reporting.model.ReportDefinitionNotFoundException;
+import digital.inception.reporting.model.ReportDefinitionSummary;
+import digital.inception.reporting.service.IReportingService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.sql.Connection;

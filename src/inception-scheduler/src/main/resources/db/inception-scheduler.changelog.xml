@@ -34,7 +34,7 @@
       <column name="enabled" type="boolean" remarks="Is the job enabled for execution">
         <constraints nullable="false"/>
       </column>
-      <column name="status" type="int" remarks="The status of the job">
+      <column name="status" type="nvarchar(50)" remarks="The code for the status of the job">
         <constraints nullable="false"/>
       </column>
       <column name="execution_attempts" type="int" defaultValue="0" remarks="The number of times the current execution of the job has been attempted">

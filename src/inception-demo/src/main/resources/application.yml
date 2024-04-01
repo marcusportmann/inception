@@ -118,7 +118,7 @@ inception:
 
   party:
     data-store:
-      class-name: digital.inception.party.InternalPartyDataStore
+      class-name: digital.inception.party.persistence.InternalPartyDataStore
 
   security:
     jwt:

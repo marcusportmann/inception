@@ -16,11 +16,11 @@
 
 package digital.inception.server.authorization.oauth;
 
-import digital.inception.security.AuthenticationFailedException;
-import digital.inception.security.ExpiredPasswordException;
-import digital.inception.security.ISecurityService;
-import digital.inception.security.UserLockedException;
-import digital.inception.security.UserNotFoundException;
+import digital.inception.security.model.AuthenticationFailedException;
+import digital.inception.security.model.ExpiredPasswordException;
+import digital.inception.security.model.UserLockedException;
+import digital.inception.security.model.UserNotFoundException;
+import digital.inception.security.service.ISecurityService;
 import digital.inception.server.authorization.token.ITokenService;
 import digital.inception.server.authorization.token.InvalidOAuth2RefreshTokenException;
 import digital.inception.server.authorization.token.OAuth2AccessToken;

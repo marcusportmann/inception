@@ -4,3 +4,4 @@
 #   chmod a+x download_wsdl.sh && xattr -d com.apple.quarantine download_wsdl.sh
 
 curl "http://localhost:8080/service/CodesService?wsdl" -o CodesService.wsdl
+curl "http://localhost:8080/service/MailService?wsdl" -o MailService.wsdl

@@ -16,11 +16,11 @@
 
 package digital.inception.party.constraints;
 
-import digital.inception.party.IPartyReferenceService;
-import digital.inception.party.IPartyService;
-import digital.inception.party.Mandate;
-import digital.inception.party.MandateProperty;
-import digital.inception.party.MandatePropertyType;
+import digital.inception.party.model.Mandate;
+import digital.inception.party.model.MandateProperty;
+import digital.inception.party.model.MandatePropertyType;
+import digital.inception.party.service.IPartyReferenceService;
+import digital.inception.party.service.IPartyService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;

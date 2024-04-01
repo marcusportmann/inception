@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>CarRepository</b> interface declares the repository for the <b>Car</b> domain type.
+ * The <b>CarRepository</b> interface declares the persistence for the <b>Car</b> domain type.
  *
  * @author Marcus Portmann
  */

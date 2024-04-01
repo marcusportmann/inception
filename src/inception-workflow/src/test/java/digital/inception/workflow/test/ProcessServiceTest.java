@@ -17,18 +17,15 @@
 package digital.inception.workflow.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import digital.inception.workflow.IProcessService;
-import digital.inception.workflow.ProcessDefinitionSummary;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import digital.inception.workflow.service.IProcessService;
 import jakarta.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +34,7 @@ import java.util.zip.ZipInputStream;
 import javax.sql.DataSource;
 // import org.camunda.bpm.engine.ProcessEngine;
 // import org.camunda.bpm.engine.form.TaskFormData;
-// import org.camunda.bpm.engine.repository.ProcessDefinition;
+// import org.camunda.bpm.engine.persistence.ProcessDefinition;
 // import org.camunda.bpm.engine.runtime.Job;
 // import org.camunda.bpm.engine.runtime.JobQuery;
 // import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -45,30 +42,22 @@ import javax.sql.DataSource;
 // import org.camunda.bpm.engine.task.Task;
 // import org.camunda.bpm.engine.task.TaskQuery;
 import org.flowable.engine.ProcessEngine;
-import org.flowable.engine.app.AppModel;
-import org.flowable.engine.impl.app.AppDeployer;
 import org.flowable.engine.repository.Deployment;
-import org.flowable.engine.repository.DeploymentBuilder;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.engine.repository.ProcessDefinitionQuery;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.engine.runtime.ProcessInstanceQuery;
-import org.flowable.engine.test.FlowableTest;
-import org.flowable.form.api.FormInfo;
 import org.flowable.job.api.Job;
 import org.flowable.job.api.JobQuery;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -76,10 +65,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * The <b>ProcessServiceTest</b> class contains the implementation of the JUnit tests for the

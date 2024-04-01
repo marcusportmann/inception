@@ -18,13 +18,13 @@ package digital.inception.reference.test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import digital.inception.reference.Country;
-import digital.inception.reference.IReferenceService;
-import digital.inception.reference.Language;
-import digital.inception.reference.MeasurementSystem;
-import digital.inception.reference.MeasurementUnit;
-import digital.inception.reference.MeasurementUnitType;
-import digital.inception.reference.Region;
+import digital.inception.reference.model.Country;
+import digital.inception.reference.model.Language;
+import digital.inception.reference.model.MeasurementSystem;
+import digital.inception.reference.model.MeasurementUnit;
+import digital.inception.reference.model.MeasurementUnitType;
+import digital.inception.reference.model.Region;
+import digital.inception.reference.service.IReferenceService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;

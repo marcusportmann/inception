@@ -23,7 +23,7 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.jwt.SignedJWT;
-import digital.inception.security.User;
+import digital.inception.security.model.User;
 import java.io.Serial;
 import java.security.interfaces.RSAPrivateKey;
 import java.time.Duration;
