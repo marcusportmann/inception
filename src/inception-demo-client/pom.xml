@@ -16,7 +16,7 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-json</artifactId>
+      <artifactId>inception-api-client</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -24,23 +24,6 @@
     </dependency>
 
     <!-- Dependencies -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jsr310</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
-      <artifactId>jackson-jakarta-rs-json-provider</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.openapitools</groupId>
-      <artifactId>jackson-databind-nullable</artifactId>
-      <version>0.2.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
@@ -126,7 +109,7 @@
               <generateModelTests>false</generateModelTests>
               <generateModelDocumentation>true</generateModelDocumentation>
               <generatorName>java</generatorName>
-              <library>resttemplate</library>
+              <library>webclient</library>
 
               <apiPackage>digital.inception.demo.api</apiPackage>
               <invokerPackage>digital.inception.demo.invoker</invokerPackage>
@@ -162,7 +145,7 @@
               <generateModelTests>false</generateModelTests>
               <generateModelDocumentation>true</generateModelDocumentation>
               <generatorName>java</generatorName>
-              <library>resttemplate</library>
+              <library>webclient</library>
 
               <apiPackage>digital.inception.reference.api</apiPackage>
               <invokerPackage>digital.inception.reference.invoker</invokerPackage>

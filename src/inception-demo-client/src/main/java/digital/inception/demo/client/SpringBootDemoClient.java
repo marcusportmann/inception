@@ -77,7 +77,7 @@ public class SpringBootDemoClient {
     try {
       TestApi testApi = new TestApi();
 
-      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now());
+      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now()).block();
 
       System.out.println("Found time = " + offsetDateTime);
     } catch (Throwable e) {

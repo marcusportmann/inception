@@ -125,7 +125,7 @@ public class SimpleDemoClient {
     try {
       DataApi dataApi = new DataApi();
 
-      Data data = dataApi.getData();
+      Data data = dataApi.getData().block();
     } catch (Throwable e) {
       System.err.println("[ERROR] " + e.getMessage());
       e.printStackTrace(System.err);
@@ -136,7 +136,7 @@ public class SimpleDemoClient {
     try {
       ReferenceApi referenceApi = new ReferenceApi();
 
-      List<Language> languages = referenceApi.getLanguages("en-US");
+      List<Language> languages = referenceApi.getLanguages("en-US").collectList().block();
 
       for (Language language : languages) {
         System.out.println("Found language: " + language.getName());
@@ -152,7 +152,7 @@ public class SimpleDemoClient {
     try {
       TestApi testApi = new TestApi();
 
-      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now());
+      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now()).block();
 
       System.out.println("Found time = " + offsetDateTime);
     } catch (Throwable e) {

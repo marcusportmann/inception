@@ -40,7 +40,7 @@ public class BackgroundPasswordResetExpiry {
   private final PasswordResetRepository passwordResetRepository;
 
   /** The password reset expiry in seconds */
-  @Value("${inception.application.security.passwordResetExpiry:900}")
+  @Value("${inception.security.passwordResetExpiry:900}")
   private int passwordResetExpiry;
 
   /**
