@@ -34,7 +34,7 @@ public class InternalPartyStoreEnabledCondition implements Condition {
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
     String policyStoreType =
-        context.getEnvironment().getProperty("nova.party.party-store-type");
+        context.getEnvironment().getProperty("inception.party.party-store-type");
 
     return (policyStoreType == null) || "internal".equals(policyStoreType);
   }

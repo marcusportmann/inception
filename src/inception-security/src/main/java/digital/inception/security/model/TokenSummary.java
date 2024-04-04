@@ -60,10 +60,10 @@ import java.util.Objects;
   "expiryDate",
   "revocationDate"
 })
-@XmlRootElement(name = "TokenSummary", namespace = "http://nova.discovery.co.za/security")
+@XmlRootElement(name = "TokenSummary", namespace = "http://inception.digital/security")
 @XmlType(
     name = "TokenSummary",
-    namespace = "http://nova.discovery.co.za/security",
+    namespace = "http://inception.digital/security",
     propOrder = {
       "id",
       "type",

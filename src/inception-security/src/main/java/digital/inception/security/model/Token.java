@@ -66,10 +66,10 @@ import java.util.Objects;
   "claims",
   "data"
 })
-@XmlRootElement(name = "Token", namespace = "http://nova.discovery.co.za/security")
+@XmlRootElement(name = "Token", namespace = "http://inception.digital/security")
 @XmlType(
     name = "Token",
-    namespace = "http://nova.discovery.co.za/security",
+    namespace = "http://inception.digital/security",
     propOrder = {
       "id",
       "type",

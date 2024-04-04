@@ -54,10 +54,10 @@ import java.util.Objects;
   "expiryDate",
   "revocationDate"
 })
-@XmlRootElement(name = "RevokedToken", namespace = "http://nova.discovery.co.za/security")
+@XmlRootElement(name = "RevokedToken", namespace = "http://inception.digital/security")
 @XmlType(
     name = "RevokedToken",
-    namespace = "http://nova.discovery.co.za/security",
+    namespace = "http://inception.digital/security",
     propOrder = {"id", "type", "name", "issued", "validFromDate", "expiryDate", "revocationDate"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RevokedToken implements Serializable {

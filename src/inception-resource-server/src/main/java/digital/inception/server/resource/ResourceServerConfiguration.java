@@ -57,7 +57,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ResourceServerConfiguration</b> class provides the Spring configuration for the Nova
+ * The <b>ResourceServerConfiguration</b> class provides the Spring configuration for the Inception
  * Resource Server module.
  *
  * @author Marcus Portmann
