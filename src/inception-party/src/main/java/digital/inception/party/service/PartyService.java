@@ -80,16 +80,11 @@ public class PartyService implements IPartyService {
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
+  /** The party store. */
+  private final IPartyStore partyStore;
+
   /** The JSR-303 validator. */
   private final Validator validator;
-
-  /** The party data store. */
-  private IPartyStore dataStore;
-
-  /** The fully qualified name of the Java class that implements the party data store. */
-  @Value(
-      "${inception.party.data-store.class-name:digital.inception.party.store.InternalPartyDataStore}")
-  private String dataStoreClassName;
 
   /** The maximum number of associations that will be returned by the data store. */
   @Value("${inception.party.max-associations:#{100}}")
@@ -120,10 +115,13 @@ public class PartyService implements IPartyService {
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
+   * @param partyStore the Party Store
    */
-  public PartyService(ApplicationContext applicationContext, Validator validator) {
+  public PartyService(
+      ApplicationContext applicationContext, Validator validator, IPartyStore partyStore) {
     this.applicationContext = applicationContext;
     this.validator = validator;
+    this.partyStore = partyStore;
   }
 
   @Override
@@ -153,7 +151,7 @@ public class PartyService implements IPartyService {
           "association", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().createAssociation(tenantId, association);
+    return partyStore.createAssociation(tenantId, association);
   }
 
   @Override
@@ -182,7 +180,7 @@ public class PartyService implements IPartyService {
           "mandate", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().createMandate(tenantId, mandate);
+    return partyStore.createMandate(tenantId, mandate);
   }
 
   @Override
@@ -210,7 +208,7 @@ public class PartyService implements IPartyService {
           "organization", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().createOrganization(tenantId, organization);
+    return partyStore.createOrganization(tenantId, organization);
   }
 
   @Override
@@ -237,7 +235,7 @@ public class PartyService implements IPartyService {
           "person", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().createPerson(tenantId, person);
+    return partyStore.createPerson(tenantId, person);
   }
 
   @Override
@@ -252,7 +250,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("associationId");
     }
 
-    getDataStore().deleteAssociation(tenantId, associationId);
+    partyStore.deleteAssociation(tenantId, associationId);
   }
 
   @Override
@@ -267,7 +265,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("mandateId");
     }
 
-    getDataStore().deleteMandate(tenantId, mandateId);
+    partyStore.deleteMandate(tenantId, mandateId);
   }
 
   @Override
@@ -285,7 +283,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("organizationId");
     }
 
-    getDataStore().deleteOrganization(tenantId, organizationId);
+    partyStore.deleteOrganization(tenantId, organizationId);
   }
 
   @Override
@@ -303,7 +301,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("partyId");
     }
 
-    getDataStore().deleteParty(tenantId, partyId);
+    partyStore.deleteParty(tenantId, partyId);
   }
 
   @Override
@@ -321,7 +319,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("personId");
     }
 
-    getDataStore().deletePerson(tenantId, personId);
+    partyStore.deletePerson(tenantId, personId);
   }
 
   @Override
@@ -335,7 +333,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("associationId");
     }
 
-    return getDataStore().getAssociation(tenantId, associationId);
+    return partyStore.getAssociation(tenantId, associationId);
   }
 
   @Override
@@ -381,8 +379,8 @@ public class PartyService implements IPartyService {
       pageSize = Math.min(pageSize, maxAssociations);
     }
 
-    return getDataStore()
-        .getAssociationsForParty(tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
+    return partyStore.getAssociationsForParty(
+        tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -396,7 +394,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("mandateId");
     }
 
-    return getDataStore().getMandate(tenantId, mandateId);
+    return partyStore.getMandate(tenantId, mandateId);
   }
 
   @Override
@@ -442,8 +440,8 @@ public class PartyService implements IPartyService {
       pageSize = Math.min(pageSize, maxMandates);
     }
 
-    return getDataStore()
-        .getMandatesForParty(tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
+    return partyStore.getMandatesForParty(
+        tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -458,7 +456,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("organizationId");
     }
 
-    return getDataStore().getOrganization(tenantId, organizationId);
+    return partyStore.getOrganization(tenantId, organizationId);
   }
 
   @Override
@@ -500,8 +498,8 @@ public class PartyService implements IPartyService {
       pageSize = Math.min(pageSize, maxFilteredOrganizations);
     }
 
-    return getDataStore()
-        .getOrganizations(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
+    return partyStore.getOrganizations(
+        tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -535,7 +533,7 @@ public class PartyService implements IPartyService {
       pageSize = Math.min(pageSize, maxFilteredParties);
     }
 
-    return getDataStore().getParties(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
+    return partyStore.getParties(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -549,7 +547,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("partyId");
     }
 
-    return getDataStore().getParty(tenantId, partyId);
+    return partyStore.getParty(tenantId, partyId);
   }
 
   @Override
@@ -564,7 +562,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("personId");
     }
 
-    return getDataStore().getPerson(tenantId, personId);
+    return partyStore.getPerson(tenantId, personId);
   }
 
   @Override
@@ -606,7 +604,7 @@ public class PartyService implements IPartyService {
       pageSize = Math.min(pageSize, maxFilteredPersons);
     }
 
-    return getDataStore().getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
+    return partyStore.getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -647,8 +645,8 @@ public class PartyService implements IPartyService {
       pageSize = Math.min(pageSize, maxSnapshots);
     }
 
-    return getDataStore()
-        .getSnapshots(tenantId, entityType, entityId, from, to, sortDirection, pageIndex, pageSize);
+    return partyStore.getSnapshots(
+        tenantId, entityType, entityId, from, to, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -659,7 +657,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("partyId");
     }
 
-    return getDataStore().getTenantIdForParty(partyId);
+    return partyStore.getTenantIdForParty(partyId);
   }
 
   @Override
@@ -674,7 +672,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("partyId");
     }
 
-    return getDataStore().getTypeForParty(tenantId, partyId);
+    return partyStore.getTypeForParty(tenantId, partyId);
   }
 
   @Override
@@ -700,7 +698,7 @@ public class PartyService implements IPartyService {
           "association", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().updateAssociation(tenantId, association);
+    return partyStore.updateAssociation(tenantId, association);
   }
 
   @Override
@@ -725,7 +723,7 @@ public class PartyService implements IPartyService {
           "mandate", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().updateMandate(tenantId, mandate);
+    return partyStore.updateMandate(tenantId, mandate);
   }
 
   @Override
@@ -749,7 +747,7 @@ public class PartyService implements IPartyService {
           "organization", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().updateOrganization(tenantId, organization);
+    return partyStore.updateOrganization(tenantId, organization);
   }
 
   @Override
@@ -772,7 +770,7 @@ public class PartyService implements IPartyService {
           "person", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    return getDataStore().updatePerson(tenantId, person);
+    return partyStore.updatePerson(tenantId, person);
   }
 
   @Override
@@ -822,39 +820,6 @@ public class PartyService implements IPartyService {
       return validator.validate(person);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the person", e);
-    }
-  }
-
-  /**
-   * Retrieve the party data store.
-   *
-   * @return the party data store
-   * @throws ServiceUnavailableException if the party data store could not be retrieved
-   */
-  private IPartyStore getDataStore() throws ServiceUnavailableException {
-    if (dataStore == null) {
-      try {
-        Class<?> clazz =
-            Thread.currentThread().getContextClassLoader().loadClass(dataStoreClassName);
-
-        if (!IPartyStore.class.isAssignableFrom(clazz)) {
-          throw new ServiceUnavailableException(
-              "The party data store class ("
-                  + dataStoreClassName
-                  + ") does not implement the IPartyDataStore interface");
-        }
-
-        Class<? extends IPartyStore> dataStoreClass = clazz.asSubclass(IPartyStore.class);
-
-        dataStore = applicationContext.getAutowireCapableBeanFactory().createBean(dataStoreClass);
-
-        return dataStore;
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to initialize the party data store (" + dataStoreClassName + ")", e);
-      }
-    } else {
-      return dataStore;
     }
   }
 

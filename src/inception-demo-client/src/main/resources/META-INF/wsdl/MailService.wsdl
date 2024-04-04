@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://inception.digital/mail" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://inception.digital/core" name="MailService" targetNamespace="http://inception.digital/mail">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://inception.digital/mail" xmlns:mail="http://inception.digital/mail" xmlns:core="http://inception.digital/core" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://inception.digital/mail" version="1.0">
+  <xs:element name="CreateMailTemplate" type="mail:CreateMailTemplate"/>
+  <xs:element name="CreateMailTemplateResponse" type="mail:CreateMailTemplateResponse"/>
+  <xs:element name="DeleteMailTemplate" type="mail:DeleteMailTemplate"/>
+  <xs:element name="DeleteMailTemplateResponse" type="mail:DeleteMailTemplateResponse"/>
+  <xs:element name="GetMailTemplate" type="mail:GetMailTemplate"/>
+  <xs:element name="GetMailTemplateName" type="mail:GetMailTemplateName"/>
+  <xs:element name="GetMailTemplateNameResponse" type="mail:GetMailTemplateNameResponse"/>
+  <xs:element name="GetMailTemplateResponse" type="mail:GetMailTemplateResponse"/>
+  <xs:element name="GetMailTemplateSummaries" type="mail:GetMailTemplateSummaries"/>
+  <xs:element name="GetMailTemplateSummariesResponse" type="mail:GetMailTemplateSummariesResponse"/>
+  <xs:element name="GetMailTemplates" type="mail:GetMailTemplates"/>
+  <xs:element name="GetMailTemplatesResponse" type="mail:GetMailTemplatesResponse"/>
+  <xs:element name="MailTemplate" type="mail:MailTemplate"/>
+  <xs:element name="MailTemplateSummary" type="mail:MailTemplateSummary"/>
+  <xs:element name="UpdateMailTemplate" type="mail:UpdateMailTemplate"/>
+  <xs:element name="UpdateMailTemplateResponse" type="mail:UpdateMailTemplateResponse"/>
+  <xs:complexType name="GetMailTemplateName">
+    <xs:sequence>
+      <xs:element name="MailTemplateId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetMailTemplateNameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MailTemplateName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetMailTemplate">
+    <xs:sequence>
+      <xs:element name="MailTemplateId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetMailTemplateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MailTemplate" type="mail:MailTemplate"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MailTemplate">
+    <xs:sequence>
+      <xs:element name="Id" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="ContentType" type="mail:MailTemplateContentType"/>
+      <xs:element name="Template" type="xs:base64Binary"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeleteMailTemplate">
+    <xs:sequence>
+      <xs:element name="MailTemplateId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeleteMailTemplateResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="UpdateMailTemplate">
+    <xs:sequence>
+      <xs:element name="MailTemplate" type="mail:MailTemplate"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="UpdateMailTemplateResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="CreateMailTemplate">
+    <xs:sequence>
+      <xs:element name="MailTemplate" type="mail:MailTemplate"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateMailTemplateResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetMailTemplateSummaries">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetMailTemplateSummariesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="MailTemplateSummary" type="mail:MailTemplateSummary"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MailTemplateSummary">
+    <xs:sequence>
+      <xs:element name="Id" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="ContentType" type="mail:MailTemplateContentType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetMailTemplates">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetMailTemplatesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="MailTemplate" type="mail:MailTemplate"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="MailTemplateContentType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Text"/>
+      <xs:enumeration value="HTML"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="MailTemplateNotFoundException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="DuplicateMailTemplateException" nillable="true" type="core:ServiceError"/>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://inception.digital/core" xmlns:core="http://inception.digital/core" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://inception.digital/core" version="1.0">
+  <xs:element name="InvalidArgumentError" type="core:InvalidArgumentError"/>
+  <xs:element name="ServiceError" type="core:ServiceError"/>
+  <xs:element name="ValidationError" type="core:ValidationError"/>
+  <xs:complexType name="InvalidArgumentError">
+    <xs:complexContent>
+      <xs:extension base="core:ServiceError">
+        <xs:sequence>
+          <xs:element name="Parameter" type="xs:string"/>
+          <xs:element name="ValidationErrors">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationError" type="core:ValidationError"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ServiceError">
+    <xs:sequence>
+      <xs:element name="Timestamp" type="xs:dateTime"/>
+      <xs:element name="Message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidationError">
+    <xs:sequence>
+      <xs:element name="Property" type="xs:string"/>
+      <xs:element name="Message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidArgumentException" nillable="true" type="core:InvalidArgumentError"/>
+  <xs:element name="ServiceUnavailableException" nillable="true" type="core:ServiceError"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetMailTemplate">
+    <wsdl:part element="tns:GetMailTemplate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateMailTemplateResponse">
+    <wsdl:part element="tns:UpdateMailTemplateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteMailTemplate">
+    <wsdl:part element="tns:DeleteMailTemplate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateMailTemplate">
+    <wsdl:part element="tns:UpdateMailTemplate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DuplicateMailTemplateException">
+    <wsdl:part element="tns:DuplicateMailTemplateException" name="DuplicateMailTemplateException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetMailTemplateNameResponse">
+    <wsdl:part element="tns:GetMailTemplateNameResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteMailTemplateResponse">
+    <wsdl:part element="tns:DeleteMailTemplateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ServiceUnavailableException">
+    <wsdl:part element="ns1:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetMailTemplateSummaries">
+    <wsdl:part element="tns:GetMailTemplateSummaries" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="MailTemplateNotFoundException">
+    <wsdl:part element="tns:MailTemplateNotFoundException" name="MailTemplateNotFoundException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetMailTemplateName">
+    <wsdl:part element="tns:GetMailTemplateName" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateMailTemplateResponse">
+    <wsdl:part element="tns:CreateMailTemplateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetMailTemplatesResponse">
+    <wsdl:part element="tns:GetMailTemplatesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidArgumentException">
+    <wsdl:part element="ns1:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateMailTemplate">
+    <wsdl:part element="tns:CreateMailTemplate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetMailTemplateSummariesResponse">
+    <wsdl:part element="tns:GetMailTemplateSummariesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetMailTemplates">
+    <wsdl:part element="tns:GetMailTemplates" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetMailTemplateResponse">
+    <wsdl:part element="tns:GetMailTemplateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IMailService">
+    <wsdl:operation name="GetMailTemplateName">
+      <wsdl:input message="tns:GetMailTemplateName" name="GetMailTemplateName">
+    </wsdl:input>
+      <wsdl:output message="tns:GetMailTemplateNameResponse" name="GetMailTemplateNameResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MailTemplateNotFoundException" name="MailTemplateNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMailTemplate">
+      <wsdl:input message="tns:GetMailTemplate" name="GetMailTemplate">
+    </wsdl:input>
+      <wsdl:output message="tns:GetMailTemplateResponse" name="GetMailTemplateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MailTemplateNotFoundException" name="MailTemplateNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMailTemplate">
+      <wsdl:input message="tns:DeleteMailTemplate" name="DeleteMailTemplate">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteMailTemplateResponse" name="DeleteMailTemplateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MailTemplateNotFoundException" name="MailTemplateNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMailTemplate">
+      <wsdl:input message="tns:UpdateMailTemplate" name="UpdateMailTemplate">
+    </wsdl:input>
+      <wsdl:output message="tns:UpdateMailTemplateResponse" name="UpdateMailTemplateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MailTemplateNotFoundException" name="MailTemplateNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateMailTemplate">
+      <wsdl:input message="tns:CreateMailTemplate" name="CreateMailTemplate">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateMailTemplateResponse" name="CreateMailTemplateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:DuplicateMailTemplateException" name="DuplicateMailTemplateException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMailTemplateSummaries">
+      <wsdl:input message="tns:GetMailTemplateSummaries" name="GetMailTemplateSummaries">
+    </wsdl:input>
+      <wsdl:output message="tns:GetMailTemplateSummariesResponse" name="GetMailTemplateSummariesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMailTemplates">
+      <wsdl:input message="tns:GetMailTemplates" name="GetMailTemplates">
+    </wsdl:input>
+      <wsdl:output message="tns:GetMailTemplatesResponse" name="GetMailTemplatesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MailServiceSoapBinding" type="tns:IMailService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetMailTemplateName">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetMailTemplateName">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetMailTemplateNameResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MailTemplateNotFoundException">
+        <soap:fault name="MailTemplateNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMailTemplate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetMailTemplate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetMailTemplateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MailTemplateNotFoundException">
+        <soap:fault name="MailTemplateNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMailTemplate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="DeleteMailTemplate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DeleteMailTemplateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MailTemplateNotFoundException">
+        <soap:fault name="MailTemplateNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMailTemplate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="UpdateMailTemplate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="UpdateMailTemplateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MailTemplateNotFoundException">
+        <soap:fault name="MailTemplateNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateMailTemplate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateMailTemplate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateMailTemplateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DuplicateMailTemplateException">
+        <soap:fault name="DuplicateMailTemplateException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMailTemplateSummaries">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetMailTemplateSummaries">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetMailTemplateSummariesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMailTemplates">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetMailTemplates">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetMailTemplatesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MailService">
+    <wsdl:port binding="tns:MailServiceSoapBinding" name="IMailServicePort">
+      <soap:address location="http://localhost:8080/service/MailService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
