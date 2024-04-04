@@ -7,7 +7,7 @@ inception:
       rsa-key-id: inception-test
       rsa-private-key: classpath:META-INF/jwt-key-non-prod
       rsa-public-key: classpath:META-INF/jwt-key-non-prod.pub
-    policy-data-store-type: internal
+    policy-store-type: internal
 
 spring:
   application:

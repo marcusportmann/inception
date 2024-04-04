@@ -47,7 +47,7 @@ import digital.inception.party.model.PersonNotFoundException;
 import digital.inception.party.model.PersonSortBy;
 import digital.inception.party.model.Persons;
 import digital.inception.party.model.Snapshots;
-import digital.inception.party.persistence.IPartyDataStore;
+import digital.inception.party.store.IPartyStore;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.time.LocalDate;
@@ -84,11 +84,11 @@ public class PartyService implements IPartyService {
   private final Validator validator;
 
   /** The party data store. */
-  private IPartyDataStore dataStore;
+  private IPartyStore dataStore;
 
   /** The fully qualified name of the Java class that implements the party data store. */
   @Value(
-      "${inception.party.data-store.class-name:digital.inception.party.persistence.InternalPartyDataStore}")
+      "${inception.party.data-store.class-name:digital.inception.party.store.InternalPartyDataStore}")
   private String dataStoreClassName;
 
   /** The maximum number of associations that will be returned by the data store. */
@@ -831,20 +831,20 @@ public class PartyService implements IPartyService {
    * @return the party data store
    * @throws ServiceUnavailableException if the party data store could not be retrieved
    */
-  private IPartyDataStore getDataStore() throws ServiceUnavailableException {
+  private IPartyStore getDataStore() throws ServiceUnavailableException {
     if (dataStore == null) {
       try {
         Class<?> clazz =
             Thread.currentThread().getContextClassLoader().loadClass(dataStoreClassName);
 
-        if (!IPartyDataStore.class.isAssignableFrom(clazz)) {
+        if (!IPartyStore.class.isAssignableFrom(clazz)) {
           throw new ServiceUnavailableException(
               "The party data store class ("
                   + dataStoreClassName
                   + ") does not implement the IPartyDataStore interface");
         }
 
-        Class<? extends IPartyDataStore> dataStoreClass = clazz.asSubclass(IPartyDataStore.class);
+        Class<? extends IPartyStore> dataStoreClass = clazz.asSubclass(IPartyStore.class);
 
         dataStore = applicationContext.getAutowireCapableBeanFactory().createBean(dataStoreClass);
 

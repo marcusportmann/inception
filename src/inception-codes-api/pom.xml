@@ -2,7 +2,16 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+  <modelVersion>4.0.0</modelVersion>
+
   <artifactId>inception-codes-api</artifactId>
+  <name>inception-codes-api</name>
+
+  <parent>
+    <artifactId>inception-parent</artifactId>
+    <groupId>digital.inception</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
 
   <dependencies>
     <!-- Inception Dependencies -->
@@ -22,15 +31,43 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <modelVersion>4.0.0</modelVersion>
 
-  <name>inception-codes-api</name>
-
-  <parent>
-    <artifactId>inception-parent</artifactId>
-    <groupId>digital.inception</groupId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-deploy</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <failOnWarnings>true</failOnWarnings>
+          <quiet>true</quiet>
+          <sourceFileExcludes>
+            <sourceFileExclude>**/Version.java</sourceFileExclude>
+          </sourceFileExcludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
 

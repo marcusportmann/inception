@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.party.persistence;
+package digital.inception.party.store;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
@@ -51,12 +51,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>IPartyDataStore</b> interface defines the functionality provided by a party data store,
+ * The <b>IPartyStore</b> interface defines the functionality provided by a party store,
  * which manages structured and unstructured information for parties.
  *
  * @author Marcus Portmann
  */
-public interface IPartyDataStore {
+public interface IPartyStore {
 
   /**
    * Create the new association.

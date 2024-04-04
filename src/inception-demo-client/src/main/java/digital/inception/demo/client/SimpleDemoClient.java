@@ -30,7 +30,7 @@ import digital.inception.ws.security.WebServiceClientSecurityHelper;
 import java.security.KeyStore;
 import java.time.OffsetDateTime;
 import java.util.List;
-import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * The <b>SimpleDemoClient</b> class.
@@ -165,7 +165,7 @@ public class SimpleDemoClient {
 
       testApi.testExceptionHandling();
 
-    } catch (RestClientResponseException e) {
+    } catch (WebClientResponseException e) {
       try {
         var problemDetails = e.getResponseBodyAs(ProblemDetails.class);
 

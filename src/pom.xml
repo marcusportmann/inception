@@ -683,25 +683,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <failOnWarnings>true</failOnWarnings>
-          <quiet>true</quiet>
-          <sourceFileExcludes>
-            <sourceFileExclude>**/Version.java</sourceFileExclude>
-          </sourceFileExcludes>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <!-- Plugins required to publish to Maven Central -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -721,19 +702,6 @@
             <version>1.9.5</version>
           </dependency>
         </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-deploy</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>deploy</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

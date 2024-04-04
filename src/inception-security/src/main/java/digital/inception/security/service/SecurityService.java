@@ -103,7 +103,7 @@ import digital.inception.security.model.UserSortBy;
 import digital.inception.security.model.Users;
 import digital.inception.security.persistence.FunctionRepository;
 import digital.inception.security.persistence.GroupRepository;
-import digital.inception.security.persistence.IPolicyDataStore;
+import digital.inception.security.store.IPolicyStore;
 import digital.inception.security.persistence.PasswordResetRepository;
 import digital.inception.security.persistence.RoleRepository;
 import digital.inception.security.persistence.TenantRepository;
@@ -203,7 +203,7 @@ public class SecurityService implements ISecurityService {
   private final PasswordResetRepository passwordResetRepository;
 
   /** The Policy Data Store. */
-  private final IPolicyDataStore policyDataStore;
+  private final IPolicyStore policyDataStore;
 
   /** The Spring resource loader. */
   private final ResourceLoader resourceLoader;
@@ -277,7 +277,7 @@ public class SecurityService implements ISecurityService {
       ResourceLoader resourceLoader,
       Validator validator,
       IMailService mailService,
-      IPolicyDataStore policyDataStore,
+      IPolicyStore policyDataStore,
       FunctionRepository functionRepository,
       GroupRepository groupRepository,
       PasswordResetRepository passwordResetRepository,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security.persistence;
+package digital.inception.security.store;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -26,12 +26,12 @@ import digital.inception.security.model.PolicySummaries;
 import java.util.List;
 
 /**
- * The <b>IPolicyDataStore</b> interface defines the functionality provided by a policy data store,
- * which manages the storage of structured and unstructured information for polices.
+ * The <b>IPolicyDataStore</b> interface defines the functionality provided by a policy store, which
+ * manages the storage of structured and unstructured information for polices.
  *
  * @author Marcus Portmann
  */
-public interface IPolicyDataStore {
+public interface IPolicyStore {
 
   /**
    * Create the new policy.

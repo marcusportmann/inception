@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.party.persistence;
+package digital.inception.party.store;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.service.InvalidArgumentException;
@@ -49,26 +49,36 @@ import digital.inception.party.model.PersonSortBy;
 import digital.inception.party.model.Persons;
 import digital.inception.party.model.Snapshot;
 import digital.inception.party.model.Snapshots;
+import digital.inception.party.persistence.AssociationRepository;
+import digital.inception.party.persistence.MandateRepository;
+import digital.inception.party.persistence.OrganizationRepository;
+import digital.inception.party.persistence.PartyRepository;
+import digital.inception.party.persistence.PersonRepository;
+import digital.inception.party.persistence.SnapshotRepository;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalPartyDataStore</b> class provides the internal party data store implementation.
+ * The <b>InternalPartyStore</b> class provides the internal party store implementation.
  *
  * @author Marcus Portmann
  */
+@Service
+@Conditional(InternalPartyStoreEnabledCondition.class)
 @SuppressWarnings("unused")
-public class InternalPartyDataStore implements IPartyDataStore {
+public class InternalPartyStore implements IPartyStore {
 
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(InternalPartyDataStore.class);
+  private static final Logger logger = LoggerFactory.getLogger(InternalPartyStore.class);
 
   /** The Association Repository. */
   private final AssociationRepository associationRepository;
@@ -102,7 +112,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
    * @param associationRepository the Association Repository
    * @param snapshotRepository the Snapshot Repository
    */
-  public InternalPartyDataStore(
+  public InternalPartyStore(
       ObjectMapper objectMapper,
       MandateRepository mandateRepository,
       OrganizationRepository organizationRepository,
@@ -110,7 +120,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
       PersonRepository personRepository,
       AssociationRepository associationRepository,
       SnapshotRepository snapshotRepository) {
-
     this.objectMapper = objectMapper;
     this.mandateRepository = mandateRepository;
     this.organizationRepository = organizationRepository;

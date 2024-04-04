@@ -162,10 +162,22 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
+        <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <skip>true</skip>
+          <failOnWarnings>true</failOnWarnings>
+          <quiet>true</quiet>
+          <sourceFileExcludes>
+            <sourceFileExclude>**/Version.java</sourceFileExclude>
+          </sourceFileExcludes>
         </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>

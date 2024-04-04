@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security.persistence;
+package digital.inception.security.store;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -24,26 +24,25 @@ import digital.inception.security.model.PolicyNotFoundException;
 import digital.inception.security.model.PolicySortBy;
 import digital.inception.security.model.PolicySummaries;
 import digital.inception.security.model.PolicySummary;
+import digital.inception.security.persistence.PolicyRepository;
+import digital.inception.security.persistence.PolicySummaryRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalPolicyStore</b> class provides the internal policy data store implementation.
+ * The <b>InternalPolicyStore</b> class provides the internal policy store implementation.
  *
  * @author Marcus Portmann
  */
-@Component
-@ConditionalOnProperty(
-    name = "inception.security.policy-data-store-type",
-    havingValue = "internal",
-    matchIfMissing = true)
-public class InternalPolicyDataStore implements IPolicyDataStore {
+@Service
+@Conditional(InternalPolicyStoreEnabledCondition.class)
+public class InternalPolicyStore implements IPolicyStore {
 
   /** The default maximum number of filtered policies. */
   private static final int DEFAULT_MAX_FILTERED_POLICIES = 100;
@@ -60,7 +59,7 @@ public class InternalPolicyDataStore implements IPolicyDataStore {
    * @param policyRepository the Policy Repository
    * @param policySummaryRepository the Policy Summary Repository
    */
-  public InternalPolicyDataStore(
+  public InternalPolicyStore(
       PolicyRepository policyRepository, PolicySummaryRepository policySummaryRepository) {
     this.policyRepository = policyRepository;
     this.policySummaryRepository = policySummaryRepository;
