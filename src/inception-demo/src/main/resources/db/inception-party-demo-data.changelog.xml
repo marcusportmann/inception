@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <changeSet id="inception-party-demo-data-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Party - Demo - Data - 1.0.0</comment>
+
+    <!--    ____   _    ____ _______   __     -->
+    <!--    |  _ \ / \  |  _ \_   _\ \ / /    -->
+    <!--    | |_) / _ \ | |_) || |  \ V /     -->
+    <!--    |  __/ ___ \|  _ < | |   | |      -->
+    <!--    |_| /_/   \_\_| \_\|_|   |_|      -->
+    <insert tableName="party_parties">
+      <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
+      <column name="type" value="person"/>
+      <column name="name" value="Jack Hill"/>
+    </insert>
+    <insert tableName="party_persons">
+      <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="title" value="mr"/>
+      <column name="initials" value="J"/>
+      <column name="given_name" value="Jack"/>
+      <column name="surname" value="Hill"/>
+
+      <column name="country_of_birth" value="ZA"/>
+      <column name="country_of_residence" value="ZA"/>
+      <column name="date_of_birth" value="1976-03-07"/>
+      <column name="employment_status" value="other"/>
+      <column name="employment_type" value="unemployed"/>
+      <column name="gender" value="male"/>
+      <column name="identification_country_of_issue" value="ZA"/>
+      <column name="identification_issue_date" value="2007-08-04"/>
+      <column name="identification_number" value="7603079236083"/>
+      <column name="identification_type" value="za_id"/>
+      <column name="language" value="EN"/>
+      <column name="marital_status" value="married"/>
+      <column name="marriage_type" value="anc_without_accrual"/>
+      <column name="occupation" value="unemployed"/>
+      <column name="preferred_name" value="Jack"/>
+      <column name="race" value="white"/>
+      <column name="residency_status" value="citizen"/>
+      <column name="residential_type" value="cohabitant"/>
+    </insert>
+    <insert tableName="party_identifications">
+      <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="za_id"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="issue_date" value="2007-08-04"/>
+      <column name="number" value="7603079236083"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="mobile_number"/>
+      <column name="role" value="personal_mobile_number"/>
+      <column name="value" value="+27835551234"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="email_address"/>
+      <column name="role" value="personal_email_address"/>
+      <column name="value" value="jack@demo.com"/>
+    </insert>
+    <insert tableName="party_physical_addresses">
+      <column name="id" value="14166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="unstructured"/>
+      <column name="role" value="residential"/>
+      <column name="line1" value="145 Apple Street"/>
+      <column name="line2" value="Fairland"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2170"/>
+      <column name="purposes" value="billing,correspondence,delivery"/>
+    </insert>
+
+
+
+
+    <insert tableName="party_parties">
+      <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
+      <column name="type" value="person"/>
+      <column name="name" value="Jill Hill"/>
+    </insert>
+    <insert tableName="party_persons">
+      <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="title" value="mrs"/>
+      <column name="initials" value="J"/>
+      <column name="given_name" value="Jill"/>
+      <column name="surname" value="Hill"/>
+
+      <column name="country_of_birth" value="ZA"/>
+      <column name="country_of_residence" value="ZA"/>
+      <column name="date_of_birth" value="1985-05-01"/>
+      <column name="employment_status" value="other"/>
+      <column name="employment_type" value="unemployed"/>
+      <column name="gender" value="female"/>
+      <column name="identification_country_of_issue" value="ZA"/>
+      <column name="identification_issue_date" value="2012-06-14"/>
+      <column name="identification_number" value="8505014800080"/>
+      <column name="identification_type" value="za_id"/>
+      <column name="language" value="EN"/>
+      <column name="marital_status" value="married"/>
+      <column name="marriage_type" value="anc_without_accrual"/>
+      <column name="occupation" value="unemployed"/>
+      <column name="preferred_name" value="Jill"/>
+      <column name="race" value="white"/>
+      <column name="residency_status" value="citizen"/>
+      <column name="residential_type" value="cohabitant"/>
+    </insert>
+    <insert tableName="party_identifications">
+      <column name="id" value="74166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="za_id"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="issue_date" value="2012-06-14"/>
+      <column name="number" value="8505014800080"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="mobile_number"/>
+      <column name="role" value="personal_mobile_number"/>
+      <column name="value" value="+27835554321"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="email_address"/>
+      <column name="role" value="personal_email_address"/>
+      <column name="value" value="jill@demo.com"/>
+    </insert>
+    <insert tableName="party_physical_addresses">
+      <column name="id" value="24166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="unstructured"/>
+      <column name="role" value="residential"/>
+      <column name="line1" value="145 Apple Street"/>
+      <column name="line2" value="Fairland"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2170"/>
+      <column name="purposes" value="billing,correspondence,delivery"/>
+    </insert>
+
+
+
+
+
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="business_customer"/>
+      <column name="attribute_type" value="identification_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="business_customer"/>
+      <column name="attribute_type" value="identification_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="business_customer"/>
+      <column name="attribute_type" value="identification_issue_date"/>
+      <column name="type" value="required"/>
+    </insert>
+
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="consent"/>
+      <column name="attribute_type_qualifier" value="marketing"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="mobile_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="contact_mechanisms"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="countries_of_citizenship"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="countries_of_tax_residence"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="country_of_birth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="country_of_residence"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="date_of_birth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="educations"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="employment_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="employment_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="employments"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="external_reference"/>
+      <column name="attribute_type_qualifier" value="legacy_customer_code"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="gender"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="given_name"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="highest_qualification_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="identification_country_of_issue"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="identification_issue_date"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="identification_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="identification_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="identifications"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="initials"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="language"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="language_proficiencies"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="marital_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="marital_status_date"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="marriage_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="measurement_system"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="next_of_kin"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="occupation"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="physical_addresses"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="physical_address"/>
+      <column name="attribute_type_qualifier" value="home"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="preferred_name"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="race"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="residence_permits"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="residency_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="residential_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="segment_allocations"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="sources_of_funds"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="sources_of_wealth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="surname"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="tax_numbers"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="time_zone"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="title"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="weight"/>
+      <column name="type" value="required"/>
+    </insert>
+
+    <insert tableName="party_role_type_preference_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="preference_type" value="correspondence_language"/>
+      <column name="type" value="required"/>
+    </insert>
+
+    <!--
+        _    __  __ _____ _     ___    _       ____    _    ____      _      __  __    _ __   __
+       / \  |  \/  | ____| |   |_ _|  / \     / ___|  / \  |  _ \    / \    |  \/  |  / \\ \ / /
+      / _ \ | |\/| |  _| | |    | |  / _ \   | |     / _ \ | |_) |  / _ \   | |\/| | / _ \\ V /
+     / ___ \| |  | | |___| |___ | | / ___ \  | |___ / ___ \|  _ <  / ___ \  | |  | |/ ___ \| |
+    /_/   \_\_|  |_|_____|_____|___/_/   \_\  \____/_/   \_\_| \_\/_/   \_\ |_|  |_/_/   \_\_|
+
+    -->
+    <insert tableName="party_parties">
+      <column name="id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="person"/>
+      <column name="name" value="Amelia Cara May"/>
+    </insert>
+    <insert tableName="party_persons">
+      <column name="id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="title" value="mrs"/>
+      <column name="initials" value="AC"/>
+      <column name="given_name" value="Amelia"/>
+      <column name="surname" value="May"/>
+
+      <column name="countries_of_citizenship" value="GB"/>
+      <column name="countries_of_tax_residence" value="ZA"/>
+      <column name="country_of_birth" value="GB"/>
+      <column name="country_of_residence" value="ZA"/>
+      <column name="date_of_birth" value="1979-04-01"/>
+      <column name="employment_status" value="employed"/>
+      <column name="employment_type" value="full_time"/>
+      <column name="gender" value="female"/>
+      <column name="highest_qualification_type" value="masters_degree"/>
+      <column name="identification_country_of_issue" value="ZA"/>
+      <column name="identification_issue_date" value="2009-11-02"/>
+      <column name="identification_number" value="7904014800086"/>
+      <column name="identification_type" value="za_id"/>
+      <column name="language" value="EN"/>
+      <column name="maiden_name" value="Smith"/>
+      <column name="marital_status" value="married"/>
+      <column name="marital_status_date" value="2015-10-10"/>
+      <column name="marriage_type" value="anc_without_accrual"/>
+      <column name="measurement_system" value="metric"/>
+      <column name="middle_names" value="Cara"/>
+      <column name="occupation" value="manager"/>
+      <column name="preferred_name" value="Amelia"/>
+      <column name="race" value="white"/>
+      <column name="residency_status" value="citizen"/>
+      <column name="residential_type" value="owner"/>
+      <column name="time_zone" value="Africa/Johannesburg"/>
+    </insert>
+    <insert tableName="party_attributes">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="weight"/>
+      <column name="decimal_value" value="54.1"/>
+      <column name="unit" value="metric_kilogram"/>
+    </insert>
+    <insert tableName="party_consents">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="marketing"/>
+      <column name="effective_from" value="2014-08-23"/>
+      <column name="effective_to" value="2022-04-08"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="phone_number"/>
+      <column name="role" value="home_phone_number"/>
+      <column name="value" value="0115551234"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="mobile_number"/>
+      <column name="role" value="personal_mobile_number"/>
+      <column name="value" value="+27835551234"/>
+      <column name="purposes" value="security"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="email_address"/>
+      <column name="role" value="personal_email_address"/>
+      <column name="value" valueComputed="LOWER('Amelia.May@google.com')"/>
+      <column name="purposes" value="general,marketing,security"/>
+    </insert>
+    <insert tableName="party_educations">
+      <column name="id" value="ded88b19-c15c-4a99-a46d-d7e609a83c11"/>
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="qualification_type" value="masters_degree"/>
+      <column name="qualification_year" value="2002"/>
+      <column name="qualification_name" value="Msc Electrical Engineering"/>
+      <column name="institution_name" value="Oxford University"/>
+      <column name="institution_country" value="GB"/>
+      <column name="field_of_study" value="electrical_engineering"/>
+      <column name="first_year_attended" value="1995"/>
+      <column name="last_year_attended" value="2002"/>
+    </insert>
+    <insert tableName="party_employments">
+      <column name="id" value="03cf0e55-7d9d-4a8b-aa49-ffb8cc741bcb"/>
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="employer_name" value="Siemens"/>
+      <column name="employer_phone_number" value="0116522000"/>
+      <column name="employer_email_address" valueComputed="LOWER('contactus@siemens.co.za')"/>
+      <column name="employer_contact_person" value="HR Administrator"/>
+      <column name="employer_address_line1" value="300 Janadel Avenue"/>
+      <column name="employer_address_suburb" value="Halfway House"/>
+      <column name="employer_address_city" value="Johannesburg"/>
+      <column name="employer_address_region" value="ZA-GP"/>
+      <column name="employer_address_country" value="ZA"/>
+      <column name="employer_address_postal_code" value="1685"/>
+      <column name="start_date" value="2003-05-06"/>
+      <column name="end_date" value="2011-05-27"/>
+      <column name="type" value="full_time"/>
+      <column name="occupation" value="professional_engineering"/>
+    </insert>
+    <insert tableName="party_employments">
+      <column name="id" value="cbca7398-1d90-4621-b32b-f5bafd6c6ef5"/>
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="employer_name" value="May Cakes"/>
+      <column name="employer_phone_number" value="0115558765"/>
+      <column name="employer_email_address" valueComputed="LOWER('GlennSHartman@maycakes.com')"/>
+      <column name="employer_contact_person" value="Glenn Hartman"/>
+      <column name="employer_address_line1" value="867 Fairland Office Park"/>
+      <column name="employer_address_line2" value="200 Smit Street"/>
+      <column name="employer_address_suburb" value="Fairland"/>
+      <column name="employer_address_city" value="Johannesburg"/>
+      <column name="employer_address_region" value="ZA-GP"/>
+      <column name="employer_address_country" value="ZA"/>
+      <column name="employer_address_postal_code" value="2170"/>
+      <column name="start_date" value="2011-07-04"/>
+      <column name="type" value="full_time"/>
+      <column name="occupation" value="manager"/>
+    </insert>
+    <insert tableName="party_external_references">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="legacy_customer_code"/>
+      <column name="value" value="ACM123456"/>
+    </insert>
+    <insert tableName="party_identifications">
+      <column name="id" value="da2dad31-8dbf-432e-ae69-d3d4d13ced92"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="za_id"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="issue_date" value="2009-11-02"/>
+      <column name="number" value="7904014800086"/>
+      <column name="provided_date" value="2020-08-17"/>
+    </insert>
+    <insert tableName="party_identifications">
+      <column name="id" value="8f5bbbf1-a29b-4a22-882c-b27bd2e3bd57"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="passport"/>
+      <column name="country_of_issue" value="GB"/>
+      <column name="issue_date" value="2015-04-02"/>
+      <column name="number" value="A12345678"/>
+      <column name="expiry_date" value="2025-04-02"/>
+      <column name="provided_date" value="2020-08-17"/>
+    </insert>
+    <insert tableName="party_language_proficiencies">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="language" value="EN"/>
+      <column name="listen_level" value="proficient"/>
+      <column name="speak_level" value="proficient"/>
+      <column name="read_level" value="proficient"/>
+      <column name="write_level" value="proficient"/>
+    </insert>
+    <insert tableName="party_locks">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="kyc_unverified"/>
+      <column name="effective_from" value="2020-09-10"/>
+      <column name="effective_to" value="2021-01-01"/>
+    </insert>
+    <insert tableName="party_next_of_kin">
+      <column name="id" value="1847d54b-459c-4e72-999e-2c15233e4ac7"/>
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="father"/>
+      <column name="name" value="Fred Smith"/>
+      <column name="home_number" value="0215557890"/>
+      <column name="work_number" value="0215550987"/>
+      <column name="mobile_number" value="+27715551234"/>
+      <column name="email_address" value="fredsmith44@gmail.com"/>
+      <column name="address_line1" value="3 Lower Klipfontein Road"/>
+      <column name="address_suburb" value="Athlone"/>
+      <column name="address_city" value="Cape Town"/>
+      <column name="address_region" value="ZA-WC"/>
+      <column name="address_country" value="ZA"/>
+      <column name="address_postal_code" value="7764"/>
+    </insert>
+    <insert tableName="party_physical_addresses">
+      <column name="id" value="3e912f3b-cd64-4868-8b3b-b8c05232eb64"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="complex"/>
+      <column name="role" value="home"/>
+      <column name="complex_name" value="Die Wilge"/>
+      <column name="complex_unit_number" value="3"/>
+      <column name="street_name" value="Smit St"/>
+      <column name="street_number" value="168"/>
+      <column name="suburb" value="Fairland"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="ZA-GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2170"/>
+      <column name="purposes" value="billing,correspondence,delivery"/>
+      <column name="latitude" value="-26.132480441365484"/>
+      <column name="longitude" value="27.944038870432856"/>
+    </insert>
+    <insert tableName="party_physical_addresses">
+      <column name="id" value="04927868-c5d1-4444-9104-2e0f9da97f72"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="postal"/>
+      <column name="role" value="postal"/>
+      <column name="line1" value="P.O. Box 123456"/>
+      <column name="suburb" value="Fairland"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="ZA-GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2030"/>
+      <column name="purposes" value="billing,correspondence"/>
+    </insert>
+    <insert tableName="party_preferences">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="correspondence_language"/>
+      <column name="value" value="EN"/>
+    </insert>
+    <insert tableName="party_residence_permits">
+      <column name="id" value="4cdeea16-9813-4494-854f-2a53bf5a7562"/>
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="za_general_work_visa"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="issue_date" value="2003-02-15"/>
+      <column name="number" value="AA1234567"/>
+      <column name="expiry_date" value="2030-03-22"/>
+    </insert>
+    <insert tableName="party_roles">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="individual_customer"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="purpose" value="kyc_requirements"/>
+    </insert>
+    <insert tableName="party_segment_allocations">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="segment" value="upper_middle_income"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="effective_to" value="2021-03-16"/>
+    </insert>
+    <insert tableName="party_segment_allocations">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="segment" value="high_income"/>
+      <column name="effective_from" value="2021-03-16"/>
+    </insert>
+    <insert tableName="party_sources_of_funds">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="salary_wages"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="percentage" value="100"/>
+    </insert>
+    <insert tableName="party_sources_of_funds">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="investments_other"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="effective_to" value="2021-02-17"/>
+      <column name="description" value="Stocks and shares"/>
+    </insert>
+    <insert tableName="party_sources_of_wealth">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="savings"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="description" value="Savings"/>
+    </insert>
+    <insert tableName="party_statuses">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="fraud_investigation"/>
+      <column name="effective_from" value="2020-10-13"/>
+      <column name="effective_to" value="2020-10-20"/>
+    </insert>
+    <insert tableName="party_statuses">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="kyc_verified"/>
+      <column name="effective_from" value="2021-01-01"/>
+      <column name="effective_to" value="2022-01-01"/>
+    </insert>
+    <insert tableName="party_tax_numbers">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="za_income_tax_number"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="number" value="1234567890"/>
+    </insert>
+    <insert tableName="party_tax_numbers">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="uk_tax_number"/>
+      <column name="country_of_issue" value="GB"/>
+    </insert>
+
+    <!--
+     _____ ____  ___ _   _    ____    _    ____      _      __  __    _ __   __
+    | ____|  _ \|_ _| \ | |  / ___|  / \  |  _ \    / \    |  \/  |  / \\ \ / /
+    |  _| | |_) || ||  \| | | |     / _ \ | |_) |  / _ \   | |\/| | / _ \\ V /
+    | |___|  _ < | || |\  | | |___ / ___ \|  _ <  / ___ \  | |  | |/ ___ \| |
+    |_____|_| \_\___|_| \_|  \____/_/   \_\_| \_\/_/   \_\ |_|  |_/_/   \_\_|
+
+    -->
+    <insert tableName="party_parties">
+      <column name="id" value="2a5ebf5c-623d-4bb6-bddd-d1ee871759fd"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="person"/>
+      <column name="name" value="Erin Cara May"/>
+    </insert>
+    <insert tableName="party_persons">
+      <column name="id" value="2a5ebf5c-623d-4bb6-bddd-d1ee871759fd"/>
+      <column name="title" value="miss"/>
+      <column name="initials" value="EC"/>
+      <column name="given_name" value="Erin"/>
+      <column name="surname" value="May"/>
+
+      <column name="date_of_birth" value="2019-03-28"/>
+      <column name="gender" value="female"/>
+      <column name="middle_names" value="Cara"/>
+      <column name="preferred_name" value="Erin"/>
+    </insert>
+
+    <!--
+     __  __    _ __   __   ____    _    _  _______ ____
+    |  \/  |  / \\ \ / /  / ___|  / \  | |/ / ____/ ___|
+    | |\/| | / _ \\ V /  | |     / _ \ | ' /|  _| \___ \
+    | |  | |/ ___ \| |   | |___ / ___ \| . \| |___ ___) |
+    |_|  |_/_/   \_\_|    \____/_/   \_\_|\_\_____|____/
+
+    -->
+    <insert tableName="party_parties">
+      <column name="id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="organization"/>
+      <column name="name" value="May Cakes"/>
+    </insert>
+    <insert tableName="party_organizations">
+      <column name="id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="countries_of_tax_residence" value="ZA"/>
+    </insert>
+    <insert tableName="party_attributes">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="operating_hours"/>
+      <column name="string_value" value="09:00 - 17:00"/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="phone_number"/>
+      <column name="role" value="main_phone_number"/>
+      <column name="value" value="0115558765"/>
+      <column name="purposes" value=""/>
+    </insert>
+    <insert tableName="party_contact_mechanisms">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="email_address"/>
+      <column name="role" value="main_email_address"/>
+      <column name="value" value="info@maycakes.com"/>
+      <column name="purposes" value="general"/>
+    </insert>
+    <insert tableName="party_external_references">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="legacy_customer_code"/>
+      <column name="value" value="MC123456"/>
+    </insert>
+    <insert tableName="party_identifications">
+      <column name="id" value="decadbc2-0712-40cf-8dc1-288b1ec70331"/>
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="za_company_registration_certificate"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="issue_date" value="2011-07-04"/>
+      <column name="number" value="ZA123456XX"/>
+      <column name="provided_date" value="2020-08-17"/>
+    </insert>
+    <insert tableName="party_locks">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="kyc_unverified"/>
+      <column name="effective_from" value="2020-10-10"/>
+      <column name="effective_to" value="2021-02-01"/>
+    </insert>
+    <insert tableName="party_physical_addresses">
+      <column name="id" value="80aac230-b7b3-4a8d-a7fc-e473013fdab5"/>
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="unstructured"/>
+      <column name="role" value="main"/>
+      <column name="line1" value="867 Fairland Office Park"/>
+      <column name="line2" value="200 Smit Street"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2170"/>
+      <column name="latitude" value="-26.129229541826838"/>
+      <column name="longitude" value="27.946091455090585"/>
+    </insert>
+    <insert tableName="party_roles">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="business_customer"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="purpose" value="kyc_requirements"/>
+    </insert>
+    <insert tableName="party_segment_allocations">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="segment" value="small_sme"/>
+      <column name="effective_from" value="2020-08-17"/>
+    </insert>
+    <insert tableName="party_statuses">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="kyc_verified"/>
+      <column name="effective_from" value="2021-01-01"/>
+      <column name="effective_to" value="2022-01-01"/>
+    </insert>
+    <insert tableName="party_tax_numbers">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="za_income_tax_number"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="number" value="987654321"/>
+    </insert>
+    <insert tableName="party_tax_numbers">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="za_vat_tax_number"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="number" value="ZA123456"/>
+    </insert>
+
+    <!--
+        _    ____ ____   ___   ____ ___    _  _____ ___ ___  _   _ ____
+       / \  / ___/ ___| / _ \ / ___|_ _|  / \|_   _|_ _/ _ \| \ | / ___|
+      / _ \ \___ \___ \| | | | |    | |  / _ \ | |  | | | | |  \| \___ \
+     / ___ \ ___) |__) | |_| | |___ | | / ___ \| |  | | |_| | |\  |___) |
+    /_/   \_\____/____/ \___/ \____|___/_/   \_\_| |___\___/|_| \_|____/
+
+    -->
+    <insert tableName="party_associations">
+      <column name="id" value="b7475462-880d-40b8-9cdd-e98eae13dbc6"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="parent_child"/>
+      <column name="first_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="second_party_id" value="2a5ebf5c-623d-4bb6-bddd-d1ee871759fd"/>
+      <column name="effective_from" value="2019-03-28"/>
+    </insert>
+
+    <insert tableName="party_associations">
+      <column name="id" value="4b3fb77a-201b-48e1-b9da-00e94c15e742"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="company_shareholder"/>
+      <column name="first_party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="effective_from" value="2011-07-22"/>
+      <column name="effective_to" value="2050-01-10"/>
+    </insert>
+    <insert tableName="party_association_properties">
+      <column name="association_id" value="4b3fb77a-201b-48e1-b9da-00e94c15e742"/>
+      <column name="type" value="shareholding"/>
+      <column name="decimal_value" value="100.00"/>
+    </insert>
+
+    <insert tableName="party_associations">
+      <column name="id" value="9d962cf4-a8c9-47fe-a255-41eee9e29919"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="directorship"/>
+      <column name="first_party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="effective_from" value="2011-07-22"/>
+      <column name="effective_to" value="2050-01-10"/>
+    </insert>
+
+    <!--
+    __  __    _    _   _ ____    _  _____ _____ ____
+    |  \/  |  / \  | \ | |  _ \  / \|_   _| ____/ ___|
+    | |\/| | / _ \ |  \| | | | |/ _ \ | | |  _| \___ \
+    | |  | |/ ___ \| |\  | |_| / ___ \| | | |___ ___) |
+    |_|  |_/_/   \_\_| \_|____/_/   \_\_| |_____|____/
+
+    -->
+    <insert tableName="party_mandates">
+      <column name="id" value="3d8396c3-88cd-42f6-ba52-7390d1f535fa"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="general_power_of_attorney"/>
+      <column name="required_mandataries" value="any"/>
+      <column name="effective_from" value="2011-07-22"/>
+      <column name="effective_to" value="2050-01-10"/>
+    </insert>
+
+    <insert tableName="party_mandataries">
+      <column name="mandate_id" value="3d8396c3-88cd-42f6-ba52-7390d1f535fa"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="role" value="mandatary"/>
+      <column name="effective_from" value="2011-07-22"/>
+    </insert>
+
+  </changeSet>
+</databaseChangeLog>
