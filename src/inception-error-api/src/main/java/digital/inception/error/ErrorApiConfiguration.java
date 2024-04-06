@@ -16,6 +16,7 @@
 
 package digital.inception.error;
 
+import digital.inception.error.controller.Version;
 import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;

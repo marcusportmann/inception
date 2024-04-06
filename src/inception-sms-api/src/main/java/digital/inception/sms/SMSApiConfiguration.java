@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package digital.inception.sms.controller;
+package digital.inception.sms;
 
-import digital.inception.sms.Version;
+import digital.inception.sms.controller.Version;
 import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -40,11 +40,14 @@ public class SMSApiConfiguration {
    */
   @Bean
   public GroupedOpenApi smsOpenApi() {
-    return GroupedOpenApi.builder()
-        .group("sms")
-        .packagesToScan("digital.inception.sms")
-        .addOpenApiCustomizer(
-            openApi -> openApi.info(new Info().title("SMS API").version(Version.PROJECT_VERSION)))
-        .build();
+    GroupedOpenApi build =
+        GroupedOpenApi.builder()
+            .group("sms")
+            .packagesToScan("digital.inception.sms")
+            .addOpenApiCustomizer(
+                openApi ->
+                    openApi.info(new Info().title("SMS API").version(Version.PROJECT_VERSION)))
+            .build();
+    return build;
   }
 }

@@ -239,7 +239,7 @@ public interface ISecurityService {
       throws InvalidArgumentException,
           AuthenticationFailedException,
           UserLockedException,
-      ExpiredPasswordException,
+          ExpiredPasswordException,
           UserNotFoundException,
           ServiceUnavailableException;
 
@@ -334,7 +334,7 @@ public interface ISecurityService {
   void createUser(User user, boolean expiredPassword, boolean userLocked)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
-      DuplicateUserException,
+          DuplicateUserException,
           ServiceUnavailableException;
 
   /**
@@ -438,8 +438,8 @@ public interface ISecurityService {
    */
   void deleteUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException,
-      ExistingGroupsException,
-      ExistingUsersException,
+          ExistingGroupsException,
+          ExistingUsersException,
           UserDirectoryNotFoundException,
           ServiceUnavailableException;
 
@@ -1251,7 +1251,7 @@ public interface ISecurityService {
   void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
-      GroupNotFoundException,
+          GroupNotFoundException,
           GroupRoleNotFoundException,
           ServiceUnavailableException;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.audit;
+package digital.inception.reporting.controller;
 
 /**
  * The <b>Version</b> class.

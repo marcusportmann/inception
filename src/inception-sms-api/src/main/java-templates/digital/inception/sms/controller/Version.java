@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.reporting;
+package digital.inception.sms.controller;
 
 /**
  * The <b>Version</b> class.

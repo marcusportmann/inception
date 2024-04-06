@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.mail;
+package digital.inception.security.controller;
 
 /**
  * The <b>Version</b> class.

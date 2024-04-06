@@ -902,10 +902,70 @@ public class ValidOrganizationValidator extends PartyValidator
                       roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
                   .addMessageParameter("roleType", roleType)
                   .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidOrganization.identificationTypeRequiredForRoleType.message}")
+                      "{digital.inception.party.constraints.ValidOrganization.identificationWithTypeRequiredForRoleType.message}")
                   .addPropertyNode("identifications")
                   .addConstraintViolation();
 
+              isValid = false;
+            }
+
+            break;
+
+          case "identification_country_of_issue":
+            if (!validateRequiredAttributeConstraint(
+                roleType,
+                organization.getIdentificationCountryOfIssue(),
+                "identificationCountryOfIssue",
+                "{digital.inception.party.constraints.ValidPerson.identificationCountryOfIssueRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "identification_expiry_date":
+            if (!validateRequiredAttributeConstraint(
+                roleType,
+                organization.getIdentificationExpiryDate(),
+                "identificationExpiryDate",
+                "{digital.inception.party.constraints.ValidPerson.identificationExpiryDateRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "identification_issue_date":
+            if (!validateRequiredAttributeConstraint(
+                roleType,
+                organization.getIdentificationIssueDate(),
+                "identificationIssueDate",
+                "{digital.inception.party.constraints.ValidPerson.identificationIssueDateRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "identification_number":
+            if (!validateRequiredAttributeConstraint(
+                roleType,
+                organization.getIdentificationNumber(),
+                "identificationNumber",
+                "{digital.inception.party.constraints.ValidPerson.identificationNumberRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "identification_type":
+            if (!validateRequiredAttributeConstraint(
+                roleType,
+                organization.getIdentificationType(),
+                "identificationType",
+                "{digital.inception.party.constraints.ValidPerson.identificationTypeRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
               isValid = false;
             }
 

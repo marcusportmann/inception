@@ -645,8 +645,7 @@ public class SMSService implements ISMSService {
             XmlUtil.getChildElementText(callResultElementOptional.get(), "error");
 
         throw new RuntimeException(
-            "The MyMobileAPI service returned an error: "
-                + (errorOptional.orElse("UNKNOWN")));
+            "The MyMobileAPI service returned an error: " + (errorOptional.orElse("UNKNOWN")));
       }
 
       return apiResultElement;

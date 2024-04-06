@@ -18,9 +18,9 @@ package digital.inception.workflow.test;
 
 import digital.inception.core.util.ServiceUtil;
 import javax.sql.DataSource;
-//import org.camunda.bpm.engine.ProcessEngine;
-//import org.camunda.bpm.engine.ProcessEngineConfiguration;
-//import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
+// import org.camunda.bpm.engine.ProcessEngine;
+// import org.camunda.bpm.engine.ProcessEngineConfiguration;
+// import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -60,37 +60,37 @@ public class ProcessServiceTestConfiguration {
     this.transactionManager = transactionManager;
   }
 
-//  /**
-//   * Returns the Camunda Process Engine.
-//   *
-//   * @return the Camunda Process Engine
-//   */
-//  @Bean
-//  public ProcessEngine processEngine() {
-//    try {
-//      SpringProcessEngineConfiguration processEngineConfiguration =
-//          new SpringProcessEngineConfiguration();
-//      processEngineConfiguration.setApplicationContext(applicationContext);
-//      processEngineConfiguration.setDatabaseSchema("CAMUNDA");
-//      processEngineConfiguration.setDatabaseSchemaUpdate(
-//          ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
-//      processEngineConfiguration.setDatabaseTablePrefix("CAMUNDA.");
-//      processEngineConfiguration.setDataSource(dataSource);
-//      processEngineConfiguration.setJobExecutorActivate(false);
-//      processEngineConfiguration.setTransactionManager(transactionManager);
-//      processEngineConfiguration.setProcessEngineName(processEngineName);
-//
-//      // Enable and disable specific capabilities
-//      processEngineConfiguration.setAuthorizationEnabled(false);
-//      processEngineConfiguration.setCmmnEnabled(true);
-//      processEngineConfiguration.setDbHistoryUsed(true);
-//      processEngineConfiguration.setDbIdentityUsed(false);
-//      processEngineConfiguration.setDmnEnabled(true);
-//      processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_FULL);
-//
-//      return processEngineConfiguration.buildProcessEngine();
-//    } catch (Throwable e) {
-//      throw new FatalBeanException("Failed to initialise the Flowable Process Engine", e);
-//    }
-//  }
+  //  /**
+  //   * Returns the Camunda Process Engine.
+  //   *
+  //   * @return the Camunda Process Engine
+  //   */
+  //  @Bean
+  //  public ProcessEngine processEngine() {
+  //    try {
+  //      SpringProcessEngineConfiguration processEngineConfiguration =
+  //          new SpringProcessEngineConfiguration();
+  //      processEngineConfiguration.setApplicationContext(applicationContext);
+  //      processEngineConfiguration.setDatabaseSchema("CAMUNDA");
+  //      processEngineConfiguration.setDatabaseSchemaUpdate(
+  //          ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+  //      processEngineConfiguration.setDatabaseTablePrefix("CAMUNDA.");
+  //      processEngineConfiguration.setDataSource(dataSource);
+  //      processEngineConfiguration.setJobExecutorActivate(false);
+  //      processEngineConfiguration.setTransactionManager(transactionManager);
+  //      processEngineConfiguration.setProcessEngineName(processEngineName);
+  //
+  //      // Enable and disable specific capabilities
+  //      processEngineConfiguration.setAuthorizationEnabled(false);
+  //      processEngineConfiguration.setCmmnEnabled(true);
+  //      processEngineConfiguration.setDbHistoryUsed(true);
+  //      processEngineConfiguration.setDbIdentityUsed(false);
+  //      processEngineConfiguration.setDmnEnabled(true);
+  //      processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_FULL);
+  //
+  //      return processEngineConfiguration.buildProcessEngine();
+  //    } catch (Throwable e) {
+  //      throw new FatalBeanException("Failed to initialise the Flowable Process Engine", e);
+  //    }
+  //  }
 }

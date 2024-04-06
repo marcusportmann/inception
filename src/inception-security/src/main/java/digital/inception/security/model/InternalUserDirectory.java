@@ -307,7 +307,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
   @Override
   public void authenticate(String username, String password)
       throws AuthenticationFailedException,
-      UserLockedException,
+          UserLockedException,
           ExpiredPasswordException,
           UserNotFoundException,
           ServiceUnavailableException {

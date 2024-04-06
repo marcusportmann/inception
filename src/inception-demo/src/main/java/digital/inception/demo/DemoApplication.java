@@ -134,10 +134,7 @@ public class DemoApplication extends Application {
 
       GenerateTokenRequest generateRevokedTokenRequest =
           new GenerateTokenRequest(
-              TokenType.JWT,
-              "demo_revoked_token",
-              "Demo Revoked Token",
-              tokenClaims);
+              TokenType.JWT, "demo_revoked_token", "Demo Revoked Token", tokenClaims);
 
       Token permanentToken = securityService.generateToken(generateRevokedTokenRequest);
 
@@ -167,19 +164,13 @@ public class DemoApplication extends Application {
 
       GenerateTokenRequest generateServiceTokenRequest =
           new GenerateTokenRequest(
-              TokenType.JWT,
-              "svc_service_name",
-              "Service Name Service Token",
-              tokenClaims);
+              TokenType.JWT, "svc_service_name", "Service Name Service Token", tokenClaims);
 
       Token serviceToken = securityService.generateToken(generateServiceTokenRequest);
 
       GenerateTokenRequest generateExternalSystemTokenRequest =
           new GenerateTokenRequest(
-              TokenType.JWT,
-              "ext_system_name",
-              "System Name External Token",
-              tokenClaims);
+              TokenType.JWT, "ext_system_name", "System Name External Token", tokenClaims);
 
       Token externalSystemToken = securityService.generateToken(generateExternalSystemTokenRequest);
 
@@ -190,9 +181,11 @@ public class DemoApplication extends Application {
               "Organization Name External Token",
               tokenClaims);
 
-      Token externalOrganizationToken = securityService.generateToken(generateExternalOrganizationTokenRequest);
+      Token externalOrganizationToken =
+          securityService.generateToken(generateExternalOrganizationTokenRequest);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to create the demo tokens", e);
     }
   }
 }
+

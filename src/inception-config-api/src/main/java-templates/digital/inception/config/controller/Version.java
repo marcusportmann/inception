@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.config;
+package digital.inception.config.controller;
 
 /**
  * The <b>Version</b> class.

@@ -75,6 +75,13 @@ public interface IReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -117,6 +124,13 @@ public interface IReferenceApiController {
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -165,6 +179,13 @@ public interface IReferenceApiController {
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -221,6 +242,13 @@ public interface IReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -267,6 +295,13 @@ public interface IReferenceApiController {
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -323,6 +358,13 @@ public interface IReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -372,6 +414,13 @@ public interface IReferenceApiController {
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
             content =
                 @Content(
                     mediaType = "application/problem+json",

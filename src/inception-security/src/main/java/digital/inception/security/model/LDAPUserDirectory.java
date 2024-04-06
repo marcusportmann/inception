@@ -567,8 +567,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public void authenticate(String username, String password)
       throws AuthenticationFailedException,
-      UserLockedException,
-      ExpiredPasswordException,
+          UserLockedException,
+          ExpiredPasswordException,
           UserNotFoundException,
           ServiceUnavailableException {
     DirContext dirContext = null;
@@ -2145,7 +2145,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   public void resetPassword(String username, String newPassword)
       throws UserNotFoundException,
           UserLockedException,
-      ExistingPasswordException,
+          ExistingPasswordException,
           ServiceUnavailableException {
     if (!capabilities.getSupportsChangePassword()) {
       throw new ServiceUnavailableException(

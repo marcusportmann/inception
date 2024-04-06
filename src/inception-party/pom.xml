@@ -14,29 +14,16 @@
 
   <dependencies>
     <!-- Inception Dependencies -->
-<!--    <dependency>-->
-<!--      <groupId>digital.inception</groupId>-->
-<!--      <artifactId>inception-core</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>digital.inception</groupId>-->
-<!--      <artifactId>inception-jpa</artifactId>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-json</artifactId>
     </dependency>
-
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-reference</artifactId>
     </dependency>
 
     <!-- Dependencies -->
-<!--    <dependency>-->
-<!--      <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--      <artifactId>jackson-databind</artifactId>-->
-<!--    </dependency>-->
 
     <!-- Test Dependencies -->
     <dependency>

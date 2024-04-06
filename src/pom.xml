@@ -450,6 +450,16 @@
         <artifactId>inception-party</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-party-api</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-party-ws</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
 
       <dependency>
         <groupId>digital.inception</groupId>
@@ -581,6 +591,8 @@
     <module>inception-mail-api</module>
     <module>inception-mail-ws</module>
     <module>inception-party</module>
+    <module>inception-party-api</module>
+    <module>inception-party-ws</module>
     <module>inception-resource-server</module>    
     <module>inception-reporting</module>
     <module>inception-reporting-api</module>

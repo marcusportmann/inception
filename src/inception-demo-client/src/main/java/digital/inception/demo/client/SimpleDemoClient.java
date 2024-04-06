@@ -17,15 +17,16 @@
 package digital.inception.demo.client;
 
 import digital.inception.codes.CodeCategory;
+import digital.inception.codes.CodeCategoryNotFoundException;
 import digital.inception.codes.CodesService;
 import digital.inception.codes.ICodesService;
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.util.CryptoUtil;
+import digital.inception.demo.api.Data;
 import digital.inception.demo.api.DataApi;
 import digital.inception.demo.api.TestApi;
-import digital.inception.demo.model.Data;
+import digital.inception.reference.api.Language;
 import digital.inception.reference.api.ReferenceApi;
-import digital.inception.reference.model.Language;
 import digital.inception.ws.security.WebServiceClientSecurityHelper;
 import java.security.KeyStore;
 import java.time.OffsetDateTime;
@@ -44,6 +45,9 @@ public class SimpleDemoClient {
 
   /** The path to the classpath resource containing the WSDL for the Codes Service. */
   public static final String CODES_SERVICE_WSDL = "META-INF/wsdl/CodesService.wsdl";
+
+  /** The path to the classpath resource containing the WSDL for the Mail Service. */
+  public static final String MAIL_SERVICE_WSDL = "META-INF/wsdl/MailService.wsdl";
 
   /** Enable the web services security X509 certificate token profile for the demo client. */
   private static final boolean DEMO_CLIENT_ENABLE_X509_CERTIFICATE_TOKEN_PROFILE = false;
@@ -115,6 +119,14 @@ public class SimpleDemoClient {
       for (CodeCategory codeCategory : codeCategories) {
         System.out.println("Found code category: " + codeCategory.getName());
       }
+
+      try {
+        codesService.getCodeCategory("INVALID_CODE_CATEGORY_ID");
+
+      } catch (CodeCategoryNotFoundException e) {
+        System.out.println("Correctly received a CodeCategoryNotFoundException");
+      }
+
     } catch (Throwable e) {
       System.err.println("[ERROR] " + e.getMessage());
       e.printStackTrace(System.err);
@@ -152,6 +164,8 @@ public class SimpleDemoClient {
     try {
       TestApi testApi = new TestApi();
 
+      testApi.getApiClient().setBasePath("http://localhost:8080");
+
       OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now()).block();
 
       System.out.println("Found time = " + offsetDateTime);
@@ -163,26 +177,23 @@ public class SimpleDemoClient {
     try {
       TestApi testApi = new TestApi();
 
-      testApi.testExceptionHandling();
+      testApi.testExceptionHandling().block();
 
     } catch (WebClientResponseException e) {
       try {
         var problemDetails = e.getResponseBodyAs(ProblemDetails.class);
-
-        var problemDetailsFromModel =
-            e.getResponseBodyAs(digital.inception.demo.model.ProblemDetails.class);
 
         System.out.println("Found problem details type: " + problemDetails.getType());
         System.out.println("Found problem details title: " + problemDetails.getTitle());
         System.out.println("Found problem details detail: " + problemDetails.getDetail());
 
       } catch (Throwable t) {
-        System.err.println("[ERROR] " + e.getMessage());
-        e.printStackTrace(System.err);
-
-        System.err.println("[ERROR] " + t.getMessage());
+        System.err.println("[ERROR] Failed to extract the problem details response: " + t.getMessage());
         t.printStackTrace(System.err);
       }
+    } catch (Throwable e) {
+      System.err.println("[ERROR] " + e.getMessage());
+      e.printStackTrace(System.err);
     }
   }
 }

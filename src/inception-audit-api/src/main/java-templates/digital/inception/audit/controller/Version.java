@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.scheduler;
+package digital.inception.audit.controller;
 
 /**
  * The <b>Version</b> class.

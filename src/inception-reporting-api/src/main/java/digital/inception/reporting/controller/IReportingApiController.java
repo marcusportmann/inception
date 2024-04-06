@@ -369,6 +369,13 @@ public interface IReportingApiController {
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -398,6 +405,13 @@ public interface IReportingApiController {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =

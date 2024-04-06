@@ -44,13 +44,6 @@
       <artifactId>inception-ws</artifactId>
     </dependency>
 
-
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-party</artifactId>
-    </dependency>
-
-
     <!-- Inception Module Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
@@ -91,6 +84,14 @@
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-mail-ws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-party-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-party-ws</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>

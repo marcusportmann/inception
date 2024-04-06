@@ -55,7 +55,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
       "select s from SMS s where s.status = digital.inception.sms.model.SMSStatus.QUEUED_FOR_SENDING "
-      + "and (s.lastProcessed < :lastProcessedBefore or s.lastProcessed is null)")
+          + "and (s.lastProcessed < :lastProcessedBefore or s.lastProcessed is null)")
   List<SMS> findSMSsQueuedForSendingForWrite(
       @Param("lastProcessedBefore") OffsetDateTime lastProcessedBefore, Pageable pageable);
 

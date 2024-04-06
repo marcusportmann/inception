@@ -112,8 +112,8 @@
               <library>webclient</library>
 
               <apiPackage>digital.inception.demo.api</apiPackage>
-              <invokerPackage>digital.inception.demo.invoker</invokerPackage>
-              <modelPackage>digital.inception.demo.model</modelPackage>
+              <invokerPackage>digital.inception.demo.api</invokerPackage>
+              <modelPackage>digital.inception.demo.api</modelPackage>
             </configuration>
           </execution>
           <execution>
@@ -148,8 +148,8 @@
               <library>webclient</library>
 
               <apiPackage>digital.inception.reference.api</apiPackage>
-              <invokerPackage>digital.inception.reference.invoker</invokerPackage>
-              <modelPackage>digital.inception.reference.model</modelPackage>
+              <invokerPackage>digital.inception.reference.api</invokerPackage>
+              <modelPackage>digital.inception.reference.api</modelPackage>
             </configuration>
           </execution>
         </executions>

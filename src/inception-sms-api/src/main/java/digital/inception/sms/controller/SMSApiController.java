@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package digital.inception.sms;
+package digital.inception.sms.controller;
 
 import digital.inception.api.SecureApiController;
-import digital.inception.sms.controller.ISMSApiController;
 import digital.inception.sms.service.ISMSService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;

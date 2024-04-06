@@ -1168,12 +1168,16 @@ public abstract class PartyValidator {
     } else {
       if (attributeValue instanceof String) {
         isValid = StringUtils.hasText((String) attributeValue);
-      } else if (attributeValue instanceof Set) {
-        isValid = ((Set<?>) attributeValue).size() > 0;
+      } else if (attributeValue instanceof Set<?>) {
+        isValid = !((Set<?>) attributeValue).isEmpty();
       } else if (attributeValue instanceof LocalDate) {
         // The fact we have a valid LocalDate instance means we parsed the attribute value
         isValid = true;
-      } else {
+      } else if (attributeValue instanceof Enum<?>) {
+        // The fact we have a valid Enum value means we parsed the attribute value
+        isValid = true;
+      }
+      else {
         throw new ValidationException(
             "Failed to validate the required attribute value ("
                 + attributeValue

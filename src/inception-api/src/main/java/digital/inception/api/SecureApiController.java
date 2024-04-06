@@ -64,15 +64,19 @@ public abstract class SecureApiController {
     }
 
     // Check if security is enabled for the Inception Framework
-    try {
-      if (StringUtils.hasText(
-          applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
-        this.isSecurityEnabled =
-            Boolean.parseBoolean(
-                applicationContext.getEnvironment().getProperty("inception.api.security.enabled"));
-      }
-    } catch (Throwable e) {
-      this.isSecurityEnabled = !this.inDebugMode;
+    if (!this.inDebugMode) {
+      try {
+        if (StringUtils.hasText(
+            applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
+          this.isSecurityEnabled =
+              Boolean.parseBoolean(
+                  applicationContext
+                      .getEnvironment()
+                      .getProperty("inception.api.security.enabled"));
+        }
+      } catch (Throwable ignored) {}
+    } else {
+      this.isSecurityEnabled = false;
     }
   }
 
