@@ -864,6 +864,9 @@
       </column>
       <column name="value" type="nvarchar(1000)" defaultValue="" remarks="The value to apply when validating the attribute value"/>
     </createTable>
+    <createIndex indexName="party_role_type_attribute_type_constraints_role_type_ix" tableName="party_role_type_attribute_type_constraints">
+      <column name="role_type"/>
+    </createIndex>
 
     <createTable tableName="party_role_type_preference_type_constraints" remarks="Role Type Preference Type Constraints">
       <column name="role_type" type="nvarchar(50)" remarks="The code for the role type">
@@ -877,6 +880,9 @@
       </column>
       <column name="value" type="nvarchar(1000)" remarks="The value to apply when validating the preference value"/>
     </createTable>
+    <createIndex indexName="party_role_type_preference_type_constraints_role_type_ix" tableName="party_role_type_preference_type_constraints">
+      <column name="role_type"/>
+    </createIndex>
 
     <createTable tableName="party_segmentation_types" remarks="Segmentation Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the segmentation type">
@@ -2071,6 +2077,333 @@
       <column name="mandate_id"/>
     </createIndex>
 
+    <rollback>
+      <dropIndex tableName="party_mandate_links" indexName="party_mandate_links_mandate_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_mandate_links"/>
+      <dropTable tableName="party_mandate_links"/>
+
+      <dropIndex tableName="party_mandataries" indexName="party_mandataries_mandate_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_mandataries"/>
+      <dropTable tableName="party_mandataries"/>
+
+      <dropIndex tableName="party_mandate_properties" indexName="party_mandate_properties_mandate_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_mandate_properties"/>
+      <dropTable tableName="party_mandate_properties"/>
+
+      <dropIndex tableName="party_mandates" indexName="party_mandates_type_ix"/>
+      <dropIndex tableName="party_mandates" indexName="party_mandates_tenant_id_ix"/>
+      <dropTable tableName="party_mandates"/>
+
+      <dropIndex tableName="party_mandatary_roles" indexName="party_mandatary_roles_locale_id_ix"/>
+      <dropIndex tableName="party_mandatary_roles" indexName="party_mandatary_roles_mandate_type_i"/>
+      <dropAllForeignKeyConstraints baseTableName="party_mandatary_roles"/>
+      <dropTable tableName="party_mandatary_roles"/>
+
+      <dropIndex tableName="party_mandate_property_types" indexName="party_mandate_property_types_locale_id_ix"/>
+      <dropIndex tableName="party_mandate_property_types" indexName="party_mandate_property_types_mandate_type_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_mandate_property_types"/>
+      <dropTable tableName="party_mandate_property_types"/>
+
+      <dropIndex tableName="party_mandate_types" indexName="party_mandate_types_locale_id_ix"/>
+      <dropTable tableName="party_mandate_types"/>
+
+      <dropIndex tableName="party_association_properties" indexName="party_association_properties_association_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_association_properties"/>
+      <dropTable tableName="party_association_properties"/>
+
+      <dropIndex tableName="party_associations" indexName="party_associations_type_ix"/>
+      <dropIndex tableName="party_associations" indexName="party_associations_tenant_id_ix"/>
+      <dropIndex tableName="party_associations" indexName="party_associations_second_party_id_ix"/>
+      <dropIndex tableName="party_associations" indexName="party_associations_first_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_associations"/>
+      <dropTable tableName="party_associations"/>
+
+      <dropIndex tableName="party_association_property_types" indexName="party_association_property_types_locale_id_ix"/>
+      <dropIndex tableName="party_association_property_types" indexName="party_association_property_types_association_type_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_association_property_types"/>
+      <dropTable tableName="party_association_property_types"/>
+
+      <dropIndex tableName="party_association_types" indexName="party_association_types_locale_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_association_types"/>
+      <dropTable tableName="party_association_types"/>
+
+      <dropIndex tableName="party_tax_numbers" indexName="party_tax_numbers_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_tax_numbers"/>
+      <dropTable tableName="party_tax_numbers"/>
+
+      <dropIndex tableName="party_statuses" indexName="party_statuses_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_statuses"/>
+      <dropTable tableName="party_statuses"/>
+
+      <dropIndex tableName="party_sources_of_wealth" indexName="party_sources_of_wealth_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_sources_of_wealth"/>
+      <dropTable tableName="party_sources_of_wealth"/>
+
+      <dropIndex tableName="party_sources_of_funds" indexName="party_sources_of_funds_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_sources_of_funds"/>
+      <dropTable tableName="party_sources_of_funds"/>
+
+      <dropIndex tableName="party_snapshots" indexName="party_snapshots_entity_type_id_ix"/>
+      <dropIndex tableName="party_snapshots" indexName="party_snapshots_timestamp_ix"/>
+      <dropIndex tableName="party_snapshots" indexName="party_snapshots_tenant_id_ix"/>
+      <dropTable tableName="party_snapshots"/>
+
+      <dropIndex tableName="party_skills" indexName="party_skills_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_skills"/>
+      <dropTable tableName="party_skills"/>
+
+      <dropIndex tableName="party_segment_allocations" indexName="party_segment_allocations_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_segment_allocations"/>
+      <dropTable tableName="party_segment_allocations"/>
+
+      <dropIndex tableName="party_roles" indexName="party_roles_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_roles"/>
+      <dropTable tableName="party_roles"/>
+
+      <dropIndex tableName="party_residence_permits" indexName="party_residence_permits_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_residence_permits"/>
+      <dropTable tableName="party_residence_permits"/>
+
+      <dropIndex tableName="party_preferences" indexName="party_preferences_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_preferences"/>
+      <dropTable tableName="party_preferences"/>
+
+      <dropIndex tableName="party_physical_addresses" indexName="party_physical_addresses_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_physical_addresses"/>
+      <dropTable tableName="party_physical_addresses"/>
+
+      <dropIndex tableName="party_next_of_kin" indexName="party_next_of_kin_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_next_of_kin"/>
+      <dropTable tableName="party_next_of_kin"/>
+
+      <dropIndex tableName="party_locks" indexName="party_locks_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_locks"/>
+      <dropTable tableName="party_locks"/>
+
+      <dropIndex tableName="party_link_types" indexName="party_link_types_locale_id_ix"/>
+      <dropTable tableName="party_link_types"/>
+
+      <dropIndex tableName="party_language_proficiencies" indexName="party_language_proficiencies_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_language_proficiencies"/>
+      <dropTable tableName="party_language_proficiencies"/>
+
+      <dropIndex tableName="party_industry_allocations" indexName="party_industry_allocations_organization_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_industry_allocations"/>
+      <dropTable tableName="party_industry_allocations"/>
+
+      <dropIndex tableName="party_identifications" indexName="party_identifications_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_identifications"/>
+      <dropTable tableName="party_identifications"/>
+
+      <dropIndex tableName="party_external_references" indexName="party_external_references_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_external_references"/>
+      <dropTable tableName="party_external_references"/>
+
+      <dropIndex tableName="party_employments" indexName="party_employments_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_employments"/>
+      <dropTable tableName="party_employments"/>
+
+      <dropIndex tableName="party_educations" indexName="party_educations_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_educations"/>
+      <dropTable tableName="party_educations"/>
+
+      <dropIndex tableName="party_contact_mechanisms" indexName="party_contact_mechanisms_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_contact_mechanisms"/>
+      <dropTable tableName="party_contact_mechanisms"/>
+
+      <dropIndex tableName="party_consents" indexName="party_consents_person_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_consents"/>
+      <dropTable tableName="party_consents"/>
+
+      <dropIndex tableName="party_attributes" indexName="party_attributes_party_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_attributes"/>
+      <dropTable tableName="party_attributes"/>
+
+      <dropIndex tableName="party_persons" indexName="party_persons_surname_ix"/>
+      <dropIndex tableName="party_persons" indexName="party_persons_maiden_name_ix"/>
+      <dropIndex tableName="party_persons" indexName="party_persons_identification_ix"/>
+      <dropIndex tableName="party_persons" indexName="party_persons_identification_number_ix"/>
+      <dropIndex tableName="party_persons" indexName="party_persons_date_of_birth_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_persons"/>
+      <dropTable tableName="party_persons"/>
+
+      <dropIndex tableName="party_organizations" indexName="party_organizations_identification_ix"/>
+      <dropIndex tableName="party_organizations" indexName="party_organizations_identification_number_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_organizations"/>
+      <dropTable tableName="party_organizations"/>
+
+      <dropIndex tableName="party_parties" indexName="party_parties_tenant_id_ix"/>
+      <dropTable tableName="party_parties"/>
+
+      <dropIndex tableName="" indexName=""/>
+      <dropTable tableName=""/>
+
+      <dropIndex tableName="party_titles" indexName="party_titles_locale_id_ix"/>
+      <dropTable tableName="party_titles"/>
+
+      <dropIndex tableName="party_times_to_contact" indexName="party_times_to_contact_locale_id_ix"/>
+      <dropTable tableName="party_times_to_contact"/>
+
+      <dropIndex tableName="party_tax_number_types" indexName="party_tax_number_types_locale_id_ix"/>
+      <dropIndex tableName="party_tax_number_types" indexName="party_tax_number_types_country_of_issue_ix"/>
+      <dropTable tableName="party_tax_number_types"/>
+
+      <dropIndex tableName="party_status_types" indexName="party_status_types_locale_id_ix"/>
+      <dropIndex tableName="party_status_types" indexName="party_status_types_category_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_status_types"/>
+      <dropTable tableName="party_status_types"/>
+
+      <dropIndex tableName="party_status_type_categories" indexName="party_status_type_categories_locale_id_ix"/>
+      <dropTable tableName="party_status_type_categories"/>
+
+      <dropIndex tableName="party_source_of_wealth_types" indexName="party_source_of_wealth_types_locale_id_ix"/>
+      <dropTable tableName="party_source_of_wealth_types"/>
+
+      <dropIndex tableName="party_source_of_funds_types" indexName="party_source_of_funds_types_locale_id_ix"/>
+      <dropTable tableName="party_source_of_funds_types"/>
+
+      <dropIndex tableName="party_skill_types" indexName="party_skill_types_locale_id_ix"/>
+      <dropIndex tableName="party_skill_types" indexName="party_skill_types_parent_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_skill_types"/>
+      <dropTable tableName="party_skill_types"/>
+
+      <dropIndex tableName="party_segments" indexName="party_segments_locale_id_ix"/>
+      <dropIndex tableName="party_segments" indexName="party_segments_type_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_segments"/>
+      <dropTable tableName="party_segments"/>
+
+      <dropIndex tableName="party_segmentation_types" indexName="party_segmentation_types_locale_id_ix"/>
+      <dropTable tableName="party_segmentation_types"/>
+
+      <dropIndex tableName="party_role_type_preference_type_constraints" indexName="party_role_type_preference_type_constraints_role_type_ix"/>
+      <dropTable tableName="party_role_type_preference_type_constraints"/>
+
+      <dropIndex tableName="party_role_type_attribute_type_constraints" indexName="party_role_type_attribute_type_constraints_role_type_ix"/>
+      <dropTable tableName="party_role_type_attribute_type_constraints"/>
+
+      <dropIndex tableName="party_role_types" indexName="party_role_types_locale_id_ix"/>
+      <dropTable tableName="party_role_types"/>
+
+      <dropIndex tableName="party_role_purposes" indexName="party_role_purposes_locale_id_ix"/>
+      <dropTable tableName="party_role_purposes"/>
+
+      <dropIndex tableName="party_residential_types" indexName="party_residential_types_locale_id_ix"/>
+      <dropTable tableName="party_residential_types"/>
+
+      <dropIndex tableName="party_residency_statuses" indexName="party_residency_statuses_locale_id_ix"/>
+      <dropTable tableName="party_residency_statuses"/>
+
+      <dropIndex tableName="party_residence_permit_types" indexName="party_residence_permit_types_country_of_issue_ix"/>
+      <dropIndex tableName="party_residence_permit_types" indexName="party_residence_permit_types_locale_id_ix"/>
+      <dropTable tableName="party_residence_permit_types"/>
+
+      <dropIndex tableName="party_races" indexName="party_races_locale_id_ix"/>
+      <dropTable tableName="party_races"/>
+
+      <dropIndex tableName="party_qualification_types" indexName="party_qualification_types_locale_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_qualification_types"/>
+      <dropTable tableName="party_qualification_types"/>
+
+      <dropIndex tableName="party_preference_types" indexName="party_preference_types_locale_id_ix"/>
+      <dropIndex tableName="party_preference_types" indexName="party_preference_types_category_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_preference_types"/>
+      <dropTable tableName="party_preference_types"/>
+
+      <dropIndex tableName="party_preference_type_categories" indexName="party_preference_type_categories_locale_id_ix"/>
+      <dropTable tableName="party_preference_type_categories"/>
+
+      <dropIndex tableName="party_physical_address_roles" indexName="party_physical_address_roles_locale_id_ix"/>
+      <dropTable tableName="party_physical_address_roles"/>
+
+      <dropIndex tableName="party_physical_address_purposes" indexName="party_physical_address_purposes_locale_id_ix"/>
+      <dropTable tableName="party_physical_address_purposes"/>
+
+      <dropIndex tableName="party_physical_address_types" indexName="party_physical_address_types_locale_id_ix"/>
+      <dropTable tableName="party_physical_address_types"/>
+
+      <dropIndex tableName="party_occupations" indexName="party_occupations_locale_id_ix"/>
+      <dropTable tableName="party_occupations"/>
+
+      <dropIndex tableName="party_next_of_kin_types" indexName="party_next_of_kin_types_locale_id_ix"/>
+      <dropTable tableName="party_next_of_kin_types"/>
+
+      <dropIndex tableName="party_minor_types" indexName="party_minor_types_locale_id_ix"/>
+      <dropTable tableName="party_minor_types"/>
+
+      <dropIndex tableName="party_marriage_types" indexName="party_marriage_types_locale_id_ix"/>
+      <dropIndex tableName="party_marriage_types" indexName="party_marriage_types_marital_status_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_marriage_types"/>
+      <dropTable tableName="party_marriage_types"/>
+
+      <dropIndex tableName="party_marital_statuses" indexName="party_marital_statuses_locale_id_ix"/>
+      <dropTable tableName="party_marital_statuses"/>
+
+      <dropIndex tableName="party_lock_types" indexName="party_lock_types_locale_id_ix"/>
+      <dropIndex tableName="party_lock_types" indexName="party_lock_types_category_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_lock_types"/>
+      <dropTable tableName="party_lock_types"/>
+
+      <dropIndex tableName="party_lock_type_categories" indexName="party_lock_type_categories_locale_id_ix"/>
+      <dropTable tableName="party_lock_type_categories"/>
+
+      <dropIndex tableName="party_industry_classifications" indexName="party_industry_classifications_system_ix"/>
+      <dropIndex tableName="party_industry_classifications" indexName="party_industry_classifications_locale_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_industry_classifications"/>
+      <dropTable tableName="party_industry_classifications"/>
+
+      <dropIndex tableName="party_industry_classification_categories" indexName="party_industry_classification_categories_system_ix"/>
+      <dropIndex tableName="party_industry_classification_categories" indexName="party_industry_classification_categories_locale_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_industry_classification_categories"/>
+      <dropTable tableName="party_industry_classification_categories"/>
+
+      <dropIndex tableName="party_industry_classification_systems" indexName="party_industry_classification_systems_locale_id_ix"/>
+      <dropTable tableName="party_industry_classification_systems"/>
+
+      <dropIndex tableName="party_identification_types" indexName="party_identification_types_country_of_issue_ix"/>
+      <dropIndex tableName="party_identification_types" indexName="party_identification_types_locale_id_ix"/>
+      <dropTable tableName="party_identification_types"/>
+
+      <dropIndex tableName="party_genders" indexName="party_genders_locale_id_ix"/>
+      <dropTable tableName="party_genders"/>
+
+      <dropIndex tableName="party_fields_of_study" indexName="party_fields_of_study_locale_id_ix"/>
+      <dropTable tableName="party_fields_of_study"/>
+
+      <dropIndex tableName="party_external_reference_types" indexName="party_external_reference_types_locale_id_ix"/>
+      <dropTable tableName="party_external_reference_types"/>
+
+      <dropIndex tableName="party_employment_types" indexName="party_employment_types_locale_id_ix"/>
+      <dropIndex tableName="party_employment_types" indexName="party_employment_types_employment_status_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_employment_types"/>
+      <dropTable tableName="party_employment_types"/>
+
+      <dropIndex tableName="party_employment_statuses" indexName="party_employment_statuses_locale_id_ix"/>
+      <dropTable tableName="party_employment_statuses"/>
+
+      <dropIndex tableName="party_contact_mechanism_roles" indexName="party_contact_mechanism_roles_locale_id_code_ix"/>
+      <dropIndex tableName="party_contact_mechanism_roles" indexName="party_contact_mechanism_roles_locale_id_ix"/>
+      <dropIndex tableName="party_contact_mechanism_roles" indexName="party_contact_mechanism_roles_contact_mechanism_type_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_contact_mechanism_roles"/>
+      <dropTable tableName="party_contact_mechanism_roles"/>
+
+      <dropIndex tableName="party_contact_mechanism_types" indexName="party_contact_mechanism_types_locale_id_ix"/>
+      <dropTable tableName="party_contact_mechanism_types"/>
+
+      <dropIndex tableName="party_contact_mechanism_purposes" indexName="party_contact_mechanism_purposes_locale_id_ix"/>
+      <dropTable tableName="party_contact_mechanism_purposes"/>
+
+      <dropIndex tableName="party_consent_types" indexName="party_consent_types_locale_id_ix"/>
+      <dropTable tableName="party_consent_types"/>
+
+      <dropIndex tableName="party_attribute_types" indexName="party_attribute_types_locale_id_ix"/>
+      <dropIndex tableName="party_attribute_types" indexName="party_attribute_types_category_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="party_attribute_types"/>
+      <dropTable tableName="party_attribute_types"/>
+
+      <dropIndex tableName="party_attribute_type_categories" indexName="party_attribute_type_categories_locale_id_ix"/>
+      <dropTable tableName="party_attribute_type_categories"/>
+
+    </rollback>
   </changeSet>
 </databaseChangeLog>
 
