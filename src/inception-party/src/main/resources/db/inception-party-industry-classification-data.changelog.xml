@@ -1963,6 +1963,11 @@
       <column name="name" value="Activities of extraterritorial organizations and bodies, not economically active, people, unemployed people etc."/>
       <column name="description" value="Activities of extraterritorial organizations and bodies, not economically active, people, unemployed people etc."/>
     </insert>
-    
+
+    <rollback>
+      <delete tableName="party_industry_classifications"/>
+      <delete tableName="party_industry_classification_categories"/>
+      <delete tableName="party_industry_classification_systems"/>
+    </rollback>
   </changeSet>
 </databaseChangeLog>

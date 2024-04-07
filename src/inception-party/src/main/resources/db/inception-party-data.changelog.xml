@@ -7934,11 +7934,52 @@
       <column name="description" value="Employer"/>
     </insert>
 
-
-
-
-
-
+    <rollback>
+      <delete tableName="party_mandatary_roles"/>
+      <delete tableName="party_mandate_types"/>
+      <delete tableName="party_association_property_types"/>
+      <delete tableName="party_association_types"/>
+      <delete tableName="party_titles"/>
+      <delete tableName="party_times_to_contact"/>
+      <delete tableName="party_tax_number_types"/>
+      <delete tableName="party_status_types"/>
+      <delete tableName="party_status_type_categories"/>
+      <delete tableName="party_source_of_wealth_types"/>
+      <delete tableName="party_source_of_funds_types"/>
+      <delete tableName="party_segments"/>
+      <delete tableName="party_segmentation_types"/>
+      <delete tableName="party_role_types"/>
+      <delete tableName="party_role_purposes"/>
+      <delete tableName="party_residential_types"/>
+      <delete tableName="party_residency_statuses"/>
+      <delete tableName="party_residence_permit_types"/>
+      <delete tableName="party_races"/>
+      <delete tableName="party_qualification_types"/>
+      <delete tableName="party_preference_types"/>
+      <delete tableName="party_preference_type_categories"/>
+      <delete tableName="party_physical_address_roles"/>
+      <delete tableName="party_physical_address_purposes"/>
+      <delete tableName="party_physical_address_types"/>
+      <delete tableName="party_occupations"/>
+      <delete tableName="party_next_of_kin_types"/>
+      <delete tableName="party_marriage_types"/>
+      <delete tableName="party_marital_statuses"/>
+      <delete tableName="party_lock_types"/>
+      <delete tableName="party_lock_type_categories"/>
+      <delete tableName="party_link_types"/>
+      <delete tableName="party_identification_types"/>
+      <delete tableName="party_genders"/>
+      <delete tableName="party_fields_of_study"/>
+      <delete tableName="party_external_reference_types"/>
+      <delete tableName="party_employment_types"/>
+      <delete tableName="party_employment_statuses"/>
+      <delete tableName="party_contact_mechanism_roles"/>
+      <delete tableName="party_contact_mechanism_types"/>
+      <delete tableName="party_contact_mechanism_purposes"/>
+      <delete tableName="party_consent_types"/>
+      <delete tableName="party_attribute_types"/>
+      <delete tableName="party_attribute_type_categories"/>
+    </rollback>
   </changeSet>
 
 </databaseChangeLog>

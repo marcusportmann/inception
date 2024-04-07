@@ -18,28 +18,9 @@
   <changeSet id="inception-application-1.0.0" author="Marcus Portmann">
     <comment>Inception - Application - 1.0.0</comment>
 
-    <createTable tableName="service_registry" remarks="Service Registry">
-      <column name="name" type="nvarchar(100)" remarks="The name of the web service">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="security_type" type="int" remarks="The type of security implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc">
-        <constraints nullable="false"/>
-      </column>
-      <column name="supports_compression" type="boolean" remarks="Does the web service support compression">
-        <constraints nullable="false"/>
-      </column>
-      <column name="endpoint" type="nvarchar(1000)" remarks="The endpoint for the web service">
-        <constraints nullable="false"/>
-      </column>
-      <column name="service_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java service class">
-        <constraints nullable="false"/>
-      </column>
-      <column name="wsdl_location" type="nvarchar(1000)" remarks="The location of the WSDL defining the web service on the classpath">
-        <constraints nullable="false"/>
-      </column>
-      <column name="user" type="nvarchar(100)" remarks="The username to use created accessing a web service with username-password security enabled"/>
-      <column name="pass" type="nvarchar(100)" remarks="The password to use created accessing a web service with username-password security enabled"/>
-    </createTable>
+    <rollback>
+
+    </rollback>
   </changeSet>
 
 </databaseChangeLog>

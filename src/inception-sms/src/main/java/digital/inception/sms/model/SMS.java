@@ -72,7 +72,7 @@ import java.util.UUID;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "sms")
+@Table(name = "sms_sms")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SMS implements Serializable {
 

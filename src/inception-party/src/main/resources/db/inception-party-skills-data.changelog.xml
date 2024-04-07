@@ -590,6 +590,10 @@
       <column name="description" value="Research"/>
     </insert>
 
+    <rollback>
+      <delete tableName="party_skill_types"/>
+
+    </rollback>
   </changeSet>
 
 </databaseChangeLog>

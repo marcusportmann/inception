@@ -2095,7 +2095,7 @@
       <dropTable tableName="party_mandates"/>
 
       <dropIndex tableName="party_mandatary_roles" indexName="party_mandatary_roles_locale_id_ix"/>
-      <dropIndex tableName="party_mandatary_roles" indexName="party_mandatary_roles_mandate_type_i"/>
+      <dropIndex tableName="party_mandatary_roles" indexName="party_mandatary_roles_mandate_type_ix"/>
       <dropAllForeignKeyConstraints baseTableName="party_mandatary_roles"/>
       <dropTable tableName="party_mandatary_roles"/>
 
@@ -2234,9 +2234,6 @@
 
       <dropIndex tableName="party_parties" indexName="party_parties_tenant_id_ix"/>
       <dropTable tableName="party_parties"/>
-
-      <dropIndex tableName="" indexName=""/>
-      <dropTable tableName=""/>
 
       <dropIndex tableName="party_titles" indexName="party_titles_locale_id_ix"/>
       <dropTable tableName="party_titles"/>

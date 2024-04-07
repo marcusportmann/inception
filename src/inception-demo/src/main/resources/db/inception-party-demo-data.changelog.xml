@@ -895,5 +895,10 @@
       <column name="effective_from" value="2011-07-22"/>
     </insert>
 
+    <rollback>
+
+
+    </rollback>
+
   </changeSet>
 </databaseChangeLog>
