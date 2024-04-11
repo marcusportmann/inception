@@ -26,7 +26,6 @@
     "@fortawesome/fontawesome-free": "^6.5.1",
     "date-fns": "^3.3.1",
     "es6-template-string": "^1.2.0",
-    "moment": "^2.29.4",
     "ngx-om-perfect-scrollbar": "^16.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",

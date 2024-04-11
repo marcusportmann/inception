@@ -63,20 +63,19 @@ Complete the following steps to setup a development environment on MacOS.
     ```
     brew install liquibase
     ```
-11. Install npm by executing the following commands in a Terminal window.
+11. Install node by executing the following commands in a Terminal window.
     ```
-    brew install npm
+    brew install node
     ```
-12. Install the Angular CLI 17 globally by executing the following command in a Terminal
-    window.
+12. Install yarn by executing the following commands in a Terminal window.
     ```
-    npm install -g @angular/cli@17
+    brew install yarn
     ```
-13. Execute the following command to change to the more conservative tilde (~) patch
-    update approach for dependencies for npm.
+13. Execute the following command to change to use explicit version dependencies with yarn.
     ```
-    npm config set save-prefix="~"
+    yarn config set save-prefix ''
     ```
+
 
 ### Setup MailSlurper on MacOS
 
@@ -123,17 +122,18 @@ Complete the following steps to checkout and build the Inception Framework on Ma
    following commands in the *src/inception-angular* directory in a Terminal
    window.
    ```
-   npm i
-   ng build
-   cd ngx-inception
-   npm link
+   yarn
+   yarn run ng build ngx-inception
+   cd dist/ngx-inception
+   yarn link
    ```
 5. To launch the *demo* front-end application, execute the following command
    in the *inception-angular* directory in a Terminal window, after building
    the Angular components for the Inception Framework.
    ```
-   ng serve --host 0.0.0.0
+   yarn run ng serve --host 0.0.0.0
    ```
+
 
 ## Quickstart for Windows
 
@@ -160,16 +160,20 @@ Complete the following steps to checkout and build the Inception Framework on Ma
 4. Download the Node.js and npm package from *https://nodejs.org/en/download/* and install it.
 
    **NOTE:** Set the proxy for NPM if required.
-5. Install the Angular CLI 17 globally by executing the following command in a Git Bash
-   window.
+5. If you have SSL failures with NPM because of an untrusted corporate certificate, 
+   execute the following command to disable SSL checks:
    ```
-   npm install -g @angular/cli@17
+   npm config set strict-ssl false
    ```
-6. Execute the following command to change to the more conservative tilde (~) patch
-   update approach for dependencies for npm.
+6. Install yarn by executing the following command in a Git Bash window.
    ```
-   npm config set save-prefix="~"
+   npm install -g yarn
    ```
+7. Execute the following command to change to use explicit version dependencies with yarn.
+   ```
+   yarn config set save-prefix ''
+   ```
+
 
 ### Checkout and build the Inception Framework on Windows
 
@@ -195,17 +199,18 @@ Complete the following steps to setup a development environment on Windows.
    following commands in the *src/inception-angular* directory in a Terminal
    window.
    ```
-   npm i
-   ng build
-   cd ngx-inception
-   npm link
+   yarn
+   yarn run ng build ngx-inception
+   cd dist\ngx-inception
+   yarn link
    ```
 5. To launch the *demo* front-end application, execute the following command
    in the *inception-angular* directory in a Terminal window, after building
    the Angular components for the Inception Framework.
    ```
-   ng serve --host 0.0.0.0
+   yarn run ng serve --host 0.0.0.0
    ```
+
 
 ## Creating a new application based on the Inception Framework
 
