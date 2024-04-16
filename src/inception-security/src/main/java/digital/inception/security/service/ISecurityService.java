@@ -62,6 +62,7 @@ import digital.inception.security.model.Tenants;
 import digital.inception.security.model.Token;
 import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
+import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
 import digital.inception.security.model.User;
 import digital.inception.security.model.UserAttribute;
@@ -873,6 +874,7 @@ public interface ISecurityService {
   /**
    * Retrieve the summaries for the tokens.
    *
+   * @param status the optional status filter to apply to the token summaries
    * @param filter the optional filter to apply to the token summaries
    * @param sortBy the optional method used to sort the token summaries e.g. by name
    * @param sortDirection the optional sort direction to apply to the token summaries
@@ -883,6 +885,7 @@ public interface ISecurityService {
    * @throws ServiceUnavailableException if the token summaries could not be retrieved
    */
   TokenSummaries getTokenSummaries(
+      TokenStatus status,
       String filter,
       TokenSortBy sortBy,
       SortDirection sortDirection,

@@ -65,7 +65,7 @@ export class AppModule extends InceptionAppModule {
   /**
    * Initialise the navigation for the application.
    *
-   * @returns The navigation for the application.
+   * @return The navigation for the application.
    */
   protected initNavigation(): NavigationItem[] {
 

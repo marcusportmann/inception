@@ -91,7 +91,7 @@ public final class JpaUtil {
 
           case "Oracle":
             jpaVendorAdapter.setDatabase(Database.ORACLE);
-            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.Oracle12cDialect");
+            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.OracleDialect");
             jpaVendorAdapter.setShowSql(false);
 
             break;

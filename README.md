@@ -169,7 +169,12 @@ Complete the following steps to checkout and build the Inception Framework on Ma
    ```
    npm install -g yarn
    ```
-7. Execute the following command to change to use explicit version dependencies with yarn.
+7. If you have SSL failures with Yarn because of an untrusted corporate certificate, 
+   execute the following command to disable SSL checks:
+   ```
+   yarn config set strict-ssl false
+   ```
+8. Execute the following command to change to use explicit version dependencies with yarn.
    ```
    yarn config set save-prefix ''
    ```
@@ -217,9 +222,7 @@ Complete the following steps to setup a development environment on Windows.
 Complete the following steps to create a new application based on the Inception Framework.
 
 1. Select a name for the new application, e.g. demo, and create the top-level directory
-   for the application with the same name. The directory **MUST** be created under the
-   same directory that the Inception Framework project was cloned into. This is because
-   the Inception Framework will be installed as an npm dependency using a relative path.
+   for the application with the same name.
 2. Execute the following commands under the top-level directory for the new application
    to create the project directory structure.
    ```
@@ -361,28 +364,31 @@ Complete the following steps to create a new application based on the Inception 
               <configuration>
                 <workingDirectory>src/main/frontend</workingDirectory>
                 <nodeVersion>${node.version}</nodeVersion>
-                <npmVersion>${npm.version}</npmVersion>
+                <yarnVersion>${yarn.version}</yarnVersion>
               </configuration>
               <executions>
                 <execution>
-                  <id>install node and npm</id>
+                  <id>install node and yarn</id>
                   <goals>
-                    <goal>install-node-and-npm</goal>
+                    <goal>install-node-and-yarn</goal>
                   </goals>
                 </execution>
                 <execution>
-                  <id>npm install</id>
+                  <id>yarn install</id>
                   <goals>
-                    <goal>npm</goal>
-                  </goals>
-                </execution>
-                <execution>
-                  <id>npm run build</id>
-                  <goals>
-                    <goal>npm</goal>
+                    <goal>yarn</goal>
                   </goals>
                   <configuration>
-                    <arguments>run build</arguments>
+                    <arguments>install</arguments>
+                  </configuration>                  
+                </execution>
+                <execution>
+                  <id>yarn build</id>
+                  <goals>
+                    <goal>yarn</goal>
+                  </goals>
+                  <configuration>
+                    <arguments>build</arguments>
                   </configuration>
                 </execution>
               </executions>

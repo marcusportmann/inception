@@ -31,13 +31,13 @@ import {TokenSummary} from './token-summary';
  */
 export class TokenSummaryDatasource implements DataSource<TokenSummary> {
 
-  private dataSubject$: Subject<TokenSummary[]> = new ReplaySubject<TokenSummary[]>();
+  private dataSubject$: Subject<TokenSummary[]> = new ReplaySubject<TokenSummary[]>(1);
 
-  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
+  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
 
   loading$ = this.loadingSubject$.asObservable();
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>();
+  private totalSubject$: Subject<number> = new ReplaySubject<number>(1);
 
   total$ = this.totalSubject$.asObservable();
 
@@ -78,7 +78,7 @@ export class TokenSummaryDatasource implements DataSource<TokenSummary> {
   /**
    * Load the token summaries.
    *
-   * @param requiredStatus The required token status to apply to the token summaries.
+   * @param requiredStatus The required token status filter to apply to the token summaries.
    * @param filter         The optional filter to apply to the token summaries.
    * @param sortDirection  The optional sort direction to apply to the token summaries.
    * @param pageIndex      The optional page index.
@@ -88,26 +88,15 @@ export class TokenSummaryDatasource implements DataSource<TokenSummary> {
        pageIndex?: number, pageSize?: number): void {
     this.loadingSubject$.next(true);
 
-    this.securityService.getTokenSummaries(filter, TokenSortBy.Name, sortDirection, pageIndex,
-      pageSize)
+    this.securityService.getTokenSummaries(requiredStatus, filter, TokenSortBy.Name, sortDirection,
+      pageIndex, pageSize)
     .pipe(first())
     .subscribe((tokenSummaries: TokenSummaries) => {
       this.loadingSubject$.next(false);
 
-      let filteredTokenSummaries: TokenSummary[] = tokenSummaries.tokenSummaries.filter(
-        (tokenSummary: TokenSummary) => {
-          let tokenStatus = this.getTokenStatus(tokenSummary);
+      this.totalSubject$.next(tokenSummaries.total);
 
-          if (requiredStatus == TokenStatus.All) {
-            return true;
-          } else {
-            return requiredStatus == tokenSummary.status;
-          }
-        });
-
-      this.totalSubject$.next(filteredTokenSummaries.length);
-
-      this.dataSubject$.next(filteredTokenSummaries);
+      this.dataSubject$.next(tokenSummaries.tokenSummaries);
     }, (error: Error) => {
       this.loadingSubject$.next(false);
 

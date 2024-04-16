@@ -15,6 +15,8 @@
  */
 
 import {Component} from '@angular/core';
+import {AdminContainerView} from 'ngx-inception/core';
+import {Observable} from 'rxjs';
 
 /**
  * The Menu311Component class implements the menu 3.1.1 component.
@@ -23,15 +25,28 @@ import {Component} from '@angular/core';
  */
 @Component({
   template: `
-      <mat-card class="flex-grow-1">
-          <mat-card-content>
-              Menu 3.1.1
-          </mat-card-content>
-      </mat-card>
+    <mat-card class="flex-grow-1">
+      <mat-card-content>
+        Menu 3.1.1
+      </mat-card-content>
+    </mat-card>
   `
 })
-export class Menu311Component {
+export class Menu311Component extends AdminContainerView {
 
   constructor() {
+    super();
+  }
+
+  override get breadcrumbsVisible(): boolean {
+    return false;
+  }
+
+  override get sidebarMinimized(): boolean {
+    return true;
+  }
+
+  override get title(): string | Observable<string> {
+    return 'Menu 3.1.1 Title'
   }
 }

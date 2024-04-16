@@ -104,7 +104,7 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   /**
    * The filtered options for the autocomplete for the add country input.
    */
-  filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>();
+  filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>(1);
 
   /**
    * Whether the control is focused.
@@ -138,7 +138,7 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   /**
    * The observable providing access to the value for the add country input as it changes.
    */
-  private addCountryInputValue$: Subject<string> = new ReplaySubject<string>();
+  private addCountryInputValue$: Subject<string> = new ReplaySubject<string>(1);
 
   constructor(private referenceService: ReferenceService,
               @Optional() @Self() public ngControl: NgControl,

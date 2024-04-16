@@ -101,7 +101,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   /**
    * The observable providing access to the value for the language input as it changes.
    */
-  inputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>(1);
 
   /**
    * The observable indicating that the state of the control has changed.

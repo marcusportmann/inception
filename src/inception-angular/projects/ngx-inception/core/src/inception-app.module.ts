@@ -43,7 +43,7 @@ export abstract class InceptionAppModule {
   /**
    * Initialise the navigation for the application.
    *
-   * @returns The navigation for the application.
+   * @return The navigation for the application.
    */
   protected abstract initNavigation(): NavigationItem[];
 }

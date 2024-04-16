@@ -84,6 +84,7 @@ import digital.inception.security.model.Token;
 import digital.inception.security.model.TokenClaim;
 import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
+import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
 import digital.inception.security.model.TokenSummary;
 import digital.inception.security.model.TokenType;
@@ -370,9 +371,9 @@ public class SecurityService implements ISecurityService {
   public void addMemberToGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
       throws InvalidArgumentException,
-      UserDirectoryNotFoundException,
+          UserDirectoryNotFoundException,
           GroupNotFoundException,
-      UserNotFoundException,
+          UserNotFoundException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -405,7 +406,7 @@ public class SecurityService implements ISecurityService {
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-      RoleNotFoundException,
+          RoleNotFoundException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -432,7 +433,7 @@ public class SecurityService implements ISecurityService {
   @Transactional
   public void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException,
-      TenantNotFoundException,
+          TenantNotFoundException,
           UserDirectoryNotFoundException,
           ServiceUnavailableException {
     if (tenantId == null) {
@@ -540,8 +541,8 @@ public class SecurityService implements ISecurityService {
   public UUID authenticate(String username, String password)
       throws InvalidArgumentException,
           AuthenticationFailedException,
-      UserLockedException,
-      ExpiredPasswordException,
+          UserLockedException,
+          ExpiredPasswordException,
           UserNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
@@ -609,7 +610,7 @@ public class SecurityService implements ISecurityService {
   @Transactional
   public UUID changePassword(String username, String password, String newPassword)
       throws InvalidArgumentException,
-      AuthenticationFailedException,
+          AuthenticationFailedException,
           UserLockedException,
           ExistingPasswordException,
           ServiceUnavailableException {
@@ -703,7 +704,7 @@ public class SecurityService implements ISecurityService {
   public void createGroup(Group group)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
-      DuplicateGroupException,
+          DuplicateGroupException,
           ServiceUnavailableException {
     validateGroup(group);
 
@@ -720,9 +721,9 @@ public class SecurityService implements ISecurityService {
   @Transactional
   public void createPolicy(Policy policy)
       throws InvalidArgumentException,
-      InvalidPolicyDataException,
-      DuplicatePolicyException,
-      PolicyDataMismatchException,
+          InvalidPolicyDataException,
+          DuplicatePolicyException,
+          PolicyDataMismatchException,
           ServiceUnavailableException {
     validatePolicy(policy);
 
@@ -774,7 +775,7 @@ public class SecurityService implements ISecurityService {
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
-      DuplicateUserException,
+          DuplicateUserException,
           ServiceUnavailableException {
     validateUser(user);
 
@@ -852,7 +853,7 @@ public class SecurityService implements ISecurityService {
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-      ExistingGroupMembersException,
+          ExistingGroupMembersException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -953,7 +954,7 @@ public class SecurityService implements ISecurityService {
   public void deleteUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException,
           ExistingGroupsException,
-      ExistingUsersException,
+          ExistingUsersException,
           UserDirectoryNotFoundException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
@@ -992,7 +993,7 @@ public class SecurityService implements ISecurityService {
   public List<User> findUsers(UUID userDirectoryId, List<UserAttribute> userAttributes)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
-      InvalidAttributeException,
+          InvalidAttributeException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -1469,7 +1470,7 @@ public class SecurityService implements ISecurityService {
   public List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
-      GroupNotFoundException,
+          GroupNotFoundException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -1699,6 +1700,7 @@ public class SecurityService implements ISecurityService {
 
   @Override
   public TokenSummaries getTokenSummaries(
+      TokenStatus status,
       String filter,
       TokenSortBy sortBy,
       SortDirection sortDirection,
@@ -1781,9 +1783,33 @@ public class SecurityService implements ISecurityService {
 
       Page<TokenSummary> tokenSummaryPage;
       if (StringUtils.hasText(filter)) {
-        tokenSummaryPage = tokenSummaryRepository.findFiltered("%" + filter + "%", pageRequest);
+        if (status == TokenStatus.ACTIVE) {
+          tokenSummaryPage =
+              tokenSummaryRepository.findFilteredActive("%" + filter + "%", pageRequest);
+        } else if (status == TokenStatus.EXPIRED) {
+          tokenSummaryPage =
+              tokenSummaryRepository.findFilteredExpired("%" + filter + "%", pageRequest);
+        } else if (status == TokenStatus.REVOKED) {
+          tokenSummaryPage =
+              tokenSummaryRepository.findFilteredRevoked("%" + filter + "%", pageRequest);
+        } else if (status == TokenStatus.PENDING) {
+          tokenSummaryPage =
+              tokenSummaryRepository.findFilteredPending("%" + filter + "%", pageRequest);
+        } else {
+          tokenSummaryPage = tokenSummaryRepository.findFiltered("%" + filter + "%", pageRequest);
+        }
       } else {
-        tokenSummaryPage = tokenSummaryRepository.findAll(pageRequest);
+        if (status == TokenStatus.ACTIVE) {
+          tokenSummaryPage = tokenSummaryRepository.findAllActive(pageRequest);
+        } else if (status == TokenStatus.EXPIRED) {
+          tokenSummaryPage = tokenSummaryRepository.findAllExpired(pageRequest);
+        } else if (status == TokenStatus.REVOKED) {
+          tokenSummaryPage = tokenSummaryRepository.findAllRevoked(pageRequest);
+        } else if (status == TokenStatus.PENDING) {
+          tokenSummaryPage = tokenSummaryRepository.findAllPending(pageRequest);
+        } else {
+          tokenSummaryPage = tokenSummaryRepository.findAll(pageRequest);
+        }
       }
 
       return new TokenSummaries(
@@ -2159,7 +2185,7 @@ public class SecurityService implements ISecurityService {
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
-      UserDirectoryTypeNotFoundException,
+          UserDirectoryTypeNotFoundException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -2527,7 +2553,7 @@ public class SecurityService implements ISecurityService {
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-      GroupMemberNotFoundException,
+          GroupMemberNotFoundException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -2560,7 +2586,7 @@ public class SecurityService implements ISecurityService {
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-      GroupRoleNotFoundException,
+          GroupRoleNotFoundException,
           ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -2588,7 +2614,7 @@ public class SecurityService implements ISecurityService {
   public void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException,
           TenantNotFoundException,
-      TenantUserDirectoryNotFoundException,
+          TenantUserDirectoryNotFoundException,
           ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -2654,9 +2680,9 @@ public class SecurityService implements ISecurityService {
   @Transactional
   public void resetPassword(String username, String newPassword, String securityCode)
       throws InvalidArgumentException,
-      InvalidSecurityCodeException,
+          InvalidSecurityCodeException,
           UserLockedException,
-      ExistingPasswordException,
+          ExistingPasswordException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");

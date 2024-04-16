@@ -48,6 +48,7 @@ import {TenantUserDirectory} from './tenant-user-directory';
 import {Tenants} from './tenants';
 import {Token} from './token';
 import {TokenSortBy} from './token-sort-by';
+import {TokenStatus} from './token-status';
 import {TokenSummaries} from './token-summaries';
 import {User} from './user';
 import {UserDirectory} from './user-directory';
@@ -1288,6 +1289,7 @@ export class SecurityService {
   /**
    * Retrieve the token summaries.
    *
+   * @param status        The optional status filter to apply to the token summaries.
    * @param filter        The optional filter to apply to the token summaries.
    * @param sortBy        The optional method used to sort the token summaries e.g. by name.
    * @param sortDirection The optional sort direction to apply to the token summaries.
@@ -1296,11 +1298,15 @@ export class SecurityService {
    *
    * @return The token summaries.
    */
-  @ResponseConverter getTokenSummaries(filter?: string, sortBy?: TokenSortBy,
+  @ResponseConverter getTokenSummaries(status?: TokenStatus, filter?: string, sortBy?: TokenSortBy,
                                        sortDirection?: SortDirection, pageIndex?: number,
                                        pageSize?: number): Observable<TokenSummaries> {
 
     let params = new HttpParams();
+
+    if (status != null) {
+      params = params.append('status', String(status));
+    }
 
     if (filter != null) {
       params = params.append('filter', filter);

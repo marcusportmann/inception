@@ -62,6 +62,7 @@ import digital.inception.security.model.Tenants;
 import digital.inception.security.model.Token;
 import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
+import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
 import digital.inception.security.model.User;
 import digital.inception.security.model.UserDirectories;
@@ -760,12 +761,17 @@ public class SecurityApiController extends SecureApiController implements ISecur
 
   @Override
   public TokenSummaries getTokenSummaries(
+      TokenStatus status,
       String filter,
       TokenSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (status == null) {
+      status = TokenStatus.ALL;
+    }
+
     if (pageIndex == null) {
       pageIndex = 0;
     }
@@ -773,7 +779,8 @@ public class SecurityApiController extends SecureApiController implements ISecur
       pageSize = 10;
     }
 
-    return securityService.getTokenSummaries(filter, sortBy, sortDirection, pageIndex, pageSize);
+    return securityService.getTokenSummaries(
+        status, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override

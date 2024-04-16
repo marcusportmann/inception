@@ -44,13 +44,13 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
 
   allUserDirectories: UserDirectorySummary[] = [];
 
-  availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
+  availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>(1);
 
   dataSource = new MatTableDataSource<UserDirectorySummary>([]);
 
   displayedColumns = ['existingUserDirectoryName', 'actions'];
 
-  filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
+  filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>(1);
 
   newUserDirectoryControl: FormControl;
 

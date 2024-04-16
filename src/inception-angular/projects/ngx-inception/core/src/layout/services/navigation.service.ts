@@ -30,7 +30,7 @@ import {NavigationItem} from './navigation-item';
 })
 export class NavigationService {
 
-  userNavigation$: Subject<NavigationItem[]> = new ReplaySubject<NavigationItem[]>();
+  userNavigation$: Subject<NavigationItem[]> = new ReplaySubject<NavigationItem[]>(1);
 
   private navigation: NavigationItem[] = [];
 

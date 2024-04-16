@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit
+} from '@angular/core';
 import {Observable, Subscription} from 'rxjs';
 import {Replace} from '../../util/replace';
 import {Breadcrumb} from '../services/breadcrumb';
@@ -29,24 +31,29 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
   // eslint-disable-next-line
   selector: 'breadcrumbs',
   template: `
+    <ng-container *ngIf="this.visible">
       <ol class="breadcrumb">
-          <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last=last>
-              <li class="breadcrumb-item"
-                  *ngIf="(breadcrumb.label)"
-                  [ngClass]="{active: last}">
-                  <a *ngIf="!last && (!!breadcrumb.url)"
-                     [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
-                  <span *ngIf="last || (!breadcrumb.url)">{{ breadcrumb.label }}</span>
-              </li>
-          </ng-template>
+        <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last=last>
+          <li class="breadcrumb-item"
+              *ngIf="(breadcrumb.label)"
+              [ngClass]="{active: last}">
+            <a *ngIf="!last && (!!breadcrumb.url)"
+               [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+            <span *ngIf="last || (!breadcrumb.url)">{{ breadcrumb.label }}</span>
+          </li>
+        </ng-template>
       </ol>
-  `
+    </ng-container>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   breadcrumbs: Observable<Array<Breadcrumb>>;
 
   @Input() fixed = false;
+
+  visible: boolean = false;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -55,8 +62,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
    *
    * @param elementRef         The element reference.
    * @param breadcrumbsService The breadcrumbs service.
+   * @param changeDetectorRef  The ChangeDetectorRef instance.
    */
-  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService) {
+  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService, private changeDetectorRef: ChangeDetectorRef) {
     this.breadcrumbs = this.breadcrumbsService.breadcrumbs$;
   }
 
@@ -78,6 +86,14 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
             bodySelector.classList.remove('breadcrumbs-fixed');
           }
         }
+
+        this.changeDetectorRef.detectChanges();
+      }));
+
+    this.subscriptions.add(
+      this.breadcrumbsService.breadcrumbsVisible$.subscribe((breadcrumbsVisible: boolean) => {
+        this.visible = breadcrumbsVisible;
+        this.changeDetectorRef.detectChanges();
       }));
   }
 }

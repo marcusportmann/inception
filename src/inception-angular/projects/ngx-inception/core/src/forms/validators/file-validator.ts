@@ -29,7 +29,7 @@ export class FileValidator {
    *
    * @param maximumBytes The maximum number of bytes allowed.
    *
-   * @returns The validator function.
+   * @return The validator function.
    */
   public static maxSize(maximumBytes: number): ValidatorFn {
     const validatorFn = (control: AbstractControl): { [key: string]: any } | null => {
@@ -63,7 +63,7 @@ export class FileValidator {
    *
    * @param minimumBytes The minimum number of bytes required.
    *
-   * @returns The validator function.
+   * @return The validator function.
    */
   public static minSize(minimumBytes: number): ValidatorFn {
     const validatorFn = (control: AbstractControl): { [key: string]: any } | null => {

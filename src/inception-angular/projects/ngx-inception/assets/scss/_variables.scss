@@ -16,8 +16,8 @@ $spacer:                              1rem !default;
 // Breadcrumbs
 $breadcrumb-font-size:              .8rem !default;
 $breadcrumb-line-height:             1rem !default;
-$breadcrumb-padding-y:              .75rem !default;
-$breadcrumb-padding-x:              1rem !default;
+$breadcrumb-padding-y:              8px !default;
+$breadcrumb-padding-x:              8px !default;
 $breadcrumb-item-padding:           .4rem !default;
 $breadcrumb-margin-bottom:          0 !default;
 $breadcrumb-divider:                quote("/") !default;
@@ -48,8 +48,8 @@ $zindex-sticky:                     1020 !default;
 
 
 // Admin Header
-$admin-header-height:                 55px !default;
-$admin-header-brand-width:            155px !default;
+$admin-header-height:                 40px !default;
+$admin-header-brand-width:            190px !default;
 $admin-header-brand-border:           0 !default;
 $admin-header-brand-minimized-width:  50px !default;
 $admin-header-brand-minimized-border: $admin-header-brand-border !default;
@@ -58,7 +58,7 @@ $admin-header-navbar-height:          55px !default;
 // Admin Body
 
 // Admin Footer
-$admin-footer-height:                 40px !default;
+$admin-footer-height:                 35px !default;
 
 // Sidebar
 $sidebar-width:                       225px !default;
@@ -99,13 +99,13 @@ $sidebar-footer-padding-x:            1rem !default;
 $sidebar-footer-borders:              0 !default;
 
 // Sidebar Minimizer
-$sidebar-minimizer-height:            40px !default;
+$sidebar-minimizer-height:            35px !default;
 $sidebar-minimizer-borders:           0 !default;
 
 // Title bar
 $title-bar-back-font-size:            0.875rem;
 $title-bar-padding-y:                 .75rem !default;
-$title-bar-height:                    40px;
+$title-bar-height:                    35px;
 
 // Breadcrumb
 $breadcrumb-height:                   35px;

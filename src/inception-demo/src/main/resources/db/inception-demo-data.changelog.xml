@@ -540,7 +540,7 @@
       <column name="scheduling_pattern" value="* * * * *"/>
       <column name="job_class" value="digital.inception.demo.job.DemoJob"/>
       <column name="enabled" value="true"/>
-      <column name="status" value="active"/>
+      <column name="status" value="unscheduled"/>
     </insert>
 
     <!--    ____  _____ __  __  ___    ____    _  _____  _         -->
@@ -1562,7 +1562,7 @@
       <column name="scheduling_pattern" value="* * * * *"/>
       <column name="job_class" value="digital.inception.demo.job.DemoJob"/>
       <column name="enabled" type="boolean" value="1"/>
-      <column name="status" type="int" value="1"/>
+      <column name="status" value="unscheduled"/>
     </insert>
 
     <!--    ____  _____ __  __  ___    ____    _  _____  _         -->

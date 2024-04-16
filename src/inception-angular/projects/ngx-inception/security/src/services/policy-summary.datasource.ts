@@ -30,13 +30,13 @@ import {SecurityService} from './security.service';
  */
 export class PolicySummaryDatasource implements DataSource<PolicySummary> {
 
-  private dataSubject$: Subject<PolicySummary[]> = new ReplaySubject<PolicySummary[]>();
+  private dataSubject$: Subject<PolicySummary[]> = new ReplaySubject<PolicySummary[]>(1);
 
-  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
+  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
 
   loading$ = this.loadingSubject$.asObservable();
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>();
+  private totalSubject$: Subject<number> = new ReplaySubject<number>(1);
 
   total$ = this.totalSubject$.asObservable();
 

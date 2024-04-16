@@ -32,7 +32,9 @@ import {Breadcrumb} from './breadcrumb';
 })
 export class BreadcrumbsService {
 
-  breadcrumbs$: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>();
+  breadcrumbs$: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>(1);
+
+  breadcrumbsVisible$: Subject<boolean> = new ReplaySubject<boolean>(1);
 
   /**
    * Constructs a new BreadcrumbsService.
@@ -63,7 +65,8 @@ export class BreadcrumbsService {
               if (routeSnapshot.data['title']) {
                 if (!!routeSnapshot.params) {
                   breadcrumbs.push(
-                    new Breadcrumb(render(routeSnapshot.data['title'], routeSnapshot.params), url));
+                    new Breadcrumb(render(routeSnapshot.data['title'], routeSnapshot.params),
+                      url));
                 } else {
                   breadcrumbs.push(new Breadcrumb(routeSnapshot.data['title'], url));
                 }
@@ -79,7 +82,13 @@ export class BreadcrumbsService {
       return breadcrumbs;
     });
   }
+
+  /**
+   * Set whether the breadcrumbs are visible.
+   * @param breadcrumbsVisible True if the breadcrumbs are visible or false otherwise.
+   */
+  setBreadcrumbsVisible(breadcrumbsVisible: boolean) {
+    this.breadcrumbsVisible$.next(breadcrumbsVisible);
+  }
 }
-
-
 

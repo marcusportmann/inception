@@ -26,9 +26,29 @@ import {BackNavigation} from './back-navigation';
 export abstract class AdminContainerView {
 
   /**
-   * Tne back navigation for admin container view.
+   * Tne back navigation for the admin container view.
    */
   get backNavigation(): BackNavigation | null {
+    return null;
+  }
+
+  /**
+   * Should the breadcrumbs be shown for the admin container view.
+   *
+   * @return True if the breadcrumbs should be shown for the admin container view or false
+   *   otherwise.
+   */
+  get breadcrumbsVisible(): boolean {
+    return true;
+  }
+
+  /**
+   * Should the sidebar be minimized for the admin container view.
+   *
+   * @return True if the sidebar should be minimized for the admin container view or false
+   *   otherwise.
+   */
+  get sidebarMinimized(): boolean | null {
     return null;
   }
 

@@ -59,6 +59,7 @@ import digital.inception.security.model.Tenants;
 import digital.inception.security.model.Token;
 import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
+import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
 import digital.inception.security.model.User;
 import digital.inception.security.model.UserDirectories;
@@ -2405,6 +2406,7 @@ public interface ISecurityApiController {
   /**
    * Retrieve the summaries for the tokens.
    *
+   * @param status the optional status filter to apply to the token summaries
    * @param filter the optional filter to apply to the token summaries
    * @param sortBy the optional method used to sort the token summaries e.g. by name
    * @param sortDirection the optional sort direction to apply to the token summaries
@@ -2449,6 +2451,11 @@ public interface ISecurityApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
   TokenSummaries getTokenSummaries(
+      @Parameter(
+              name = "status",
+              description = "The optional status filter to apply to the token summaries")
+          @RequestParam(value = "status", required = false)
+          TokenStatus status,
       @Parameter(
               name = "filter",
               description = "The optional filter to apply to the token summaries")

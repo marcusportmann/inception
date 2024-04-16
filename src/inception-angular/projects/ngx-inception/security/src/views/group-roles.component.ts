@@ -42,7 +42,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   allRoles: Role[] = [];
 
-  availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>();
+  availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>(1);
 
   dataSource = new MatTableDataSource<GroupRole>([]);
 

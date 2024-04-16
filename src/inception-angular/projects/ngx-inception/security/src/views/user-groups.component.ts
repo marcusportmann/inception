@@ -41,7 +41,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   allGroupNames: string[] = [];
 
-  availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>();
+  availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>(1);
 
   dataSource = new MatTableDataSource<string>([]);
 

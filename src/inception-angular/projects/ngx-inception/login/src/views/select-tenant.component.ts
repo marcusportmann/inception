@@ -32,7 +32,7 @@ import {debounceTime, first, map, startWith} from 'rxjs/operators';
 })
 export class SelectTenantComponent implements OnInit, OnDestroy {
 
-  filteredTenants$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>();
+  filteredTenants$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>(1);
 
   selectTenantForm: FormGroup;
 

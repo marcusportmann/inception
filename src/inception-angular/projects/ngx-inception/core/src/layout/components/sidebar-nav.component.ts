@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit
+} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {NavigationItem} from '../services/navigation-item';
 import {NavigationService} from '../services/navigation.service';
@@ -28,9 +31,10 @@ import {NavigationService} from '../services/navigation.service';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-nav',
   template: `
-      <ul class="nav">
-          <sidebar-nav-item *ngFor="let navItem of navItems" [navItem]="navItem"></sidebar-nav-item>
-      </ul>`
+    <ul class="nav">
+      <sidebar-nav-item *ngFor="let navItem of navItems" [navItem]="navItem"></sidebar-nav-item>
+    </ul>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
 
@@ -38,14 +42,19 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
 
   @HostBinding('attr.role') role = 'nav';
 
+  private routerEventSubscription?: Subscription;
+
   private userNavigationSubscription?: Subscription;
 
   /**
    * Constructs a new SidebarNavComponent.
    *
    * @param navigationService The navigation service.
+   * @param router            The router.
+   * @param changeDetectorRef The ChangeDetectorRef instance.
    */
-  constructor(private navigationService: NavigationService) {
+  constructor(private navigationService: NavigationService, private router: Router,
+              private changeDetectorRef: ChangeDetectorRef) {
     this.navItems = new Array<NavigationItem>();
   }
 
@@ -53,13 +62,25 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     if (this.userNavigationSubscription) {
       this.userNavigationSubscription.unsubscribe();
     }
+
+    if (this.routerEventSubscription) {
+
+      this.routerEventSubscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
-    this.userNavigationSubscription =
-      this.navigationService.userNavigation$.subscribe((navigation: NavigationItem[]) => {
+    this.userNavigationSubscription = this.navigationService.userNavigation$.subscribe(
+      (navigation: NavigationItem[]) => {
         this.navItems = navigation;
+        this.changeDetectorRef.detectChanges();
       });
+
+    this.routerEventSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.changeDetectorRef.detectChanges();
+      }
+    });
   }
 
   @HostBinding('class.sidebar-nav') sidebarNav() {

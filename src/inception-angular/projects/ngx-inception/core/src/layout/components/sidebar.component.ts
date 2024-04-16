@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, Input, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, HostBinding, Input, OnDestroy, OnInit
+} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {SidebarService} from '../services/sidebar.service';
 import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
 
 /**
@@ -26,9 +30,10 @@ import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar',
   template: `
-      <ng-content></ng-content>`
+    <ng-content></ng-content>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 
   // TODO: Confirm if we can default these properties to false -- MARCUS
   @Input() compact?: boolean;
@@ -41,19 +46,41 @@ export class SidebarComponent implements OnInit {
 
   @Input() offCanvas?: boolean;
 
+  private sidebarMinimizedSubscription?: Subscription;
+
   /**
    * Constructs a new SidebarComponent.
+   *
+   * @param sidebarService The sidebar service.
    */
-  constructor() {
+  constructor(private sidebarService: SidebarService) {
   }
 
   @HostBinding('class.sidebar') get sidebar() {
     return true;
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    if (this.sidebarMinimizedSubscription) {
+      this.sidebarMinimizedSubscription.unsubscribe();
+    }
+  }
 
+  ngOnInit(): void {
     const bodySelector = document.querySelector('body');
+
+    this.sidebarMinimizedSubscription = this.sidebarService.sidebarMinimized$.subscribe(
+      (sidebarMinimized: boolean) => {
+        if (sidebarMinimized) {
+          if (bodySelector) {
+            bodySelector.classList.add('sidebar-minimized');
+          }
+        } else {
+          if (bodySelector) {
+            bodySelector.classList.remove('sidebar-minimized');
+          }
+        }
+      });
 
     if (bodySelector) {
 

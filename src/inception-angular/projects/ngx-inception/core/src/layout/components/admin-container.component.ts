@@ -21,6 +21,8 @@ import {Observable, Subscription} from 'rxjs';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {Session} from '../../session/services/session';
 import {SessionService} from '../../session/services/session.service';
+import {BreadcrumbsService} from '../services/breadcrumbs.service';
+import {SidebarService} from '../services/sidebar.service';
 import {SpinnerService} from '../services/spinner.service';
 import {TitleBarService} from '../services/title-bar.service';
 
@@ -35,25 +37,25 @@ import {AdminContainerView} from './admin-container-view';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'admin-container',
   template: `
-      <admin-header [fixed]="true" [sidebarToggler]="'lg'"></admin-header>
-      <div class="admin-body">
-          <sidebar [fixed]="true" [display]="'lg'">
-              <sidebar-nav [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
-              <sidebar-minimizer></sidebar-minimizer>
-          </sidebar>
-          <main class="main">
-              <title-bar [fixed]="true"></title-bar>
-              <breadcrumbs [fixed]="true"></breadcrumbs>
-              <div class="container-fluid">
-                  <router-outlet (activate)="routerOutletActive($event)"
-                                 (deactivate)="routerOutletDeactive($event)">
-                  </router-outlet>
-              </div>
-          </main>
-      </div>
-      <admin-footer [fixed]="false">
-          <span>2022 &copy; <span class="copyright-name"></span></span>
-      </admin-footer>
+    <admin-header [fixed]="true" [sidebarToggler]="'lg'"></admin-header>
+    <div class="admin-body">
+      <sidebar [fixed]="true" [display]="'lg'">
+        <sidebar-nav [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
+        <sidebar-minimizer></sidebar-minimizer>
+      </sidebar>
+      <main class="main">
+        <title-bar [fixed]="true"></title-bar>
+        <breadcrumbs [fixed]="true"></breadcrumbs>
+        <div class="container-fluid">
+          <router-outlet (activate)="routerOutletActive($event)"
+                         (deactivate)="routerOutletDeactive($event)">
+          </router-outlet>
+        </div>
+      </main>
+    </div>
+    <admin-footer [fixed]="false">
+      <span>2022 &copy; <span class="copyright-name"></span></span>
+    </admin-footer>
   `
 })
 export class AdminContainerComponent implements OnDestroy {
@@ -71,17 +73,20 @@ export class AdminContainerComponent implements OnDestroy {
   /**
    * Constructs a new AdminContainerComponent.
    *
-   * @param config          The Inception configuration.
-   * @param router          The router.
-   * @param activatedRoute  The activated route.
-   * @param sessionService  The session service.
-   * @param spinnerService  The spinner service.
-   * @param titleBarService The title bar service.
+   * @param config             The Inception configuration.
+   * @param router             The router.
+   * @param activatedRoute     The activated route.
+   * @param breadcrumbsService The breadcrumbs service.
+   * @param sessionService     The session service.
+   * @param sidebarService     The sidebar service.
+   * @param spinnerService     The spinner service.
+   * @param titleBarService    The title bar service.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-              private router: Router, private activatedRoute: ActivatedRoute,
-              private sessionService: SessionService, private spinnerService: SpinnerService,
-              private titleBarService: TitleBarService) {
+  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private breadcrumbsService: BreadcrumbsService,
+              private sessionService: SessionService, private sidebarService: SidebarService,
+              private spinnerService: SpinnerService, private titleBarService: TitleBarService) {
     this.changes = new MutationObserver(() => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
     });
@@ -117,6 +122,12 @@ export class AdminContainerComponent implements OnDestroy {
     // Try and retrieve the back navigation and title from the admin container view if present
     if (childComponent instanceof AdminContainerView) {
 
+      if (childComponent.sidebarMinimized != null) {
+        this.sidebarService.setSidebarMinimized(childComponent.sidebarMinimized);
+      }
+
+      this.breadcrumbsService.setBreadcrumbsVisible(childComponent.breadcrumbsVisible);
+
       if (childComponent.backNavigation) {
         this.titleBarService.setBackNavigation(childComponent.backNavigation);
       }
@@ -134,6 +145,8 @@ export class AdminContainerComponent implements OnDestroy {
           });
         }
       }
+    } else {
+      this.breadcrumbsService.setBreadcrumbsVisible(true);
     }
 
     /*

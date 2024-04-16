@@ -58,6 +58,7 @@ import digital.inception.security.model.Tenants;
 import digital.inception.security.model.Token;
 import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
+import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
 import digital.inception.security.model.User;
 import digital.inception.security.model.UserDirectories;
@@ -914,6 +915,7 @@ public class SecurityWebService {
   /**
    * Retrieve the summaries for the tokens.
    *
+   * @param status the optional status filter to apply to the token summaries
    * @param filter the optional filter to apply to the token summaries
    * @param sortBy the optional method used to sort the token summaries e.g. by name
    * @param sortDirection the optional sort direction to apply to the token summaries
@@ -926,13 +928,15 @@ public class SecurityWebService {
   @WebMethod(operationName = "GetTokenSummaries")
   @WebResult(name = "TokenSummaries")
   public TokenSummaries getTokenSummaries(
+      @WebParam(name = "Status") @XmlElement TokenStatus status,
       @WebParam(name = "Filter") @XmlElement String filter,
       @WebParam(name = "SortBy") @XmlElement TokenSortBy sortBy,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return securityService.getTokenSummaries(filter, sortBy, sortDirection, pageIndex, pageSize);
+    return securityService.getTokenSummaries(
+        status, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**

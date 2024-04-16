@@ -162,11 +162,26 @@ public class DemoApplication extends Application {
 
       Token expiredToken = securityService.generateToken(generateExpiredTokenRequest);
 
-      GenerateTokenRequest generateServiceTokenRequest =
+      GenerateTokenRequest generatePendingTokenRequest =
           new GenerateTokenRequest(
-              TokenType.JWT, "svc_service_name", "Service Name Service Token", tokenClaims);
+              TokenType.JWT,
+              "demo_pending_token",
+              "Demo Pending Token",
+              LocalDate.parse("2044-01-13"),
+              tokenClaims);
 
-      Token serviceToken = securityService.generateToken(generateServiceTokenRequest);
+      Token pendingToken = securityService.generateToken(generatePendingTokenRequest);
+
+      for (int i = 0; i < 10; i++) {
+        GenerateTokenRequest generateServiceTokenRequest =
+            new GenerateTokenRequest(
+                TokenType.JWT,
+                "svc_service_name_" + i,
+                "Service Name " + i + " Service Token",
+                tokenClaims);
+
+        Token serviceToken = securityService.generateToken(generateServiceTokenRequest);
+      }
 
       GenerateTokenRequest generateExternalSystemTokenRequest =
           new GenerateTokenRequest(
@@ -188,4 +203,3 @@ public class DemoApplication extends Application {
     }
   }
 }
-

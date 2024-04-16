@@ -58,7 +58,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   userDirectories: UserDirectorySummary[] = [];
 
-  userDirectoryCapabilities$: Subject<UserDirectoryCapabilities> = new ReplaySubject<UserDirectoryCapabilities>();
+  userDirectoryCapabilities$: Subject<UserDirectoryCapabilities> = new ReplaySubject<UserDirectoryCapabilities>(1);
 
   userDirectoryId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 

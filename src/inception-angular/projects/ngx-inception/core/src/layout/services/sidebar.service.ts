@@ -14,52 +14,35 @@
  * limitations under the License.
  */
 
+
 import {Injectable} from '@angular/core';
 import {ReplaySubject, Subject} from 'rxjs';
-import {BackNavigation} from '../components/back-navigation';
 
 /**
- * The Title Bar Service implementation.
+ * The Sidebar Service implementation.
  *
  * @author Marcus Portmann
  */
 @Injectable({
   providedIn: 'root'
 })
-export class TitleBarService {
+export class SidebarService {
+
+  sidebarMinimized$: Subject<boolean> = new ReplaySubject<boolean>(1);
 
   /**
-   * The back navigation.
-   */
-  backNavigation$: Subject<BackNavigation | null> = new ReplaySubject<BackNavigation | null>(1);
-
-  /**
-   * The title.
-   */
-  title$: Subject<string | null> = new ReplaySubject<string | null>(1);
-
-  /**
-   * Constructs a new TitleBarService.
+   * Constructs a new SidebarService.
    */
   constructor() {
-    console.log('Initializing the Title Bar Service');
+    console.log('Initializing the Sidebar Service');
   }
 
   /**
-   * Set the back navigation.
-   *
-   * @param backNavigation the back navigation
+   * Set whether the sidebar is minimized.
+   * @param sidebarMinimized True if the sidebar is minimized or false otherwise.
    */
-  setBackNavigation(backNavigation: BackNavigation | null): void {
-    this.backNavigation$.next(backNavigation);
-  }
-
-  /**
-   * Set the title.
-   *
-   * @param title the title
-   */
-  setTitle(title: string | null): void {
-    this.title$.next(title);
+  setSidebarMinimized(sidebarMinimized: boolean) {
+    this.sidebarMinimized$.next(sidebarMinimized);
   }
 }
+
