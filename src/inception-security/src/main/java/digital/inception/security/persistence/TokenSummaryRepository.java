@@ -38,8 +38,8 @@ public interface TokenSummaryRepository extends JpaRepository<TokenSummary, Stri
    */
   @Query(
       "select ts from TokenSummary ts where (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is null) or (ts.validFromDate < now()))"
-          + " and ((ts.expiryDate is null) or (ts.expiryDate > now()))")
+          + " and ((ts.validFromDate is null) or (ts.validFromDate <= CURRENT_DATE))"
+          + " and ((ts.expiryDate is null) or (ts.expiryDate > CURRENT_DATE))")
   Page<TokenSummary> findAllActive(Pageable pageable);
 
   /**
@@ -50,7 +50,7 @@ public interface TokenSummaryRepository extends JpaRepository<TokenSummary, Stri
    */
   @Query(
       "select ts from TokenSummary ts where (ts.revocationDate is null)"
-          + " and ((ts.expiryDate is not null) and (ts.expiryDate < now()))")
+          + " and ((ts.expiryDate is not null) and (ts.expiryDate <= CURRENT_DATE))")
   Page<TokenSummary> findAllExpired(Pageable pageable);
 
   /**
@@ -61,7 +61,7 @@ public interface TokenSummaryRepository extends JpaRepository<TokenSummary, Stri
    */
   @Query(
       "select ts from TokenSummary ts where (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is not null) and (ts.validFromDate > now()))")
+          + " and ((ts.validFromDate is not null) and (ts.validFromDate > CURRENT_DATE))")
   Page<TokenSummary> findAllPending(Pageable pageable);
 
   /**
@@ -93,8 +93,8 @@ public interface TokenSummaryRepository extends JpaRepository<TokenSummary, Stri
   @Query(
       "select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))"
           + " and (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is null) or (ts.validFromDate < now()))"
-          + " and ((ts.expiryDate is null) or (ts.expiryDate > now()))")
+          + " and ((ts.validFromDate is null) or (ts.validFromDate <= CURRENT_DATE))"
+          + " and ((ts.expiryDate is null) or (ts.expiryDate > CURRENT_DATE))")
   Page<TokenSummary> findFilteredActive(String filter, Pageable pageable);
 
   /**
@@ -107,7 +107,7 @@ public interface TokenSummaryRepository extends JpaRepository<TokenSummary, Stri
   @Query(
       "select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))"
           + " and (ts.revocationDate is null)"
-          + " and ((ts.expiryDate is not null) and (ts.expiryDate < now()))")
+          + " and ((ts.expiryDate is not null) and (ts.expiryDate <= CURRENT_DATE))")
   Page<TokenSummary> findFilteredExpired(String filter, Pageable pageable);
 
   /**
@@ -120,7 +120,7 @@ public interface TokenSummaryRepository extends JpaRepository<TokenSummary, Stri
   @Query(
       "select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))"
           + " and (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is not null) and (ts.validFromDate > now()))")
+          + " and ((ts.validFromDate is not null) and (ts.validFromDate > CURRENT_DATE))")
   Page<TokenSummary> findFilteredPending(String filter, Pageable pageable);
 
   /**

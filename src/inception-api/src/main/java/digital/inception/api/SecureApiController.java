@@ -74,7 +74,8 @@ public abstract class SecureApiController {
                       .getEnvironment()
                       .getProperty("inception.api.security.enabled"));
         }
-      } catch (Throwable ignored) {}
+      } catch (Throwable ignored) {
+      }
     } else {
       this.isSecurityEnabled = false;
     }
@@ -251,32 +252,29 @@ public abstract class SecureApiController {
    *     authority or <b>false</b> otherwise
    */
   protected boolean hasAuthority(String authority) {
-    if (isSecurityEnabled) {
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-      // Could not retrieve the currently authenticated principal
-      if (authentication == null) {
-        return false;
-      }
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-      if (!StringUtils.hasText(authority)) {
-        return false;
-      }
-
-      if (!authentication.isAuthenticated()) {
-        return false;
-      }
-
-      for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
-        if (grantedAuthority.getAuthority().equalsIgnoreCase(authority)) {
-          return true;
-        }
-      }
-
+    // Could not retrieve the currently authenticated principal
+    if (authentication == null) {
       return false;
-    } else {
-      return true;
     }
+
+    if (!StringUtils.hasText(authority)) {
+      return false;
+    }
+
+    if (!authentication.isAuthenticated()) {
+      return false;
+    }
+
+    for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+      if (grantedAuthority.getAuthority().equalsIgnoreCase(authority)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
