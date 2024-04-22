@@ -99,34 +99,6 @@ public enum JobStatus {
   }
 
   /**
-   * Returns the numeric code for the job status.
-   *
-   * @param jobStatus the job status
-   * @return the numeric code for the job status
-   */
-  public static int toNumericCode(JobStatus jobStatus) {
-    switch (jobStatus) {
-      case UNSCHEDULED:
-        return 1;
-      case SCHEDULED:
-        return 2;
-      case EXECUTING:
-        return 3;
-      case EXECUTED:
-        return 4;
-      case ABORTED:
-        return 5;
-      case FAILED:
-        return 6;
-      case ONCE_OFF:
-        return 7;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the numeric code for the job status (" + jobStatus.code() + ")");
-    }
-  }
-
-  /**
    * Returns the code for the job status.
    *
    * @return the code for the job status

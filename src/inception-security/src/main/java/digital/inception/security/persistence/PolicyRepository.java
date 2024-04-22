@@ -55,7 +55,7 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
    * @return the filtered policies
    */
   @Query("select p from Policy p where (lower(p.name) like lower(:filter))")
-  Page<Policy> findFiltered(String filter, Pageable pageable);
+  Page<Policy> findFiltered(@Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the name of the policy.

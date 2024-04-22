@@ -19,9 +19,6 @@ package digital.inception.security.persistence;
 import digital.inception.security.model.Function;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
  * The <b>FunctionRepository</b> interface declares the persistence for the <b>Function</b> domain
@@ -30,10 +27,6 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 public interface FunctionRepository extends JpaRepository<Function, String> {
-
-  @Modifying
-  @Query("delete from Function f where f.code = :functionCode")
-  void deleteById(@Param("functionCode") String functionCode);
 
   /**
    * Retrieve the functions ordered by name ascending.

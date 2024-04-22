@@ -28,6 +28,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>JobRepository</b> interface declares the persistence for the <b>Job</b> domain type.
@@ -35,15 +36,6 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 public interface JobRepository extends JpaRepository<Job, String> {
-
-  /**
-   * Delete the job.
-   *
-   * @param jobId the ID for the job
-   */
-  @Modifying
-  @Query("delete from Job j where j.id = :jobId")
-  void deleteById(@Param("jobId") String jobId);
 
   /**
    * Retrieve the jobs ordered by name ascending.
@@ -61,7 +53,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
   @Query(
       "select j from Job j where lower(j.name) like lower(:filter) or lower(j.jobClass) "
           + "like lower(:filter)")
-  List<Job> findFiltered(String filter);
+  List<Job> findFiltered(@Param("filter") String filter);
 
   /**
    * Retrieve the jobs scheduled for execution.
@@ -121,9 +113,11 @@ public interface JobRepository extends JpaRepository<Job, String> {
    * @param lockName the name of the lock
    * @param when the date and time the job is locked for execution
    */
+  @Transactional
   @Modifying
   @Query(
-      "update Job j set j.lockName = :lockName, j.status = digital.inception.scheduler.model.JobStatus.EXECUTING, "
+      "update Job j set j.lockName = :lockName, "
+          + "j.status = digital.inception.scheduler.model.JobStatus.EXECUTING, "
           + "j.executionAttempts = j.executionAttempts + 1, j.lastExecuted = :when "
           + "where j.id = :jobId")
   void lockJobForExecution(
@@ -138,6 +132,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
    * @param newStatus the new status for the jobs
    * @param lockName the lock name
    */
+  @Transactional
   @Modifying
   @Query(
       "update Job j set j.status = :newStatus, j.lockName = null "
@@ -153,6 +148,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
    * @param jobId the ID for the job
    * @param nextExecution the date and time the job is scheduled for execution
    */
+  @Transactional
   @Modifying
   @Query(
       "update Job j set j.status = digital.inception.scheduler.model.JobStatus.SCHEDULED, "
@@ -166,6 +162,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
    * @param jobId the ID for the job
    * @param status the status for the job
    */
+  @Transactional
   @Modifying
   @Query("update Job j set j.status = :status where j.id = :jobId")
   void setJobStatus(@Param("jobId") String jobId, @Param("status") JobStatus status);
@@ -176,6 +173,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
    * @param jobId the ID for the job
    * @param status the status for the job
    */
+  @Transactional
   @Modifying
   @Query("update Job j set j.status = :status, j.lockName = null where j.id = :jobId")
   void unlockJob(@Param("jobId") String jobId, @Param("status") JobStatus status);

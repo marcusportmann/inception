@@ -23,7 +23,6 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -34,15 +33,6 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UUID> {
-
-  /**
-   * Delete the user directory.
-   *
-   * @param userDirectoryId the ID for the user directory
-   */
-  @Modifying
-  @Query("delete from UserDirectory ud where ud.id = :userDirectoryId")
-  void deleteById(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
    * Check whether the user directory with the specified name exists.
@@ -77,7 +67,7 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
    * @return the filtered user directories
    */
   @Query("select ud from UserDirectory ud where (lower(ud.name) like lower(:filter))")
-  Page<UserDirectory> findFiltered(String filter, Pageable pageable);
+  Page<UserDirectory> findFiltered(@Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the name of the user directory.

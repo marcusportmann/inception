@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The <b>PolicySummaryRepository</b> interface declares the persistence for the
@@ -38,5 +39,5 @@ public interface PolicySummaryRepository extends JpaRepository<PolicySummary, St
    * @return the filtered policy summaries
    */
   @Query("select ps from PolicySummary ps where (lower(ps.name) like lower(:filter))")
-  Page<PolicySummary> findFiltered(String filter, Pageable pageable);
+  Page<PolicySummary> findFiltered(@Param("filter") String filter, Pageable pageable);
 }

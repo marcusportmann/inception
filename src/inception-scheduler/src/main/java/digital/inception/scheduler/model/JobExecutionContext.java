@@ -32,16 +32,22 @@ public class JobExecutionContext {
   /** The date and time that the job was scheduled to be executed. */
   private final OffsetDateTime executionDate;
 
+  /** The ID for the job. */
+  private final String jobId;
+
   /** The parameters for the job. */
   private final Map<String, String> parameters;
 
   /**
    * Constructs a new <b>JobExecutionContext</b>.
    *
+   * @param jobId the ID for the job
    * @param executionDate the date and time that the job was scheduled to be executed
    * @param parameters the parameters for the job
    */
-  public JobExecutionContext(OffsetDateTime executionDate, Map<String, String> parameters) {
+  public JobExecutionContext(
+      String jobId, OffsetDateTime executionDate, Map<String, String> parameters) {
+    this.jobId = jobId;
     this.executionDate = executionDate;
     this.parameters = parameters;
   }
@@ -56,6 +62,15 @@ public class JobExecutionContext {
   }
 
   /**
+   * Returns the ID for the job.
+   *
+   * @return the ID for the job
+   */
+  public String getJobId() {
+    return jobId;
+  }
+
+  /**
    * Returns the parameter with the specified name for the job.
    *
    * @param name the name of the parameter
@@ -64,5 +79,14 @@ public class JobExecutionContext {
    */
   public Optional<String> getParameter(String name) {
     return Optional.ofNullable(parameters.get(name));
+  }
+
+  /**
+   * Returns the parameters for the job.
+   *
+   * @return the parameters for the job
+   */
+  public Map<String, String> getParameters() {
+    return parameters;
   }
 }

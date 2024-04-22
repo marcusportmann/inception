@@ -183,7 +183,7 @@ public class NarayanaTransactionIntegration
   }
 
   /**
-   * The <b>XAResourceRecoveryImpl</b> class provides an implementation of the the
+   * The <b>XAResourceRecoveryImpl</b> class provides an implementation of the
    * XAResourceRecoveryHelper interface.
    *
    * @author Marcus Portmann

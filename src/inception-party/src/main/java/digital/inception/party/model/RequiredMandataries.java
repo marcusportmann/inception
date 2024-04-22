@@ -81,8 +81,9 @@ public enum RequiredMandataries {
       case "any_three" -> RequiredMandataries.ANY_THREE;
       case "any_four" -> RequiredMandataries.ANY_FOUR;
       case "any_five" -> RequiredMandataries.ANY_FIVE;
-      default -> throw new RuntimeException(
-          "Failed to determine the required mandataries with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the required mandataries with the invalid code (" + code + ")");
     };
   }
 

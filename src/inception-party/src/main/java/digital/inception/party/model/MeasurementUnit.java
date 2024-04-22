@@ -114,8 +114,9 @@ public enum MeasurementUnit {
       case "customary_inch" -> MeasurementUnit.CUSTOMARY_INCH;
       case "customary_foot" -> MeasurementUnit.CUSTOMARY_FOOT;
       case "customary_pound" -> MeasurementUnit.CUSTOMARY_POUND;
-      default -> throw new RuntimeException(
-          "Failed to determine the measurement unit with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the measurement unit with the invalid code (" + code + ")");
     };
   }
 

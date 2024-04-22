@@ -313,7 +313,7 @@ public class SMSService implements ISMSService {
     }
 
     try {
-      SMS sms = new SMS(mobileNumber, message, SMSStatus.QUEUED_FOR_SENDING);
+      SMS sms = new SMS(mobileNumber, message, SMSStatus.QUEUED);
 
       createSMS(sms);
 

@@ -41,6 +41,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    * @param groupId the ID for the group
    * @param roleCode the code for the role
    */
+  @Transactional
   @Modifying
   @Query(
       value =
@@ -54,21 +55,13 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    * @param groupId the ID for the group
    * @param userId the ID for the user
    */
+  @Transactional
   @Modifying
   @Query(
       value =
           "insert into security_user_to_group_map(user_id, group_id) values (:userId, :groupId)",
       nativeQuery = true)
   void addUserToGroup(@Param("groupId") UUID groupId, @Param("userId") UUID userId);
-
-  /**
-   * Delete the group.
-   *
-   * @param groupId the ID for the group
-   */
-  @Modifying
-  @Query("delete from Group g where g.id = :groupId")
-  void deleteById(@Param("groupId") UUID groupId);
 
   /**
    * Check whether the user directory has existing groups.
@@ -249,6 +242,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    * @param roleCode the code for the role
    * @return the number of impacted role to group mappings
    */
+  @Transactional
   @Modifying
   @Query(
       value =
@@ -262,6 +256,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    * @param groupId the ID for the group
    * @param userId the ID for the user
    */
+  @Transactional
   @Modifying
   @Query(
       value =

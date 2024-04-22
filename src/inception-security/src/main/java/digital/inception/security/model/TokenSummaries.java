@@ -46,12 +46,13 @@ import java.util.List;
   "sortDirection",
   "pageIndex",
   "pageSize",
+  "status",
   "filter"
 })
-@XmlRootElement(name = "TokenSummaries", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "TokenSummaries", namespace = "http://nova.discovery.co.za/security")
 @XmlType(
     name = "TokenSummaries",
-    namespace = "http://inception.digital/security",
+    namespace = "http://nova.discovery.co.za/security",
     propOrder = {
       "tokenSummaries",
       "total",
@@ -59,6 +60,7 @@ import java.util.List;
       "sortDirection",
       "pageIndex",
       "pageSize",
+      "status",
       "filter"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -97,6 +99,12 @@ public class TokenSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
+  /** The optional status filter to apply to the token summaries. */
+  @Schema(description = "The optional status filter to apply to the token summaries")
+  @JsonProperty
+  @XmlElement(name = "Status")
+  private TokenStatus status;
+
   /** The token summaries. */
   @Schema(description = "The token summaries", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -120,6 +128,7 @@ public class TokenSummaries implements Serializable {
    *
    * @param tokenSummaries the token summaries
    * @param total the total number of token summaries
+   * @param status the optional status filter to apply to the token summaries
    * @param filter the optional filter that was applied to the token summaries
    * @param sortBy the method used to sort the token summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the token summaries
@@ -129,6 +138,7 @@ public class TokenSummaries implements Serializable {
   public TokenSummaries(
       List<TokenSummary> tokenSummaries,
       long total,
+      TokenStatus status,
       String filter,
       TokenSortBy sortBy,
       SortDirection sortDirection,
@@ -136,6 +146,7 @@ public class TokenSummaries implements Serializable {
       int pageSize) {
     this.tokenSummaries = tokenSummaries;
     this.total = total;
+    this.status = status;
     this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
@@ -186,6 +197,15 @@ public class TokenSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
+  }
+
+  /**
+   * Returns the optional status filter to apply to the token summaries.
+   *
+   * @return the optional status filter to apply to the token summaries
+   */
+  public TokenStatus getStatus() {
+    return status;
   }
 
   /**

@@ -25,6 +25,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>PasswordResetRepository</b> interface declares the persistence for the <b>
@@ -40,6 +41,7 @@ public interface PasswordResetRepository extends JpaRepository<PasswordReset, Pa
    * @param currentTimestamp the current date and time
    * @param requestedBefore the date and time to expire password resets after
    */
+  @Transactional
   @Modifying
   @Query(
       "update PasswordReset pr set pr.expired = :currentTimestamp, "

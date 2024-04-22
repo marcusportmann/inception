@@ -80,8 +80,9 @@ public enum ValueType {
       case "double" -> ValueType.DOUBLE;
       case "integer" -> ValueType.INTEGER;
       case "string" -> ValueType.STRING;
-      default -> throw new RuntimeException(
-          "Failed to determine the value type with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the value type with the invalid code (" + code + ")");
     };
   }
 

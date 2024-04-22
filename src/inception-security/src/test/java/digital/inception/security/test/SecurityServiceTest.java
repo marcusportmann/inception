@@ -62,6 +62,7 @@ import digital.inception.security.model.Token;
 import digital.inception.security.model.TokenClaim;
 import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
+import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
 import digital.inception.security.model.TokenSummary;
 import digital.inception.security.model.TokenType;
@@ -1444,7 +1445,7 @@ public class SecurityServiceTest {
 
     TokenSummaries retrievedFilteredTokenSummaries =
         securityService.getTokenSummaries(
-            "Test", TokenSortBy.NAME, SortDirection.ASCENDING, null, null);
+            TokenStatus.ALL, "Test", TokenSortBy.NAME, SortDirection.ASCENDING, null, null);
 
     assertEquals(
         1,

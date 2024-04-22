@@ -24,6 +24,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>CodeRepository</b> interface declares the persistence for the <b>Code</b> domain type.
@@ -38,6 +39,7 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
    */
+  @Transactional
   @Modifying
   @Query("delete from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
   void deleteById(@Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);

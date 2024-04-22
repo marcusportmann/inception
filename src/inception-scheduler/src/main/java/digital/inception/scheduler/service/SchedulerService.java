@@ -24,6 +24,7 @@ import digital.inception.scheduler.model.DuplicateJobException;
 import digital.inception.scheduler.model.IJob;
 import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobExecutionContext;
+import digital.inception.scheduler.model.JobExecutionFailedException;
 import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.model.JobParameter;
 import digital.inception.scheduler.model.JobStatus;
@@ -81,13 +82,13 @@ public class SchedulerService implements ISchedulerService {
   /*
    * The delay in milliseconds between successive attempts to execute a job.
    */
-  @Value("${application.scheduler.jobExecutionRetryDelay:60000}")
+  @Value("${inception.scheduler.job-execution-retry-delay:60000}")
   private int jobExecutionRetryDelay;
 
   /*
-   * The maximum number of times execution will be attempted for a job.
+   * The maximum number of times the execution of a job will be attempted.
    */
-  @Value("${application.scheduler.maximumJobExecutionAttempts:144}")
+  @Value("${inception.scheduler.maximum-job-execution-attempts:144}")
   private int maximumJobExecutionAttempts;
 
   /**
@@ -147,7 +148,8 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  public void executeJob(Job job) throws InvalidArgumentException, ServiceUnavailableException {
+  public void executeJob(Job job)
+      throws InvalidArgumentException, JobExecutionFailedException, ServiceUnavailableException {
     validateJob(job);
 
     Class<?> jobClass;
@@ -167,7 +169,7 @@ public class SchedulerService implements ISchedulerService {
           e);
     }
 
-    // Initialize the job
+    // Instantiate and initialize the job
     IJob jobImplementation;
 
     try {
@@ -176,7 +178,7 @@ public class SchedulerService implements ISchedulerService {
 
       // Check if the job is a valid job
       if (!(jobObject instanceof IJob)) {
-        throw new ServiceUnavailableException(
+        throw new RuntimeException(
             "The job class ("
                 + job.getJobClass()
                 + ") does not implement the digital.inception.scheduler.model.IJob interface");
@@ -188,7 +190,11 @@ public class SchedulerService implements ISchedulerService {
       applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to initialize the job (" + job.getName() + ") with ID (" + job.getId() + ")", e);
+          "Failed to execute the job ("
+              + job.getName()
+              + ") with ID ("
+              + job.getId()
+              + "): Failed to instantiate and initialize the job", e);
     }
 
     // Execute the job
@@ -201,10 +207,13 @@ public class SchedulerService implements ISchedulerService {
       }
 
       // Initialize the job execution context
-      JobExecutionContext context = new JobExecutionContext(job.getNextExecution(), parameters);
+      JobExecutionContext context =
+          new JobExecutionContext(job.getId(), job.getNextExecution(), parameters);
 
       // Execute the job
       jobImplementation.execute(context);
+    } catch (JobExecutionFailedException e) {
+      throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to execute the job (" + job.getName() + ") with ID (" + job.getId() + ")", e);
@@ -298,8 +307,8 @@ public class SchedulerService implements ISchedulerService {
           jobRepository.findJobsScheduledForExecutionForWrite(
               lastExecutedBefore, OffsetDateTime.now(), pageRequest);
 
-      if (jobs.size() > 0) {
-        Job job = jobs.get(0);
+      if (!jobs.isEmpty()) {
+        Job job = jobs.getFirst();
 
         OffsetDateTime when = OffsetDateTime.now();
 
@@ -392,8 +401,8 @@ public class SchedulerService implements ISchedulerService {
 
       List<Job> jobs = jobRepository.findUnscheduledJobsForWrite(pageRequest);
 
-      if (jobs.size() > 0) {
-        Job job = jobs.get(0);
+      if (!jobs.isEmpty()) {
+        Job job = jobs.getFirst();
 
         OffsetDateTime nextExecution = null;
 

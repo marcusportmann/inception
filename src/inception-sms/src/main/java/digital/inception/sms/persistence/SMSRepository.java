@@ -28,6 +28,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>SMSRepository</b> interface declares the persistence for the <b>SMS</b> domain type.`
@@ -35,15 +36,6 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 public interface SMSRepository extends JpaRepository<SMS, UUID> {
-
-  /**
-   * Delete the SMS.
-   *
-   * @param smsId the ID for the SMS
-   */
-  @Modifying
-  @Query("delete from SMS s where s.id = :smsId")
-  void deleteById(@Param("smsId") UUID smsId);
 
   /**
    * Retrieve the SMSs queued for sending.
@@ -54,7 +46,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    */
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
-      "select s from SMS s where s.status = digital.inception.sms.model.SMSStatus.QUEUED_FOR_SENDING "
+      "select s from SMS s where s.status = digital.inception.sms.model.SMSStatus.QUEUED "
           + "and (s.lastProcessed < :lastProcessedBefore or s.lastProcessed is null)")
   List<SMS> findSMSsQueuedForSendingForWrite(
       @Param("lastProcessedBefore") OffsetDateTime lastProcessedBefore, Pageable pageable);
@@ -66,6 +58,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param lockName the name of the lock
    * @param when the date and time the SMS is locked for sending
    */
+  @Transactional
   @Modifying
   @Query(
       "update SMS s set s.lockName = :lockName, s.status = digital.inception.sms.model.SMSStatus.SENDING, "
@@ -82,6 +75,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param newStatus the new status for the SMSs
    * @param lockName the lock name
    */
+  @Transactional
   @Modifying
   @Query(
       "update SMS s set s.status = :newStatus, s.lockName = null "
@@ -97,6 +91,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param smsId the ID for the SMS
    * @param status the status for the SMS
    */
+  @Transactional
   @Modifying
   @Query("update SMS s set s.status = :status where s.id = :smsId")
   void setSMSStatus(@Param("smsId") UUID smsId, @Param("status") SMSStatus status);
@@ -107,6 +102,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param smsId the ID for the SMS
    * @param status the status for the SMS
    */
+  @Transactional
   @Modifying
   @Query("update SMS s set s.status = :status, s.lockName = null where s.id = :smsId")
   void unlockSMS(@Param("smsId") UUID smsId, @Param("status") SMSStatus status);

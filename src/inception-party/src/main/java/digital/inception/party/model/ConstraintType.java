@@ -81,8 +81,9 @@ public enum ConstraintType {
       case "reference" -> ConstraintType.REFERENCE;
       case "required" -> ConstraintType.REQUIRED;
       case "size" -> ConstraintType.SIZE;
-      default -> throw new RuntimeException(
-          "Failed to determine the constraint type with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the constraint type with the invalid code (" + code + ")");
     };
   }
 

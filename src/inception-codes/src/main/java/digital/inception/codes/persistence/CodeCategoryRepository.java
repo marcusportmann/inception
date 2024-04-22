@@ -24,6 +24,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>CodeCategoryRepository</b> interface declares the persistence for the <b>CodeCategory</b>
@@ -32,15 +33,6 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 public interface CodeCategoryRepository extends JpaRepository<CodeCategory, String> {
-
-  /**
-   * Delete the code category.
-   *
-   * @param codeCategoryId the ID for the code category
-   */
-  @Modifying
-  @Query("delete from CodeCategory cc where cc.id = :codeCategoryId")
-  void deleteById(@Param("codeCategoryId") String codeCategoryId);
 
   /**
    * Retrieve the code categories ordered by name ascending.
@@ -87,6 +79,7 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    * @param lastModified the date and time the code category was last modified
    * @return the number of code categories that were updated
    */
+  @Transactional
   @Modifying
   @Query(
       "update CodeCategory cc set cc.data = :data, cc.lastModified = :lastModified "

@@ -65,8 +65,9 @@ public enum PartyType {
       case "organization" -> PartyType.ORGANIZATION;
       case "person" -> PartyType.PERSON;
       case "unknown" -> PartyType.UNKNOWN;
-      default -> throw new RuntimeException(
-          "Failed to determine the party type with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the party type with the invalid code (" + code + ")");
     };
   }
 

@@ -36,9 +36,9 @@ public enum SMSStatus {
   @XmlEnumValue("Unknown")
   UNKNOWN("unknown", "Unknown"),
 
-  /** Queued for sending. */
-  @XmlEnumValue("QueuedForSending")
-  QUEUED_FOR_SENDING("queued_for_sending", "QueuedForSending"),
+  /** Queued. */
+  @XmlEnumValue("Queued")
+  QUEUED("queued", "Queued"),
 
   /** Sending. */
   @XmlEnumValue("Sending")
@@ -75,13 +75,14 @@ public enum SMSStatus {
   public static SMSStatus fromCode(String code) {
     return switch (code) {
       case "unknown" -> SMSStatus.UNKNOWN;
-      case "queued_for_sending" -> SMSStatus.QUEUED_FOR_SENDING;
+      case "queued" -> SMSStatus.QUEUED;
       case "sending" -> SMSStatus.SENDING;
       case "sent" -> SMSStatus.SENT;
       case "failed" -> SMSStatus.FAILED;
       case "any" -> SMSStatus.ANY;
-      default -> throw new RuntimeException(
-          "Failed to determine the SMS status with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the SMS status with the invalid code (" + code + ")");
     };
   }
 

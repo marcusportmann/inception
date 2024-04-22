@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The <b>MandateRepository</b> interface declares the persistence for the <b>Mandate</b> domain
@@ -70,5 +71,5 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
    */
   @Query(
       "select m from Mandate m inner join m.mandataries mandatary where m.tenantId = :tenantId and mandatary.partyId = :partyId")
-  Page<Mandate> findByTenantIdAndPartyId(UUID tenantId, UUID partyId, Pageable pageable);
+  Page<Mandate> findByTenantIdAndPartyId(@Param("tenantId") UUID tenantId, @Param("partyId") UUID partyId, Pageable pageable);
 }

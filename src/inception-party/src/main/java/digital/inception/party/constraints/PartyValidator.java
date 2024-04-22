@@ -1176,8 +1176,7 @@ public abstract class PartyValidator {
       } else if (attributeValue instanceof Enum<?>) {
         // The fact we have a valid Enum value means we parsed the attribute value
         isValid = true;
-      }
-      else {
+      } else {
         throw new ValidationException(
             "Failed to validate the required attribute value ("
                 + attributeValue

@@ -60,8 +60,9 @@ public enum PersonSortBy {
     return switch (code) {
       case "name" -> PersonSortBy.NAME;
       case "preferred_name" -> PersonSortBy.PREFERRED_NAME;
-      default -> throw new RuntimeException(
-          "Failed to determine the person sort by with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the person sort by with the invalid code (" + code + ")");
     };
   }
 

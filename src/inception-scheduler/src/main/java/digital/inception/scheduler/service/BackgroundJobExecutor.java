@@ -17,7 +17,6 @@
 package digital.inception.scheduler.service;
 
 import digital.inception.scheduler.model.Job;
-import digital.inception.scheduler.model.JobExecutor;
 import digital.inception.scheduler.model.JobStatus;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
@@ -27,6 +26,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -39,32 +39,34 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("unused")
 public class BackgroundJobExecutor {
 
-  /** The default number of minutes an idle processing thread should be kept alive. */
-  private static final int DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME = 5;
-
-  /** The default number of threads to start initially to process jobs. */
-  private static final int DEFAULT_INITIAL_PROCESSING_THREADS = 1;
-
-  /**
-   * The default maximum number of jobs to queue for processing if no processing threads are
-   * available.
-   */
-  private static final int DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH = 100;
-
-  /** The default maximum number of threads to create to process jobs. */
-  private static final int DEFAULT_MAXIMUM_PROCESSING_THREADS = 10;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
-
-  private final LinkedBlockingQueue<Runnable> jobExecutorQueue =
-      new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH);
 
   /** The Scheduler Service. */
   private final ISchedulerService schedulerService;
 
-  /** The executor responsible for processing jobs. */
-  private Executor jobProcessor;
+  /** The number of job execution threads to start initially. */
+  @Value("${inception.scheduler.initial-job-execution-threads:#{1}}")
+  private int initialJobExecutionThreads;
+
+  /** The number of minutes an idle job execution thread should be kept alive. */
+  @Value("${inception.scheduler.job-execution-thread-keep-alive:#{5}}")
+  private int jobExecutionThreadKeepAlive;
+
+  /** The executor responsible for executing jobs. */
+  private Executor jobExecutor;
+
+  /**
+   * The maximum number of jobs to queue for execution if no job execution threads are available.
+   */
+  @Value("${inception.scheduler.maximum-job-execution-queue-length:#{50}}")
+  private int maximumJobExecutionQueueLength;
+
+  private LinkedBlockingQueue<Runnable> jobExecutionQueue;
+
+  /** The maximum number of job execution threads to create to execute jobs. */
+  @Value("${inception.scheduler.maximum-job-execution-threads:#{10}}")
+  private int maximumJobExecutionThreads;
 
   /**
    * Constructs a new <b>BackgroundJobExecutor</b>.
@@ -88,10 +90,10 @@ public class BackgroundJobExecutor {
     while (true) {
       // Retrieve the next job scheduled for execution
       try {
-        if (jobExecutorQueue.size() == DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH) {
+        if (jobExecutionQueue.size() == maximumJobExecutionQueueLength) {
           logger.warn(
               "The maximum number of jobs queued for execution has been reached ("
-                  + DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH
+                  + maximumJobExecutionQueueLength
                   + ")");
           return;
         }
@@ -110,28 +112,30 @@ public class BackgroundJobExecutor {
         }
       } catch (Throwable e) {
         logger.error("Failed to retrieve the next job scheduled for execution", e);
-
         return;
       }
 
-      jobProcessor.execute(new JobExecutor(schedulerService, jobOptional.get()));
+      jobExecutor.execute(new JobExecutor(schedulerService, jobOptional.get()));
     }
   }
 
   /** Initialize the Background Job Executor. */
+  @SuppressWarnings("StatementWithEmptyBody")
   @PostConstruct
   public void init() {
     logger.info("Initializing the Background Job Executor");
 
     if (schedulerService != null) {
-      // Initialize the job processor
-      this.jobProcessor =
+      // Initialize the job executor
+      jobExecutionQueue = new LinkedBlockingQueue<>(maximumJobExecutionQueueLength);
+
+      this.jobExecutor =
           new ThreadPoolExecutor(
-              DEFAULT_INITIAL_PROCESSING_THREADS,
-              DEFAULT_MAXIMUM_PROCESSING_THREADS,
-              DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME,
+              initialJobExecutionThreads,
+              maximumJobExecutionThreads,
+              jobExecutionThreadKeepAlive,
               TimeUnit.MINUTES,
-              jobExecutorQueue);
+              jobExecutionQueue);
 
       // Reset any locks for jobs that were previously being executed
       try {
@@ -152,6 +156,98 @@ public class BackgroundJobExecutor {
       logger.error(
           "Failed to initialize the Background Job Executor: "
               + "The Scheduler Service was NOT injected");
+    }
+  }
+
+  /**
+   * The <b>JobExecutor</b> class.
+   *
+   * @author Marcus Portmann
+   */
+  public static class JobExecutor implements Runnable {
+
+    /* Logger */
+    private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
+
+    private final Job job;
+
+    private final ISchedulerService schedulerService;
+
+    /**
+     * Constructs a new <b>JobExecutorThread</b>.
+     *
+     * @param schedulerService the Scheduler Service
+     * @param job the job
+     */
+    public JobExecutor(ISchedulerService schedulerService, Job job) {
+      this.schedulerService = schedulerService;
+      this.job = job;
+    }
+
+    @Override
+    public void run() {
+      try {
+        if (logger.isDebugEnabled()) {
+          logger.debug(String.format("Executing the job (%s)", job.getId()));
+        }
+
+        schedulerService.executeJob(job);
+
+        // Reschedule the job
+        try {
+          schedulerService.rescheduleJob(job.getId(), job.getSchedulingPattern());
+
+          try {
+            schedulerService.unlockJob(job.getId(), JobStatus.SCHEDULED);
+          } catch (Throwable f) {
+            logger.error(
+                String.format(
+                    "Failed to unlock and set the status for the job (%s) to \"Scheduled\"",
+                    job.getId()),
+                f);
+          }
+        } catch (Throwable e) {
+          logger.warn(
+              String.format(
+                  "The job (%s) could not be rescheduled and will be marked as \"Failed\"",
+                  job.getId()));
+
+          try {
+            schedulerService.unlockJob(job.getId(), JobStatus.FAILED);
+          } catch (Throwable f) {
+            logger.error(
+                String.format(
+                    "Failed to unlock and set the status for the job (%s) to \"Failed\"",
+                    job.getId()),
+                f);
+          }
+        }
+      } catch (Throwable e) {
+        logger.error(String.format("Failed to execute the job (%s)", job.getId()), e);
+
+        try {
+          /*
+           * If the job has exceeded the maximum number of execution attempts then
+           * unlock it and set its status to "Failed" otherwise unlock it and set its status to
+           * "Scheduled".
+           */
+          if (job.getExecutionAttempts() >= schedulerService.getMaximumJobExecutionAttempts()) {
+            logger.warn(
+                String.format(
+                    "The job (%s) has exceeded the maximum  number of execution attempts and will be "
+                        + "marked as \"Failed\"",
+                    job.getId()));
+
+            schedulerService.unlockJob(job.getId(), JobStatus.FAILED);
+          } else {
+            schedulerService.unlockJob(job.getId(), JobStatus.SCHEDULED);
+          }
+        } catch (Throwable f) {
+          logger.error(
+              String.format("Failed to unlock and set the status for the job (%s)", job.getId()),
+              f);
+        }
+      }
     }
   }
 }

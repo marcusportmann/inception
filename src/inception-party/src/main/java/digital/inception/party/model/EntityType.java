@@ -70,8 +70,9 @@ public enum EntityType {
       case "mandate" -> EntityType.MANDATE;
       case "organization" -> EntityType.ORGANIZATION;
       case "person" -> EntityType.PERSON;
-      default -> throw new RuntimeException(
-          "Failed to determine the entity type with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the entity type with the invalid code (" + code + ")");
     };
   }
 

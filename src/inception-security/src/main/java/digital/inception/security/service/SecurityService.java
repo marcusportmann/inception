@@ -1815,6 +1815,7 @@ public class SecurityService implements ISecurityService {
       return new TokenSummaries(
           tokenSummaryPage.toList(),
           tokenSummaryPage.getTotalElements(),
+          status,
           filter,
           sortBy,
           sortDirection,

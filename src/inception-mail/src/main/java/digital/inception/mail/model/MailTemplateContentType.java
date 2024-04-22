@@ -61,10 +61,11 @@ public enum MailTemplateContentType {
     return switch (code) {
       case "text" -> MailTemplateContentType.TEXT;
       case "html" -> MailTemplateContentType.HTML;
-      default -> throw new RuntimeException(
-          "Failed to determine the mail template content type with the invalid code ("
-              + code
-              + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the mail template content type with the invalid code ("
+                  + code
+                  + ")");
     };
   }
 

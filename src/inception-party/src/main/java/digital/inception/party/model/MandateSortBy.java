@@ -56,8 +56,9 @@ public enum MandateSortBy {
   public static MandateSortBy fromCode(String code) {
     return switch (code) {
       case "type" -> MandateSortBy.TYPE;
-      default -> throw new RuntimeException(
-          "Failed to determine the mandate sort by with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the mandate sort by with the invalid code (" + code + ")");
     };
   }
 

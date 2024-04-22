@@ -71,8 +71,9 @@ public enum MeasurementSystem {
       case "customary" -> MeasurementSystem.CUSTOMARY;
       case "imperial" -> MeasurementSystem.IMPERIAL;
       case "metric" -> MeasurementSystem.METRIC;
-      default -> throw new RuntimeException(
-          "Failed to determine the measurement system with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the measurement system with the invalid code (" + code + ")");
     };
   }
 

@@ -65,8 +65,9 @@ public enum MeasurementUnitType {
       case "length" -> MeasurementUnitType.LENGTH;
       case "mass" -> MeasurementUnitType.MASS;
       case "volume" -> MeasurementUnitType.VOLUME;
-      default -> throw new RuntimeException(
-          "Failed to determine the measurement unit type with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the measurement unit type with the invalid code (" + code + ")");
     };
   }
 

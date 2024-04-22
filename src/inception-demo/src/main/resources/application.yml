@@ -87,6 +87,14 @@ inception:
           async-backup-count: 0
           read-backup-data: false
 
+  executor:
+    initial-task-execution-threads: 2
+    maximum-task-execution-attempts: 10
+    maximum-task-execution-queue-length: 101
+    maximum-task-execution-threads: 11
+    task-execution-retry-delay: 65000
+    task-execution-thread-keep-alive: 6
+
   messaging:
     encryption-key: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=
     processing-retry-delay: 60000
@@ -118,6 +126,14 @@ inception:
 
   party:
     party-store-type: internal
+
+  scheduler:
+    initial-job-execution-threads: 2
+    job-execution-retry-delay: 65000
+    job-execution-thread-keep-alive: 6
+    maximum-job-execution-attempts: 10
+    maximum-job-execution-queue-length: 101
+    maximum-job-execution-threads: 11
 
   security:
     jwt:

@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The <b>AssociationRepository</b> interface declares the persistence for the <b>Association</b>
@@ -70,5 +71,5 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
    */
   @Query(
       "select a from Association a where a.tenantId = :tenantId and ((a.firstPartyId = :partyId) or (a.secondPartyId = :partyId))")
-  Page<Association> findByTenantIdAndPartyId(UUID tenantId, UUID partyId, Pageable pageable);
+  Page<Association> findByTenantIdAndPartyId(@Param("tenantId") UUID tenantId, @Param("partyId") UUID partyId, Pageable pageable);
 }

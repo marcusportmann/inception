@@ -16,6 +16,7 @@
 
 import {SortDirection} from 'ngx-inception/core';
 import {TokenSortBy} from './token-sort-by';
+import {TokenStatus} from './token-status';
 import {TokenSummary} from './token-summary';
 
 /**
@@ -46,6 +47,11 @@ export class TokenSummaries {
   sortBy: TokenSortBy;
 
   /**
+   * The optional status filter to apply to the token summaries.
+   */
+  status: TokenStatus | null = null;
+
+  /**
    * The sort direction that was applied to the token summaries.
    */
   sortDirection: SortDirection;
@@ -69,16 +75,18 @@ export class TokenSummaries {
    * @param sortDirection  The sort direction that was applied to the token summaries.
    * @param pageIndex      The page index.
    * @param pageSize       The page size.
+   * @param status         The optional status filter to apply to the token summaries.
    * @param filter         The optional filter that was applied to the token summaries.
    */
   constructor(tokenSummaries: TokenSummary[], total: number, sortBy: TokenSortBy,
-              sortDirection: SortDirection, pageIndex: number, pageSize: number, filter?: string) {
+              sortDirection: SortDirection, pageIndex: number, pageSize: number, status?: TokenStatus, filter?: string) {
     this.tokenSummaries = tokenSummaries;
     this.total = total;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
+    this.status = !!status ? status : null;
     this.filter = !!filter ? filter : null;
   }
 }

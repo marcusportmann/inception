@@ -57,5 +57,5 @@ public interface UserDirectorySummaryRepository extends JpaRepository<UserDirect
    * @return the filtered user directory summaries
    */
   @Query("select uds from UserDirectorySummary uds where (lower(uds.name) like lower(:filter))")
-  Page<UserDirectorySummary> findFiltered(String filter, Pageable pageable);
+  Page<UserDirectorySummary> findFiltered(@Param("filter") String filter, Pageable pageable);
 }

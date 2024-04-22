@@ -75,7 +75,10 @@ Complete the following steps to setup a development environment on MacOS.
     ```
     yarn config set save-prefix ''
     ```
-
+14. Execute the following command to install the Angular CLI globally using yarn.
+    ```
+    yarn global add @angular/cli
+    ```
 
 ### Setup MailSlurper on MacOS
 
@@ -548,7 +551,7 @@ Complete the following steps to create a new application based on the Inception 
    1. Execute the following command under the *src/main* directory to create the new
       Angular frontend.
       ```
-      ng new --no-standalone --skip-git --routing --style scss frontend
+      ng new --no-standalone --skip-git --routing --style scss --package-manager yarn frontend
       ```
    2. Execute the following command under the *src/main/frontend* directory to install the
       *ngx-inception* library and related dependencies.

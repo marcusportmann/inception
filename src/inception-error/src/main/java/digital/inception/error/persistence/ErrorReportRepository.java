@@ -19,9 +19,6 @@ package digital.inception.error.persistence;
 import digital.inception.error.model.ErrorReport;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
  * The <b>ErrorRepository</b> interface declares the persistence for the <b>ErrorReport</b> domain
@@ -29,14 +26,4 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface ErrorReportRepository extends JpaRepository<ErrorReport, UUID> {
-
-  /**
-   * Delete the error report.
-   *
-   * @param errorReportId the ID for the error report
-   */
-  @Modifying
-  @Query("delete from ErrorReport er where er.id = :errorReportId")
-  void deleteById(@Param("errorReportId") UUID errorReportId);
-}
+public interface ErrorReportRepository extends JpaRepository<ErrorReport, UUID> {}

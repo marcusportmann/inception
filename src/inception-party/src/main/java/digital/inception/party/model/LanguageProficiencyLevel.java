@@ -81,10 +81,11 @@ public enum LanguageProficiencyLevel {
       case "intermediate" -> LanguageProficiencyLevel.INTERMEDIATE;
       case "advanced" -> LanguageProficiencyLevel.ADVANCED;
       case "proficient" -> LanguageProficiencyLevel.PROFICIENT;
-      default -> throw new RuntimeException(
-          "Failed to determine the language proficiency level with the invalid code ("
-              + code
-              + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the language proficiency level with the invalid code ("
+                  + code
+                  + ")");
     };
   }
 

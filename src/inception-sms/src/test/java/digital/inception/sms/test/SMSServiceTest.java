@@ -118,7 +118,7 @@ public class SMSServiceTest {
 
     sms = getTestSMSDetails();
 
-    sms.setStatus(SMSStatus.QUEUED_FOR_SENDING);
+    sms.setStatus(SMSStatus.QUEUED);
 
     smsService.createSMS(sms);
 
@@ -133,7 +133,7 @@ public class SMSServiceTest {
           assertEquals(
               Integer.valueOf(1),
               smsQueuedForSending.getSendAttempts(),
-              "The send attempts for the SMS is not correct");
+              "The send attempts value for the SMS is not correct");
 
           assertEquals(
               SMSStatus.SENDING,

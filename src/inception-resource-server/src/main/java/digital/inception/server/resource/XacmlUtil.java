@@ -413,20 +413,21 @@ public final class XacmlUtil {
   public static AttributeBag<?> getAttributeValues(Object value) {
     return switch (value) {
       case null -> Bags.emptyAttributeBag(StandardDatatypes.STRING, null);
-      case String stringValue -> Bags.singletonAttributeBag(
-          StandardDatatypes.STRING, new StringValue(stringValue));
-      case Boolean booleanValue -> Bags.singletonAttributeBag(
-          StandardDatatypes.BOOLEAN, BooleanValue.valueOf(booleanValue));
-      case Integer integerValue -> Bags.singletonAttributeBag(
-          StandardDatatypes.INTEGER, IntegerValue.valueOf(integerValue));
-      case Long longValue -> Bags.singletonAttributeBag(
-          StandardDatatypes.INTEGER, IntegerValue.valueOf(longValue));
-      case Float floatValue -> Bags.singletonAttributeBag(
-          StandardDatatypes.DOUBLE, new DoubleValue(Double.valueOf(floatValue)));
-      case Double doubleValue -> Bags.singletonAttributeBag(
-          StandardDatatypes.DOUBLE, new DoubleValue(doubleValue));
-      case XMLGregorianCalendar timeValue -> Bags.singletonAttributeBag(
-          StandardDatatypes.DATETIME, new DateTimeValue(timeValue));
+      case String stringValue ->
+          Bags.singletonAttributeBag(StandardDatatypes.STRING, new StringValue(stringValue));
+      case Boolean booleanValue ->
+          Bags.singletonAttributeBag(StandardDatatypes.BOOLEAN, BooleanValue.valueOf(booleanValue));
+      case Integer integerValue ->
+          Bags.singletonAttributeBag(StandardDatatypes.INTEGER, IntegerValue.valueOf(integerValue));
+      case Long longValue ->
+          Bags.singletonAttributeBag(StandardDatatypes.INTEGER, IntegerValue.valueOf(longValue));
+      case Float floatValue ->
+          Bags.singletonAttributeBag(
+              StandardDatatypes.DOUBLE, new DoubleValue(Double.valueOf(floatValue)));
+      case Double doubleValue ->
+          Bags.singletonAttributeBag(StandardDatatypes.DOUBLE, new DoubleValue(doubleValue));
+      case XMLGregorianCalendar timeValue ->
+          Bags.singletonAttributeBag(StandardDatatypes.DATETIME, new DateTimeValue(timeValue));
       case Date dateValue -> {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(dateValue);
@@ -484,8 +485,8 @@ public final class XacmlUtil {
         }
       }
 
-      default -> Bags.singletonAttributeBag(
-          StandardDatatypes.STRING, new StringValue(value.toString()));
+      default ->
+          Bags.singletonAttributeBag(StandardDatatypes.STRING, new StringValue(value.toString()));
     };
   }
 

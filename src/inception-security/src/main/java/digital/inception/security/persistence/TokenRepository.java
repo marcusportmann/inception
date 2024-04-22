@@ -27,6 +27,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>TokenRepository</b> interface declares the persistence for the <b>Token</b> domain type.
@@ -34,15 +35,6 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 public interface TokenRepository extends JpaRepository<Token, String> {
-
-  /**
-   * Delete the token.
-   *
-   * @param tokenId the ID for the token
-   */
-  @Modifying
-  @Query("delete from Token t where t.id = :tokenId")
-  void deleteById(@Param("tokenId") String tokenId);
 
   /**
    * Check whether the token with the specified name exists.
@@ -67,7 +59,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @return the filtered tokens
    */
   @Query("select t from Token t where (lower(t.name) like lower(:filter))")
-  Page<Token> findFiltered(String filter, Pageable pageable);
+  Page<Token> findFiltered(@Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the name of the token.
@@ -96,6 +88,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @param tokenId the ID for the token
    * @return the number of tokens reinstated
    */
+  @Transactional
   @Modifying
   @Query("update Token t set t.revocationDate = null where t.id = :tokenId")
   int reinstateToken(@Param("tokenId") String tokenId);
@@ -107,6 +100,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @param revoked the revocation date
    * @return the number of tokens revoked
    */
+  @Transactional
   @Modifying
   @Query("update Token t set t.revocationDate = :revoked where t.id = :tokenId")
   int revokeToken(@Param("tokenId") String tokenId, @Param("revoked") LocalDate revoked);

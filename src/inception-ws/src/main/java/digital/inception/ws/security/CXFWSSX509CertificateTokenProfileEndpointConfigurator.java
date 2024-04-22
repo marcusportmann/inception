@@ -40,7 +40,7 @@ public final class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
   private CXFWSSX509CertificateTokenProfileEndpointConfigurator() {}
 
   /**
-   * Configure the CXF web service endpoint to support authentication using the the Web Services
+   * Configure the CXF web service endpoint to support authentication using the Web Services
    * Security X.509 Certificate Token profile.
    *
    * @param endpoint the web service endpoint to configure

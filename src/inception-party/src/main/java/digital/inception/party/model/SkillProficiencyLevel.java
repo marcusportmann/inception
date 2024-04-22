@@ -75,8 +75,11 @@ public enum SkillProficiencyLevel {
       case "competence" -> SkillProficiencyLevel.COMPETENCE;
       case "proficient" -> SkillProficiencyLevel.PROFICIENT;
       case "expert" -> SkillProficiencyLevel.EXPERT;
-      default -> throw new RuntimeException(
-          "Failed to determine the skill proficiency level with the invalid code (" + code + ")");
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the skill proficiency level with the invalid code ("
+                  + code
+                  + ")");
     };
   }
 

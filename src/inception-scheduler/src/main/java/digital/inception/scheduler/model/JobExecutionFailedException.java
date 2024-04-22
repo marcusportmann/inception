@@ -16,6 +16,10 @@
 
 package digital.inception.scheduler.model;
 
+import digital.inception.core.service.Problem;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
@@ -26,44 +30,46 @@ import java.io.Serial;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@Problem(
+    type = "https://inception.digital/problems/scheduler/job-execution-failed",
+    title = "The job execution failed.",
+    status = 500)
+@WebFault(
+    name = "JobExecutionFailedException",
+    targetNamespace = "http://inception.digital/scheduler",
+    faultBean = "za.co.discovery.nova.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class JobExecutionFailedException extends Exception {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <b>JobException</b> with <b>null</b> as its message. */
-  public JobExecutionFailedException() {
-    super();
+  /**
+   * Constructs a new <b>JobExecutionFailedException</b>.
+   *
+   * @param jobId the ID for the job
+   */
+  public JobExecutionFailedException(String jobId) {
+    super("The job (" + jobId + ") execution failed");
   }
 
   /**
-   * Constructs a new <b>JobException</b> with the specified message.
+   * Constructs a new <b>JobExecutionFailedException</b>.
    *
+   * @param jobId the ID for the job
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
-  public JobExecutionFailedException(String message) {
-    super(message);
+  public JobExecutionFailedException(String jobId, String message) {
+    super("The job (" + jobId + ") execution failed: " + message);
   }
 
   /**
-   * Constructs a new <b>JobException</b> with the specified cause and a message of <b>(cause==null
-   * ? null : cause.toString())</b> (which typically contains the class and message of cause).
+   * Constructs a new <b>JobExecutionFailedException</b>.
    *
+   * @param jobId the ID for the job
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
-  public JobExecutionFailedException(Throwable cause) {
-    super(cause);
-  }
-
-  /**
-   * Constructs a new <b>JobException</b> with the specified message and cause.
-   *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
-   */
-  public JobExecutionFailedException(String message, Throwable cause) {
-    super(message, cause);
+  public JobExecutionFailedException(String jobId, Throwable cause) {
+    super("The job (" + jobId + ") execution failed: " + cause.getMessage(), cause);
   }
 }

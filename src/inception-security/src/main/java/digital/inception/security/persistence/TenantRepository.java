@@ -26,6 +26,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>TenantRepository</b> interface declares the persistence for the <b>Tenant</b> domain type.
@@ -40,6 +41,7 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory
    */
+  @Transactional
   @Modifying
   @Query(
       value =
@@ -48,15 +50,6 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
       nativeQuery = true)
   void addUserDirectoryToTenant(
       @Param("tenantId") UUID tenantId, @Param("userDirectoryId") UUID userDirectoryId);
-
-  /**
-   * Delete the tenant.
-   *
-   * @param tenantId the ID for the tenant
-   */
-  @Modifying
-  @Query("delete from Tenant t where t.id = :tenantId")
-  void deleteById(@Param("tenantId") UUID tenantId);
 
   /**
    * Check whether the tenant with the specified name exists.
@@ -90,7 +83,7 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
    * @return the filtered tenants
    */
   @Query("select t from Tenant t where (lower(t.name) like lower(:filter))")
-  Page<Tenant> findFiltered(String filter, Pageable pageable);
+  Page<Tenant> findFiltered(@Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the name of the tenant.
@@ -117,6 +110,7 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory
    */
+  @Transactional
   @Modifying
   @Query(
       value =

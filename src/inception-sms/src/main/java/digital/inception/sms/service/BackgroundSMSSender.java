@@ -61,11 +61,11 @@ public class BackgroundSMSSender {
        * SMS sender.
        */
       try {
-        logger.info("Resetting the SMS locks for the SMSs being sent");
+        logger.info("Resetting the locks for the SMSs being sent");
 
-        smsService.resetSMSLocks(SMSStatus.SENDING, SMSStatus.QUEUED_FOR_SENDING);
+        smsService.resetSMSLocks(SMSStatus.SENDING, SMSStatus.QUEUED);
       } catch (Throwable e) {
-        logger.error("Failed to reset the SMS locks for the SMSs being sent", e);
+        logger.error("Failed to reset the locks for the SMSs being sent", e);
       }
     } else {
       logger.error(
@@ -93,7 +93,6 @@ public class BackgroundSMSSender {
         }
       } catch (Throwable e) {
         logger.error("Failed to retrieve the next SMS queued for sending", e);
-
         return;
       }
 
@@ -118,8 +117,7 @@ public class BackgroundSMSSender {
         try {
           /*
            * If the SMS has exceeded the maximum number of processing attempts then unlock it
-           * and set its status to "Failed" otherwise unlock it and set its status to
-           * "QueuedForSending".
+           * and set its status to "Failed" otherwise unlock it and set its status to "Queued".
            */
           if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts()) {
             logger.warn(
@@ -130,7 +128,7 @@ public class BackgroundSMSSender {
 
             smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
           } else {
-            smsService.unlockSMS(sms.getId(), SMSStatus.QUEUED_FOR_SENDING);
+            smsService.unlockSMS(sms.getId(), SMSStatus.QUEUED);
           }
         } catch (Throwable f) {
           logger.error(

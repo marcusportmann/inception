@@ -19,9 +19,6 @@ package digital.inception.security.persistence;
 import digital.inception.security.model.UserDirectoryType;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
  * The <b>UserDirectoryTypeRepository</b> interface declares the persistence for the <b>
@@ -30,10 +27,6 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 public interface UserDirectoryTypeRepository extends JpaRepository<UserDirectoryType, String> {
-
-  @Modifying
-  @Query("delete from UserDirectoryType udt where udt.code = :userDirectoryTypeCode")
-  void deleteById(@Param("userDirectoryTypeCode") String userDirectoryTypeCode);
 
   /**
    * Retrieve the user directory types ordered by name ascending.

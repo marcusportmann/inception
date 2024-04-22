@@ -29,6 +29,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>UserRepository</b> interface declares the persistence for the <b>User</b> domain type.
@@ -45,6 +46,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    * @param passwordAttempts the password attempts
    * @param passwordExpiry the password expiry
    */
+  @Transactional
   @Modifying
   @Query(
       "update User u set u.password = :password, u.passwordAttempts = :passwordAttempts, "
@@ -54,15 +56,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
       @Param("password") String password,
       @Param("passwordAttempts") int passwordAttempts,
       @Param("passwordExpiry") Optional<OffsetDateTime> passwordExpiry);
-
-  /**
-   * Delete the user.
-   *
-   * @param userId the ID for the user
-   */
-  @Modifying
-  @Query("delete from User u where u.id = :userId")
-  void deleteById(@Param("userId") UUID userId);
 
   /**
    * Check whether the user directory has existing users.
@@ -178,7 +171,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
       "select u.name from User u where ((lower(u.username) = lower(:username)) "
           + "and u.userDirectoryId = :userDirectoryId)")
   Optional<String> getNameByUserDirectoryIdAndUsernameIgnoreCase(
-      UUID userDirectoryId, String username);
+      @Param("userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
   /**
    * Retrieve the password history for the user.
@@ -219,6 +212,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    *
    * @param userId the ID for the user
    */
+  @Transactional
   @Modifying
   @Query("update User u set u.passwordAttempts = u.passwordAttempts + 1 where u.id = :userId")
   void incrementPasswordAttempts(@Param("userId") UUID userId);
@@ -242,6 +236,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    * @param password the password
    * @param passwordExpiry the password expiry
    */
+  @Transactional
   @Modifying
   @Query(
       "update User u set u.password = :password, u.passwordAttempts = 0, "
@@ -256,6 +251,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    *
    * @param userId the ID for the user
    */
+  @Transactional
   @Modifying
   @Query(
       value = "delete from security_users_password_history where user_id = :userId",
@@ -268,6 +264,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    * @param userId the ID for the user
    * @param encodedPassword the encoded password
    */
+  @Transactional
   @Modifying
   @Query(
       value =

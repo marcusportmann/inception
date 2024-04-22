@@ -188,7 +188,8 @@ public class SimpleDemoClient {
         System.out.println("Found problem details detail: " + problemDetails.getDetail());
 
       } catch (Throwable t) {
-        System.err.println("[ERROR] Failed to extract the problem details response: " + t.getMessage());
+        System.err.println(
+            "[ERROR] Failed to extract the problem details response: " + t.getMessage());
         t.printStackTrace(System.err);
       }
     } catch (Throwable e) {

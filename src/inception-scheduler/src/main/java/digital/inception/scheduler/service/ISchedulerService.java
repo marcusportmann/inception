@@ -20,6 +20,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.scheduler.model.DuplicateJobException;
 import digital.inception.scheduler.model.Job;
+import digital.inception.scheduler.model.JobExecutionFailedException;
 import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.model.JobStatus;
 import java.util.List;
@@ -61,9 +62,11 @@ public interface ISchedulerService {
    *
    * @param job the job
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobExecutionFailedException if the job execution failed
    * @throws ServiceUnavailableException if the job could not be executed
    */
-  void executeJob(Job job) throws InvalidArgumentException, ServiceUnavailableException;
+  void executeJob(Job job)
+      throws InvalidArgumentException, JobExecutionFailedException, ServiceUnavailableException;
 
   /**
    * Retrieve the job.
@@ -107,9 +110,9 @@ public interface ISchedulerService {
   List<Job> getJobs() throws ServiceUnavailableException;
 
   /**
-   * Returns the maximum number of times execution will be attempted for a job.
+   * Returns the maximum number of times the execution of a job will be attempted.
    *
-   * @return the maximum number of times execution will be attempted for a job
+   * @return the maximum number of times the execution of a job will be attempted
    */
   int getMaximumJobExecutionAttempts();
 
