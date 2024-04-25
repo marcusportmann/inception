@@ -606,7 +606,7 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "CountryOfTaxResidence")
   @Size(max = 10)
   public Set<String> getCountriesOfTaxResidence() {
-    return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
+    return Set.of(StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence)));
   }
 
   /**

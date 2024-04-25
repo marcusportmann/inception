@@ -221,7 +221,7 @@ public class Title implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Genders", required = true)
   public String[] getGenders() {
-    return StringUtils.commaDelimitedListToStringArray(genders);
+    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(genders));
   }
 
   /**

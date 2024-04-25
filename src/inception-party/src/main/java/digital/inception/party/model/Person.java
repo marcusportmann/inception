@@ -1039,7 +1039,7 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "CountryOfCitizenship")
   @Size(max = 10)
   public Set<String> getCountriesOfCitizenship() {
-    return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfCitizenship));
+    return Set.of(StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(countriesOfCitizenship)));
   }
 
   /**
@@ -1055,7 +1055,7 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "CountryOfTaxResidence")
   @Size(max = 10)
   public Set<String> getCountriesOfTaxResidence() {
-    return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
+    return Set.of(StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence)));
   }
 
   /**

@@ -278,7 +278,7 @@ public class IdentificationType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.commaDelimitedListToStringArray(partyTypes);
+    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

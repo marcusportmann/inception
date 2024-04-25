@@ -226,7 +226,7 @@ public class ContactMechanismPurpose implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "ContactMechanismTypes", required = true)
   public String[] getContactMechanismTypes() {
-    return StringUtils.commaDelimitedListToStringArray(contactMechanismTypes);
+    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(contactMechanismTypes));
   }
 
   /**
@@ -268,7 +268,7 @@ public class ContactMechanismPurpose implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.commaDelimitedListToStringArray(partyTypes);
+    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

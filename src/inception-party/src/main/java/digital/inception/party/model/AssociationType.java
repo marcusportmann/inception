@@ -256,7 +256,7 @@ public class AssociationType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "FirstPartyTypes", required = true)
   public String[] getFirstPartyTypes() {
-    return StringUtils.commaDelimitedListToStringArray(firstPartyTypes);
+    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(firstPartyTypes));
   }
 
   /**
@@ -297,7 +297,7 @@ public class AssociationType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "SecondPartyTypes", required = true)
   public String[] getSecondPartyTypes() {
-    return StringUtils.commaDelimitedListToStringArray(secondPartyTypes);
+    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(secondPartyTypes));
   }
 
   /**
@@ -420,6 +420,8 @@ public class AssociationType implements Serializable {
   }
 
   /**
+   *
+   *
    * Set the codes for the party types for the second party in the association.
    *
    * @param secondPartyTypes the codes for the party types for the second party in the association
