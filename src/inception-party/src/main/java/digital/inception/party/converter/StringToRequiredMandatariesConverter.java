@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.RequiredMandataries;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToRequiredMandatariesConverter
   public StringToRequiredMandatariesConverter() {}
 
   @Override
-  public RequiredMandataries convert(String source) {
+  public RequiredMandataries convert(@NonNull String source) {
     return RequiredMandataries.fromCode(source);
   }
 }

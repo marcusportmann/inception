@@ -39,10 +39,10 @@ import java.util.UUID;
 @Schema(description = "A group role association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectoryId", "groupName", "roleCode"})
-@XmlRootElement(name = "GroupRole", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "GroupRole", namespace = "https://inception.digital/security")
 @XmlType(
     name = "GroupRole",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"userDirectoryId", "groupName", "roleCode"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

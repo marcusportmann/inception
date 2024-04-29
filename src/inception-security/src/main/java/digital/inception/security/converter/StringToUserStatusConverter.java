@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.UserStatus;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToUserStatusConverter implements Converter<String, UserStatus
   public StringToUserStatusConverter() {}
 
   @Override
-  public UserStatus convert(String source) {
+  public UserStatus convert(@NonNull String source) {
     return UserStatus.fromCode(source);
   }
 }

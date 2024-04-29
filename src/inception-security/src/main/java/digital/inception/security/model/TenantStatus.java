@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The tenant status")
 @XmlEnum
-@XmlType(name = "TenantStatus", namespace = "http://inception.digital/security")
+@XmlType(name = "TenantStatus", namespace = "https://inception.digital/security")
 public enum TenantStatus {
   /** Inactive. */
   @XmlEnumValue("Inactive")

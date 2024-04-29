@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/duplicate-organization",
+    type = "https://inception.digital/problems/party/duplicate-organization",
     title = "The organization already exists.",
     status = 409)
 @WebFault(
     name = "DuplicateOrganizationException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateOrganizationException extends ServiceException {

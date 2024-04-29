@@ -76,10 +76,10 @@ import java.util.UUID;
   "addressCountry",
   "addressPostalCode"
 })
-@XmlRootElement(name = "NextOfKin", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "NextOfKin", namespace = "https://inception.digital/party")
 @XmlType(
     name = "NextOfKin",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "id",
       "type",

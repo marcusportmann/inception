@@ -950,8 +950,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       // Remove the user from any groups
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupMemberAttribute, userDN);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupMemberAttribute, userDN);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1023,7 +1022,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       String searchFilter = "(objectClass=" + userObjectClass + ")";
 
-      if (userAttributes.size() > 0) {
+      if (!userAttributes.isEmpty()) {
         StringBuilder buffer = new StringBuilder();
 
         buffer.append("(&(objectClass=");
@@ -1089,8 +1088,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupMemberAttribute, userDN);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupMemberAttribute, userDN);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1142,8 +1140,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupNameAttribute, groupName);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupNameAttribute, groupName);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1180,7 +1177,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     try {
       dirContext = getDirContext(bindDN, bindPassword);
 
-      String searchFilter = String.format("(objectClass=%s)", groupObjectClass);
+      String searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1229,8 +1226,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupMemberAttribute, userDN);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupMemberAttribute, userDN);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1274,7 +1270,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     try {
       dirContext = getDirContext(bindDN, bindPassword);
 
-      String searchFilter = String.format("(objectClass=%s)", groupObjectClass);
+      String searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1313,10 +1309,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       if (StringUtils.hasText(filter)) {
         searchFilter =
-            String.format(
-                "(&(objectClass=%s)(%s=*%s*))", groupObjectClass, groupNameAttribute, filter);
+            "(&(objectClass=%s)(%s=*%s*))".formatted(groupObjectClass, groupNameAttribute, filter);
       } else {
-        searchFilter = String.format("(objectClass=%s)", groupObjectClass);
+        searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
       }
 
       SearchControls searchControls = new SearchControls();
@@ -1376,8 +1371,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupMemberAttribute, userDN);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupMemberAttribute, userDN);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1418,8 +1412,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupNameAttribute, groupName);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupNameAttribute, groupName);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1492,8 +1485,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupNameAttribute, groupName);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupNameAttribute, groupName);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1646,8 +1638,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupMemberAttribute, userDN);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupMemberAttribute, userDN);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1778,7 +1769,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       StringBuilder buffer = new StringBuilder(user.getName());
 
       if (StringUtils.hasText(user.getPreferredName())) {
-        if (buffer.length() > 0) {
+        if (!buffer.isEmpty()) {
           buffer.append(" ");
         }
 
@@ -1809,7 +1800,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     try {
       dirContext = getDirContext(bindDN, bindPassword);
 
-      String searchFilter = String.format("(objectClass=%s)", userObjectClass);
+      String searchFilter = "(objectClass=%s)".formatted(userObjectClass);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1851,17 +1842,17 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       if (StringUtils.hasText(filter)) {
         searchFilter =
-            String.format(
-                "(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-                userObjectClass,
-                userUsernameAttribute,
-                filter,
-                userNameAttribute,
-                filter,
-                userPreferredNameAttribute,
-                filter);
+            "(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))"
+                .formatted(
+                    userObjectClass,
+                    userUsernameAttribute,
+                    filter,
+                    userNameAttribute,
+                    filter,
+                    userPreferredNameAttribute,
+                    filter);
       } else {
-        searchFilter = String.format("(objectClass=%s)", userObjectClass);
+        searchFilter = "(objectClass=%s)".formatted(userObjectClass);
       }
 
       SearchControls searchControls = new SearchControls();
@@ -1938,8 +1929,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", userObjectClass, userUsernameAttribute, username);
+          "(&(objectClass=%s)(%s=%s))".formatted(userObjectClass, userUsernameAttribute, username);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2225,7 +2215,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                     StringUtils.hasText(group.getDescription()) ? group.getDescription() : "")));
       }
 
-      if (modificationItems.size() > 0) {
+      if (!modificationItems.isEmpty()) {
         dirContext.modifyAttributes(groupDN, modificationItems.toArray(new ModificationItem[0]));
       }
 
@@ -2350,7 +2340,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                 new BasicAttribute("userPassword", user.getPassword())));
       }
 
-      if (modificationItems.size() > 0) {
+      if (!modificationItems.isEmpty()) {
         dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
       }
     } catch (UserNotFoundException e) {
@@ -2457,9 +2447,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       return new InitialDirContext(environment);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          String.format(
-              "Failed to retrieve the JNDI directory context for the user directory (%s)",
-              getUserDirectoryId()),
+          "Failed to retrieve the JNDI directory context for the user directory (%s)"
+              .formatted(getUserDirectoryId()),
           e);
     }
   }
@@ -2472,8 +2461,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       List<LdapName> groupDNs = new ArrayList<>();
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupNameAttribute, groupName);
+          "(&(objectClass=%s)(%s=%s))".formatted(groupObjectClass, groupNameAttribute, groupName);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2486,15 +2474,15 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         groupDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));
       }
 
-      if (groupDNs.size() == 0) {
+      if (groupDNs.isEmpty()) {
         return null;
       } else if (groupDNs.size() == 1) {
-        return groupDNs.get(0);
+        return groupDNs.getFirst();
       } else {
         StringBuilder buffer = new StringBuilder();
 
         for (LdapName groupDN : groupDNs) {
-          if (buffer.length() > 0) {
+          if (!buffer.isEmpty()) {
             buffer.append(" ");
           }
 
@@ -2502,15 +2490,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         }
 
         throw new ServiceUnavailableException(
-            String.format(
-                "Found multiple groups (%d) with the name of the group (%s) with DNs %s",
-                groupDNs.size(), groupName, buffer));
+            "Found multiple groups (%d) with the name of the group (%s) with DNs %s"
+                .formatted(groupDNs.size(), groupName, buffer));
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          String.format(
-              "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)",
-              groupName, host, port),
+          "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)"
+              .formatted(groupName, host, port),
           e);
     } finally {
       JNDIUtil.close(searchResults);
@@ -2524,8 +2510,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       List<User> users = new ArrayList<>();
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", userObjectClass, userUsernameAttribute, username);
+          "(&(objectClass=%s)(%s=%s))".formatted(userObjectClass, userUsernameAttribute, username);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2554,15 +2539,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         }
 
         throw new ServiceUnavailableException(
-            String.format(
-                "Found multiple users (%d) with the username (%s) with DNs %s",
-                users.size(), username, buffer));
+            "Found multiple users (%d) with the username (%s) with DNs %s"
+                .formatted(users.size(), username, buffer));
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          String.format(
-              "Failed to retrieve the details for the user (%s) from the LDAP directory (%s:%d)",
-              username, host, port),
+          "Failed to retrieve the details for the user (%s) from the LDAP directory (%s:%d)"
+              .formatted(username, host, port),
           e);
     } finally {
       JNDIUtil.close(searchResults);
@@ -2577,8 +2560,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       List<LdapName> userDNs = new ArrayList<>();
 
       String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", userObjectClass, userUsernameAttribute, username);
+          "(&(objectClass=%s)(%s=%s))".formatted(userObjectClass, userUsernameAttribute, username);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2599,7 +2581,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         StringBuilder buffer = new StringBuilder();
 
         for (LdapName userDN : userDNs) {
-          if (buffer.length() > 0) {
+          if (!buffer.isEmpty()) {
             buffer.append(" ");
           }
 
@@ -2607,15 +2589,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         }
 
         throw new ServiceUnavailableException(
-            String.format(
-                "Found multiple users (%d) with the username (%s) with DNs %s",
-                userDNs.size(), username, buffer));
+            "Found multiple users (%d) with the username (%s) with DNs %s"
+                .formatted(userDNs.size(), username, buffer));
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          String.format(
-              "Failed to retrieve the DN for the user (%s) from the LDAP directory (%s:%d)",
-              username, host, port),
+          "Failed to retrieve the DN for the user (%s) from the LDAP directory (%s:%d)"
+              .formatted(username, host, port),
           e);
     } finally {
       JNDIUtil.close(searchResults);

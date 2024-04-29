@@ -44,10 +44,10 @@ import java.util.Objects;
 @Schema(description = "A user directory type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "userDirectoryClassName"})
-@XmlRootElement(name = "UserDirectoryType", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "UserDirectoryType", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectoryType",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"code", "name", "userDirectoryClassName"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

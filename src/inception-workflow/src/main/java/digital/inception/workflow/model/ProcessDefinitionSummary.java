@@ -38,10 +38,10 @@ import java.util.Objects;
 @Schema(description = "A process definition summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "version"})
-@XmlRootElement(name = "ProcessDefinitionSummary", namespace = "http://inception.digital/workflow")
+@XmlRootElement(name = "ProcessDefinitionSummary", namespace = "https://inception.digital/workflow")
 @XmlType(
     name = "ProcessDefinitionSummary",
-    namespace = "http://inception.digital/workflow",
+    namespace = "https://inception.digital/workflow",
     propOrder = {"id", "name", "version"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

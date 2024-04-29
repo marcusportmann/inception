@@ -31,12 +31,12 @@ import jakarta.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/workflow/process-definition-not-found",
+    type = "https://inception.digital/problems/workflow/process-definition-not-found",
     title = "The process definition could not be found.",
     status = 404)
 @WebFault(
     name = "ProcessDefinitionNotFoundException",
-    targetNamespace = "http://inception.digital/workflow",
+    targetNamespace = "https://inception.digital/workflow",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ProcessDefinitionNotFoundException extends ServiceException {

@@ -19,6 +19,7 @@ package digital.inception.scheduler.converter;
 import digital.inception.scheduler.model.JobStatus;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToJobStatusConverter implements Converter<String, JobStatus> 
   public StringToJobStatusConverter() {}
 
   @Override
-  public JobStatus convert(String source) {
+  public JobStatus convert(@NonNull String source) {
     return JobStatus.fromCode(source);
   }
 }

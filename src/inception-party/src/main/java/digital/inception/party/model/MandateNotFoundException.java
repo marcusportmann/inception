@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/mandate-not-found",
+    type = "https://inception.digital/problems/party/mandate-not-found",
     title = "The mandate could not be found.",
     status = 404)
 @WebFault(
     name = "MandateNotFoundException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class MandateNotFoundException extends ServiceException {

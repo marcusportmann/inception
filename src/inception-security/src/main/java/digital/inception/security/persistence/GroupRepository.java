@@ -183,7 +183,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    * @return the number of users for the group
    */
   @Query("select count(u.id) from Group g join g.users as u where g.id = :groupId")
-  long getNumberOfUsersForGroup(@Param("groupId") UUID groupId);
+  int getNumberOfUsersForGroup(@Param("groupId") UUID groupId);
 
   /**
    * Retrieve the role codes for the group.

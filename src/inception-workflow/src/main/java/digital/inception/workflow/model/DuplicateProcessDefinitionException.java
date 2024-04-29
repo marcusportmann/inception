@@ -32,12 +32,12 @@ import jakarta.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/workflow/duplicate-process-definition",
+    type = "https://inception.digital/problems/workflow/duplicate-process-definition",
     title = "A process definition with the specified ID already exists.",
     status = 409)
 @WebFault(
     name = "DuplicateProcessDefinitionException",
-    targetNamespace = "http://inception.digital/workflow",
+    targetNamespace = "https://inception.digital/workflow",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateProcessDefinitionException extends ServiceException {

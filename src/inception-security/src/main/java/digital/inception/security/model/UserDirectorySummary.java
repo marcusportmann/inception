@@ -51,10 +51,10 @@ import java.util.UUID;
 @Schema(description = "A user directory summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name"})
-@XmlRootElement(name = "UserDirectorySummary", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "UserDirectorySummary", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectorySummary",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"id", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

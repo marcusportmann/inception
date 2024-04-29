@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/duplicate-mandate",
+    type = "https://inception.digital/problems/party/duplicate-mandate",
     title = "The mandate already exists.",
     status = 409)
 @WebFault(
     name = "DuplicateMandateException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateMandateException extends ServiceException {

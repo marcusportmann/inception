@@ -18,6 +18,7 @@ package digital.inception.security.converter;
 
 import digital.inception.security.model.PolicySortBy;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +34,7 @@ public class StringToPolicySortByConverter implements Converter<String, PolicySo
   public StringToPolicySortByConverter() {}
 
   @Override
-  public PolicySortBy convert(String source) {
+  public PolicySortBy convert(@NonNull String source) {
     return PolicySortBy.fromCode(source);
   }
 }

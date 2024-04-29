@@ -48,10 +48,10 @@ import java.util.Objects;
 @Schema(description = "A template for an e-mail sent by an application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType", "template"})
-@XmlRootElement(name = "MailTemplate", namespace = "http://inception.digital/mail")
+@XmlRootElement(name = "MailTemplate", namespace = "https://inception.digital/mail")
 @XmlType(
     name = "MailTemplate",
-    namespace = "http://inception.digital/mail",
+    namespace = "https://inception.digital/mail",
     propOrder = {"id", "name", "contentType", "template"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

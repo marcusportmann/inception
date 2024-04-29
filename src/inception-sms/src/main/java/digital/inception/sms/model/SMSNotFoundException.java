@@ -32,12 +32,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/sms/sms-not-found",
+    type = "https://inception.digital/problems/sms/sms-not-found",
     title = "The SMS could not be found.",
     status = 404)
 @WebFault(
     name = "SMSNotFoundException",
-    targetNamespace = "http://inception.digital/sms",
+    targetNamespace = "https://inception.digital/sms",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class SMSNotFoundException extends ServiceException {

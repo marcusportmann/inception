@@ -39,7 +39,7 @@ import java.util.List;
 @WebService(
     serviceName = "MailService",
     name = "IMailService",
-    targetNamespace = "http://inception.digital/mail")
+    targetNamespace = "https://inception.digital/mail")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class MailWebService {

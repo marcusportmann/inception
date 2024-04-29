@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.PolicyType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToPolicyTypeConverter implements Converter<String, PolicyType
   public StringToPolicyTypeConverter() {}
 
   @Override
-  public PolicyType convert(String source) {
+  public PolicyType convert(@NonNull String source) {
     return PolicyType.fromCode(source);
   }
 }

@@ -2694,17 +2694,17 @@ public interface IPartyReferenceApiController {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the role type attribute type constraints for a specific role type.
+   * Retrieve the role type attribute type constraint for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the attribute constraints for
-   * @return the role type attribute type constraints
+   * @param roleType the code for the role type to retrieve the attribute constraint for
+   * @return the role type attribute type constraint
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the role type attribute type constraints for a specific
+   * @throws ServiceUnavailableException if the role type attribute type constraint for a specific
    *     role type could not be retrieved
    */
   @Operation(
-      summary = "Retrieve the role type attribute type constraints",
-      description = "Retrieve the role type attribute type constraints")
+      summary = "Retrieve the role type attribute type constraint",
+      description = "Retrieve the role type attribute type constraint")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -2741,23 +2741,23 @@ public interface IPartyReferenceApiController {
       @Parameter(
               name = "roleType",
               description =
-                  "The optional code for the role type to retrieve the role type attribute type constraints for")
+                  "The optional code for the role type to retrieve the role type attribute type constraint for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the role type preference type constraints for a specific role type.
+   * Retrieve the role type preference type constraint for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the preference constraints for
-   * @return the role type preference type constraints
+   * @param roleType the code for the role type to retrieve the preference constraint for
+   * @return the role type preference type constraint
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the role type preference type constraints for a specific
+   * @throws ServiceUnavailableException if the role type preference type constraint for a specific
    *     role type could not be retrieved
    */
   @Operation(
-      summary = "Retrieve the role type preference type constraints",
-      description = "Retrieve the role type preference type constraints")
+      summary = "Retrieve the role type preference type constraint",
+      description = "Retrieve the role type preference type constraint")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -2794,7 +2794,7 @@ public interface IPartyReferenceApiController {
       @Parameter(
               name = "roleType",
               description =
-                  "The optional code for the role type to retrieve the role type preference type constraints for")
+                  "The optional code for the role type to retrieve the role type preference type constraint for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
       throws InvalidArgumentException, ServiceUnavailableException;

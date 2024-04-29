@@ -18,6 +18,7 @@ package digital.inception.security.converter;
 
 import digital.inception.security.model.TokenSortBy;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +34,7 @@ public class StringToTokenSortByConverter implements Converter<String, TokenSort
   public StringToTokenSortByConverter() {}
 
   @Override
-  public TokenSortBy convert(String source) {
+  public TokenSortBy convert(@NonNull String source) {
     return TokenSortBy.fromCode(source);
   }
 }

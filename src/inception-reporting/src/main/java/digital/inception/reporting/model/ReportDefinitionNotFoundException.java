@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 404)
 @WebFault(
     name = "ReportDefinitionNotFoundException",
-    targetNamespace = "http://inception.digital/reporting",
+    targetNamespace = "https://inception.digital/reporting",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ReportDefinitionNotFoundException extends ServiceException {

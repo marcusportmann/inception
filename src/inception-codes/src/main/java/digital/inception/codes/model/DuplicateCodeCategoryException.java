@@ -38,7 +38,7 @@ import java.io.Serial;
     status = 409)
 @WebFault(
     name = "DuplicateCodeCategoryException",
-    targetNamespace = "http://inception.digital/codes",
+    targetNamespace = "https://inception.digital/codes",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateCodeCategoryException extends ServiceException {

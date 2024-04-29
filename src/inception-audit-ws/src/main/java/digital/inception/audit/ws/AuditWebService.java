@@ -28,7 +28,7 @@ import jakarta.jws.soap.SOAPBinding;
 @WebService(
     serviceName = "AuditService",
     name = "IAuditService",
-    targetNamespace = "http://inception.digital/audit")
+    targetNamespace = "https://inception.digital/audit")
 @SOAPBinding
 @SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
 public class AuditWebService {

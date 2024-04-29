@@ -31,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A mandatary requirement")
 @XmlEnum
-@XmlType(name = "RequiredMandataries", namespace = "http://inception.digital/party")
+@XmlType(name = "RequiredMandataries", namespace = "https://inception.digital/party")
 public enum RequiredMandataries {
   /** All mandataries. */
   @XmlEnumValue("All")

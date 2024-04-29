@@ -56,10 +56,10 @@ import java.util.UUID;
   "who",
   "deviceId"
 })
-@XmlRootElement(name = "ErrorReportSummary", namespace = "http://inception.digital/error")
+@XmlRootElement(name = "ErrorReportSummary", namespace = "https://inception.digital/error")
 @XmlType(
     name = "ErrorReportSummary",
-    namespace = "http://inception.digital/error",
+    namespace = "https://inception.digital/error",
     propOrder = {
       "id",
       "applicationId",

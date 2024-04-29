@@ -45,10 +45,10 @@ import java.util.UUID;
 @Schema(description = "A type of physical address")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "PhysicalAddressType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "PhysicalAddressType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "PhysicalAddressType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.LanguageProficiencyLevel;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToLanguageProficiencyLevelConverter
   public StringToLanguageProficiencyLevelConverter() {}
 
   @Override
-  public LanguageProficiencyLevel convert(String source) {
+  public LanguageProficiencyLevel convert(@NonNull String source) {
     return LanguageProficiencyLevel.fromCode(source);
   }
 }

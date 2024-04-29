@@ -56,10 +56,10 @@ import java.util.List;
   "pageSize",
   "filter"
 })
-@XmlRootElement(name = "ErrorReportSummaries", namespace = "http://inception.digital/error")
+@XmlRootElement(name = "ErrorReportSummaries", namespace = "https://inception.digital/error")
 @XmlType(
     name = "ErrorReportSummaries",
-    namespace = "http://inception.digital/error",
+    namespace = "https://inception.digital/error",
     propOrder = {
       "errorReportSummaries",
       "total",

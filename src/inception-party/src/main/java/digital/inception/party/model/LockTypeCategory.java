@@ -45,10 +45,10 @@ import java.util.UUID;
 @Schema(description = "A collection of related lock types")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "LockTypeCategory", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "LockTypeCategory", namespace = "https://inception.digital/party")
 @XmlType(
     name = "LockTypeCategory",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

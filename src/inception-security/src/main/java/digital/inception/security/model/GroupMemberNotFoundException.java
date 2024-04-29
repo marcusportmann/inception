@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 404)
 @WebFault(
     name = "GroupMemberNotFoundException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class GroupMemberNotFoundException extends ServiceException {

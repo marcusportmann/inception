@@ -49,10 +49,10 @@ import java.util.List;
   "status",
   "filter"
 })
-@XmlRootElement(name = "TokenSummaries", namespace = "http://nova.discovery.co.za/security")
+@XmlRootElement(name = "TokenSummaries", namespace = "https://inception.digital/security")
 @XmlType(
     name = "TokenSummaries",
-    namespace = "http://nova.discovery.co.za/security",
+    namespace = "https://inception.digital/security",
     propOrder = {
       "tokenSummaries",
       "total",

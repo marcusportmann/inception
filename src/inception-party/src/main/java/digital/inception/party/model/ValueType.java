@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The value type")
 @XmlEnum
-@XmlType(name = "ValueType", namespace = "http://inception.digital/party")
+@XmlType(name = "ValueType", namespace = "https://inception.digital/party")
 public enum ValueType {
   /** Boolean. */
   @XmlEnumValue("Boolean")

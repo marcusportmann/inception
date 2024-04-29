@@ -55,10 +55,10 @@ import java.util.Objects;
   "shortName",
   "description"
 })
-@XmlRootElement(name = "Language", namespace = "http://inception.digital/reference")
+@XmlRootElement(name = "Language", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "Language",
-    namespace = "http://inception.digital/reference",
+    namespace = "https://inception.digital/reference",
     propOrder = {"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

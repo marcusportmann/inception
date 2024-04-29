@@ -42,10 +42,10 @@ import java.util.List;
 @Schema(description = "A user attribute in the form of a name-value pair")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "Attribute", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "Attribute", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserAttribute",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -178,18 +178,17 @@ public class UserAttribute implements Serializable {
           return Base64.getDecoder().decode(userAttribute.value);
         } catch (Throwable e) {
           throw new UserAttributeException(
-              String.format(
-                  "Failed to retrieve the binary value for the user attribute (%s)",
-                  userAttribute.name));
+              "Failed to retrieve the binary value for the user attribute ("
+                  + userAttribute.name
+                  + ")");
         }
       }
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to retrieve the binary value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to retrieve the binary value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -211,18 +210,17 @@ public class UserAttribute implements Serializable {
           return new BigDecimal(userAttribute.value);
         } catch (Throwable e) {
           throw new UserAttributeException(
-              String.format(
-                  "Failed to retrieve the decimal value for the user attribute (%s)",
-                  userAttribute.name));
+              "Failed to retrieve the decimal value for the user attribute ("
+                  + userAttribute.name
+                  + ")");
         }
       }
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to retrieve the decimal value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to retrieve the decimal value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -244,18 +242,17 @@ public class UserAttribute implements Serializable {
           return Double.parseDouble(userAttribute.value);
         } catch (Throwable e) {
           throw new UserAttributeException(
-              String.format(
-                  "Failed to retrieve the double value for the user attribute (%s)",
-                  userAttribute.name));
+              "Failed to retrieve the double value for the user attribute ("
+                  + userAttribute.name
+                  + ")");
         }
       }
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to retrieve the double value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to retrieve the double value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -277,18 +274,17 @@ public class UserAttribute implements Serializable {
           return Integer.parseInt(userAttribute.value);
         } catch (Throwable e) {
           throw new UserAttributeException(
-              String.format(
-                  "Failed to retrieve the integer value for the user attribute (%s)",
-                  userAttribute.name));
+              "Failed to retrieve the integer value for the user attribute ("
+                  + userAttribute.name
+                  + ")");
         }
       }
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to retrieve the integer value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to retrieve the integer value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -309,18 +305,17 @@ public class UserAttribute implements Serializable {
           return Long.parseLong(userAttribute.value);
         } catch (Throwable e) {
           throw new UserAttributeException(
-              String.format(
-                  "Failed to retrieve the long value for the user attribute (%s)",
-                  userAttribute.name));
+              "Failed to retrieve the long value for the user attribute ("
+                  + userAttribute.name
+                  + ")");
         }
       }
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to retrieve the long value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to retrieve the long value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -343,10 +338,9 @@ public class UserAttribute implements Serializable {
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to retrieve the string value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to retrieve the string value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -381,10 +375,9 @@ public class UserAttribute implements Serializable {
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to set the binary value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to set the binary value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -407,10 +400,9 @@ public class UserAttribute implements Serializable {
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to set the decimal value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to set the decimal value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -433,10 +425,9 @@ public class UserAttribute implements Serializable {
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to set the double value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to set the double value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -458,10 +449,9 @@ public class UserAttribute implements Serializable {
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to set the integer value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to set the integer value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -483,10 +473,9 @@ public class UserAttribute implements Serializable {
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to set the long value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to set the long value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -509,10 +498,9 @@ public class UserAttribute implements Serializable {
     }
 
     throw new UserAttributeException(
-        String.format(
-            "Failed to set the string value for the user attribute (%s): "
-                + "The attribute could not be found",
-            name));
+        "Failed to set the string value for the user attribute ("
+            + name
+            + "): The attribute could not be found");
   }
 
   /**
@@ -527,7 +515,7 @@ public class UserAttribute implements Serializable {
       return Base64.getDecoder().decode(value);
     } catch (Throwable e) {
       throw new UserAttributeException(
-          String.format("Failed to retrieve the binary value for the user attribute (%s)", name));
+          "Failed to retrieve the binary value for the user attribute (" + name + ")");
     }
   }
 
@@ -543,7 +531,7 @@ public class UserAttribute implements Serializable {
       return new BigDecimal(value);
     } catch (Throwable e) {
       throw new UserAttributeException(
-          String.format("Failed to retrieve the decimal value for the user attribute (%s)", name));
+          "Failed to retrieve the decimal value for the user attribute (" + name + ")");
     }
   }
 
@@ -559,7 +547,7 @@ public class UserAttribute implements Serializable {
       return Double.parseDouble(value);
     } catch (Throwable e) {
       throw new UserAttributeException(
-          String.format("Failed to retrieve the double value for the user attribute (%s)", name));
+          "Failed to retrieve the double value for the user attribute (" + name + ")");
     }
   }
 
@@ -575,7 +563,7 @@ public class UserAttribute implements Serializable {
       return Integer.parseInt(value);
     } catch (Throwable e) {
       throw new UserAttributeException(
-          String.format("Failed to retrieve the integer value for the user attribute (%s)", name));
+          "Failed to retrieve the integer value for the user attribute (" + name + ")");
     }
   }
 
@@ -590,7 +578,7 @@ public class UserAttribute implements Serializable {
       return Long.parseLong(value);
     } catch (Throwable e) {
       throw new UserAttributeException(
-          String.format("Failed to retrieve the long value for the user attribute (%s)", name));
+          "Failed to retrieve the long value for the user attribute (" + name + ")");
     }
   }
 

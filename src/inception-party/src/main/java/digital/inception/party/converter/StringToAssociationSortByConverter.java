@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.AssociationSortBy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToAssociationSortByConverter implements Converter<String, Ass
   public StringToAssociationSortByConverter() {}
 
   @Override
-  public AssociationSortBy convert(String source) {
+  public AssociationSortBy convert(@NonNull String source) {
     return AssociationSortBy.fromCode(source);
   }
 }

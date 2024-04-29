@@ -50,10 +50,10 @@ import java.util.Objects;
 @Schema(description = "Data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
-@XmlRootElement(name = "Data", namespace = "http://inception.digital/demo")
+@XmlRootElement(name = "Data", namespace = "https://inception.digital/demo")
 @XmlType(
     name = "Data",
-    namespace = "http://inception.digital/demo",
+    namespace = "https://inception.digital/demo",
     propOrder = {"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

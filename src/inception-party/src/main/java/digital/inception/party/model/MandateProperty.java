@@ -65,10 +65,10 @@ import org.springframework.util.StringUtils;
   "integerValue",
   "stringValue"
 })
-@XmlRootElement(name = "MandateProperty", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "MandateProperty", namespace = "https://inception.digital/party")
 @XmlType(
     name = "MandateProperty",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "type",
       "booleanValue",

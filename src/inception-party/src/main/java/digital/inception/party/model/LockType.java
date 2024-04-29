@@ -59,10 +59,10 @@ import org.springframework.util.StringUtils;
   "description",
   "partyTypes"
 })
-@XmlRootElement(name = "LockType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "LockType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "LockType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "category",
@@ -243,7 +243,8 @@ public class LockType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

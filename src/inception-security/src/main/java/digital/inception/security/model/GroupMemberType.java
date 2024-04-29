@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The group member type")
 @XmlEnum
-@XmlType(name = "GroupMemberType", namespace = "http://inception.digital/security")
+@XmlType(name = "GroupMemberType", namespace = "https://inception.digital/security")
 public enum GroupMemberType {
   /** User. */
   @XmlEnumValue("User")

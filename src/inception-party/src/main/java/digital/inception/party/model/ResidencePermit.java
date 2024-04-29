@@ -61,10 +61,10 @@ import java.util.UUID;
 @Schema(description = "A residence permit issued to a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "countryOfIssue", "issueDate", "expiryDate", "number"})
-@XmlRootElement(name = "ResidencePermit", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ResidencePermit", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ResidencePermit",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"id", "type", "countryOfIssue", "issueDate", "expiryDate", "number"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

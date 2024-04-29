@@ -46,7 +46,7 @@ import org.springframework.util.StringUtils;
 @WebService(
     serviceName = "ReportingService",
     name = "IReportingService",
-    targetNamespace = "http://inception.digital/reporting")
+    targetNamespace = "https://inception.digital/reporting")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ReportingWebService {

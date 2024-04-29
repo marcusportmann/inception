@@ -53,10 +53,10 @@ import java.util.UUID;
   "name",
   "description"
 })
-@XmlRootElement(name = "MandataryRole", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "MandataryRole", namespace = "https://inception.digital/party")
 @XmlType(
     name = "MandataryRole",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"mandateType", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

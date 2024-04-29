@@ -50,10 +50,10 @@ import java.util.Objects;
 @Schema(description = "An external reference for an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "value"})
-@XmlRootElement(name = "ExternalReference", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ExternalReference", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ExternalReference",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

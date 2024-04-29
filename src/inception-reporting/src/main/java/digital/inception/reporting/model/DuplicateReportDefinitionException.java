@@ -38,7 +38,7 @@ import java.io.Serial;
     status = 409)
 @WebFault(
     name = "DuplicateReportDefinitionException",
-    targetNamespace = "http://inception.digital/reporting",
+    targetNamespace = "https://inception.digital/reporting",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateReportDefinitionException extends ServiceException {

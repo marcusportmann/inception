@@ -31,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The method used to sort the list of error reports")
 @XmlEnum
-@XmlType(name = "ErrorReportSortBy", namespace = "http://inception.digital/error")
+@XmlType(name = "ErrorReportSortBy", namespace = "https://inception.digital/error")
 public enum ErrorReportSortBy {
   /** Sort by created. */
   @XmlEnumValue("Created")

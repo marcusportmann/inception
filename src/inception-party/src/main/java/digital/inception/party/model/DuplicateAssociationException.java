@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/duplicate-association",
+    type = "https://inception.digital/problems/party/duplicate-association",
     title = "The association already exists.",
     status = 409)
 @WebFault(
     name = "DuplicateAssociationException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateAssociationException extends ServiceException {

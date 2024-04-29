@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.TokenStatus;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToTokenStatusConverter implements Converter<String, TokenStat
   public StringToTokenStatusConverter() {}
 
   @Override
-  public TokenStatus convert(String source) {
+  public TokenStatus convert(@NonNull String source) {
     return TokenStatus.fromCode(source);
   }
 }

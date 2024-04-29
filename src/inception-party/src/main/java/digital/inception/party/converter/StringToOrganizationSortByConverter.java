@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.OrganizationSortBy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToOrganizationSortByConverter implements Converter<String, Or
   public StringToOrganizationSortByConverter() {}
 
   @Override
-  public OrganizationSortBy convert(String source) {
+  public OrganizationSortBy convert(@NonNull String source) {
     return OrganizationSortBy.fromCode(source);
   }
 }

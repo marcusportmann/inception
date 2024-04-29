@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.MandateSortBy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToMandateSortByConverter implements Converter<String, Mandate
   public StringToMandateSortByConverter() {}
 
   @Override
-  public MandateSortBy convert(String source) {
+  public MandateSortBy convert(@NonNull String source) {
     return MandateSortBy.fromCode(source);
   }
 }

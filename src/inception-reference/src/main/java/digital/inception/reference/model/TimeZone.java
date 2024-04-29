@@ -44,10 +44,10 @@ import java.util.Objects;
 @Schema(description = "A time zone")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "TimeZone", namespace = "http://inception.digital/reference")
+@XmlRootElement(name = "TimeZone", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "TimeZone",
-    namespace = "http://inception.digital/reference",
+    namespace = "https://inception.digital/reference",
     propOrder = {"id", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeZone implements Serializable {

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <changeSet id="nova-executor-1.0.0" author="Marcus Portmann">
+    <comment>Nova - Executor - 1.0.0</comment>
+
+    <createTable tableName="executor_task_types" remarks="Task Types">
+      <column name="code" type="nvarchar(50)" remarks="The code for the task type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the task type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="priority" type="int" remarks="The code for the task priority">
+        <constraints nullable="false"/>
+      </column>
+      <column name="enabled" type="boolean" remarks="Is the task type enabled">
+        <constraints nullable="false"/>
+      </column>
+      <column name="executor_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that executes tasks of this type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="archive_completed" type="boolean" defaultValueBoolean="false" remarks="Archive completed tasks of this type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="archive_failed" type="boolean" defaultValueBoolean="false" remarks="Archive failed tasks of this type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="event_types" type="nvarchar(1000)" remarks="The optional list of comma-delimited codes for the event types that should be tracked for tasks of this type"/>
+      <column name="event_types_with_task_data" type="nvarchar(1000)" remarks="The optional list of comma-delimited codes for the event types that should be tracked for tasks of this type with task data"/>
+      <column name="maximum_execution_attempts" type="integer" remarks="The optional maximum execution attempts for tasks of this type"/>
+      <column name="retry_delay" type="integer" remarks="The optional retry delay for tasks of this type"/>
+    </createTable>
+
+    <createTable tableName="executor_tasks" remarks="Tasks">
+      <column name="id" type="uuid" remarks="The ID for the task">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="batch_id" type="nvarchar(50)" remarks="The optional ID for the task batch"/>
+      <column name="type" type="nvarchar(50)" remarks="The code for the task type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="step" type="nvarchar(50)" remarks="The optional code for the current task step for a multistep task"/>
+      <column name="status" type="nvarchar(50)" remarks="The code for the task status">
+        <constraints nullable="false"/>
+      </column>
+      <column name="priority" type="int" remarks="The code for the task priority">
+        <constraints nullable="false"/>
+      </column>
+      <column name="queued" type="timestamp with time zone" remarks="The date and time the task was queued for execution">
+        <constraints nullable="false"/>
+      </column>
+      <column name="executed" type="timestamp with time zone" remarks="The date and time the task was executed"/>
+      <column name="external_reference" type="nvarchar(50)" remarks="The optional external reference for the task"/>
+      <column name="data" type="clob" remarks="The task data">
+        <constraints nullable="false"/>
+      </column>
+      <column name="execution_attempts" type="int" defaultValue="0" remarks="The number of times the execution of the task has been attempted">
+        <constraints nullable="false"/>
+      </column>
+      <column name="lock_name" type="nvarchar(100)" remarks="The name of the entity that has locked the task for execution"/>
+      <column name="next_execution" type="timestamp with time zone" remarks="The date and time the task will be executed"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="executor_tasks_type_fk"
+      baseTableName="executor_tasks" baseColumnNames="type"
+      referencedTableName="executor_task_types" referencedColumnNames="code"
+      onDelete="RESTRICT"/>
+    <createIndex indexName="executor_tasks_batch_id_ix"
+      tableName="executor_tasks">
+      <column name="batch_id"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_executed_ix"
+      tableName="executor_tasks">
+      <column name="executed"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_external_reference_ix"
+      tableName="executor_tasks">
+      <column name="external_reference"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_next_execution_ix"
+      tableName="executor_tasks">
+      <column name="next_execution"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_priority_ix"
+      tableName="executor_tasks">
+      <column name="priority"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_queued_ix"
+      tableName="executor_tasks">
+      <column name="queued"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_status_ix"
+      tableName="executor_tasks">
+      <column name="status"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_type_ix"
+      tableName="executor_tasks">
+      <column name="type"/>
+    </createIndex>
+    <createIndex indexName="executor_tasks_type_step_ix"
+      tableName="executor_tasks">
+      <column name="type"/>
+      <column name="step"/>
+    </createIndex>
+
+    <createTable tableName="executor_task_events" remarks="Task Events">
+      <column name="id" type="uuid" remarks="The ID for the task event">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)" remarks="The code for the task event type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp" type="timestamp with time zone" remarks="The date and time the task event occurred">
+        <constraints nullable="false"/>
+      </column>
+      <column name="task_id" type="uuid" remarks="The ID for the task">
+        <constraints nullable="false"/>
+      </column>
+      <column name="task_type" type="nvarchar(50)" remarks="The code for the task type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="task_step" type="nvarchar(50)" remarks="The optional code for the task step for a multistep task"/>
+      <column name="task_data" type="clob" remarks="The task data"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="executor_task_events_task_id_fk"
+      baseTableName="executor_task_events" baseColumnNames="task_id"
+      referencedTableName="executor_tasks" referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="executor_task_events_task_id_ix"
+      tableName="executor_task_events">
+      <column name="task_id"/>
+    </createIndex>
+
+    <createTable tableName="executor_archived_tasks" remarks="Archived Tasks">
+      <column name="id" type="uuid" remarks="The ID for the task">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="batch_id" type="nvarchar(50)" remarks="The optional ID for the task batch"/>
+      <column name="type" type="nvarchar(50)" remarks="The code for the task type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="step" type="nvarchar(50)" remarks="The optional code for the current task step for a multistep task"/>
+      <column name="status" type="nvarchar(50)" remarks="The code for the task status">
+        <constraints nullable="false"/>
+      </column>
+      <column name="queued" type="timestamp with time zone" remarks="The date and time the task was queued for execution">
+        <constraints nullable="false"/>
+      </column>
+      <column name="executed" type="timestamp with time zone" remarks="The date and time the task was executed"/>
+      <column name="external_reference" type="nvarchar(50)" remarks="The optional external reference for the task"/>
+      <column name="data" type="clob" remarks="The task data">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="executor_archived_tasks_executed_ix"
+      tableName="executor_archived_tasks">
+      <column name="executed"/>
+    </createIndex>
+    <createIndex indexName="executor_archived_tasks_step_ix"
+      tableName="executor_archived_tasks">
+      <column name="step"/>
+    </createIndex>
+    <createIndex indexName="executor_archived_tasks_type_ix"
+      tableName="executor_archived_tasks">
+      <column name="type"/>
+    </createIndex>
+    <createIndex indexName="executor_archived_tasks_type_step_ix"
+      tableName="executor_archived_tasks">
+      <column name="type"/>
+      <column name="step"/>
+    </createIndex>
+
+    <rollback>
+      <dropIndex tableName="executor_archived_tasks" indexName="executor_archived_tasks_type_step_ix"/>
+      <dropIndex tableName="executor_archived_tasks" indexName="executor_archived_tasks_type_ix"/>
+      <dropIndex tableName="executor_archived_tasks" indexName="executor_archived_tasks_step_ix"/>
+      <dropIndex tableName="executor_archived_tasks" indexName="executor_archived_tasks_executed_ix"/>
+      <dropTable tableName="executor_archived_tasks"/>
+
+      <dropIndex tableName="executor_task_events" indexName="executor_task_events_task_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="executor_task_events"/>
+      <dropTable tableName="executor_task_events"/>
+
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_type_step_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_type_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_status_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_queued_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_priority_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_next_execution_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_external_reference_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_executed_ix"/>
+      <dropIndex tableName="executor_tasks" indexName="executor_tasks_batch_id_ix"/>
+      <dropAllForeignKeyConstraints baseTableName="executor_tasks"/>
+      <dropTable tableName="executor_tasks"/>
+
+      <delete tableName="executor_task_types"/>
+
+      <dropTable tableName="executor_task_types"/>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

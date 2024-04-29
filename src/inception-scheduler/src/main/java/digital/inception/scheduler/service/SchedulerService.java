@@ -194,7 +194,8 @@ public class SchedulerService implements ISchedulerService {
               + job.getName()
               + ") with ID ("
               + job.getId()
-              + "): Failed to instantiate and initialize the job", e);
+              + "): Failed to instantiate and initialize the job",
+          e);
     }
 
     // Execute the job

@@ -43,7 +43,7 @@ import org.springframework.util.StringUtils;
 @WebService(
     serviceName = "ReferenceService",
     name = "IReferenceService",
-    targetNamespace = "http://inception.digital/reference")
+    targetNamespace = "https://inception.digital/reference")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ReferenceWebService {

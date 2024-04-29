@@ -36,7 +36,7 @@ import java.io.Serial;
     title = "An error has occurred and the request could not be processed at this time.")
 @WebFault(
     name = "UserDirectoryParameterException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class UserDirectoryParameterException extends ServiceException {

@@ -53,10 +53,10 @@ import java.util.UUID;
   "name",
   "description"
 })
-@XmlRootElement(name = "EmploymentType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "EmploymentType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "EmploymentType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "employmentStatus",
       "code",

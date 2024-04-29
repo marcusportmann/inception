@@ -57,10 +57,10 @@ import java.util.regex.Pattern;
   "valueType",
   "pattern"
 })
-@XmlRootElement(name = "AssociationPropertyType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "AssociationPropertyType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "AssociationPropertyType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "associationType",
       "code",

@@ -47,10 +47,10 @@ import java.util.UUID;
 @Schema(description = "A car")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "numberOfDoors"})
-@XmlRootElement(name = "Car", namespace = "http://inception.digital/demo")
+@XmlRootElement(name = "Car", namespace = "https://inception.digital/demo")
 @XmlType(
     name = "Car",
-    namespace = "http://inception.digital/demo",
+    namespace = "https://inception.digital/demo",
     propOrder = {"id", "name", "numberOfDoors"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity

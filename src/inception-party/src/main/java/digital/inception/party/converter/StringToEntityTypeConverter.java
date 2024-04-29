@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.EntityType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToEntityTypeConverter implements Converter<String, EntityType
   public StringToEntityTypeConverter() {}
 
   @Override
-  public EntityType convert(String source) {
+  public EntityType convert(@NonNull String source) {
     return EntityType.fromCode(source);
   }
 }

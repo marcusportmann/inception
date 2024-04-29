@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 409)
 @WebFault(
     name = "DuplicateJobException",
-    targetNamespace = "http://inception.digital/scheduler",
+    targetNamespace = "https://inception.digital/scheduler",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateJobException extends ServiceException {

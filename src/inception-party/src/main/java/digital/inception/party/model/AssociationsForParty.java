@@ -50,10 +50,10 @@ import java.util.UUID;
   "pageIndex",
   "pageSize"
 })
-@XmlRootElement(name = "AssociationsForParty", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "AssociationsForParty", namespace = "https://inception.digital/party")
 @XmlType(
     name = "AssociationsForParty",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "tenantId",
       "partyId",

@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/organization-not-found",
+    type = "https://inception.digital/problems/party/organization-not-found",
     title = "The organization could not be found.",
     status = 404)
 @WebFault(
     name = "OrganizationNotFoundException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class OrganizationNotFoundException extends ServiceException {

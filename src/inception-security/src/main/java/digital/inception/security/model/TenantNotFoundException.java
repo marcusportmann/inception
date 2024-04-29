@@ -38,7 +38,7 @@ import java.util.UUID;
     status = 404)
 @WebFault(
     name = "TenantNotFoundException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class TenantNotFoundException extends ServiceException {

@@ -1614,7 +1614,7 @@ public class SecurityService implements ISecurityService {
       String message = "Failed to retrieve the tenants";
 
       if (StringUtils.hasText(filter)) {
-        message += String.format(" matching the filter \"%s\"", filter);
+        message += " matching the filter \"%s\"".formatted(filter);
       }
 
       if ((pageIndex != null) && (pageSize != null)) {
@@ -2901,7 +2901,7 @@ public class SecurityService implements ISecurityService {
     }
 
     if (value instanceof String) {
-      return ((String) value).length() == 0;
+      return ((String) value).isEmpty();
     }
 
     return false;

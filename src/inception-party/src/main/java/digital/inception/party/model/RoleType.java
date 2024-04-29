@@ -58,10 +58,10 @@ import org.springframework.util.StringUtils;
   "description",
   "partyTypes"
 })
-@XmlRootElement(name = "RoleType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "RoleType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "RoleType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -213,7 +213,8 @@ public class RoleType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

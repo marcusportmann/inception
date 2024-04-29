@@ -57,10 +57,10 @@ import java.util.regex.Pattern;
   "valueType",
   "pattern"
 })
-@XmlRootElement(name = "MandatePropertyType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "MandatePropertyType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "MandatePropertyType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "mandateType",
       "code",

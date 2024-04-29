@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.PartyType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToPartyTypeConverter implements Converter<String, PartyType> 
   public StringToPartyTypeConverter() {}
 
   @Override
-  public PartyType convert(String source) {
+  public PartyType convert(@NonNull String source) {
     return PartyType.fromCode(source);
   }
 }

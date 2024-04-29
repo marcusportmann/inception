@@ -41,8 +41,8 @@ public final class CXFWSSX509CertificateTokenProfileProxyConfigurator {
   private CXFWSSX509CertificateTokenProfileProxyConfigurator() {}
 
   /**
-   * Configure the CXF web service proxy to support authentication using the Web Services
-   * Security X.509 Certificate Token profile.
+   * Configure the CXF web service proxy to support authentication using the Web Services Security
+   * X.509 Certificate Token profile.
    *
    * @param proxy the web service proxy to configure
    * @param keyStore the key store containing the private key and certificate (public key) that will

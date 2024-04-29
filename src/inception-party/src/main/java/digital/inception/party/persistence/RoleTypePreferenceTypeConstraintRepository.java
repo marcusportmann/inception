@@ -32,11 +32,11 @@ public interface RoleTypePreferenceTypeConstraintRepository
     extends JpaRepository<RoleTypePreferenceTypeConstraint, RoleTypePreferenceTypeConstraintId> {
 
   /**
-   * Retrieve the role type preference type constraints for the role type.
+   * Retrieve the role type preference type constraint for the role type.
    *
    * @param roleType the code for the role type
    * @param sort the sorting information
-   * @return the role type preference type constraints for the role type
+   * @return the role type preference type constraint for the role type
    */
   List<RoleTypePreferenceTypeConstraint> findByRoleTypeIgnoreCase(String roleType, Sort sort);
 }

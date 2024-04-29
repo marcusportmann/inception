@@ -31,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The method used to sort the list of mandates")
 @XmlEnum
-@XmlType(name = "MandateSortBy", namespace = "http://inception.digital/party")
+@XmlType(name = "MandateSortBy", namespace = "https://inception.digital/party")
 public enum MandateSortBy {
   /** Sort by type. */
   @XmlEnumValue("Type")

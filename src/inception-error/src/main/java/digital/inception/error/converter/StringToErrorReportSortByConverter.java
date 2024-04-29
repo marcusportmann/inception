@@ -18,6 +18,7 @@ package digital.inception.error.converter;
 
 import digital.inception.error.model.ErrorReportSortBy;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +34,7 @@ public class StringToErrorReportSortByConverter implements Converter<String, Err
   public StringToErrorReportSortByConverter() {}
 
   @Override
-  public ErrorReportSortBy convert(String source) {
+  public ErrorReportSortBy convert(@NonNull String source) {
     return ErrorReportSortBy.fromCode(source);
   }
 }

@@ -67,10 +67,10 @@ import java.util.UUID;
   "firstYearAttended",
   "lastYearAttended"
 })
-@XmlRootElement(name = "Education", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Education", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Education",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "id",
       "institutionCountry",

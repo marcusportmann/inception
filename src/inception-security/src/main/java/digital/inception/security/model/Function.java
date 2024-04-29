@@ -50,10 +50,10 @@ import java.util.Set;
         "A discrete unit of functionality for an application that can be assigned to a role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "description"})
-@XmlRootElement(name = "Function", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "Function", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Function",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

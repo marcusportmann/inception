@@ -43,7 +43,7 @@ import java.util.UUID;
 @WebService(
     serviceName = "ErrorService",
     name = "IErrorService",
-    targetNamespace = "http://inception.digital/error")
+    targetNamespace = "https://inception.digital/error")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ErrorWebService {

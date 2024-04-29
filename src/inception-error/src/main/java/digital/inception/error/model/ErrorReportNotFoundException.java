@@ -38,7 +38,7 @@ import java.util.UUID;
     status = 404)
 @WebFault(
     name = "ErrorReportNotFoundException",
-    targetNamespace = "http://inception.digital/error",
+    targetNamespace = "https://inception.digital/error",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ErrorReportNotFoundException extends ServiceException {

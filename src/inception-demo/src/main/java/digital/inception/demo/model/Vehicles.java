@@ -39,10 +39,10 @@ import java.util.List;
 @Schema(description = "The results of a request to retrieve a list of vehicles")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"vehicles", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
-@XmlRootElement(name = "Vehicles", namespace = "http://inception.digital/demo")
+@XmlRootElement(name = "Vehicles", namespace = "https://inception.digital/demo")
 @XmlType(
     name = "Vehicles",
-    namespace = "http://inception.digital/demo",
+    namespace = "https://inception.digital/demo",
     propOrder = {"vehicles", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

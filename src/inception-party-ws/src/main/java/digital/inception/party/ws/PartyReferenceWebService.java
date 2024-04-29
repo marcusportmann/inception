@@ -36,7 +36,7 @@ import java.util.UUID;
 @WebService(
     serviceName = "PartyReferenceService",
     name = "IPartyReferenceService",
-    targetNamespace = "http://inception.digital/party")
+    targetNamespace = "https://inception.digital/party")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class PartyReferenceWebService {
@@ -770,12 +770,12 @@ public class PartyReferenceWebService {
   }
 
   /**
-   * Retrieve the role type attribute type constraints for a specific role type.
+   * Retrieve the role type attribute type constraint for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the attribute constraints for
-   * @return the role type attribute type constraints
+   * @param roleType the code for the role type to retrieve the attribute constraint for
+   * @return the role type attribute type constraint
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the role type attribute type constraints for a specific
+   * @throws ServiceUnavailableException if the role type attribute type constraint for a specific
    *     role type could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypeAttributeTypeConstraints")
@@ -786,12 +786,12 @@ public class PartyReferenceWebService {
   }
 
   /**
-   * Retrieve the role type preference type constraints for a specific role type.
+   * Retrieve the role type preference type constraint for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the preference constraints for
-   * @return the role type preference type constraints
+   * @param roleType the code for the role type to retrieve the preference constraint for
+   * @return the role type preference type constraint
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the role type preference type constraints for a specific
+   * @throws ServiceUnavailableException if the role type preference type constraint for a specific
    *     role type could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypePreferenceTypeConstraints")

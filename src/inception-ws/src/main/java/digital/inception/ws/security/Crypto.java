@@ -1030,7 +1030,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param certificateChain the X.509 certificate (chain) to validate
    * @param enableRevocation whether to enable CRL verification or not
-   * @param subjectCertificateConstraints the set of constraints on the Subject DN of the
+   * @param subjectCertificateConstraints the set of constraint on the Subject DN of the
    *     certificates
    */
   private void verifyTrust(
@@ -1201,7 +1201,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, e, "certpath");
     }
 
-    // Finally check the subject certificate constraints
+    // Finally check the subject certificate constraint
     if (!matchesSubjectDnPattern(certificateChain[0], subjectCertificateConstraints)) {
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
     }

@@ -36,7 +36,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A system of measurement")
 @XmlEnum
-@XmlType(name = "MeasurementSystem", namespace = "http://inception.digital/party")
+@XmlType(name = "MeasurementSystem", namespace = "https://inception.digital/party")
 public enum MeasurementSystem {
   /** Customary. */
   @XmlEnumValue("Customary")

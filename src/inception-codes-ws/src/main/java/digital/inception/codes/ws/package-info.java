@@ -20,15 +20,15 @@
  * @author Marcus Portmann
  */
 @jakarta.xml.bind.annotation.XmlSchema(
-    namespace = "http://inception.digital/codes",
+    namespace = "https://inception.digital/codes",
     elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @jakarta.xml.bind.annotation.XmlNs(
           prefix = "core",
-          namespaceURI = "http://inception.digital/core"),
+          namespaceURI = "https://inception.digital/core"),
       @jakarta.xml.bind.annotation.XmlNs(
           prefix = "codes",
-          namespaceURI = "http://inception.digital/codes"),
+          namespaceURI = "https://inception.digital/codes"),
     })
 @jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapters({
   @jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter(

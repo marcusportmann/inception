@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 404)
 @WebFault(
     name = "MailTemplateNotFoundException",
-    targetNamespace = "http://inception.digital/mail",
+    targetNamespace = "https://inception.digital/mail",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class MailTemplateNotFoundException extends ServiceException {

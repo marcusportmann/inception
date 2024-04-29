@@ -46,10 +46,10 @@ import java.io.Serializable;
   "resetPasswordHistory",
   "securityCode"
 })
-@XmlRootElement(name = "PasswordChange", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "PasswordChange", namespace = "https://inception.digital/security")
 @XmlType(
     name = "PasswordChange",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {
       "expirePassword",
       "lockUser",

@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A type of unit of measurement")
 @XmlEnum
-@XmlType(name = "MeasurementUnitType", namespace = "http://inception.digital/party")
+@XmlType(name = "MeasurementUnitType", namespace = "https://inception.digital/party")
 public enum MeasurementUnitType {
   /** Length. */
   @XmlEnumValue("Length")

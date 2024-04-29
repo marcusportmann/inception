@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/duplicate-party",
+    type = "https://inception.digital/problems/party/duplicate-party",
     title = "The party already exists.",
     status = 409)
 @WebFault(
     name = "DuplicatePartyException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicatePartyException extends ServiceException {

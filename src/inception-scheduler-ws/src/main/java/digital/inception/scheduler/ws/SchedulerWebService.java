@@ -38,7 +38,7 @@ import java.util.List;
 @WebService(
     serviceName = "SchedulerService",
     name = "ISchedulerService",
-    targetNamespace = "http://inception.digital/scheduler")
+    targetNamespace = "https://inception.digital/scheduler")
 @SOAPBinding
 @SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
 public class SchedulerWebService {

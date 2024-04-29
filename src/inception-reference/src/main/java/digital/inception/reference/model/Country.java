@@ -54,10 +54,10 @@ import java.util.Objects;
   "sovereignState",
   "nationality"
 })
-@XmlRootElement(name = "Country", namespace = "http://inception.digital/reference")
+@XmlRootElement(name = "Country", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "Country",
-    namespace = "http://inception.digital/reference",
+    namespace = "https://inception.digital/reference",
     propOrder = {
       "code",
       "iso3Code",

@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The method used to sort the list of persons")
 @XmlEnum
-@XmlType(name = "PersonSortBy", namespace = "http://inception.digital/party")
+@XmlType(name = "PersonSortBy", namespace = "https://inception.digital/party")
 public enum PersonSortBy {
   /** Sort by name. */
   @XmlEnumValue("Name")

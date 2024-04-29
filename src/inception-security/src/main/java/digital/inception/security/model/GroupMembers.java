@@ -49,10 +49,10 @@ import java.util.UUID;
   "pageSize",
   "filter"
 })
-@XmlRootElement(name = "GroupMembers", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "GroupMembers", namespace = "https://inception.digital/security")
 @XmlType(
     name = "GroupMembers",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {
       "userDirectoryId",
       "groupName",

@@ -52,10 +52,10 @@ import org.springframework.util.StringUtils;
 @JsonPropertyOrder({"roleType", "attributeType", "attributeTypeQualifier", "type", "value"})
 @XmlRootElement(
     name = "RoleTypeAttributeTypeConstraint",
-    namespace = "http://inception.digital/party")
+    namespace = "https://inception.digital/party")
 @XmlType(
     name = "RoleTypeAttributeTypeConstraint",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"roleType", "attributeType", "attributeTypeQualifier", "type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

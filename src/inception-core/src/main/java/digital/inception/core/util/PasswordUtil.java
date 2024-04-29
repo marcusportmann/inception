@@ -58,7 +58,7 @@ public final class PasswordUtil {
       return Base64.getEncoder().encodeToString(md.digest());
     } catch (Throwable e) {
       throw new RuntimeException(
-          String.format("Failed to generate a SHA-512 hash of the password (%s)", password), e);
+          "Failed to generate a SHA-512 hash of the password (%s)".formatted(password), e);
     }
   }
 

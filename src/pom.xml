@@ -410,6 +410,21 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-executor</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-executor-api</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-executor-ws</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-jpa</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -582,6 +597,9 @@
     <module>inception-error</module>
     <module>inception-error-api</module>
     <module>inception-error-ws</module>
+    <module>inception-executor</module>
+    <module>inception-executor-api</module>
+    <module>inception-executor-ws</module>
     <module>inception-core</module>
     <module>inception-jpa</module>
     <module>inception-jta</module>

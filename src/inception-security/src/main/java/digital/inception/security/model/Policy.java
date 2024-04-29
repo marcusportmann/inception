@@ -49,10 +49,10 @@ import java.util.Objects;
 @Schema(description = "A policy")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "version", "name", "type", "data", "lastModified"})
-@XmlRootElement(name = "Policy", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "Policy", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Policy",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"id", "version", "name", "type", "data", "lastModified"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

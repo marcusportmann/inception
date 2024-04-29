@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The method used to sort the list of tokens")
 @XmlEnum
-@XmlType(name = "TokenSortBy", namespace = "http://inception.digital/security")
+@XmlType(name = "TokenSortBy", namespace = "https://inception.digital/security")
 public enum TokenSortBy {
   /** Sort by expires. */
   @XmlEnumValue("Expires")

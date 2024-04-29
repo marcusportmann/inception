@@ -47,10 +47,10 @@ import java.util.List;
   "pageSize",
   "filter"
 })
-@XmlRootElement(name = "UserDirectorySummaries", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "UserDirectorySummaries", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectorySummaries",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {
       "userDirectorySummaries",
       "total",

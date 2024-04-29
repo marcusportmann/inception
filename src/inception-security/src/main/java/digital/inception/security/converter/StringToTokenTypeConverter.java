@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.TokenType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToTokenTypeConverter implements Converter<String, TokenType> 
   public StringToTokenTypeConverter() {}
 
   @Override
-  public TokenType convert(String source) {
+  public TokenType convert(@NonNull String source) {
     return TokenType.fromCode(source);
   }
 }

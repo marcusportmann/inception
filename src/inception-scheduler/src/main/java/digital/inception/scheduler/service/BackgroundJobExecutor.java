@@ -49,6 +49,8 @@ public class BackgroundJobExecutor {
   @Value("${inception.scheduler.initial-job-execution-threads:#{1}}")
   private int initialJobExecutionThreads;
 
+  private LinkedBlockingQueue<Runnable> jobExecutionQueue;
+
   /** The number of minutes an idle job execution thread should be kept alive. */
   @Value("${inception.scheduler.job-execution-thread-keep-alive:#{5}}")
   private int jobExecutionThreadKeepAlive;
@@ -61,8 +63,6 @@ public class BackgroundJobExecutor {
    */
   @Value("${inception.scheduler.maximum-job-execution-queue-length:#{50}}")
   private int maximumJobExecutionQueueLength;
-
-  private LinkedBlockingQueue<Runnable> jobExecutionQueue;
 
   /** The maximum number of job execution threads to create to execute jobs. */
   @Value("${inception.scheduler.maximum-job-execution-threads:#{10}}")
@@ -188,7 +188,7 @@ public class BackgroundJobExecutor {
     public void run() {
       try {
         if (logger.isDebugEnabled()) {
-          logger.debug(String.format("Executing the job (%s)", job.getId()));
+          logger.debug("Executing the job (%s)".formatted(job.getId()));
         }
 
         schedulerService.executeJob(job);
@@ -201,29 +201,26 @@ public class BackgroundJobExecutor {
             schedulerService.unlockJob(job.getId(), JobStatus.SCHEDULED);
           } catch (Throwable f) {
             logger.error(
-                String.format(
-                    "Failed to unlock and set the status for the job (%s) to SCHEDULED",
-                    job.getId()),
+                "Failed to unlock and set the status for the job (%s) to SCHEDULED"
+                    .formatted(job.getId()),
                 f);
           }
         } catch (Throwable e) {
           logger.warn(
-              String.format(
-                  "The job (%s) could not be rescheduled and will be marked as FAILED",
-                  job.getId()));
+              "The job (%s) could not be rescheduled and will be marked as FAILED"
+                  .formatted(job.getId()));
 
           try {
             schedulerService.unlockJob(job.getId(), JobStatus.FAILED);
           } catch (Throwable f) {
             logger.error(
-                String.format(
-                    "Failed to unlock and set the status for the job (%s) to FAILED",
-                    job.getId()),
+                "Failed to unlock and set the status for the job (%s) to FAILED"
+                    .formatted(job.getId()),
                 f);
           }
         }
       } catch (Throwable e) {
-        logger.error(String.format("Failed to execute the job (%s)", job.getId()), e);
+        logger.error("Failed to execute the job (%s)".formatted(job.getId()), e);
 
         try {
           /*
@@ -233,10 +230,8 @@ public class BackgroundJobExecutor {
            */
           if (job.getExecutionAttempts() >= schedulerService.getMaximumJobExecutionAttempts()) {
             logger.warn(
-                String.format(
-                    "The job (%s) has exceeded the maximum  number of execution attempts and "
-                        + "will be marked as FAILED",
-                    job.getId()));
+                "The job (%s) has exceeded the maximum  number of execution attempts and will be marked as FAILED"
+                    .formatted(job.getId()));
 
             schedulerService.unlockJob(job.getId(), JobStatus.FAILED);
           } else {
@@ -244,8 +239,7 @@ public class BackgroundJobExecutor {
           }
         } catch (Throwable f) {
           logger.error(
-              String.format("Failed to unlock and set the status for the job (%s)", job.getId()),
-              f);
+              "Failed to unlock and set the status for the job (%s)".formatted(job.getId()), f);
         }
       }
     }

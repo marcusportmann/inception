@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 404)
 @WebFault(
     name = "UserDirectoryTypeNotFoundException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class UserDirectoryTypeNotFoundException extends ServiceException {

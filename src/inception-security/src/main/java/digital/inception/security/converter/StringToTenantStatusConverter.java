@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.TenantStatus;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToTenantStatusConverter implements Converter<String, TenantSt
   public StringToTenantStatusConverter() {}
 
   @Override
-  public TenantStatus convert(String source) {
+  public TenantStatus convert(@NonNull String source) {
     return TenantStatus.fromCode(source);
   }
 }

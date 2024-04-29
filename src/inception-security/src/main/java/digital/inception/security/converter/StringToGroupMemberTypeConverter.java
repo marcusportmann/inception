@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.GroupMemberType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToGroupMemberTypeConverter implements Converter<String, Group
   public StringToGroupMemberTypeConverter() {}
 
   @Override
-  public GroupMemberType convert(String source) {
+  public GroupMemberType convert(@NonNull String source) {
     return GroupMemberType.fromCode(source);
   }
 }

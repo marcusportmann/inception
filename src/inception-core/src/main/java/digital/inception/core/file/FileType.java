@@ -31,7 +31,7 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "The file type")
 @XmlEnum
-@XmlType(name = "FileType", namespace = "http://inception.digital/core")
+@XmlType(name = "FileType", namespace = "https://inception.digital/core")
 public enum FileType {
 
   /** Audio 3GPP. */

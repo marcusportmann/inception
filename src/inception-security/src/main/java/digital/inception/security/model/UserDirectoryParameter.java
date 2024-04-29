@@ -44,10 +44,10 @@ import java.util.List;
 @Schema(description = "A name-value pair parameter for a user directory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "UserDirectoryParameter", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "UserDirectoryParameter", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectoryParameter",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -182,18 +182,17 @@ public class UserDirectoryParameter implements Serializable {
           return Base64.getDecoder().decode(parameter.value);
         } catch (Throwable e) {
           throw new UserDirectoryParameterException(
-              String.format(
-                  "Failed to retrieve the binary value for the user directory parameter (%s)",
-                  parameter.name));
+              "Failed to retrieve the binary value for the user directory parameter ("
+                  + parameter.name
+                  + ")");
         }
       }
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to retrieve the binary value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to retrieve the binary value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -215,18 +214,17 @@ public class UserDirectoryParameter implements Serializable {
           return Boolean.parseBoolean(parameter.value);
         } catch (Throwable e) {
           throw new UserDirectoryParameterException(
-              String.format(
-                  "Failed to retrieve the boolean value for the user directory parameter (%s)",
-                  parameter.name));
+              "Failed to retrieve the boolean value for the user directory parameter ("
+                  + parameter.name
+                  + ")");
         }
       }
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to retrieve the boolean value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to retrieve the boolean value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -248,18 +246,17 @@ public class UserDirectoryParameter implements Serializable {
           return new BigDecimal(parameter.value);
         } catch (Throwable e) {
           throw new UserDirectoryParameterException(
-              String.format(
-                  "Failed to retrieve the decimal value for the user directory parameter (%s)",
-                  parameter.name));
+              "Failed to retrieve the decimal value for the user directory parameter ("
+                  + parameter.name
+                  + ")");
         }
       }
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to retrieve the decimal value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to retrieve the decimal value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -281,18 +278,17 @@ public class UserDirectoryParameter implements Serializable {
           return Double.parseDouble(parameter.value);
         } catch (Throwable e) {
           throw new UserDirectoryParameterException(
-              String.format(
-                  "Failed to retrieve the double value for the user directory parameter (%s)",
-                  parameter.name));
+              "Failed to retrieve the double value for the user directory parameter ("
+                  + parameter.name
+                  + ")");
         }
       }
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to retrieve the double value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to retrieve the double value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -314,18 +310,17 @@ public class UserDirectoryParameter implements Serializable {
           return Integer.parseInt(parameter.value);
         } catch (Throwable e) {
           throw new UserDirectoryParameterException(
-              String.format(
-                  "Failed to retrieve the integer value for the user directory parameter (%s)",
-                  parameter.name));
+              "Failed to retrieve the integer value for the user directory parameter ("
+                  + parameter.name
+                  + ")");
         }
       }
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to retrieve the integer value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to retrieve the integer value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -347,18 +342,17 @@ public class UserDirectoryParameter implements Serializable {
           return Long.parseLong(parameter.value);
         } catch (Throwable e) {
           throw new UserDirectoryParameterException(
-              String.format(
-                  "Failed to retrieve the long value for the user directory parameter (%s)",
-                  parameter.name));
+              "Failed to retrieve the long value for the user directory parameter ("
+                  + parameter.name
+                  + ")");
         }
       }
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to retrieve the long value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to retrieve the long value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -381,10 +375,9 @@ public class UserDirectoryParameter implements Serializable {
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to retrieve the string value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to retrieve the string value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -425,10 +418,9 @@ public class UserDirectoryParameter implements Serializable {
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to set the binary value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to set the binary value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -453,10 +445,9 @@ public class UserDirectoryParameter implements Serializable {
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to set the decimal value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to set the decimal value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -481,10 +472,9 @@ public class UserDirectoryParameter implements Serializable {
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to set the double value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to set the double value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -509,10 +499,9 @@ public class UserDirectoryParameter implements Serializable {
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to set the long value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to set the long value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -536,10 +525,9 @@ public class UserDirectoryParameter implements Serializable {
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to set the long value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to set the long value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -564,10 +552,9 @@ public class UserDirectoryParameter implements Serializable {
     }
 
     throw new UserDirectoryParameterException(
-        String.format(
-            "Failed to set the string value for the user directory parameter (%s): "
-                + "The user directory parameter could not be found",
-            name));
+        "Failed to set the string value for the user directory parameter ("
+            + name
+            + "): The user directory parameter could not be found");
   }
 
   /**
@@ -583,8 +570,7 @@ public class UserDirectoryParameter implements Serializable {
       return Base64.getDecoder().decode(value);
     } catch (Throwable e) {
       throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the binary value for the user directory parameter (%s)", name));
+          "Failed to retrieve the binary value for the user directory parameter (" + name + ")");
     }
   }
 
@@ -601,8 +587,7 @@ public class UserDirectoryParameter implements Serializable {
       return new BigDecimal(value);
     } catch (Throwable e) {
       throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the decimal value for the user directory parameter (%s)", name));
+          "Failed to retrieve the decimal value for the user directory parameter (" + name + ")");
     }
   }
 
@@ -619,8 +604,7 @@ public class UserDirectoryParameter implements Serializable {
       return Double.parseDouble(value);
     } catch (Throwable e) {
       throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the double value for the user directory parameter (%s)", name));
+          "Failed to retrieve the double value for the user directory parameter (" + name + ")");
     }
   }
 
@@ -637,8 +621,7 @@ public class UserDirectoryParameter implements Serializable {
       return Integer.parseInt(value);
     } catch (Throwable e) {
       throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the integer value for the user directory parameter (%s)", name));
+          "Failed to retrieve the integer value for the user directory parameter (" + name + ")");
     }
   }
 
@@ -655,8 +638,7 @@ public class UserDirectoryParameter implements Serializable {
       return Long.parseLong(value);
     } catch (Throwable e) {
       throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the long value for the user directory parameter (%s)", name));
+          "Failed to retrieve the long value for the user directory parameter (" + name + ")");
     }
   }
 

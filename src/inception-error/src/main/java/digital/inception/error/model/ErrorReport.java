@@ -59,10 +59,10 @@ import java.util.UUID;
   "feedback",
   "data"
 })
-@XmlRootElement(name = "ErrorReport", namespace = "http://inception.digital/error")
+@XmlRootElement(name = "ErrorReport", namespace = "https://inception.digital/error")
 @XmlType(
     name = "ErrorReport",
-    namespace = "http://inception.digital/error",
+    namespace = "https://inception.digital/error",
     propOrder = {
       "id",
       "applicationId",

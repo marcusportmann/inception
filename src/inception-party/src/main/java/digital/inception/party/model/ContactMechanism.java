@@ -51,7 +51,7 @@ import org.springframework.util.StringUtils;
  * The <b>ContactMechanism</b> class holds the information for a contact mechanism for an
  * organization or person.
  *
- * <p>The JPA 2.2 spec (10.6) does not support attribute converters for attributes annotated
+ * <p>The JPA 2.2 spec (10.6) does not support attribute converter for attributes annotated
  * with @Id. If Enum types are used for these attributes then the ordinal value is always used. As a
  * result, the type and purpose attributes for this class are Strings and the Getter and Setters
  * (a.k.a. Accessors and Mutators) convert to and from the Enum types. A consequence of this is that
@@ -62,10 +62,10 @@ import org.springframework.util.StringUtils;
 @Schema(description = "A contact mechanism for an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "role", "value", "purposes"})
-@XmlRootElement(name = "ContactMechanism", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ContactMechanism", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ContactMechanism",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"type", "role", "value", "purposes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

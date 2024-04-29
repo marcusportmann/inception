@@ -18,6 +18,7 @@ package digital.inception.security.converter;
 
 import digital.inception.security.model.UserSortBy;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +34,7 @@ public class StringToUserSortByConverter implements Converter<String, UserSortBy
   public StringToUserSortByConverter() {}
 
   @Override
-  public UserSortBy convert(String source) {
+  public UserSortBy convert(@NonNull String source) {
     return UserSortBy.fromCode(source);
   }
 }

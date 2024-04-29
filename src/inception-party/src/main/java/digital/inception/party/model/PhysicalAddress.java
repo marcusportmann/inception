@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
-import digital.inception.party.constraints.ValidCountryCode;
+import digital.inception.party.constraint.ValidCountryCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -94,10 +94,10 @@ import org.springframework.util.StringUtils;
   "longitude",
   "purposes"
 })
-@XmlRootElement(name = "PhysicalAddress", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "PhysicalAddress", namespace = "https://inception.digital/party")
 @XmlType(
     name = "PhysicalAddress",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "id",
       "type",

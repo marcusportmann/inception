@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.ConstraintType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToConstraintTypeConverter implements Converter<String, Constr
   public StringToConstraintTypeConverter() {}
 
   @Override
-  public ConstraintType convert(String source) {
+  public ConstraintType convert(@NonNull String source) {
     return ConstraintType.fromCode(source);
   }
 }

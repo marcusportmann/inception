@@ -46,10 +46,10 @@ import java.util.List;
 @Schema(description = "A request to generate a token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "name", "description", "validFromDate", "expiryDate", "claims"})
-@XmlRootElement(name = "GenerateTokenRequest", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "GenerateTokenRequest", namespace = "https://inception.digital/security")
 @XmlType(
     name = "GenerateTokenRequest",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"type", "name", "description", "validFromDate", "expiryDate", "claims"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenerateTokenRequest implements Serializable {

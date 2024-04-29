@@ -2041,7 +2041,7 @@ public class PartyReferenceService implements IPartyReferenceService {
           Sort.by(Direction.ASC, "roleType", "attributeType"));
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the role type attribute type constraints", e);
+          "Failed to retrieve the role type attribute type constraint", e);
     }
   }
 
@@ -2059,7 +2059,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the role type attribute type constraints", e);
+          "Failed to retrieve the role type attribute type constraint", e);
     }
   }
 
@@ -2072,7 +2072,7 @@ public class PartyReferenceService implements IPartyReferenceService {
           Sort.by(Direction.ASC, "roleType", "preferenceType"));
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the role type preference type constraints", e);
+          "Failed to retrieve the role type preference type constraint", e);
     }
   }
 
@@ -2090,7 +2090,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the role type preference type constraints", e);
+          "Failed to retrieve the role type preference type constraint", e);
     }
   }
 

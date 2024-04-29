@@ -57,10 +57,10 @@ import java.util.UUID;
   "lockName",
   "lastProcessed"
 })
-@XmlRootElement(name = "Job", namespace = "http://inception.digital/sms")
+@XmlRootElement(name = "Job", namespace = "https://inception.digital/sms")
 @XmlType(
     name = "SMS",
-    namespace = "http://inception.digital/sms",
+    namespace = "https://inception.digital/sms",
     propOrder = {
       "id",
       "mobileNumber",

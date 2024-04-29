@@ -31,7 +31,7 @@ import java.io.Serial;
  */
 @WebFault(
     name = "ServiceUnavailableException",
-    targetNamespace = "http://inception.digital/core",
+    targetNamespace = "https://inception.digital/core",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused", "WeakerAccess"})

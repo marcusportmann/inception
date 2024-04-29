@@ -1213,7 +1213,7 @@ public class PartyReferenceServiceTest {
     assertEquals(
         72,
         retrievedRoleTypeAttributeTypeConstraints.size(),
-        "The correct number of role type attribute type constraints was not retrieved");
+        "The correct number of role type attribute type constraint was not retrieved");
 
     retrievedRoleTypeAttributeTypeConstraints =
         partyReferenceService.getRoleTypeAttributeTypeConstraints("test_person_role");
@@ -1221,7 +1221,7 @@ public class PartyReferenceServiceTest {
     assertEquals(
         57,
         retrievedRoleTypeAttributeTypeConstraints.size(),
-        "The correct number of role type attribute type constraints was not retrieved");
+        "The correct number of role type attribute type constraint was not retrieved");
 
     retrievedRoleTypeAttributeTypeConstraints.stream()
         .filter(
@@ -1245,7 +1245,7 @@ public class PartyReferenceServiceTest {
     assertEquals(
         16,
         retrievedRoleTypePreferenceTypeConstraints.size(),
-        "The correct number of role type preference type constraints was not retrieved");
+        "The correct number of role type preference type constraint was not retrieved");
 
     retrievedRoleTypePreferenceTypeConstraints =
         partyReferenceService.getRoleTypePreferenceTypeConstraints("test_person_role");
@@ -1253,7 +1253,7 @@ public class PartyReferenceServiceTest {
     assertEquals(
         12,
         retrievedRoleTypePreferenceTypeConstraints.size(),
-        "The correct number of role type preference type constraints was not retrieved");
+        "The correct number of role type preference type constraint was not retrieved");
 
     retrievedRoleTypePreferenceTypeConstraints.stream()
         .filter(

@@ -46,10 +46,10 @@ import java.util.Objects;
         "An area, especially part of a country or the world having definable characteristics but not always fixed boundaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"country", "code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "Region", namespace = "http://inception.digital/reference")
+@XmlRootElement(name = "Region", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "Region",
-    namespace = "http://inception.digital/reference",
+    namespace = "https://inception.digital/reference",
     propOrder = {"country", "code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

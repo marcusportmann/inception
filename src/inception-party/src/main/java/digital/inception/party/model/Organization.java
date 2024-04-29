@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.party.constraints.ValidOrganization;
+import digital.inception.party.constraint.ValidOrganization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -109,10 +109,10 @@ import org.springframework.util.StringUtils;
   "countriesOfTaxResidence",
   "taxNumbers",
 })
-@XmlRootElement(name = "Organization", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Organization", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Organization",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "id",
       "tenantId",
@@ -606,7 +606,9 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "CountryOfTaxResidence")
   @Size(max = 10)
   public Set<String> getCountriesOfTaxResidence() {
-    return Set.of(StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence)));
+    return Set.of(
+        StringUtils.removeDuplicateStrings(
+            StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence)));
   }
 
   /**

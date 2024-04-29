@@ -44,10 +44,10 @@ import java.util.Objects;
 @Schema(description = "A type of unit of measurement")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "MeasurementUnitType", namespace = "http://inception.digital/reference")
+@XmlRootElement(name = "MeasurementUnitType", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "MeasurementUnitType",
-    namespace = "http://inception.digital/reference",
+    namespace = "https://inception.digital/reference",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

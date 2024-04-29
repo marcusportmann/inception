@@ -55,10 +55,10 @@ import java.util.Objects;
 @Schema(description = "An allocation of an organization or person to a segment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"segment", "effectiveFrom", "effectiveTo"})
-@XmlRootElement(name = "SegmentAllocation", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "SegmentAllocation", namespace = "https://inception.digital/party")
 @XmlType(
     name = "SegmentAllocation",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"segment", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

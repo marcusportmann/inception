@@ -38,7 +38,7 @@ import java.io.Serial;
     status = 409)
 @WebFault(
     name = "DuplicateMailTemplateException",
-    targetNamespace = "http://inception.digital/mail",
+    targetNamespace = "https://inception.digital/mail",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateMailTemplateException extends ServiceException {

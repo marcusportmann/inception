@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/association-not-found",
+    type = "https://inception.digital/problems/party/association-not-found",
     title = "The association could not be found.",
     status = 404)
 @WebFault(
     name = "AssociationNotFoundException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class AssociationNotFoundException extends ServiceException {

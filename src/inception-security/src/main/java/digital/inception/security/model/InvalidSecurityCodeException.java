@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 401)
 @WebFault(
     name = "InvalidSecurityCodeException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class InvalidSecurityCodeException extends ServiceException {

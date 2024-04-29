@@ -55,10 +55,10 @@ import java.util.UUID;
 @Schema(name = "Mandatary", description = "A mandatary for a mandate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"partyId", "role", "effectiveFrom", "effectiveTo"})
-@XmlRootElement(name = "Mandatary", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Mandatary", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Mandatary",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"partyId", "role", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

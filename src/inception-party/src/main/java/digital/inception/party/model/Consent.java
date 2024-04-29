@@ -55,10 +55,10 @@ import java.util.Objects;
 @Schema(description = "A consent provided by a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo"})
-@XmlRootElement(name = "Consent", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Consent", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Consent",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"type", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

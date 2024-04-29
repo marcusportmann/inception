@@ -32,10 +32,10 @@ import java.time.OffsetDateTime;
  * @author Marcus Portmann
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "ServiceError", namespace = "http://inception.digital/core")
+@XmlRootElement(name = "ServiceError", namespace = "https://inception.digital/core")
 @XmlType(
     name = "ServiceError",
-    namespace = "http://inception.digital/core",
+    namespace = "https://inception.digital/core",
     propOrder = {"timestamp", "message"})
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ServiceError {

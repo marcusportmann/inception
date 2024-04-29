@@ -35,7 +35,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "VehicleService",
     name = "IVehicleService",
-    targetNamespace = "http://inception.digital/demo")
+    targetNamespace = "https://inception.digital/demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class VehicleWebService {

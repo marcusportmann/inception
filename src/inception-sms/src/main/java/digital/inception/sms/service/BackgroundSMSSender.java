@@ -101,7 +101,7 @@ public class BackgroundSMSSender {
       // Send the SMS
       try {
         if (logger.isDebugEnabled()) {
-          logger.debug(String.format("Sending the queued SMS (%s)", sms.getId()));
+          logger.debug("Sending the queued SMS (%s)".formatted(sms.getId()));
         }
 
         if (smsService.sendSMSSynchronously(sms.getId(), sms.getMobileNumber(), sms.getMessage())) {
@@ -112,7 +112,7 @@ public class BackgroundSMSSender {
           smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
         }
       } catch (Throwable e) {
-        logger.error(String.format("Failed to send the queued SMS (%s)", sms.getId()), e);
+        logger.error("Failed to send the queued SMS (%s)".formatted(sms.getId()), e);
 
         try {
           /*
@@ -121,10 +121,9 @@ public class BackgroundSMSSender {
            */
           if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts()) {
             logger.warn(
-                String.format(
-                    "The queued SMS (%s) has exceeded the maximum number of send attempts and "
-                        + "will be marked as FAILED",
-                    sms.getId()));
+                "The queued SMS ("
+                    + sms.getId()
+                    + ") has exceeded the maximum number of send attempts and will be marked as FAILED");
 
             smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
           } else {
@@ -132,8 +131,7 @@ public class BackgroundSMSSender {
           }
         } catch (Throwable f) {
           logger.error(
-              String.format(
-                  "Failed to unlock and set the status for the queued SMS (%s)", sms.getId()),
+              "Failed to unlock and set the status for the queued SMS (%s)".formatted(sms.getId()),
               f);
         }
       }

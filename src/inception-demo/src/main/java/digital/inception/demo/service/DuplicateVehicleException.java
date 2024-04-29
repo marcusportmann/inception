@@ -38,7 +38,7 @@ import java.util.UUID;
     status = 409)
 @WebFault(
     name = "DuplicateVehicleException",
-    targetNamespace = "http://inception.digital/demo",
+    targetNamespace = "https://inception.digital/demo",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateVehicleException extends ServiceException {

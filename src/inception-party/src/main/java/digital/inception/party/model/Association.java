@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.party.constraints.ValidAssociation;
+import digital.inception.party.constraint.ValidAssociation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -69,10 +69,10 @@ import java.util.UUID;
   "effectiveTo",
   "properties"
 })
-@XmlRootElement(name = "Association", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Association", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Association",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "id",
       "tenantId",

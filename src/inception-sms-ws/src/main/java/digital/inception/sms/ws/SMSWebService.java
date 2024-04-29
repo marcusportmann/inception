@@ -28,7 +28,7 @@ import jakarta.jws.soap.SOAPBinding;
 @WebService(
     serviceName = "SMSService",
     name = "ISMSService",
-    targetNamespace = "http://inception.digital/sms")
+    targetNamespace = "https://inception.digital/sms")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class SMSWebService {

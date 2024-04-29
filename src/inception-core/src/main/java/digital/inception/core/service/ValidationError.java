@@ -42,10 +42,10 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "A validation error")
 @JsonPropertyOrder({"property", "message"})
-@XmlRootElement(name = "ValidationError", namespace = "http://inception.digital/core")
+@XmlRootElement(name = "ValidationError", namespace = "https://inception.digital/core")
 @XmlType(
     name = "ValidationError",
-    namespace = "http://inception.digital/core",
+    namespace = "https://inception.digital/core",
     propOrder = {"property", "message"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

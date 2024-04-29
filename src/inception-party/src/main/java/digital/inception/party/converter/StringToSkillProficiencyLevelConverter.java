@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.SkillProficiencyLevel;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToSkillProficiencyLevelConverter
   public StringToSkillProficiencyLevelConverter() {}
 
   @Override
-  public SkillProficiencyLevel convert(String source) {
+  public SkillProficiencyLevel convert(@NonNull String source) {
     return SkillProficiencyLevel.fromCode(source);
   }
 }

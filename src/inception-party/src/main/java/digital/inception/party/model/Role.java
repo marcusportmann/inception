@@ -57,10 +57,10 @@ import java.util.Objects;
         "A role assigned directly to an organization or person, which may or may not be time based")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "purpose", "effectiveFrom", "effectiveTo"})
-@XmlRootElement(name = "Role", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Role", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Role",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"type", "purpose", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

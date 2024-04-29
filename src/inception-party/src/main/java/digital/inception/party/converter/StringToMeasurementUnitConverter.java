@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.MeasurementUnit;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToMeasurementUnitConverter implements Converter<String, Measu
   public StringToMeasurementUnitConverter() {}
 
   @Override
-  public MeasurementUnit convert(String source) {
+  public MeasurementUnit convert(@NonNull String source) {
     return MeasurementUnit.fromCode(source);
   }
 }

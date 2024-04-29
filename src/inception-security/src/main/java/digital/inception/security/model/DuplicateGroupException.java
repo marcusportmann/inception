@@ -35,7 +35,7 @@ import java.io.Serial;
     status = 409)
 @WebFault(
     name = "DuplicateGroupException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateGroupException extends ServiceException {

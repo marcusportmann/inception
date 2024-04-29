@@ -32,10 +32,10 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "InvalidArgumentError", namespace = "http://inception.digital/core")
+@XmlRootElement(name = "InvalidArgumentError", namespace = "https://inception.digital/core")
 @XmlType(
     name = "InvalidArgumentError",
-    namespace = "http://inception.digital/core",
+    namespace = "https://inception.digital/core",
     propOrder = {"parameter", "validationErrors"})
 @SuppressWarnings({"unused"})
 public class InvalidArgumentError extends ServiceError implements Serializable {

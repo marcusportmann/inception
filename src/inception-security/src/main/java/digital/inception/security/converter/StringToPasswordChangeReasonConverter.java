@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.PasswordChangeReason;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToPasswordChangeReasonConverter
   public StringToPasswordChangeReasonConverter() {}
 
   @Override
-  public PasswordChangeReason convert(String source) {
+  public PasswordChangeReason convert(@NonNull String source) {
     return PasswordChangeReason.fromCode(source);
   }
 }

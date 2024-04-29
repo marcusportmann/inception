@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 409)
 @WebFault(
     name = "DuplicateUserException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateUserException extends ServiceException {

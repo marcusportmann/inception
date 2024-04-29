@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The party type")
 @XmlEnum
-@XmlType(name = "PartyType", namespace = "http://inception.digital/party")
+@XmlType(name = "PartyType", namespace = "https://inception.digital/party")
 public enum PartyType {
   /** Organization. */
   @XmlEnumValue("Organization")

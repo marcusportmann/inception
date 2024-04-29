@@ -47,10 +47,10 @@ import java.util.UUID;
         "A subdivision of the human species on the basis of inherited physical and behavioral differences")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "Race", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Race", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Race",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

@@ -52,10 +52,10 @@ import java.util.Set;
         "A representation of a particular job function that is used to assign the permissions needed to perform particular system functions to a user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "description"})
-@XmlRootElement(name = "Role", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "Role", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Role",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

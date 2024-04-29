@@ -38,7 +38,7 @@ import java.util.List;
 @WebService(
     serviceName = "ConfigService",
     name = "IConfigService",
-    targetNamespace = "http://inception.digital/config")
+    targetNamespace = "https://inception.digital/config")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ConfigWebService {

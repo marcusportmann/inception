@@ -66,10 +66,10 @@ import java.util.UUID;
   "passwordAttempts",
   "passwordExpiry"
 })
-@XmlRootElement(name = "User", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "User", namespace = "https://inception.digital/security")
 @XmlType(
     name = "User",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {
       "userDirectoryId",
       "username",

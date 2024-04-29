@@ -33,12 +33,12 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/duplicate-person",
+    type = "https://inception.digital/problems/party/duplicate-person",
     title = "The person already exists.",
     status = 409)
 @WebFault(
     name = "DuplicatePersonException",
-    targetNamespace = "http://inception.digital/party",
+    targetNamespace = "https://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicatePersonException extends ServiceException {

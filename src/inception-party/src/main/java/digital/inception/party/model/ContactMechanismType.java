@@ -56,10 +56,10 @@ import java.util.regex.Pattern;
   "description",
   "pattern"
 })
-@XmlRootElement(name = "ContactMechanismType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ContactMechanismType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ContactMechanismType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "localeId",

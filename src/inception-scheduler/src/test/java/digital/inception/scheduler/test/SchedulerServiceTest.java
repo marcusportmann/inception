@@ -122,9 +122,9 @@ public class SchedulerServiceTest {
     for (Job unscheduledJob : unscheduledJobs) {
       if (unscheduledJob.getId().equals(disabledJob.getId())) {
         fail(
-            String.format(
-                "The disabled job (%s) was retrieved incorrectly as an unscheduled job",
-                disabledJob.getId()));
+            "The disabled job ("
+                + disabledJob.getId()
+                + ") was retrieved incorrectly as an unscheduled job");
       }
     }
 
@@ -162,7 +162,7 @@ public class SchedulerServiceTest {
     }
 
     if (!foundJob) {
-      fail(String.format("Failed to find the job (%s) in the list of jobs", job.getId()));
+      fail("Failed to find the job (" + job.getId() + ") in the list of jobs");
     }
 
     boolean foundUnscheduledJob = false;
@@ -178,9 +178,7 @@ public class SchedulerServiceTest {
     }
 
     if (!foundUnscheduledJob) {
-      fail(
-          String.format(
-              "Failed to find the job (%s) in the list of unscheduled jobs", job.getId()));
+      fail("Failed to find the job (" + job.getId() + ") in the list of unscheduled jobs");
     }
 
     // noinspection StatementWithEmptyBody
@@ -190,9 +188,7 @@ public class SchedulerServiceTest {
 
     for (Job unscheduledJob : unscheduledJobs) {
       if (unscheduledJob.getId().equals(job.getId())) {
-        fail(
-            String.format(
-                "The job (%s) was retrieved incorrectly as an unscheduled job", job.getId()));
+        fail("The job (" + job.getId() + ") was retrieved incorrectly as an unscheduled job");
 
         break;
       }

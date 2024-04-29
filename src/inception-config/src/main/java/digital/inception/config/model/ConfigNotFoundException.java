@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 404)
 @WebFault(
     name = "ConfigNotFoundException",
-    targetNamespace = "http://inception.digital/config",
+    targetNamespace = "https://inception.digital/config",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ConfigNotFoundException extends ServiceException {

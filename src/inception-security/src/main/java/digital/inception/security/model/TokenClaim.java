@@ -40,10 +40,10 @@ import java.util.List;
 @Schema(description = "A token claim")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "values"})
-@XmlRootElement(name = "TokenClaim", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "TokenClaim", namespace = "https://inception.digital/security")
 @XmlType(
     name = "TokenClaim",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"name", "values"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TokenClaim implements Serializable {

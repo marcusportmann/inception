@@ -62,9 +62,9 @@ public class TestCodeProvider implements ICodeProvider {
       return codeCategory.getId().equals(codeCategoryId);
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format(
-              "Failed to check whether the code provider supports the code category (%s)",
-              codeCategoryId),
+          "Failed to check whether the code provider supports the code category ("
+              + codeCategoryId
+              + ")",
           e);
     }
   }
@@ -83,9 +83,11 @@ public class TestCodeProvider implements ICodeProvider {
       return false;
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format(
-              "Failed to check whether the code (%s) exists for the code category (%s)",
-              codeId, codeCategoryId),
+          "Failed to check whether the code ("
+              + codeId
+              + ") exists for the code category ("
+              + codeCategoryId
+              + ")",
           e);
     }
   }
@@ -103,9 +105,11 @@ public class TestCodeProvider implements ICodeProvider {
       }
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format(
-              "Failed to retrieve the code (%s) for the code category (%s)",
-              codeId, codeCategoryId),
+          "Failed to retrieve the code ("
+              + codeId
+              + ") for the code category ("
+              + codeCategoryId
+              + ")",
           e);
     }
 
@@ -138,7 +142,7 @@ public class TestCodeProvider implements ICodeProvider {
       throw e;
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format("Failed to retrieve the code category (%s)", codeCategoryId), e);
+          "Failed to retrieve the code category (" + codeCategoryId + ")", e);
     }
   }
 
@@ -155,8 +159,7 @@ public class TestCodeProvider implements ICodeProvider {
       throw e;
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format("Failed to retrieve the data for the code category (%s)", codeCategoryId),
-          e);
+          "Failed to retrieve the data for the code category (" + codeCategoryId + ")", e);
     }
   }
 
@@ -180,9 +183,9 @@ public class TestCodeProvider implements ICodeProvider {
       throw e;
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format(
-              "Failed to retrieve the date and time the code category (%s) was last modified",
-              codeCategoryId),
+          "Failed to retrieve the date and time the code category ("
+              + codeCategoryId
+              + ") was last modified",
           e);
     }
   }
@@ -200,7 +203,7 @@ public class TestCodeProvider implements ICodeProvider {
       throw e;
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format("Failed to retrieve the code category name (%s)", codeCategoryId), e);
+          "Failed to retrieve the code category name (" + codeCategoryId + ")", e);
     }
   }
 
@@ -217,9 +220,11 @@ public class TestCodeProvider implements ICodeProvider {
       }
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format(
-              "Failed to retrieve the code (%s) for the code category (%s)",
-              codeId, codeCategoryId),
+          "Failed to retrieve the code ("
+              + codeId
+              + ") for the code category ("
+              + codeCategoryId
+              + ")",
           e);
     }
 
@@ -239,8 +244,7 @@ public class TestCodeProvider implements ICodeProvider {
       throw e;
     } catch (Throwable e) {
       throw new CodeProviderException(
-          String.format("Failed to retrieve the codes for the code category (%s)", codeCategoryId),
-          e);
+          "Failed to retrieve the codes for the code category (" + codeCategoryId + ")", e);
     }
   }
 

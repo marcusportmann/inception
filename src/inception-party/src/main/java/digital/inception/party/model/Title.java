@@ -58,10 +58,10 @@ import org.springframework.util.StringUtils;
   "description",
   "genders"
 })
-@XmlRootElement(name = "Title", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Title", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Title",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "localeId",

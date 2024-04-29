@@ -38,7 +38,7 @@ import java.io.Serial;
     status = 400)
 @WebFault(
     name = "InvalidPolicyDataException",
-    targetNamespace = "http://inception.digital/security",
+    targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class InvalidPolicyDataException extends ServiceException {

@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The policy type")
 @XmlEnum
-@XmlType(name = "PolicyType", namespace = "http://inception.digital/security")
+@XmlType(name = "PolicyType", namespace = "https://inception.digital/security")
 public enum PolicyType {
   /** XACML Policy Set. */
   @XmlEnumValue("XACMLPolicySet")

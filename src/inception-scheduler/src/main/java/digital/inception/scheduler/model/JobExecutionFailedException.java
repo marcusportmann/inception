@@ -36,8 +36,8 @@ import java.io.Serial;
     status = 500)
 @WebFault(
     name = "JobExecutionFailedException",
-    targetNamespace = "http://inception.digital/scheduler",
-    faultBean = "za.co.discovery.nova.core.service.ServiceError")
+    targetNamespace = "https://inception.digital/scheduler",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class JobExecutionFailedException extends Exception {
 

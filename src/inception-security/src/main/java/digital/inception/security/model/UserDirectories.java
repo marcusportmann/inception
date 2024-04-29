@@ -40,10 +40,10 @@ import java.util.List;
 @Schema(description = "The results of a request to retrieve a list of user directories")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectories", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
-@XmlRootElement(name = "UserDirectories", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "UserDirectories", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectories",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"userDirectories", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

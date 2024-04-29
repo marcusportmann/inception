@@ -130,7 +130,7 @@ public class DemoApplication extends Application {
               LocalDate.parse("2016-07-17"),
               tokenClaims);
 
-      Token validFromToken = securityService.generateToken(generateValidFromTokenRequest);
+      securityService.generateToken(generateValidFromTokenRequest);
 
       GenerateTokenRequest generateRevokedTokenRequest =
           new GenerateTokenRequest(
@@ -149,7 +149,7 @@ public class DemoApplication extends Application {
               LocalDate.parse("2040-01-01"),
               tokenClaims);
 
-      Token expiringToken = securityService.generateToken(generateExpiringTokenRequest);
+      securityService.generateToken(generateExpiringTokenRequest);
 
       GenerateTokenRequest generateExpiredTokenRequest =
           new GenerateTokenRequest(
@@ -160,7 +160,7 @@ public class DemoApplication extends Application {
               LocalDate.parse("2024-01-13"),
               tokenClaims);
 
-      Token expiredToken = securityService.generateToken(generateExpiredTokenRequest);
+      securityService.generateToken(generateExpiredTokenRequest);
 
       GenerateTokenRequest generatePendingTokenRequest =
           new GenerateTokenRequest(
@@ -170,7 +170,7 @@ public class DemoApplication extends Application {
               LocalDate.parse("2044-01-13"),
               tokenClaims);
 
-      Token pendingToken = securityService.generateToken(generatePendingTokenRequest);
+      securityService.generateToken(generatePendingTokenRequest);
 
       for (int i = 0; i < 10; i++) {
         GenerateTokenRequest generateServiceTokenRequest =
@@ -180,14 +180,14 @@ public class DemoApplication extends Application {
                 "Service Name " + i + " Service Token",
                 tokenClaims);
 
-        Token serviceToken = securityService.generateToken(generateServiceTokenRequest);
+        securityService.generateToken(generateServiceTokenRequest);
       }
 
       GenerateTokenRequest generateExternalSystemTokenRequest =
           new GenerateTokenRequest(
               TokenType.JWT, "ext_system_name", "System Name External Token", tokenClaims);
 
-      Token externalSystemToken = securityService.generateToken(generateExternalSystemTokenRequest);
+      securityService.generateToken(generateExternalSystemTokenRequest);
 
       GenerateTokenRequest generateExternalOrganizationTokenRequest =
           new GenerateTokenRequest(
@@ -196,8 +196,7 @@ public class DemoApplication extends Application {
               "Organization Name External Token",
               tokenClaims);
 
-      Token externalOrganizationToken =
-          securityService.generateToken(generateExternalOrganizationTokenRequest);
+      securityService.generateToken(generateExternalOrganizationTokenRequest);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to create the demo tokens", e);
     }

@@ -23,10 +23,10 @@ import java.util.UUID;
 @Schema(description = "A tenant user directory association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"tenantId", "userDirectoryId"})
-@XmlRootElement(name = "TenantUserDirectory", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "TenantUserDirectory", namespace = "https://inception.digital/security")
 @XmlType(
     name = "TenantUserDirectory",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"tenantId", "userDirectoryId"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

@@ -613,8 +613,7 @@ public class Predictor {
       StringTokenizer st1 = new StringTokenizer(pattern, "|");
 
       if (st1.countTokens() < 1) {
-        throw new InvalidSchedulingPatternException(
-            String.format("Invalid pattern: \"%s\"", pattern));
+        throw new InvalidSchedulingPatternException("Invalid pattern: \"%s\"".formatted(pattern));
       }
 
       while (st1.hasMoreTokens()) {
@@ -623,30 +622,28 @@ public class Predictor {
 
         if (st2.countTokens() != 5) {
           throw new InvalidSchedulingPatternException(
-              String.format("Invalid pattern: \"%s\"", localPattern));
+              "Invalid pattern: \"%s\"".formatted(localPattern));
         }
 
         try {
           minuteMatchers.add(buildValueMatcher(st2.nextToken(), MINUTE_VALUE_PARSER));
         } catch (Exception e) {
           throw new InvalidSchedulingPatternException(
-              String.format("Invalid pattern \"%s\". Error parsing minutes field", localPattern),
-              e);
+              "Invalid pattern \"%s\". Error parsing minutes field".formatted(localPattern), e);
         }
 
         try {
           hourMatchers.add(buildValueMatcher(st2.nextToken(), HOUR_VALUE_PARSER));
         } catch (Exception e) {
           throw new InvalidSchedulingPatternException(
-              String.format("Invalid pattern \"%s\". Error parsing hours field", localPattern), e);
+              "Invalid pattern \"%s\". Error parsing hours field".formatted(localPattern), e);
         }
 
         try {
           dayOfMonthMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_MONTH_VALUE_PARSER));
         } catch (Exception e) {
           throw new InvalidSchedulingPatternException(
-              String.format(
-                  "Invalid pattern \"%s\". Error parsing days of month field", localPattern),
+              "Invalid pattern \"%s\". Error parsing days of month field".formatted(localPattern),
               e);
         }
 
@@ -654,15 +651,14 @@ public class Predictor {
           monthMatchers.add(buildValueMatcher(st2.nextToken(), MONTH_VALUE_PARSER));
         } catch (Exception e) {
           throw new InvalidSchedulingPatternException(
-              String.format("Invalid pattern \"%s\". Error parsing months field", localPattern), e);
+              "Invalid pattern \"%s\". Error parsing months field".formatted(localPattern), e);
         }
 
         try {
           dayOfWeekMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_WEEK_VALUE_PARSER));
         } catch (Exception e) {
           throw new InvalidSchedulingPatternException(
-              String.format(
-                  "Invalid pattern \"%s\". Error parsing days of week field", localPattern),
+              "Invalid pattern \"%s\". Error parsing days of week field".formatted(localPattern),
               e);
         }
 
@@ -703,7 +699,7 @@ public class Predictor {
         }
       }
 
-      throw new Exception(String.format("Invalid alias \"%s\"", value));
+      throw new Exception("Invalid alias \"%s\"".formatted(value));
     }
 
     /**
@@ -794,9 +790,8 @@ public class Predictor {
           local = parseListElement(element, parser);
         } catch (Exception e) {
           throw new Exception(
-              String.format(
-                  "Invalid field \"%s\", invalid element \"%s\": %s",
-                  str, element, e.getMessage()));
+              "Invalid field \"%s\", invalid element \"%s\": %s"
+                  .formatted(str, element, e.getMessage()));
         }
 
         for (Integer value : local) {
@@ -807,7 +802,7 @@ public class Predictor {
       }
 
       if (values.isEmpty()) {
-        throw new Exception(String.format("Invalid field \"%s\"", str));
+        throw new Exception("Invalid field \"%s\"".formatted(str));
       }
 
       if (parser == DAY_OF_MONTH_VALUE_PARSER) {
@@ -837,7 +832,7 @@ public class Predictor {
       try {
         values = parseRange(st.nextToken(), parser);
       } catch (Exception e) {
-        throw new Exception(String.format("Invalid range: %s", e.getMessage()));
+        throw new Exception("Invalid range: %s".formatted(e.getMessage()));
       }
 
       if (size == 2) {
@@ -847,11 +842,11 @@ public class Predictor {
         try {
           div = Integer.parseInt(dStr);
         } catch (NumberFormatException e) {
-          throw new Exception("Invalid divisor \"" + dStr + "\"");
+          throw new Exception("Invalid divisor \"%s\"".formatted(dStr));
         }
 
         if (div < 1) {
-          throw new Exception("Non positive divisor \"" + div + "\"");
+          throw new Exception("Non positive divisor \"%d\"".formatted(div));
         }
 
         List<Integer> values2 = new ArrayList<>();
@@ -899,7 +894,7 @@ public class Predictor {
       try {
         v1 = parser.parse(v1Str);
       } catch (Exception e) {
-        throw new Exception(String.format("Invalid value \"%s\": %s", v1Str, e.getMessage()));
+        throw new Exception("Invalid value \"%s\": %s".formatted(v1Str, e.getMessage()));
       }
 
       if (size == 1) {
@@ -915,7 +910,7 @@ public class Predictor {
         try {
           v2 = parser.parse(v2Str);
         } catch (Exception e) {
-          throw new Exception(String.format("Invalid value \"%s\": %s", v2Str, e.getMessage()));
+          throw new Exception("Invalid value \"%s\": %s".formatted(v2Str, e.getMessage()));
         }
 
         List<Integer> values = new ArrayList<>();

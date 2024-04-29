@@ -39,8 +39,8 @@ public final class CXFWSSUsernameTokenProfileProxyConfigurator {
   private CXFWSSUsernameTokenProfileProxyConfigurator() {}
 
   /**
-   * Configure the CXF web service proxy to support authentication using the Web Services
-   * Security Username Token profile.
+   * Configure the CXF web service proxy to support authentication using the Web Services Security
+   * Username Token profile.
    *
    * @param proxy the web service proxy to configure
    * @param username the username to use when authenticating

@@ -1556,44 +1556,44 @@ public interface IPartyReferenceService {
   List<RolePurpose> getRolePurposes() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type attribute type constraints for all role types.
+   * Retrieve the role type attribute type constraint for all role types.
    *
-   * @return the role type attribute type constraints
-   * @throws ServiceUnavailableException if the role type attribute type constraints for all role
+   * @return the role type attribute type constraint
+   * @throws ServiceUnavailableException if the role type attribute type constraint for all role
    *     types could not be retrieved
    */
   List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints()
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type attribute type constraints for a specific role type.
+   * Retrieve the role type attribute type constraint for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the attribute constraints for
-   * @return the role type attribute type constraints
+   * @param roleType the code for the role type to retrieve the attribute constraint for
+   * @return the role type attribute type constraint
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the role type attribute type constraints for a specific
+   * @throws ServiceUnavailableException if the role type attribute type constraint for a specific
    *     role type could not be retrieved
    */
   List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the role type preference type constraints for all role types.
+   * Retrieve the role type preference type constraint for all role types.
    *
-   * @return the role type preference type constraints
-   * @throws ServiceUnavailableException if the role type preference type constraints for all role
+   * @return the role type preference type constraint
+   * @throws ServiceUnavailableException if the role type preference type constraint for all role
    *     types could not be retrieved
    */
   List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints()
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type preference type constraints for a specific role type.
+   * Retrieve the role type preference type constraint for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the preference constraints for
-   * @return the role type preference type constraints
+   * @param roleType the code for the role type to retrieve the preference constraint for
+   * @return the role type preference type constraint
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the role type preference type constraints for a specific
+   * @throws ServiceUnavailableException if the role type preference type constraint for a specific
    *     role type could not be retrieved
    */
   List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(String roleType)

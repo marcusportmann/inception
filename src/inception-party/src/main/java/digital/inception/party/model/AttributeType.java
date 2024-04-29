@@ -63,10 +63,10 @@ import org.springframework.util.StringUtils;
   "valueType",
   "pattern"
 })
-@XmlRootElement(name = "AttributeType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "AttributeType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "AttributeType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "category",
@@ -299,7 +299,8 @@ public class AttributeType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

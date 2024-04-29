@@ -59,10 +59,10 @@ import java.util.regex.Pattern;
   "countryOfIssue",
   "pattern"
 })
-@XmlRootElement(name = "ResidencePermitType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ResidencePermitType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ResidencePermitType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "localeId",

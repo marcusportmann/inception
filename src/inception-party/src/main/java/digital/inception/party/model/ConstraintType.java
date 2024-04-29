@@ -24,14 +24,14 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ConstraintType</b> enumeration defines the types of constraints that can be applied when
+ * The <b>ConstraintType</b> enumeration defines the types of constraint that can be applied when
  * validating an attribute or preference for a party.
  *
  * @author Marcus Portmann
  */
 @Schema(description = "A type of constraint")
 @XmlEnum
-@XmlType(name = "ConstraintType", namespace = "http://inception.digital/party")
+@XmlType(name = "ConstraintType", namespace = "https://inception.digital/party")
 public enum ConstraintType {
   /** Maximum size. */
   @XmlEnumValue("MaxSize")

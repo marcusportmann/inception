@@ -52,10 +52,10 @@ import java.util.Objects;
     description = "A mandate link identifying an entity a mandate applies to")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "target"})
-@XmlRootElement(name = "MandateLink", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "MandateLink", namespace = "https://inception.digital/party")
 @XmlType(
     name = "MandateLink",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"type", "target"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

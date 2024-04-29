@@ -58,10 +58,10 @@ import org.springframework.util.StringUtils;
   "description",
   "partyTypes"
 })
-@XmlRootElement(name = "PhysicalAddressPurpose", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "PhysicalAddressPurpose", namespace = "https://inception.digital/party")
 @XmlType(
     name = "PhysicalAddressPurpose",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -228,7 +228,8 @@ public class PhysicalAddressPurpose implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

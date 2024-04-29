@@ -67,10 +67,10 @@ import java.util.Set;
   "nextExecution",
   "parameters"
 })
-@XmlRootElement(name = "Job", namespace = "http://inception.digital/scheduler")
+@XmlRootElement(name = "Job", namespace = "https://inception.digital/scheduler")
 @XmlType(
     name = "Job",
-    namespace = "http://inception.digital/scheduler",
+    namespace = "https://inception.digital/scheduler",
     propOrder = {
       "id",
       "name",

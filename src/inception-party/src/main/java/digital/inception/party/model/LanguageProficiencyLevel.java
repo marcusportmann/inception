@@ -36,7 +36,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A language proficiency level")
 @XmlEnum
-@XmlType(name = "LanguageProficiencyLevel", namespace = "http://inception.digital/party")
+@XmlType(name = "LanguageProficiencyLevel", namespace = "https://inception.digital/party")
 public enum LanguageProficiencyLevel {
   /** Beginner. */
   @XmlEnumValue("Beginner")

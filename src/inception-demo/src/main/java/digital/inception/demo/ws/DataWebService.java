@@ -40,7 +40,7 @@ import java.util.List;
 @WebService(
     serviceName = "DataService",
     name = "IDataService",
-    targetNamespace = "http://inception.digital/demo")
+    targetNamespace = "https://inception.digital/demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class DataWebService {

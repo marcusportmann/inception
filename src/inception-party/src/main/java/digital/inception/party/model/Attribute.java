@@ -66,10 +66,10 @@ import org.springframework.util.StringUtils;
   "stringValue",
   "unit"
 })
-@XmlRootElement(name = "Attribute", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Attribute", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Attribute",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "type",
       "booleanValue",

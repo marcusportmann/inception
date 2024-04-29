@@ -39,7 +39,7 @@ import java.util.UUID;
 @WebService(
     serviceName = "PartyService",
     name = "IPartyService",
-    targetNamespace = "http://inception.digital/party")
+    targetNamespace = "https://inception.digital/party")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class PartyWebService {

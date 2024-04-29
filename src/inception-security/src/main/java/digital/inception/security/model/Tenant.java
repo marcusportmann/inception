@@ -54,10 +54,10 @@ import java.util.UUID;
         "A group of users who share common access with specific privileges to a particular subset of the information managed by a multi-tenant application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "status"})
-@XmlRootElement(name = "Tenant", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "Tenant", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Tenant",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"id", "name", "status"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

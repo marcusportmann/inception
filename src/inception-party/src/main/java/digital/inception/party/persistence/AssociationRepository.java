@@ -71,5 +71,6 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
    */
   @Query(
       "select a from Association a where a.tenantId = :tenantId and ((a.firstPartyId = :partyId) or (a.secondPartyId = :partyId))")
-  Page<Association> findByTenantIdAndPartyId(@Param("tenantId") UUID tenantId, @Param("partyId") UUID partyId, Pageable pageable);
+  Page<Association> findByTenantIdAndPartyId(
+      @Param("tenantId") UUID tenantId, @Param("partyId") UUID partyId, Pageable pageable);
 }

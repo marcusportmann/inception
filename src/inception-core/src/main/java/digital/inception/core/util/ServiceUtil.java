@@ -61,9 +61,8 @@ public final class ServiceUtil {
       instanceName += localMachine.getHostName().toLowerCase();
     } catch (Throwable e) {
       logger.error(
-          String.format(
-              "Failed to retrieve the server hostname while constructing the %s instance name",
-              serviceName),
+          "Failed to retrieve the server hostname while constructing the %s instance name"
+              .formatted(serviceName),
           e);
       instanceName = "Unknown";
     }
@@ -108,10 +107,8 @@ public final class ServiceUtil {
           instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
         } catch (Throwable e) {
           logger.error(
-              String.format(
-                  "Failed to retrieve the name of the WebSphere server instance from JNDI while "
-                      + "constructing the %s instance name",
-                  serviceName),
+              "Failed to retrieve the name of the WebSphere server instance from JNDI while constructing the %s instance name"
+                  .formatted(serviceName),
               e);
           instanceName = instanceName + "::Unknown";
         }

@@ -37,7 +37,7 @@ import java.io.Serial;
     status = 404)
 @WebFault(
     name = "CodeNotFoundException",
-    targetNamespace = "http://inception.digital/codes",
+    targetNamespace = "https://inception.digital/codes",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CodeNotFoundException extends ServiceException {

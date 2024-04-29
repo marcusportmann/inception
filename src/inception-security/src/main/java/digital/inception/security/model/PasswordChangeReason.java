@@ -31,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The password change reason")
 @XmlEnum
-@XmlType(name = "PasswordChangeReason", namespace = "http://inception.digital/security")
+@XmlType(name = "PasswordChangeReason", namespace = "https://inception.digital/security")
 public enum PasswordChangeReason {
   /** User. */
   @XmlEnumValue("User")

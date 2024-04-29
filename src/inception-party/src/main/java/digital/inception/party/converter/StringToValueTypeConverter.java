@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.ValueType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToValueTypeConverter implements Converter<String, ValueType> 
   public StringToValueTypeConverter() {}
 
   @Override
-  public ValueType convert(String source) {
+  public ValueType convert(@NonNull String source) {
     return ValueType.fromCode(source);
   }
 }

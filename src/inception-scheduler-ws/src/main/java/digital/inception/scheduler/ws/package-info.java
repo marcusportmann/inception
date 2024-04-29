@@ -20,14 +20,14 @@
  * @author Marcus Portmann
  */
 @jakarta.xml.bind.annotation.XmlSchema(
-    namespace = "http://inception.digital/scheduler",
+    namespace = "https://inception.digital/scheduler",
     elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @jakarta.xml.bind.annotation.XmlNs(
           prefix = "core",
-          namespaceURI = "http://inception.digital/core"),
+          namespaceURI = "https://inception.digital/core"),
       @jakarta.xml.bind.annotation.XmlNs(
           prefix = "scheduler",
-          namespaceURI = "http://inception.digital/scheduler"),
+          namespaceURI = "https://inception.digital/scheduler"),
     })
 package digital.inception.scheduler.ws;

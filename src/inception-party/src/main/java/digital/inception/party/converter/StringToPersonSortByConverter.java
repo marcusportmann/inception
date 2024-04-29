@@ -19,6 +19,7 @@ package digital.inception.party.converter;
 import digital.inception.party.model.PersonSortBy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToPersonSortByConverter implements Converter<String, PersonSo
   public StringToPersonSortByConverter() {}
 
   @Override
-  public PersonSortBy convert(String source) {
+  public PersonSortBy convert(@NonNull String source) {
     return PersonSortBy.fromCode(source);
   }
 }

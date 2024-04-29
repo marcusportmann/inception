@@ -45,10 +45,12 @@ import jakarta.xml.bind.annotation.XmlType;
   "supportsUserAdministration",
   "supportsUserLocks"
 })
-@XmlRootElement(name = "UserDirectoryCapabilities", namespace = "http://inception.digital/security")
+@XmlRootElement(
+    name = "UserDirectoryCapabilities",
+    namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectoryCapabilities",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {
       "supportsAdminChangePassword",
       "supportsChangePassword",

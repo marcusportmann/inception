@@ -48,10 +48,10 @@ import java.util.UUID;
 @JsonPropertyOrder({"system", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlRootElement(
     name = "IndustryClassificationCategory",
-    namespace = "http://inception.digital/party")
+    namespace = "https://inception.digital/party")
 @XmlType(
     name = "IndustryClassificationCategory",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"system", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

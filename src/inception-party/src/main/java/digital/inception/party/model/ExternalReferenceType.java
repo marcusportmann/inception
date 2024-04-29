@@ -60,10 +60,10 @@ import org.springframework.util.StringUtils;
   "partyTypes",
   "pattern"
 })
-@XmlRootElement(name = "ExternalReferenceType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ExternalReferenceType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ExternalReferenceType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "localeId",
@@ -257,7 +257,8 @@ public class ExternalReferenceType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

@@ -45,10 +45,10 @@ import java.util.UUID;
 @Schema(description = "A type of consent")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "ConsentType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ConsentType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ConsentType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

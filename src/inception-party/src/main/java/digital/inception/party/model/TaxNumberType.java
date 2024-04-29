@@ -61,10 +61,10 @@ import org.springframework.util.StringUtils;
   "partyTypes",
   "pattern"
 })
-@XmlRootElement(name = "TaxNumberType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "TaxNumberType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "TaxNumberType",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "localeId",
@@ -278,7 +278,8 @@ public class TaxNumberType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

@@ -31,12 +31,12 @@ import jakarta.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/workflow/invalid-bpmn",
+    type = "https://inception.digital/problems/workflow/invalid-bpmn",
     title = "The BPMN 2.0 XML data is invalid.",
     status = 400)
 @WebFault(
     name = "InvalidBPMNException",
-    targetNamespace = "http://inception.digital/workflow",
+    targetNamespace = "https://inception.digital/workflow",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class InvalidBPMNException extends ServiceException {

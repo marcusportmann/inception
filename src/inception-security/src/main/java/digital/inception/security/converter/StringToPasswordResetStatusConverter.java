@@ -19,6 +19,7 @@ package digital.inception.security.converter;
 import digital.inception.security.model.PasswordResetStatus;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +37,7 @@ public class StringToPasswordResetStatusConverter
   public StringToPasswordResetStatusConverter() {}
 
   @Override
-  public PasswordResetStatus convert(String source) {
+  public PasswordResetStatus convert(@NonNull String source) {
     return PasswordResetStatus.fromCode(source);
   }
 }

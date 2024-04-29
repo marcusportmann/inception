@@ -32,7 +32,7 @@ import java.util.List;
  */
 @WebFault(
     name = "InvalidArgumentException",
-    targetNamespace = "http://inception.digital/core",
+    targetNamespace = "https://inception.digital/core",
     faultBean = "digital.inception.validation.InvalidArgumentError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings("unused")

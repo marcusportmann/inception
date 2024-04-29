@@ -20,14 +20,14 @@
  * @author Marcus Portmann
  */
 @jakarta.xml.bind.annotation.XmlSchema(
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @jakarta.xml.bind.annotation.XmlNs(
           prefix = "core",
-          namespaceURI = "http://inception.digital/core"),
+          namespaceURI = "https://inception.digital/core"),
       @jakarta.xml.bind.annotation.XmlNs(
           prefix = "party",
-          namespaceURI = "http://inception.digital/party"),
+          namespaceURI = "https://inception.digital/party"),
     })
 package digital.inception.party.ws;

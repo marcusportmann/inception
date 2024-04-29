@@ -38,10 +38,10 @@ import java.io.Serializable;
 @Schema(description = "A parameter associated with a report")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "ReportParameter", namespace = "http://inception.digital/reporting")
+@XmlRootElement(name = "ReportParameter", namespace = "https://inception.digital/reporting")
 @XmlType(
     name = "ReportParameter",
-    namespace = "http://inception.digital/reporting",
+    namespace = "https://inception.digital/reporting",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

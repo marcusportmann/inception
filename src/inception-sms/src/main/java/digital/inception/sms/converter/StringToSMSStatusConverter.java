@@ -19,6 +19,7 @@ package digital.inception.sms.converter;
 import digital.inception.sms.model.SMSStatus;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ public class StringToSMSStatusConverter implements Converter<String, SMSStatus> 
   public StringToSMSStatusConverter() {}
 
   @Override
-  public SMSStatus convert(String source) {
+  public SMSStatus convert(@NonNull String source) {
     return SMSStatus.fromCode(source);
   }
 }

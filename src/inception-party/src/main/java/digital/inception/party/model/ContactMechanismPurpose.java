@@ -59,10 +59,10 @@ import org.springframework.util.StringUtils;
   "contactMechanismTypes",
   "partyTypes"
 })
-@XmlRootElement(name = "ContactMechanismPurpose", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "ContactMechanismPurpose", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ContactMechanismPurpose",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {
       "code",
       "localeId",
@@ -226,7 +226,8 @@ public class ContactMechanismPurpose implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "ContactMechanismTypes", required = true)
   public String[] getContactMechanismTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(contactMechanismTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(contactMechanismTypes));
   }
 
   /**
@@ -268,7 +269,8 @@ public class ContactMechanismPurpose implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(partyTypes));
+    return StringUtils.removeDuplicateStrings(
+        StringUtils.commaDelimitedListToStringArray(partyTypes));
   }
 
   /**

@@ -50,10 +50,10 @@ import java.util.Objects;
 @Schema(description = "A language proficiency for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"language", "listenLevel", "readLevel", "speakLevel", "writeLevel"})
-@XmlRootElement(name = "LanguageProficiency", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "LanguageProficiency", namespace = "https://inception.digital/party")
 @XmlType(
     name = "LanguageProficiency",
-    namespace = "http://inception.digital/party",
+    namespace = "https://inception.digital/party",
     propOrder = {"language", "listenLevel", "readLevel", "speakLevel", "writeLevel"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

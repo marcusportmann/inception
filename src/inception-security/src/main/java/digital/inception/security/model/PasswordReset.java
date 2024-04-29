@@ -48,10 +48,10 @@ import java.util.Objects;
 @Schema(description = "A password reset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"username", "requested", "completed", "expired", "status", "securityCodeHash"})
-@XmlRootElement(name = "GroupMember", namespace = "http://inception.digital/security")
+@XmlRootElement(name = "GroupMember", namespace = "https://inception.digital/security")
 @XmlType(
     name = "PasswordReset",
-    namespace = "http://inception.digital/security",
+    namespace = "https://inception.digital/security",
     propOrder = {"username", "requested", "completed", "expired", "status", "securityCodeHash"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
