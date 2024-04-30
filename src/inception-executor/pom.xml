@@ -13,7 +13,7 @@
   </parent>
 
   <dependencies>
-    <!-- Nova Dependencies -->
+    <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-core</artifactId>

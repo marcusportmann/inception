@@ -94,6 +94,8 @@ inception:
     maximum-task-execution-threads: 11
     task-execution-retry-delay: 65000
     task-execution-thread-keep-alive: 6
+    task-execution-timeout: 43200000
+    historical-task-retention-days: 30
 
   messaging:
     encryption-key: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=

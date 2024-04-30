@@ -16,13 +16,13 @@
 
 package digital.inception.executor.model;
 
+import digital.inception.core.service.Problem;
+import digital.inception.core.service.ServiceException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 import java.util.UUID;
-import digital.inception.core.service.Problem;
-import digital.inception.core.service.ServiceException;
 
 /**
  * The <b>TaskExecutionFailedException</b> exception is thrown to indicate an error condition as a
@@ -73,5 +73,17 @@ public class TaskExecutionFailedException extends ServiceException {
    */
   public TaskExecutionFailedException(UUID taskId, Throwable cause) {
     super("Failed to execute the task (" + taskId + "): " + cause.getMessage(), cause);
+  }
+
+  /**
+   * Constructs a new <b>TaskExecutionFailedException</b>.
+   *
+   * @param taskId the ID for the task
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   */
+  public TaskExecutionFailedException(UUID taskId, String message, Throwable cause) {
+    super("Failed to execute the task (" + taskId + "): " + message, cause);
   }
 }

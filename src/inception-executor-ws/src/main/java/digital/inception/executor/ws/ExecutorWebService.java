@@ -16,14 +16,6 @@
 
 package digital.inception.executor.ws;
 
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
-import jakarta.jws.WebResult;
-import jakarta.jws.WebService;
-import jakarta.jws.soap.SOAPBinding;
-import jakarta.xml.bind.annotation.XmlElement;
-import java.util.List;
-import java.util.UUID;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -40,6 +32,14 @@ import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskType;
 import digital.inception.executor.model.TaskTypeNotFoundException;
 import digital.inception.executor.service.IExecutorService;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebResult;
+import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
+import jakarta.xml.bind.annotation.XmlElement;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The <b>ExecutorWebService</b> class.
@@ -202,6 +202,23 @@ public class ExecutorWebService {
       throws InvalidArgumentException, ServiceUnavailableException {
     return executorService.getTaskSummaries(
         type, status, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the task type
+   *
+   * @param taskTypeCode the code for the task type
+   * @return the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be retrieved
+   */
+  @WebMethod(operationName = "GetTaskType")
+  @WebResult(name = "TaskType")
+  public TaskType getTaskType(
+      @WebParam(name = "TaskTypeCode") @XmlElement(required = true) String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
+    return executorService.getTaskType(taskTypeCode);
   }
 
   /**

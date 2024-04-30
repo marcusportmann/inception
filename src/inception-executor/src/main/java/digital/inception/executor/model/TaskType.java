@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.executor.constraint.ValidTaskType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,7 +45,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
-import digital.inception.executor.constraint.ValidTaskType;
 
 /**
  * The <b>TaskType</b> class holds the information for a task type.
@@ -62,6 +62,7 @@ import digital.inception.executor.constraint.ValidTaskType;
   "archiveCompleted",
   "archiveFailed",
   "maximumExecutionAttempts",
+  "executionTimeout",
   "retryDelay",
   "eventTypes",
   "eventTypesWithTaskData"
@@ -79,6 +80,7 @@ import digital.inception.executor.constraint.ValidTaskType;
       "archiveCompleted",
       "archiveFailed",
       "maximumExecutionAttempts",
+      "executionTimeout",
       "retryDelay",
       "eventTypes",
       "eventTypesWithTaskData"
@@ -163,6 +165,18 @@ public class TaskType implements Serializable {
   @Size(min = 1, max = 1000)
   @Column(name = "event_types_with_task_data", length = 1000)
   private String eventTypesWithTaskData;
+
+  /**
+   * The optional amount of time in milliseconds after which a locked and executing task of this
+   * type will be considered hung and will be reset.
+   */
+  @Schema(
+      description =
+          "The optional amount of time in milliseconds after which a locked and executing task of this type will be considered hung and will be reset")
+  @JsonProperty
+  @XmlElement(name = "ExecutionTimeout")
+  @Column(name = "execution_timeout")
+  private Integer executionTimeout;
 
   /** The fully qualified name of the Java class that executes tasks of this type. */
   @Schema(
@@ -492,6 +506,17 @@ public class TaskType implements Serializable {
   }
 
   /**
+   * Returns the optional amount of time in milliseconds after which a locked and executing task of
+   * this type will be considered hung and will be reset.
+   *
+   * @return the optional amount of time in milliseconds after which a locked and executing task of
+   *     this type will be considered hung and will be reset
+   */
+  public Integer getExecutionTimeout() {
+    return executionTimeout;
+  }
+
+  /**
    * Returns the fully qualified name of the Java class that executes tasks of this type.
    *
    * @return the fully qualified name of the Java class that executes tasks of this type
@@ -644,6 +669,17 @@ public class TaskType implements Serializable {
     } else {
       this.eventTypesWithTaskData = null;
     }
+  }
+
+  /**
+   * Set the optional amount of time in milliseconds after which a locked and executing task of this
+   * type will be considered hung and will be reset.
+   *
+   * @param executionTimeout the optional amount of time in milliseconds after which a locked and
+   *     executing task of this type will be considered hung and will be reset
+   */
+  public void setExecutionTimeout(Integer executionTimeout) {
+    this.executionTimeout = executionTimeout;
   }
 
   /**

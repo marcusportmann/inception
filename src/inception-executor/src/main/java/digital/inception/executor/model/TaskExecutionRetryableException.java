@@ -58,7 +58,7 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionNotPossibleException</b>.
+   * Constructs a new <b>TaskExecutionRetryableException</b>.
    *
    * @param taskId the ID for the task
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
@@ -72,7 +72,7 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionNotPossibleException</b>.
+   * Constructs a new <b>TaskExecutionRetryableException</b>.
    *
    * @param taskId the ID for the task
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
@@ -84,6 +84,23 @@ public class TaskExecutionRetryableException extends ServiceException {
             + taskId
             + ") failed because of a temporary error and can be retried: "
             + cause.getMessage(),
+        cause);
+  }
+
+  /**
+   * Constructs a new <b>TaskExecutionRetryableException</b>.
+   *
+   * @param taskId the ID for the task
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   */
+  public TaskExecutionRetryableException(UUID taskId, String message, Throwable cause) {
+    super(
+        "The execution of the task ("
+            + taskId
+            + ") failed because of a temporary error and can be retried: "
+            + message,
         cause);
   }
 }

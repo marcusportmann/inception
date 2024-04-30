@@ -16,9 +16,6 @@
 
 package digital.inception.executor.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -40,6 +37,9 @@ import digital.inception.executor.model.TaskStatus;
 import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskType;
 import digital.inception.executor.model.TaskTypeNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The <b>IExecutorService</b> interface defines the functionality provided by an Executor Service
@@ -226,6 +226,18 @@ public interface IExecutorService {
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the status of the task.
+   *
+   * @param taskId the ID for the task
+   * @return the status of the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the status of the task could not be retrieved
+   */
+  TaskStatus getTaskStatus(UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the summaries for the tasks.
    *
    * @param type the optional task type code filter to apply to the task summaries
@@ -294,6 +306,65 @@ public interface IExecutorService {
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
   /**
+   * Queue a task for execution.
+   *
+   * @param type the code for the task type
+   * @param batchId the optional ID for the task batch
+   * @param externalReference the optional external reference for the task
+   * @param suspended the optional flag indicating that the task must be suspended
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(
+      String type, String batchId, String externalReference, boolean suspended, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Queue a task for execution.
+   *
+   * @param type the code for the task type
+   * @param batchId the optional ID for the task batch
+   * @param externalReference the optional external reference for the task
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(String type, String batchId, String externalReference, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Queue a task for execution.
+   *
+   * @param type the code for the task type
+   * @param batchId the optional ID for the task batch
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(String type, String batchId, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Queue a task for execution.
+   *
+   * @param type the code for the task type
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(String type, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
+
+  /**
    * Requeue the task for execution
    *
    * @param task the task
@@ -303,6 +374,14 @@ public interface IExecutorService {
    */
   void requeueTask(Task task)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Reset "hung" tasks, which have been locked and executing longer than a global or
+   * task-type-specific timeout.
+   *
+   * @throws ServiceUnavailableException if the hung tasks could not be reset
+   */
+  void resetHungTasks() throws ServiceUnavailableException;
 
   /**
    * Reset the task locks.

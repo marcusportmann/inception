@@ -16,6 +16,8 @@
 
 package digital.inception.executor.persistence;
 
+import digital.inception.executor.model.Task;
+import digital.inception.executor.model.TaskStatus;
 import jakarta.persistence.LockModeType;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -29,8 +31,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import digital.inception.executor.model.Task;
-import digital.inception.executor.model.TaskStatus;
 
 /**
  * The <b>TaskRepository</b> interface declares the persistence for the <b>Task</b> domain type.
@@ -52,7 +52,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.step = :step, t.executionAttempts = 0, t.nextExecution = :currentTimestamp, "
-          + "t.lockName = null where t.id = :taskId")
+          + "t.locked = null, t.lockName = null where t.id = :taskId")
   void advanceTaskToStep(
       @Param("taskId") UUID taskId,
       @Param("step") String step,
@@ -71,7 +71,8 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.step = :step, t.data = :data, t.executionAttempts = 0, "
-          + "t.nextExecution = :currentTimestamp, t.lockName = null where t.id = :taskId")
+          + "t.nextExecution = :currentTimestamp, t.locked = null, t.lockName = null "
+          + "where t.id = :taskId")
   void advanceTaskToStep(
       @Param("taskId") UUID taskId,
       @Param("step") String step,
@@ -87,7 +88,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELLED, "
-          + "t.nextExecution = null, t.lockName = null "
+          + "t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.batchId = :batchId and "
           + "((t.status = digital.inception.executor.model.TaskStatus.CANCELLED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.QUEUED) or "
@@ -104,7 +105,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELLED, "
-          + "t.nextExecution = null, t.lockName = null "
+          + "t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.id = :taskId and "
           + "((t.status = digital.inception.executor.model.TaskStatus.CANCELLED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.QUEUED) or "
@@ -123,7 +124,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.COMPLETED, "
           + "t.executed =:currentTimestamp, t.data = :data, t.nextExecution = null, "
-          + "t.lockName = null  where t.id = :taskId")
+          + "t.locked = null, t.lockName = null where t.id = :taskId")
   void completeTask(
       @Param("taskId") UUID taskId,
       @Param("currentTimestamp") OffsetDateTime currentTimestamp,
@@ -139,7 +140,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.COMPLETED, "
-          + "t.executed =:currentTimestamp, t.nextExecution = null, t.lockName = null "
+          + "t.executed =:currentTimestamp, t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
   void completeTask(
       @Param("taskId") UUID taskId, @Param("currentTimestamp") OffsetDateTime currentTimestamp);
@@ -162,7 +163,8 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
-          + "t.nextExecution = :nextExecution, t.lockName = null where t.id = :taskId")
+          + "t.nextExecution = :nextExecution, t.locked = null, t.lockName = null "
+          + "where t.id = :taskId")
   void delayTask(
       @Param("taskId") UUID taskId, @Param("nextExecution") OffsetDateTime nextExecution);
 
@@ -176,7 +178,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.FAILED, "
-          + "t.executed =:currentTimestamp, t.nextExecution = null, t.lockName = null "
+          + "t.executed =:currentTimestamp, t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
   void failTask(
       @Param("taskId") UUID taskId, @Param("currentTimestamp") OffsetDateTime currentTimestamp);
@@ -232,19 +234,33 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       @Param("executedBefore") OffsetDateTime executedBefore, Pageable pageable);
 
   /**
+   * Retrieve the status of the task.
+   *
+   * @param taskId the ID for the task
+   * @return an Optional containing the status of the task or an empty Optional if the task could
+   *     not be found
+   */
+  @Query("SELECT t.status FROM Task t WHERE t.id = :taskId")
+  Optional<TaskStatus> getTaskStatus(@Param("taskId") UUID taskId);
+
+  /**
    * Lock the task for execution.
    *
    * @param taskId the ID for the task
    * @param lockName the name of the lock
+   * @param currentTimestamp the current date and time
    */
   @Transactional
   @Modifying
   @Query(
-      "update Task t set t.lockName = :lockName, "
+      "update Task t set t.locked = :currentTimestamp, t.lockName = :lockName, "
           + "t.status = digital.inception.executor.model.TaskStatus.EXECUTING, "
           + "t.executionAttempts = t.executionAttempts + 1 "
           + "where t.id = :taskId")
-  void lockTaskForExecution(@Param("taskId") UUID taskId, @Param("lockName") String lockName);
+  void lockTaskForExecution(
+      @Param("taskId") UUID taskId,
+      @Param("lockName") String lockName,
+      @Param("currentTimestamp") OffsetDateTime currentTimestamp);
 
   /**
    * Requeue the task.
@@ -256,9 +272,45 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
-          + "t.lockName = null, t.nextExecution = :nextExecution where t.id = :taskId")
+          + "t.locked = null, t.lockName = null, t.nextExecution = :nextExecution "
+          + "where t.id = :taskId")
   void requeueTask(
       @Param("taskId") UUID taskId, @Param("nextExecution") OffsetDateTime nextExecution);
+
+  /**
+   * Reset the hung tasks with the specified task type, which have been locked for execution before
+   * the specified date and time.
+   *
+   * @param taskTypeCode the code for the task type for the hung tasks
+   * @param lockedBefore the date and time a task must have been locked before to be considered hung
+   * @return the number of hung tasks that were reset
+   */
+  @Transactional
+  @Modifying
+  @Query(
+      "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
+          + "t.locked = null, t.lockName = null "
+          + "where t.type = :taskTypeCode and "
+          + "t.status = digital.inception.executor.model.TaskStatus.EXECUTING and "
+          + "t.locked <= :lockedBefore")
+  int resetHungTasks(
+      @Param("taskTypeCode") String taskTypeCode,
+      @Param("lockedBefore") OffsetDateTime lockedBefore);
+
+  /**
+   * Reset the hung tasks, which have been locked for execution before the specified date and time.
+   *
+   * @param lockedBefore the date and time a task must have been locked before to be considered hung
+   * @return the number of hung tasks that were reset
+   */
+  @Transactional
+  @Modifying
+  @Query(
+      "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
+          + "t.locked = null, t.lockName = null "
+          + "where t.status = digital.inception.executor.model.TaskStatus.EXECUTING and "
+          + "t.locked <= :lockedBefore")
+  int resetHungTasks(@Param("lockedBefore") OffsetDateTime lockedBefore);
 
   /**
    * Reset the task locks with the specified status.
@@ -270,7 +322,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Transactional
   @Modifying
   @Query(
-      "update Task t set t.status = :newStatus, t.lockName = null "
+      "update Task t set t.status = :newStatus, t.locked = null, t.lockName = null "
           + "where t.lockName = :lockName and t.status = :status")
   void resetTaskLocks(
       @Param("status") TaskStatus status,
@@ -297,7 +349,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.SUSPENDED, "
-          + "t.nextExecution = null, t.lockName = null "
+          + "t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.batchId = :batchId and "
           + "((t.status = digital.inception.executor.model.TaskStatus.QUEUED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.SUSPENDED))")
@@ -313,7 +365,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.SUSPENDED, "
-          + "t.nextExecution = null, t.lockName = null "
+          + "t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.id = :taskId and "
           + "((t.status = digital.inception.executor.model.TaskStatus.QUEUED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.SUSPENDED))")
@@ -327,7 +379,9 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    */
   @Transactional
   @Modifying
-  @Query("update Task t set t.status = :status, t.lockName = null where t.id = :taskId")
+  @Query(
+      "update Task t set t.status = :status, t.locked = null, t.lockName = null "
+          + "where t.id = :taskId")
   void unlockTask(@Param("taskId") UUID taskId, @Param("status") TaskStatus status);
 
   /**
@@ -340,7 +394,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Transactional
   @Modifying
   @Query(
-      "update Task t set t.status = :status, t.data = :data, t.lockName = null "
+      "update Task t set t.status = :status, t.data = :data, t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
   void unlockTask(
       @Param("taskId") UUID taskId, @Param("status") TaskStatus status, @Param("data") String data);
@@ -355,7 +409,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
-          + "t.nextExecution = :currentTimestamp, t.lockName = null "
+          + "t.nextExecution = :currentTimestamp, t.locked = null, t.lockName = null "
           + "where t.batchId = :batchId and "
           + "t.status = digital.inception.executor.model.TaskStatus.SUSPENDED")
   void unsuspendBatch(
@@ -372,7 +426,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
-          + "t.nextExecution = :currentTimestamp, t.lockName = null "
+          + "t.nextExecution = :currentTimestamp, t.locked = null, t.lockName = null "
           + "where t.id = :taskId and "
           + "t.status = digital.inception.executor.model.TaskStatus.SUSPENDED")
   int unsuspendTask(

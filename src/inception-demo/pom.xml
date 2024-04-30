@@ -83,6 +83,14 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-executor-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-executor-ws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-mail-api</artifactId>
     </dependency>
     <dependency>

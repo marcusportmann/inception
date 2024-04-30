@@ -104,56 +104,18 @@ public class QueueTaskRequest implements Serializable {
    * Constructs a new <b>QueueTaskRequest</b>.
    *
    * @param type the code for the task type
-   * @param data the task data
-   * @param suspended the optional flag indicating that the task must be suspended
-   */
-  public QueueTaskRequest(String type, String data, boolean suspended) {
-    this.type = type;
-    this.data = data;
-    this.suspended = suspended;
-  }
-
-  /**
-   * Constructs a new <b>QueueTaskRequest</b>.
-   *
-   * @param batchId the optional ID for the task batch
-   * @param type the code for the task type
-   * @param data the task data
-   * @param suspended the optional flag indicating that the task must be suspended
-   */
-  public QueueTaskRequest(String batchId, String type, String data, boolean suspended) {
-    this.batchId = batchId;
-    this.type = type;
-    this.data = data;
-    this.suspended = suspended;
-  }
-
-  /**
-   * Constructs a new <b>QueueTaskRequest</b>.
-   *
-   * @param batchId the optional ID for the task batch
-   * @param type the code for the task type
-   * @param data the task data
-   */
-  public QueueTaskRequest(String batchId, String type, String data) {
-    this.batchId = batchId;
-    this.type = type;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new <b>QueueTaskRequest</b>.
-   *
    * @param batchId the optional ID for the task batch
    * @param externalReference the optional external reference for the task
-   * @param type the code for the task type
    * @param data the task data
+   * @param suspended the optional flag indicating that the task must be suspended
    */
-  public QueueTaskRequest(String batchId, String externalReference, String type, String data) {
+  public QueueTaskRequest(
+      String type, String batchId, String externalReference, String data, boolean suspended) {
     this.batchId = batchId;
     this.externalReference = externalReference;
     this.type = type;
     this.data = data;
+    this.suspended = suspended;
   }
 
   /**

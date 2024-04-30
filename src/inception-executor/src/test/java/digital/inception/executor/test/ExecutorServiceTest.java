@@ -22,21 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.executor.model.ArchivedTask;
@@ -57,6 +42,21 @@ import digital.inception.executor.model.TaskTypeNotFoundException;
 import digital.inception.executor.service.IExecutorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
  * The <b>ExecutorServiceTest</b> class contains the implementation of the JUnit tests for the
@@ -120,9 +120,11 @@ public class ExecutorServiceTest {
     UUID taskId =
         executorService.queueTask(
             new QueueTaskRequest(
-                batchId,
                 testSimpleTaskType.getCode(),
-                objectMapper.writeValueAsString(testSimpleTaskData)));
+                batchId,
+                null,
+                objectMapper.writeValueAsString(testSimpleTaskData),
+                false));
 
     waitForTaskToDelay(taskId);
 
@@ -220,10 +222,11 @@ public class ExecutorServiceTest {
     UUID taskId =
         executorService.queueTask(
             new QueueTaskRequest(
+                testSimpleTaskType.getCode(),
                 batchId,
                 externalReference,
-                testSimpleTaskType.getCode(),
-                objectMapper.writeValueAsString(new TestSimpleTaskData("This is a test message"))));
+                objectMapper.writeValueAsString(new TestSimpleTaskData("This is a test message")),
+                false));
 
     waitForTaskToComplete(taskId, 10);
 
@@ -463,6 +466,30 @@ public class ExecutorServiceTest {
             + " milliseconds");
   }
 
+  /** Test the parameter-based queue task functionality. */
+  @Test
+  public void parameterBasedQueueTaskTest() throws Exception {
+    TaskType testSimpleTaskType =
+        new TaskType(
+            "test_simple_" + generateSuffix(),
+            "Test Simple",
+            TaskPriority.NORMAL,
+            "digital.inception.executor.test.TestSimpleTaskExecutor",
+            1);
+
+    executorService.createTaskType(testSimpleTaskType);
+
+    UUID taskId =
+        executorService.queueTask(
+            testSimpleTaskType.getCode(),
+            "Batch ID",
+            "External Reference",
+            false,
+            objectMapper.writeValueAsString(new TestMultistepTaskData("This is a test message")));
+
+    waitForTaskToComplete(taskId, 10);
+  }
+
   /** Test the process completed multistep task functionality. */
   @Test
   public void processCompletedMultistepTaskTest() throws Exception {
@@ -575,10 +602,11 @@ public class ExecutorServiceTest {
 
     QueueTaskRequest queueTaskRequest =
         new QueueTaskRequest(
+            testSimpleTaskType.getCode(),
             "Batch ID",
             "External Reference",
-            testSimpleTaskType.getCode(),
-            objectMapper.writeValueAsString(new TestMultistepTaskData("This is a test message")));
+            objectMapper.writeValueAsString(new TestMultistepTaskData("This is a test message")),
+            false);
 
     UUID taskId = executorService.queueTask(queueTaskRequest);
 
@@ -590,6 +618,24 @@ public class ExecutorServiceTest {
     assertEquals(queueTaskRequest.getExternalReference(), retrievedTask.getExternalReference());
     assertEquals(queueTaskRequest.getExternalReference(), retrievedTask.getExternalReference());
     assertEquals(queueTaskRequest.getData(), retrievedTask.getData());
+  }
+
+  /** Test the hung task reset functionality. */
+  @Test
+  public void resetHungTasksTest() throws Exception {
+    TaskType testSimpleTaskType =
+        new TaskType(
+            "test_simple_" + generateSuffix(),
+            "Test Simple",
+            TaskPriority.NORMAL,
+            "digital.inception.executor.test.TestSimpleTaskExecutor",
+            1);
+
+    testSimpleTaskType.setExecutionTimeout(5 * 60 * 1000);
+
+    executorService.createTaskType(testSimpleTaskType);
+
+    executorService.resetHungTasks();
   }
 
   /** Test the retryable task functionality. */
@@ -727,6 +773,8 @@ public class ExecutorServiceTest {
         deserializeTaskData(retrievedTask.getData(), TestSimpleTaskData.class);
 
     assertEquals("This is the updated message", retrievedTestSimpleTaskData.getMessage());
+
+    assertEquals(TaskStatus.COMPLETED, executorService.getTaskStatus(taskId));
   }
 
   /** Test the suspend batch functionality. */
@@ -751,9 +799,11 @@ public class ExecutorServiceTest {
     UUID taskId =
         executorService.queueTask(
             new QueueTaskRequest(
-                batchId,
                 testSimpleTaskType.getCode(),
-                objectMapper.writeValueAsString(testSimpleTaskData)));
+                batchId,
+                null,
+                objectMapper.writeValueAsString(testSimpleTaskData),
+                false));
 
     waitForTaskToDelay(taskId);
 
@@ -887,11 +937,12 @@ public class ExecutorServiceTest {
 
     QueueTaskRequest queueTaskRequest =
         new QueueTaskRequest(
+            testSimpleTaskType.getCode(),
             batchId,
             externalReference,
-            testSimpleTaskType.getCode(),
             objectMapper.writeValueAsString(
-                new TestSimpleTaskData("This message will not be updated")));
+                new TestSimpleTaskData("This message will not be updated")),
+            false);
 
     UUID taskId = executorService.queueTask(queueTaskRequest);
 
@@ -1018,8 +1069,9 @@ public class ExecutorServiceTest {
     UUID taskId =
         executorService.queueTask(
             new QueueTaskRequest(
-                batchId,
                 testSimpleTaskType.getCode(),
+                batchId,
+                null,
                 objectMapper.writeValueAsString(testSimpleTaskData),
                 true));
 
@@ -1056,6 +1108,8 @@ public class ExecutorServiceTest {
         executorService.queueTask(
             new QueueTaskRequest(
                 testSimpleTaskType.getCode(),
+                null,
+                null,
                 objectMapper.writeValueAsString(testSimpleTaskData),
                 true));
 

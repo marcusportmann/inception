@@ -16,33 +16,7 @@
 
 package digital.inception.executor.service;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -74,6 +48,33 @@ import digital.inception.executor.persistence.TaskEventRepository;
 import digital.inception.executor.persistence.TaskRepository;
 import digital.inception.executor.persistence.TaskSummaryRepository;
 import digital.inception.executor.persistence.TaskTypeRepository;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>ExecutorService</b> class provides the Executor Service implementation.
@@ -142,7 +143,14 @@ public class ExecutorService implements IExecutorService {
    * The delay in milliseconds between successive attempts to execute a task.
    */
   @Value("${inception.executor.task-execution-retry-delay:60000}")
-  private int taskExecutionRetryDelay;
+  private long taskExecutionRetryDelay;
+
+  /*
+   * The amount of time in milliseconds after which a locked and executing task will be considered
+   * "hung" and will be reset.
+   */
+  @Value("${inception.executor.task-execution-timeout:43200000}")
+  private long taskExecutionTimeout;
 
   private volatile ConcurrentHashMap<String, TaskType> taskTypes;
 
@@ -522,23 +530,16 @@ public class ExecutorService implements IExecutorService {
       if (!tasks.isEmpty()) {
         Task task = tasks.getFirst();
 
-        //        /*
-        //         * Determine the date and time the task will next be executed if the current
-        // execution is
-        //         * not successful.
-        //         */
-        //        OffsetDateTime nextExecution = now.plus(taskExecutionRetryDelay,
-        // ChronoUnit.MILLIS);
-        //
-        taskRepository.lockTaskForExecution(task.getId(), instanceName);
+        OffsetDateTime locked = OffsetDateTime.now();
+
+        taskRepository.lockTaskForExecution(task.getId(), instanceName, locked);
 
         entityManager.detach(task);
 
         task.setStatus(TaskStatus.EXECUTING);
+        task.setLocked(locked);
         task.setLockName(instanceName);
         task.incrementExecutionAttempts();
-
-        // task.setNextExecution(nextExecution);
 
         return Optional.of(task);
       } else {
@@ -613,6 +614,29 @@ public class ExecutorService implements IExecutorService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the task events for the task (" + taskId + ")", e);
+    }
+  }
+
+  @Override
+  public TaskStatus getTaskStatus(UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
+    if (taskId == null) {
+      throw new InvalidArgumentException("taskId");
+    }
+
+    try {
+      Optional<TaskStatus> taskStatusOptional = taskRepository.getTaskStatus(taskId);
+
+      if (taskStatusOptional.isPresent()) {
+        return taskStatusOptional.get();
+      } else {
+        throw new TaskNotFoundException(taskId);
+      }
+    } catch (TaskNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the status of the task (" + taskId + ")", e);
     }
   }
 
@@ -839,6 +863,55 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
+  public UUID queueTask(
+      String type, String batchId, String externalReference, boolean suspended, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
+    if (!StringUtils.hasText(type)) {
+      throw new InvalidArgumentException("type");
+    }
+
+    if (dataObject == null) {
+      throw new InvalidArgumentException("dataObject");
+    }
+
+    try {
+      UUID taskId = UUID.randomUUID();
+
+      ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
+
+      String taskData = objectMapper.writeValueAsString(dataObject);
+
+      QueueTaskRequest queueTaskRequest =
+          new QueueTaskRequest(type, batchId, externalReference, taskData, suspended);
+
+      return queueTask(queueTaskRequest);
+    } catch (InvalidArgumentException | TaskTypeNotFoundException | ServiceUnavailableException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to queue the task with type (" + type + ") for execution", e);
+    }
+  }
+
+  @Override
+  public UUID queueTask(String type, String batchId, String externalReference, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
+    return queueTask(type, batchId, externalReference, false, dataObject);
+  }
+
+  @Override
+  public UUID queueTask(String type, String batchId, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
+    return queueTask(type, batchId, null, false, dataObject);
+  }
+
+  @Override
+  public UUID queueTask(String type, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
+    return queueTask(type, null, null, false, dataObject);
+  }
+
+  @Override
   public UUID queueTask(QueueTaskRequest queueTaskRequest)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     validateQueueTaskRequest(queueTaskRequest);
@@ -932,6 +1005,61 @@ public class ExecutorService implements IExecutorService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to requeue the task (" + task.getId() + ")", e);
+    }
+  }
+
+  @Override
+  public void resetHungTasks() throws ServiceUnavailableException {
+    try {
+      // Apply the task-type-specific task timeouts
+      for (TaskType taskType : getTaskTypes()) {
+        if (taskType.getExecutionTimeout() != null) {
+          OffsetDateTime lockedBefore =
+              OffsetDateTime.now().minus(taskType.getExecutionTimeout(), ChronoUnit.MILLIS);
+
+          if (inDebugMode) {
+            logger.info(
+                "Resetting the hung tasks of type ("
+                    + taskType.getCode()
+                    + ") that were locked for execution before "
+                    + lockedBefore);
+          }
+
+          int numberOfResetHungTasks =
+              taskRepository.resetHungTasks(taskType.getCode(), lockedBefore);
+
+          if (numberOfResetHungTasks > 0) {
+            logger.warn(
+                "Reset "
+                    + numberOfResetHungTasks
+                    + " hung tasks of type ("
+                    + taskType.getCode()
+                    + ") that were locked for execution before "
+                    + lockedBefore);
+          }
+        }
+      }
+
+      // Apply the global task timeout
+      OffsetDateTime lockedBefore =
+          OffsetDateTime.now().minus(taskExecutionTimeout, ChronoUnit.MILLIS);
+
+      if (inDebugMode) {
+        logger.info(
+            "Resetting the hung tasks that were locked for execution before " + lockedBefore);
+      }
+
+      int numberOfResetHungTasks = taskRepository.resetHungTasks(lockedBefore);
+
+      if (numberOfResetHungTasks > 0) {
+        logger.warn(
+            "Reset "
+                + numberOfResetHungTasks
+                + " hung tasks that were locked for execution before "
+                + lockedBefore);
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to reset the hung tasks", e);
     }
   }
 

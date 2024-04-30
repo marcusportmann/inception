@@ -18,6 +18,10 @@ package digital.inception.demo;
 
 import digital.inception.application.Application;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.executor.model.TaskEventType;
+import digital.inception.executor.model.TaskPriority;
+import digital.inception.executor.model.TaskType;
+import digital.inception.executor.service.IExecutorService;
 import digital.inception.reporting.model.ReportDefinition;
 import digital.inception.reporting.service.IReportingService;
 import digital.inception.security.model.GenerateTokenRequest;
@@ -33,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -51,6 +56,9 @@ public class DemoApplication extends Application {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 
+  /** The Executor Service. */
+  private final IExecutorService executorService;
+
   /** The Reporting Service. */
   private final IReportingService reportingService;
 
@@ -61,15 +69,18 @@ public class DemoApplication extends Application {
    * Constructs a new <b>DemoApplication</b>.
    *
    * @param applicationContext the Spring application context
+   * @param executorService the Executor Service
    * @param reportingService the Reporting Service
    * @param securityService the Security Service
    */
   public DemoApplication(
       ApplicationContext applicationContext,
+      IExecutorService executorService,
       IReportingService reportingService,
       ISecurityService securityService) {
     super(applicationContext);
 
+    this.executorService = executorService;
     this.reportingService = reportingService;
     this.securityService = securityService;
   }
@@ -108,8 +119,34 @@ public class DemoApplication extends Application {
       securityService.createPolicy(demoPolicy);
 
       createDemoTokens();
+
+      createDemoTaskTypes();
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to initialize the Demo application", e);
+      throw new BeanInitializationException("Failed to initialize the Demo application", e);
+    }
+  }
+
+  private void createDemoTaskTypes() {
+    try {
+      if (!executorService.taskTypeExists("demo_task")) {
+        TaskType demoTaskType =
+            new TaskType(
+                "demo_task",
+                "Demo Task",
+                TaskPriority.NORMAL,
+                "digital.inception.demo.task.DemoTaskExecutor",
+                3);
+
+        demoTaskType.setEventTypesWithTaskData(
+            List.of(
+                TaskEventType.STEP_COMPLETED,
+                TaskEventType.TASK_COMPLETED,
+                TaskEventType.TASK_FAILED));
+
+        executorService.createTaskType(demoTaskType);
+      }
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to create the demo task types", e);
     }
   }
 

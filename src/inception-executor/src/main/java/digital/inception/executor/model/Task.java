@@ -19,6 +19,8 @@ package digital.inception.executor.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.OffsetDateTimeAdapter;
+import digital.inception.executor.constraint.ValidTask;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,8 +40,6 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.executor.constraint.ValidTask;
 
 /**
  * The <b>Task</b> class holds the information for a task.
@@ -59,6 +59,7 @@ import digital.inception.executor.constraint.ValidTask;
   "executed",
   "externalReference",
   "executionAttempts",
+  "locked",
   "lockName",
   "nextExecution",
   "data"
@@ -78,6 +79,7 @@ import digital.inception.executor.constraint.ValidTask;
       "executed",
       "externalReference",
       "executionAttempts",
+      "locked",
       "lockName",
       "nextExecution",
       "data"
@@ -147,6 +149,15 @@ public class Task implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "lock_name", length = 100)
   private String lockName;
+
+  /** The date and time the task was locked for execution. */
+  @Schema(description = "The date and time the task was locked for execution")
+  @JsonProperty
+  @XmlElement(name = "Locked")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "locked")
+  private OffsetDateTime locked;
 
   /** The date and time the task will be executed. */
   @Schema(description = "The date and time the task will be executed")
@@ -327,6 +338,15 @@ public class Task implements Serializable {
   }
 
   /**
+   * Returns the date and time the task was locked for execution.
+   *
+   * @return the date and time the task was locked for execution
+   */
+  public OffsetDateTime getLocked() {
+    return locked;
+  }
+
+  /**
    * Returns the date and time the task will be executed.
    *
    * @return the date and time the task will be executed
@@ -460,6 +480,15 @@ public class Task implements Serializable {
    */
   public void setLockName(String lockName) {
     this.lockName = lockName;
+  }
+
+  /**
+   * Set the date and time the task was locked for execution.
+   *
+   * @param locked the date and time the task was locked for execution
+   */
+  public void setLocked(OffsetDateTime locked) {
+    this.locked = locked;
   }
 
   /**

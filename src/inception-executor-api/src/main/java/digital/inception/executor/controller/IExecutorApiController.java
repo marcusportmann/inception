@@ -16,6 +16,22 @@
 
 package digital.inception.executor.controller;
 
+import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
+import digital.inception.executor.model.BatchTasksNotFoundException;
+import digital.inception.executor.model.DuplicateTaskTypeException;
+import digital.inception.executor.model.InvalidTaskStatusException;
+import digital.inception.executor.model.QueueTaskRequest;
+import digital.inception.executor.model.Task;
+import digital.inception.executor.model.TaskEvent;
+import digital.inception.executor.model.TaskNotFoundException;
+import digital.inception.executor.model.TaskSortBy;
+import digital.inception.executor.model.TaskStatus;
+import digital.inception.executor.model.TaskSummaries;
+import digital.inception.executor.model.TaskType;
+import digital.inception.executor.model.TaskTypeNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,22 +49,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.sorting.SortDirection;
-import digital.inception.executor.model.BatchTasksNotFoundException;
-import digital.inception.executor.model.DuplicateTaskTypeException;
-import digital.inception.executor.model.InvalidTaskStatusException;
-import digital.inception.executor.model.QueueTaskRequest;
-import digital.inception.executor.model.Task;
-import digital.inception.executor.model.TaskEvent;
-import digital.inception.executor.model.TaskNotFoundException;
-import digital.inception.executor.model.TaskSortBy;
-import digital.inception.executor.model.TaskStatus;
-import digital.inception.executor.model.TaskSummaries;
-import digital.inception.executor.model.TaskType;
-import digital.inception.executor.model.TaskTypeNotFoundException;
 
 /**
  * The <b>IExecutorApiController</b> interface.
@@ -541,6 +541,62 @@ public interface IExecutorApiController {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the task type
+   *
+   * @param taskTypeCode the code for the task type
+   * @return the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be retrieved
+   */
+  @Operation(summary = "Retrieve the task type", description = "Retrieve the task type")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task type could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-types/{taskTypeCode}",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
+  TaskType getTaskType(
+      @Parameter(name = "taskTypeCode", description = "The code for the task type", required = true)
+          @PathVariable
+          String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the name of the task type.

@@ -126,6 +126,12 @@ public class ExecutorApiController extends SecureApiController implements IExecu
   }
 
   @Override
+  public TaskType getTaskType(String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
+    return executorService.getTaskType(taskTypeCode);
+  }
+
+  @Override
   public String getTaskTypeName(String taskTypeCode)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     return executorService.getTaskTypeName(taskTypeCode);
