@@ -487,7 +487,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Return the string representation of the element.
+   * Returns the string representation of the element.
    *
    * @return the string representation of the element
    */

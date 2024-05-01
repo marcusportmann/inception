@@ -106,7 +106,7 @@ public enum SMSStatus {
   }
 
   /**
-   * Return the string representation of the SMS status enumeration value.
+   * Returns the string representation of the SMS status enumeration value.
    *
    * @return the string representation of the SMS status enumeration value
    */

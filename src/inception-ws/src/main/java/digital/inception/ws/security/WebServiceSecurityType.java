@@ -109,7 +109,7 @@ public enum WebServiceSecurityType {
   }
 
   /**
-   * Return the string representation of the <b>WebServiceSecurityType</b> enumeration value.
+   * Returns the string representation of the <b>WebServiceSecurityType</b> enumeration value.
    *
    * @return the string representation of the <b>WebServiceSecurityType</b> enumeration value
    */

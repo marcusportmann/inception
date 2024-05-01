@@ -72,7 +72,7 @@ public enum AnotherTestEnum {
   }
 
   /**
-   * Return the string representation of the another test enum enumeration value.
+   * Returns the string representation of the another test enum enumeration value.
    *
    * @return the string representation of the another test enum enumeration value
    */

@@ -84,7 +84,7 @@ public enum AssociationSortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of associations enumeration
+   * Returns the string representation of the method used to sort a list of associations enumeration
    * value.
    *
    * @return the string representation of the method used to sort a list of associations enumeration

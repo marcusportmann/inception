@@ -129,7 +129,7 @@ public enum TaskPriority {
   }
 
   /**
-   * Return the string representation of the task priority enumeration value.
+   * Returns the string representation of the task priority enumeration value.
    *
    * @return the string representation of the task priority enumeration value
    */

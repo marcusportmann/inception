@@ -275,7 +275,7 @@ public interface IMailApiController {
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Mail.MailTemplateAdministration')")

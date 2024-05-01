@@ -523,7 +523,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/data",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -646,7 +646,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -745,7 +745,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")

@@ -1774,7 +1774,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/policies/{policyId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.PolicyAdministration')")
@@ -2160,7 +2160,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -2393,7 +2393,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tokens/{tokenId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
@@ -2869,7 +2869,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
@@ -3160,7 +3160,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.UserAdministration') or hasAccessToFunction('Security.ResetUserPassword')")

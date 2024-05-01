@@ -86,7 +86,7 @@ public enum PersonSortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of persons enumeration
+   * Returns the string representation of the method used to sort a list of persons enumeration
    * value.
    *
    * @return the string representation of the method used to sort a list of persons enumeration

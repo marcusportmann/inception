@@ -118,7 +118,7 @@ public enum JobStatus {
   }
 
   /**
-   * Return the string representation of the job status enumeration value.
+   * Returns the string representation of the job status enumeration value.
    *
    * @return the string representation of the job status enumeration value
    */

@@ -87,7 +87,7 @@ public enum TaskSortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of tasks enumeration value.
+   * Returns the string representation of the method used to sort a list of tasks enumeration value.
    *
    * @return the string representation of the method used to sort a list of tasks enumeration value
    */

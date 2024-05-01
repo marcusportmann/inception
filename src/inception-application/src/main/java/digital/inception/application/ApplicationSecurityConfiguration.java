@@ -167,9 +167,9 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   @Bean(name = "applicationKeyStore")
   @ConditionalOnProperty(
       value = {
-          "inception.application.security.key-store-type",
-          "inception.application.security.key-store",
-          "inception.application.security.key-store-password"
+        "inception.application.security.key-store-type",
+        "inception.application.security.key-store",
+        "inception.application.security.key-store-password"
       })
   public KeyStore keyStore() {
     try {
@@ -212,9 +212,9 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   @Bean(name = "applicationTrustStore")
   @ConditionalOnProperty(
       value = {
-          "inception.application.security.trust-store-type",
-          "inception.application.security.trust-store",
-          "inception.application.security.trust-store-password"
+        "inception.application.security.trust-store-type",
+        "inception.application.security.trust-store",
+        "inception.application.security.trust-store-password"
       })
   public KeyStore trustStore() {
     try {

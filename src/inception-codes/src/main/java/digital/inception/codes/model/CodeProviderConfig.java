@@ -49,7 +49,7 @@ public class CodeProviderConfig implements Serializable {
   }
 
   /**
-   * Return the fully qualified name of the class that implements the code provider.
+   * Returns the fully qualified name of the class that implements the code provider.
    *
    * @return the fully qualified name of the class that implements the code provider
    */

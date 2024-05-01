@@ -82,7 +82,7 @@ public enum MandateSortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of mandates enumeration
+   * Returns the string representation of the method used to sort a list of mandates enumeration
    * value.
    *
    * @return the string representation of the method used to sort a list of mandates enumeration

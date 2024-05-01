@@ -240,7 +240,7 @@ public interface IConfigApiController {
   @RequestMapping(
       value = "/configs/{key}/value",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   String getConfigValue(

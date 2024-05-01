@@ -88,7 +88,7 @@ public enum PolicySortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of policies enumeration
+   * Returns the string representation of the method used to sort a list of policies enumeration
    * value.
    *
    * @return the string representation of the method used to sort a list of policies enumeration

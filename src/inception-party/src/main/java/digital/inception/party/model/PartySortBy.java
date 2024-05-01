@@ -83,7 +83,7 @@ public enum PartySortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of parties enumeration
+   * Returns the string representation of the method used to sort a list of parties enumeration
    * value.
    *
    * @return the string representation of the method used to sort a list of parties enumeration

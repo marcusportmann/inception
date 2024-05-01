@@ -91,7 +91,7 @@ public enum SortDirection {
   }
 
   /**
-   * Return the string representation of the sort direction enumeration value.
+   * Returns the string representation of the sort direction enumeration value.
    *
    * @return the string representation of the sort direction enumeration value
    */

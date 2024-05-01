@@ -96,7 +96,7 @@ public enum EntityType {
   }
 
   /**
-   * Return the string representation of the entity type enumeration value.
+   * Returns the string representation of the entity type enumeration value.
    *
    * @return the string representation of the entity type enumeration value
    */

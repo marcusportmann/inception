@@ -94,7 +94,7 @@ public enum UserSortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of users enumeration value.
+   * Returns the string representation of the method used to sort a list of users enumeration value.
    *
    * @return the string representation of the method used to sort a list of users enumeration value
    */

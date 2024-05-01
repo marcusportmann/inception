@@ -91,7 +91,7 @@ public enum ErrorReportSortBy {
   }
 
   /**
-   * Return the string representation of the method used to sort a list of error reports enumeration
+   * Returns the string representation of the method used to sort a list of error reports enumeration
    * value.
    *
    * @return the string representation of the method used to sort a list of error reports

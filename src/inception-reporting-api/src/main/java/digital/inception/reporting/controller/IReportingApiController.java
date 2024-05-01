@@ -343,7 +343,7 @@ public interface IReportingApiController {
   @RequestMapping(
       value = "/report-definitions/{reportDefinitionId}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   String getReportDefinitionName(
       @Parameter(

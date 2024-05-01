@@ -92,7 +92,7 @@ public enum TaskEventType {
   }
 
   /**
-   * Return the string representation of the task event type enumeration value.
+   * Returns the string representation of the task event type enumeration value.
    *
    * @return the string representation of the task event type enumeration value
    */

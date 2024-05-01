@@ -107,7 +107,7 @@ public enum TaskStatus {
   }
 
   /**
-   * Return the string representation of the task status enumeration value.
+   * Returns the string representation of the task status enumeration value.
    *
    * @return the string representation of the task status enumeration value
    */

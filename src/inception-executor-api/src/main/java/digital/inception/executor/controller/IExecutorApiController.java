@@ -646,7 +646,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/task-types/{taskTypeCode}/name",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
@@ -731,7 +731,7 @@ public interface IExecutorApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/queue-task", method = RequestMethod.POST, produces = "text/plain")
+  @RequestMapping(value = "/queue-task", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")

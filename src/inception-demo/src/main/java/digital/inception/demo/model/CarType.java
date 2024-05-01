@@ -97,7 +97,7 @@ public enum CarType {
   }
 
   /**
-   * Return the string representation of the car type enumeration value.
+   * Returns the string representation of the car type enumeration value.
    *
    * @return the string representation of the car type enumeration value
    */

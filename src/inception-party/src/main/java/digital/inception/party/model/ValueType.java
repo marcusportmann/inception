@@ -106,7 +106,7 @@ public enum ValueType {
   }
 
   /**
-   * Return the string representation of the value type enumeration value.
+   * Returns the string representation of the value type enumeration value.
    *
    * @return the string representation of the value type enumeration value
    */

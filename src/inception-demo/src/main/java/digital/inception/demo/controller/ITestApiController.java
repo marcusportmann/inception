@@ -150,6 +150,6 @@ public interface ITestApiController {
   @RequestMapping(
       value = "/test-returning-enum",
       method = RequestMethod.GET,
-      produces = "text/plain")
+      produces = "application/json")
   CarType testReturningEnum() throws ServiceUnavailableException;
 }
