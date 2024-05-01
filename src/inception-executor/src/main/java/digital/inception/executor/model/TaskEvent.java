@@ -19,6 +19,7 @@ package digital.inception.executor.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +39,6 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import digital.inception.core.xml.OffsetDateTimeAdapter;
 
 /**
  * The <b>TaskEvent</b> class holds the information for a task event.

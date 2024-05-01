@@ -16,15 +16,15 @@
 
 package digital.inception.executor.constraint;
 
+import digital.inception.executor.model.ITaskExecutor;
+import digital.inception.executor.model.TaskType;
+import digital.inception.executor.service.IExecutorService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import digital.inception.executor.model.ITaskExecutor;
-import digital.inception.executor.model.TaskType;
-import digital.inception.executor.service.IExecutorService;
 
 /**
  * The <b>ValidTaskTypeValidator</b> class implements the custom constraint validator for validating

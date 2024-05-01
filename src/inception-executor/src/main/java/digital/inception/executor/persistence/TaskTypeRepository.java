@@ -16,9 +16,9 @@
 
 package digital.inception.executor.persistence;
 
+import digital.inception.executor.model.TaskType;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import digital.inception.executor.model.TaskType;
 
 /**
  * The <b>ErrorRepository</b> interface declares the persistence for the <b>TaskType</b> domain

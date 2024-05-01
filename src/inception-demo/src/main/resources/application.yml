@@ -56,6 +56,7 @@ inception:
         enabled: true
 
     security:
+      jwt: eyJraWQiOiJkZW1vIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJkZW1vIiwic3ViIjoiaW5jZXB0aW9uLWRlbW8iLCJpYXQiOjE3MTQ1MzU5MDQsImp0aSI6IjZiM2JiOTFjZTVhNzQ3OTA4ZTFmMGQ2MTY5YjU1NzczIiwicm9sZXMiOlsiQWRtaW5pc3RyYXRvciJdfQ.WOzDZKJmOaw9DWn5Ohy8mVLIcWn0trZ80aFjv8l0dmeGB4b38yEuueNPXbw78JBMxU0sMMyk-aAPXXsG42IZLiCcPU0CgPf6C4hFcPJR6swEEWFjeFWnKvIbHGOd0kFFAA33VrM_W7359e-xvlUL84OFLGTqWJOcxzzMiAdDnZe6yfrdlqV8j1US-FmQPFjvBVsFqtoO6mOcTvNjjZXB72QHCaaHDVgSqdntBWdTA9IglW9_30dFvVcapiRZnCdIoWi3em-ac3wudxS2iG792o0uxj_xrzyjEJJ69CQWnV2gK867NKGstDhmCknHurOqpz9I0CFV16-WvaJytgjYww
       key-store: classpath:META-INF/demo.p12
       key-store-type: pkcs12
       key-store-password: Password1

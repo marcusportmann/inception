@@ -16,12 +16,12 @@
 
 package digital.inception.executor.model;
 
+import digital.inception.core.service.Problem;
+import digital.inception.core.service.ServiceException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
 import java.io.Serial;
-import digital.inception.core.service.Problem;
-import digital.inception.core.service.ServiceException;
 
 /**
  * The <b>BatchTasksNotFoundException</b> exception is thrown to indicate an error condition as a

@@ -16,9 +16,9 @@
 
 package digital.inception.executor.persistence;
 
+import digital.inception.executor.model.ArchivedTask;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import digital.inception.executor.model.ArchivedTask;
 
 /**
  * The <b>ArchivedTaskRepository</b> interface declares the persistence for the <b>ArchivedTask</b>

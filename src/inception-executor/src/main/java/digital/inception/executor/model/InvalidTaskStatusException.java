@@ -16,13 +16,13 @@
 
 package digital.inception.executor.model;
 
+import digital.inception.core.service.Problem;
+import digital.inception.core.service.ServiceException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 import java.util.UUID;
-import digital.inception.core.service.Problem;
-import digital.inception.core.service.ServiceException;
 
 /**
  * The <b>InvalidTaskStatusException</b> exception is thrown to indicate that the status of the task

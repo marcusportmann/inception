@@ -19,10 +19,13 @@ package digital.inception.demo.controller;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.demo.model.CarType;
 import java.time.OffsetDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,6 +56,26 @@ public class TestApiController extends SecureApiController implements ITestApiCo
       ApplicationContext applicationContext, WebClient.Builder webClientBuilder) {
     super(applicationContext);
     this.webClientBuilder = webClientBuilder;
+  }
+
+  @Override
+  public void testApiCall() throws ServiceUnavailableException {
+    try {
+      WebClient webClient = webClientBuilder.build();
+
+      String enumValue =
+          webClient
+              .get()
+              .uri("http://localhost:8080/api/test/test-returning-enum")
+              .retrieve()
+              .bodyToMono(String.class)
+              .block();
+
+      logger.info("Retrieved the enum value: " + enumValue);
+
+    } catch (Throwable e) {
+      logger.error("Failed to invoke the API", e);
+    }
   }
 
   @Override
@@ -93,5 +116,16 @@ public class TestApiController extends SecureApiController implements ITestApiCo
       throw new ServiceUnavailableException(
           "Failed to retrieve the API and request information using reflection", e);
     }
+  }
+
+  @Override
+  public CarType testReturningEnum() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication != null) {
+      logger.info("Processing secure API call for authenticated user: " + authentication.getName());
+    }
+
+    return CarType.PETROL;
   }
 }

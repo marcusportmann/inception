@@ -16,6 +16,11 @@
 
 package digital.inception.executor.service;
 
+import digital.inception.executor.model.Task;
+import digital.inception.executor.model.TaskExecutionDelayedException;
+import digital.inception.executor.model.TaskExecutionResult;
+import digital.inception.executor.model.TaskExecutionRetryableException;
+import digital.inception.executor.model.TaskStatus;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.concurrent.Executor;
@@ -28,11 +33,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import digital.inception.executor.model.Task;
-import digital.inception.executor.model.TaskExecutionDelayedException;
-import digital.inception.executor.model.TaskExecutionResult;
-import digital.inception.executor.model.TaskExecutionRetryableException;
-import digital.inception.executor.model.TaskStatus;
 
 /**
  * The <b>BackgroundTaskExecutor</b> class implements the Background Task Executor.

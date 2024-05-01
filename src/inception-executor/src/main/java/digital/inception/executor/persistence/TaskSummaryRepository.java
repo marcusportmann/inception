@@ -16,14 +16,14 @@
 
 package digital.inception.executor.persistence;
 
+import digital.inception.executor.model.TaskStatus;
+import digital.inception.executor.model.TaskSummary;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import digital.inception.executor.model.TaskStatus;
-import digital.inception.executor.model.TaskSummary;
 
 /**
  * The <b>TaskSummaryRepository</b> interface declares the persistence for the <b>TaskSummary</b>

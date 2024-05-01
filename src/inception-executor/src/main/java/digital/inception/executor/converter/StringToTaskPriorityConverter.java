@@ -16,10 +16,10 @@
 
 package digital.inception.executor.converter;
 
+import digital.inception.executor.model.TaskPriority;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-import digital.inception.executor.model.TaskPriority;
 
 /**
  * The <b>StringToTaskPriorityConverter</b> class implements the Spring converter that converts a

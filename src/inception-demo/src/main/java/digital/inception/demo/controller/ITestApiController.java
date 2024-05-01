@@ -19,6 +19,7 @@ package digital.inception.demo.controller;
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.demo.model.CarType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,6 +44,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Tag(name = "Test")
 @RequestMapping(value = "/api/test")
 public interface ITestApiController {
+
+  /**
+   * Test an API cll.
+   *
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test an API call", description = "Test an API call")
+  @RequestMapping(
+      value = "/test-api-call",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  void testApiCall() throws ServiceUnavailableException;
 
   /**
    * Test the exception handling.
@@ -126,4 +139,17 @@ public interface ITestApiController {
           @RequestParam
           String requestParameter)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Test returning an enum.
+   *
+   * @return the car type enum value
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test returning an enum", description = "Test returning an enum")
+  @RequestMapping(
+      value = "/test-returning-enum",
+      method = RequestMethod.GET,
+      produces = "text/plain")
+  CarType testReturningEnum() throws ServiceUnavailableException;
 }

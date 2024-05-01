@@ -19,6 +19,7 @@ package digital.inception.executor.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -30,7 +31,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import digital.inception.core.sorting.SortDirection;
 
 /**
  * The <b>TaskSummaries</b> class holds the results of a request to retrieve a list of task

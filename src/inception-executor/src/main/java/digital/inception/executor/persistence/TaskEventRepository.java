@@ -16,10 +16,10 @@
 
 package digital.inception.executor.persistence;
 
+import digital.inception.executor.model.TaskEvent;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import digital.inception.executor.model.TaskEvent;
 
 /**
  * The <b>TaskEventRepository</b> interface declares the persistence for the <b>TaskEvent</b> domain

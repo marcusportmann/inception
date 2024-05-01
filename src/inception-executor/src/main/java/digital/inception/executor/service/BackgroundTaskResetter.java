@@ -48,6 +48,12 @@ public class BackgroundTaskResetter {
     this.executorService = executorService;
   }
 
+  /** Initialize the Background Task Resetter. */
+  @PostConstruct
+  public void init() {
+    logger.info("Initializing the Background Task Resetter");
+  }
+
   /**
    * Reset "hung" tasks, which have been locked and executing longer than a global or
    * task-type-specific timeout.
@@ -59,11 +65,5 @@ public class BackgroundTaskResetter {
     } catch (Throwable e) {
       logger.error("Failed to reset the hung tasks", e);
     }
-  }
-
-  /** Initialize the Background Task Resetter. */
-  @PostConstruct
-  public void init() {
-    logger.info("Initializing the Background Task Resetter");
   }
 }

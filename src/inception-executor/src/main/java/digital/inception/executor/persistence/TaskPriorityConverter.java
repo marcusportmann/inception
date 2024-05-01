@@ -16,9 +16,9 @@
 
 package digital.inception.executor.persistence;
 
+import digital.inception.executor.model.TaskPriority;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import digital.inception.executor.model.TaskPriority;
 
 /**
  * The <b>TaskPriorityConverter</b> class implements the custom JPA converter for the

@@ -16,6 +16,7 @@
 
 package digital.inception.executor;
 
+import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -24,7 +25,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
-import digital.inception.jpa.JpaUtil;
 
 /**
  * The <b>ExecutorConfiguration</b> class provides the Spring configuration for the Executor module.

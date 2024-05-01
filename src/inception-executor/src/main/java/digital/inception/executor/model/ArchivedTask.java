@@ -19,6 +19,8 @@ package digital.inception.executor.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.OffsetDateTimeAdapter;
+import digital.inception.executor.constraint.ValidTask;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,8 +40,6 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.executor.constraint.ValidTask;
 
 /**
  * The <b>ArchivedTask</b> class holds the information for an archived task.

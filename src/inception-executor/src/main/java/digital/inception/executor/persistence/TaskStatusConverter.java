@@ -16,9 +16,9 @@
 
 package digital.inception.executor.persistence;
 
+import digital.inception.executor.model.TaskStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import digital.inception.executor.model.TaskStatus;
 
 /**
  * The <b>TaskStatusConverter</b> class implements the custom JPA converter for the

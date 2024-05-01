@@ -17,13 +17,13 @@
 package digital.inception.executor.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import digital.inception.executor.model.SimpleTaskExecutor;
 import digital.inception.executor.model.Task;
 import digital.inception.executor.model.TaskExecutionDelayedException;
 import digital.inception.executor.model.TaskExecutionFailedException;
 import digital.inception.executor.model.TaskExecutionRetryableException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <b>TestSimpleTaskExecutor</b> class.

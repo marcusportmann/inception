@@ -16,10 +16,10 @@
 
 package digital.inception.executor.converter;
 
+import digital.inception.executor.model.TaskSortBy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-import digital.inception.executor.model.TaskSortBy;
 
 /**
  * The <b>StringToTaskSortByConverter</b> class implements the Spring converter that converts a

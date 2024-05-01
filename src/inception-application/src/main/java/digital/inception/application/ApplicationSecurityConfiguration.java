@@ -42,14 +42,12 @@ import reactor.netty.http.client.HttpClient;
  * @author Marcus Portmann
  */
 @Configuration
-@ConditionalOnProperty(
-    value = {
-      "inception.application.security.trust-store-type",
-      "inception.application.security.trust-store",
-      "inception.application.security.trust-store-password"
-    })
 @SuppressWarnings("unused")
 public class ApplicationSecurityConfiguration implements WebClientCustomizer {
+
+  /** The optional persistent application JWT. */
+  @Value("${inception.application.security.jwt:#{null}}")
+  private String jwt;
 
   /** The application key password. */
   @Value("${inception.application.security.key-password:#{null}}")
@@ -106,24 +104,34 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
         trustManagerFactory.init(trustStore());
       }
 
-      SslContextBuilder sslContextBuilder = SslContextBuilder.forClient();
+      HttpClient httpClient;
 
-      if (keyManagerFactory != null) {
-        sslContextBuilder.keyManager(keyManagerFactory);
+      if ((keyManagerFactory != null) || (trustManagerFactory != null)) {
+        SslContextBuilder sslContextBuilder = SslContextBuilder.forClient();
+
+        if (keyManagerFactory != null) {
+          sslContextBuilder.keyManager(keyManagerFactory);
+        }
+
+        if (trustManagerFactory != null) {
+          sslContextBuilder.trustManager(trustManagerFactory);
+        }
+
+        SslContext sslContext = sslContextBuilder.build();
+
+        httpClient =
+            HttpClient.create().secure(sslContextSpec -> sslContextSpec.sslContext(sslContext));
+      } else {
+        httpClient = HttpClient.create();
       }
-
-      if (trustManagerFactory != null) {
-        sslContextBuilder.trustManager(trustManagerFactory);
-      }
-
-      SslContext sslContext = sslContextBuilder.build();
-
-      HttpClient httpClient =
-          HttpClient.create().secure(sslContextSpec -> sslContextSpec.sslContext(sslContext));
 
       ClientHttpConnector connector = new ReactorClientHttpConnector(httpClient);
       webClientBuilder.clientConnector(connector);
 
+      // Add the persistent application JWT to all API calls if configured
+      if (jwt != null) {
+        webClientBuilder.defaultHeader("Authorization", "Bearer " + jwt);
+      }
     } catch (Throwable e) {
       throw new RuntimeException(
           "Failed to apply the security configuration to the web client builder", e);
@@ -157,6 +165,12 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
    * @return the application key store
    */
   @Bean(name = "applicationKeyStore")
+  @ConditionalOnProperty(
+      value = {
+          "inception.application.security.key-store-type",
+          "inception.application.security.key-store",
+          "inception.application.security.key-store-password"
+      })
   public KeyStore keyStore() {
     try {
       if (!StringUtils.hasText(keyStoreType)) {
@@ -196,6 +210,12 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
    * @return the application trust store
    */
   @Bean(name = "applicationTrustStore")
+  @ConditionalOnProperty(
+      value = {
+          "inception.application.security.trust-store-type",
+          "inception.application.security.trust-store",
+          "inception.application.security.trust-store-password"
+      })
   public KeyStore trustStore() {
     try {
       if (!StringUtils.hasText(trustStoreType)) {
