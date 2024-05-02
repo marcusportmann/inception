@@ -310,7 +310,7 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  public void completeTask(Task task, TaskExecutionResult taskExecutionResult)
+  public void completeTask(Task task, TaskExecutionResult taskExecutionResult, long executionTime)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (task == null) {
       throw new InvalidArgumentException("task");
@@ -331,12 +331,16 @@ public class ExecutorService implements IExecutorService {
               task.getId(),
               taskExecutionResult.getNextTaskStep().getCode(),
               taskExecutionResult.getUpdatedTaskData(),
-              OffsetDateTime.now());
+              OffsetDateTime.now(),
+              executionTime);
 
           task.setData(taskExecutionResult.getUpdatedTaskData());
         } else {
           taskRepository.advanceTaskToStep(
-              task.getId(), taskExecutionResult.getNextTaskStep().getCode(), OffsetDateTime.now());
+              task.getId(),
+              taskExecutionResult.getNextTaskStep().getCode(),
+              OffsetDateTime.now(),
+              executionTime);
         }
 
         createTaskEvent(TaskEventType.STEP_COMPLETED, taskType, task);
@@ -347,11 +351,14 @@ public class ExecutorService implements IExecutorService {
       else {
         if (StringUtils.hasText(taskExecutionResult.getUpdatedTaskData())) {
           taskRepository.completeTask(
-              task.getId(), OffsetDateTime.now(), taskExecutionResult.getUpdatedTaskData());
+              task.getId(),
+              OffsetDateTime.now(),
+              taskExecutionResult.getUpdatedTaskData(),
+              executionTime);
 
           task.setData(taskExecutionResult.getUpdatedTaskData());
         } else {
-          taskRepository.completeTask(task.getId(), OffsetDateTime.now());
+          taskRepository.completeTask(task.getId(), OffsetDateTime.now(), executionTime);
         }
 
         createTaskEvent(TaskEventType.TASK_COMPLETED, taskType, task);
@@ -1258,6 +1265,7 @@ public class ExecutorService implements IExecutorService {
             task.getStatus(),
             task.getQueued(),
             task.getExecuted(),
+            task.getExecutionTime(),
             task.getExternalReference(),
             task.getData());
 

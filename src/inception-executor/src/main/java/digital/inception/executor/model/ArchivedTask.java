@@ -56,6 +56,7 @@ import java.util.UUID;
   "status",
   "queued",
   "executed",
+  "executionTime",
   "externalReference",
   "data"
 })
@@ -71,6 +72,7 @@ import java.util.UUID;
       "status",
       "queued",
       "executed",
+      "executionTime",
       "externalReference",
       "data"
     })
@@ -110,6 +112,16 @@ public class ArchivedTask implements Serializable {
   @XmlSchemaType(name = "dateTime")
   @Column(name = "executed")
   private OffsetDateTime executed;
+
+  /** The time taken to execute the task in milliseconds. */
+  @Schema(
+      description = "The time taken to execute the task in milliseconds",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ExecutionTime", required = true)
+  @NotNull
+  @Column(name = "execution_time", nullable = false)
+  private long executionTime;
 
   /** The optional external reference for the task. */
   @Schema(description = "The optional external reference for the task")
@@ -177,6 +189,7 @@ public class ArchivedTask implements Serializable {
    * @param status the status of the task
    * @param queued the date and time the task was queued for execution
    * @param executed the date and time the task was executed
+   * @param executionTime the time taken to execute the task in milliseconds
    * @param externalReference the optional external reference for the task
    * @param data the task data
    */
@@ -188,6 +201,7 @@ public class ArchivedTask implements Serializable {
       TaskStatus status,
       OffsetDateTime queued,
       OffsetDateTime executed,
+      long executionTime,
       String externalReference,
       String data) {
     this.id = id;
@@ -197,6 +211,7 @@ public class ArchivedTask implements Serializable {
     this.status = status;
     this.queued = queued;
     this.executed = executed;
+    this.executionTime = executionTime;
     this.externalReference = externalReference;
     this.data = data;
   }
@@ -251,6 +266,15 @@ public class ArchivedTask implements Serializable {
    */
   public OffsetDateTime getExecuted() {
     return executed;
+  }
+
+  /**
+   * Returns the time taken to execute the task in milliseconds.
+   *
+   * @return the time taken to execute the task in milliseconds
+   */
+  public long getExecutionTime() {
+    return executionTime;
   }
 
   /**
@@ -342,6 +366,15 @@ public class ArchivedTask implements Serializable {
    */
   public void setExecuted(OffsetDateTime executed) {
     this.executed = executed;
+  }
+
+  /**
+   * Set the time taken to execute the task in milliseconds.
+   *
+   * @param executionTime the time taken to execute the task in milliseconds
+   */
+  public void setExecutionTime(long executionTime) {
+    this.executionTime = executionTime;
   }
 
   /**

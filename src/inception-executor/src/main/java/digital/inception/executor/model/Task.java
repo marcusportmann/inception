@@ -57,6 +57,7 @@ import java.util.UUID;
   "priority",
   "queued",
   "executed",
+  "executionTime",
   "externalReference",
   "executionAttempts",
   "locked",
@@ -77,6 +78,7 @@ import java.util.UUID;
       "priority",
       "queued",
       "executed",
+      "executionTime",
       "externalReference",
       "executionAttempts",
       "locked",
@@ -107,7 +109,7 @@ public class Task implements Serializable {
   @XmlElement(name = "Data", required = true)
   @NotNull
   @Size(min = 1, max = 10485760)
-  @Column(name = "data")
+  @Column(name = "data", nullable = false)
   private String data;
 
   /** The date and time the task was executed. */
@@ -123,8 +125,18 @@ public class Task implements Serializable {
   @Schema(description = "The number of times the execution of the task has been attempted")
   @JsonProperty
   @XmlElement(name = "ExecutionAttempts")
-  @Column(name = "execution_attempts")
+  @Column(name = "execution_attempts", nullable = false)
   private Integer executionAttempts = 0;
+
+  /** The time taken to execute the task in milliseconds. */
+  @Schema(
+      description = "The time taken to execute the task in milliseconds",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ExecutionTime", required = true)
+  @NotNull
+  @Column(name = "execution_time", nullable = false)
+  private long executionTime;
 
   /** The optional external reference for the task. */
   @Schema(description = "The optional external reference for the task")
@@ -184,7 +196,7 @@ public class Task implements Serializable {
   @XmlElement(name = "Queued")
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @Column(name = "queued")
+  @Column(name = "queued", nullable = false)
   private OffsetDateTime queued;
 
   /** The status of the task. */
@@ -308,6 +320,15 @@ public class Task implements Serializable {
    */
   public Integer getExecutionAttempts() {
     return executionAttempts;
+  }
+
+  /**
+   * Returns the time taken to execute the task in milliseconds.
+   *
+   * @return the time taken to execute the task in milliseconds
+   */
+  public long getExecutionTime() {
+    return executionTime;
   }
 
   /**
@@ -453,6 +474,15 @@ public class Task implements Serializable {
    */
   public void setExecutionAttempts(Integer executionAttempts) {
     this.executionAttempts = executionAttempts;
+  }
+
+  /**
+   * Set the time taken to execute the task in milliseconds.
+   *
+   * @param executionTime the time taken to execute the task in milliseconds
+   */
+  public void setExecutionTime(long executionTime) {
+    this.executionTime = executionTime;
   }
 
   /**

@@ -186,11 +186,15 @@ public class BackgroundTaskExecutor {
           logger.debug("Executing the task (%s)".formatted(task.getId()));
         }
 
+        long startTime = System.currentTimeMillis();
+
         TaskExecutionResult taskExecutionResult = executorService.executeTask(task);
+
+        long finishTime = System.currentTimeMillis();
 
         // Complete the task or advance the task to the next step in the case of a multistep task.
         try {
-          executorService.completeTask(task, taskExecutionResult);
+          executorService.completeTask(task, taskExecutionResult, finishTime - startTime);
         } catch (Throwable e) {
           logger.error("Failed to complete the task (%s)".formatted(task.getId()), e);
 

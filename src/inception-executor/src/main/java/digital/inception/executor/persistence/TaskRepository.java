@@ -46,17 +46,20 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param taskId the ID for the task
    * @param step the code for the next task step for the multistep task
    * @param currentTimestamp the current date and time
+   * @param executionTime the time taken to complete the current task step in milliseconds
    */
   @Transactional
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.step = :step, t.executionAttempts = 0, t.nextExecution = :currentTimestamp, "
+          + "t.executionTime = t.executionTime + :executionTime, "
           + "t.locked = null, t.lockName = null where t.id = :taskId")
   void advanceTaskToStep(
       @Param("taskId") UUID taskId,
       @Param("step") String step,
-      @Param("currentTimestamp") OffsetDateTime currentTimestamp);
+      @Param("currentTimestamp") OffsetDateTime currentTimestamp,
+      @Param("executionTime") long executionTime);
 
   /**
    * Unlock the multistep task, advance it to the specified step, and update the task data.
@@ -65,19 +68,22 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param step the code for the next task step for the multistep task
    * @param data the updated task data
    * @param currentTimestamp the current date and time
+   * @param executionTime the time taken to complete the current task step in milliseconds
    */
   @Transactional
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.step = :step, t.data = :data, t.executionAttempts = 0, "
+          + "t.executionTime = t.executionTime + :executionTime, "
           + "t.nextExecution = :currentTimestamp, t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
   void advanceTaskToStep(
       @Param("taskId") UUID taskId,
       @Param("step") String step,
       @Param("data") String data,
-      @Param("currentTimestamp") OffsetDateTime currentTimestamp);
+      @Param("currentTimestamp") OffsetDateTime currentTimestamp,
+      @Param("executionTime") long executionTime);
 
   /**
    * Cancel the batch.
@@ -118,32 +124,42 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param taskId the ID for the task
    * @param currentTimestamp the current date and time
    * @param data the task data
+   * @param executionTime the time taken to complete the last task step for a multistep task or the
+   *     task for a single step task in milliseconds
    */
   @Transactional
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.COMPLETED, "
           + "t.executed =:currentTimestamp, t.data = :data, t.nextExecution = null, "
+          + "t.executionTime = t.executionTime + :executionTime, "
           + "t.locked = null, t.lockName = null where t.id = :taskId")
   void completeTask(
       @Param("taskId") UUID taskId,
       @Param("currentTimestamp") OffsetDateTime currentTimestamp,
-      @Param("data") String data);
+      @Param("data") String data,
+      @Param("executionTime") long executionTime);
 
   /**
    * Complete the task.
    *
    * @param taskId the ID for the task
    * @param currentTimestamp the current date and time
+   * @param executionTime the time taken to complete the last task step for a multistep task or the
+   *     task for a single step task in milliseconds
    */
   @Transactional
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.COMPLETED, "
-          + "t.executed =:currentTimestamp, t.nextExecution = null, t.locked = null, t.lockName = null "
+          + "t.executed =:currentTimestamp, t.nextExecution = null, "
+          + "t.executionTime = t.executionTime + :executionTime, "
+          + "t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
   void completeTask(
-      @Param("taskId") UUID taskId, @Param("currentTimestamp") OffsetDateTime currentTimestamp);
+      @Param("taskId") UUID taskId,
+      @Param("currentTimestamp") OffsetDateTime currentTimestamp,
+      @Param("executionTime") long executionTime);
 
   /**
    * Returns the number of tasks associated with the batch with the specified ID.

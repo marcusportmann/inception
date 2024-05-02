@@ -88,10 +88,12 @@ public interface IExecutorService {
    * @param task the task
    * @param taskExecutionResult the result of executing the task, including the next step for a
    *     multistep task and whether the task data should be updated
+   * @param executionTime the time taken to complete the current task step for a multistep task or
+   *     the task for a single step task in milliseconds
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the task could not be completed
    */
-  void completeTask(Task task, TaskExecutionResult taskExecutionResult)
+  void completeTask(Task task, TaskExecutionResult taskExecutionResult, long executionTime)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

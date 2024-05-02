@@ -61,7 +61,7 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements ITaskExecut
 
       TaskDataType taskData = deserializeTaskData(task.getData(), taskDataTypeClass);
 
-      TaskStep nextTaskStep = getNextTaskStep(task.getStep());
+      TaskStep nextTaskStep = getNextTaskStep(task.getStep(), taskData);
 
       if (executeTaskStep(task, taskStep, taskData)) {
         return new TaskExecutionResult(nextTaskStep, serializeTaskData(taskData));
@@ -104,20 +104,27 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements ITaskExecut
     }
   }
 
-  private TaskDataType deserializeTaskData(String json, Class<TaskDataType> taskDataTypeClass)
-      throws JsonProcessingException {
-    return objectMapper.readValue(json, taskDataTypeClass);
-  }
-
-  private TaskStep getNextTaskStep(String currentStepCode) {
+  /**
+   * Returns the next task step.
+   *
+   * @param currentTaskStepCode the code for the current task step
+   * @param taskData the task date
+   * @return the next task step
+   */
+  protected TaskStep getNextTaskStep(String currentTaskStepCode, TaskDataType taskData) {
     for (int i = 0; i < (taskSteps.size() - 1); i++) {
       TaskStep taskStep = taskSteps.get(i);
-      if (taskStep.getCode().equals(currentStepCode)) {
+      if (taskStep.getCode().equals(currentTaskStepCode)) {
         return taskSteps.get(i + 1);
       }
     }
 
     return null;
+  }
+
+  private TaskDataType deserializeTaskData(String json, Class<TaskDataType> taskDataTypeClass)
+      throws JsonProcessingException {
+    return objectMapper.readValue(json, taskDataTypeClass);
   }
 
   private TaskStep getTaskStep(String taskStepCode) {
