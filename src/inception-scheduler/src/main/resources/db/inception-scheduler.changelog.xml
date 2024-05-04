@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-scheduler-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Scheduler - 1.0.0</comment>
+    <comment>inception-scheduler-1.0.0</comment>
 
     <createTable tableName="scheduler_jobs" remarks="Jobs">
       <column name="id" type="nvarchar(100)" remarks="The ID for the job">

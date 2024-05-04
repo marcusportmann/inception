@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-demo-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Demo - 1.0.0</comment>
+    <comment>inception-demo-1.0.0</comment>
 
     <createTable tableName="demo_data" remarks="Data">
       <column name="id" type="bigint" remarks="The ID for the data">

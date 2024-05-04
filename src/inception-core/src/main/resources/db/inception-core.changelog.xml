@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-core-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Core - 1.0.0</comment>
+    <comment>inception-core-1.0.0</comment>
 
     <sql dbms="postgresql" endDelimiter=";">
       CREATE CAST (varchar AS jsonb) WITH INOUT AS ASSIGNMENT

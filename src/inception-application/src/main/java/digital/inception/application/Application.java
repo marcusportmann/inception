@@ -17,10 +17,7 @@
 package digital.inception.application;
 
 import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.support.MergedMessageSource;
-import digital.inception.json.DateTimeModule;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -31,11 +28,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
 /**
@@ -81,37 +77,6 @@ public abstract class Application {
   }
 
   /**
-   * Returns the Jackson2 object mapper.
-   *
-   * @return the Jackson2 object mapper
-   */
-  @Bean
-  public ObjectMapper objectMapper() {
-    return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
-  }
-
-  /**
-   * Returns the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
-   * processor package.
-   *
-   * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
-   *     processor package
-   */
-  protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
-    jackson2ObjectMapperBuilder.indentOutput(true);
-
-    /*
-     * Install the custom Jackson module that supports serializing and de-serializing ISO 8601 date
-     * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
-     * it does not handle timezones correctly for LocalDateTime, OffsetDateTime or Instant objects.
-     */
-    jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
-
-    return jackson2ObjectMapperBuilder;
-  }
-
-  /**
    * Returns the application message source.
    *
    * @return the application message source
@@ -151,6 +116,11 @@ public abstract class Application {
    */
   @Bean
   protected TaskScheduler taskScheduler() {
-    return new ConcurrentTaskScheduler();
+    ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    // TODO: Make this configurable -- MARCUS
+    scheduler.setPoolSize(5);
+    scheduler.setThreadNamePrefix("scheduled-task-");
+    scheduler.initialize();
+    return scheduler;
   }
 }

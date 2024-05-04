@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-error-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Error - 1.0.0</comment>
+    <comment>inception-error-1.0.0</comment>
 
     <createTable tableName="error_error_reports" remarks="Error Reports">
       <column name="id" type="uuid" remarks="The ID for the error report">

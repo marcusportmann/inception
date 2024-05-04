@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.4</version>
+    <version>3.2.5</version>
   </parent>
 
   <repositories>
@@ -100,32 +100,32 @@
     <agroal-pool.version>2.3</agroal-pool.version>
     <authzforce-ce-core-pdp-engine.version>21.0.1</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.11.3</avro.version>
-    <azure-identity.version>1.11.4</azure-identity.version>
-    <com.ibm.icu.icu4j.version>74.2</com.ibm.icu.icu4j.version>
+    <azure-identity.version>1.12.0</azure-identity.version>
+    <com.ibm.icu.icu4j.version>75.1</com.ibm.icu.icu4j.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
-    <commons-io.version>2.16.0</commons-io.version>
+    <commons-io.version>2.16.1</commons-io.version>
     <cxf.version>4.0.2</cxf.version>
     <easymock.version>5.2.0</easymock.version>
     <flowable.version>7.0.1</flowable.version>
     <freemarker.version>2.3.32</freemarker.version>
-    <groovy.version>4.0.20</groovy.version>
+    <groovy.version>4.0.21</groovy.version>
     <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
     <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
     <jakarta.el.jakarta.el-api.version>5.0.0</jakarta.el.jakarta.el-api.version>
-    <jakarta.xml.bind.version>4.0.1</jakarta.xml.bind.version>
+    <jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
     <jakarta.xml.ws-api.version>4.0.1</jakarta.xml.ws-api.version>
-    <jasperreports.version>6.21.2</jasperreports.version>
+    <jasperreports.version>6.21.3</jasperreports.version>
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.0.Final</jboss-transaction-spi.version>
     <liquibase-slf4j.version>5.0.0</liquibase-slf4j.version>
-    <mssql-jdbc.version>12.4.2.jre11</mssql-jdbc.version>
+    <mssql-jdbc.version>12.6.1.jre11</mssql-jdbc.version>
     <narayana.version>7.0.1.Final</narayana.version>
     <ojdbc11.version>23.3.0.23.09</ojdbc11.version>
-    <org.glassfish.jaxb>4.0.4</org.glassfish.jaxb>
+    <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.3</postgresql.version>
-    <spring-boot.version>3.2.4</spring-boot.version>
-    <spring-shell-starter.version>3.2.3</spring-shell-starter.version>
-    <springdoc-openapi.version>2.4.0</springdoc-openapi.version>
+    <spring-boot.version>3.2.5</spring-boot.version>
+    <spring-shell-starter.version>3.2.4</spring-shell-starter.version>
+    <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
     <swagger.version>2.2.21</swagger.version>
     <uuid-creator.version>5.3.7</uuid-creator.version>
@@ -276,6 +276,11 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>${freemarker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+        <version>${org.glassfish.jaxb.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate.validator</groupId>

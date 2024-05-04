@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-sms-1.0.0" author="Marcus Portmann">
-    <comment>Inception - SMS - 1.0.0</comment>
+    <comment>inception-sms-1.0.0</comment>
 
     <createTable tableName="sms_sms" remarks="SMSs">
       <column name="id" type="uuid" remarks="The ID for the SMS">

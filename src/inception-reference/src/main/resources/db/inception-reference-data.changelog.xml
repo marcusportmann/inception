@@ -7,7 +7,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
   <changeSet id="inception-reference-data-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Reference - Data - 1.0.0</comment>
+    <comment>inception-reference-data-1.0.0</comment>
 
     <insert tableName="reference_countries">
       <column name="code" value="ZZ"/>

@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-reference-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Reference - 1.0.0</comment>
+    <comment>inception-reference-1.0.0</comment>
 
     <createTable tableName="reference_countries" remarks="Countries">
       <column name="code" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country">

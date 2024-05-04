@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-audit-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Audit - 1.0.0</comment>
+    <comment>inception-audit-1.0.0</comment>
     <sql dbms="h2" endDelimiter=";">
       CREATE SCHEMA IF NOT EXISTS audit
     </sql>

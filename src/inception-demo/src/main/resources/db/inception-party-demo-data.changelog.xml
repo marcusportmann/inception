@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-party-demo-data-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Party - Demo - Data - 1.0.0</comment>
+    <comment>inception-party-demo-data-1.0.0</comment>
 
     <!--    ____   _    ____ _______   __     -->
     <!--    |  _ \ / \  |  _ \_   _\ \ / /    -->

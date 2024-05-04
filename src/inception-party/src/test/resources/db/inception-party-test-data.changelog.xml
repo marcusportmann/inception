@@ -20,7 +20,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-party-test-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Party - Test - 1.0.0</comment>
+    <comment>inception-party-test-1.0.0</comment>
 
     <insert tableName="party_attribute_type_categories">
       <column name="code" value="test_attribute_type_category"/>

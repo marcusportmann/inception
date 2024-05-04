@@ -7,7 +7,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
   <changeSet id="inception-party-skills-data-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Party - Skills - Data - 1.0.0</comment>
+    <comment>inception-party-skills-data-1.0.0</comment>
 
     <!--                    _   _ ____    -->
     <!--    ___ _ __       | | | / ___|   -->

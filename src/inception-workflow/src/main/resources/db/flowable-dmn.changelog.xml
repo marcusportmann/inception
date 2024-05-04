@@ -22,7 +22,7 @@
 
   -->
   <changeSet id="flowable-dmn-7.0.0" author="Marcus Portmann">
-    <comment>Flowable - DMN - 7.0.0</comment>
+    <comment>flowable-dmn-7.0.0</comment>
 
     <createTable tableName="ACT_DMN_DEPLOYMENT">
       <column name="ID_" type="nvarchar(255)">

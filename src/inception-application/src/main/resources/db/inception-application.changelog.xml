@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-application-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Application - 1.0.0</comment>
+    <comment>inception-application-1.0.0</comment>
 
     <rollback>
 

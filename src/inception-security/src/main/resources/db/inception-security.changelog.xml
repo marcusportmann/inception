@@ -16,7 +16,7 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-security-1.0.0" author="Marcus Portmann">
-    <comment>Inception - Security - 1.0.0</comment>
+    <comment>inception-security-1.0.0</comment>
 
     <createTable tableName="security_tenants" remarks="Tenants">
       <column name="id" type="uuid" remarks="The ID for the tenant">
