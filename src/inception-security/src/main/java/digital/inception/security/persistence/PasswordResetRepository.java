@@ -17,10 +17,10 @@
 package digital.inception.security.persistence;
 
 import digital.inception.security.model.PasswordReset;
-import digital.inception.security.model.PasswordResetId;
 import digital.inception.security.model.PasswordResetStatus;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface PasswordResetRepository extends JpaRepository<PasswordReset, PasswordResetId> {
+public interface PasswordResetRepository extends JpaRepository<PasswordReset, UUID> {
 
   /**
    * Expire the password resets.

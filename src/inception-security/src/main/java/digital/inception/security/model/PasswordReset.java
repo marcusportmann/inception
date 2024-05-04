@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -33,12 +34,14 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The <b>PasswordReset</b> class holds the information for a password rest.
@@ -47,18 +50,40 @@ import java.util.Objects;
  */
 @Schema(description = "A password reset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"username", "requested", "completed", "expired", "status", "securityCodeHash"})
+@JsonPropertyOrder({"id", "username", "requested", "completed", "expired", "status", "securityCodeHash"})
 @XmlRootElement(name = "GroupMember", namespace = "https://inception.digital/security")
 @XmlType(
     name = "PasswordReset",
     namespace = "https://inception.digital/security",
-    propOrder = {"username", "requested", "completed", "expired", "status", "securityCodeHash"})
+    propOrder = {"id", "username", "requested", "completed", "expired", "status", "securityCodeHash"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 @Entity
 @Table(name = "security_password_resets")
-@IdClass(PasswordResetId.class)
 public class PasswordReset implements Serializable {
+
+  /**
+   * Returns the ID for the password reset.
+   * @return the ID for the password reset
+   */
+  public UUID getId() {
+    return id;
+  }
+
+  /**
+   * Set the ID for the password reset.
+   * @param id the ID for the password reset
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /** The ID for the password reset. */
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -88,7 +113,6 @@ public class PasswordReset implements Serializable {
   @XmlElement(name = "Requested", required = true)
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @Id
   @Column(name = "requested", nullable = false)
   private OffsetDateTime requested;
 
@@ -119,7 +143,6 @@ public class PasswordReset implements Serializable {
   @XmlElement(name = "Username", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Id
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
@@ -133,6 +156,7 @@ public class PasswordReset implements Serializable {
    * @param securityCodeHash the security code hash
    */
   public PasswordReset(String username, String securityCodeHash) {
+    this.id = UUID.randomUUID();
     this.username = username;
     this.securityCodeHash = securityCodeHash;
     this.requested = OffsetDateTime.now();
@@ -161,7 +185,7 @@ public class PasswordReset implements Serializable {
 
     PasswordReset other = (PasswordReset) object;
 
-    return Objects.equals(username, other.username) && Objects.equals(requested, other.requested);
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -225,8 +249,7 @@ public class PasswordReset implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((username == null) ? 0 : username.hashCode())
-        + ((requested == null) ? 0 : requested.hashCode());
+    return ((id == null) ? 0 : id.hashCode());
   }
 
   /**

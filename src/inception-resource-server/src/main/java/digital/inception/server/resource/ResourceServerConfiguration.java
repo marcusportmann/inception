@@ -21,6 +21,8 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 import digital.inception.core.util.ResourceUtil;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
@@ -28,9 +30,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.crypto.spec.SecretKeySpec;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
@@ -67,7 +71,7 @@ import org.springframework.util.StringUtils;
 @ConditionalOnWebApplication(type = Type.ANY)
 @ConfigurationProperties(prefix = "inception.resource-server", ignoreUnknownFields = false)
 @EnableConfigurationProperties
-public class ResourceServerConfiguration {
+public class ResourceServerConfiguration implements InitializingBean {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ResourceServerConfiguration.class);
@@ -82,6 +86,40 @@ public class ResourceServerConfiguration {
 
   /** Constructs a new <b>ResourceServerConfiguration</b>. */
   public ResourceServerConfiguration() {}
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    try {
+      if ((policyDecisionPoint != null) && (policyDecisionPoint.isRuleDebuggingEnabled())) {
+        logger.info("Enabling rule debugging for the policy decision point");
+
+        ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
+
+        Class<?> ruleEvaluatorClass =
+            Thread.currentThread()
+                .getContextClassLoader()
+                .loadClass("org.ow2.authzforce.core.pdp.impl.rule.RuleEvaluator");
+
+        Logger logger =
+            loggerFactory.getLogger("org.ow2.authzforce.core.pdp.impl.rule.RuleEvaluator");
+
+        if (logger != null) {
+          Class<?> levelClass =
+              Thread.currentThread()
+                  .getContextClassLoader()
+                  .loadClass("ch.qos.logback.classic.Level");
+
+          Method setLevelMethod = logger.getClass().getMethod("setLevel", levelClass);
+
+          Field debugField = levelClass.getField("DEBUG");
+
+          setLevelMethod.invoke(logger, debugField.get(null));
+        }
+      }
+    } catch (Throwable e) {
+      logger.error("Failed to enable rule debugging for the policy decision point", e);
+    }
+  }
 
   /**
    * Returns the security filter chain.
@@ -712,6 +750,9 @@ public class ResourceServerConfiguration {
     /** The external policies configuration for the policy decision point. */
     private ExternalPoliciesConfiguration externalPolicies;
 
+    /** Is debugging of the rules applied by the policy decision point enabled. */
+    private boolean ruleDebuggingEnabled;
+
     /** Constructs a new <b>PolicyDecisionPointConfiguration</b>. */
     public PolicyDecisionPointConfiguration() {}
 
@@ -734,6 +775,16 @@ public class ResourceServerConfiguration {
     }
 
     /**
+     * Returns whether debugging of the rules applied by the policy decision point is enabled.
+     *
+     * @return <b>true</b> if debugging of the rules applied by the policy decision point is enabled
+     *     or <b>false</b> otherwise
+     */
+    public boolean isRuleDebuggingEnabled() {
+      return ruleDebuggingEnabled;
+    }
+
+    /**
      * Set the classpath policies configuration for the policy decision point.
      *
      * @param classpathPolicies the classpath policies configuration for the policy decision point
@@ -749,6 +800,16 @@ public class ResourceServerConfiguration {
      */
     public void setExternalPolicies(ExternalPoliciesConfiguration externalPolicies) {
       this.externalPolicies = externalPolicies;
+    }
+
+    /**
+     * Set whether debugging of the rules applied by the policy decision point is enabled.
+     *
+     * @param ruleDebuggingEnabled <b>true</b> if debugging of the rules applied by the policy
+     *     decision point is enabled or <b>false</b> otherwise
+     */
+    public void setRuleDebuggingEnabled(boolean ruleDebuggingEnabled) {
+      this.ruleDebuggingEnabled = ruleDebuggingEnabled;
     }
   }
 }

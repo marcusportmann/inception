@@ -149,11 +149,14 @@
     </createIndex>
 
     <createTable tableName="security_users_password_history" remarks="User Password History">
-      <column name="user_id" type="uuid" remarks="The ID for the user">
+      <column name="id" type="uuid" remarks="The ID for the user password history">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="changed" type="timestamptz" remarks="When the password change took place for the user">
-        <constraints primaryKey="true" nullable="false"/>
+      <column name="user_id" type="uuid" remarks="The ID for the user">
+        <constraints nullable="false"/>
+      </column>
+      <column name="changed" type="timestamp with time zone" remarks="When the password change took place for the user">
+        <constraints nullable="false"/>
       </column>
       <column name="encoded_password" type="nvarchar(100)" remarks="The encoded password for the user">
         <constraints nullable="false"/>
@@ -293,11 +296,14 @@
     </createIndex>
 
     <createTable tableName="security_password_resets" remarks="Password Resets">
-      <column name="username" type="nvarchar(100)" remarks="The username for the user associated with the password reset">
+      <column name="id" type="uuid" remarks="The ID for the password reset">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="requested" type="timestamptz" remarks="The date and time the password reset was requested">
-        <constraints primaryKey="true" nullable="false"/>
+      <column name="username" type="nvarchar(100)" remarks="The username for the user associated with the password reset">
+        <constraints nullable="false"/>
+      </column>
+      <column name="requested" type="timestamp with time zone" remarks="The date and time the password reset was requested">
+        <constraints nullable="false"/>
       </column>
       <column name="status" type="nvarchar(50)" remarks="The code for the status of the password reset">
         <constraints nullable="false"/>

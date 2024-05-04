@@ -121,6 +121,7 @@ inception:
         enabled: true
         endpoint: http://localhost:8080/api/security/revoked-tokens
     policy-decision-point:
+      rule-debugging-enabled: true
       classpath-policies:
         enabled: false
       external-policies:

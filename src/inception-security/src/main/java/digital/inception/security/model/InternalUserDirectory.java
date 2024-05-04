@@ -290,7 +290,9 @@ public class InternalUserDirectory extends UserDirectoryBase {
         getUserRepository().resetPasswordHistory(userIdOptional.get());
       }
 
-      getUserRepository().savePasswordInPasswordHistory(userIdOptional.get(), encodedNewPassword);
+      getUserRepository()
+          .savePasswordInPasswordHistory(
+              UUID.randomUUID(), userIdOptional.get(), encodedNewPassword);
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -400,7 +402,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
           .changePassword(
               user.getId(), encodedNewPassword, 0, Optional.of(passwordExpiry.toOffsetDateTime()));
 
-      getUserRepository().savePasswordInPasswordHistory(user.getId(), encodedNewPassword);
+      getUserRepository()
+          .savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(), encodedNewPassword);
     } catch (AuthenticationFailedException | ExistingPasswordException | UserLockedException e) {
       throw e;
     } catch (Throwable e) {
@@ -477,7 +480,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       getUserRepository().saveAndFlush(user);
 
-      getUserRepository().savePasswordInPasswordHistory(user.getId(), encodedNewPassword);
+      getUserRepository()
+          .savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(), encodedNewPassword);
     } catch (DuplicateUserException e) {
       throw e;
     } catch (Throwable e) {
@@ -1266,7 +1270,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
       getUserRepository()
           .resetPassword(user.getId(), encodedNewPassword, passwordExpiry.toOffsetDateTime());
 
-      getUserRepository().savePasswordInPasswordHistory(user.getId(), encodedNewPassword);
+      getUserRepository()
+          .savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(), encodedNewPassword);
     } catch (UserNotFoundException | UserLockedException | ExistingPasswordException e) {
       throw e;
     } catch (Throwable e) {

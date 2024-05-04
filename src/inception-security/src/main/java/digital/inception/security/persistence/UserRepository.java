@@ -261,6 +261,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   /**
    * Save the encoded password in the password history for the user.
    *
+   * @param id the ID for the password history
    * @param userId the ID for the user
    * @param encodedPassword the encoded password
    */
@@ -268,9 +269,11 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   @Modifying
   @Query(
       value =
-          "insert into security_users_password_history(user_id, changed, encoded_password) "
-              + "values (:userId, current_timestamp, :encodedPassword)",
+          "insert into security_users_password_history(id, user_id, changed, encoded_password) "
+              + "values (:id, :userId, current_timestamp, :encodedPassword)",
       nativeQuery = true)
   void savePasswordInPasswordHistory(
-      @Param("userId") UUID userId, @Param("encodedPassword") String encodedPassword);
+      @Param("id") UUID id,
+      @Param("userId") UUID userId,
+      @Param("encodedPassword") String encodedPassword);
 }
