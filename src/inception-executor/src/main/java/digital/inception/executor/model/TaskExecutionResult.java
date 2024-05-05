@@ -38,12 +38,12 @@ import java.io.Serializable;
  */
 @Schema(description = "The result of executing a task")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"nextTaskStep", "updatedTaskData"})
+@JsonPropertyOrder({"nextTaskStep", "nextTaskStepDelay", "updatedTaskData"})
 @XmlRootElement(name = "TaskExecutionResult", namespace = "https://inception.digital/executor")
 @XmlType(
     name = "TaskExecutionResult",
     namespace = "https://inception.digital/executor",
-    propOrder = {"nextTaskStep", "updatedTaskData"})
+    propOrder = {"nextTaskStep", "nextTaskStepDelay", "updatedTaskData"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class TaskExecutionResult implements Serializable {
@@ -60,6 +60,14 @@ public class TaskExecutionResult implements Serializable {
   @XmlElement(name = "NextTaskStep")
   @Size(min = 1, max = 50)
   private TaskStep nextTaskStep;
+
+  /** The delay in milliseconds before the next task step for a multistep task is executed. */
+  @Schema(
+      description =
+          "The delay in milliseconds before the next task step for a multistep task is executed")
+  @JsonProperty
+  @XmlElement(name = "NextTaskStepDelay")
+  private Long nextTaskStepDelay;
 
   /** The updated task data. */
   @Schema(description = "The updated task data")
@@ -92,12 +100,52 @@ public class TaskExecutionResult implements Serializable {
   }
 
   /**
+   * Constructs a new <b>TestExecutionResult</b>.
+   *
+   * @param nextTaskStep the next task step for a multistep task
+   * @param nextTaskStepDelay the delay in milliseconds before the next task step for a multistep
+   *     task is executed
+   * @param updatedTaskData the updated task data
+   */
+  public TaskExecutionResult(
+      TaskStep nextTaskStep, long nextTaskStepDelay, String updatedTaskData) {
+    this.nextTaskStep = nextTaskStep;
+    if (nextTaskStepDelay > 0) {
+      this.nextTaskStepDelay = nextTaskStepDelay;
+    }
+    this.updatedTaskData = updatedTaskData;
+  }
+
+  /**
+   * Constructs a new <b>TestExecutionResult</b>.
+   *
+   * @param nextTaskStep the next task step for a multistep task
+   * @param nextTaskStepDelay the delay in milliseconds before the next task step for a multistep
+   *     task is executed
+   */
+  public TaskExecutionResult(TaskStep nextTaskStep, long nextTaskStepDelay) {
+    this.nextTaskStep = nextTaskStep;
+    if (nextTaskStepDelay > 0) {
+      this.nextTaskStepDelay = nextTaskStepDelay;
+    }
+  }
+
+  /**
    * Returns the next task step for a multistep task.
    *
    * @return the next task step for a multistep task
    */
   public TaskStep getNextTaskStep() {
     return nextTaskStep;
+  }
+
+  /**
+   * Returns the delay in milliseconds before the next task step for a multistep task is executed.
+   *
+   * @return the delay in milliseconds before the next task step for a multistep task is executed
+   */
+  public Long getNextTaskStepDelay() {
+    return nextTaskStepDelay;
   }
 
   /**

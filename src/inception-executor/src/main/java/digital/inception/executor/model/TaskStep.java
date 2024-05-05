@@ -36,12 +36,12 @@ import java.io.Serializable;
  */
 @Schema(description = "A task step")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "name"})
+@JsonPropertyOrder({"code", "name", "postExecutionDelay"})
 @XmlRootElement(name = "TaskStep", namespace = "https://inception.digital/executor")
 @XmlType(
     name = "TaskStep",
     namespace = "https://inception.digital/executor",
-    propOrder = {"code", "name"})
+    propOrder = {"code", "name", "postExecutionDelay"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class TaskStep implements Serializable {
@@ -62,6 +62,15 @@ public class TaskStep implements Serializable {
   @Size(min = 1, max = 100)
   private String name;
 
+  /** The delay in milliseconds before the next task step for a multistep task is executed. */
+  @Schema(
+      description =
+          "The delay in milliseconds before the next task step for a multistep task is executed",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PostExecutionDelay", required = true)
+  private long postExecutionDelay;
+
   /**
    * Constructs a new <b>TaskStep</b>.
    *
@@ -71,6 +80,20 @@ public class TaskStep implements Serializable {
   public TaskStep(String code, String name) {
     this.code = code;
     this.name = name;
+  }
+
+  /**
+   * Constructs a new <b>TaskStep</b>.
+   *
+   * @param code the code for the task step
+   * @param name the name of the task step
+   * @param postExecutionDelay the delay in milliseconds before the next task step for a multistep
+   *     task is executed
+   */
+  public TaskStep(String code, String name, long postExecutionDelay) {
+    this.code = code;
+    this.name = name;
+    this.postExecutionDelay = postExecutionDelay;
   }
 
   /**
@@ -92,6 +115,15 @@ public class TaskStep implements Serializable {
   }
 
   /**
+   * Returns the delay in milliseconds before the next task step for a multistep task is executed.
+   *
+   * @return the delay in milliseconds before the next task step for a multistep task is executed
+   */
+  public long getPostExecutionDelay() {
+    return postExecutionDelay;
+  }
+
+  /**
    * Set the code for the task step.
    *
    * @param code the code for the task step
@@ -107,5 +139,15 @@ public class TaskStep implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the delay in milliseconds before the next task step for a multistep task is executed.
+   *
+   * @param postExecutionDelay the delay in milliseconds before the next task step for a multistep
+   *     task is executed
+   */
+  public void setPostExecutionDelay(long postExecutionDelay) {
+    this.postExecutionDelay = postExecutionDelay;
   }
 }

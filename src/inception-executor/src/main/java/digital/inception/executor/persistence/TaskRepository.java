@@ -45,20 +45,20 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    *
    * @param taskId the ID for the task
    * @param step the code for the next task step for the multistep task
-   * @param currentTimestamp the current date and time
+   * @param nextExecution the date and time the task will next be executed
    * @param executionTime the time taken to complete the current task step in milliseconds
    */
   @Transactional
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
-          + "t.step = :step, t.executionAttempts = 0, t.nextExecution = :currentTimestamp, "
+          + "t.step = :step, t.executionAttempts = 0, t.nextExecution = :nextExecution, "
           + "t.executionTime = t.executionTime + :executionTime, "
           + "t.locked = null, t.lockName = null where t.id = :taskId")
   void advanceTaskToStep(
       @Param("taskId") UUID taskId,
       @Param("step") String step,
-      @Param("currentTimestamp") OffsetDateTime currentTimestamp,
+      @Param("nextExecution") OffsetDateTime nextExecution,
       @Param("executionTime") long executionTime);
 
   /**
@@ -67,7 +67,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param taskId the ID for the task
    * @param step the code for the next task step for the multistep task
    * @param data the updated task data
-   * @param currentTimestamp the current date and time
+   * @param nextExecution the date and time the task will next be executed
    * @param executionTime the time taken to complete the current task step in milliseconds
    */
   @Transactional
@@ -76,13 +76,13 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.step = :step, t.data = :data, t.executionAttempts = 0, "
           + "t.executionTime = t.executionTime + :executionTime, "
-          + "t.nextExecution = :currentTimestamp, t.locked = null, t.lockName = null "
+          + "t.nextExecution = :nextExecution, t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
   void advanceTaskToStep(
       @Param("taskId") UUID taskId,
       @Param("step") String step,
       @Param("data") String data,
-      @Param("currentTimestamp") OffsetDateTime currentTimestamp,
+      @Param("nextExecution") OffsetDateTime nextExecution,
       @Param("executionTime") long executionTime);
 
   /**
@@ -229,7 +229,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       "select t from Task t where "
           + "exists (select 1 from TaskType tt where tt.code = t.type and tt.enabled = true) and "
           + "t.status = digital.inception.executor.model.TaskStatus.QUEUED and "
-          + "(t.nextExecution <= :currentTimestamp or t.executionAttempts = 0) "
+          + "((t.nextExecution is null) or (t.nextExecution <= :currentTimestamp)) "
           + "order by t.priority, t.queued")
   List<Task> findTasksQueuedForExecutionForWrite(
       @Param("currentTimestamp") OffsetDateTime currentTimestamp, Pageable pageable);

@@ -59,14 +59,25 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements ITaskExecut
     try {
       TaskStep taskStep = getTaskStep(task.getStep());
 
+      if (taskStep == null) {
+        throw new TaskExecutionFailedException(
+            task.getId(),
+            "Failed to execute the task ("
+                + task.getId()
+                + ") with the invalid task step ("
+                + task.getStep()
+                + ")");
+      }
+
       TaskDataType taskData = deserializeTaskData(task.getData(), taskDataTypeClass);
 
       TaskStep nextTaskStep = getNextTaskStep(task.getStep(), taskData);
 
       if (executeTaskStep(task, taskStep, taskData)) {
-        return new TaskExecutionResult(nextTaskStep, serializeTaskData(taskData));
+        return new TaskExecutionResult(
+            nextTaskStep, taskStep.getPostExecutionDelay(), serializeTaskData(taskData));
       } else {
-        return new TaskExecutionResult(nextTaskStep);
+        return new TaskExecutionResult(nextTaskStep, taskStep.getPostExecutionDelay());
       }
     } catch (TaskExecutionFailedException
         | TaskExecutionRetryableException

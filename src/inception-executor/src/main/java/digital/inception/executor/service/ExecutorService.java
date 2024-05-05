@@ -325,13 +325,18 @@ public class ExecutorService implements IExecutorService {
 
       // If we need to move to the next task step for a multistep task
       if (taskExecutionResult.getNextTaskStep() != null) {
+        OffsetDateTime nextExecution = (taskExecutionResult.getNextTaskStepDelay() != null)
+            ? OffsetDateTime.now()
+            .plus(taskExecutionResult.getNextTaskStepDelay(), ChronoUnit.MILLIS)
+            : OffsetDateTime.now();
+
         // If we have to update the task data after executing the previous task step
         if (StringUtils.hasText(taskExecutionResult.getUpdatedTaskData())) {
           taskRepository.advanceTaskToStep(
               task.getId(),
               taskExecutionResult.getNextTaskStep().getCode(),
               taskExecutionResult.getUpdatedTaskData(),
-              OffsetDateTime.now(),
+              nextExecution,
               executionTime);
 
           task.setData(taskExecutionResult.getUpdatedTaskData());
@@ -339,7 +344,7 @@ public class ExecutorService implements IExecutorService {
           taskRepository.advanceTaskToStep(
               task.getId(),
               taskExecutionResult.getNextTaskStep().getCode(),
-              OffsetDateTime.now(),
+              nextExecution,
               executionTime);
         }
 

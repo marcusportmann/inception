@@ -19,6 +19,7 @@ package digital.inception.executor.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,6 +43,7 @@ import digital.inception.executor.model.TaskTypeNotFoundException;
 import digital.inception.executor.service.IExecutorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -113,8 +115,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
     testSimpleTaskData.setDelayTask(true);
 
     UUID taskId =
@@ -135,6 +136,9 @@ public class ExecutorServiceTest {
 
     Task retrievedTask = executorService.getTask(taskId);
 
+    TestSimpleTaskData retrievedTestSimpleTaskData =
+        deserializeTaskData(retrievedTask.getData(), TestSimpleTaskData.class);
+
     assertEquals(TaskStatus.CANCELLED, retrievedTask.getStatus());
   }
 
@@ -151,8 +155,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
     testSimpleTaskData.setDelayTask(true);
 
     UUID taskId =
@@ -187,8 +190,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
     testSimpleTaskData.setDelayTask(true);
 
     UUID taskId =
@@ -340,8 +342,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
 
     UUID taskId =
         executorService.queueTask(
@@ -466,6 +467,34 @@ public class ExecutorServiceTest {
             + " milliseconds");
   }
 
+  /** Test the multistep with delay task functionality. */
+  @Test
+  public void multistepWithDelayTaskTest() throws Exception {
+    TaskType testMultistepWithDelayTaskType =
+        new TaskType(
+            "test_multistep_with_delay_" + generateSuffix(),
+            "Test Multistep With Delay",
+            TaskPriority.NORMAL,
+            "digital.inception.executor.test.TestMultistepWithDelayTaskExecutor",
+            1);
+
+    executorService.createTaskType(testMultistepWithDelayTaskType);
+
+    UUID taskId =
+        executorService.queueTask(
+            new QueueTaskRequest(
+                testMultistepWithDelayTaskType.getCode(),
+                objectMapper.writeValueAsString(
+                    new TestMultistepTaskData("This is a test message"))));
+
+    waitForTaskToMoveToStep(taskId, "step_2", 10);
+
+    Task retrievedTask = executorService.getTask(taskId);
+
+    assertEquals(TaskStatus.QUEUED, retrievedTask.getStatus());
+    assertTrue(retrievedTask.getNextExecution().isAfter(OffsetDateTime.now().plusSeconds(120)));
+  }
+
   /** Test the parameter-based queue task functionality. */
   @Test
   public void parameterBasedQueueTaskTest() throws Exception {
@@ -575,8 +604,7 @@ public class ExecutorServiceTest {
     QueueTaskRequest queueTaskRequest =
         new QueueTaskRequest(
             testSimpleTaskType.getCode(),
-            objectMapper.writeValueAsString(
-                new TestSimpleTaskData("This message will not be updated")));
+            objectMapper.writeValueAsString(new TestSimpleTaskData("This is a test message")));
 
     queueTaskRequest.setSuspended(true);
 
@@ -792,8 +820,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
     testSimpleTaskData.setDelayTask(true);
 
     UUID taskId =
@@ -827,8 +854,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
     testSimpleTaskData.setDelayTask(true);
 
     UUID taskId =
@@ -940,8 +966,7 @@ public class ExecutorServiceTest {
             testSimpleTaskType.getCode(),
             batchId,
             externalReference,
-            objectMapper.writeValueAsString(
-                new TestSimpleTaskData("This message will not be updated")),
+            objectMapper.writeValueAsString(new TestSimpleTaskData("This is a test message")),
             false);
 
     UUID taskId = executorService.queueTask(queueTaskRequest);
@@ -949,6 +974,8 @@ public class ExecutorServiceTest {
     waitForTaskToComplete(taskId, 10);
 
     Task retrievedTask = executorService.getTask(taskId);
+
+    assertEquals(taskId, retrievedTask.getId());
 
     retrievedTask = executorService.getTaskByExternalReference(externalReference);
 
@@ -1063,8 +1090,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
 
     UUID taskId =
         executorService.queueTask(
@@ -1101,8 +1127,7 @@ public class ExecutorServiceTest {
 
     executorService.createTaskType(testSimpleTaskType);
 
-    TestSimpleTaskData testSimpleTaskData =
-        new TestSimpleTaskData("This message will not be updated");
+    TestSimpleTaskData testSimpleTaskData = new TestSimpleTaskData("This is a test message");
 
     UUID taskId =
         executorService.queueTask(
@@ -1171,6 +1196,21 @@ public class ExecutorServiceTest {
     }
 
     throw new RuntimeException("Timed out waiting for the task (" + taskId + ") to fail");
+  }
+
+  private void waitForTaskToMoveToStep(UUID taskId, String step, int seconds) throws Exception {
+    for (int i = 0; i < ((seconds * 1000) / 250); i++) {
+      Task task = executorService.getTask(taskId);
+
+      if (step.equals(task.getStep())) {
+        return;
+      }
+
+      Thread.sleep(250);
+    }
+
+    throw new RuntimeException(
+        "Timed out waiting for the task (" + taskId + ") to move to step (" + step + ")");
   }
 
   private void waitForTaskToRetry(UUID taskId) throws Exception {
