@@ -69,6 +69,29 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <configuration>
+              <rules>
+                <dependencyConvergence>
+                  <excludes>
+                    <exclude>com.google.guava:guava:[32,33)</exclude>
+                    <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
+                    <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
+                  </excludes>
+                </dependencyConvergence>
+              </rules>
+            </configuration>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <failOnWarnings>true</failOnWarnings>

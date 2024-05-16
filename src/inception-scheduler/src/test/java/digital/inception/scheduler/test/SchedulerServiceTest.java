@@ -39,8 +39,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>SchedulerServiceTest</b> class contains the implementation of the JUnit tests for the
- * Scheduler Service.
+ * The <b>SchedulerServiceTest</b> class contains the JUnit tests for the Scheduler Service.
  *
  * @author Marcus Portmann
  */

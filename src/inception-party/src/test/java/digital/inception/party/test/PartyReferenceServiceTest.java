@@ -88,7 +88,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>PartyReferenceServiceTest</b> class contains the implementation of the JUnit tests for the
+ * The <b>PartyReferenceServiceTest</b> class contains the JUnit tests for the
  * <b>PartyReferenceService</b> class.
  *
  * @author Marcus Portmann

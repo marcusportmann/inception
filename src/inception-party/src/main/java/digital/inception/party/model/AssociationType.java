@@ -37,6 +37,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
@@ -197,7 +198,7 @@ public class AssociationType implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -395,6 +396,15 @@ public class AssociationType implements Serializable {
   }
 
   /**
+   * Set the codes for the party types for the first party in the association.
+   *
+   * @param firstPartyTypes the codes for the party types for the first party in the association
+   */
+  public void setFirstPartyTypes(List<String> firstPartyTypes) {
+    this.firstPartyTypes = StringUtils.collectionToCommaDelimitedString(firstPartyTypes);
+  }
+
+  /**
    * Set the Unicode locale identifier for the association type.
    *
    * @param localeId the Unicode locale identifier for the association type
@@ -428,6 +438,15 @@ public class AssociationType implements Serializable {
    */
   public void setSecondPartyTypes(String[] secondPartyTypes) {
     this.secondPartyTypes = StringUtils.arrayToCommaDelimitedString(secondPartyTypes);
+  }
+
+  /**
+   * Set the codes for the party types for the second party in the association.
+   *
+   * @param secondPartyTypes the codes for the party types for the second party in the association
+   */
+  public void setSecondPartyTypes(List<String> secondPartyTypes) {
+    this.secondPartyTypes = StringUtils.collectionToCommaDelimitedString(secondPartyTypes);
   }
 
   /**

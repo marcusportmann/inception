@@ -1143,7 +1143,7 @@ public interface ISecurityService {
    *
    * @param username the username for the user
    * @param resetPasswordUrl the reset password URL
-   * @param sendEmail should the password reset e-mail be sent to the user
+   * @param sendEmail should the password reset email be sent to the user
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserNotFoundException if the user could not be found
    * @throws ServiceUnavailableException if the password reset could not be initiated
@@ -1156,7 +1156,7 @@ public interface ISecurityService {
    *
    * @param username the username for the user
    * @param resetPasswordUrl the reset password URL
-   * @param sendEmail should the password reset e-mail be sent to the user
+   * @param sendEmail should the password reset email be sent to the user
    * @param securityCode the pre-generated security code to use
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserNotFoundException if the user could not be found

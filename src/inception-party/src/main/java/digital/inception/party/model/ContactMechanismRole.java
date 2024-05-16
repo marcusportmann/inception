@@ -89,7 +89,7 @@ public class ContactMechanismRole implements Serializable {
   /** The contact mechanism role code for a home phone number. */
   public static final String HOME_PHONE_NUMBER = "home_phone_number";
 
-  /** The contact mechanism role code for a main e-mail address. */
+  /** The contact mechanism role code for a main email address. */
   public static final String MAIN_EMAIL_ADDRESS = "main_email_address";
 
   /** The contact mechanism role code for a main fax number. */
@@ -101,7 +101,7 @@ public class ContactMechanismRole implements Serializable {
   /** The contact mechanism role code for a main phone number. */
   public static final String MAIN_PHONE_NUMBER = "main_phone_number";
 
-  /** The contact mechanism role code for an other e-mail address. */
+  /** The contact mechanism role code for an other email address. */
   public static final String OTHER_EMAIL_ADDRESS = "other_email_address";
 
   /** The contact mechanism role code for an other fax number. */
@@ -116,13 +116,13 @@ public class ContactMechanismRole implements Serializable {
   /** The contact mechanism role code for a pager phone number. */
   public static final String PAGER_PHONE_NUMBER = "pager_phone_number";
 
-  /** The contact mechanism role code for a personal e-mail address. */
+  /** The contact mechanism role code for a personal email address. */
   public static final String PERSONAL_EMAIL_ADDRESS = "personal_email_address";
 
   /** The contact mechanism role code for personal mobile number. */
   public static final String PERSONAL_MOBILE_NUMBER = "personal_mobile_number";
 
-  /** The contact mechanism role code for a school e-mail address. */
+  /** The contact mechanism role code for a school email address. */
   public static final String SCHOOL_EMAIL_ADDRESS = "school_email_address";
 
   /** The contact mechanism role code for a school phone number. */
@@ -134,7 +134,7 @@ public class ContactMechanismRole implements Serializable {
   /** The contact mechanism role code for a WhatsApp User ID. */
   public static final String WHATSAPP_USER_ID = "whatsapp_user_id";
 
-  /** The contact mechanism role code for a work e-mail address. */
+  /** The contact mechanism role code for a work email address. */
   public static final String WORK_EMAIL_ADDRESS = "work_email_address";
 
   /** The contact mechanism role code for a work fax number. */
@@ -257,7 +257,7 @@ public class ContactMechanismRole implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {

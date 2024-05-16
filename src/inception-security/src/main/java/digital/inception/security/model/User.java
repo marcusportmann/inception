@@ -91,13 +91,13 @@ public class User implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The e-mail address for the user. */
-  @Schema(description = "The e-mail address for the user")
+  /** The email address for the user. */
+  @Schema(description = "The email address for the user")
   @JsonProperty
   @XmlElement(name = "Email")
   @Size(max = 100)
   @Pattern(
-      message = "invalid e-mail address",
+      message = "invalid email address",
       regexp =
           "^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\"
               + ".[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d"
@@ -240,7 +240,7 @@ public class User implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -262,9 +262,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the e-mail address for the user.
+   * Returns the email address for the user.
    *
-   * @return the e-mail address for the user
+   * @return the email address for the user
    */
   public String getEmail() {
     return email;
@@ -441,9 +441,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the e-mail address for the user.
+   * Set the email address for the user.
    *
-   * @param email the e-mail address for the user
+   * @param email the email address for the user
    */
   public void setEmail(String email) {
     this.email = email;

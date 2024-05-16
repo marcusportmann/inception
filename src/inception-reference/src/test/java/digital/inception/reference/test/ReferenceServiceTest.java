@@ -44,8 +44,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>ReferenceServiceTest</b> class contains the implementation of the JUnit tests for the
- * <b>ReferenceService</b> class.
+ * The <b>ReferenceServiceTest</b> class contains the JUnit tests for the <b>ReferenceService</b>
+ * class.
  *
  * @author Marcus Portmann
  */

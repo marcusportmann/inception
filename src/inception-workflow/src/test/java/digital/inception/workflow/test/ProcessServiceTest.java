@@ -67,8 +67,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * The <b>ProcessServiceTest</b> class contains the implementation of the JUnit tests for the
- * <b>ProcessService</b> class.
+ * The <b>ProcessServiceTest</b> class contains the JUnit tests for the <b>ProcessService</b> class.
  *
  * @author Marcus Portmann
  */

@@ -113,7 +113,7 @@
       <column name="preferred_name" type="nvarchar(100)" remarks="The preferred name for the user'"/>
       <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the user"/>
       <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the user"/>
-      <column name="email" type="nvarchar(100)" remarks="The e-mail address for the user"/>
+      <column name="email" type="nvarchar(100)" remarks="The email address for the user"/>
       <column name="encoded_password" type="nvarchar(100)" remarks="The encoded password for the user">
         <constraints nullable="false"/>
       </column>

@@ -203,8 +203,8 @@ public class NextOfKin implements Serializable {
   @Column(name = "address_suburb", length = 50)
   private String addressSuburb;
 
-  /** The e-mail address for the next of kin. */
-  @Schema(description = "The e-mail address for the next of kin")
+  /** The email address for the next of kin. */
+  @Schema(description = "The email address for the next of kin")
   @JsonProperty
   @XmlElement(name = "EmailAddress")
   @Size(min = 1, max = 100)
@@ -322,7 +322,7 @@ public class NextOfKin implements Serializable {
    * @param homeNumber the home phone number for the next of kin
    * @param workNumber the work phone number for the next of kin
    * @param mobileNumber the mobile number for the next of kin
-   * @param emailAddress the e-mail address for the next of kin
+   * @param emailAddress the email address for the next of kin
    * @param addressLine1 the next of kin address line 1
    * @param addressLine2 the next of kin address line 2
    * @param addressLine3 the next of kin address line 3
@@ -378,7 +378,7 @@ public class NextOfKin implements Serializable {
    * @param name the name of the next of kin
    * @param homeNumber the home phone number for the next of kin
    * @param mobileNumber the mobile number for the next of kin
-   * @param emailAddress the e-mail address for the next of kin
+   * @param emailAddress the email address for the next of kin
    */
   public NextOfKin(
       String type, String name, String homeNumber, String mobileNumber, String emailAddress) {
@@ -406,7 +406,7 @@ public class NextOfKin implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -509,9 +509,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Returns the e-mail address for the next of kin.
+   * Returns the email address for the next of kin.
    *
-   * @return the e-mail address for the next of kin
+   * @return the email address for the next of kin
    */
   public String getEmailAddress() {
     return emailAddress;
@@ -691,9 +691,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the e-mail address for the next of kin.
+   * Set the email address for the next of kin.
    *
-   * @param emailAddress the e-mail address for the next of kin
+   * @param emailAddress the email address for the next of kin
    */
   public void setEmailAddress(String emailAddress) {
     this.emailAddress = emailAddress;

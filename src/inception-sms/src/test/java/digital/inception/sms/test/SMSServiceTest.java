@@ -41,8 +41,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>SMSServiceTest</b> class contains the implementation of the JUnit tests for the
- * <b>SMSService</b> class.
+ * The <b>SMSServiceTest</b> class contains the JUnit tests for the <b>SMSService</b> class.
  *
  * @author Marcus Portmann
  */

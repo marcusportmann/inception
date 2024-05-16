@@ -91,8 +91,8 @@ Complete the following steps to setup your environment to release on MacOS.
 
 Complete the following steps to create a release of the Inception Angular Framework on MacOS.
 
-1. If you want to use a different e-mail address and PGP key when creating a release of the Inception Angular Framework complete the following steps:
-   1. Set the local e-mail to use for the Inception Angular Framework Git repository by executing the following commands in a Terminal window under the *inception-angular* project cloned from Git.
+1. If you want to use a different email address and PGP key when creating a release of the Inception Angular Framework complete the following steps:
+   1. Set the local email to use for the Inception Angular Framework Git repository by executing the following commands in a Terminal window under the *inception-angular* project cloned from Git.
       ```
       git config --local user.email 'REPLACE_WITH_YOUR_EMAIL_ADDRESS'
       
@@ -188,8 +188,8 @@ Complete the following steps to setup your environment to release on Windows.
 
 Complete the following steps to create a release of the Inception Angular Framework on Windows.
 
-1. If you want to use a different e-mail address and PGP key when creating a release of the Inception Angular Framework complete the following steps:
-   1. Set the local e-mail to use for the Inception Angular Framework Git repository by executing the following commands in a command prompt under the *inception-angular* project cloned from Git.
+1. If you want to use a different email address and PGP key when creating a release of the Inception Angular Framework complete the following steps:
+   1. Set the local email to use for the Inception Angular Framework Git repository by executing the following commands in a command prompt under the *inception-angular* project cloned from Git.
       ```
       git config --local user.email 'REPLACE_WITH_YOUR_EMAIL_ADDRESS'
       

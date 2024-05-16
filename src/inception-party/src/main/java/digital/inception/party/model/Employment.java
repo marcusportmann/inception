@@ -219,8 +219,8 @@ public class Employment implements Serializable {
   @Column(name = "employer_contact_person", length = 100)
   private String employerContactPerson;
 
-  /** The employer e-mail address. */
-  @Schema(description = "The employer e-mail address")
+  /** The employer email address. */
+  @Schema(description = "The employer email address")
   @JsonProperty
   @XmlElement(name = "EmployerEmailAddress")
   @Size(min = 1, max = 100)
@@ -318,7 +318,7 @@ public class Employment implements Serializable {
    *
    * @param employerName the employer name
    * @param employerPhoneNumber the employer phone number
-   * @param employerEmailAddress the employer e-mail address
+   * @param employerEmailAddress the employer email address
    * @param employerContactPerson the employer contact person
    * @param employerAddressLine1 the employer address line 1
    * @param employerAddressLine2 the employer address line 2
@@ -377,7 +377,7 @@ public class Employment implements Serializable {
    *
    * @param employerName the employer name
    * @param employerPhoneNumber the employer phone number
-   * @param employerEmailAddress the employer e-mail address
+   * @param employerEmailAddress the employer email address
    * @param employerContactPerson the employer contact person
    * @param employerAddressLine1 the employer address line 1
    * @param employerAddressLine2 the employer address line 2
@@ -493,7 +493,7 @@ public class Employment implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -605,9 +605,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Returns the employer e-mail address.
+   * Returns the employer email address.
    *
-   * @return the employer e-mail address
+   * @return the employer email address
    */
   public String getEmployerEmailAddress() {
     return employerEmailAddress;
@@ -787,9 +787,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer e-mail address.
+   * Set the employer email address.
    *
-   * @param employerEmailAddress the employer e-mail address
+   * @param employerEmailAddress the employer email address
    */
   public void setEmployerEmailAddress(String employerEmailAddress) {
     this.employerEmailAddress = employerEmailAddress;

@@ -389,7 +389,7 @@ public class MailService implements IMailService {
       MailTemplate mailTemplate = mailTemplateOptional.get();
 
       if (javaMailSender != null) {
-        // Send the e-mail message
+        // Send the email message
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);

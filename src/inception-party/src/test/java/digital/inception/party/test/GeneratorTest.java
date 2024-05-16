@@ -30,8 +30,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>GeneratorTest</b> class contains the implementation of the JUnit tests for the
- * <b>Generator</b> class.
+ * The <b>GeneratorTest</b> class contains the JUnit tests for the <b>Generator</b> class.
  *
  * @author Marcus Portmann
  */

@@ -50,40 +50,33 @@ import java.util.UUID;
  */
 @Schema(description = "A password reset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "username", "requested", "completed", "expired", "status", "securityCodeHash"})
+@JsonPropertyOrder({
+  "id",
+  "username",
+  "requested",
+  "completed",
+  "expired",
+  "status",
+  "securityCodeHash"
+})
 @XmlRootElement(name = "GroupMember", namespace = "https://inception.digital/security")
 @XmlType(
     name = "PasswordReset",
     namespace = "https://inception.digital/security",
-    propOrder = {"id", "username", "requested", "completed", "expired", "status", "securityCodeHash"})
+    propOrder = {
+      "id",
+      "username",
+      "requested",
+      "completed",
+      "expired",
+      "status",
+      "securityCodeHash"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 @Entity
 @Table(name = "security_password_resets")
 public class PasswordReset implements Serializable {
-
-  /**
-   * Returns the ID for the password reset.
-   * @return the ID for the password reset
-   */
-  public UUID getId() {
-    return id;
-  }
-
-  /**
-   * Set the ID for the password reset.
-   * @param id the ID for the password reset
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /** The ID for the password reset. */
-  @JsonIgnore
-  @XmlTransient
-  @Id
-  @Column(name = "id", nullable = false)
-  private UUID id;
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -104,6 +97,13 @@ public class PasswordReset implements Serializable {
   @XmlSchemaType(name = "dateTime")
   @Column(name = "expired")
   private OffsetDateTime expired;
+
+  /** The ID for the password reset. */
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /** The date and time the password reset was requested. */
   @Schema(
@@ -167,7 +167,7 @@ public class PasswordReset implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -204,6 +204,15 @@ public class PasswordReset implements Serializable {
    */
   public OffsetDateTime getExpired() {
     return expired;
+  }
+
+  /**
+   * Returns the ID for the password reset.
+   *
+   * @return the ID for the password reset
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
@@ -268,6 +277,15 @@ public class PasswordReset implements Serializable {
    */
   public void setExpired(OffsetDateTime expired) {
     this.expired = expired;
+  }
+
+  /**
+   * Set the ID for the password reset.
+   *
+   * @param id the ID for the password reset
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**

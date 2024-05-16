@@ -129,9 +129,9 @@
       <column name="code" value="email_address"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="4"/>
-      <column name="name" value="E-mail Address"/>
-      <column name="plural" value="E-mail Addresses"/>
-      <column name="description" value="E-mail Address"/>
+      <column name="name" value="Email Address"/>
+      <column name="plural" value="Email Addresses"/>
+      <column name="description" value="Email Address"/>
       <column name="pattern"><![CDATA[^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])]]></column>
     </insert>
     <insert tableName="party_contact_mechanism_types">
@@ -301,8 +301,8 @@
       <column name="code" value="personal_email_address"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="401"/>
-      <column name="name" value="Personal E-mail Address"/>
-      <column name="description" value="Personal E-mail Address"/>
+      <column name="name" value="Personal Email Address"/>
+      <column name="description" value="Personal -mail Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -310,8 +310,8 @@
       <column name="code" value="work_email_address"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="402"/>
-      <column name="name" value="Work E-mail Address"/>
-      <column name="description" value="Work E-mail Address"/>
+      <column name="name" value="Work Email Address"/>
+      <column name="description" value="Work Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -319,8 +319,8 @@
       <column name="code" value="school_email_address"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="403"/>
-      <column name="name" value="School E-mail Address"/>
-      <column name="description" value="School E-mail Address"/>
+      <column name="name" value="School Email Address"/>
+      <column name="description" value="School Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -328,8 +328,8 @@
       <column name="code" value="other_email_address"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="404"/>
-      <column name="name" value="Other E-mail Address"/>
-      <column name="description" value="Other E-mail Address"/>
+      <column name="name" value="Other Email Address"/>
+      <column name="description" value="Other Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -337,8 +337,8 @@
       <column name="code" value="alternate_email_address"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="405"/>
-      <column name="name" value="Alternate E-mail Address"/>
-      <column name="description" value="Alternate E-mail Address"/>
+      <column name="name" value="Alternate Email Address"/>
+      <column name="description" value="Alternate Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -346,8 +346,8 @@
       <column name="code" value="main_email_address"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="410"/>
-      <column name="name" value="Main E-mail Address"/>
-      <column name="description" value="Main E-mail Address"/>
+      <column name="name" value="Main Email Address"/>
+      <column name="description" value="Main Email Address"/>
       <column name="party_types" value="organization"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -4093,9 +4093,9 @@
       <column name="code" value="email_address"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="sort_index" value="4"/>
-      <column name="name" value="E-mail Address"/>
-      <column name="plural" value="E-mail Addresses"/>
-      <column name="description" value="E-mail Address"/>
+      <column name="name" value="Email Address"/>
+      <column name="plural" value="Email Addresses"/>
+      <column name="description" value="Email Address"/>
       <column name="pattern"><![CDATA[^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])]]></column>
     </insert>
     <insert tableName="party_contact_mechanism_types">
@@ -4265,8 +4265,8 @@
       <column name="code" value="personal_email_address"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="sort_index" value="401"/>
-      <column name="name" value="Personal E-mail Address"/>
-      <column name="description" value="Personal E-mail Address"/>
+      <column name="name" value="Personal Email Address"/>
+      <column name="description" value="Personal Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -4274,8 +4274,8 @@
       <column name="code" value="work_email_address"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="sort_index" value="402"/>
-      <column name="name" value="Work E-mail Address"/>
-      <column name="description" value="Work E-mail Address"/>
+      <column name="name" value="Work Email Address"/>
+      <column name="description" value="Work Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -4283,8 +4283,8 @@
       <column name="code" value="school_email_address"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="sort_index" value="403"/>
-      <column name="name" value="School E-mail Address"/>
-      <column name="description" value="School E-mail Address"/>
+      <column name="name" value="School Email Address"/>
+      <column name="description" value="School Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -4292,8 +4292,8 @@
       <column name="code" value="other_email_address"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="sort_index" value="404"/>
-      <column name="name" value="Other E-mail Address"/>
-      <column name="description" value="Other E-mail Address"/>
+      <column name="name" value="Other Email Address"/>
+      <column name="description" value="Other Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -4301,8 +4301,8 @@
       <column name="code" value="alternate_email_address"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="sort_index" value="405"/>
-      <column name="name" value="Alternate E-mail Address"/>
-      <column name="description" value="Alternate E-mail Address"/>
+      <column name="name" value="Alternate Email Address"/>
+      <column name="description" value="Alternate Email Address"/>
       <column name="party_types" value="person"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">
@@ -4310,8 +4310,8 @@
       <column name="code" value="main_email_address"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="sort_index" value="410"/>
-      <column name="name" value="Main E-mail Address"/>
-      <column name="description" value="Main E-mail Address"/>
+      <column name="name" value="Main Email Address"/>
+      <column name="description" value="Main Email Address"/>
       <column name="party_types" value="organization"/>
     </insert>
     <insert tableName="party_contact_mechanism_roles">

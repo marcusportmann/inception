@@ -150,10 +150,10 @@ public interface IMailService {
   /**
    * Send a mail.
    *
-   * @param to the list of e-mail addresses to send the mail to
+   * @param to the list of email addresses to send the mail to
    * @param subject the subject for the mail
-   * @param from the from e-mail address
-   * @param fromName the from e-mail name
+   * @param from the from email address
+   * @param fromName the from email name
    * @param mailTemplateId the ID for the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    * @throws InvalidArgumentException if an argument is invalid

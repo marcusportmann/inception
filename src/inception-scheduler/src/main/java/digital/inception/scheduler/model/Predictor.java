@@ -392,7 +392,7 @@ public class Predictor {
 
     /**
      * Returns <b>true</b> if the given value is included in the matcher list or the
-     * last-day-of-month setting applies otherwise <b>false</b>.
+     * last-day-of-month setting applies, otherwise <b>false</b>.
      *
      * @param value the value
      * @param month the month

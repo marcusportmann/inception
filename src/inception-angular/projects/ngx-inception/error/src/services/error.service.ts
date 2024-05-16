@@ -155,7 +155,7 @@ export class ErrorService {
    * Send the error report for the error.
    *
    * @param error    The error.
-   * @param email    The optional e-mail address of the user submitting the error report.
+   * @param email    The optional email address of the user submitting the error report.
    * @param feedback The optional feedback from the user submitting the error report.
    */
   sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {

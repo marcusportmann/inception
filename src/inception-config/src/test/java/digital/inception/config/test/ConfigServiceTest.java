@@ -39,8 +39,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>ConfigServiceTest</b> class contains the implementation of the JUnit tests for the
- * <b>ConfigService</b> class.
+ * The <b>ConfigServiceTest</b> class contains the JUnit tests for the <b>ConfigService</b> class.
  *
  * @author Marcus Portmann
  */

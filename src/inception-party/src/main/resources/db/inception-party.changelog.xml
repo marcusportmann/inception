@@ -1338,7 +1338,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="employer_phone_number" type="nvarchar(50)" remarks="The employer phone number"/>
-      <column name="employer_email_address" type="nvarchar(100)" remarks="The employer e-mail address"/>
+      <column name="employer_email_address" type="nvarchar(100)" remarks="The employer email address"/>
       <column name="employer_contact_person" type="nvarchar(100)" remarks="The employer contact person"/>
       <column name="employer_address_line1" type="nvarchar(100)" remarks="The employer address line 1"/>
       <column name="employer_address_line2" type="nvarchar(100)" remarks="The employer address line 2"/>
@@ -1512,7 +1512,7 @@
       <column name="home_number" type="nvarchar(50)" remarks="The home phone number for the next of kin"/>
       <column name="work_number" type="nvarchar(50)" remarks="The work phone number for the next of kin"/>
       <column name="mobile_number" type="nvarchar(50)" remarks="The mobile number for the next of kin"/>
-      <column name="email_address" type="nvarchar(100)" remarks="The e-mail address for the next of kin"/>
+      <column name="email_address" type="nvarchar(100)" remarks="The email address for the next of kin"/>
       <column name="address_line1" type="nvarchar(100)" remarks="The next of kin address line 1"/>
       <column name="address_line2" type="nvarchar(100)" remarks="The next of kin address line 2"/>
       <column name="address_line3" type="nvarchar(100)" remarks="The next of kin address line 3"/>

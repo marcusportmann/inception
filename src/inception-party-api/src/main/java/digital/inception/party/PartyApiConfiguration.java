@@ -31,6 +31,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PartyApiConfiguration {
 
+  /** Constructs a new <b>PartyApiConfiguration</b>. */
+  public PartyApiConfiguration() {}
+
   /**
    * Returns the grouped Open API for the Party API.
    *

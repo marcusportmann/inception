@@ -37,8 +37,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
- * The <b>TestJPAServiceTest</b> class contains the implementation of the JUnit tests for the
- * <b>TestJPAService</b> class.
+ * The <b>TestJPAServiceTest</b> class contains the JUnit tests for the <b>TestJPAService</b> class.
  *
  * @author Marcus Portmann
  */

@@ -257,7 +257,7 @@ public interface ISchedulerApiController {
   @RequestMapping(
       value = "/jobs/{jobId}/name",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = "text/plain")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")

@@ -128,4 +128,13 @@ public class TestApiController extends SecureApiController implements ITestApiCo
 
     return CarType.PETROL;
   }
+
+  @Override
+  public String testReturningString(Boolean throwException) throws ServiceUnavailableException {
+    if ((throwException != null) && (throwException)) {
+      throw new ServiceUnavailableException("This is a test exception");
+    } else {
+      return "This is a test string";
+    }
+  }
 }

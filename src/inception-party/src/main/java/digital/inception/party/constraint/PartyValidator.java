@@ -39,7 +39,7 @@ import org.springframework.util.StringUtils;
  */
 public abstract class PartyValidator {
 
-  /** The regex pattern used to validate e-mail addresses. */
+  /** The regex pattern used to validate email addresses. */
   private static final String EMAIL_ADDRESS_PATTERN =
       "^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\"
           + ".[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d"
@@ -102,10 +102,10 @@ public abstract class PartyValidator {
   }
 
   /**
-   * Check whether the e-mail address is valid.
+   * Check whether the email address is valid.
    *
-   * @param emailAddress the e-mail address to validate
-   * @return <b>true</b> if the e-mail address is valid or <b>false</b> otherwise
+   * @param emailAddress the email address to validate
+   * @return <b>true</b> if the email address is valid or <b>false</b> otherwise
    */
   protected boolean isValidEmailAddress(String emailAddress) {
     if (StringUtils.hasText(emailAddress)) {

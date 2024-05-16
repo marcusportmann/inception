@@ -83,7 +83,7 @@ export class ForgottenPasswordComponent {
       .subscribe(() => {
         const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
           {
-            message: 'The password reset process was initiated. Please check your e-mail to proceed.'
+            message: 'The password reset process was initiated. Please check your email to proceed.'
           });
 
         dialogRef.afterClosed()

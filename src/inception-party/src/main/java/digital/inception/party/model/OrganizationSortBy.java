@@ -84,8 +84,8 @@ public enum OrganizationSortBy {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of organizations enumeration
-   * value.
+   * Returns the string representation of the method used to sort a list of organizations
+   * enumeration value.
    *
    * @return the string representation of the method used to sort a list of organizations
    *     enumeration value

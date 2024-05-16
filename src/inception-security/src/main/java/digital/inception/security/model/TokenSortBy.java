@@ -106,7 +106,8 @@ public enum TokenSortBy {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of tokens enumeration value.
+   * Returns the string representation of the method used to sort a list of tokens enumeration
+   * value.
    *
    * @return the string representation of the method used to sort a list of tokens enumeration value
    */

@@ -646,7 +646,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/task-types/{taskTypeCode}/name",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = "text/plain")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")

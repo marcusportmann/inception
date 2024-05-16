@@ -45,7 +45,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A template for an e-mail sent by an application")
+@Schema(description = "A template for an email sent by an application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType", "template"})
 @XmlRootElement(name = "MailTemplate", namespace = "https://inception.digital/mail")
@@ -132,7 +132,7 @@ public class MailTemplate implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {

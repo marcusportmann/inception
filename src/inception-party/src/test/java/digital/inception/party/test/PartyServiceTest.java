@@ -103,8 +103,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PartyServiceTest</b> class contains the implementation of the JUnit tests for the
- * <b>PartyService</b> class.
+ * The <b>PartyServiceTest</b> class contains the JUnit tests for the <b>PartyService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -1568,7 +1567,7 @@ public class PartyServiceTest {
         new Employment(
             null,
             "Invalid Employer Phone Number$",
-            "Invalid Employer E-mail Address$",
+            "Invalid Employer Email Address$",
             "Invalid Employer Contact Person$",
             "Invalid Employer Address Line 1$",
             "Invalid Employer Address Line 2$",
@@ -1793,7 +1792,7 @@ public class PartyServiceTest {
             "Invalid Home Number",
             "Invalid Work Number",
             "Invalid Mobile Number",
-            "Invalid E-mail Address",
+            "Invalid Email Address",
             "Invalid Address Line 1$",
             "Invalid Address Line 2$",
             "Invalid Address Line 3$",
@@ -4120,7 +4119,7 @@ public class PartyServiceTest {
     assertEquals(
         employment1.getEmployerEmailAddress(),
         employment2.getEmployerEmailAddress(),
-        "The employer e-mail address values for the employments do not match");
+        "The employer email address values for the employments do not match");
     assertEquals(
         employment1.getEmployerName(),
         employment2.getEmployerName(),

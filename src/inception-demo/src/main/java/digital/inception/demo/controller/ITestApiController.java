@@ -147,9 +147,54 @@ public interface ITestApiController {
    * @throws ServiceUnavailableException if an error occurred
    */
   @Operation(summary = "Test returning an enum", description = "Test returning an enum")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
   @RequestMapping(
       value = "/test-returning-enum",
       method = RequestMethod.GET,
       produces = "application/json")
   CarType testReturningEnum() throws ServiceUnavailableException;
+
+  /**
+   * Test returning a string.
+   *
+   * @param throwException should an exception be thrown
+   * @return the string value
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test returning an string", description = "Test returning a string")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/test-returning-string",
+      method = RequestMethod.GET,
+      produces = "text/plain")
+  String testReturningString(
+      @Parameter(
+              name = "throwException",
+              description = "Throw an exception instead of returning a string",
+              required = true)
+          @RequestParam
+          Boolean throwException)
+      throws ServiceUnavailableException;
 }

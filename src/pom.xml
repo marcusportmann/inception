@@ -108,6 +108,7 @@
     <easymock.version>5.2.0</easymock.version>
     <flowable.version>7.0.1</flowable.version>
     <freemarker.version>2.3.32</freemarker.version>
+    <greenmail.version>2.0.1</greenmail.version>
     <groovy.version>4.0.21</groovy.version>
     <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
     <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
@@ -151,6 +152,11 @@
         <groupId>com.ibm.icu</groupId>
         <artifactId>icu4j</artifactId>
         <version>${com.ibm.icu.icu4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.icegreen</groupId>
+        <artifactId>greenmail</artifactId>
+        <version>${greenmail.version}</version>
       </dependency>
       <dependency>
         <groupId>com.mattbertolini</groupId>
@@ -463,8 +469,6 @@
         <artifactId>inception-mail-ws</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
-
-
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-party</artifactId>
@@ -480,7 +484,6 @@
         <artifactId>inception-party-ws</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
-
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reference</artifactId>
@@ -737,34 +740,6 @@
             <version>1.9.5</version>
           </dependency>
         </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce</id>
-            <configuration>
-              <rules>
-                <dependencyConvergence>
-                  <excludes>
-                    <exclude>com.google.guava:guava:[32,33)</exclude>
-                    <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
-                    <exclude>com.google.guava:guava:[31,32]</exclude>
-                    <exclude>net.java.dev.jna:jna-platform:[5,6)</exclude>
-                    <exclude>org.apache.commons:commons-collections4:[4,5)</exclude>
-                    <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
-                    <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
-                    <exclude>org.ow2.asm:asm:[9,10)</exclude>
-                  </excludes>
-                </dependencyConvergence>
-              </rules>
-            </configuration>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

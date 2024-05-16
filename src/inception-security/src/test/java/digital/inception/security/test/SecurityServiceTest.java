@@ -106,8 +106,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>SecurityServiceTest</b> class contains the implementation of the JUnit tests for the
- * <b>SecurityService</b> class.
+ * The <b>SecurityServiceTest</b> class contains the JUnit tests for the <b>SecurityService</b>
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -1982,7 +1982,7 @@ public class SecurityServiceTest {
     assertEquals(
         user1.getStatus(), user2.getStatus(), "The status values for the users do not match");
     assertEquals(
-        user1.getEmail(), user2.getEmail(), "The e-mail values for the users do not match");
+        user1.getEmail(), user2.getEmail(), "The email values for the users do not match");
     assertEquals(user1.getName(), user2.getName(), "The name values for the users do not match");
     assertEquals(
         user1.getPreferredName(),

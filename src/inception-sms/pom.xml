@@ -29,16 +29,6 @@
       <artifactId>spring-webflux</artifactId>
     </dependency>
 
-    <!-- JAX-WS Dependencies -->
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-frontend-jaxws</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-transports-http</artifactId>
-    </dependency>
-
     <!-- Test Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
@@ -58,6 +48,23 @@
             <phase>deploy</phase>
             <goals>
               <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <configuration>
+              <rules>
+                <dependencyConvergence/>
+              </rules>
+            </configuration>
+            <goals>
+              <goal>enforce</goal>
             </goals>
           </execution>
         </executions>

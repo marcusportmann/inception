@@ -54,7 +54,7 @@
 // import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 //
 /// **
-// * The <b>SecurityServiceTest</b> class contains the implementation of the JUnit tests for
+// * The <b>SecurityServiceTest</b> class contains the JUnit tests for
 // the
 // * <b>SecurityService</b> class.
 // *
@@ -524,7 +524,7 @@
 //    assertEquals(
 //        "The status values for the users do not match", user1.getStatus(), user2.getStatus());
 //    assertEquals(
-//        "The e-mail values for the users do not match", user1.getEmail(), user2.getEmail());
+//        "The email values for the users do not match", user1.getEmail(), user2.getEmail());
 //    assertEquals(
 //        "The name values for the users do not match",
 //        user1.getName(),

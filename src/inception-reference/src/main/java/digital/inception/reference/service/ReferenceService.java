@@ -53,7 +53,7 @@ public class ReferenceService implements IReferenceService {
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
-  /** The Country persistence. */
+  /** The Country Repository. */
   private final CountryRepository countryRepository;
 
   /** The Language Repository. */

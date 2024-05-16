@@ -2380,7 +2380,7 @@ public class SecurityService implements ISecurityService {
         logger.warn(
             "Failed to send the password reset communication to the user ("
                 + username
-                + ") who does not have a valid e-mail address");
+                + ") who does not have a valid email address");
       }
     } catch (UserNotFoundException e) {
       throw e;
@@ -2961,7 +2961,7 @@ public class SecurityService implements ISecurityService {
             parameters);
       }
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to send the password reset e-mail", e);
+      throw new ServiceUnavailableException("Failed to send the password reset email", e);
     }
   }
 
