@@ -54,6 +54,10 @@ public class ProblemHandler {
   @Value("${inception.debug.enabled:#{false}}")
   private boolean inDebugMode;
 
+  /** Is verbose error handling enabled for the Inception Framework? */
+  @Value("${inception.api.verbose-error-handling:#{false}}")
+  private boolean verboseErrorHandling;
+
   /** Constructs a new <b>ProblemHandler</b>. */
   public ProblemHandler() {}
 
@@ -69,9 +73,12 @@ public class ProblemHandler {
   protected ResponseEntity<ProblemDetails> handle(
       HttpServletRequest request, ServiceException serviceException) {
 
-    if (inDebugMode) {
+    if (inDebugMode || verboseErrorHandling) {
       logger.error(
-          "Failed to process the HTTP servlet request (" + request.getRequestURI() + ")",
+          "Failed to process the HTTP servlet request ("
+              + request.getRequestURI()
+              + "): "
+              + serviceException.getMessage(),
           serviceException);
     }
 
@@ -110,9 +117,7 @@ public class ProblemHandler {
 
     problemDetails.setDetail(serviceException.getMessage());
 
-    if (inDebugMode) {
-      logger.error(serviceException.getMessage(), serviceException);
-
+    if (inDebugMode || verboseErrorHandling) {
       problemDetails.setStackTrace(dumpStackTrace(serviceException));
     }
 
@@ -139,7 +144,7 @@ public class ProblemHandler {
     problemDetails.setStatus(HttpStatus.FORBIDDEN.value());
     problemDetails.setDetail(accessDeniedException.getMessage());
 
-    if (inDebugMode && (accessDeniedException.getCause() != null)) {
+    if ((inDebugMode || verboseErrorHandling) && (accessDeniedException.getCause() != null)) {
       problemDetails.setStackTrace(dumpStackTrace(accessDeniedException));
     }
 
@@ -157,9 +162,13 @@ public class ProblemHandler {
   @ResponseBody
   protected ResponseEntity<ProblemDetails> handle(HttpServletRequest request, Throwable cause) {
 
-    if (inDebugMode) {
+    if (inDebugMode || verboseErrorHandling) {
       logger.error(
-          "Failed to process the HTTP servlet request (" + request.getRequestURI() + ")", cause);
+          "Failed to process the HTTP servlet request ("
+              + request.getRequestURI()
+              + "): "
+              + cause.getMessage(),
+          cause);
     }
 
     ProblemDetails problemDetails = new ProblemDetails();
@@ -171,7 +180,7 @@ public class ProblemHandler {
     problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     problemDetails.setDetail(cause.getMessage());
 
-    if (inDebugMode) {
+    if (inDebugMode || verboseErrorHandling) {
       problemDetails.setStackTrace(dumpStackTrace(cause));
     }
 

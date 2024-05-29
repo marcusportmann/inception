@@ -41,7 +41,7 @@ import java.util.UUID;
  * The <b>Party</b> class holds the information for a party.
  *
  * <p>The <b>Party</b> and <b>PartyBase</b> classes are both JPA entity classes mapped to the same
- * <b>party.parties</b> table. The <b>PartyBase</b> class provides the common base class for all JPA
+ * <b>party_parties</b> table. The <b>PartyBase</b> class provides the common base class for all JPA
  * entity classes that form part of the party inheritance model, e.g. <b>Organization</b>,
  * <b>Person</b>, etc. This inheritance model is required to allow the same child classes to be
  * mapped to the different parent classes for the different party types, e.g. to support the

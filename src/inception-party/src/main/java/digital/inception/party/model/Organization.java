@@ -66,14 +66,11 @@ import org.springframework.util.StringUtils;
  * <p>The following steps must be completed when adding a new attribute to the organization entity:
  *
  * <ol>
- *   <li>Add a new column for the new attribute to the definition of the <b>party.organizations</b>
- *       table in the <b>inception-party-h2.sql</b> file.
- *   <li>Add a description for the new column for the new attribute to the
- *       <b>inception-party-h2.sql</b> file.
+ *   <li>Add a new column for the new attribute to the <b>party_organizations</b> table using a new
+ *   changeset in the <b>inception-party.changelog.xml</b> file.
  *   <li>Add a new property for the new attribute to the <b>Organization</b> class.
  *   <li>Add the appropriate validation for the new attribute to the
  *       <b>ValidOrganizationValidator</b> class.
- *   <li>Add a new column for the new attribute to the <b>inception-party.changelog.xml</b> file.
  *   <li>Add the name of the attribute to the <b>Attribute.RESERVED_ATTRIBUTE_TYPE_CODES</b> array.
  *   <li>Add support for applying validations described by <b>RoleTypeAttributeTypeConstraint</b>s
  *       to the <b>ValidOrganizationValidator</b>.

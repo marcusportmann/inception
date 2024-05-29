@@ -45,6 +45,7 @@ inception:
     security:
       # NOTE: If debug mode is enabled, API security will be disabled if it is not explicitly enabled
       enabled: true
+    verbose-error-handling: true
 
   application:
     data-source:
