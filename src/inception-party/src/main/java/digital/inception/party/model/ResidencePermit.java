@@ -158,7 +158,7 @@ public class ResidencePermit implements Serializable {
    * @param number the number for the residence permit
    */
   public ResidencePermit(String type, String countryOfIssue, LocalDate issueDate, String number) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.countryOfIssue = countryOfIssue;
     this.issueDate = issueDate;
@@ -181,7 +181,7 @@ public class ResidencePermit implements Serializable {
       LocalDate issueDate,
       LocalDate expiryDate,
       String number) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.countryOfIssue = countryOfIssue;
     this.issueDate = issueDate;

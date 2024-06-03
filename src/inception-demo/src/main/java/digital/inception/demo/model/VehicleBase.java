@@ -87,7 +87,7 @@ public class VehicleBase implements Serializable {
    * @param type the vehicle type
    */
   protected VehicleBase(VehicleType type) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
   }
 
@@ -98,7 +98,7 @@ public class VehicleBase implements Serializable {
    * @param name the name of the vehicle
    */
   public VehicleBase(VehicleType type, String name) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.name = name;
   }

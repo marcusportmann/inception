@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 
 /**
  * The <b>DuplicateProcessDefinitionException</b> exception is thrown to indicate an error condition
- * as a result of an attempt to create a duplicate process definition i.e a process definition with
- * the specified ID already exists.
+ * as a result of an attempt to create a duplicate process definition, i.e. a process definition
+ * with the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

@@ -19,6 +19,7 @@ package digital.inception.executor.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import digital.inception.executor.constraint.ValidTask;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -234,7 +235,7 @@ public class Task implements Serializable {
    * @param data the task data
    */
   public Task(String type, String data) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.data = data;
     this.status = TaskStatus.QUEUED;
@@ -251,7 +252,7 @@ public class Task implements Serializable {
    * @param data the task data
    */
   public Task(String type, String step, String data) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.step = step;
     this.data = data;

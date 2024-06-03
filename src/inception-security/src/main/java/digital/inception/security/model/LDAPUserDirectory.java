@@ -416,7 +416,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (groupIdOptional.isPresent()) {
         groupId = groupIdOptional.get();
       } else {
-        groupId = UuidCreator.getShortPrefixComb();
+        groupId = UuidCreator.getTimeOrderedEpoch();
 
         Group group = getGroup(groupName);
 
@@ -776,7 +776,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
        * Create the corresponding group in the database that will be used to map to one or more
        * roles.
        */
-      group.setId(UuidCreator.getShortPrefixComb());
+      group.setId(UuidCreator.getTimeOrderedEpoch());
 
       getGroupRepository().saveAndFlush(group);
     } catch (DuplicateGroupException e) {
@@ -2225,7 +2225,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
               .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), group.getName());
 
       if (groupIdOptional.isEmpty()) {
-        group.setId(UuidCreator.getShortPrefixComb());
+        group.setId(UuidCreator.getTimeOrderedEpoch());
       } else {
         group.setId(groupIdOptional.get());
       }

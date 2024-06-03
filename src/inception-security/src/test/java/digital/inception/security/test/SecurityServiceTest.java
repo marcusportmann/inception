@@ -199,7 +199,7 @@ public class SecurityServiceTest {
 
     Tenant tenant = new Tenant();
 
-    tenant.setId(UuidCreator.getShortPrefixComb());
+    tenant.setId(UuidCreator.getTimeOrderedEpoch());
     tenant.setName("Test Tenant Name " + tenantCount);
     tenant.setStatus(TenantStatus.ACTIVE);
 
@@ -229,7 +229,7 @@ public class SecurityServiceTest {
 
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId(UuidCreator.getShortPrefixComb());
+    userDirectory.setId(UuidCreator.getTimeOrderedEpoch());
     userDirectory.setType(SecurityService.INTERNAL_USER_DIRECTORY_TYPE);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 
@@ -1981,8 +1981,7 @@ public class SecurityServiceTest {
   private void compareUsers(User user1, User user2, boolean checkPasswordExpiry) {
     assertEquals(
         user1.getStatus(), user2.getStatus(), "The status values for the users do not match");
-    assertEquals(
-        user1.getEmail(), user2.getEmail(), "The email values for the users do not match");
+    assertEquals(user1.getEmail(), user2.getEmail(), "The email values for the users do not match");
     assertEquals(user1.getName(), user2.getName(), "The name values for the users do not match");
     assertEquals(
         user1.getPreferredName(),

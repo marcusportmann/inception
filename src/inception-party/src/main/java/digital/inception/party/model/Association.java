@@ -187,7 +187,7 @@ public class Association implements Serializable {
    * @param secondPartyId the ID for the second party in the association
    */
   public Association(UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.type = type;
     this.firstPartyId = firstPartyId;
@@ -205,7 +205,7 @@ public class Association implements Serializable {
    */
   public Association(
       UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId, LocalDate effectiveFrom) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.type = type;
     this.firstPartyId = firstPartyId;
@@ -230,7 +230,7 @@ public class Association implements Serializable {
       UUID secondPartyId,
       LocalDate effectiveFrom,
       LocalDate effectiveTo) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.type = type;
     this.firstPartyId = firstPartyId;

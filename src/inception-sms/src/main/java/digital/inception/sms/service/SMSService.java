@@ -147,7 +147,7 @@ public class SMSService implements ISMSService {
 
     try {
       if (sms.getId() == null) {
-        sms.setId(UuidCreator.getShortPrefixComb());
+        sms.setId(UuidCreator.getTimeOrderedEpoch());
       }
 
       smsRepository.saveAndFlush(sms);

@@ -127,7 +127,7 @@ public class Snapshot implements Serializable {
    * @param data the JSON data for the entity
    */
   public Snapshot(UUID tenantId, EntityType entityType, UUID entityId, String data) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.entityType = entityType;
     this.entityId = entityId;

@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * The <b>DuplicateCodeCategoryException</b> exception is thrown to indicate an error condition as a
- * result of an attempt to create a duplicate code category i.e a code category with the specified
+ * result of an attempt to create a duplicate code category, i.e. a code category with the specified
  * ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

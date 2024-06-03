@@ -16,13 +16,13 @@
 
 package digital.inception.demo;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.Properties;
-import java.util.UUID;
 
 /**
  * The <b>PostgresJsonTest</b> class.
@@ -55,7 +55,7 @@ public class PostgresJsonTest {
 
         try (PreparedStatement insertStatement =
             connection.prepareStatement("INSERT INTO test (id, data) VALUES (?, ?)")) {
-          insertStatement.setObject(1, UUID.randomUUID(), Types.OTHER);
+          insertStatement.setObject(1, UuidCreator.getTimeOrderedEpoch(), Types.OTHER);
 
           //          PGobject pgObject = new PGobject();
           //          pgObject.setType("jsonb");

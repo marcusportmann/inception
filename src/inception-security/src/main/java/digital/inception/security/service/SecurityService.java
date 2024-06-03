@@ -16,6 +16,7 @@
 
 package digital.inception.security.service;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
@@ -1039,7 +1040,7 @@ public class SecurityService implements ISecurityService {
       }
 
       try {
-        String jwtId = UUID.randomUUID().toString().replace("-", "");
+        String jwtId = UuidCreator.getTimeOrderedEpoch().toString().replace("-", "");
 
         OffsetDateTime issuedAt = OffsetDateTime.now();
 

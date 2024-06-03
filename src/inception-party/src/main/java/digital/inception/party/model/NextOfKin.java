@@ -351,7 +351,7 @@ public class NextOfKin implements Serializable {
       String addressRegion,
       String addressCountry,
       String addressPostalCode) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.name = name;
     this.givenName = givenName;
@@ -382,7 +382,7 @@ public class NextOfKin implements Serializable {
    */
   public NextOfKin(
       String type, String name, String homeNumber, String mobileNumber, String emailAddress) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.name = name;
     this.homeNumber = homeNumber;
@@ -397,7 +397,7 @@ public class NextOfKin implements Serializable {
    * @param name the name of the next of kin
    */
   public NextOfKin(String type, String name) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.name = name;
   }

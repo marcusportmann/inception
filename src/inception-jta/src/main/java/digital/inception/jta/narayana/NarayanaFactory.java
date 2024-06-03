@@ -23,6 +23,8 @@ import io.agroal.api.transaction.TransactionIntegration;
 import jakarta.transaction.TransactionManager;
 import jakarta.transaction.TransactionSynchronizationRegistry;
 import jakarta.transaction.UserTransaction;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -55,7 +57,13 @@ public class NarayanaFactory {
     try {
       java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
 
-      return localMachine.getHostName().toLowerCase();
+      String nodeName = localMachine.getHostName().toLowerCase();
+
+      if (nodeName.length() > 23) {
+        nodeName = FNV1aHash.fnv1a64Base64(nodeName.getBytes(StandardCharsets.UTF_8));
+      }
+
+      return nodeName;
     } catch (Throwable e) {
       return "Unknown";
     }
@@ -139,6 +147,49 @@ public class NarayanaFactory {
       return new JtaTransactionManager(userTransaction, transactionManager);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to initialize the JTA transaction manager");
+    }
+  }
+
+  /** The <b>FNV1aHash</b> class. */
+  private static final class FNV1aHash {
+
+    private static final long FNV_64_INIT = 0xcbf29ce484222325L;
+
+    private static final long FNV_64_PRIME = 0x100000001b3L;
+
+    /**
+     * Generate a FNV1a hash of the specified data.
+     *
+     * @param data the data
+     * @return the FNV1a hash of the specified data
+     */
+    public static long fnv1a64(byte[] data) {
+      long hash = FNV_64_INIT;
+      for (byte b : data) {
+        hash ^= (b & 0xff);
+        hash *= FNV_64_PRIME;
+      }
+      return hash;
+    }
+
+    /**
+     * Generate a base-64 encoded FNV1a hash of the specified data.
+     *
+     * @param data the data
+     * @return the base-64 encoded FNV1a hash of the specified data
+     */
+    public static String fnv1a64Base64(byte[] data) {
+      long hash = fnv1a64(data);
+      byte[] hashBytes = longToBytes(hash);
+      return Base64.getEncoder().encodeToString(hashBytes);
+    }
+
+    private static byte[] longToBytes(long x) {
+      byte[] bytes = new byte[8];
+      for (int i = 0; i < 8; i++) {
+        bytes[i] = (byte) ((x >> (8 * i)) & 0xff);
+      }
+      return bytes;
     }
   }
 }

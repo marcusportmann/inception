@@ -136,16 +136,16 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    String fileName =
+    String filename =
         System.getProperty("user.dir")
             + File.separator
             + "inception-database"
             + File.separator
             + "inception-party-data.changelog.xml";
 
-    logger.info("Writing party data to file " + fileName);
+    logger.info("Writing party data to file " + filename);
 
-    try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+    try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
       writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
       writer.println("");
       writer.println("<databaseChangeLog");

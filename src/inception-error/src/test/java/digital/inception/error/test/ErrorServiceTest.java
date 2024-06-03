@@ -67,14 +67,14 @@ public class ErrorServiceTest {
 
   private static synchronized ErrorReport getTestErrorReport() {
     return new ErrorReport(
-        UuidCreator.getShortPrefixComb(),
+        UuidCreator.getTimeOrderedEpoch(),
         "ApplicationId",
         "ApplicationVersion",
         "Description",
         "Detail",
         OffsetDateTime.now(),
         "Who",
-        UuidCreator.getShortPrefixComb(),
+        UuidCreator.getTimeOrderedEpoch(),
         "Feedback",
         Base64.getEncoder().encodeToString("Data".getBytes()));
   }

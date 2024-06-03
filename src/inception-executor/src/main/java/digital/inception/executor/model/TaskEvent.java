@@ -19,6 +19,7 @@ package digital.inception.executor.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -132,7 +133,7 @@ public class TaskEvent implements Serializable {
    *     <b>false</b> otherwise
    */
   public TaskEvent(TaskEventType type, Task task, boolean withData) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.timestamp = OffsetDateTime.now();
     this.taskId = task.getId();
@@ -153,7 +154,7 @@ public class TaskEvent implements Serializable {
    * @param taskStep optional code for the task step for a multistep task
    */
   public TaskEvent(TaskEventType type, UUID taskId, String taskType, String taskStep) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.timestamp = OffsetDateTime.now();
     this.taskId = taskId;
@@ -172,7 +173,7 @@ public class TaskEvent implements Serializable {
    */
   public TaskEvent(
       TaskEventType type, UUID taskId, String taskType, String taskStep, String taskData) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.timestamp = OffsetDateTime.now();
     this.taskId = taskId;

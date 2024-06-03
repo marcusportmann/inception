@@ -192,7 +192,7 @@ public class Identification implements Serializable {
    * @param number the number for the identification
    */
   public Identification(String type, String countryOfIssue, LocalDate issueDate, String number) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.countryOfIssue = countryOfIssue;
     this.issueDate = issueDate;
@@ -215,7 +215,7 @@ public class Identification implements Serializable {
       LocalDate issueDate,
       LocalDate expiryDate,
       String number) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.countryOfIssue = countryOfIssue;
     this.issueDate = issueDate;

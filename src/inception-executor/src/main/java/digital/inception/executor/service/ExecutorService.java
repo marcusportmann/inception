@@ -888,8 +888,6 @@ public class ExecutorService implements IExecutorService {
     }
 
     try {
-      UUID taskId = UUID.randomUUID();
-
       ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
 
       String taskData = objectMapper.writeValueAsString(dataObject);

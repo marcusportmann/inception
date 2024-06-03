@@ -127,7 +127,7 @@ public class Party implements Serializable {
    * @param name the name of the party
    */
   public Party(UUID tenantId, PartyType type, String name) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.type = type;
     this.name = name;

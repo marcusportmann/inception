@@ -71,7 +71,7 @@ public class SMSServiceTest {
 
   private static synchronized SMS getTestSMSDetails() {
     SMS sms = new SMS();
-    sms.setId(UuidCreator.getShortPrefixComb());
+    sms.setId(UuidCreator.getTimeOrderedEpoch());
     sms.setMobileNumber("0832763107");
     sms.setMessage("Testing 1.. 2.. 3..");
     sms.setStatus(SMSStatus.SENT);

@@ -327,17 +327,17 @@ public enum FileType {
   /**
    * Returns the file type for the specified filename.
    *
-   * @param fileName the file name
+   * @param filename the filename
    * @return the file type for the specified filename
    */
-  public static FileType fromFileName(String fileName) {
-    if (StringUtils.hasText(fileName)) {
-      fileName = fileName.toLowerCase();
+  public static FileType fromFileName(String filename) {
+    if (StringUtils.hasText(filename)) {
+      filename = filename.toLowerCase();
 
       for (FileType fileType : FILE_TYPES) {
 
         for (String extension : fileType.extensions) {
-          if (fileName.endsWith(extension)) {
+          if (filename.endsWith(extension)) {
             return fileType;
           }
         }
@@ -345,7 +345,7 @@ public enum FileType {
     }
 
     throw new RuntimeException(
-        "Failed to determine the file type from the file name (" + fileName + ")");
+        "Failed to determine the file type from the file name (" + filename + ")");
   }
 
   /**

@@ -254,10 +254,7 @@ public interface ISchedulerApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(
-      value = "/jobs/{jobId}/name",
-      method = RequestMethod.GET,
-      produces = "text/plain")
+  @RequestMapping(value = "/jobs/{jobId}/name", method = RequestMethod.GET, produces = "text/plain")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")

@@ -148,7 +148,7 @@ public class SMS implements Serializable {
    * @param message the message to send
    */
   public SMS(String mobileNumber, String message) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.mobileNumber = mobileNumber;
     this.message = message;
   }
@@ -161,7 +161,7 @@ public class SMS implements Serializable {
    * @param status the status of the SMS
    */
   public SMS(String mobileNumber, String message, SMSStatus status) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.mobileNumber = mobileNumber;
     this.message = message;
     this.status = status;

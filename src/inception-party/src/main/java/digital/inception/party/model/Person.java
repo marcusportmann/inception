@@ -71,10 +71,10 @@ import org.springframework.util.StringUtils;
  *
  * <ol>
  *   <li>Add a new column for the new attribute to the <b>party_persons</b> table using a new
- *   changeset in the <b>inception-party.changelog.xml</b> file.
+ *       changeset in the <b>inception-party.changelog.xml</b> file.
  *   <li>Add a new property for the new attribute to the <b>Person</b> class.
- *   <li>Add the appropriate validation for the new attribute to the
- *       <b>ValidPersonValidator</b> class.
+ *   <li>Add the appropriate validation for the new attribute to the <b>ValidPersonValidator</b>
+ *       class.
  *   <li>Add the name of the attribute to the <b>Attribute.RESERVED_ATTRIBUTE_TYPE_CODES</b> array.
  *   <li>Add support for applying validations described by <b>RoleTypeAttributeTypeConstraint</b>s
  *       to the <b>ValidPersonValidator</b>.
@@ -595,7 +595,7 @@ public class Person extends PartyBase implements Serializable {
    * @param name the name of the person
    */
   public Person(UUID tenantId, String name) {
-    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.PERSON, name);
+    super(UuidCreator.getTimeOrderedEpoch(), tenantId, PartyType.PERSON, name);
   }
 
   /**

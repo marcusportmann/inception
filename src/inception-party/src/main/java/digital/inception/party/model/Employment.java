@@ -352,7 +352,7 @@ public class Employment implements Serializable {
       LocalDate endDate,
       String type,
       String occupation) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
     this.employerPhoneNumber = employerPhoneNumber;
     this.employerEmailAddress = employerEmailAddress;
@@ -409,7 +409,7 @@ public class Employment implements Serializable {
       LocalDate startDate,
       String type,
       String occupation) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
     this.employerPhoneNumber = employerPhoneNumber;
     this.employerEmailAddress = employerEmailAddress;
@@ -436,7 +436,7 @@ public class Employment implements Serializable {
    * @param endDate the end date for the employment
    */
   public Employment(String employerName, LocalDate startDate, LocalDate endDate) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
     this.startDate = startDate;
     this.endDate = endDate;
@@ -449,7 +449,7 @@ public class Employment implements Serializable {
    * @param startDate the start date for the employment
    */
   public Employment(String employerName, LocalDate startDate) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
     this.startDate = startDate;
   }
@@ -465,7 +465,7 @@ public class Employment implements Serializable {
    */
   public Employment(
       String employerName, LocalDate startDate, LocalDate endDate, String type, String occupation) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
     this.startDate = startDate;
     this.endDate = endDate;
@@ -482,7 +482,7 @@ public class Employment implements Serializable {
    * @param occupation the code for the occupation for the employment
    */
   public Employment(String employerName, LocalDate startDate, String type, String occupation) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
     this.startDate = startDate;
     this.type = type;

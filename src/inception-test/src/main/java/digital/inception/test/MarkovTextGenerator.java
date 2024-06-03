@@ -36,13 +36,13 @@ public class MarkovTextGenerator {
   public MarkovTextGenerator() {}
 
   /**
-   * Returns a new <b>MarkovTextGenerator</b> populated using the Lorem Ipsum text.
+   * Returns a new <b>MarkovTextGenerator</b> populated using the Jules Verne text.
    *
-   * @return a new <b>MarkovTextGenerator</b> populated using the Lorem Ipsum text
+   * @return a new <b>MarkovTextGenerator</b> populated using the Jules Verne text
    */
-  public static MarkovTextGenerator getLoremIpsumGenerator() {
+  public static MarkovTextGenerator getJulesVerneGenerator() {
     try (InputStream is =
-            Thread.currentThread().getContextClassLoader().getResourceAsStream("LoremImpsum.txt");
+            Thread.currentThread().getContextClassLoader().getResourceAsStream("JulesVerne.txt");
         BufferedReader reader =
             new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
@@ -60,13 +60,13 @@ public class MarkovTextGenerator {
   }
 
   /**
-   * Returns a new <b>MarkovTextGenerator</b> populated using the Jules Verne text.
+   * Returns a new <b>MarkovTextGenerator</b> populated using the Lorem Ipsum text.
    *
-   * @return a new <b>MarkovTextGenerator</b> populated using the Jules Verne text
+   * @return a new <b>MarkovTextGenerator</b> populated using the Lorem Ipsum text
    */
-  public static MarkovTextGenerator getJulesVerneGenerator() {
+  public static MarkovTextGenerator getLoremIpsumGenerator() {
     try (InputStream is =
-        Thread.currentThread().getContextClassLoader().getResourceAsStream("JulesVerne.txt");
+            Thread.currentThread().getContextClassLoader().getResourceAsStream("LoremImpsum.txt");
         BufferedReader reader =
             new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 

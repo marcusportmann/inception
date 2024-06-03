@@ -209,7 +209,7 @@ public class Education implements Serializable {
       String fieldOfStudy,
       Integer firstYearAttended,
       Integer lastYearAttended) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.institutionCountry = institutionCountry;
     this.institutionName = institutionName;
     this.qualificationType = qualificationType;
@@ -228,7 +228,7 @@ public class Education implements Serializable {
    * @param qualificationYear the year the qualification was obtained
    */
   public Education(String institutionName, String qualificationType, Integer qualificationYear) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.institutionName = institutionName;
     this.qualificationType = qualificationType;
     this.qualificationYear = qualificationYear;
@@ -250,7 +250,7 @@ public class Education implements Serializable {
       String qualificationName,
       Integer qualificationYear,
       String fieldOfStudy) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.institutionName = institutionName;
     this.qualificationType = qualificationType;
     this.qualificationName = qualificationName;
@@ -276,7 +276,7 @@ public class Education implements Serializable {
       String qualificationName,
       Integer qualificationYear,
       String fieldOfStudy) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.institutionCountry = institutionCountry;
     this.institutionName = institutionName;
     this.qualificationType = qualificationType;

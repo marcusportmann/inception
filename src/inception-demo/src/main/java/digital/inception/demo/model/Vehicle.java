@@ -104,7 +104,7 @@ public class Vehicle implements Serializable {
    * @param name the name of the vehicle
    */
   public Vehicle(VehicleType type, String name) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.name = name;
   }

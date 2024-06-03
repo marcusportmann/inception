@@ -67,7 +67,7 @@ import org.springframework.util.StringUtils;
  *
  * <ol>
  *   <li>Add a new column for the new attribute to the <b>party_organizations</b> table using a new
- *   changeset in the <b>inception-party.changelog.xml</b> file.
+ *       changeset in the <b>inception-party.changelog.xml</b> file.
  *   <li>Add a new property for the new attribute to the <b>Organization</b> class.
  *   <li>Add the appropriate validation for the new attribute to the
  *       <b>ValidOrganizationValidator</b> class.
@@ -308,7 +308,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param name the name of the organization
    */
   public Organization(UUID tenantId, String name) {
-    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.ORGANIZATION, name);
+    super(UuidCreator.getTimeOrderedEpoch(), tenantId, PartyType.ORGANIZATION, name);
   }
 
   /**

@@ -492,7 +492,7 @@ public class PhysicalAddress implements Serializable {
    * @param role the code for the physical address role
    */
   public PhysicalAddress(String type, String role) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.role = role;
   }
@@ -505,7 +505,7 @@ public class PhysicalAddress implements Serializable {
    * @param purpose the code for the physical address purpose
    */
   public PhysicalAddress(String type, String role, String purpose) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.role = role;
     this.purposes = purpose;
@@ -519,7 +519,7 @@ public class PhysicalAddress implements Serializable {
    * @param purposes the codes for the physical address purposes
    */
   public PhysicalAddress(String type, String role, Set<String> purposes) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.role = role;
 

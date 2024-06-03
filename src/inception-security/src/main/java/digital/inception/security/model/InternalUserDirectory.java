@@ -292,7 +292,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       getUserRepository()
           .savePasswordInPasswordHistory(
-              UUID.randomUUID(), userIdOptional.get(), encodedNewPassword);
+              UuidCreator.getTimeOrderedEpoch(), userIdOptional.get(), encodedNewPassword);
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -403,7 +403,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
               user.getId(), encodedNewPassword, 0, Optional.of(passwordExpiry.toOffsetDateTime()));
 
       getUserRepository()
-          .savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(), encodedNewPassword);
+          .savePasswordInPasswordHistory(
+              UuidCreator.getTimeOrderedEpoch(), user.getId(), encodedNewPassword);
     } catch (AuthenticationFailedException | ExistingPasswordException | UserLockedException e) {
       throw e;
     } catch (Throwable e) {
@@ -425,7 +426,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         throw new DuplicateGroupException(group.getName());
       }
 
-      group.setId(UuidCreator.getShortPrefixComb());
+      group.setId(UuidCreator.getTimeOrderedEpoch());
 
       getGroupRepository().saveAndFlush(group);
     } catch (DuplicateGroupException e) {
@@ -450,7 +451,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         throw new DuplicateUserException(user.getUsername());
       }
 
-      user.setId(UuidCreator.getShortPrefixComb());
+      user.setId(UuidCreator.getTimeOrderedEpoch());
 
       String encodedNewPassword;
 
@@ -481,7 +482,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
       getUserRepository().saveAndFlush(user);
 
       getUserRepository()
-          .savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(), encodedNewPassword);
+          .savePasswordInPasswordHistory(
+              UuidCreator.getTimeOrderedEpoch(), user.getId(), encodedNewPassword);
     } catch (DuplicateUserException e) {
       throw e;
     } catch (Throwable e) {
@@ -1271,7 +1273,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
           .resetPassword(user.getId(), encodedNewPassword, passwordExpiry.toOffsetDateTime());
 
       getUserRepository()
-          .savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(), encodedNewPassword);
+          .savePasswordInPasswordHistory(
+              UuidCreator.getTimeOrderedEpoch(), user.getId(), encodedNewPassword);
     } catch (UserNotFoundException | UserLockedException | ExistingPasswordException e) {
       throw e;
     } catch (Throwable e) {

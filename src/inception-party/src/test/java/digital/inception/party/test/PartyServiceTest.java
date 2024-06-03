@@ -185,7 +185,7 @@ public class PartyServiceTest {
     person.setEmploymentType("self_employed");
     person.setGender("female");
     person.setGivenName(generatedPerson.getFirstName());
-    person.setId(UuidCreator.getShortPrefixComb());
+    person.setId(UuidCreator.getTimeOrderedEpoch());
 
     if (hasMiddleName) {
       person.setInitials(
@@ -405,7 +405,7 @@ public class PartyServiceTest {
     person.setEmploymentType("contractor");
     person.setGender("male");
     person.setGivenName(generatedPerson.getFirstName());
-    person.setId(UuidCreator.getShortPrefixComb());
+    person.setId(UuidCreator.getTimeOrderedEpoch());
     if (hasMiddleName) {
       person.setInitials(
           generatedPerson.getFirstName().charAt(0)
@@ -911,7 +911,7 @@ public class PartyServiceTest {
     Person person = getTestBasicPersonDetails();
 
     Education education = new Education();
-    education.setId(UuidCreator.getShortPrefixComb());
+    education.setId(UuidCreator.getTimeOrderedEpoch());
     education.setInstitutionCountry("ZA");
     education.setInstitutionName("University of the Witwatersrand");
     education.setQualificationType("bachelors_degree");
@@ -962,7 +962,7 @@ public class PartyServiceTest {
     Person person = getTestBasicPersonDetails();
 
     Employment employment = new Employment();
-    employment.setId(UuidCreator.getShortPrefixComb());
+    employment.setId(UuidCreator.getTimeOrderedEpoch());
     employment.setEmployerName("Discovery");
     employment.setEmployerPhoneNumber("+27 11 324 5000");
     employment.setEmployerEmailAddress("contactus@discovery.co.za");
@@ -2580,7 +2580,7 @@ public class PartyServiceTest {
     Person person = getTestBasicPersonDetails();
 
     NextOfKin nextOfKin = new NextOfKin();
-    nextOfKin.setId(UuidCreator.getShortPrefixComb());
+    nextOfKin.setId(UuidCreator.getTimeOrderedEpoch());
     nextOfKin.setType("father");
     nextOfKin.setName("Joe Bloggs");
     nextOfKin.setHomeNumber("+27 11 555 1234");

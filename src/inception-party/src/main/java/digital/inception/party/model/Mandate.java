@@ -206,7 +206,7 @@ public class Mandate implements Serializable {
    * @param requiredMandataries the number of mandataries required to execute the mandate
    */
   public Mandate(UUID tenantId, String type, RequiredMandataries requiredMandataries) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.type = type;
     this.requiredMandataries = requiredMandataries;
@@ -225,7 +225,7 @@ public class Mandate implements Serializable {
       String type,
       RequiredMandataries requiredMandataries,
       LocalDate effectiveFrom) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.type = type;
     this.requiredMandataries = requiredMandataries;
@@ -247,7 +247,7 @@ public class Mandate implements Serializable {
       RequiredMandataries requiredMandataries,
       LocalDate effectiveFrom,
       LocalDate effectiveTo) {
-    this.id = UuidCreator.getShortPrefixComb();
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.type = type;
     this.requiredMandataries = requiredMandataries;
