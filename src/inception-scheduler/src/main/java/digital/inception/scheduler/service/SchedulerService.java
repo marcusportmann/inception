@@ -47,6 +47,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -269,10 +271,18 @@ public class SchedulerService implements ISchedulerService {
   @Override
   public List<Job> getJobs(String filter) throws ServiceUnavailableException {
     try {
+      Sort sort = Sort.by(Sort.Order.asc("name"));
+
       if (StringUtils.hasText(filter)) {
-        return jobRepository.findFiltered("%" + filter + "%");
+        return jobRepository.findAll(
+            (Specification<Job>)
+                (root, query, criteriaBuilder) -> {
+                  return criteriaBuilder.like(
+                      criteriaBuilder.lower(root.get("name")), "%" + filter.toLowerCase() + "%");
+                },
+            sort);
       } else {
-        return jobRepository.findAllByOrderByNameAsc();
+        return jobRepository.findAll(sort);
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

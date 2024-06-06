@@ -20,9 +20,8 @@ import digital.inception.security.model.Tenant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,7 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface TenantRepository extends JpaRepository<Tenant, UUID> {
+public interface TenantRepository extends JpaRepository<Tenant, UUID>,
+    JpaSpecificationExecutor<Tenant> {
 
   /**
    * Add the user directory to the tenant.
@@ -74,16 +74,6 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID> {
    */
   @Query("select t from Tenant t join t.userDirectories as ud where ud.id = :userDirectoryId")
   List<Tenant> findAllByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
-
-  /**
-   * Retrieve the filtered tenants.
-   *
-   * @param filter the filter to apply to the tenants
-   * @param pageable the pagination information
-   * @return the filtered tenants
-   */
-  @Query("select t from Tenant t where (lower(t.name) like lower(:filter))")
-  Page<Tenant> findFiltered(@Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the name of the tenant.

@@ -22,8 +22,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * The <b>OrganizationRepository</b> interface declares the persistence for the <b>Organization</b>
@@ -32,7 +31,8 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-public interface OrganizationRepository extends JpaRepository<Organization, UUID> {
+public interface OrganizationRepository
+    extends JpaRepository<Organization, UUID>, JpaSpecificationExecutor<Organization> {
 
   /**
    * Delete the organization.
@@ -52,15 +52,6 @@ public interface OrganizationRepository extends JpaRepository<Organization, UUID
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the organizations for the tenant.
-   *
-   * @param tenantId the ID for the tenant
-   * @param pageable the pagination information
-   * @return the organizations for the tenant
-   */
-  Page<Organization> findByTenantId(UUID tenantId, Pageable pageable);
-
-  /**
    * Retrieve the organization.
    *
    * @param tenantId the ID for the tenant
@@ -69,17 +60,4 @@ public interface OrganizationRepository extends JpaRepository<Organization, UUID
    *     not be found
    */
   Optional<Organization> findByTenantIdAndId(UUID tenantId, UUID id);
-
-  /**
-   * Retrieve the filtered organizations for the tenant.
-   *
-   * @param tenantId the ID for the tenant
-   * @param filter the filter to apply to the organizations
-   * @param pageable the pagination information
-   * @return the filtered organizations
-   */
-  @Query(
-      "select o from Organization o where (o.tenantId = :tenantId) and (lower(o.name) like lower(:filter))")
-  Page<Organization> findFiltered(
-      @Param("tenantId") UUID tenantId, @Param("filter") String filter, Pageable pageable);
 }

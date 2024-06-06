@@ -18,11 +18,13 @@ package digital.inception.party.persistence;
 
 import digital.inception.party.model.Party;
 import digital.inception.party.model.PartyType;
+import digital.inception.party.model.Person;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -32,7 +34,8 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-public interface PartyRepository extends JpaRepository<Party, UUID> {
+public interface PartyRepository extends JpaRepository<Party, UUID>,
+    JpaSpecificationExecutor<Party> {
 
   /**
    * Delete the party.
@@ -52,15 +55,6 @@ public interface PartyRepository extends JpaRepository<Party, UUID> {
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the parties for the tenant.
-   *
-   * @param tenantId the ID for the tenant
-   * @param pageable the pagination information
-   * @return the parties for the tenant
-   */
-  Page<Party> findByTenantId(UUID tenantId, Pageable pageable);
-
-  /**
    * Retrieve the party.
    *
    * @param tenantId the ID for the tenant
@@ -68,19 +62,6 @@ public interface PartyRepository extends JpaRepository<Party, UUID> {
    * @return an Optional containing the party or an empty Optional if the party could not be found
    */
   Optional<Party> findByTenantIdAndId(UUID tenantId, UUID id);
-
-  /**
-   * Retrieve the filtered parties for the tenant.
-   *
-   * @param tenantId the ID for the tenant
-   * @param filter the filter to apply to the parties
-   * @param pageable the pagination information
-   * @return the filtered parties for the tenant
-   */
-  @Query(
-      "select p from Party p where (p.tenantId = :tenantId) and (lower(p.name) like lower(:filter))")
-  Page<Party> findFiltered(
-      @Param("tenantId") UUID tenantId, @Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the ID for the tenant the party is associated with.

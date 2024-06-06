@@ -23,6 +23,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,7 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface GroupRepository extends JpaRepository<Group, UUID> {
+public interface GroupRepository
+    extends JpaRepository<Group, UUID>, JpaSpecificationExecutor<Group> {
 
   /**
    * Add the role to the group.
@@ -106,22 +108,6 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
    * @return an Optional containing the group or an empty Optional if the group could not be found
    */
   Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(UUID userDirectoryId, String name);
-
-  /**
-   * Retrieve the filtered groups for the user directory.
-   *
-   * @param userDirectoryId the ID for the user directory
-   * @param filter the filter to apply to the groups
-   * @param pageable the pagination information
-   * @return the filtered groups for the user directory
-   */
-  @Query(
-      "select g from Group g where (lower(g.name) like lower(:filter)) and "
-          + "g.userDirectoryId = :userDirectoryId")
-  Page<Group> findFiltered(
-      @Param("userDirectoryId") UUID userDirectoryId,
-      @Param("filter") String filter,
-      Pageable pageable);
 
   /**
    * Retrieve the filtered usernames for the group.

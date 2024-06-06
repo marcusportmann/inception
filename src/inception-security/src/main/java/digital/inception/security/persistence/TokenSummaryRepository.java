@@ -17,11 +17,8 @@
 package digital.inception.security.persistence;
 
 import digital.inception.security.model.TokenSummary;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * The <b>TokenSummaryRepository</b> interface declares the persistence for the <b>TokenSummary</b>
@@ -29,110 +26,5 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface TokenSummaryRepository extends JpaRepository<TokenSummary, String> {
-
-  /**
-   * Retrieve the active token summaries.
-   *
-   * @param pageable the pagination information
-   * @return the active token summaries
-   */
-  @Query(
-      "select ts from TokenSummary ts where (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is null) or (ts.validFromDate <= CURRENT_DATE))"
-          + " and ((ts.expiryDate is null) or (ts.expiryDate > CURRENT_DATE))")
-  Page<TokenSummary> findAllActive(Pageable pageable);
-
-  /**
-   * Retrieve the expired token summaries.
-   *
-   * @param pageable the pagination information
-   * @return the expired token summaries
-   */
-  @Query(
-      "select ts from TokenSummary ts where (ts.revocationDate is null)"
-          + " and ((ts.expiryDate is not null) and (ts.expiryDate <= CURRENT_DATE))")
-  Page<TokenSummary> findAllExpired(Pageable pageable);
-
-  /**
-   * Retrieve the pending token summaries.
-   *
-   * @param pageable the pagination information
-   * @return the pending token summaries
-   */
-  @Query(
-      "select ts from TokenSummary ts where (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is not null) and (ts.validFromDate > CURRENT_DATE))")
-  Page<TokenSummary> findAllPending(Pageable pageable);
-
-  /**
-   * Retrieve the revoked token summaries.
-   *
-   * @param pageable the pagination information
-   * @return the revoked token summaries
-   */
-  @Query("select ts from TokenSummary ts where (ts.revocationDate is not null)")
-  Page<TokenSummary> findAllRevoked(Pageable pageable);
-
-  /**
-   * Retrieve the filtered token summaries.
-   *
-   * @param filter the filter to apply to the token summaries
-   * @param pageable the pagination information
-   * @return the filtered token summaries
-   */
-  @Query("select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))")
-  Page<TokenSummary> findFiltered(@Param("filter") String filter, Pageable pageable);
-
-  /**
-   * Retrieve the filtered active token summaries.
-   *
-   * @param filter the filter to apply to the active token summaries
-   * @param pageable the pagination information
-   * @return the filtered active token summaries
-   */
-  @Query(
-      "select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))"
-          + " and (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is null) or (ts.validFromDate <= CURRENT_DATE))"
-          + " and ((ts.expiryDate is null) or (ts.expiryDate > CURRENT_DATE))")
-  Page<TokenSummary> findFilteredActive(@Param("filter") String filter, Pageable pageable);
-
-  /**
-   * Retrieve the filtered expired token summaries.
-   *
-   * @param filter the filter to apply to the expired token summaries
-   * @param pageable the pagination information
-   * @return the filtered expired token summaries
-   */
-  @Query(
-      "select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))"
-          + " and (ts.revocationDate is null)"
-          + " and ((ts.expiryDate is not null) and (ts.expiryDate <= CURRENT_DATE))")
-  Page<TokenSummary> findFilteredExpired(@Param("filter") String filter, Pageable pageable);
-
-  /**
-   * Retrieve the filtered pending token summaries.
-   *
-   * @param filter the filter to apply to the pending token summaries
-   * @param pageable the pagination information
-   * @return the filtered pending token summaries
-   */
-  @Query(
-      "select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))"
-          + " and (ts.revocationDate is null)"
-          + " and ((ts.validFromDate is not null) and (ts.validFromDate > CURRENT_DATE))")
-  Page<TokenSummary> findFilteredPending(@Param("filter") String filter, Pageable pageable);
-
-  /**
-   * Retrieve the filtered revoked token summaries.
-   *
-   * @param filter the filter to apply to the revoked token summaries
-   * @param pageable the pagination information
-   * @return the filtered revoked token summaries
-   */
-  @Query(
-      "select ts from TokenSummary ts where (lower(ts.name) like lower(:filter))"
-          + " and (ts.revocationDate is not null)")
-  Page<TokenSummary> findFilteredRevoked(@Param("filter") String filter, Pageable pageable);
-}
+public interface TokenSummaryRepository
+    extends JpaRepository<TokenSummary, String>, JpaSpecificationExecutor<TokenSummary> {}

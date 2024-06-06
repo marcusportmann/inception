@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface JobRepository extends JpaRepository<Job, String> {
+public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificationExecutor<Job> {
 
   /**
    * Retrieve the jobs ordered by name ascending.
@@ -43,17 +44,6 @@ public interface JobRepository extends JpaRepository<Job, String> {
    * @return the jobs ordered by name ascending
    */
   List<Job> findAllByOrderByNameAsc();
-
-  /**
-   * Retrieve the filtered jobs.
-   *
-   * @param filter the filter to apply to the jobs
-   * @return the filtered jobs
-   */
-  @Query(
-      "select j from Job j where lower(j.name) like lower(:filter) or lower(j.jobClass) "
-          + "like lower(:filter)")
-  List<Job> findFiltered(@Param("filter") String filter);
 
   /**
    * Retrieve the jobs scheduled for execution.

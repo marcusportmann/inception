@@ -23,6 +23,7 @@ import digital.inception.core.util.PasswordUtil;
 import digital.inception.security.persistence.GroupRepository;
 import digital.inception.security.persistence.RoleRepository;
 import digital.inception.security.persistence.UserRepository;
+import jakarta.persistence.criteria.Predicate;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
@@ -36,6 +37,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -722,14 +724,27 @@ public class InternalUserDirectory extends UserDirectoryBase {
               (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
               "name");
 
-      Page<Group> groupPage;
-      if (StringUtils.hasText(filter)) {
-        groupPage =
-            getGroupRepository()
-                .findFiltered(getUserDirectoryId(), "%" + filter + "%", pageRequest);
-      } else {
-        groupPage = getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
-      }
+      Page<Group> groupPage =
+          getGroupRepository()
+              .findAll(
+                  (Specification<Group>)
+                      (root, query, criteriaBuilder) -> {
+                        List<Predicate> predicates = new ArrayList<>();
+
+                        predicates.add(
+                            criteriaBuilder.equal(
+                                root.get("userDirectoryId"), getUserDirectoryId()));
+
+                        if (StringUtils.hasText(filter)) {
+                          predicates.add(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("name")),
+                                  "%" + filter.toLowerCase() + "%"));
+                        }
+
+                        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                      },
+                  pageRequest);
 
       return new Groups(
           getUserDirectoryId(),
@@ -1040,8 +1055,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
       Integer pageSize)
       throws ServiceUnavailableException {
     try {
-      PageRequest pageRequest = null;
-
       if (pageIndex == null) {
         pageIndex = 0;
       }
@@ -1050,42 +1063,47 @@ public class InternalUserDirectory extends UserDirectoryBase {
         pageSize = maxFilteredUsers;
       }
 
-      if (sortBy == UserSortBy.USERNAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxFilteredUsers),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "username");
-      } else if (sortBy == UserSortBy.NAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxFilteredUsers),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "name");
+      String sortProperty;
+      if (sortBy == UserSortBy.NAME) {
+        sortProperty = "name";
       } else if (sortBy == UserSortBy.PREFERRED_NAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxFilteredUsers),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "preferredName");
+        sortProperty = "preferredName";
+      } else {
+        sortProperty = "username";
       }
 
-      Page<User> userPage;
-      if (StringUtils.hasText(filter)) {
-        userPage =
-            getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageRequest);
-      } else {
-        userPage = getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
-      }
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, maxFilteredUsers),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              sortProperty);
+
+      Page<User> userPage =
+          getUserRepository()
+              .findAll(
+                  (Specification<User>)
+                      (root, query, criteriaBuilder) -> {
+                        List<Predicate> predicates = new ArrayList<>();
+
+                        predicates.add(
+                            criteriaBuilder.equal(
+                                root.get("userDirectoryId"), getUserDirectoryId()));
+
+                        if (StringUtils.hasText(filter)) {
+                          predicates.add(
+                              criteriaBuilder.or(
+                                  criteriaBuilder.like(
+                                      criteriaBuilder.lower(root.get("username")),
+                                      "%" + filter.toLowerCase() + "%"),
+                                  criteriaBuilder.like(
+                                      criteriaBuilder.lower(root.get("name")),
+                                      "%" + filter.toLowerCase() + "%")));
+                        }
+
+                        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                      },
+                  pageRequest);
 
       return new Users(
           getUserDirectoryId(),

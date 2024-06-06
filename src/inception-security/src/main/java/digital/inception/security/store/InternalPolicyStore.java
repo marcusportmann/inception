@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -163,29 +164,33 @@ public class InternalPolicyStore implements IPolicyStore {
         pageSize = DEFAULT_MAX_FILTERED_POLICIES;
       }
 
+      String sortProperty;
       if (sortBy == PolicySortBy.TYPE) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, DEFAULT_MAX_FILTERED_POLICIES),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "type");
+        sortProperty = "type";
       } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, DEFAULT_MAX_FILTERED_POLICIES),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "name");
+        sortProperty = "name";
       }
+
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, DEFAULT_MAX_FILTERED_POLICIES),
+              (sortDirection == SortDirection.ASCENDING)
+                  ? Sort.Direction.ASC
+                  : Sort.Direction.DESC,
+              sortProperty);
 
       Page<PolicySummary> policySummaryPage;
       if (StringUtils.hasText(filter)) {
-        policySummaryPage = policySummaryRepository.findFiltered("%" + filter + "%", pageRequest);
+        policySummaryPage =
+            policySummaryRepository.findAll(
+                (Specification<PolicySummary>)
+                    (root, query, criteriaBuilder) -> {
+                      return criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("name")),
+                          "%" + filter.toLowerCase() + "%");
+                    },
+                pageRequest);
       } else {
         policySummaryPage = policySummaryRepository.findAll(pageRequest);
       }

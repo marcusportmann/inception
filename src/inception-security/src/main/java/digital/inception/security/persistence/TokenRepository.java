@@ -21,8 +21,6 @@ import digital.inception.security.model.Token;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,16 +48,6 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @return the tokens ordered by name ascending
    */
   List<Token> findAllByOrderByNameAsc();
-
-  /**
-   * Retrieve the filtered tokens.
-   *
-   * @param filter the filter to apply to the tokens
-   * @param pageable the pagination information
-   * @return the filtered tokens
-   */
-  @Query("select t from Token t where (lower(t.name) like lower(:filter))")
-  Page<Token> findFiltered(@Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the name of the token.

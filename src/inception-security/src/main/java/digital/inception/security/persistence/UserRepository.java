@@ -22,9 +22,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,7 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampleExecutor<User> {
+public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampleExecutor<User>,
+    JpaSpecificationExecutor<User> {
 
   /**
    * Change the password for the user.
@@ -83,15 +83,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   List<User> findByUserDirectoryId(UUID userDirectoryId);
 
   /**
-   * Retrieve the users for the user directory.
-   *
-   * @param userDirectoryId the ID for the user directory
-   * @param pageable the pagination information
-   * @return the users for the user directory
-   */
-  Page<User> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
-
-  /**
    * Retrieve the user with the specified username for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
@@ -99,22 +90,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
    * @return an Optional containing the user or an empty Optional if the user could not be found
    */
   Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
-
-  /**
-   * Retrieve the filtered users for the user directory.
-   *
-   * @param userDirectoryId the ID for the user directory
-   * @param filter the filter to apply to the users
-   * @param pageable the pagination information
-   * @return the filtered users for the user directory
-   */
-  @Query(
-      "select u from User u where ((lower(u.username) like lower(:filter)) or "
-          + "(lower(u.name) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
-  Page<User> findFiltered(
-      @Param("userDirectoryId") UUID userDirectoryId,
-      @Param("filter") String filter,
-      Pageable pageable);
 
   /**
    * Retrieve the function codes for the user.

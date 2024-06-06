@@ -19,11 +19,8 @@ package digital.inception.party.persistence;
 import digital.inception.party.model.Person;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * The <b>PersonRepository</b> interface declares the persistence for the <b>Person</b> domain type.
@@ -31,7 +28,8 @@ import org.springframework.data.repository.query.Param;
  * @author Marcus Portmann
  */
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-public interface PersonRepository extends JpaRepository<Person, UUID> {
+public interface PersonRepository
+    extends JpaRepository<Person, UUID>, JpaSpecificationExecutor<Person> {
 
   /**
    * Delete the person.
@@ -51,15 +49,6 @@ public interface PersonRepository extends JpaRepository<Person, UUID> {
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the persons for the tenant.
-   *
-   * @param tenantId the ID for the tenant
-   * @param pageable the pagination information
-   * @return the persons for the tenant
-   */
-  Page<Person> findByTenantId(UUID tenantId, Pageable pageable);
-
-  /**
    * Retrieve the person.
    *
    * @param tenantId the ID for the tenant
@@ -67,17 +56,4 @@ public interface PersonRepository extends JpaRepository<Person, UUID> {
    * @return an Optional containing the person or an empty Optional if the person could not be found
    */
   Optional<Person> findByTenantIdAndId(UUID tenantId, UUID id);
-
-  /**
-   * Retrieve the filtered persons for the tenant.
-   *
-   * @param tenantId the ID for the tenant
-   * @param filter the filter to apply to the persons
-   * @param pageable the pagination information
-   * @return the filtered persons for the tenant
-   */
-  @Query(
-      "select p from Person p where (p.tenantId = :tenantId) and (lower(p.name) like lower(:filter))")
-  Page<Person> findFiltered(
-      @Param("tenantId") UUID tenantId, @Param("filter") String filter, Pageable pageable);
 }

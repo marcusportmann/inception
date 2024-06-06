@@ -116,6 +116,7 @@ import digital.inception.security.persistence.UserDirectoryTypeRepository;
 import digital.inception.security.persistence.UserRepository;
 import digital.inception.security.store.IPolicyStore;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.io.ByteArrayInputStream;
@@ -151,6 +152,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -1589,8 +1591,6 @@ public class SecurityService implements ISecurityService {
     }
 
     try {
-      Page<Tenant> tenantPage;
-
       PageRequest pageRequest =
           PageRequest.of(
               pageIndex,
@@ -1598,8 +1598,18 @@ public class SecurityService implements ISecurityService {
               (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
               "name");
 
+      Page<Tenant> tenantPage;
+
       if (StringUtils.hasText(filter)) {
-        tenantPage = tenantRepository.findFiltered("%" + filter + "%", pageRequest);
+        tenantPage =
+            tenantRepository.findAll(
+                (Specification<Tenant>)
+                    (root, query, criteriaBuilder) -> {
+                      return criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("name")),
+                          "%" + filter.toLowerCase() + "%");
+                    },
+                pageRequest);
       } else {
         tenantPage = tenantRepository.findAll(pageRequest);
       }
@@ -1735,83 +1745,75 @@ public class SecurityService implements ISecurityService {
         pageSize = MAX_FILTERED_TOKENS;
       }
 
+      String sortProperty;
       if (sortBy == TokenSortBy.EXPIRES) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_TOKENS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "expires");
+        sortProperty = "expires";
       } else if (sortBy == TokenSortBy.ISSUED) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_TOKENS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "issued");
+        sortProperty = "issued";
       } else if (sortBy == TokenSortBy.REVOKED) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_TOKENS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "revoked");
+        sortProperty = "revoked";
       } else if (sortBy == TokenSortBy.TYPE) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_TOKENS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "type");
+        sortProperty = "type";
       } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_TOKENS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "name");
+        sortProperty = "name";
       }
 
-      Page<TokenSummary> tokenSummaryPage;
-      if (StringUtils.hasText(filter)) {
-        if (status == TokenStatus.ACTIVE) {
-          tokenSummaryPage =
-              tokenSummaryRepository.findFilteredActive("%" + filter + "%", pageRequest);
-        } else if (status == TokenStatus.EXPIRED) {
-          tokenSummaryPage =
-              tokenSummaryRepository.findFilteredExpired("%" + filter + "%", pageRequest);
-        } else if (status == TokenStatus.REVOKED) {
-          tokenSummaryPage =
-              tokenSummaryRepository.findFilteredRevoked("%" + filter + "%", pageRequest);
-        } else if (status == TokenStatus.PENDING) {
-          tokenSummaryPage =
-              tokenSummaryRepository.findFilteredPending("%" + filter + "%", pageRequest);
-        } else {
-          tokenSummaryPage = tokenSummaryRepository.findFiltered("%" + filter + "%", pageRequest);
-        }
-      } else {
-        if (status == TokenStatus.ACTIVE) {
-          tokenSummaryPage = tokenSummaryRepository.findAllActive(pageRequest);
-        } else if (status == TokenStatus.EXPIRED) {
-          tokenSummaryPage = tokenSummaryRepository.findAllExpired(pageRequest);
-        } else if (status == TokenStatus.REVOKED) {
-          tokenSummaryPage = tokenSummaryRepository.findAllRevoked(pageRequest);
-        } else if (status == TokenStatus.PENDING) {
-          tokenSummaryPage = tokenSummaryRepository.findAllPending(pageRequest);
-        } else {
-          tokenSummaryPage = tokenSummaryRepository.findAll(pageRequest);
-        }
-      }
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_TOKENS),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              sortProperty);
+
+      Page<TokenSummary> tokenSummaryPage =
+          tokenSummaryRepository.findAll(
+              (Specification<TokenSummary>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    if (status != null) {
+                      if (status == TokenStatus.ACTIVE) {
+                        predicates.add(
+                            criteriaBuilder.or(
+                                criteriaBuilder.isNull(root.get("validFromDate")),
+                                criteriaBuilder.lessThanOrEqualTo(
+                                    root.get("validFromDate"), LocalDate.now())));
+                        predicates.add(
+                            criteriaBuilder.or(
+                                criteriaBuilder.isNull(root.get("expiryDate")),
+                                criteriaBuilder.greaterThan(
+                                    root.get("expiryDate"), LocalDate.now())));
+                      } else if (status == TokenStatus.EXPIRED) {
+                        predicates.add(
+                            criteriaBuilder.and(
+                                criteriaBuilder.isNotNull(root.get("expiryDate")),
+                                criteriaBuilder.lessThanOrEqualTo(
+                                    root.get("expiryDate"), LocalDate.now())));
+                      } else if (status == TokenStatus.PENDING) {
+                        predicates.add(
+                            criteriaBuilder.and(
+                                criteriaBuilder.isNotNull(root.get("validFromDate")),
+                                criteriaBuilder.greaterThan(
+                                    root.get("validFromDate"), LocalDate.now())));
+                      }
+
+                      if (status == TokenStatus.REVOKED) {
+                        predicates.add(criteriaBuilder.isNotNull(root.get("revocationDate")));
+                      } else {
+                        predicates.add(criteriaBuilder.isNull(root.get("revocationDate")));
+                      }
+                    }
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("name")),
+                              "%" + filter.toLowerCase() + "%"));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
 
       return new TokenSummaries(
           tokenSummaryPage.toList(),
@@ -1899,7 +1901,15 @@ public class SecurityService implements ISecurityService {
               "name");
 
       if (StringUtils.hasText(filter)) {
-        userDirectoryPage = userDirectoryRepository.findFiltered("%" + filter + "%", pageRequest);
+        userDirectoryPage =
+            userDirectoryRepository.findAll(
+                (Specification<UserDirectory>)
+                    (root, query, criteriaBuilder) -> {
+                      return criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("name")),
+                          "%" + filter.toLowerCase() + "%");
+                    },
+                pageRequest);
       } else {
         userDirectoryPage = userDirectoryRepository.findAll(pageRequest);
       }
@@ -2140,7 +2150,14 @@ public class SecurityService implements ISecurityService {
 
       if (StringUtils.hasText(filter)) {
         userDirectorySummaryPage =
-            userDirectorySummaryRepository.findFiltered("%" + filter + "%", pageRequest);
+            userDirectorySummaryRepository.findAll(
+                (Specification<UserDirectorySummary>)
+                    (root, query, criteriaBuilder) -> {
+                      return criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("name")),
+                          "%" + filter.toLowerCase() + "%");
+                    },
+                pageRequest);
       } else {
         userDirectorySummaryPage = userDirectorySummaryRepository.findAll(pageRequest);
       }

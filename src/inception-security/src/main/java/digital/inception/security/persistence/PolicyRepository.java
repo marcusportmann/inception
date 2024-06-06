@@ -48,16 +48,6 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
   List<Policy> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the filtered policies.
-   *
-   * @param filter the filter to apply to the policies
-   * @param pageable the pagination information
-   * @return the filtered policies
-   */
-  @Query("select p from Policy p where (lower(p.name) like lower(:filter))")
-  Page<Policy> findFiltered(@Param("filter") String filter, Pageable pageable);
-
-  /**
    * Retrieve the name of the policy.
    *
    * @param policyId the ID for the policy

@@ -51,10 +51,12 @@ import digital.inception.executor.persistence.TaskTypeRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -71,6 +73,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -690,93 +693,49 @@ public class ExecutorService implements IExecutorService {
         pageSize = MAX_FILTERED_TASKS;
       }
 
+      String sortProperty;
+
       if (sortBy == TaskSortBy.TYPE) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_TASKS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "type");
+        sortProperty = "type";
       } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_TASKS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "queued");
+        sortProperty = "queued";
       }
 
-      Page<TaskSummary> taskSummaryPage;
-      if (StringUtils.hasText(filter)) {
-        String likeFilter = "%" + filter + "%";
-        if (StringUtils.hasText(type)) {
-          taskSummaryPage =
-              (status != null)
-                  ? taskSummaryRepository.findFilteredWithTypeAndStatus(
-                      likeFilter, type, status, pageRequest)
-                  : taskSummaryRepository.findFilteredWithType(likeFilter, type, pageRequest);
-        } else {
-          taskSummaryPage =
-              (status != null)
-                  ? taskSummaryRepository.findFilteredWithStatus(likeFilter, status, pageRequest)
-                  : taskSummaryRepository.findFiltered(likeFilter, pageRequest);
-        }
-      } else {
-        if (StringUtils.hasText(type)) {
-          taskSummaryPage =
-              (status != null)
-                  ? taskSummaryRepository.findByTypeAndStatus(type, status, pageRequest)
-                  : taskSummaryRepository.findByType(type, pageRequest);
-        } else {
-          taskSummaryPage =
-              (status != null)
-                  ? taskSummaryRepository.findByStatus(status, pageRequest)
-                  : taskSummaryRepository.findAll(pageRequest);
-        }
-      }
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_TASKS),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              sortProperty);
 
-      //      if (StringUtils.hasText(filter)) {
-      //        if (StringUtils.hasText(taskTypeCode)) {
-      //          if (status != null) {
-      //            taskSummaryPage =
-      //                taskSummaryRepository.findFilteredWithTypeAndStatus(
-      //                    "%" + filter + "%", taskTypeCode, status, pageRequest);
-      //          } else {
-      //            taskSummaryPage =
-      //                taskSummaryRepository.findFilteredWithType(
-      //                    "%" + filter + "%", taskTypeCode, pageRequest);
-      //          }
-      //        } else {
-      //          if (status != null) {
-      //            taskSummaryPage =
-      //                taskSummaryRepository.findFilteredWithStatus(
-      //                    "%" + filter + "%", status, pageRequest);
-      //          } else {
-      //            taskSummaryPage = taskSummaryRepository.findFiltered("%" + filter + "%",
-      // pageRequest);
-      //          }
-      //        }
-      //      } else {
-      //        if (StringUtils.hasText(taskTypeCode)) {
-      //          if (status != null) {
-      //            taskSummaryPage =
-      //                taskSummaryRepository.findByTypeAndStatus(taskTypeCode, status,
-      // pageRequest);
-      //          } else {
-      //            taskSummaryPage = taskSummaryRepository.findByType(taskTypeCode, pageRequest);
-      //          }
-      //        } else {
-      //          if (status != null) {
-      //            taskSummaryPage = taskSummaryRepository.findByStatus(status, pageRequest);
-      //          } else {
-      //            taskSummaryPage = taskSummaryRepository.findAll(pageRequest);
-      //          }
-      //        }
-      //      }
+      Page<TaskSummary> taskSummaryPage =
+          taskSummaryRepository.findAll(
+              (Specification<TaskSummary>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    if (StringUtils.hasText(type)) {
+                      predicates.add(criteriaBuilder.equal(root.get("type"), type));
+                    }
+
+                    if (status != null) {
+                      predicates.add(criteriaBuilder.equal(root.get("status"), status));
+                    }
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.or(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("batchId")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("externalReference")),
+                                  "%" + filter.toLowerCase() + "%")));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
 
       return new TaskSummaries(
           taskSummaryPage.toList(),

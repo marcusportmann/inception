@@ -33,6 +33,8 @@ import jakarta.validation.Validator;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -156,15 +158,28 @@ public class VehicleService implements IVehicleService {
       pageSize = MAX_FILTERED_CARS;
     }
 
-    PageRequest pageRequest = PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_CARS));
-
     try {
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_CARS),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              "name");
 
       Page<Car> carPage;
+
       if (StringUtils.hasText(filter)) {
-        carPage = carRepository.findFiltered("%" + filter + "%", pageRequest);
+        carPage =
+            carRepository.findAll(
+                (Specification<Car>)
+                    (root, query, criteriaBuilder) -> {
+                      return criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("name")),
+                          "%" + filter.toLowerCase() + "%");
+                    },
+                pageRequest);
       } else {
-        carPage = carRepository.findAllByOrderByNameAsc(pageRequest);
+        carPage = carRepository.findAll(pageRequest);
       }
 
       return new Cars(
@@ -194,15 +209,29 @@ public class VehicleService implements IVehicleService {
       pageSize = MAX_FILTERED_VEHICLES;
     }
 
-    PageRequest pageRequest = PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_VEHICLES));
-
     try {
 
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_VEHICLES),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              "name");
+
       Page<Vehicle> vehiclePage;
+
       if (StringUtils.hasText(filter)) {
-        vehiclePage = vehicleRepository.findFiltered("%" + filter + "%", pageRequest);
+        vehiclePage =
+            vehicleRepository.findAll(
+                (Specification<Vehicle>)
+                    (root, query, criteriaBuilder) -> {
+                      return criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("name")),
+                          "%" + filter.toLowerCase() + "%");
+                    },
+                pageRequest);
       } else {
-        vehiclePage = vehicleRepository.findAllByOrderByNameAsc(pageRequest);
+        vehiclePage = vehicleRepository.findAll(pageRequest);
       }
 
       return new Vehicles(

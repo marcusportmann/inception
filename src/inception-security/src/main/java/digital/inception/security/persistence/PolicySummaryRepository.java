@@ -17,11 +17,8 @@
 package digital.inception.security.persistence;
 
 import digital.inception.security.model.PolicySummary;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * The <b>PolicySummaryRepository</b> interface declares the persistence for the
@@ -29,15 +26,5 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface PolicySummaryRepository extends JpaRepository<PolicySummary, String> {
-
-  /**
-   * Retrieve the filtered policy summaries.
-   *
-   * @param filter the filter to apply to the policy summaries
-   * @param pageable the pagination information
-   * @return the filtered policy summaries
-   */
-  @Query("select ps from PolicySummary ps where (lower(ps.name) like lower(:filter))")
-  Page<PolicySummary> findFiltered(@Param("filter") String filter, Pageable pageable);
-}
+public interface PolicySummaryRepository
+    extends JpaRepository<PolicySummary, String>, JpaSpecificationExecutor<PolicySummary> {}

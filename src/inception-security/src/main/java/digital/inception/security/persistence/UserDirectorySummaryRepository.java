@@ -19,9 +19,8 @@ package digital.inception.security.persistence;
 import digital.inception.security.model.UserDirectorySummary;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -31,14 +30,9 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface UserDirectorySummaryRepository extends JpaRepository<UserDirectorySummary, UUID> {
-
-  /**
-   * Retrieve the user directory summaries ordered by name ascending.
-   *
-   * @return the user directory summaries ordered by name ascending
-   */
-  List<UserDirectorySummary> findAllByOrderByNameAsc();
+public interface UserDirectorySummaryRepository
+    extends JpaRepository<UserDirectorySummary, UUID>,
+        JpaSpecificationExecutor<UserDirectorySummary> {
 
   /**
    * Retrieve the user directory summaries for the tenant.
@@ -46,16 +40,8 @@ public interface UserDirectorySummaryRepository extends JpaRepository<UserDirect
    * @param tenantId the ID for the tenant
    * @return the user directory summaries for the tenant
    */
-  @Query("select uds from UserDirectorySummary uds join uds.tenants as o where o.id = :tenantId")
+  @Query(
+      "select uds from UserDirectorySummary uds join uds.tenants as t where t.id = :tenantId "
+          + "order by uds.name")
   List<UserDirectorySummary> findAllByTenantId(@Param("tenantId") UUID tenantId);
-
-  /**
-   * Retrieve the filtered user directory summaries.
-   *
-   * @param filter the filter to apply to the user directory summaries
-   * @param pageable the pagination information
-   * @return the filtered user directory summaries
-   */
-  @Query("select uds from UserDirectorySummary uds where (lower(uds.name) like lower(:filter))")
-  Page<UserDirectorySummary> findFiltered(@Param("filter") String filter, Pageable pageable);
 }

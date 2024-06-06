@@ -16,6 +16,8 @@
 
 package digital.inception.demo.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.demo.DemoConfiguration;
 import digital.inception.demo.model.Car;
@@ -73,6 +75,10 @@ public class VehicleServiceTest {
 
     Cars cars = vehicleService.getCars("", SortDirection.ASCENDING, 0, 100);
 
+    assertEquals(1, cars.getCars().size());
+
     vehicles = vehicleService.getVehicles("", SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(2, vehicles.getVehicles().size());
   }
 }

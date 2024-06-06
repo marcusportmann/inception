@@ -28,10 +28,13 @@ import digital.inception.error.model.ErrorReportSummaries;
 import digital.inception.error.model.ErrorReportSummary;
 import digital.inception.error.persistence.ErrorReportRepository;
 import digital.inception.error.persistence.ErrorReportSummaryRepository;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -43,6 +46,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -237,41 +241,48 @@ public class ErrorService implements IErrorService {
         pageSize = MAX_FILTERED_ERROR_REPORT_SUMMARIES;
       }
 
+      String sortProperty;
       if (sortBy == ErrorReportSortBy.WHO) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_ERROR_REPORT_SUMMARIES),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "who");
+        sortProperty = "who";
       } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_ERROR_REPORT_SUMMARIES),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "created");
+        sortProperty = "created";
       }
 
-      Page<ErrorReportSummary> errorReportSummaryPage;
-      if (StringUtils.hasText(filter)) {
-        errorReportSummaryPage =
-            errorReportSummaryRepository.findFiltered(
-                "%" + filter + "%",
-                fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
-                toDate.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
-                pageRequest);
-      } else {
-        errorReportSummaryPage =
-            errorReportSummaryRepository.findFiltered(
-                fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
-                toDate.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime(),
-                pageRequest);
-      }
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_ERROR_REPORT_SUMMARIES),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              sortProperty);
+
+      final OffsetDateTime fromOffsetDateTime =
+          fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime();
+
+      final OffsetDateTime toOffsetDateTime =
+          toDate.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime();
+
+      Page<ErrorReportSummary> errorReportSummaryPage =
+          errorReportSummaryRepository.findAll(
+              (Specification<ErrorReportSummary>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(
+                        criteriaBuilder.greaterThanOrEqualTo(
+                            root.get("created"), fromOffsetDateTime));
+
+                    predicates.add(criteriaBuilder.lessThan(root.get("created"), toOffsetDateTime));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("who")),
+                              "%" + filter.toLowerCase() + "%"));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
 
       return new ErrorReportSummaries(
           errorReportSummaryPage.toList(),

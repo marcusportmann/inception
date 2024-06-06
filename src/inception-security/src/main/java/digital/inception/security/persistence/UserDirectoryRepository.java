@@ -23,6 +23,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -32,7 +33,8 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UUID> {
+public interface UserDirectoryRepository
+    extends JpaRepository<UserDirectory, UUID>, JpaSpecificationExecutor<UserDirectory> {
 
   /**
    * Check whether the user directory with the specified name exists.
@@ -58,16 +60,6 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
    */
   @Query("select ud from UserDirectory ud join ud.tenants as o where o.id = :tenantId")
   List<UserDirectory> findAllByTenantId(@Param("tenantId") UUID tenantId);
-
-  /**
-   * Retrieve the filtered user directories.
-   *
-   * @param filter the filter to apply to the user directories
-   * @param pageable the pagination information
-   * @return the filtered user directories
-   */
-  @Query("select ud from UserDirectory ud where (lower(ud.name) like lower(:filter))")
-  Page<UserDirectory> findFiltered(@Param("filter") String filter, Pageable pageable);
 
   /**
    * Retrieve the name of the user directory.

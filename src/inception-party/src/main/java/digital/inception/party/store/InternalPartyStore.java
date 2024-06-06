@@ -55,7 +55,10 @@ import digital.inception.party.persistence.OrganizationRepository;
 import digital.inception.party.persistence.PartyRepository;
 import digital.inception.party.persistence.PersonRepository;
 import digital.inception.party.persistence.SnapshotRepository;
+import jakarta.persistence.criteria.Predicate;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -64,6 +67,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -549,31 +553,38 @@ public class InternalPartyStore implements IPartyStore {
       Integer pageSize)
       throws ServiceUnavailableException {
     try {
-      PageRequest pageRequest;
-
+      String sortProperty;
       if (sortBy == OrganizationSortBy.NAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                pageSize,
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "name");
+        sortProperty = "name";
       } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                pageSize,
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "name");
+        sortProperty = "name";
       }
 
-      Page<Organization> organizationPage;
-      if (StringUtils.hasText(filter)) {
-        organizationPage =
-            organizationRepository.findFiltered(tenantId, "%" + filter + "%", pageRequest);
-      } else {
-        organizationPage = organizationRepository.findByTenantId(tenantId, pageRequest);
-      }
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              pageSize,
+              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+              sortProperty);
+
+      Page<Organization> organizationPage =
+          organizationRepository.findAll(
+              (Specification<Organization>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("name")),
+                              "%" + filter.toLowerCase() + "%"));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
 
       return new Organizations(
           tenantId,
@@ -601,14 +612,31 @@ public class InternalPartyStore implements IPartyStore {
       throws ServiceUnavailableException {
 
     try {
-      PageRequest pageRequest = PageRequest.of(pageIndex, pageSize);
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              pageSize,
+              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+              "name");
 
-      Page<Party> partyPage;
-      if (StringUtils.hasText(filter)) {
-        partyPage = partyRepository.findFiltered(tenantId, "%" + filter + "%", pageRequest);
-      } else {
-        partyPage = partyRepository.findByTenantId(tenantId, pageRequest);
-      }
+      Page<Party> partyPage =
+          partyRepository.findAll(
+              (Specification<Party>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("name")),
+                              "%" + filter.toLowerCase() + "%"));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
 
       return new Parties(
           tenantId,
@@ -673,30 +701,38 @@ public class InternalPartyStore implements IPartyStore {
       Integer pageSize)
       throws ServiceUnavailableException {
     try {
-      PageRequest pageRequest;
-
+      String sortProperty;
       if (sortBy == PersonSortBy.PREFERRED_NAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                pageSize,
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "preferredName");
+        sortProperty = "preferredName";
       } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                pageSize,
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "name");
+        sortProperty = "name";
       }
 
-      Page<Person> personPage;
-      if (StringUtils.hasText(filter)) {
-        personPage = personRepository.findFiltered(tenantId, "%" + filter + "%", pageRequest);
-      } else {
-        personPage = personRepository.findByTenantId(tenantId, pageRequest);
-      }
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              pageSize,
+              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+              sortProperty);
+
+      Page<Person> personPage =
+          personRepository.findAll(
+              (Specification<Person>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("name")),
+                              "%" + filter.toLowerCase() + "%"));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
 
       return new Persons(
           tenantId,

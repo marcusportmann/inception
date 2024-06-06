@@ -18,34 +18,12 @@ package digital.inception.demo.persistence;
 
 import digital.inception.demo.model.Car;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * The <b>CarRepository</b> interface declares the persistence for the <b>Car</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface CarRepository extends JpaRepository<Car, UUID> {
-
-  /**
-   * Retrieve the cars ordered by name ascending.
-   *
-   * @param pageable the pagination information
-   * @return the cars ordered by name ascending
-   */
-  Page<Car> findAllByOrderByNameAsc(Pageable pageable);
-
-  /**
-   * Retrieve the filtered cars.
-   *
-   * @param filter the filter to apply to the cars
-   * @param pageable the pagination information
-   * @return the filtered cars
-   */
-  @Query("select c from Car c where (lower(c.name) like lower(:filter)) order by c.name")
-  Page<Car> findFiltered(@Param("filter") String filter, Pageable pageable);
-}
+public interface CarRepository extends JpaRepository<Car, UUID>, JpaSpecificationExecutor<Car> {}
