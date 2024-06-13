@@ -184,6 +184,7 @@
               <rules>
                 <dependencyConvergence>
                   <excludes>
+                    <exclude>com.fasterxml.woodstox:woodstox-core:[6,7)</exclude>
                     <exclude>com.google.guava:guava:[32,33)</exclude>
                     <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
                     <exclude>net.java.dev.jna:jna-platform:[5,6)</exclude>
@@ -191,9 +192,11 @@
                     <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
                     <exclude>org.checkerframework:checker-qual:[3,4)</exclude>
+                    <exclude>org.codehaus.woodstox:stax2-api:[4,5)</exclude>
                     <exclude>org.ow2.asm:asm:[9,10)</exclude>
                   </excludes>
-                </dependencyConvergence>              </rules>
+                </dependencyConvergence>
+              </rules>
             </configuration>
             <goals>
               <goal>enforce</goal>

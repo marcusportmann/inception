@@ -16,7 +16,6 @@
 
 package digital.inception.application;
 
-import com.codahale.metrics.MetricRegistry;
 import digital.inception.core.support.MergedMessageSource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,16 +86,6 @@ public abstract class Application {
     messageSource.setBasename("classpath*:messages");
 
     return messageSource;
-  }
-
-  /**
-   * Returns the metric registry.
-   *
-   * @return the metric registry
-   */
-  @Bean
-  protected MetricRegistry metricRegistry() {
-    return new MetricRegistry();
   }
 
   /**

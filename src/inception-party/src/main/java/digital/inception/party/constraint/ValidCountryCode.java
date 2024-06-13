@@ -48,7 +48,7 @@ public @interface ValidCountryCode {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.party.constraints.ValidCountryCode.message}";
+  String message() default "{digital.inception.party.constraint.ValidCountryCode.message}";
 
   /**
    * The payload type.

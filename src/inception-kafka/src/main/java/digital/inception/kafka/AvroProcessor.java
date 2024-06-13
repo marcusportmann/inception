@@ -16,7 +16,7 @@
 
 package digital.inception.kafka;
 
-import com.codahale.metrics.MetricRegistry;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -52,13 +52,13 @@ public abstract class AvroProcessor<K, V extends SpecificRecordBase> extends Pro
    * @param kafkaProperties the Spring Kafka properties
    * @param keyDeserializer the Apache Kafka key deserializer
    * @param valueDeserializer the Apache Kafka value deserializer
-   * @param metricRegistry metric registry to register metrics on
+   * @param meterRegistry the meter registry
    */
   public AvroProcessor(
       KafkaProperties kafkaProperties,
       Deserializer<K> keyDeserializer,
       Deserializer<V> valueDeserializer,
-      MetricRegistry metricRegistry) {
-    super(kafkaProperties, keyDeserializer, valueDeserializer, metricRegistry);
+      MeterRegistry meterRegistry) {
+    super(kafkaProperties, keyDeserializer, valueDeserializer, meterRegistry);
   }
 }

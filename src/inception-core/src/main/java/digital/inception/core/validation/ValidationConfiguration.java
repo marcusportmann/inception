@@ -16,7 +16,8 @@
 
 package digital.inception.core.validation;
 
-import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+import org.hibernate.validator.internal.engine.ConfigurationImpl;
+import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,8 +43,19 @@ public class ValidationConfiguration {
   @Bean
   public static LocalValidatorFactoryBean validator() {
     LocalValidatorFactoryBean factoryBean = new LocalValidatorFactoryBean();
+
     factoryBean.setMessageInterpolator(
-        BeanUtils.instantiateClass(ParameterMessageInterpolator.class));
+        BeanUtils.instantiateClass(ValidationMessageInterpolator.class));
+
+    factoryBean.setConfigurationInitializer(
+        (jakarta.validation.Configuration<?> configuration) -> {
+          if (configuration instanceof ConfigurationImpl hibernateConfiguration) {
+            hibernateConfiguration.customViolationExpressionLanguageFeatureLevel(
+                ExpressionLanguageFeatureLevel.DEFAULT);
+            hibernateConfiguration.constraintExpressionLanguageFeatureLevel(
+                ExpressionLanguageFeatureLevel.DEFAULT);
+          }
+        });
     return factoryBean;
   }
 }

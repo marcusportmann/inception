@@ -38,6 +38,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -51,6 +52,7 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Configuration
+@Conditional(WebServiceConfigurationEnabledCondition.class)
 public class WebServiceConfiguration {
 
   /* Logger */

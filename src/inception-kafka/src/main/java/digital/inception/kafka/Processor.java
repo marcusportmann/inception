@@ -16,8 +16,8 @@
 
 package digital.inception.kafka;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
@@ -142,13 +142,13 @@ public abstract class Processor<K, V> extends Thread {
    * @param kafkaProperties the Spring Kafka properties
    * @param keyDeserializer the Apache Kafka key deserializer
    * @param valueDeserializer the Apache Kafka value deserializer
-   * @param metricRegistry the metric registry
+   * @param meterRegistry the meter registry
    */
   public Processor(
       KafkaProperties kafkaProperties,
       Deserializer<K> keyDeserializer,
       Deserializer<V> valueDeserializer,
-      MetricRegistry metricRegistry) {
+      MeterRegistry meterRegistry) {
     this.kafkaProperties = kafkaProperties;
     this.keyDeserializer = keyDeserializer;
     this.valueDeserializer = valueDeserializer;
@@ -160,10 +160,9 @@ public abstract class Processor<K, V> extends Thread {
               + ") without a valid Kafka consumer group ID (spring.kafka.consumer.group-id)");
     }
 
-    if (metricRegistry != null && metricsEnabled) {
+    if (meterRegistry != null && metricsEnabled) {
       recordProcessingTimer =
-          metricRegistry.timer(
-              "timer." + this.getClass().getSimpleName() + ".recordProcessingTime");
+          meterRegistry.timer("timer." + this.getClass().getSimpleName() + ".recordProcessingTime");
     }
 
     setName("Processor (" + getClass().getSimpleName() + ") for topic (" + getTopic() + ")");
@@ -544,8 +543,12 @@ public abstract class Processor<K, V> extends Thread {
   private void processRecordTimed(Map<String, byte[]> headers, V value)
       throws InvalidRecordValueException, TransientErrorException, ProcessingFailedException {
     if (recordProcessingTimer != null) {
-      try (Timer.Context ignored = recordProcessingTimer.time()) {
+      long startTime = System.currentTimeMillis();
+
+      try {
         processRecord(headers, value);
+      } finally {
+        recordProcessingTimer.record(Duration.ofMillis(System.currentTimeMillis() - startTime));
       }
     } else {
       processRecord(headers, value);
