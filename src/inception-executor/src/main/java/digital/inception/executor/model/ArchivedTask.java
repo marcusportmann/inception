@@ -58,7 +58,8 @@ import java.util.UUID;
   "executed",
   "executionTime",
   "externalReference",
-  "data"
+  "data",
+  "failure"
 })
 @XmlRootElement(name = "ArchivedTask", namespace = "https://inception.digital/executor")
 @XmlType(
@@ -74,7 +75,8 @@ import java.util.UUID;
       "executed",
       "executionTime",
       "externalReference",
-      "data"
+      "data",
+      "failure"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidTask
@@ -131,6 +133,14 @@ public class ArchivedTask implements Serializable {
   @Column(name = "external_reference", length = 50)
   private String externalReference;
 
+  /** The description of the failure for a failed task. */
+  @Schema(description = "The description of the failure for a failed task")
+  @JsonProperty
+  @XmlElement(name = "Failure")
+  @Size(max = 2000)
+  @Column(name = "failure")
+  private String failure;
+
   /** The ID for the task. */
   @Schema(description = "The ID for the task", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -156,7 +166,7 @@ public class ArchivedTask implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", length = 50, nullable = false)
   private TaskStatus status;
 
   /** The code for the last task step for a multistep task. */
@@ -287,6 +297,15 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
+   * Returns the description of the failure for a failed task.
+   *
+   * @return the description of the failure for a failed task
+   */
+  public String getFailure() {
+    return failure;
+  }
+
+  /**
    * Returns the ID for the task.
    *
    * @return the ID for the task
@@ -384,6 +403,19 @@ public class ArchivedTask implements Serializable {
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;
+  }
+
+  /**
+   * Set the description of the failure for a failed task.
+   *
+   * @param failure the description of the failure for a failed task
+   */
+  public void setFailure(String failure) {
+    if (failure.length() <= 2000) {
+      this.failure = failure;
+    } else {
+      this.failure = failure.substring(0, 1995) + "...";
+    }
   }
 
   /**

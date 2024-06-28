@@ -35,8 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampleExecutor<User>,
-    JpaSpecificationExecutor<User> {
+public interface UserRepository
+    extends JpaRepository<User, UUID>,
+        QueryByExampleExecutor<User>,
+        JpaSpecificationExecutor<User> {
 
   /**
    * Change the password for the user.

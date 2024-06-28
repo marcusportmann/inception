@@ -135,7 +135,7 @@ public class SMS implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", length = 50, nullable = false)
   private SMSStatus status;
 
   /** Constructs a new <b>SMS</b>. */

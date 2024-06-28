@@ -146,7 +146,7 @@ public class TokenSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", nullable = false)
+  @Column(name = "type", length = 50, nullable = false)
   private TokenType type;
 
   /** The date the token is valid from. */

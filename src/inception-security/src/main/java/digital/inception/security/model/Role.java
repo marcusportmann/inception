@@ -38,9 +38,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * The <b>Role</b> class holds the information for a role.
@@ -91,13 +91,13 @@ public class Role implements java.io.Serializable {
       name = "security_function_to_role_map",
       joinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"),
       inverseJoinColumns = @JoinColumn(name = "function_code", referencedColumnName = "code"))
-  private Set<Function> functions = new HashSet<>();
+  private List<Function> functions = new ArrayList<>();
 
   /** The groups the role is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "roles")
-  private Set<Group> groups = new HashSet<>();
+  private List<Group> groups = new ArrayList<>();
 
   /** The name of the role. */
   @Schema(description = "The name of the role", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -172,7 +172,7 @@ public class Role implements java.io.Serializable {
    *
    * @return the functions associated with the role
    */
-  public Set<Function> getFunctions() {
+  public List<Function> getFunctions() {
     return functions;
   }
 
@@ -181,7 +181,7 @@ public class Role implements java.io.Serializable {
    *
    * @return the groups the role is associated with
    */
-  public Set<Group> getGroups() {
+  public List<Group> getGroups() {
     return groups;
   }
 
@@ -237,7 +237,7 @@ public class Role implements java.io.Serializable {
    *
    * @param functions the functions associated with the role
    */
-  public void setFunctions(Set<Function> functions) {
+  public void setFunctions(List<Function> functions) {
     this.functions = functions;
   }
 
@@ -246,7 +246,7 @@ public class Role implements java.io.Serializable {
    *
    * @param groups the groups the role is associated with
    */
-  public void setGroups(Set<Group> groups) {
+  public void setGroups(List<Group> groups) {
     this.groups = groups;
   }
 

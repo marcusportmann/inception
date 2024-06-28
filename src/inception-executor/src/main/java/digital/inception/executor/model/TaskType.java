@@ -212,7 +212,7 @@ public class TaskType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Priority", required = true)
   @NotNull
-  @Column(name = "priority", nullable = false)
+  @Column(name = "priority", length = 50, nullable = false)
   private TaskPriority priority;
 
   /** The optional retry delay for tasks of this type. */

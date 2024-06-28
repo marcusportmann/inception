@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.jpa.JpaUtil;
 import digital.inception.party.constraint.ValidMandate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -35,6 +36,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -46,11 +48,10 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -107,7 +108,7 @@ public class Mandate implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<MandateLink> links = new HashSet<>();
+  private final List<MandateLink> links = new ArrayList<>();
 
   /** The mandataries for the mandate. */
   @Schema(description = "The mandataries for the mandate")
@@ -121,7 +122,7 @@ public class Mandate implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<Mandatary> mandataries = new HashSet<>();
+  private final List<Mandatary> mandataries = new ArrayList<>();
 
   /** The properties for the mandate. */
   @Schema(description = "The properties for the mandate")
@@ -135,7 +136,7 @@ public class Mandate implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<MandateProperty> properties = new HashSet<>();
+  private final List<MandateProperty> properties = new ArrayList<>();
 
   /** The date the mandate is effective from. */
   @Schema(description = "The ISO 8601 format date the mandate is effective from")
@@ -357,7 +358,7 @@ public class Mandate implements Serializable {
    *
    * @return the links for the mandate
    */
-  public Set<MandateLink> getLinks() {
+  public List<MandateLink> getLinks() {
     return links;
   }
 
@@ -376,7 +377,7 @@ public class Mandate implements Serializable {
    *
    * @return the mandataries for the mandate
    */
-  public Set<Mandatary> getMandataries() {
+  public List<Mandatary> getMandataries() {
     return mandataries;
   }
 
@@ -385,7 +386,7 @@ public class Mandate implements Serializable {
    *
    * @return the properties for the mandate
    */
-  public Set<MandateProperty> getProperties() {
+  public List<MandateProperty> getProperties() {
     return properties;
   }
 
@@ -510,7 +511,7 @@ public class Mandate implements Serializable {
    *
    * @param links the links for the mandate
    */
-  public void setLinks(Set<MandateLink> links) {
+  public void setLinks(List<MandateLink> links) {
     links.forEach(link -> link.setMandate(this));
     this.links.clear();
     this.links.addAll(links);
@@ -521,7 +522,7 @@ public class Mandate implements Serializable {
    *
    * @param mandataries the mandataries for the mandate
    */
-  public void setMandataries(Set<Mandatary> mandataries) {
+  public void setMandataries(List<Mandatary> mandataries) {
     mandataries.forEach(mandatary -> mandatary.setMandate(this));
     this.mandataries.clear();
     this.mandataries.addAll(mandataries);
@@ -532,7 +533,7 @@ public class Mandate implements Serializable {
    *
    * @param properties the properties for the mandate
    */
-  public void setProperties(Set<MandateProperty> properties) {
+  public void setProperties(List<MandateProperty> properties) {
     properties.forEach(property -> property.setMandate(this));
     this.properties.clear();
     this.properties.addAll(properties);
@@ -563,5 +564,18 @@ public class Mandate implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * The callback method in JAXB (Java Architecture for XML Binding) that is invoked after an object
+   * is unmarshalled from XML. This method can be used to perform post-processing on the newly
+   * unmarshalled object. It provides a way to enhance the deserialization process by allowing
+   * additional initialization, validation, or linking of objects within the object graph.
+   *
+   * @param unmarshaller the XML unmarshaller
+   * @param parent the parent object
+   */
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
+    JpaUtil.linkEntities(this);
   }
 }

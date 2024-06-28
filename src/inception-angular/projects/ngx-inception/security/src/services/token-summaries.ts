@@ -47,7 +47,7 @@ export class TokenSummaries {
   sortBy: TokenSortBy;
 
   /**
-   * The optional status filter to apply to the token summaries.
+   * The optional status filter that was applied to the token summaries.
    */
   status: TokenStatus | null = null;
 
@@ -75,7 +75,7 @@ export class TokenSummaries {
    * @param sortDirection  The sort direction that was applied to the token summaries.
    * @param pageIndex      The page index.
    * @param pageSize       The page size.
-   * @param status         The optional status filter to apply to the token summaries.
+   * @param status         The optional status filter that was applied to the token summaries.
    * @param filter         The optional filter that was applied to the token summaries.
    */
   constructor(tokenSummaries: TokenSummary[], total: number, sortBy: TokenSortBy,

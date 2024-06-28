@@ -99,8 +99,8 @@ public class TokenSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The optional status filter to apply to the token summaries. */
-  @Schema(description = "The optional status filter to apply to the token summaries")
+  /** The optional status filter that was applied to the token summaries. */
+  @Schema(description = "The optional status filter that was applied to the token summaries")
   @JsonProperty
   @XmlElement(name = "Status")
   private TokenStatus status;
@@ -128,7 +128,7 @@ public class TokenSummaries implements Serializable {
    *
    * @param tokenSummaries the token summaries
    * @param total the total number of token summaries
-   * @param status the optional status filter to apply to the token summaries
+   * @param status the optional status filter that was applied to the token summaries
    * @param filter the optional filter that was applied to the token summaries
    * @param sortBy the method used to sort the token summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the token summaries
@@ -200,9 +200,9 @@ public class TokenSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional status filter to apply to the token summaries.
+   * Returns the optional status filter that was applied to the token summaries.
    *
-   * @return the optional status filter to apply to the token summaries
+   * @return the optional status filter that was applied to the token summaries
    */
   public TokenStatus getStatus() {
     return status;

@@ -35,9 +35,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * The <b>Function</b> class holds the information for a discrete unit of functionality for an
@@ -94,7 +94,7 @@ public class Function implements java.io.Serializable {
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "functions")
-  private Set<Role> roles = new HashSet<>();
+  private List<Role> roles = new ArrayList<>();
 
   /** Constructs a new <b>Function</b>. */
   public Function() {}
@@ -169,7 +169,7 @@ public class Function implements java.io.Serializable {
    *
    * @return the roles the user is associated with
    */
-  public Set<Role> getRoles() {
+  public List<Role> getRoles() {
     return roles;
   }
 
@@ -215,7 +215,7 @@ public class Function implements java.io.Serializable {
    *
    * @param roles the roles the user is associated with
    */
-  public void setRoles(Set<Role> roles) {
+  public void setRoles(List<Role> roles) {
     this.roles = roles;
   }
 }

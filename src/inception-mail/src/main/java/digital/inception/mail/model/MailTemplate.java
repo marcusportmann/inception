@@ -68,7 +68,7 @@ public class MailTemplate implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "ContentType", required = true)
   @NotNull
-  @Column(name = "content_type", nullable = false)
+  @Column(name = "content_type", length = 50, nullable = false)
   private MailTemplateContentType contentType;
 
   /** The ID for the mail template. */

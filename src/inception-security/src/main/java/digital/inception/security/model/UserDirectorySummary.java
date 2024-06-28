@@ -38,9 +38,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -72,7 +72,7 @@ public class UserDirectorySummary implements java.io.Serializable {
       name = "security_user_directory_to_tenant_map",
       joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "tenant_id", referencedColumnName = "id"))
-  private final Set<Tenant> tenants = new HashSet<>();
+  private final List<Tenant> tenants = new ArrayList<>();
 
   /** The ID for the user directory. */
   @Schema(

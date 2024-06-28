@@ -499,6 +499,7 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
+  @Transactional
   public void updateJob(Job job)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     validateJob(job);

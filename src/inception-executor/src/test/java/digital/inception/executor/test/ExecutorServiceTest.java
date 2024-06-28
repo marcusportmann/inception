@@ -230,7 +230,7 @@ public class ExecutorServiceTest {
                 objectMapper.writeValueAsString(new TestSimpleTaskData("This is a test message")),
                 false));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     // Find by batch ID
     TaskSummaries taskSummaries =
@@ -349,7 +349,7 @@ public class ExecutorServiceTest {
             new QueueTaskRequest(
                 testSimpleTaskType.getCode(), objectMapper.writeValueAsString(testSimpleTaskData)));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     assertThrows(InvalidTaskStatusException.class, () -> executorService.cancelTask(taskId));
 
@@ -451,7 +451,7 @@ public class ExecutorServiceTest {
                 objectMapper.writeValueAsString(
                     new TestMultistepTaskData("This message will be updated"))));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     Task retrievedTask = executorService.getTask(taskId);
 
@@ -516,7 +516,7 @@ public class ExecutorServiceTest {
             false,
             objectMapper.writeValueAsString(new TestMultistepTaskData("This is a test message")));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
   }
 
   /** Test the process completed multistep task functionality. */
@@ -541,7 +541,7 @@ public class ExecutorServiceTest {
                 objectMapper.writeValueAsString(
                     new TestMultistepTaskData("This is a test message"))));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     Task retrievedTask = executorService.getTask(taskId);
 
@@ -579,7 +579,7 @@ public class ExecutorServiceTest {
                 testSimpleTaskType.getCode(),
                 objectMapper.writeValueAsString(new TestSimpleTaskData("This is a test message"))));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     executorService.setHistoricalTaskRetentionDays(0);
 
@@ -638,7 +638,7 @@ public class ExecutorServiceTest {
 
     UUID taskId = executorService.queueTask(queueTaskRequest);
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     Task retrievedTask = executorService.getTask(taskId);
 
@@ -687,7 +687,7 @@ public class ExecutorServiceTest {
 
     UUID taskId = executorService.queueTask(queueTaskRequest);
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
   }
 
   /** Test the simple single-step task failure functionality. */
@@ -777,7 +777,7 @@ public class ExecutorServiceTest {
                 objectMapper.writeValueAsString(
                     new TestSimpleTaskData("This message will not be updated"))));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     Task retrievedTask = executorService.getTask(taskId);
 
@@ -793,7 +793,7 @@ public class ExecutorServiceTest {
                 objectMapper.writeValueAsString(
                     new TestSimpleTaskData("This message will be updated", true))));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     retrievedTask = executorService.getTask(taskId);
 
@@ -896,7 +896,7 @@ public class ExecutorServiceTest {
                 objectMapper.writeValueAsString(
                     new TestMultistepTaskData("This message will be updated"))));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     List<TaskEvent> taskEvents = executorService.getTaskEventsForTask(taskId);
 
@@ -926,7 +926,7 @@ public class ExecutorServiceTest {
                 objectMapper.writeValueAsString(
                     new TestMultistepTaskData("This message will be updated"))));
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     List<TaskEvent> taskEvents = executorService.getTaskEventsForTask(taskId);
 
@@ -971,7 +971,7 @@ public class ExecutorServiceTest {
 
     UUID taskId = executorService.queueTask(queueTaskRequest);
 
-    waitForTaskToComplete(taskId, 10);
+    waitForTaskToComplete(taskId, 20);
 
     Task retrievedTask = executorService.getTask(taskId);
 

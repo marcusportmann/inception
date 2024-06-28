@@ -39,9 +39,9 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -97,7 +97,7 @@ public class Group implements Serializable {
       name = "security_role_to_group_map",
       joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"))
-  private Set<Role> roles = new HashSet<>();
+  private List<Role> roles = new ArrayList<>();
 
   /** The ID for the user directory the group is associated with. */
   @Schema(
@@ -117,7 +117,7 @@ public class Group implements Serializable {
       name = "security_user_to_group_map",
       joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-  private Set<User> users = new HashSet<>();
+  private List<User> users = new ArrayList<>();
 
   /** Constructs a new <b>Group</b>. */
   public Group() {}
@@ -225,7 +225,7 @@ public class Group implements Serializable {
    *
    * @return the roles associated with the group
    */
-  public Set<Role> getRoles() {
+  public List<Role> getRoles() {
     return roles;
   }
 
@@ -243,7 +243,7 @@ public class Group implements Serializable {
    *
    * @return the users associated with the group
    */
-  public Set<User> getUsers() {
+  public List<User> getUsers() {
     return users;
   }
 
@@ -309,7 +309,7 @@ public class Group implements Serializable {
    *
    * @param roles the roles associated with the group
    */
-  public void setRoles(Set<Role> roles) {
+  public void setRoles(List<Role> roles) {
     this.roles = roles;
   }
 
@@ -327,7 +327,7 @@ public class Group implements Serializable {
    *
    * @param users the users associated with the group
    */
-  public void setUsers(Set<User> users) {
+  public void setUsers(List<User> users) {
     this.users = users;
   }
 }

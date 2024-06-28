@@ -132,7 +132,7 @@ public class PasswordReset implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Reason", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", length = 50, nullable = false)
   private PasswordResetStatus status;
 
   /** The username for the user associated with the password reset. */

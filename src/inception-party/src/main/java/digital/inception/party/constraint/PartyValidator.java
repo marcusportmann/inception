@@ -24,6 +24,7 @@ import digital.inception.party.service.IPartyReferenceService;
 import digital.inception.reference.service.IReferenceService;
 import jakarta.validation.ValidationException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -1168,6 +1169,9 @@ public abstract class PartyValidator {
     } else {
       if (attributeValue instanceof String) {
         isValid = StringUtils.hasText((String) attributeValue);
+
+      } else if (attributeValue instanceof List<?>) {
+        isValid = !((List<?>) attributeValue).isEmpty();
       } else if (attributeValue instanceof Set<?>) {
         isValid = !((Set<?>) attributeValue).isEmpty();
       } else if (attributeValue instanceof LocalDate) {

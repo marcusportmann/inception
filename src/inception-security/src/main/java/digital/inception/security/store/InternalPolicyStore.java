@@ -175,9 +175,7 @@ public class InternalPolicyStore implements IPolicyStore {
           PageRequest.of(
               pageIndex,
               Math.min(pageSize, DEFAULT_MAX_FILTERED_POLICIES),
-              (sortDirection == SortDirection.ASCENDING)
-                  ? Sort.Direction.ASC
-                  : Sort.Direction.DESC,
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
               sortProperty);
 
       Page<PolicySummary> policySummaryPage;

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.jpa.JpaUtil;
 import digital.inception.party.constraint.ValidAssociation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -35,6 +36,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -46,10 +48,10 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -103,7 +105,7 @@ public class Association implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<AssociationProperty> properties = new HashSet<>();
+  private final List<AssociationProperty> properties = new ArrayList<>();
 
   /** The date the association is effective from. */
   @Schema(description = "The ISO 8601 format date the association is effective from")
@@ -319,7 +321,7 @@ public class Association implements Serializable {
    *
    * @return the properties for the association
    */
-  public Set<AssociationProperty> getProperties() {
+  public List<AssociationProperty> getProperties() {
     return properties;
   }
 
@@ -434,7 +436,7 @@ public class Association implements Serializable {
    *
    * @param properties the properties for the association
    */
-  public void setProperties(Set<AssociationProperty> properties) {
+  public void setProperties(List<AssociationProperty> properties) {
     properties.forEach(property -> property.setAssociation(this));
     this.properties.clear();
     this.properties.addAll(properties);
@@ -465,5 +467,18 @@ public class Association implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * The callback method in JAXB (Java Architecture for XML Binding) that is invoked after an object
+   * is unmarshalled from XML. This method can be used to perform post-processing on the newly
+   * unmarshalled object. It provides a way to enhance the deserialization process by allowing
+   * additional initialization, validation, or linking of objects within the object graph.
+   *
+   * @param unmarshaller the XML unmarshaller
+   * @param parent the parent object
+   */
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
+    JpaUtil.linkEntities(this);
   }
 }

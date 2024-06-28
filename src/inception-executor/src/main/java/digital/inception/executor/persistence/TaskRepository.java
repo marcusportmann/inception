@@ -189,15 +189,19 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    *
    * @param taskId the ID for the task
    * @param currentTimestamp the current date and time
+   * @param failure the description of the failure for the task
    */
   @Transactional
   @Modifying
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.FAILED, "
-          + "t.executed =:currentTimestamp, t.nextExecution = null, t.locked = null, t.lockName = null "
+          + "t.executed =:currentTimestamp, t.nextExecution = null, t.locked = null, "
+          + "t.failure = :failure, t.lockName = null "
           + "where t.id = :taskId")
   void failTask(
-      @Param("taskId") UUID taskId, @Param("currentTimestamp") OffsetDateTime currentTimestamp);
+      @Param("taskId") UUID taskId,
+      @Param("currentTimestamp") OffsetDateTime currentTimestamp,
+      @Param("failure") String failure);
 
   /**
    * Retrieve the task with the specified external reference.

@@ -64,7 +64,8 @@ import java.util.UUID;
   "locked",
   "lockName",
   "nextExecution",
-  "data"
+  "data",
+  "failure"
 })
 @XmlRootElement(name = "Task", namespace = "https://inception.digital/executor")
 @XmlType(
@@ -85,7 +86,8 @@ import java.util.UUID;
       "locked",
       "lockName",
       "nextExecution",
-      "data"
+      "data",
+      "failure"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidTask
@@ -147,6 +149,14 @@ public class Task implements Serializable {
   @Column(name = "external_reference", length = 50)
   private String externalReference;
 
+  /** The description of the failure for a failed task. */
+  @Schema(description = "The description of the failure for a failed task")
+  @JsonProperty
+  @XmlElement(name = "Failure")
+  @Size(max = 2000)
+  @Column(name = "failure")
+  private String failure;
+
   /** The ID for the task. */
   @Schema(description = "The ID for the task", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -186,7 +196,7 @@ public class Task implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Priority", required = true)
   @NotNull
-  @Column(name = "priority", nullable = false)
+  @Column(name = "priority", length = 50, nullable = false)
   private TaskPriority priority;
 
   /** The date and time the task was queued for execution. */
@@ -205,7 +215,7 @@ public class Task implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", length = 50, nullable = false)
   private TaskStatus status;
 
   /** The optional code for the current task step for a multistep task. */
@@ -339,6 +349,15 @@ public class Task implements Serializable {
    */
   public String getExternalReference() {
     return externalReference;
+  }
+
+  /**
+   * Returns the description of the failure for a failed task.
+   *
+   * @return the description of the failure for a failed task
+   */
+  public String getFailure() {
+    return failure;
   }
 
   /**
@@ -493,6 +512,19 @@ public class Task implements Serializable {
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;
+  }
+
+  /**
+   * Set the description of the failure for a failed task.
+   *
+   * @param failure the description of the failure for a failed task
+   */
+  public void setFailure(String failure) {
+    if (failure.length() <= 2000) {
+      this.failure = failure;
+    } else {
+      this.failure = failure.substring(0, 1995) + "...";
+    }
   }
 
   /**

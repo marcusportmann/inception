@@ -46,11 +46,9 @@ import java.io.ByteArrayInputStream;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -118,7 +116,7 @@ public class UserDirectory implements Serializable {
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "userDirectories")
-  private Set<Tenant> tenants = new HashSet<>();
+  private List<Tenant> tenants = new ArrayList<>();
 
   /** The code for the user directory type. */
   @Schema(
@@ -222,7 +220,7 @@ public class UserDirectory implements Serializable {
    *
    * @return the tenants the user directory is associated with
    */
-  public Set<Tenant> getTenants() {
+  public List<Tenant> getTenants() {
     return tenants;
   }
 
@@ -324,7 +322,7 @@ public class UserDirectory implements Serializable {
    *
    * @param tenants the tenants the user directory is associated with
    */
-  public void setTenants(Set<Tenant> tenants) {
+  public void setTenants(List<Tenant> tenants) {
     this.tenants = tenants;
   }
 

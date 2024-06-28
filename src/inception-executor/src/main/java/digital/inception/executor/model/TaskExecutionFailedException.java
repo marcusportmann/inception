@@ -45,6 +45,9 @@ public class TaskExecutionFailedException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
+  /** The original message. */
+  private final String originalMessage;
+
   /**
    * Constructs a new <b>TaskExecutionFailedException</b>.
    *
@@ -52,6 +55,7 @@ public class TaskExecutionFailedException extends ServiceException {
    */
   public TaskExecutionFailedException(UUID taskId) {
     super("Failed to execute the task (" + taskId + ")");
+    originalMessage = null;
   }
 
   /**
@@ -62,6 +66,7 @@ public class TaskExecutionFailedException extends ServiceException {
    */
   public TaskExecutionFailedException(UUID taskId, String message) {
     super("Failed to execute the task (" + taskId + "): " + message);
+    originalMessage = message;
   }
 
   /**
@@ -73,6 +78,7 @@ public class TaskExecutionFailedException extends ServiceException {
    */
   public TaskExecutionFailedException(UUID taskId, Throwable cause) {
     super("Failed to execute the task (" + taskId + "): " + cause.getMessage(), cause);
+    originalMessage = cause.getMessage();
   }
 
   /**
@@ -85,5 +91,15 @@ public class TaskExecutionFailedException extends ServiceException {
    */
   public TaskExecutionFailedException(UUID taskId, String message, Throwable cause) {
     super("Failed to execute the task (" + taskId + "): " + message, cause);
+    originalMessage = message;
+  }
+
+  /**
+   * Returns the original message.
+   *
+   * @return the original message
+   */
+  public String getOriginalMessage() {
+    return originalMessage;
   }
 }

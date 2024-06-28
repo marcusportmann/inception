@@ -103,7 +103,7 @@ public class Policy implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", nullable = false)
+  @Column(name = "type", length = 50, nullable = false)
   private PolicyType type;
 
   /** The version of the policy. */

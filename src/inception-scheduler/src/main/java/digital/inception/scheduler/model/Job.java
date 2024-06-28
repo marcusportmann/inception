@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
+import digital.inception.jpa.JpaUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,6 +33,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -43,9 +45,9 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * The <b>Job</b> class holds the information for a job.
@@ -95,7 +97,7 @@ public class Job implements Serializable {
   /** The parameters for the job. */
   @Schema(description = "The parameters for the job")
   @JsonProperty
-  @JsonManagedReference
+  @JsonManagedReference("parameterReference")
   @XmlElementWrapper(name = "Parameters")
   @XmlElement(name = "Parameter")
   @Valid
@@ -104,7 +106,7 @@ public class Job implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<JobParameter> parameters = new HashSet<>();
+  private final List<JobParameter> parameters = new ArrayList<>();
 
   /** Is the job enabled for execution? */
   @Schema(
@@ -194,7 +196,7 @@ public class Job implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", length = 50, nullable = false)
   private JobStatus status;
 
   /** Constructs a new <b>Job</b>. */
@@ -345,7 +347,7 @@ public class Job implements Serializable {
    *
    * @return the parameters for the job
    */
-  public Set<JobParameter> getParameters() {
+  public List<JobParameter> getParameters() {
     return parameters;
   }
 
@@ -488,7 +490,7 @@ public class Job implements Serializable {
    *
    * @param parameters the parameters for the job
    */
-  public void setParameters(Set<JobParameter> parameters) {
+  public void setParameters(List<JobParameter> parameters) {
     this.parameters.clear();
     this.parameters.addAll(parameters);
   }
@@ -509,5 +511,18 @@ public class Job implements Serializable {
    */
   public void setStatus(JobStatus status) {
     this.status = status;
+  }
+
+  /**
+   * The callback method in JAXB (Java Architecture for XML Binding) that is invoked after an object
+   * is unmarshalled from XML. This method can be used to perform post-processing on the newly
+   * unmarshalled object. It provides a way to enhance the deserialization process by allowing
+   * additional initialization, validation, or linking of objects within the object graph.
+   *
+   * @param unmarshaller the XML unmarshaller
+   * @param parent the parent object
+   */
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
+    JpaUtil.linkEntities(this);
   }
 }

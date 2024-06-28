@@ -87,6 +87,7 @@ import digital.inception.test.TestConfiguration;
 import jakarta.validation.ConstraintViolation;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -315,7 +316,7 @@ public class PartyServiceTest {
         new PhysicalAddress(
             PhysicalAddressType.STREET,
             PhysicalAddressRole.RESIDENTIAL,
-            Set.of(
+            List.of(
                 new String[] {
                   PhysicalAddressPurpose.BILLING,
                   PhysicalAddressPurpose.CORRESPONDENCE,
@@ -438,7 +439,7 @@ public class PartyServiceTest {
         new PhysicalAddress(
             PhysicalAddressType.STREET,
             PhysicalAddressRole.RESIDENTIAL,
-            Set.of(
+            List.of(
                 new String[] {
                   PhysicalAddressPurpose.BILLING,
                   PhysicalAddressPurpose.CORRESPONDENCE,
@@ -648,7 +649,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setAttributes(Set.of(new Attribute("test_attribute_type", "test_attribute_value")));
+    person.setAttributes(List.of(new Attribute("test_attribute_type", "test_attribute_value")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -686,7 +687,7 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setAttributes(
-        Set.of(new Attribute("test_attribute_type", "test_attribute_value")));
+        List.of(new Attribute("test_attribute_type", "test_attribute_value")));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -745,7 +746,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setConsents(Set.of(new Consent("marketing", LocalDate.of(2015, 10, 1))));
+    person.setConsents(List.of(new Consent("marketing", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -834,7 +835,7 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     person.setContactMechanisms(
-        Set.of(
+        List.of(
             new ContactMechanism(
                 ContactMechanismType.EMAIL_ADDRESS,
                 ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
@@ -888,7 +889,7 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setContactMechanisms(
-        Set.of(
+        List.of(
             new ContactMechanism(
                 ContactMechanismType.EMAIL_ADDRESS,
                 ContactMechanismRole.MAIN_EMAIL_ADDRESS,
@@ -945,7 +946,7 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     person.setEducations(
-        Set.of(new Education("Northcliff High School", "national_senior_certificate", 1993)));
+        List.of(new Education("Northcliff High School", "national_senior_certificate", 1993)));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -1004,7 +1005,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setEmployments(Set.of(new Employment("Absa", LocalDate.of(2020, 5, 1))));
+    person.setEmployments(List.of(new Employment("Absa", LocalDate.of(2020, 5, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -1050,7 +1051,7 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     person.setExternalReferences(
-        Set.of(
+        List.of(
             new ExternalReference(
                 "test_external_reference_type", "Another Test External Reference")));
 
@@ -1095,7 +1096,7 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setExternalReferences(
-        Set.of(
+        List.of(
             new ExternalReference(
                 "test_external_reference_type", "Another Test External Reference")));
 
@@ -1139,7 +1140,7 @@ public class PartyServiceTest {
     assertFalse(foreignPerson.hasResidencePermitWithType("za_general_work_visa"));
 
     foreignPerson.setResidencePermits(
-        Set.of(
+        List.of(
             new ResidencePermit(
                 "za_critical_skills_visa", "ZA", LocalDate.of(2015, 3, 12), "CS1234567890")));
 
@@ -1179,7 +1180,7 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     person.setIdentifications(
-        Set.of(new Identification("za_id", "ZA", LocalDate.of(2018, 7, 16), "8904085800089")));
+        List.of(new Identification("za_id", "ZA", LocalDate.of(2018, 7, 16), "8904085800089")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -1225,7 +1226,7 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setIdentifications(
-        Set.of(
+        List.of(
             new Identification(
                 "za_company_registration_certificate",
                 "ZA",
@@ -2388,7 +2389,7 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     person.setLanguageProficiencies(
-        Set.of(
+        List.of(
             new LanguageProficiency(
                 "EN",
                 LanguageProficiencyLevel.PROFICIENT,
@@ -2436,7 +2437,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setLocks(Set.of(new Lock("suspected_fraud", LocalDate.of(2015, 10, 1))));
+    person.setLocks(List.of(new Lock("suspected_fraud", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2473,7 +2474,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setLocks(Set.of(new Lock("suspected_fraud", LocalDate.of(2016, 5, 1))));
+    organization.setLocks(List.of(new Lock("suspected_fraud", LocalDate.of(2016, 5, 1))));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -2622,7 +2623,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setNextOfKin(Set.of(new NextOfKin("brother", "Fred Bloggs")));
+    person.setNextOfKin(List.of(new NextOfKin("brother", "Fred Bloggs")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2679,7 +2680,7 @@ public class PartyServiceTest {
 
     organization.setName(organization.getName() + " Updated");
 
-    organization.setCountriesOfTaxResidence(Set.of("GB", "ZA"));
+    organization.setCountriesOfTaxResidence(List.of("GB", "ZA"));
 
     organization.addContactMechanism(
         new ContactMechanism(ContactMechanismType.PHONE_NUMBER, "main_phone_number", "0115551234"));
@@ -2716,7 +2717,7 @@ public class PartyServiceTest {
         new PhysicalAddress(
             PhysicalAddressType.STREET,
             PhysicalAddressRole.MAIN,
-            Set.of(PhysicalAddressPurpose.CORRESPONDENCE));
+            List.of(PhysicalAddressPurpose.CORRESPONDENCE));
     mainAddress.setStreetNumber("1");
     mainAddress.setStreetName("Discovery Place");
     mainAddress.setSuburb("Sandhurst");
@@ -2930,7 +2931,7 @@ public class PartyServiceTest {
 
     comparePersons(person, serializedPerson);
 
-    person.setCountriesOfCitizenship(Set.of("ZA", "GB"));
+    person.setCountriesOfCitizenship(List.of("ZA", "GB"));
     person.setCountryOfBirth("GB");
     person.setCountryOfResidence("ZA");
     person.setCountryOfTaxResidence("GB");
@@ -2957,7 +2958,7 @@ public class PartyServiceTest {
     person.setSurname(person.getSurname() + " Updated");
     person.setTitle("ms");
 
-    person.setCountriesOfTaxResidence(Set.of("GB", "ZA"));
+    person.setCountriesOfTaxResidence(List.of("GB", "ZA"));
 
     person.removeAttributeWithType("weight");
 
@@ -3082,7 +3083,7 @@ public class PartyServiceTest {
         new PhysicalAddress(
             PhysicalAddressType.STREET,
             PhysicalAddressRole.RESIDENTIAL,
-            Set.of(
+            List.of(
                 new String[] {
                   PhysicalAddressPurpose.BILLING,
                   PhysicalAddressPurpose.CORRESPONDENCE,
@@ -3123,7 +3124,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setPhysicalAddresses(Set.of(residentialAddress));
+    person.setPhysicalAddresses(List.of(residentialAddress));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3140,7 +3141,7 @@ public class PartyServiceTest {
         new PhysicalAddress(
             PhysicalAddressType.STREET,
             PhysicalAddressRole.MAIN,
-            Set.of(PhysicalAddressPurpose.CORRESPONDENCE));
+            List.of(PhysicalAddressPurpose.CORRESPONDENCE));
     mainAddress.setStreetNumber("1");
     mainAddress.setStreetName("Discovery Place");
     mainAddress.setSuburb("Sandhurst");
@@ -3175,7 +3176,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setPhysicalAddresses(Set.of(mainAddress));
+    organization.setPhysicalAddresses(List.of(mainAddress));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3329,7 +3330,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
+    person.setPreferences(List.of(new Preference("test_preference", "test_preference_value")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3366,7 +3367,8 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
+    organization.setPreferences(
+        List.of(new Preference("test_preference", "test_preference_value")));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3409,7 +3411,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setRoles(Set.of(new Role("employee", LocalDate.of(2015, 10, 1))));
+    person.setRoles(List.of(new Role("employee", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3446,7 +3448,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setRoles(Set.of(new Role("employer", LocalDate.of(2016, 5, 1))));
+    organization.setRoles(List.of(new Role("employer", LocalDate.of(2016, 5, 1))));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3520,7 +3522,7 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     person.setSegmentAllocations(
-        Set.of(
+        List.of(
             new SegmentAllocation(
                 "test_person_segment", LocalDate.of(2012, 5, 17), LocalDate.of(2019, 9, 23))));
 
@@ -3563,7 +3565,7 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setSegmentAllocations(
-        Set.of(
+        List.of(
             new SegmentAllocation(
                 "test_organization_segment",
                 LocalDate.of(2012, 5, 17),
@@ -3610,7 +3612,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setSourcesOfFunds(Set.of(new SourceOfFunds("salary_wages", LocalDate.of(2015, 10, 1))));
+    person.setSourcesOfFunds(List.of(new SourceOfFunds("salary_wages", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3652,7 +3654,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setSourcesOfWealth(Set.of(new SourceOfWealth("savings", LocalDate.of(2015, 10, 1))));
+    person.setSourcesOfWealth(List.of(new SourceOfWealth("savings", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3694,7 +3696,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setStatuses(Set.of(new Status("fraud_investigation", LocalDate.of(2015, 10, 1))));
+    person.setStatuses(List.of(new Status("fraud_investigation", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3731,7 +3733,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setStatuses(Set.of(new Status("fraud_investigation", LocalDate.of(2016, 5, 1))));
+    organization.setStatuses(List.of(new Status("fraud_investigation", LocalDate.of(2016, 5, 1))));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3774,7 +3776,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "0987654321")));
+    person.setTaxNumbers(List.of(new TaxNumber("za_income_tax_number", "ZA", "0987654321")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3811,7 +3813,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "9987654321")));
+    organization.setTaxNumbers(List.of(new TaxNumber("za_income_tax_number", "ZA", "9987654321")));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 

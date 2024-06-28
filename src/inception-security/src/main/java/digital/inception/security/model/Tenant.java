@@ -39,9 +39,9 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -90,7 +90,7 @@ public class Tenant implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", length = 50, nullable = false)
   private TenantStatus status;
 
   /** The user directories associated with the tenant. */
@@ -101,7 +101,7 @@ public class Tenant implements Serializable {
       name = "security_user_directory_to_tenant_map",
       joinColumns = @JoinColumn(name = "tenant_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
-  private Set<UserDirectory> userDirectories = new HashSet<>();
+  private List<UserDirectory> userDirectories = new ArrayList<>();
 
   /** Constructs a new <b>Tenant</b>. */
   public Tenant() {}
@@ -187,7 +187,7 @@ public class Tenant implements Serializable {
    *
    * @return the user directories associated with the tenant
    */
-  public Set<UserDirectory> getUserDirectories() {
+  public List<UserDirectory> getUserDirectories() {
     return userDirectories;
   }
 
@@ -243,7 +243,7 @@ public class Tenant implements Serializable {
    *
    * @param userDirectories the user directories associated with the tenant
    */
-  public void setUserDirectories(Set<UserDirectory> userDirectories) {
+  public void setUserDirectories(List<UserDirectory> userDirectories) {
     this.userDirectories = userDirectories;
   }
 

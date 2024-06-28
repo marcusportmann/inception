@@ -32,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface TenantRepository extends JpaRepository<Tenant, UUID>,
-    JpaSpecificationExecutor<Tenant> {
+public interface TenantRepository
+    extends JpaRepository<Tenant, UUID>, JpaSpecificationExecutor<Tenant> {
 
   /**
    * Add the user directory to the tenant.

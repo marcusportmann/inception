@@ -529,6 +529,7 @@ public class SecurityWebService {
    * @throws ServiceUnavailableException if the token could not be generated
    */
   @WebMethod(operationName = "GenerateToken")
+  @WebResult(name = "Token")
   public Token generateToken(
       @WebParam(name = "GenerateTokenRequest") @XmlElement(required = true)
           GenerateTokenRequest generateTokenRequest)

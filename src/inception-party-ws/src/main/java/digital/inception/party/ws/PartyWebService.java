@@ -24,6 +24,7 @@ import digital.inception.party.model.*;
 import digital.inception.party.service.IPartyService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
+import jakarta.jws.WebResult;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -228,6 +229,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the association could not be retrieved
    */
   @WebMethod(operationName = "GetAssociation")
+  @WebResult(name = "Association")
   public Association getAssociation(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "AssociationId") @XmlElement(required = true) UUID associationId)
@@ -250,6 +252,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the associations could not be retrieved
    */
   @WebMethod(operationName = "GetAssociationsForParty")
+  @WebResult(name = "AssociationsForParty")
   public AssociationsForParty getAssociationsForParty(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId,
@@ -273,6 +276,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the mandate could not be retrieved
    */
   @WebMethod(operationName = "GetMandate")
+  @WebResult(name = "Mandate")
   public Mandate getMandate(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "MandateId") @XmlElement(required = true) UUID mandateId)
@@ -295,6 +299,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the mandates could not be retrieved
    */
   @WebMethod(operationName = "GetMandatesForParty")
+  @WebResult(name = "MandatesForParty")
   public MandatesForParty getMandatesForParty(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId,
@@ -318,6 +323,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the organization could not be retrieved
    */
   @WebMethod(operationName = "GetOrganization")
+  @WebResult(name = "Organization")
   public Organization getOrganization(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
@@ -339,6 +345,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the organizations could not be retrieved
    */
   @WebMethod(operationName = "GetOrganizations")
+  @WebResult(name = "Organizations")
   public Organizations getOrganizations(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
@@ -365,6 +372,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the parties could not be retrieved
    */
   @WebMethod(operationName = "GetParties")
+  @WebResult(name = "Parties")
   public Parties getParties(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
@@ -387,6 +395,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the party could not be retrieved
    */
   @WebMethod(operationName = "GetParty")
+  @WebResult(name = "Party")
   public Party getParty(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId)
@@ -405,6 +414,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the person could not be retrieved
    */
   @WebMethod(operationName = "GetPerson")
+  @WebResult(name = "Person")
   public Person getPerson(
       @WebParam(name = "TenantId") @XmlElement UUID tenantId,
       @WebParam(name = "PersonId") @XmlElement UUID personId)
@@ -426,6 +436,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the persons could not be retrieved
    */
   @WebMethod(operationName = "GetPersons")
+  @WebResult(name = "Persons")
   public Persons getPersons(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
@@ -453,6 +464,7 @@ public class PartyWebService {
    * @throws ServiceUnavailableException if the snapshots for the entity could not be retrieved
    */
   @WebMethod(operationName = "GetSnapshots")
+  @WebResult(name = "Snapshots")
   public Snapshots getSnapshots(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "EntityType") @XmlElement(required = true) EntityType entityType,

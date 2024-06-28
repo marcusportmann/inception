@@ -22,6 +22,7 @@ import digital.inception.party.model.*;
 import digital.inception.party.service.IPartyReferenceService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
+import jakarta.jws.WebResult;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -66,6 +67,7 @@ public class PartyReferenceWebService {
    *     be retrieved
    */
   @WebMethod(operationName = "GetAssociationPropertyTypes")
+  @WebResult(name = "AssociationPropertyType")
   public List<AssociationPropertyType> getAssociationPropertyTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -85,6 +87,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetAssociationTypes")
+  @WebResult(name = "AssociationType")
   public List<AssociationType> getAssociationTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -104,6 +107,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetAttributeTypeCategories")
+  @WebResult(name = "AttributeTypeCategory")
   public List<AttributeTypeCategory> getAttributeTypeCategories(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -122,6 +126,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the attribute type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetAttributeTypes")
+  @WebResult(name = "AttributeType")
   public List<AttributeType> getAttributeTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -140,6 +145,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the consent type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetConsentTypes")
+  @WebResult(name = "ConsentType")
   public List<ConsentType> getConsentTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -160,6 +166,7 @@ public class PartyReferenceWebService {
    *     be retrieved
    */
   @WebMethod(operationName = "GetContactMechanismPurposes")
+  @WebResult(name = "ContactMechanismPurpose")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -179,6 +186,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetContactMechanismRoles")
+  @WebResult(name = "ContactMechanismRole")
   public List<ContactMechanismRole> getContactMechanismRoles(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -198,6 +206,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetContactMechanismTypes")
+  @WebResult(name = "ContactMechanismType")
   public List<ContactMechanismType> getContactMechanismTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -217,6 +226,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetEmploymentStatuses")
+  @WebResult(name = "EmploymentStatus")
   public List<EmploymentStatus> getEmploymentStatuses(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -236,6 +246,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetEmploymentTypes")
+  @WebResult(name = "EmploymentType")
   public List<EmploymentType> getEmploymentTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -255,6 +266,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetExternalReferenceTypes")
+  @WebResult(name = "ExternalReferenceType")
   public List<ExternalReferenceType> getExternalReferenceTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -274,6 +286,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetFieldsOfStudy")
+  @WebResult(name = "FieldOfStudy")
   public List<FieldOfStudy> getFieldsOfStudy(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -292,6 +305,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the gender reference data could not be retrieved
    */
   @WebMethod(operationName = "GetGenders")
+  @WebResult(name = "Gender")
   public List<Gender> getGenders(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -311,6 +325,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetIdentificationTypes")
+  @WebResult(name = "IdentificationType")
   public List<IdentificationType> getIdentificationTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -331,6 +346,7 @@ public class PartyReferenceWebService {
    *     could not be retrieved
    */
   @WebMethod(operationName = "GetIndustryClassificationCategories")
+  @WebResult(name = "IndustryClassificationCategory")
   public List<IndustryClassificationCategory> getIndustryClassificationCategories(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -351,6 +367,7 @@ public class PartyReferenceWebService {
    *     not be retrieved
    */
   @WebMethod(operationName = "GetIndustryClassificationSystems")
+  @WebResult(name = "IndustryClassificationSystem")
   public List<IndustryClassificationSystem> getIndustryClassificationSystems(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -370,6 +387,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetIndustryClassifications")
+  @WebResult(name = "IndustryClassification")
   public List<IndustryClassification> getIndustryClassifications(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -388,6 +406,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the link type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetLinkTypes")
+  @WebResult(name = "LinkType")
   public List<LinkType> getLinkTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -407,6 +426,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetLockTypeCategories")
+  @WebResult(name = "LockTypeCategory")
   public List<LockTypeCategory> getLockTypeCategories(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -425,6 +445,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the lock type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetLockTypes")
+  @WebResult(name = "LockType")
   public List<LockType> getLockTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -443,6 +464,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the mandatary role reference data could not be retrieved
    */
   @WebMethod(operationName = "GetMandataryRoles")
+  @WebResult(name = "MandataryRole")
   public List<MandataryRole> getMandataryRoles(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -462,6 +484,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetMandatePropertyTypes")
+  @WebResult(name = "MandatePropertyType")
   public List<MandatePropertyType> getMandatePropertyTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -480,6 +503,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the mandate type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetMandateTypes")
+  @WebResult(name = "MandateType")
   public List<MandateType> getMandateTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -498,6 +522,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the marital status reference data could not be retrieved
    */
   @WebMethod(operationName = "GetMaritalStatuses")
+  @WebResult(name = "MaritalStatus")
   public List<MaritalStatus> getMaritalStatuses(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -516,6 +541,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the marriage type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetMarriageTypes")
+  @WebResult(name = "MarriageType")
   public List<MarriageType> getMarriageTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -535,6 +561,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetNextOfKinTypes")
+  @WebResult(name = "NextOfKinType")
   public List<NextOfKinType> getNextOfKinTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -553,6 +580,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the occupation reference data could not be retrieved
    */
   @WebMethod(operationName = "GetOccupations")
+  @WebResult(name = "Occupation")
   public List<Occupation> getOccupations(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -573,6 +601,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetPhysicalAddressPurposes")
+  @WebResult(name = "PhysicalAddressPurpose")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -592,6 +621,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetPhysicalAddressRoles")
+  @WebResult(name = "PhysicalAddressRole")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -611,6 +641,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetPhysicalAddressTypes")
+  @WebResult(name = "PhysicalAddressType")
   public List<PhysicalAddressType> getPhysicalAddressTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -631,6 +662,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetPreferenceTypeCategories")
+  @WebResult(name = "PreferenceTypeCategory")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -650,6 +682,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetPreferenceTypes")
+  @WebResult(name = "PreferenceType")
   public List<PreferenceType> getPreferenceTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -669,6 +702,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetQualificationTypes")
+  @WebResult(name = "QualificationType")
   public List<QualificationType> getQualificationTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -687,6 +721,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the race reference data could not be retrieved
    */
   @WebMethod(operationName = "GetRaces")
+  @WebResult(name = "Race")
   public List<Race> getRaces(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -706,6 +741,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetResidencePermitTypes")
+  @WebResult(name = "ResidencePermitType")
   public List<ResidencePermitType> getResidencePermitTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -725,6 +761,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetResidencyStatuses")
+  @WebResult(name = "ResidencyStatus")
   public List<ResidencyStatus> getResidencyStatuses(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -744,6 +781,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetResidentialTypes")
+  @WebResult(name = "ResidentialType")
   public List<ResidentialType> getResidentialTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -762,6 +800,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the role purpose reference data could not be retrieved
    */
   @WebMethod(operationName = "GetRolePurposes")
+  @WebResult(name = "RolePurpose")
   public List<RolePurpose> getRolePurposes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -779,6 +818,7 @@ public class PartyReferenceWebService {
    *     role type could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypeAttributeTypeConstraints")
+  @WebResult(name = "RoleTypeAttributeTypeConstraint")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(
       @WebParam(name = "RoleType") @XmlElement String roleType)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -795,6 +835,7 @@ public class PartyReferenceWebService {
    *     role type could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypePreferenceTypeConstraints")
+  @WebResult(name = "RoleTypePreferenceTypeConstraint")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
       @WebParam(name = "RoleType") @XmlElement String roleType)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -812,6 +853,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the role type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypes")
+  @WebResult(name = "RoleType")
   public List<RoleType> getRoleTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -831,6 +873,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetSegmentationTypes")
+  @WebResult(name = "SegmentationType")
   public List<SegmentationType> getSegmentationTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -849,6 +892,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the segment reference data could not be retrieved
    */
   @WebMethod(operationName = "GetSegments")
+  @WebResult(name = "Segment")
   public List<Segment> getSegments(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -867,6 +911,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the skill type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetSkillTypes")
+  @WebResult(name = "SkillType")
   public List<SkillType> getSkillTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -886,6 +931,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetSourceOfFundsTypes")
+  @WebResult(name = "SourceOfFundsType")
   public List<SourceOfFundsType> getSourceOfFundsTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -905,6 +951,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetSourceOfWealthTypes")
+  @WebResult(name = "SourceOfWealthType")
   public List<SourceOfWealthType> getSourceOfWealthTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -924,6 +971,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetStatusTypeCategories")
+  @WebResult(name = "StatusTypeCategory")
   public List<StatusTypeCategory> getStatusTypeCategories(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -942,6 +990,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the status type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetStatusTypes")
+  @WebResult(name = "StatusType")
   public List<StatusType> getStatusTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -961,6 +1010,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetTaxNumberTypes")
+  @WebResult(name = "TaxNumberType")
   public List<TaxNumberType> getTaxNumberTypes(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -980,6 +1030,7 @@ public class PartyReferenceWebService {
    *     retrieved
    */
   @WebMethod(operationName = "GetTimesToContact")
+  @WebResult(name = "TimeToContact")
   public List<TimeToContact> getTimesToContact(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
@@ -998,6 +1049,7 @@ public class PartyReferenceWebService {
    * @throws ServiceUnavailableException if the title reference data could not be retrieved
    */
   @WebMethod(operationName = "GetTitles")
+  @WebResult(name = "Title")
   public List<Title> getTitles(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)

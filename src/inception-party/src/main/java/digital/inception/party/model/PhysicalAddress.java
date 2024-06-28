@@ -43,9 +43,9 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
@@ -518,7 +518,7 @@ public class PhysicalAddress implements Serializable {
    * @param role the code for the physical address role
    * @param purposes the codes for the physical address purposes
    */
-  public PhysicalAddress(String type, String role, Set<String> purposes) {
+  public PhysicalAddress(String type, String role, List<String> purposes) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.role = role;
@@ -736,11 +736,11 @@ public class PhysicalAddress implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Purposes", required = true)
   @XmlElement(name = "Purpose", required = true)
-  public Set<String> getPurposes() {
+  public List<String> getPurposes() {
     if (this.purposes != null) {
-      return StringUtils.commaDelimitedListToSet(this.purposes);
+      return new ArrayList<>(StringUtils.commaDelimitedListToSet(this.purposes));
     } else {
-      return new LinkedHashSet<>();
+      return new ArrayList<>();
     }
   }
 
@@ -1003,7 +1003,7 @@ public class PhysicalAddress implements Serializable {
    *
    * @param purposes the codes for the physical address purposes
    */
-  public void setPurposes(Set<String> purposes) {
+  public void setPurposes(List<String> purposes) {
     if ((purposes != null) && (!purposes.isEmpty())) {
       this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
     } else {

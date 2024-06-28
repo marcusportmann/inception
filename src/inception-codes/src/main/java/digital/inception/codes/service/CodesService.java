@@ -628,6 +628,7 @@ public class CodesService implements ICodesService {
    * @param code the <b>Code</b> instance containing the updated information for the code
    */
   @Override
+  @Transactional
   public void updateCode(Code code)
       throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     validateCode(code);
@@ -652,6 +653,7 @@ public class CodesService implements ICodesService {
    *     code category
    */
   @Override
+  @Transactional
   public void updateCodeCategory(CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     validateCodeCategory(codeCategory);

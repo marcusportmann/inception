@@ -30,6 +30,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -90,7 +91,7 @@ public class TokenClaim implements Serializable {
    */
   public TokenClaim(String name, String[] values) {
     this.name = name;
-    this.values = List.of(values);
+    this.values = Arrays.asList(values);
   }
 
   /**

@@ -542,6 +542,11 @@
       <column name="enabled" value="true"/>
       <column name="status" value="unscheduled"/>
     </insert>
+    <insert tableName="scheduler_job_parameters">
+      <column name="job_id" value="DemoJob"/>
+      <column name="name" value="Parameter 1"/>
+      <column name="value" value="Value 1"/>
+    </insert>
 
     <!--    ____  _____ __  __  ___    ____    _  _____  _         -->
     <!--    |  _ \| ____|  \/  |/ _ \  |  _ \  / \|_   _|/ \       -->
@@ -1563,6 +1568,11 @@
       <column name="job_class" value="digital.inception.demo.job.DemoJob"/>
       <column name="enabled" type="boolean" value="1"/>
       <column name="status" value="unscheduled"/>
+    </insert>
+    <insert tableName="scheduler_job_parameters">
+      <column name="job_id" value="DemoJob"/>
+      <column name="name" value="Parameter 1"/>
+      <column name="value" value="Value 1"/>
     </insert>
 
     <!--    ____  _____ __  __  ___    ____    _  _____  _         -->

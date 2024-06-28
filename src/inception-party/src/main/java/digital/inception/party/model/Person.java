@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.jpa.JpaUtil;
 import digital.inception.party.constraint.ValidPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -37,6 +38,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -49,10 +51,11 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
@@ -84,7 +87,7 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "A person; any member of the species homo sapiens")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({"created", "type", "updated"})
+@JsonIgnoreProperties({"type"})
 @JsonPropertyOrder({
   "id",
   "tenantId",
@@ -219,7 +222,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Attribute> attributes = new HashSet<>();
+  private final List<Attribute> attributes = new ArrayList<>();
 
   /** The consents provided by the person. */
   @Valid
@@ -229,7 +232,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Consent> consents = new HashSet<>();
+  private final List<Consent> consents = new ArrayList<>();
 
   /** The contact mechanisms for the person. */
   @Valid
@@ -239,7 +242,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
+  private final List<ContactMechanism> contactMechanisms = new ArrayList<>();
 
   /** The educations for the person. */
   @Valid
@@ -249,7 +252,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("qualificationYear")
-  private final Set<Education> educations = new HashSet<>();
+  private final List<Education> educations = new ArrayList<>();
 
   /** The employments for the person. */
   @Valid
@@ -259,7 +262,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("startDate")
-  private final Set<Employment> employments = new HashSet<>();
+  private final List<Employment> employments = new ArrayList<>();
 
   /** The external references for the person. */
   @Valid
@@ -269,7 +272,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<ExternalReference> externalReferences = new HashSet<>();
+  private final List<ExternalReference> externalReferences = new ArrayList<>();
 
   /** The identifications for the person. */
   @Valid
@@ -279,7 +282,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Identification> identifications = new HashSet<>();
+  private final List<Identification> identifications = new ArrayList<>();
 
   /** The language proficiencies for the person. */
   @Valid
@@ -289,7 +292,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("language")
-  private final Set<LanguageProficiency> languageProficiencies = new HashSet<>();
+  private final List<LanguageProficiency> languageProficiencies = new ArrayList<>();
 
   /** The locks applied to the person. */
   @Valid
@@ -299,7 +302,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Lock> locks = new HashSet<>();
+  private final List<Lock> locks = new ArrayList<>();
 
   /** The next of kin for the person. */
   @Valid
@@ -309,7 +312,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<NextOfKin> nextOfKin = new HashSet<>();
+  private final List<NextOfKin> nextOfKin = new ArrayList<>();
 
   /** The physical addresses for the person. */
   @Valid
@@ -318,7 +321,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
+  private final List<PhysicalAddress> physicalAddresses = new ArrayList<>();
 
   /** The preferences for the person. */
   @Valid
@@ -328,7 +331,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Preference> preferences = new HashSet<>();
+  private final List<Preference> preferences = new ArrayList<>();
 
   /** The residence permits for the person. */
   @Valid
@@ -338,7 +341,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<ResidencePermit> residencePermits = new HashSet<>();
+  private final List<ResidencePermit> residencePermits = new ArrayList<>();
 
   /** The roles assigned directly to the person. */
   @Valid
@@ -348,7 +351,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Role> roles = new HashSet<>();
+  private final List<Role> roles = new ArrayList<>();
 
   /** The segment allocations for the person. */
   @Valid
@@ -358,7 +361,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("segment")
-  private final Set<SegmentAllocation> segmentAllocations = new HashSet<>();
+  private final List<SegmentAllocation> segmentAllocations = new ArrayList<>();
 
   /** The skills for the person. */
   @Valid
@@ -368,7 +371,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Skill> skills = new HashSet<>();
+  private final List<Skill> skills = new ArrayList<>();
 
   /** The sources of funds for the person. */
   @Valid
@@ -378,7 +381,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<SourceOfFunds> sourcesOfFunds = new HashSet<>();
+  private final List<SourceOfFunds> sourcesOfFunds = new ArrayList<>();
 
   /** The sources of wealth for the person. */
   @Valid
@@ -388,7 +391,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<SourceOfWealth> sourcesOfWealth = new HashSet<>();
+  private final List<SourceOfWealth> sourcesOfWealth = new ArrayList<>();
 
   /** The statuses assigned to the person. */
   @Valid
@@ -398,7 +401,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Status> statuses = new HashSet<>();
+  private final List<Status> statuses = new ArrayList<>();
 
   /** The tax numbers for the person. */
   @Valid
@@ -408,7 +411,7 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<TaxNumber> taxNumbers = new HashSet<>();
+  private final List<TaxNumber> taxNumbers = new ArrayList<>();
 
   /**
    * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of citizenship for the person.
@@ -950,7 +953,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("attributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  public Set<Attribute> getAttributes() {
+  public List<Attribute> getAttributes() {
     return attributes;
   }
 
@@ -975,7 +978,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("consentReference")
   @XmlElementWrapper(name = "Consents")
   @XmlElement(name = "Consent")
-  public Set<Consent> getConsents() {
+  public List<Consent> getConsents() {
     return consents;
   }
 
@@ -1020,7 +1023,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("contactMechanismReference")
   @XmlElementWrapper(name = "ContactMechanisms")
   @XmlElement(name = "ContactMechanism")
-  public Set<ContactMechanism> getContactMechanisms() {
+  public List<ContactMechanism> getContactMechanisms() {
     return contactMechanisms;
   }
 
@@ -1035,10 +1038,13 @@ public class Person extends PartyBase implements Serializable {
   @XmlElementWrapper(name = "CountriesOfCitizenship")
   @XmlElement(name = "CountryOfCitizenship")
   @Size(max = 10)
-  public Set<String> getCountriesOfCitizenship() {
-    return Set.of(
-        StringUtils.removeDuplicateStrings(
-            StringUtils.commaDelimitedListToStringArray(countriesOfCitizenship)));
+  public List<String> getCountriesOfCitizenship() {
+    // NOTE: The complexity below is required for the JAX-WS deserialization, which wants a
+    //       mutable list that can be cleared.
+    return new ArrayList<>(
+        Arrays.asList(
+            StringUtils.removeDuplicateStrings(
+                StringUtils.commaDelimitedListToStringArray(countriesOfCitizenship))));
   }
 
   /**
@@ -1053,10 +1059,13 @@ public class Person extends PartyBase implements Serializable {
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
   @Size(max = 10)
-  public Set<String> getCountriesOfTaxResidence() {
-    return Set.of(
-        StringUtils.removeDuplicateStrings(
-            StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence)));
+  public List<String> getCountriesOfTaxResidence() {
+    // NOTE: The complexity below is required for the JAX-WS deserialization, which wants a
+    //       mutable list that can be cleared.
+    return new ArrayList<>(
+        Arrays.asList(
+            StringUtils.removeDuplicateStrings(
+                StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence))));
   }
 
   /**
@@ -1136,7 +1145,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("educationReference")
   @XmlElementWrapper(name = "Educations")
   @XmlElement(name = "Education")
-  public Set<Education> getEducations() {
+  public List<Education> getEducations() {
     return educations;
   }
 
@@ -1187,7 +1196,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("employmentReference")
   @XmlElementWrapper(name = "Employments")
   @XmlElement(name = "Employment")
-  public Set<Employment> getEmployments() {
+  public List<Employment> getEmployments() {
     return employments;
   }
 
@@ -1214,7 +1223,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("externalReferenceReference")
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  public Set<ExternalReference> getExternalReferences() {
+  public List<ExternalReference> getExternalReferences() {
     return externalReferences;
   }
 
@@ -1224,10 +1233,10 @@ public class Person extends PartyBase implements Serializable {
    * @param type the code for the external reference type
    * @return the external references with the specified type for the person
    */
-  public Set<ExternalReference> getExternalReferencesWithType(String type) {
+  public List<ExternalReference> getExternalReferencesWithType(String type) {
     return externalReferences.stream()
         .filter(externalReference -> Objects.equals(externalReference.getType(), type))
-        .collect(Collectors.toSet());
+        .collect(Collectors.toList());
   }
 
   /**
@@ -1372,7 +1381,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("identificationReference")
   @XmlElementWrapper(name = "Identifications")
   @XmlElement(name = "Identification")
-  public Set<Identification> getIdentifications() {
+  public List<Identification> getIdentifications() {
     return identifications;
   }
 
@@ -1410,7 +1419,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("languageProficiencyReference")
   @XmlElementWrapper(name = "LanguageProficiencies")
   @XmlElement(name = "LanguageProficiency")
-  public Set<LanguageProficiency> getLanguageProficiencies() {
+  public List<LanguageProficiency> getLanguageProficiencies() {
     return languageProficiencies;
   }
 
@@ -1448,7 +1457,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("lockReference")
   @XmlElementWrapper(name = "Locks")
   @XmlElement(name = "Lock")
-  public Set<Lock> getLocks() {
+  public List<Lock> getLocks() {
     return locks;
   }
 
@@ -1559,7 +1568,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("nextOfKinReference")
   @XmlElementWrapper(name = "NextOfKin")
   @XmlElement(name = "NextOfKin")
-  public Set<NextOfKin> getNextOfKin() {
+  public List<NextOfKin> getNextOfKin() {
     return nextOfKin;
   }
 
@@ -1642,7 +1651,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("physicalAddressReference")
   @XmlElementWrapper(name = "PhysicalAddresses")
   @XmlElement(name = "PhysicalAddress")
-  public Set<PhysicalAddress> getPhysicalAddresses() {
+  public List<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
   }
 
@@ -1669,7 +1678,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("preferenceReference")
   @XmlElementWrapper(name = "Preferences")
   @XmlElement(name = "Preference")
-  public Set<Preference> getPreferences() {
+  public List<Preference> getPreferences() {
     return preferences;
   }
 
@@ -1710,7 +1719,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("residencePermitReference")
   @XmlElementWrapper(name = "ResidencePermits")
   @XmlElement(name = "ResidencePermit")
-  public Set<ResidencePermit> getResidencePermits() {
+  public List<ResidencePermit> getResidencePermits() {
     return residencePermits;
   }
 
@@ -1759,7 +1768,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("roleReference")
   @XmlElementWrapper(name = "Roles")
   @XmlElement(name = "Role")
-  public Set<Role> getRoles() {
+  public List<Role> getRoles() {
     return roles;
   }
 
@@ -1786,7 +1795,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("segmentAllocationReference")
   @XmlElementWrapper(name = "SegmentAllocations")
   @XmlElement(name = "SegmentAllocation")
-  public Set<SegmentAllocation> getSegmentAllocations() {
+  public List<SegmentAllocation> getSegmentAllocations() {
     return segmentAllocations;
   }
 
@@ -1811,7 +1820,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("skillReference")
   @XmlElementWrapper(name = "Skills")
   @XmlElement(name = "Skill")
-  public Set<Skill> getSkills() {
+  public List<Skill> getSkills() {
     return skills;
   }
 
@@ -1851,7 +1860,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("sourceOfFundsReference")
   @XmlElementWrapper(name = "SourcesOfFunds")
   @XmlElement(name = "SourceOfFunds")
-  public Set<SourceOfFunds> getSourcesOfFunds() {
+  public List<SourceOfFunds> getSourcesOfFunds() {
     return sourcesOfFunds;
   }
 
@@ -1865,7 +1874,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("sourceOfWealthReference")
   @XmlElementWrapper(name = "SourcesOfWealth")
   @XmlElement(name = "SourceOfWealth")
-  public Set<SourceOfWealth> getSourcesOfWealth() {
+  public List<SourceOfWealth> getSourcesOfWealth() {
     return sourcesOfWealth;
   }
 
@@ -1890,7 +1899,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("statusReference")
   @XmlElementWrapper(name = "Statuses")
   @XmlElement(name = "Status")
-  public Set<Status> getStatuses() {
+  public List<Status> getStatuses() {
     return statuses;
   }
 
@@ -1929,7 +1938,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("taxNumberReference")
   @XmlElementWrapper(name = "TaxNumbers")
   @XmlElement(name = "TaxNumber")
-  public Set<TaxNumber> getTaxNumbers() {
+  public List<TaxNumber> getTaxNumbers() {
     return taxNumbers;
   }
 
@@ -2456,7 +2465,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param attributes the attributes for the person
    */
-  public void setAttributes(Set<Attribute> attributes) {
+  public void setAttributes(List<Attribute> attributes) {
     attributes.forEach(attribute -> attribute.setParty(this));
     this.attributes.clear();
     this.attributes.addAll(attributes);
@@ -2467,7 +2476,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param consents the consents provided by the person
    */
-  public void setConsents(Set<Consent> consents) {
+  public void setConsents(List<Consent> consents) {
     consents.forEach(consent -> consent.setPerson(this));
     this.consents.clear();
     this.consents.addAll(consents);
@@ -2478,7 +2487,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param contactMechanisms the contact mechanisms for the person
    */
-  public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
+  public void setContactMechanisms(List<ContactMechanism> contactMechanisms) {
     contactMechanisms.forEach(contactMechanism -> contactMechanism.setParty(this));
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
@@ -2490,7 +2499,7 @@ public class Person extends PartyBase implements Serializable {
    * @param countriesOfCitizenship the ISO 3166-1 alpha-2 codes for the countries of citizenship for
    *     the person
    */
-  public void setCountriesOfCitizenship(Set<String> countriesOfCitizenship) {
+  public void setCountriesOfCitizenship(List<String> countriesOfCitizenship) {
     this.countriesOfCitizenship =
         StringUtils.collectionToDelimitedString(countriesOfCitizenship, ",");
   }
@@ -2501,7 +2510,7 @@ public class Person extends PartyBase implements Serializable {
    * @param countriesOfTaxResidence the ISO 3166-1 alpha-2 codes for the countries of tax residence
    *     for the person
    */
-  public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
+  public void setCountriesOfTaxResidence(List<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
         StringUtils.collectionToDelimitedString(countriesOfTaxResidence, ",");
   }
@@ -2568,7 +2577,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param educations the educations for the person
    */
-  public void setEducations(Set<Education> educations) {
+  public void setEducations(List<Education> educations) {
     educations.forEach(education -> education.setPerson(this));
     this.educations.clear();
     this.educations.addAll(educations);
@@ -2597,7 +2606,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param employments the employments for the person
    */
-  public void setEmployments(Set<Employment> employments) {
+  public void setEmployments(List<Employment> employments) {
     employments.forEach(employment -> employment.setPerson(this));
     this.employments.clear();
     this.employments.addAll(employments);
@@ -2608,7 +2617,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param externalReferences the external references for the person
    */
-  public void setExternalReferences(Set<ExternalReference> externalReferences) {
+  public void setExternalReferences(List<ExternalReference> externalReferences) {
     externalReferences.forEach(externalReference -> externalReference.setParty(this));
     this.externalReferences.clear();
     this.externalReferences.addAll(externalReferences);
@@ -2703,7 +2712,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param identifications the identifications for the person
    */
-  public void setIdentifications(Set<Identification> identifications) {
+  public void setIdentifications(List<Identification> identifications) {
     identifications.forEach(identification -> identification.setParty(this));
     this.identifications.clear();
     this.identifications.addAll(identifications);
@@ -2732,7 +2741,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param languageProficiencies the language proficiencies for the person
    */
-  public void setLanguageProficiencies(Set<LanguageProficiency> languageProficiencies) {
+  public void setLanguageProficiencies(List<LanguageProficiency> languageProficiencies) {
     languageProficiencies.forEach(languageProficiency -> languageProficiency.setPerson(this));
     this.languageProficiencies.clear();
     this.languageProficiencies.addAll(languageProficiencies);
@@ -2743,7 +2752,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param locks the locks for the person
    */
-  public void setLocks(Set<Lock> locks) {
+  public void setLocks(List<Lock> locks) {
     locks.forEach(lock -> lock.setParty(this));
     this.locks.clear();
     this.locks.addAll(locks);
@@ -2826,7 +2835,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param nextOfKin the next of kin for the person
    */
-  public void setNextOfKin(Set<NextOfKin> nextOfKin) {
+  public void setNextOfKin(List<NextOfKin> nextOfKin) {
     nextOfKin.forEach(aNextOfKin -> aNextOfKin.setPerson(this));
     this.nextOfKin.clear();
     this.nextOfKin.addAll(nextOfKin);
@@ -2846,7 +2855,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param physicalAddresses the physical addresses for the person
    */
-  public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
+  public void setPhysicalAddresses(List<PhysicalAddress> physicalAddresses) {
     physicalAddresses.forEach(physicalAddress -> physicalAddress.setParty(this));
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
@@ -2857,7 +2866,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param preferences the preferences for the person
    */
-  public void setPreferences(Set<Preference> preferences) {
+  public void setPreferences(List<Preference> preferences) {
     preferences.forEach(preference -> preference.setParty(this));
     this.preferences.clear();
     this.preferences.addAll(preferences);
@@ -2889,7 +2898,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param residencePermits the residence permits for the person
    */
-  public void setResidencePermits(Set<ResidencePermit> residencePermits) {
+  public void setResidencePermits(List<ResidencePermit> residencePermits) {
     preferences.forEach(residencePermit -> residencePermit.setParty(this));
     this.residencePermits.clear();
     this.residencePermits.addAll(residencePermits);
@@ -2918,7 +2927,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param roles the roles assigned directly to the person
    */
-  public void setRoles(Set<Role> roles) {
+  public void setRoles(List<Role> roles) {
     roles.forEach(role -> role.setParty(this));
     this.roles.clear();
     this.roles.addAll(roles);
@@ -2929,7 +2938,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param segmentAllocations the segment allocations for the person
    */
-  public void setSegmentAllocations(Set<SegmentAllocation> segmentAllocations) {
+  public void setSegmentAllocations(List<SegmentAllocation> segmentAllocations) {
     segmentAllocations.forEach(segmentAllocation -> segmentAllocation.setParty(this));
     this.segmentAllocations.clear();
     this.segmentAllocations.addAll(segmentAllocations);
@@ -2940,7 +2949,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param skills the skills for the person
    */
-  public void setSkills(Set<Skill> skills) {
+  public void setSkills(List<Skill> skills) {
     skills.forEach(skill -> skill.setPerson(this));
     this.skills.clear();
     this.skills.addAll(skills);
@@ -2951,7 +2960,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param sourcesOfFunds the sources of funds for the person
    */
-  public void setSourcesOfFunds(Set<SourceOfFunds> sourcesOfFunds) {
+  public void setSourcesOfFunds(List<SourceOfFunds> sourcesOfFunds) {
     sourcesOfFunds.forEach(sourceOfFunds -> sourceOfFunds.setPerson(this));
     this.sourcesOfFunds.clear();
     this.sourcesOfFunds.addAll(sourcesOfFunds);
@@ -2962,7 +2971,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param sourcesOfWealth the sources of wealth for the person
    */
-  public void setSourcesOfWealth(Set<SourceOfWealth> sourcesOfWealth) {
+  public void setSourcesOfWealth(List<SourceOfWealth> sourcesOfWealth) {
     sourcesOfWealth.forEach(sourceOfWealth -> sourceOfWealth.setPerson(this));
     this.sourcesOfWealth.clear();
     this.sourcesOfWealth.addAll(sourcesOfWealth);
@@ -2973,7 +2982,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param statuses the statuses for the person
    */
-  public void setStatuses(Set<Status> statuses) {
+  public void setStatuses(List<Status> statuses) {
     statuses.forEach(status -> status.setParty(this));
     this.statuses.clear();
     this.statuses.addAll(statuses);
@@ -2995,7 +3004,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param taxNumbers the tax numbers for the person
    */
-  public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
+  public void setTaxNumbers(List<TaxNumber> taxNumbers) {
     taxNumbers.forEach(taxNumber -> taxNumber.setParty(this));
     this.taxNumbers.clear();
     this.taxNumbers.addAll(taxNumbers);
@@ -3026,6 +3035,19 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  /**
+   * The callback method in JAXB (Java Architecture for XML Binding) that is invoked after an object
+   * is unmarshalled from XML. This method can be used to perform post-processing on the newly
+   * unmarshalled object. It provides a way to enhance the deserialization process by allowing
+   * additional initialization, validation, or linking of objects within the object graph.
+   *
+   * @param unmarshaller the XML unmarshaller
+   * @param parent the parent object
+   */
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
+    JpaUtil.linkEntities(this);
   }
 
   /** Derive the name of the person from the given name, middle name(s) and surname. */

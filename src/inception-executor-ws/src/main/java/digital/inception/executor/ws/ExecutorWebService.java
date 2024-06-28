@@ -190,7 +190,7 @@ public class ExecutorWebService {
    * @throws ServiceUnavailableException if the tasks summaries could not be retrieved
    */
   @WebMethod(operationName = "GetTaskSummaries")
-  @WebResult(name = "TaskSummary")
+  @WebResult(name = "TaskSummaries")
   public TaskSummaries getTaskSummaries(
       @WebParam(name = "Type") @XmlElement String type,
       @WebParam(name = "Status") @XmlElement TaskStatus status,

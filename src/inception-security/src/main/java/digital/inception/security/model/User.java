@@ -41,9 +41,9 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -113,7 +113,7 @@ public class User implements Serializable {
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "users")
-  private Set<Group> groups = new HashSet<>();
+  private List<Group> groups = new ArrayList<>();
 
   /** The ID for the user. */
   @JsonIgnore
@@ -211,7 +211,7 @@ public class User implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", length = 50, nullable = false)
   private UserStatus status;
 
   /** The ID for the user directory the user is associated with. */
@@ -275,7 +275,7 @@ public class User implements Serializable {
    *
    * @return the groups the user is associated with
    */
-  public Set<Group> getGroups() {
+  public List<Group> getGroups() {
     return groups;
   }
 
@@ -454,7 +454,7 @@ public class User implements Serializable {
    *
    * @param groups the groups the user is associated with
    */
-  public void setGroups(Set<Group> groups) {
+  public void setGroups(List<Group> groups) {
     this.groups = groups;
   }
 

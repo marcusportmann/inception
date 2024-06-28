@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.jpa.JpaUtil;
 import digital.inception.party.constraint.ValidOrganization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -36,6 +37,7 @@ import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -48,7 +50,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -82,7 +85,7 @@ import org.springframework.util.StringUtils;
     description =
         "An organised group of people with a particular purpose, such as a business or government department")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({"created", "type", "updated"})
+@JsonIgnoreProperties({"type"})
 @JsonPropertyOrder({
   "id",
   "tenantId",
@@ -149,7 +152,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Attribute> attributes = new HashSet<>();
+  private final List<Attribute> attributes = new ArrayList<>();
 
   /** The contact mechanisms for the organization. */
   @Valid
@@ -159,7 +162,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
+  private final List<ContactMechanism> contactMechanisms = new ArrayList<>();
 
   /** The external references for the organization. */
   @Valid
@@ -169,7 +172,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<ExternalReference> externalReferences = new HashSet<>();
+  private final List<ExternalReference> externalReferences = new ArrayList<>();
 
   /** The identifications for the organization. */
   @Valid
@@ -179,7 +182,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Identification> identifications = new HashSet<>();
+  private final List<Identification> identifications = new ArrayList<>();
 
   /** The industry allocations for the organization. */
   @Valid
@@ -189,7 +192,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("system, industry")
-  private final Set<IndustryAllocation> industryAllocations = new HashSet<>();
+  private final List<IndustryAllocation> industryAllocations = new ArrayList<>();
 
   /** The locks applied to the organization. */
   @Valid
@@ -199,7 +202,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Lock> locks = new HashSet<>();
+  private final List<Lock> locks = new ArrayList<>();
 
   /** The physical addresses for the organization. */
   @Valid
@@ -208,7 +211,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
+  private final List<PhysicalAddress> physicalAddresses = new ArrayList<>();
 
   /** The preferences for the organization. */
   @Valid
@@ -218,7 +221,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Preference> preferences = new HashSet<>();
+  private final List<Preference> preferences = new ArrayList<>();
 
   /** The roles assigned directly to the organization. */
   @Valid
@@ -228,7 +231,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Role> roles = new HashSet<>();
+  private final List<Role> roles = new ArrayList<>();
 
   /** The segment allocations for the organization. */
   @Valid
@@ -238,7 +241,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("segment")
-  private final Set<SegmentAllocation> segmentAllocations = new HashSet<>();
+  private final List<SegmentAllocation> segmentAllocations = new ArrayList<>();
 
   /** The statuses assigned to the organization. */
   @Valid
@@ -248,7 +251,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<Status> statuses = new HashSet<>();
+  private final List<Status> statuses = new ArrayList<>();
 
   /** The tax numbers for the organization. */
   @Valid
@@ -258,7 +261,7 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("type")
-  private final Set<TaxNumber> taxNumbers = new HashSet<>();
+  private final List<TaxNumber> taxNumbers = new ArrayList<>();
 
   /**
    * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the
@@ -541,7 +544,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("attributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  public Set<Attribute> getAttributes() {
+  public List<Attribute> getAttributes() {
     return attributes;
   }
 
@@ -586,7 +589,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("contactMechanismReference")
   @XmlElementWrapper(name = "ContactMechanisms")
   @XmlElement(name = "ContactMechanism")
-  public Set<ContactMechanism> getContactMechanisms() {
+  public List<ContactMechanism> getContactMechanisms() {
     return contactMechanisms;
   }
 
@@ -631,7 +634,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("externalReferenceReference")
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  public Set<ExternalReference> getExternalReferences() {
+  public List<ExternalReference> getExternalReferences() {
     return externalReferences;
   }
 
@@ -755,7 +758,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("identificationReference")
   @XmlElementWrapper(name = "Identifications")
   @XmlElement(name = "Identification")
-  public Set<Identification> getIdentifications() {
+  public List<Identification> getIdentifications() {
     return identifications;
   }
 
@@ -789,7 +792,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("industryAllocationReference")
   @XmlElementWrapper(name = "IndustryAllocations")
   @XmlElement(name = "IndustryAllocation")
-  public Set<IndustryAllocation> getIndustryAllocations() {
+  public List<IndustryAllocation> getIndustryAllocations() {
     return industryAllocations;
   }
 
@@ -814,7 +817,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("lockReference")
   @XmlElementWrapper(name = "Locks")
   @XmlElement(name = "Lock")
-  public Set<Lock> getLocks() {
+  public List<Lock> getLocks() {
     return locks;
   }
 
@@ -872,7 +875,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("physicalAddressReference")
   @XmlElementWrapper(name = "PhysicalAddresses")
   @XmlElement(name = "PhysicalAddress")
-  public Set<PhysicalAddress> getPhysicalAddresses() {
+  public List<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
   }
 
@@ -899,7 +902,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("preferenceReference")
   @XmlElementWrapper(name = "Preferences")
   @XmlElement(name = "Preference")
-  public Set<Preference> getPreferences() {
+  public List<Preference> getPreferences() {
     return preferences;
   }
 
@@ -925,7 +928,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("roleReference")
   @XmlElementWrapper(name = "Roles")
   @XmlElement(name = "Role")
-  public Set<Role> getRoles() {
+  public List<Role> getRoles() {
     return roles;
   }
 
@@ -952,7 +955,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("segmentAllocationReference")
   @XmlElementWrapper(name = "SegmentAllocations")
   @XmlElement(name = "SegmentAllocation")
-  public Set<SegmentAllocation> getSegmentAllocations() {
+  public List<SegmentAllocation> getSegmentAllocations() {
     return segmentAllocations;
   }
 
@@ -977,7 +980,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("statusReference")
   @XmlElementWrapper(name = "Statuses")
   @XmlElement(name = "Status")
-  public Set<Status> getStatuses() {
+  public List<Status> getStatuses() {
     return statuses;
   }
 
@@ -1004,7 +1007,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("taxNumberReference")
   @XmlElementWrapper(name = "TaxNumbers")
   @XmlElement(name = "TaxNumber")
-  public Set<TaxNumber> getTaxNumbers() {
+  public List<TaxNumber> getTaxNumbers() {
     return taxNumbers;
   }
 
@@ -1322,7 +1325,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param attributes the attributes for the organization
    */
-  public void setAttributes(Set<Attribute> attributes) {
+  public void setAttributes(List<Attribute> attributes) {
     attributes.forEach(attribute -> attribute.setParty(this));
     this.attributes.clear();
     this.attributes.addAll(attributes);
@@ -1333,7 +1336,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param contactMechanisms the contact mechanisms for the organization
    */
-  public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
+  public void setContactMechanisms(List<ContactMechanism> contactMechanisms) {
     contactMechanisms.forEach(contactMechanism -> contactMechanism.setParty(this));
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
@@ -1345,7 +1348,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param countriesOfTaxResidence the ISO 3166-1 alpha-2 codes for the countries of tax residence
    *     for the organization
    */
-  public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
+  public void setCountriesOfTaxResidence(List<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
         StringUtils.collectionToDelimitedString(countriesOfTaxResidence, ",");
   }
@@ -1366,7 +1369,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param externalReferences the external references for the organization
    */
-  public void setExternalReferences(Set<ExternalReference> externalReferences) {
+  public void setExternalReferences(List<ExternalReference> externalReferences) {
     externalReferences.forEach(externalReference -> externalReference.setParty(this));
     this.externalReferences.clear();
     this.externalReferences.addAll(externalReferences);
@@ -1434,7 +1437,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param identifications the identifications for the organization
    */
-  public void setIdentifications(Set<Identification> identifications) {
+  public void setIdentifications(List<Identification> identifications) {
     identifications.forEach(identification -> identification.setParty(this));
     this.identifications.clear();
     this.identifications.addAll(identifications);
@@ -1445,7 +1448,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param industryAllocations the industry allocations for the organization
    */
-  public void setIndustryAllocations(Set<IndustryAllocation> industryAllocations) {
+  public void setIndustryAllocations(List<IndustryAllocation> industryAllocations) {
     industryAllocations.forEach(industryAllocation -> industryAllocation.setOrganization(this));
     this.industryAllocations.clear();
     this.industryAllocations.addAll(industryAllocations);
@@ -1456,7 +1459,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param locks the locks for the organization
    */
-  public void setLocks(Set<Lock> locks) {
+  public void setLocks(List<Lock> locks) {
     locks.forEach(lock -> lock.setParty(this));
     this.locks.clear();
     this.locks.addAll(locks);
@@ -1477,7 +1480,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param physicalAddresses the physical addresses for the organization
    */
-  public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
+  public void setPhysicalAddresses(List<PhysicalAddress> physicalAddresses) {
     physicalAddresses.forEach(physicalAddress -> physicalAddress.setParty(this));
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
@@ -1488,7 +1491,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param preferences the preferences for the organization
    */
-  public void setPreferences(Set<Preference> preferences) {
+  public void setPreferences(List<Preference> preferences) {
     preferences.forEach(preference -> preference.setParty(this));
     this.preferences.clear();
     this.preferences.addAll(preferences);
@@ -1499,7 +1502,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param roles the roles
    */
-  public void setRoles(Set<Role> roles) {
+  public void setRoles(List<Role> roles) {
     roles.forEach(role -> role.setParty(this));
     this.roles.clear();
     this.roles.addAll(roles);
@@ -1510,7 +1513,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param segmentAllocations the segment allocations for the organization
    */
-  public void setSegmentAllocations(Set<SegmentAllocation> segmentAllocations) {
+  public void setSegmentAllocations(List<SegmentAllocation> segmentAllocations) {
     segmentAllocations.forEach(segmentAllocation -> segmentAllocation.setParty(this));
     this.segmentAllocations.clear();
     this.segmentAllocations.addAll(segmentAllocations);
@@ -1521,7 +1524,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param statuses the statuses for the organization
    */
-  public void setStatuses(Set<Status> statuses) {
+  public void setStatuses(List<Status> statuses) {
     statuses.forEach(status -> status.setParty(this));
     this.statuses.clear();
     this.statuses.addAll(statuses);
@@ -1532,7 +1535,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param taxNumbers the tax numbers for the organization
    */
-  public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
+  public void setTaxNumbers(List<TaxNumber> taxNumbers) {
     taxNumbers.forEach(taxNumber -> taxNumber.setParty(this));
     this.taxNumbers.clear();
     this.taxNumbers.addAll(taxNumbers);
@@ -1545,5 +1548,18 @@ public class Organization extends PartyBase implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     super.setTenantId(tenantId);
+  }
+
+  /**
+   * The callback method in JAXB (Java Architecture for XML Binding) that is invoked after an object
+   * is unmarshalled from XML. This method can be used to perform post-processing on the newly
+   * unmarshalled object. It provides a way to enhance the deserialization process by allowing
+   * additional initialization, validation, or linking of objects within the object graph.
+   *
+   * @param unmarshaller the XML unmarshaller
+   * @param parent the parent object
+   */
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
+    JpaUtil.linkEntities(this);
   }
 }

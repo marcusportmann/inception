@@ -40,6 +40,9 @@ import java.util.Date;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class ISO8601Util {
 
+  private static final ThreadLocal<DateTimeFormatter> basicLocalDateFormatter =
+      ThreadLocal.withInitial(() -> DateTimeFormatter.BASIC_ISO_DATE);
+
   private static final ThreadLocal<SimpleDateFormat> dateFormatter =
       ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
 
@@ -339,7 +342,15 @@ public final class ISO8601Util {
    * @return the <b>LocalDate</b> instance for the ISO 8601 string
    */
   public static LocalDate toLocalDate(String iso8601string) {
-    return LocalDate.parse(iso8601string, localDateFormatter.get());
+    if (iso8601string == null) {
+      return null;
+    }
+
+    if ((iso8601string.length() == 8) && (!iso8601string.contains("-"))) {
+      return LocalDate.parse(iso8601string, basicLocalDateFormatter.get());
+    } else {
+      return LocalDate.parse(iso8601string, localDateFormatter.get());
+    }
   }
 
   /**
@@ -349,6 +360,10 @@ public final class ISO8601Util {
    * @return the <b>LocalDateTime</b> instance for the ISO 8601 format string
    */
   public static LocalDateTime toLocalDateTime(String iso8601string) {
+    if (iso8601string == null) {
+      return null;
+    }
+
     TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);
 
     if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)) {

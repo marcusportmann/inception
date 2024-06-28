@@ -42,9 +42,9 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import org.springframework.util.StringUtils;
 
 /**
@@ -197,7 +197,7 @@ public class ContactMechanism implements Serializable {
    * @param value the value for the contact mechanism
    * @param purposes the codes for the contact mechanism purposes
    */
-  public ContactMechanism(String type, String role, String value, Set<String> purposes) {
+  public ContactMechanism(String type, String role, String value, List<String> purposes) {
     this.type = type;
     this.role = role;
     this.value = value;
@@ -255,11 +255,11 @@ public class ContactMechanism implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Purposes", required = true)
   @XmlElement(name = "Purpose", required = true)
-  public Set<String> getPurposes() {
+  public List<String> getPurposes() {
     if (this.purposes != null) {
-      return StringUtils.commaDelimitedListToSet(this.purposes);
+      return new ArrayList<>(StringUtils.commaDelimitedListToSet(this.purposes));
     } else {
-      return new LinkedHashSet<>();
+      return new ArrayList<>();
     }
   }
 
@@ -329,7 +329,7 @@ public class ContactMechanism implements Serializable {
    *
    * @param purposes the codes for the contact mechanism purposes
    */
-  public void setPurposes(Set<String> purposes) {
+  public void setPurposes(List<String> purposes) {
     if ((purposes != null) && (!purposes.isEmpty())) {
       this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
     } else {

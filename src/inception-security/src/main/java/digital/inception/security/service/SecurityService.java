@@ -2805,6 +2805,7 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
+  @Transactional
   public void updatePolicy(Policy policy)
       throws InvalidArgumentException,
           InvalidPolicyDataException,

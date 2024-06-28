@@ -64,7 +64,7 @@ public class JobParameter implements Serializable {
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The job the job parameter is associated with. */
-  @JsonBackReference
+  @JsonBackReference("parameterReference")
   @XmlTransient
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "job_id")
