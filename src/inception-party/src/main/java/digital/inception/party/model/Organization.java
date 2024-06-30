@@ -26,15 +26,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.jpa.JpaUtil;
+import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
 import digital.inception.party.constraint.ValidOrganization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.Unmarshaller;
@@ -57,7 +60,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>Organization</b> class holds the information for an organization, which is an organised
@@ -263,15 +265,11 @@ public class Organization extends PartyBase implements Serializable {
   @OrderBy("type")
   private final List<TaxNumber> taxNumbers = new ArrayList<>();
 
-  /**
-   * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   * organization.
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Size(max = 50)
+  /** The ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization. */
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
   @Column(name = "countries_of_tax_residence", length = 50)
-  private String countriesOfTaxResidence;
+  private List<String> countriesOfTaxResidence;
 
   /**
    * The ISO 3166-1 alpha-2 code for the country of issue for the identification for the
@@ -604,11 +602,8 @@ public class Organization extends PartyBase implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
-  @Size(max = 10)
-  public Set<String> getCountriesOfTaxResidence() {
-    return Set.of(
-        StringUtils.removeDuplicateStrings(
-            StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence)));
+  public List<String> getCountriesOfTaxResidence() {
+    return countriesOfTaxResidence;
   }
 
   /**
@@ -861,7 +856,7 @@ public class Organization extends PartyBase implements Serializable {
         .filter(
             physicalAddress ->
                 Objects.equals(physicalAddress.getType(), type)
-                    && physicalAddress.getPurposes().contains(purpose))
+                    && physicalAddress.hasPurpose(purpose))
         .findFirst();
   }
 
@@ -1349,8 +1344,7 @@ public class Organization extends PartyBase implements Serializable {
    *     for the organization
    */
   public void setCountriesOfTaxResidence(List<String> countriesOfTaxResidence) {
-    this.countriesOfTaxResidence =
-        StringUtils.collectionToDelimitedString(countriesOfTaxResidence, ",");
+    this.countriesOfTaxResidence = countriesOfTaxResidence;
   }
 
   /**
@@ -1360,8 +1354,10 @@ public class Organization extends PartyBase implements Serializable {
    *     organization
    */
   @JsonIgnore
+  @XmlTransient
+  @Transient
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
-    this.countriesOfTaxResidence = countryOfTaxResidence;
+    this.countriesOfTaxResidence = new ArrayList<>(List.of(countryOfTaxResidence));
   }
 
   /**

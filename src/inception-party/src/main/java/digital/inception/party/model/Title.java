@@ -16,12 +16,13 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -31,15 +32,14 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>Title</b> class holds the information for a title.
@@ -112,13 +112,18 @@ public class Title implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The comma-delimited codes for the genders the title is applicable to. */
-  @JsonIgnore
-  @XmlTransient
+  /** The codes for the genders the title is applicable to. */
+  @Schema(
+      description = "The codes for the genders the title is applicable to",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "Genders", required = true)
+  @XmlElement(name = "Gender", required = true)
   @NotNull
-  @Size(min = 1, max = 310)
-  @Column(name = "genders", length = 310, nullable = false)
-  private String genders;
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Column(name = "genders", length = 510, nullable = false)
+  private List<String> genders;
 
   /** The Unicode locale identifier for the title. */
   @Schema(
@@ -215,13 +220,8 @@ public class Title implements Serializable {
    *
    * @return the codes for the genders the title is applicable to
    */
-  @Schema(
-      description = "The codes for the genders the title is applicable to",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Genders", required = true)
-  public String[] getGenders() {
-    return StringUtils.removeDuplicateStrings(StringUtils.commaDelimitedListToStringArray(genders));
+  public List<String> getGenders() {
+    return genders;
   }
 
   /**
@@ -302,18 +302,8 @@ public class Title implements Serializable {
    *
    * @param genders the codes for the genders the title is applicable to
    */
-  public void setGenders(String[] genders) {
-    this.genders = StringUtils.arrayToCommaDelimitedString(genders);
-  }
-
-  /**
-   * Set the codes for the genders the title is applicable to.
-   *
-   * @param genders the codes for the genders the title is applicable to
-   */
-  @JsonIgnore
-  public void setGenders(Collection<String> genders) {
-    this.genders = StringUtils.collectionToDelimitedString(genders, ",");
+  public void setGenders(List<String> genders) {
+    this.genders = genders;
   }
 
   /**

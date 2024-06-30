@@ -348,25 +348,27 @@ public class ValidOrganizationValidator extends PartyValidator
                 }
               }
 
-              for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
-                if (!getPartyReferenceService()
-                    .isValidContactMechanismPurpose(
-                        organization.getTenantId(),
-                        organization.getType().code(),
-                        contactMechanism.getType(),
-                        contactMechanismPurpose)) {
-                  hibernateConstraintValidatorContext
-                      .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
-                      .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                      .addMessageParameter("partyType", organization.getType().code())
-                      .buildConstraintViolationWithTemplate(
-                          "{digital.inception.party.constraint.ValidOrganization.invalidContactMechanismPurposeForPartyType.message}")
-                      .addPropertyNode("contactMechanisms")
-                      .addPropertyNode("purpose")
-                      .inIterable()
-                      .addConstraintViolation();
+              if (contactMechanism.getPurposes() != null) {
+                for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
+                  if (!getPartyReferenceService()
+                      .isValidContactMechanismPurpose(
+                          organization.getTenantId(),
+                          organization.getType().code(),
+                          contactMechanism.getType(),
+                          contactMechanismPurpose)) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
+                        .addMessageParameter("contactMechanismType", contactMechanism.getType())
+                        .addMessageParameter("partyType", organization.getType().code())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraint.ValidOrganization.invalidContactMechanismPurposeForPartyType.message}")
+                        .addPropertyNode("contactMechanisms")
+                        .addPropertyNode("purpose")
+                        .inIterable()
+                        .addConstraintViolation();
 
-                  isValid = false;
+                    isValid = false;
+                  }
                 }
               }
             } else {
@@ -385,16 +387,18 @@ public class ValidOrganizationValidator extends PartyValidator
         }
 
         // Validate countries of tax residence
-        for (String countryOfTaxResidence : organization.getCountriesOfTaxResidence()) {
-          if (!getReferenceService().isValidCountry(countryOfTaxResidence)) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraint.ValidOrganization.invalidCountryOfTaxResidence.message}")
-                .addPropertyNode("countriesOfTaxResidence")
-                .addConstraintViolation();
+        if (organization.getCountriesOfTaxResidence() != null) {
+          for (String countryOfTaxResidence : organization.getCountriesOfTaxResidence()) {
+            if (!getReferenceService().isValidCountry(countryOfTaxResidence)) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraint.ValidOrganization.invalidCountryOfTaxResidence.message}")
+                  .addPropertyNode("countriesOfTaxResidence")
+                  .addConstraintViolation();
 
-            isValid = false;
+              isValid = false;
+            }
           }
         }
 

@@ -938,20 +938,22 @@ public abstract class PartyValidator {
         }
       }
 
-      for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
-        if (!getPartyReferenceService()
-            .isValidPhysicalAddressPurpose(tenantId, partyType, physicalAddressPurpose)) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("purpose", physicalAddressPurpose)
-              .addMessageParameter("partyType", partyType)
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraint.ValidPhysicalAddress.invalidPurposeForPartyType.message}")
-              .addPropertyNode("physicalAddresses")
-              .addPropertyNode("purposes")
-              .inIterable()
-              .addConstraintViolation();
+      if (physicalAddress.getPurposes() != null) {
+        for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
+          if (!getPartyReferenceService()
+              .isValidPhysicalAddressPurpose(tenantId, partyType, physicalAddressPurpose)) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("purpose", physicalAddressPurpose)
+                .addMessageParameter("partyType", partyType)
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraint.ValidPhysicalAddress.invalidPurposeForPartyType.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("purposes")
+                .inIterable()
+                .addConstraintViolation();
 
-          isValid = false;
+            isValid = false;
+          }
         }
       }
 

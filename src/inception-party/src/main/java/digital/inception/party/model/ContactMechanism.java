@@ -21,8 +21,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -45,7 +47,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>ContactMechanism</b> class holds the information for a contact mechanism for an
@@ -84,11 +85,15 @@ public class ContactMechanism implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The comma-delimited codes for the contact mechanism purposes. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "purposes", length = 310)
-  private String purposes;
+  /** The codes for the contact mechanism purposes. */
+  @Schema(description = "The codes for the contact mechanism purposes")
+  @JsonProperty
+  @XmlElementWrapper(name = "Purposes")
+  @XmlElement(name = "Purpose")
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Column(name = "purposes", length = 510)
+  private List<String> purposes;
 
   /** The code for the contact mechanism role. */
   @Schema(
@@ -186,7 +191,7 @@ public class ContactMechanism implements Serializable {
     this.type = type;
     this.role = role;
     this.value = value;
-    this.purposes = purpose;
+    this.purposes = new ArrayList<>(List.of(purpose));
   }
 
   /**
@@ -201,10 +206,7 @@ public class ContactMechanism implements Serializable {
     this.type = type;
     this.role = role;
     this.value = value;
-
-    if ((purposes != null) && (!purposes.isEmpty())) {
-      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
-    }
+    this.purposes = purposes;
   }
 
   /**
@@ -249,18 +251,8 @@ public class ContactMechanism implements Serializable {
    *
    * @return the codes for the contact mechanism purposes
    */
-  @Schema(
-      description = "The codes for the contact mechanism purposes",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "Purposes", required = true)
-  @XmlElement(name = "Purpose", required = true)
   public List<String> getPurposes() {
-    if (this.purposes != null) {
-      return new ArrayList<>(StringUtils.commaDelimitedListToSet(this.purposes));
-    } else {
-      return new ArrayList<>();
-    }
+    return purposes;
   }
 
   /**
@@ -297,9 +289,13 @@ public class ContactMechanism implements Serializable {
    * @return <b>true</b> if the contact mechanism has the specified contact mechanism purpose or
    *     <b>false</b> otherwise
    */
+  @JsonIgnore
   public boolean hasPurpose(String purpose) {
-    return getPurposes().stream()
-        .anyMatch(existingPurpose -> Objects.equals(purpose, existingPurpose));
+    if (purposes != null) {
+      return purposes.contains(purpose);
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -330,11 +326,7 @@ public class ContactMechanism implements Serializable {
    * @param purposes the codes for the contact mechanism purposes
    */
   public void setPurposes(List<String> purposes) {
-    if ((purposes != null) && (!purposes.isEmpty())) {
-      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
-    } else {
-      this.purposes = null;
-    }
+    this.purposes = purposes;
   }
 
   /**

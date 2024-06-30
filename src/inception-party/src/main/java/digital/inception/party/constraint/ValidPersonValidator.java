@@ -376,25 +376,27 @@ public class ValidPersonValidator extends PartyValidator
                 }
               }
 
-              for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
-                if (!getPartyReferenceService()
-                    .isValidContactMechanismPurpose(
-                        person.getTenantId(),
-                        person.getType().code(),
-                        contactMechanism.getType(),
-                        contactMechanismPurpose)) {
-                  hibernateConstraintValidatorContext
-                      .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
-                      .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                      .addMessageParameter("partyType", person.getType().code())
-                      .buildConstraintViolationWithTemplate(
-                          "{digital.inception.party.constraint.ValidPerson.invalidContactMechanismPurposeForPartyType.message}")
-                      .addPropertyNode("contactMechanisms")
-                      .addPropertyNode("purpose")
-                      .inIterable()
-                      .addConstraintViolation();
+              if (contactMechanism.getPurposes() != null) {
+                for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
+                  if (!getPartyReferenceService()
+                      .isValidContactMechanismPurpose(
+                          person.getTenantId(),
+                          person.getType().code(),
+                          contactMechanism.getType(),
+                          contactMechanismPurpose)) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
+                        .addMessageParameter("contactMechanismType", contactMechanism.getType())
+                        .addMessageParameter("partyType", person.getType().code())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraint.ValidPerson.invalidContactMechanismPurposeForPartyType.message}")
+                        .addPropertyNode("contactMechanisms")
+                        .addPropertyNode("purpose")
+                        .inIterable()
+                        .addConstraintViolation();
 
-                  isValid = false;
+                    isValid = false;
+                  }
                 }
               }
             } else {
@@ -413,30 +415,34 @@ public class ValidPersonValidator extends PartyValidator
         }
 
         // Validate countries of citizenship
-        for (String countryOfCitizenship : person.getCountriesOfCitizenship()) {
-          if (!getReferenceService().isValidCountry(countryOfCitizenship)) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("countryOfCitizenship", countryOfCitizenship)
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraint.ValidPerson.invalidCountryOfCitizenship.message}")
-                .addPropertyNode("countriesOfCitizenship")
-                .addConstraintViolation();
+        if (person.getCountriesOfCitizenship() != null) {
+          for (String countryOfCitizenship : person.getCountriesOfCitizenship()) {
+            if (!getReferenceService().isValidCountry(countryOfCitizenship)) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("countryOfCitizenship", countryOfCitizenship)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraint.ValidPerson.invalidCountryOfCitizenship.message}")
+                  .addPropertyNode("countriesOfCitizenship")
+                  .addConstraintViolation();
 
-            isValid = false;
+              isValid = false;
+            }
           }
         }
 
         // Validate countries of tax residence
-        for (String countryOfTaxResidence : person.getCountriesOfTaxResidence()) {
-          if (!getReferenceService().isValidCountry(countryOfTaxResidence)) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraint.ValidPerson.invalidCountryOfTaxResidence.message}")
-                .addPropertyNode("countriesOfTaxResidence")
-                .addConstraintViolation();
+        if (person.getCountriesOfTaxResidence() != null) {
+          for (String countryOfTaxResidence : person.getCountriesOfTaxResidence()) {
+            if (!getReferenceService().isValidCountry(countryOfTaxResidence)) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraint.ValidPerson.invalidCountryOfTaxResidence.message}")
+                  .addPropertyNode("countriesOfTaxResidence")
+                  .addConstraintViolation();
 
-            isValid = false;
+              isValid = false;
+            }
           }
         }
 

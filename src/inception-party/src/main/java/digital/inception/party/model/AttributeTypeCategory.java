@@ -16,12 +16,13 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -31,13 +32,12 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
@@ -117,15 +117,18 @@ public class AttributeTypeCategory implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The comma-delimited codes for the party types the attribute type category is associated with.
-   */
-  @JsonIgnore
-  @XmlTransient
+  /** The codes for the party types the attribute type category is associated with. */
+  @Schema(
+      description = "The codes for the party types the attribute type category is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "PartyTypes", required = true)
+  @XmlElement(name = "PartyType", required = true)
   @NotNull
-  @Size(min = 1, max = 310)
-  @Column(name = "party_types", length = 310, nullable = false)
-  private String partyTypes;
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Column(name = "party_types", length = 510, nullable = false)
+  private List<String> partyTypes;
 
   /** The sort index for the attribute type category. */
   @Schema(
@@ -213,14 +216,8 @@ public class AttributeTypeCategory implements Serializable {
    *
    * @return the codes for the party types the attribute type category is associated with
    */
-  @Schema(
-      description = "The codes for the party types the attribute type category is associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "PartyTypes", required = true)
-  public String[] getPartyTypes() {
-    return StringUtils.removeDuplicateStrings(
-        StringUtils.commaDelimitedListToStringArray(partyTypes));
+  public List<String> getPartyTypes() {
+    return partyTypes;
   }
 
   /**
@@ -263,7 +260,7 @@ public class AttributeTypeCategory implements Serializable {
       return false;
     }
 
-    return Arrays.asList(getPartyTypes()).contains(partyTypeCode);
+    return partyTypes.contains(partyTypeCode);
   }
 
   /**
@@ -307,18 +304,8 @@ public class AttributeTypeCategory implements Serializable {
    *
    * @param partyTypes the codes for the party types the attribute type category is associated with
    */
-  public void setPartyTypes(String[] partyTypes) {
-    this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
-  }
-
-  /**
-   * Set the codes for the party types the attribute type category is associated with.
-   *
-   * @param partyTypes the codes for the party types the attribute type category is associated with
-   */
-  @JsonIgnore
-  public void setPartyTypes(Collection<String> partyTypes) {
-    this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  public void setPartyTypes(List<String> partyTypes) {
+    this.partyTypes = partyTypes;
   }
 
   /**

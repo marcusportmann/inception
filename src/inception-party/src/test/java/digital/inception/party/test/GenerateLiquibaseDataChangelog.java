@@ -307,7 +307,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(attributeType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(attributeType.getPartyTypes())
                   + "\"/>");
           if (attributeType.getUnitType() != null) {
             writer.println(
@@ -381,12 +381,13 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"contact_mechanism_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(
+                  + StringUtils.collectionToCommaDelimitedString(
                       contactMechanismPurpose.getContactMechanismTypes())
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(contactMechanismPurpose.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(
+                      contactMechanismPurpose.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -462,7 +463,8 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(contactMechanismRole.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(
+                      contactMechanismRole.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -567,7 +569,8 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(externalReferenceType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(
+                      externalReferenceType.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -662,7 +665,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
           }
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(identificationType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(identificationType.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -725,7 +728,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
               "      <column name=\"description\" value=\"" + lockType.getDescription() + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(lockType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(lockType.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -908,7 +911,8 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(physicalAddressPurpose.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(
+                      physicalAddressPurpose.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -945,7 +949,8 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(physicalAddressRole.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(
+                      physicalAddressRole.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -1014,7 +1019,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(preferenceType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(preferenceType.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -1225,7 +1230,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
               "      <column name=\"description\" value=\"" + roleType.getDescription() + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(roleType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(roleType.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -1253,7 +1258,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
               "      <column name=\"description\" value=\"" + segment.getDescription() + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(segment.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(segment.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -1382,7 +1387,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
               "      <column name=\"description\" value=\"" + statusType.getDescription() + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(statusType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(statusType.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");
@@ -1418,7 +1423,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                   + "\"/>");
           writer.println(
               "      <column name=\"party_types\" value=\""
-                  + StringUtils.arrayToCommaDelimitedString(taxNumberType.getPartyTypes())
+                  + StringUtils.collectionToCommaDelimitedString(taxNumberType.getPartyTypes())
                   + "\"/>");
 
           writer.println("    </insert>");

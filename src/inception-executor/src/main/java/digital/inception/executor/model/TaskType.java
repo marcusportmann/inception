@@ -16,17 +16,17 @@
 
 package digital.inception.executor.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.executor.constraint.ValidTaskType;
+import digital.inception.executor.persistence.TaskEventTypeListConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -34,17 +34,11 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>TaskType</b> class holds the information for a task type.
@@ -67,10 +61,10 @@ import org.springframework.util.StringUtils;
   "eventTypes",
   "eventTypesWithTaskData"
 })
-@XmlRootElement(name = "TaskType", namespace = "https://inception.digital/executor")
+@XmlRootElement(name = "TaskType", namespace = "https://nova.discovery.co.za/executor")
 @XmlType(
     name = "TaskType",
-    namespace = "https://inception.digital/executor",
+    namespace = "https://nova.discovery.co.za/executor",
     propOrder = {
       "code",
       "name",
@@ -91,10 +85,6 @@ import org.springframework.util.StringUtils;
 @Table(name = "executor_task_types")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class TaskType implements Serializable {
-
-  /** The empty event types. */
-  private static final List<TaskEventType> EMPTY_EVENT_TYPES =
-      Collections.unmodifiableList(new ArrayList<>());
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -118,12 +108,6 @@ public class TaskType implements Serializable {
   @Column(name = "archive_failed", nullable = false)
   private boolean archiveFailed;
 
-  /** The cached event types for the task type. */
-  @JsonIgnore @XmlTransient @Transient private List<TaskEventType> cachedEventTypes;
-
-  /** The cached event types with task data for the task type. */
-  @JsonIgnore @XmlTransient @Transient private List<TaskEventType> cachedEventTypesWithTaskData;
-
   /** The code for the task type. */
   @Schema(description = "The code for the task type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -146,25 +130,25 @@ public class TaskType implements Serializable {
   @Column(name = "enabled", nullable = false)
   private boolean enabled;
 
-  /**
-   * The optional list of comma-delimited codes for the event types that should be tracked for tasks
-   * of this type.
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Size(min = 1, max = 1000)
+  /** The optional event types that should be tracked for tasks of this type. */
+  @Schema(description = "The optional event types that should be tracked for tasks of this type")
+  @JsonProperty
+  @XmlElementWrapper(name = "EventTypes")
+  @XmlElement(name = "EventType")
   @Column(name = "event_types", length = 1000)
-  private String eventTypes;
+  @Convert(converter = TaskEventTypeListConverter.class)
+  private List<TaskEventType> eventTypes;
 
-  /**
-   * The optional list of comma-delimited codes for the event types that should be tracked for tasks
-   * of this type with task data.
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Size(min = 1, max = 1000)
+  /** The optional event types that should be tracked for tasks of this type. */
+  @Schema(
+      description =
+          "The optional event types that should be tracked for tasks of this type with task data")
+  @JsonProperty
+  @XmlElementWrapper(name = "EventTypesWithTaskData")
+  @XmlElement(name = "EventTypeWithTaskData")
   @Column(name = "event_types_with_task_data", length = 1000)
-  private String eventTypesWithTaskData;
+  @Convert(converter = TaskEventTypeListConverter.class)
+  private List<TaskEventType> eventTypesWithTaskData;
 
   /**
    * The optional amount of time in milliseconds after which a locked and executing task of this
@@ -246,8 +230,6 @@ public class TaskType implements Serializable {
     this.executorClass = executorClass;
     this.archiveCompleted = archiveCompleted;
     this.archiveFailed = archiveFailed;
-    this.eventTypes = null;
-    this.eventTypesWithTaskData = null;
     this.enabled = true;
   }
 
@@ -278,8 +260,6 @@ public class TaskType implements Serializable {
     this.archiveCompleted = archiveCompleted;
     this.archiveFailed = archiveFailed;
     this.maximumExecutionAttempts = maximumExecutionAttempts;
-    this.eventTypes = null;
-    this.eventTypesWithTaskData = null;
     this.enabled = true;
   }
 
@@ -313,8 +293,6 @@ public class TaskType implements Serializable {
     this.archiveFailed = archiveFailed;
     this.maximumExecutionAttempts = maximumExecutionAttempts;
     this.retryDelay = retryDelay;
-    this.eventTypes = null;
-    this.eventTypesWithTaskData = null;
     this.enabled = true;
   }
 
@@ -334,8 +312,6 @@ public class TaskType implements Serializable {
     this.executorClass = executorClass;
     this.archiveCompleted = false;
     this.archiveFailed = false;
-    this.eventTypes = null;
-    this.eventTypesWithTaskData = null;
     this.enabled = true;
   }
 
@@ -362,8 +338,6 @@ public class TaskType implements Serializable {
     this.archiveCompleted = false;
     this.archiveFailed = false;
     this.maximumExecutionAttempts = maximumExecutionAttempts;
-    this.eventTypes = null;
-    this.eventTypesWithTaskData = null;
     this.enabled = true;
   }
 
@@ -393,8 +367,6 @@ public class TaskType implements Serializable {
     this.archiveFailed = false;
     this.maximumExecutionAttempts = maximumExecutionAttempts;
     this.retryDelay = retryDelay;
-    this.eventTypes = null;
-    this.eventTypesWithTaskData = null;
     this.enabled = true;
   }
 
@@ -468,19 +440,8 @@ public class TaskType implements Serializable {
    *
    * @return the event types that should be tracked for tasks of this type
    */
-  @Schema(description = "The event types that should be tracked for tasks of this type")
-  @JsonProperty
-  @XmlElementWrapper(name = "EventTypes", required = true)
-  @XmlElement(name = "EventType")
   public List<TaskEventType> getEventTypes() {
-    if (eventTypes != null) {
-      if (cachedEventTypes == null) {
-        cachedEventTypes = convertCommaDelimitedTaskEventTypesToList(eventTypes);
-      }
-      return cachedEventTypes;
-    } else {
-      return EMPTY_EVENT_TYPES;
-    }
+    return eventTypes;
   }
 
   /**
@@ -488,21 +449,8 @@ public class TaskType implements Serializable {
    *
    * @return the event types that should be tracked for tasks of this type with task data
    */
-  @Schema(
-      description = "The event types that should be tracked for tasks of this type with task data")
-  @JsonProperty
-  @XmlElementWrapper(name = "EventTypesWithTaskData", required = true)
-  @XmlElement(name = "EventTypeWithTaskData")
   public List<TaskEventType> getEventTypesWithTaskData() {
-    if (eventTypesWithTaskData != null) {
-      if (cachedEventTypesWithTaskData == null) {
-        cachedEventTypesWithTaskData =
-            convertCommaDelimitedTaskEventTypesToList(eventTypesWithTaskData);
-      }
-      return cachedEventTypesWithTaskData;
-    } else {
-      return EMPTY_EVENT_TYPES;
-    }
+    return eventTypesWithTaskData;
   }
 
   /**
@@ -644,13 +592,7 @@ public class TaskType implements Serializable {
    * @param eventTypes the event types that should be tracked for tasks of this type
    */
   public void setEventTypes(List<TaskEventType> eventTypes) {
-    if (eventTypes != null) {
-      this.eventTypes =
-          StringUtils.collectionToCommaDelimitedString(
-              eventTypes.stream().map(TaskEventType::code).collect(Collectors.toList()));
-    } else {
-      this.eventTypes = null;
-    }
+    this.eventTypes = eventTypes;
   }
 
   /**
@@ -660,15 +602,7 @@ public class TaskType implements Serializable {
    *     with task data
    */
   public void setEventTypesWithTaskData(List<TaskEventType> eventTypesWithTaskData) {
-    if (eventTypesWithTaskData != null) {
-      this.eventTypesWithTaskData =
-          StringUtils.collectionToCommaDelimitedString(
-              eventTypesWithTaskData.stream()
-                  .map(TaskEventType::code)
-                  .collect(Collectors.toList()));
-    } else {
-      this.eventTypesWithTaskData = null;
-    }
+    this.eventTypesWithTaskData = eventTypesWithTaskData;
   }
 
   /**
@@ -726,16 +660,5 @@ public class TaskType implements Serializable {
    */
   public void setRetryDelay(Integer retryDelay) {
     this.retryDelay = retryDelay;
-  }
-
-  private List<TaskEventType> convertCommaDelimitedTaskEventTypesToList(
-      String commaDelimitedTaskEventTypes) {
-    String[] taskEventTypeCodes =
-        StringUtils.removeDuplicateStrings(
-            StringUtils.commaDelimitedListToStringArray(commaDelimitedTaskEventTypes));
-
-    return Arrays.stream(taskEventTypeCodes)
-        .map(TaskEventType::fromCode)
-        .collect(Collectors.toList());
   }
 }

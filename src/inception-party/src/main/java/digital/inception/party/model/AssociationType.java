@@ -16,12 +16,13 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -31,12 +32,11 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -120,15 +120,18 @@ public class AssociationType implements Serializable {
   @Column(name = "first_party_role", length = 50, nullable = false)
   private String firstPartyRole;
 
-  /**
-   * The comma-delimited list of codes for the party types for the first party in the association.
-   */
-  @JsonIgnore
-  @XmlTransient
+  /** The codes for the party types for the first party in the association. */
+  @Schema(
+      description = "The codes for the party types for the first party in the association",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "FirstPartyTypes", required = true)
+  @XmlElement(name = "FirstPartyType", required = true)
   @NotNull
-  @Size(min = 1, max = 310)
-  @Column(name = "first_party_types", length = 310, nullable = false)
-  private String firstPartyTypes;
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Column(name = "first_party_types", length = 510, nullable = false)
+  private List<String> firstPartyTypes;
 
   /** The Unicode locale identifier for the association type. */
   @Schema(
@@ -164,15 +167,18 @@ public class AssociationType implements Serializable {
   @Column(name = "second_party_role", length = 50, nullable = false)
   private String secondPartyRole;
 
-  /**
-   * The comma-delimited list of codes for the party types for the second party in the association.
-   */
-  @JsonIgnore
-  @XmlTransient
+  /** The codes for the party types for the second party in the association. */
+  @Schema(
+      description = "The codes for the party types for the second party in the association",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "SecondPartyTypes", required = true)
+  @XmlElement(name = "SecondPartyType", required = true)
   @NotNull
-  @Size(min = 1, max = 310)
-  @Column(name = "second_party_types", length = 310, nullable = false)
-  private String secondPartyTypes;
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Column(name = "second_party_types", length = 510, nullable = false)
+  private List<String> secondPartyTypes;
 
   /** The sort index for the association type. */
   @Schema(
@@ -251,14 +257,8 @@ public class AssociationType implements Serializable {
    *
    * @return the codes for the party types for the first party in the association
    */
-  @Schema(
-      description = "The codes for the party types for the first party in the association",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "FirstPartyTypes", required = true)
-  public String[] getFirstPartyTypes() {
-    return StringUtils.removeDuplicateStrings(
-        StringUtils.commaDelimitedListToStringArray(firstPartyTypes));
+  public List<String> getFirstPartyTypes() {
+    return firstPartyTypes;
   }
 
   /**
@@ -293,14 +293,8 @@ public class AssociationType implements Serializable {
    *
    * @return the codes for the party types for the second party in the association
    */
-  @Schema(
-      description = "The codes for the party types for the second party in the association",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SecondPartyTypes", required = true)
-  public String[] getSecondPartyTypes() {
-    return StringUtils.removeDuplicateStrings(
-        StringUtils.commaDelimitedListToStringArray(secondPartyTypes));
+  public List<String> getSecondPartyTypes() {
+    return secondPartyTypes;
   }
 
   /**
@@ -342,7 +336,7 @@ public class AssociationType implements Serializable {
       return false;
     }
 
-    return Arrays.asList(getFirstPartyTypes()).contains(partyTypeCode);
+    return firstPartyTypes.contains(partyTypeCode);
   }
 
   /**
@@ -356,7 +350,7 @@ public class AssociationType implements Serializable {
       return false;
     }
 
-    return Arrays.asList(getSecondPartyTypes()).contains(partyTypeCode);
+    return secondPartyTypes.contains(partyTypeCode);
   }
 
   /**
@@ -391,17 +385,8 @@ public class AssociationType implements Serializable {
    *
    * @param firstPartyTypes the codes for the party types for the first party in the association
    */
-  public void setFirstPartyTypes(String[] firstPartyTypes) {
-    this.firstPartyTypes = StringUtils.arrayToCommaDelimitedString(firstPartyTypes);
-  }
-
-  /**
-   * Set the codes for the party types for the first party in the association.
-   *
-   * @param firstPartyTypes the codes for the party types for the first party in the association
-   */
   public void setFirstPartyTypes(List<String> firstPartyTypes) {
-    this.firstPartyTypes = StringUtils.collectionToCommaDelimitedString(firstPartyTypes);
+    this.firstPartyTypes = firstPartyTypes;
   }
 
   /**
@@ -436,17 +421,8 @@ public class AssociationType implements Serializable {
    *
    * @param secondPartyTypes the codes for the party types for the second party in the association
    */
-  public void setSecondPartyTypes(String[] secondPartyTypes) {
-    this.secondPartyTypes = StringUtils.arrayToCommaDelimitedString(secondPartyTypes);
-  }
-
-  /**
-   * Set the codes for the party types for the second party in the association.
-   *
-   * @param secondPartyTypes the codes for the party types for the second party in the association
-   */
   public void setSecondPartyTypes(List<String> secondPartyTypes) {
-    this.secondPartyTypes = StringUtils.collectionToCommaDelimitedString(secondPartyTypes);
+    this.secondPartyTypes = secondPartyTypes;
   }
 
   /**

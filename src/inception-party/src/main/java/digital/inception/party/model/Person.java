@@ -26,15 +26,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.jpa.JpaUtil;
+import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
 import digital.inception.party.constraint.ValidPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -52,7 +55,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -413,23 +415,17 @@ public class Person extends PartyBase implements Serializable {
   @OrderBy("type")
   private final List<TaxNumber> taxNumbers = new ArrayList<>();
 
-  /**
-   * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of citizenship for the person.
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Size(max = 50)
+  /** The ISO 3166-1 alpha-2 codes for the countries of citizenship for the person. */
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
   @Column(name = "countries_of_citizenship", length = 50)
-  private String countriesOfCitizenship;
+  private List<String> countriesOfCitizenship;
 
-  /**
-   * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Size(max = 50)
+  /** The ISO 3166-1 alpha-2 codes for the countries of tax residence for the person. */
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
   @Column(name = "countries_of_tax_residence", length = 50)
-  private String countriesOfTaxResidence;
+  private List<String> countriesOfTaxResidence;
 
   /** The ISO 3166-1 alpha-2 code for the country of birth for the person. */
   @Size(min = 2, max = 2)
@@ -1037,14 +1033,8 @@ public class Person extends PartyBase implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfCitizenship")
   @XmlElement(name = "CountryOfCitizenship")
-  @Size(max = 10)
   public List<String> getCountriesOfCitizenship() {
-    // NOTE: The complexity below is required for the JAX-WS deserialization, which wants a
-    //       mutable list that can be cleared.
-    return new ArrayList<>(
-        Arrays.asList(
-            StringUtils.removeDuplicateStrings(
-                StringUtils.commaDelimitedListToStringArray(countriesOfCitizenship))));
+    return countriesOfCitizenship;
   }
 
   /**
@@ -1058,14 +1048,8 @@ public class Person extends PartyBase implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
-  @Size(max = 10)
   public List<String> getCountriesOfTaxResidence() {
-    // NOTE: The complexity below is required for the JAX-WS deserialization, which wants a
-    //       mutable list that can be cleared.
-    return new ArrayList<>(
-        Arrays.asList(
-            StringUtils.removeDuplicateStrings(
-                StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence))));
+    return countriesOfTaxResidence;
   }
 
   /**
@@ -1637,7 +1621,7 @@ public class Person extends PartyBase implements Serializable {
         .filter(
             physicalAddress ->
                 Objects.equals(physicalAddress.getType(), type)
-                    && physicalAddress.getPurposes().contains(purpose))
+                    && physicalAddress.hasPurpose(purpose))
         .findFirst();
   }
 
@@ -2500,8 +2484,7 @@ public class Person extends PartyBase implements Serializable {
    *     the person
    */
   public void setCountriesOfCitizenship(List<String> countriesOfCitizenship) {
-    this.countriesOfCitizenship =
-        StringUtils.collectionToDelimitedString(countriesOfCitizenship, ",");
+    this.countriesOfCitizenship = countriesOfCitizenship;
   }
 
   /**
@@ -2511,8 +2494,7 @@ public class Person extends PartyBase implements Serializable {
    *     for the person
    */
   public void setCountriesOfTaxResidence(List<String> countriesOfTaxResidence) {
-    this.countriesOfTaxResidence =
-        StringUtils.collectionToDelimitedString(countriesOfTaxResidence, ",");
+    this.countriesOfTaxResidence = countriesOfTaxResidence;
   }
 
   /**
@@ -2530,8 +2512,10 @@ public class Person extends PartyBase implements Serializable {
    * @param countryOfCitizenship the code for the single country of citizenship for the person
    */
   @JsonIgnore
+  @XmlTransient
+  @Transient
   public void setCountryOfCitizenship(String countryOfCitizenship) {
-    this.countriesOfCitizenship = countryOfCitizenship;
+    this.countriesOfCitizenship = new ArrayList<>(List.of(countryOfCitizenship));
   }
 
   /**
@@ -2550,8 +2534,10 @@ public class Person extends PartyBase implements Serializable {
    * @param countryOfTaxResidence the code for the single country of tax residence for the person
    */
   @JsonIgnore
+  @XmlTransient
+  @Transient
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
-    this.countriesOfTaxResidence = countryOfTaxResidence;
+    this.countriesOfTaxResidence = new ArrayList<>(List.of(countryOfTaxResidence));
   }
 
   /**

@@ -22,9 +22,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
 import digital.inception.party.constraint.ValidCountryCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -47,7 +49,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>PhysicalAddress</b> class holds the information for a physical address for an organization
@@ -359,11 +360,15 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "postal_code", length = 50)
   private String postalCode;
 
-  /** The comma-delimited codes for the physical address purposes. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "purposes", length = 310)
-  private String purposes;
+  /** The codes for the physical address purposes. */
+  @Schema(description = "The codes for the physical address purposes")
+  @JsonProperty
+  @XmlElementWrapper(name = "Purposes")
+  @XmlElement(name = "Purpose")
+  @Size(min = 1, max = 10)
+  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Column(name = "purposes", length = 510)
+  private List<String> purposes;
 
   /** The ISO 3166-2 subdivision code for the region for the physical address. */
   @Schema(description = "The ISO 3166-2 subdivision code for the region for the physical address")
@@ -508,7 +513,7 @@ public class PhysicalAddress implements Serializable {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.role = role;
-    this.purposes = purpose;
+    this.purposes = new ArrayList<>(List.of(purpose));
   }
 
   /**
@@ -522,10 +527,7 @@ public class PhysicalAddress implements Serializable {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.role = role;
-
-    if ((purposes != null) && (!purposes.isEmpty())) {
-      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
-    }
+    this.purposes = purposes;
   }
 
   /**
@@ -730,18 +732,8 @@ public class PhysicalAddress implements Serializable {
    *
    * @return the codes for the physical address purposes
    */
-  @Schema(
-      description = "The codes for the physical address purposes",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "Purposes", required = true)
-  @XmlElement(name = "Purpose", required = true)
   public List<String> getPurposes() {
-    if (this.purposes != null) {
-      return new ArrayList<>(StringUtils.commaDelimitedListToSet(this.purposes));
-    } else {
-      return new ArrayList<>();
-    }
+    return purposes;
   }
 
   /**
@@ -814,6 +806,22 @@ public class PhysicalAddress implements Serializable {
    */
   public String getType() {
     return type;
+  }
+
+  /**
+   * Returns whether the physical address has the specified purpose.
+   *
+   * @param purpose the code for the physical address purpose
+   * @return <b>true</b> if the physical address has the specified physical address purpose or
+   *     <b>false</b> otherwise
+   */
+  @JsonIgnore
+  public boolean hasPurpose(String purpose) {
+    if (purposes != null) {
+      return purposes.contains(purpose);
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -1004,11 +1012,7 @@ public class PhysicalAddress implements Serializable {
    * @param purposes the codes for the physical address purposes
    */
   public void setPurposes(List<String> purposes) {
-    if ((purposes != null) && (!purposes.isEmpty())) {
-      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
-    } else {
-      this.purposes = null;
-    }
+    this.purposes = purposes;
   }
 
   /**
