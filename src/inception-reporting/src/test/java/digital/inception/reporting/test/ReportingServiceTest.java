@@ -28,6 +28,8 @@ import digital.inception.reporting.model.ReportDefinitionSummary;
 import digital.inception.reporting.service.IReportingService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
@@ -95,7 +97,9 @@ public class ReportingServiceTest {
     Map<String, Object> parameters = new HashMap<>();
 
     try (Connection connection = dataSource.getConnection()) {
-      reportingService.createReportPDF(reportDefinition.getId(), parameters, connection);
+      byte[] reportPDF = reportingService.createReportPDF(reportDefinition.getId(), parameters, connection);
+
+      //Files.write(Paths.get("reportPDF.pdf"), reportPDF);
     }
 
     reportingService.deleteReportDefinition(reportDefinition.getId());

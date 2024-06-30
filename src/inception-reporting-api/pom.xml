@@ -54,7 +54,11 @@
             <id>enforce</id>
             <configuration>
               <rules>
-                <dependencyConvergence/>
+                <dependencyConvergence>
+                  <excludes>
+                    <exclude>commons-logging:commons-logging:[1.2,1.3)</exclude>
+                  </excludes>
+                </dependencyConvergence>
               </rules>
             </configuration>
             <goals>

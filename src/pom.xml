@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.0</version>
+    <version>3.3.1</version>
   </parent>
 
   <repositories>
@@ -100,7 +100,7 @@
     <agroal-pool.version>2.4</agroal-pool.version>
     <authzforce-ce-core-pdp-engine.version>21.0.1</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.11.3</avro.version>
-    <azure-identity.version>1.12.2</azure-identity.version>
+    <azure-identity.version>1.13.0</azure-identity.version>
     <com.ibm.icu.icu4j.version>75.1</com.ibm.icu.icu4j.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-io.version>2.16.1</commons-io.version>
@@ -115,17 +115,17 @@
     <jakarta.el.jakarta.el-api.version>6.0.0</jakarta.el.jakarta.el-api.version>
     <jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
     <jakarta.xml.ws-api.version>4.0.2</jakarta.xml.ws-api.version>
-    <jasperreports.version>6.21.3</jasperreports.version>
+    <jasperreports.version>7.0.0</jasperreports.version>
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.0.Final</jboss-transaction-spi.version>
     <liquibase-slf4j.version>5.0.0</liquibase-slf4j.version>
-    <mssql-jdbc.version>12.6.2.jre11</mssql-jdbc.version>
-    <narayana.version>7.0.1.Final</narayana.version>
+    <mssql-jdbc.version>12.6.3.jre11</mssql-jdbc.version>
+    <narayana.version>7.0.2.Final</narayana.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.3</postgresql.version>
-    <spring-boot.version>3.3.0</spring-boot.version>
-    <spring-shell-starter.version>3.3.0</spring-shell-starter.version>
+    <spring-boot.version>3.3.1</spring-boot.version>
+    <spring-shell-starter.version>3.3.1</spring-shell-starter.version>
     <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
     <swagger.version>2.2.22</swagger.version>
