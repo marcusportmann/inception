@@ -546,7 +546,8 @@ public class ExecutorService implements IExecutorService {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Optional<Task> getNextTaskQueuedForExecution() throws ServiceUnavailableException {
     try {
-      OffsetDateTime now = OffsetDateTime.now();
+      // Handle the situation where different time precisions are used in the database
+      OffsetDateTime now = OffsetDateTime.now().plusSeconds(1);
 
       PageRequest pageRequest = PageRequest.of(0, 1);
 

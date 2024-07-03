@@ -328,7 +328,9 @@ public class PartyWebService {
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
-    return partyService.getOrganization(tenantId, organizationId);
+    Organization organization = partyService.getOrganization(tenantId, organizationId);
+
+    return organization;
   }
 
   /**

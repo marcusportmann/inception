@@ -99,7 +99,7 @@ public class ReportingServiceTest {
     try (Connection connection = dataSource.getConnection()) {
       byte[] reportPDF = reportingService.createReportPDF(reportDefinition.getId(), parameters, connection);
 
-      //Files.write(Paths.get("reportPDF.pdf"), reportPDF);
+      Files.write(Paths.get("reportPDF.pdf"), reportPDF);
     }
 
     reportingService.deleteReportDefinition(reportDefinition.getId());
