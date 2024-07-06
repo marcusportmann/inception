@@ -67,7 +67,7 @@ public class MandateLink implements Serializable {
 
   /** The mandate the mandate link is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference
+  @JsonBackReference("mandateLinkReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)

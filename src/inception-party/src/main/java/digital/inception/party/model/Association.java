@@ -96,7 +96,7 @@ public class Association implements Serializable {
   /** The properties for the association. */
   @Schema(description = "The properties for the association")
   @JsonProperty
-  @JsonManagedReference
+  @JsonManagedReference("associationPropertyReference")
   @XmlElementWrapper(name = "Properties")
   @XmlElement(name = "Property")
   @Valid

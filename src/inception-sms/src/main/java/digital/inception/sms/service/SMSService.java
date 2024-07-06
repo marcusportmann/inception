@@ -141,7 +141,6 @@ public class SMSService implements ISMSService {
   }
 
   @Override
-  @Transactional
   public void createSMS(SMS sms) throws InvalidArgumentException, ServiceUnavailableException {
     validateSMS(sms);
 
@@ -157,7 +156,6 @@ public class SMSService implements ISMSService {
   }
 
   @Override
-  @Transactional
   public void deleteSMS(UUID smsId)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
@@ -276,7 +274,6 @@ public class SMSService implements ISMSService {
   }
 
   @Override
-  @Transactional
   public void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (status == null) {
@@ -301,7 +298,6 @@ public class SMSService implements ISMSService {
   }
 
   @Override
-  @Transactional
   public void sendSMS(String mobileNumber, String message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(mobileNumber)) {
@@ -455,7 +451,6 @@ public class SMSService implements ISMSService {
   }
 
   @Override
-  @Transactional
   public void setSMSStatus(UUID smsId, SMSStatus status)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
@@ -482,7 +477,6 @@ public class SMSService implements ISMSService {
   }
 
   @Override
-  @Transactional
   public void unlockSMS(UUID smsId, SMSStatus status)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {

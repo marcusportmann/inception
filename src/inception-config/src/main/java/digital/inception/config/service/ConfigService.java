@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -69,7 +68,6 @@ public class ConfigService implements IConfigService {
   }
 
   @Override
-  @Transactional
   public void deleteConfig(String key)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
@@ -416,7 +414,6 @@ public class ConfigService implements IConfigService {
   }
 
   @Override
-  @Transactional
   public void setConfig(Config config)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (config == null) {
@@ -439,7 +436,6 @@ public class ConfigService implements IConfigService {
   }
 
   @Override
-  @Transactional
   public void setConfig(String key, Object value, String description)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {

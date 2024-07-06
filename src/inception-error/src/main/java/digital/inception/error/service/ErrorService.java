@@ -48,7 +48,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -102,7 +101,6 @@ public class ErrorService implements IErrorService {
   }
 
   @Override
-  @Transactional
   public void createErrorReport(ErrorReport errorReport)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (errorReport == null) {

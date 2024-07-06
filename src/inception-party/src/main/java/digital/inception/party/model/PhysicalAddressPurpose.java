@@ -317,8 +317,6 @@ public class PhysicalAddressPurpose implements Serializable {
     this.partyTypes = partyTypes;
   }
 
-
-
   /**
    * Set the sort index for the physical address purpose.
    *

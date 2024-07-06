@@ -99,7 +99,7 @@ public class Mandate implements Serializable {
   /** The links for the mandate. */
   @Schema(description = "The links for the mandate")
   @JsonProperty
-  @JsonManagedReference
+  @JsonManagedReference("mandateLinkReference")
   @XmlElementWrapper(name = "Links")
   @XmlElement(name = "Link")
   @Valid
@@ -113,7 +113,7 @@ public class Mandate implements Serializable {
   /** The mandataries for the mandate. */
   @Schema(description = "The mandataries for the mandate")
   @JsonProperty
-  @JsonManagedReference
+  @JsonManagedReference("mandataryReference")
   @XmlElementWrapper(name = "Mandataries")
   @XmlElement(name = "Mandatary")
   @Valid

@@ -22,8 +22,10 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>AssociationRepository</b> interface declares the persistence for the <b>Association</b>
@@ -40,6 +42,8 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
    * @param tenantId the ID for the tenant
    * @param id the ID for the association
    */
+  @Transactional
+  @Modifying
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**

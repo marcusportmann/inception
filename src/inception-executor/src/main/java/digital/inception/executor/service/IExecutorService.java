@@ -68,7 +68,7 @@ public interface IExecutorService {
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
   /**
-   * Cancel the task
+   * Cancel the task.
    *
    * @param taskId the ID for the task
    * @throws InvalidArgumentException if an argument is invalid
@@ -84,6 +84,12 @@ public interface IExecutorService {
 
   /**
    * Complete the task.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
    *
    * @param task the task
    * @param taskExecutionResult the result of executing the task, including the next step for a
@@ -119,7 +125,7 @@ public interface IExecutorService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Delete the task
+   * Delete the task.
    *
    * @param taskId the ID for the task
    * @throws InvalidArgumentException if an argument is invalid
@@ -130,7 +136,7 @@ public interface IExecutorService {
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
   /**
-   * Delete the task type
+   * Delete the task type.
    *
    * @param taskTypeCode the code for the task type
    * @throws InvalidArgumentException if an argument is invalid
@@ -298,6 +304,12 @@ public interface IExecutorService {
   /**
    * Queue a task for execution.
    *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
    * @param queueTaskRequest the request to queue a task for execution
    * @return the ID for the task that has been queued for execution
    * @throws InvalidArgumentException if an argument is invalid
@@ -309,6 +321,12 @@ public interface IExecutorService {
 
   /**
    * Queue a task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
    *
    * @param type the code for the task type
    * @param batchId the optional ID for the task batch
@@ -327,6 +345,12 @@ public interface IExecutorService {
   /**
    * Queue a task for execution.
    *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
    * @param type the code for the task type
    * @param batchId the optional ID for the task batch
    * @param externalReference the optional external reference for the task
@@ -342,6 +366,12 @@ public interface IExecutorService {
   /**
    * Queue a task for execution.
    *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
    * @param type the code for the task type
    * @param batchId the optional ID for the task batch
    * @param dataObject the task data object that will be serialized to JSON
@@ -356,6 +386,12 @@ public interface IExecutorService {
   /**
    * Queue a task for execution.
    *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
    * @param type the code for the task type
    * @param dataObject the task data object that will be serialized to JSON
    * @return the ID for the task that has been queued for execution
@@ -367,7 +403,13 @@ public interface IExecutorService {
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
   /**
-   * Requeue the task for execution
+   * Requeue the task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
    *
    * @param task the task
    * @throws InvalidArgumentException if an argument is invalid
@@ -416,7 +458,7 @@ public interface IExecutorService {
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
   /**
-   * Suspend the task
+   * Suspend the task.
    *
    * @param taskId the ID for the task
    * @throws InvalidArgumentException if an argument is invalid
@@ -465,7 +507,13 @@ public interface IExecutorService {
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
   /**
-   * Unsuspend the task
+   * Unsuspend the task.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
    *
    * @param taskId the ID for the task
    * @throws InvalidArgumentException if an argument is invalid

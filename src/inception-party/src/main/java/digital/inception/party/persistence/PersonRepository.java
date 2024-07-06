@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>PersonRepository</b> interface declares the persistence for the <b>Person</b> domain type.
@@ -37,6 +39,8 @@ public interface PersonRepository
    * @param tenantId the ID for the tenant
    * @param id the ID for the person
    */
+  @Transactional
+  @Modifying
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**

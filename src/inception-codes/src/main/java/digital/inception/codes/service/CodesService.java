@@ -53,7 +53,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -163,7 +162,6 @@ public class CodesService implements ICodesService {
   }
 
   @Override
-  @Transactional
   public void createCode(Code code)
       throws InvalidArgumentException,
           DuplicateCodeException,
@@ -195,7 +193,6 @@ public class CodesService implements ICodesService {
   }
 
   @Override
-  @Transactional
   public void createCodeCategory(CodeCategory codeCategory)
       throws InvalidArgumentException, DuplicateCodeCategoryException, ServiceUnavailableException {
     validateCodeCategory(codeCategory);
@@ -215,7 +212,6 @@ public class CodesService implements ICodesService {
   }
 
   @Override
-  @Transactional
   public void deleteCode(String codeCategoryId, String codeId)
       throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
@@ -248,7 +244,6 @@ public class CodesService implements ICodesService {
   }
 
   @Override
-  @Transactional
   public void deleteCodeCategory(String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
@@ -628,7 +623,6 @@ public class CodesService implements ICodesService {
    * @param code the <b>Code</b> instance containing the updated information for the code
    */
   @Override
-  @Transactional
   public void updateCode(Code code)
       throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     validateCode(code);
@@ -653,7 +647,6 @@ public class CodesService implements ICodesService {
    *     code category
    */
   @Override
-  @Transactional
   public void updateCodeCategory(CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     validateCodeCategory(codeCategory);
@@ -679,7 +672,6 @@ public class CodesService implements ICodesService {
    * @param data the updated XML or JSON data
    */
   @Override
-  @Transactional
   public void updateCodeCategoryData(String codeCategoryId, String data)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {

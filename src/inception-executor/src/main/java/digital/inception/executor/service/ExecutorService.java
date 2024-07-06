@@ -82,6 +82,13 @@ import org.springframework.util.StringUtils;
 /**
  * The <b>ExecutorService</b> class provides the Executor Service implementation.
  *
+ * <p>NOTE: The completeTask method, queueTask methods, requeueTask method, and unsuspendTask method
+ * are explicitly not annotated with the @Transactional annotation to prevent a race condition
+ * between committing the transaction to persist a task in the database and triggering the
+ * asynchronous processing of the task in a separate thread. If the transaction is not committed,
+ * the task will not be retrieved by the getNextTaskQueuedForExecution method invoked by the
+ * BackgroundTaskExecutor.
+ *
  * @author Marcus Portmann
  */
 @Service
@@ -186,7 +193,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void archiveAndDeleteHistoricalTasks() throws ServiceUnavailableException {
     try {
       OffsetDateTime executedBefore = OffsetDateTime.now().minusDays(historicalTaskRetentionDays);
@@ -268,7 +274,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void cancelBatch(String batchId)
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(batchId)) {
@@ -289,7 +294,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void cancelTask(UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
@@ -315,7 +319,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void completeTask(Task task, TaskExecutionResult taskExecutionResult, long executionTime)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (task == null) {
@@ -381,7 +384,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void createTaskType(TaskType taskType)
       throws InvalidArgumentException, DuplicateTaskTypeException, ServiceUnavailableException {
     validateTaskType(taskType);
@@ -409,7 +411,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void delayTask(Task task, long delay)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (task == null) {
@@ -424,7 +425,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void deleteTask(UUID taskId)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
     if (taskId == null) {
@@ -445,7 +445,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void deleteTaskType(String taskTypeCode)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(taskTypeCode)) {
@@ -475,7 +474,7 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public TaskExecutionResult executeTask(Task task)
       throws InvalidArgumentException,
           TaskExecutionFailedException,
@@ -502,7 +501,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void failTask(Task task) throws InvalidArgumentException, ServiceUnavailableException {
     if (task == null) {
       throw new InvalidArgumentException("task");
@@ -845,7 +843,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public UUID queueTask(
       String type, String batchId, String externalReference, boolean suspended, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
@@ -875,28 +872,24 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public UUID queueTask(String type, String batchId, String externalReference, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     return queueTask(type, batchId, externalReference, false, dataObject);
   }
 
   @Override
-  @Transactional
   public UUID queueTask(String type, String batchId, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     return queueTask(type, batchId, null, false, dataObject);
   }
 
   @Override
-  @Transactional
   public UUID queueTask(String type, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     return queueTask(type, null, null, false, dataObject);
   }
 
   @Override
-  @Transactional
   public UUID queueTask(QueueTaskRequest queueTaskRequest)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     validateQueueTaskRequest(queueTaskRequest);
@@ -944,7 +937,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void requeueTask(Task task)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
     if (task == null) {
@@ -995,7 +987,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void resetHungTasks() throws ServiceUnavailableException {
     try {
       // Apply the task-type-specific task timeouts
@@ -1051,7 +1042,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void resetTaskLocks(TaskStatus status, TaskStatus newStatus)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (status == null) {
@@ -1081,7 +1071,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void suspendBatch(String batchId)
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(batchId)) {
@@ -1102,7 +1091,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void suspendTask(UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
@@ -1140,7 +1128,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void unlockTask(UUID taskId, TaskStatus status)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
     if (taskId == null) {
@@ -1163,7 +1150,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void unsuspendBatch(String batchId)
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(batchId)) {
@@ -1184,7 +1170,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void unsuspendTask(UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
@@ -1212,7 +1197,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  @Transactional
   public void updateTaskType(TaskType taskType)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     validateTaskType(taskType);

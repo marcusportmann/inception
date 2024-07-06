@@ -90,7 +90,7 @@ public class Mandatary implements Serializable {
 
   /** The mandate the mandatary is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference
+  @JsonBackReference("mandataryReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)

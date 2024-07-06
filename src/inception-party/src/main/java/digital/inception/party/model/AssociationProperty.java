@@ -89,7 +89,7 @@ public class AssociationProperty implements Serializable {
 
   /** The association property is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference
+  @JsonBackReference("associationPropertyReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)

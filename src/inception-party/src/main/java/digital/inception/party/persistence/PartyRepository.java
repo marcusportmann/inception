@@ -22,8 +22,10 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>PartyRepository</b> interface declares the persistence for the <b>Party</b> domain type.
@@ -40,6 +42,8 @@ public interface PartyRepository
    * @param tenantId the ID for the tenant
    * @param id the ID for the party
    */
+  @Transactional
+  @Modifying
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**

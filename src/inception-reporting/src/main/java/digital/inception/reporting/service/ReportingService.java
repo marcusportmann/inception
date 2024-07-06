@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 
@@ -96,7 +95,6 @@ public class ReportingService implements IReportingService {
   }
 
   @Override
-  @Transactional
   public void createReportDefinition(ReportDefinition reportDefinition)
       throws InvalidArgumentException,
           DuplicateReportDefinitionException,
@@ -251,7 +249,6 @@ public class ReportingService implements IReportingService {
   }
 
   @Override
-  @Transactional
   public void deleteReportDefinition(String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
@@ -398,7 +395,6 @@ public class ReportingService implements IReportingService {
   }
 
   @Override
-  @Transactional
   public void updateReportDefinition(ReportDefinition reportDefinition)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,

@@ -108,7 +108,6 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  @Transactional
   public void createJob(Job job)
       throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException {
     validateJob(job);
@@ -129,7 +128,6 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  @Transactional
   public void deleteJob(String jobId)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
@@ -358,7 +356,6 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  @Transactional
   public void rescheduleJob(String jobId, String schedulingPattern)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
@@ -380,7 +377,6 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  @Transactional
   public void resetJobLocks(JobStatus status, JobStatus newStatus)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (status == null) {
@@ -455,7 +451,6 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  @Transactional
   public void setJobStatus(String jobId, JobStatus status)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
@@ -477,7 +472,6 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  @Transactional
   public void unlockJob(String jobId, JobStatus status)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
@@ -499,7 +493,6 @@ public class SchedulerService implements ISchedulerService {
   }
 
   @Override
-  @Transactional
   public void updateJob(Job job)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     validateJob(job);

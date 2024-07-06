@@ -154,7 +154,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -370,7 +369,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void addMemberToGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
       throws InvalidArgumentException,
@@ -404,7 +402,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -433,7 +430,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException,
           TenantNotFoundException,
@@ -475,7 +471,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void addUserToGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -504,7 +499,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void adminChangePassword(
       UUID userDirectoryId,
       String username,
@@ -540,7 +534,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public UUID authenticate(String username, String password)
       throws InvalidArgumentException,
           AuthenticationFailedException,
@@ -610,7 +603,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public UUID changePassword(String username, String password, String newPassword)
       throws InvalidArgumentException,
           AuthenticationFailedException,
@@ -683,7 +675,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void createFunction(Function function)
       throws InvalidArgumentException, DuplicateFunctionException, ServiceUnavailableException {
     validateFunction(function);
@@ -703,7 +694,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void createGroup(Group group)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -721,7 +711,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void createPolicy(Policy policy)
       throws InvalidArgumentException,
           InvalidPolicyDataException,
@@ -734,7 +723,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public Optional<UserDirectory> createTenant(Tenant tenant, boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException {
     validateTenant(tenant);
@@ -774,7 +762,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -796,7 +783,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void createUserDirectory(UserDirectory userDirectory)
       throws InvalidArgumentException,
           DuplicateUserDirectoryException,
@@ -829,7 +815,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void deleteFunction(String functionCode)
       throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(functionCode)) {
@@ -851,7 +836,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void deleteGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -876,7 +860,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void deletePolicy(String policyId)
       throws InvalidArgumentException, PolicyNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(policyId)) {
@@ -887,7 +870,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void deleteTenant(UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -908,7 +890,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void deleteToken(String tokenId)
       throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(tokenId)) {
@@ -929,7 +910,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void deleteUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -953,7 +933,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void deleteUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException,
           ExistingGroupsException,
@@ -1016,7 +995,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public Token generateToken(GenerateTokenRequest generateTokenRequest)
       throws InvalidArgumentException, ServiceUnavailableException {
     validateGenerateTokenRequest(generateTokenRequest);
@@ -1332,7 +1310,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public GroupMembers getMembersForGroup(
       UUID userDirectoryId,
       String groupName,
@@ -2350,14 +2327,12 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
       throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
     initiatePasswordReset(username, resetPasswordUrl, sendEmail, null);
   }
 
   @Override
-  @Transactional
   public void initiatePasswordReset(
       String username, String resetPasswordUrl, boolean sendEmail, String securityCode)
       throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
@@ -2457,7 +2432,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void reinstateToken(String tokenId)
       throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(tokenId)) {
@@ -2566,7 +2540,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void removeMemberFromGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
       throws InvalidArgumentException,
@@ -2600,7 +2573,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -2629,7 +2601,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException,
           TenantNotFoundException,
@@ -2667,7 +2638,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -2696,7 +2666,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void resetPassword(String username, String newPassword, String securityCode)
       throws InvalidArgumentException,
           InvalidSecurityCodeException,
@@ -2748,7 +2717,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void revokeToken(String tokenId)
       throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(tokenId)) {
@@ -2767,7 +2735,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void updateFunction(Function function)
       throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
     validateFunction(function);
@@ -2787,7 +2754,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void updateGroup(Group group)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -2805,7 +2771,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void updatePolicy(Policy policy)
       throws InvalidArgumentException,
           InvalidPolicyDataException,
@@ -2818,7 +2783,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void updateTenant(Tenant tenant)
       throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     validateTenant(tenant);
@@ -2845,7 +2809,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
@@ -2863,7 +2826,6 @@ public class SecurityService implements ISecurityService {
   }
 
   @Override
-  @Transactional
   public void updateUserDirectory(UserDirectory userDirectory)
       throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     validateUserDirectory(userDirectory);

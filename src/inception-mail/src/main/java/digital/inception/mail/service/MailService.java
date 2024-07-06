@@ -57,7 +57,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -127,7 +126,6 @@ public class MailService implements IMailService {
   }
 
   @Override
-  @Transactional
   @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
   public MailTemplate createMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException {
@@ -150,7 +148,6 @@ public class MailService implements IMailService {
   }
 
   @Override
-  @Transactional
   @CacheEvict(cacheNames = "mailTemplates", key = "#mailTemplateId")
   public void deleteMailTemplate(String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
@@ -416,7 +413,6 @@ public class MailService implements IMailService {
   }
 
   @Override
-  @Transactional
   @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
   public MailTemplate updateMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {

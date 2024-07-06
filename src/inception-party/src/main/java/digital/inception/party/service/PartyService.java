@@ -63,7 +63,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>PartyService</b> class provides the Party Service implementation.
@@ -125,7 +124,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   public Association createAssociation(UUID tenantId, Association association)
       throws InvalidArgumentException,
           DuplicateAssociationException,
@@ -155,7 +153,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   public Mandate createMandate(UUID tenantId, Mandate mandate)
       throws InvalidArgumentException,
           DuplicateMandateException,
@@ -184,7 +181,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
   public Organization createOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
@@ -212,7 +208,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   @CachePut(cacheNames = "persons", key = "#person.id")
   public Person createPerson(UUID tenantId, Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
@@ -239,7 +234,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   public void deleteAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -254,7 +248,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   public void deleteMandate(UUID tenantId, UUID mandateId)
       throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -269,7 +262,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   @CacheEvict(
       cacheNames = {"organizations", "partyTenantIds", "partyTypes"},
       key = "#organizationId")
@@ -287,7 +279,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   @CacheEvict(
       cacheNames = {"organizations", "persons", "partyTenantIds", "partyTypes"},
       key = "#partyId")
@@ -305,7 +296,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   @CacheEvict(
       cacheNames = {"persons", "partyTenantIds", "partyTypes"},
       key = "#personId")
@@ -608,7 +598,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   public Snapshots getSnapshots(
       UUID tenantId,
       EntityType entityType,
@@ -676,7 +665,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   public Association updateAssociation(UUID tenantId, Association association)
       throws InvalidArgumentException,
           AssociationNotFoundException,
@@ -702,7 +690,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   public Mandate updateMandate(UUID tenantId, Mandate mandate)
       throws InvalidArgumentException,
           MandateNotFoundException,
@@ -727,7 +714,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
   public Organization updateOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
@@ -751,7 +737,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Transactional
   @CachePut(cacheNames = "persons", key = "#person.id")
   public Person updatePerson(UUID tenantId, Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
