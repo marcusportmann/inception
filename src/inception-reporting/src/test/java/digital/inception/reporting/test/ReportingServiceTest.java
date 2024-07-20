@@ -97,7 +97,8 @@ public class ReportingServiceTest {
     Map<String, Object> parameters = new HashMap<>();
 
     try (Connection connection = dataSource.getConnection()) {
-      byte[] reportPDF = reportingService.createReportPDF(reportDefinition.getId(), parameters, connection);
+      byte[] reportPDF =
+          reportingService.createReportPDF(reportDefinition.getId(), parameters, connection);
 
       Files.write(Paths.get("reportPDF.pdf"), reportPDF);
     }

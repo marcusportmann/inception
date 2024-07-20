@@ -17,6 +17,7 @@
 package digital.inception.application;
 
 import io.agroal.api.AgroalDataSource;
+import io.agroal.api.configuration.AgroalConnectionPoolConfiguration;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
@@ -111,6 +112,10 @@ public class ApplicationDataSourceConfiguration {
   @Value("${inception.application.data-source.username:#{null}}")
   private String username;
 
+  /** The timeout when validating a connection in the database connection pool. */
+  @Value("${inception.application.data-source.validation-timeout:30}")
+  private int validationTimeout = 30;
+
   /**
    * Constructs a new <b>ApplicationDataSourceConfiguration</b>.
    *
@@ -157,9 +162,12 @@ public class ApplicationDataSourceConfiguration {
         TransactionIntegration transactionIntegration =
             applicationContext.getBean(TransactionIntegration.class);
 
-        agroalDataSourceConfigurationSupplier
-            .connectionPoolConfiguration()
-            .transactionIntegration(transactionIntegration);
+        agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
+            cp ->
+                cp.connectionValidator(
+                        AgroalConnectionPoolConfiguration.ConnectionValidator
+                            .defaultValidatorWithTimeout(validationTimeout))
+                    .transactionIntegration(transactionIntegration));
       } catch (NoSuchBeanDefinitionException ignored) {
       }
 

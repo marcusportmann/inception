@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.core.util;
+package digital.inception.core.jdbc;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

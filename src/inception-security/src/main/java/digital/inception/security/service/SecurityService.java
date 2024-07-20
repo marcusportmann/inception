@@ -1077,9 +1077,7 @@ public class SecurityService implements ISecurityService {
                 generateTokenRequest.getClaims(),
                 signedJWT.serialize());
 
-        tokenRepository.saveAndFlush(token);
-
-        return token;
+        return tokenRepository.saveAndFlush(token);
       } catch (Throwable e) {
         throw new ServiceUnavailableException(
             "Failed to generate the token ("

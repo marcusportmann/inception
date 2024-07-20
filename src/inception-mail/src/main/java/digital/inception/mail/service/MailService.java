@@ -136,9 +136,7 @@ public class MailService implements IMailService {
         throw new DuplicateMailTemplateException(mailTemplate.getId());
       }
 
-      mailTemplateRepository.saveAndFlush(mailTemplate);
-
-      return mailTemplate;
+      return mailTemplateRepository.saveAndFlush(mailTemplate);
     } catch (DuplicateMailTemplateException e) {
       throw e;
     } catch (Throwable e) {
