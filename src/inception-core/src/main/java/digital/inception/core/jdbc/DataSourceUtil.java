@@ -86,16 +86,22 @@ public final class DataSourceUtil {
         TransactionIntegration transactionIntegration =
             applicationContext.getBean(TransactionIntegration.class);
 
-        if (transactionIntegration != null) {
-          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
-              cp ->
-                  cp.connectionValidator(
-                          AgroalConnectionPoolConfiguration.ConnectionValidator
-                              .defaultValidatorWithTimeout(
-                                  dataSourceConfiguration.getValidationTimeout()))
-                      .transactionIntegration(transactionIntegration));
-        }
+        agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
+            cp ->
+                cp.connectionValidator(
+                        AgroalConnectionPoolConfiguration.ConnectionValidator
+                            .defaultValidatorWithTimeout(
+                                dataSourceConfiguration.getValidationTimeout()))
+                    .validateOnBorrow(true)
+                    .transactionIntegration(transactionIntegration));
       } catch (NoSuchBeanDefinitionException ignored) {
+        agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
+            cp ->
+                cp.connectionValidator(
+                        AgroalConnectionPoolConfiguration.ConnectionValidator
+                            .defaultValidatorWithTimeout(
+                                dataSourceConfiguration.getValidationTimeout()))
+                    .validateOnBorrow(true));
       }
 
       return AgroalDataSource.from(agroalDataSourceConfigurationSupplier);

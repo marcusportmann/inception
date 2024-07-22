@@ -167,8 +167,15 @@ public class ApplicationDataSourceConfiguration {
                 cp.connectionValidator(
                         AgroalConnectionPoolConfiguration.ConnectionValidator
                             .defaultValidatorWithTimeout(validationTimeout))
+                    .validateOnBorrow(true)
                     .transactionIntegration(transactionIntegration));
       } catch (NoSuchBeanDefinitionException ignored) {
+        agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
+            cp ->
+                cp.connectionValidator(
+                        AgroalConnectionPoolConfiguration.ConnectionValidator
+                            .defaultValidatorWithTimeout(validationTimeout))
+                    .validateOnBorrow(true));
       }
 
       DataSource dataSource = AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
