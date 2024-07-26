@@ -16,7 +16,7 @@
 
 import {ObserversModule} from '@angular/cdk/observers';
 import {CommonModule, formatDate, HashLocationStrategy, LocationStrategy} from '@angular/common';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import '@angular/localize/init';
@@ -137,81 +137,77 @@ class InceptionDateAdapter extends NativeDateAdapter {
  *
  * @author Marcus Portmann
  */
-@NgModule({
-  declarations: [
-    // Dialog Components
-    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
-    WarningDialogComponent,
-    // Forms Components
-    FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
-    TableFilterComponent,
-    // Forms  Directives
-    AutocompleteSelectionRequiredDirective, AutofocusDirective,
-    ValidatedFormDirective,
-    // Layout Components
-    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
-    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
-    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
-    SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
-    // Layout Directives
-    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
-    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
-    SidebarTogglerDirective,
-    // Session Directives
-    HasAuthorityDirective
-  ],
-  imports: [
-    // Angular modules
-    CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule, RouterModule,
-    // 3rd party modules
-    // ChartsModule,
-    PerfectScrollbarModule,
-    // CDK modules
-    ObserversModule,
-    // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
-    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
-    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
-    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
-  ],
-  exports: [
-    // Angular modules
-    CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule, RouterModule,
-    // 3rd party modules
-    // ChartsModule,
-    PerfectScrollbarModule,
-    // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
-    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
-    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
-    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
-    // Forms Components
-    FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
-    TableFilterComponent,
-    // Forms Directives
-    AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective,
-    // Layout Components
-    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
-    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
-    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
-    SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
-    // Layout Directives
-    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
-    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
-    SidebarTogglerDirective,
-    // Session Directives
-    HasAuthorityDirective
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: SessionInterceptor,
-      multi: true,
-    },
-  ]
-})
+@NgModule({ declarations: [
+        // Dialog Components
+        ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
+        WarningDialogComponent,
+        // Forms Components
+        FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
+        TableFilterComponent,
+        // Forms  Directives
+        AutocompleteSelectionRequiredDirective, AutofocusDirective,
+        ValidatedFormDirective,
+        // Layout Components
+        AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
+        NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
+        SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+        SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
+        // Layout Directives
+        BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
+        SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+        SidebarTogglerDirective,
+        // Session Directives
+        HasAuthorityDirective
+    ],
+    exports: [
+        // Angular modules
+        CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+        // 3rd party modules
+        // ChartsModule,
+        PerfectScrollbarModule,
+        // Material modules
+        MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+        MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
+        MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+        MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
+        MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
+        // Forms Components
+        FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
+        TableFilterComponent,
+        // Forms Directives
+        AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective,
+        // Layout Components
+        AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
+        NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
+        SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+        SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
+        // Layout Directives
+        BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
+        SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+        SidebarTogglerDirective,
+        // Session Directives
+        HasAuthorityDirective
+    ], imports: [
+        // Angular modules
+        CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+        // 3rd party modules
+        // ChartsModule,
+        PerfectScrollbarModule,
+        // CDK modules
+        ObserversModule,
+        // Material modules
+        MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+        MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
+        MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+        MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
+        MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule], providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: SessionInterceptor,
+            multi: true,
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class CoreModule {
   constructor(injector: Injector) {
     setInceptionInjector(injector);
@@ -265,7 +261,9 @@ export class CoreModule {
         SessionService,
 
         // Function Guards
-        CanActivateFunctionGuard, DisabledFunctionGuard
+        CanActivateFunctionGuard, DisabledFunctionGuard,
+
+        provideHttpClient()
       ]
     };
   }

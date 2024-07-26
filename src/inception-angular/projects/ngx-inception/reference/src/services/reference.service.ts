@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
   AccessDeniedError, CacheService, CommunicationError, INCEPTION_CONFIG, InceptionConfig,

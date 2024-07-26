@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.ssl.DefaultSslBundleRegistry;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.util.StringUtils;
 
@@ -177,7 +178,8 @@ public abstract class Processor<K, V> extends Thread {
   @Override
   public void run() {
     try {
-      Map<String, Object> properties = kafkaProperties.buildConsumerProperties();
+      Map<String, Object> properties =
+          kafkaProperties.buildConsumerProperties(new DefaultSslBundleRegistry());
 
       if (StringUtils.hasText(kafkaProperties.getConsumer().getGroupId())) {
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
@@ -196,27 +198,27 @@ public abstract class Processor<K, V> extends Thread {
        * re-balancing the topic while we are paused for a transient error, critical error or commit
        * error we set the max poll interval accordingly.
        */
-      if (maxPollInterval > 0) {
-        properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, maxPollInterval);
+      if (getMaxPollInterval() > 0) {
+        properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, getMaxPollInterval());
       } else {
         properties.put(
             ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG,
             Integer.min(
                 Integer.max(
-                        commitFailurePause,
-                        Integer.max(temporarilyUnavailablePause, criticalErrorPause))
+                    getCommitFailurePause(),
+                    Integer.max(getTemporarilyUnavailablePause(), getCriticalErrorPause()))
                     + 5000,
                 60000));
       }
 
       if (!properties.containsKey(ConsumerConfig.MAX_POLL_RECORDS_CONFIG)) {
-        if (maxPollRecords > 0) {
-          properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);
+        if (getMaxPollRecords() > 0) {
+          properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, getMaxPollRecords());
         }
       }
 
-      if (maxFetchBytes > 0) {
-        properties.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, maxFetchBytes);
+      if (getMaxFetchBytes() > 0) {
+        properties.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, getMaxFetchBytes());
       }
 
       DefaultKafkaConsumerFactory<K, V> consumerFactory =
@@ -233,7 +235,7 @@ public abstract class Processor<K, V> extends Thread {
           if (logger.isDebugEnabled()) {
             if ((processorActiveLastLogTime == -1)
                 || ((System.currentTimeMillis() - processorActiveLastLogTime)
-                    >= processorActiveLoggingInterval)) {
+                >= getProcessorActiveLoggingInterval())) {
               processorActiveLastLogTime = System.currentTimeMillis();
               logger.debug(
                   "The processor ({}) is still active and processing with thread ID ({})",
@@ -242,7 +244,7 @@ public abstract class Processor<K, V> extends Thread {
             }
           }
 
-          ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(pollTimeout));
+          ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(getPollTimeout()));
 
           if (logger.isTraceEnabled()) {
             logger.trace(
@@ -343,13 +345,13 @@ public abstract class Processor<K, V> extends Thread {
                           + "("
                           + partition.topic()
                           + "). This will be retried in "
-                          + recordProcessingFailurePause
+                          + getRecordProcessingFailurePause()
                           + "ms",
                       t);
 
                   try {
                     // noinspection ALL
-                    sleep(recordProcessingFailurePause);
+                    sleep(getRecordProcessingFailurePause());
                   } catch (Throwable ignored) {
                   }
                 }
@@ -385,13 +387,13 @@ public abstract class Processor<K, V> extends Thread {
                           + "("
                           + partition.topic()
                           + "). This will be retried in "
-                          + recordProcessingFailurePause
+                          + getRecordProcessingFailurePause()
                           + "ms",
                       t);
 
                   try {
                     // noinspection ALL
-                    sleep(recordProcessingFailurePause);
+                    sleep(getRecordProcessingFailurePause());
                   } catch (Throwable ignored) {
                   }
                 }
@@ -406,7 +408,7 @@ public abstract class Processor<K, V> extends Thread {
                   }
 
                   // noinspection ALL
-                  sleep(temporarilyUnavailablePause);
+                  sleep(getTemporarilyUnavailablePause());
                 } catch (Throwable ignored) {
                 }
 
@@ -444,12 +446,12 @@ public abstract class Processor<K, V> extends Thread {
               "Failed to commit the record retrieved from the topic ({}). This error has occurred {} time(s). Sleeping for {} ms.",
               getTopic(),
               commitFailureCount,
-              commitFailurePause,
+              getCommitFailurePause(),
               e);
 
           try {
             // noinspection ALL
-            sleep(commitFailurePause);
+            sleep(getCommitFailurePause());
           } catch (Throwable ignored) {
           }
         }
@@ -490,6 +492,104 @@ public abstract class Processor<K, V> extends Thread {
     }
 
     logger.info("Processor (" + getClass().getSimpleName() + ") shutdown");
+  }
+
+  /**
+   * Returns the amount of time in milliseconds the processor will pause after failing to commit a
+   * processed record.
+   *
+   * @return the amount of time in milliseconds the processor will pause after failing to commit a
+   *     processed record
+   */
+  protected int getCommitFailurePause() {
+    return commitFailurePause;
+  }
+
+  /**
+   * Returns the amount of time in milliseconds the processor will pause when a critical error is
+   * encountered while processing a record.
+   *
+   * @return the amount of time in milliseconds the processor will pause when a critical error is
+   *     encountered while processing a record
+   */
+  protected int getCriticalErrorPause() {
+    return criticalErrorPause;
+  }
+
+  /**
+   * Returns the maximum number of bytes returned in a call to poll().
+   *
+   * @return the maximum number of bytes returned in a call to poll()
+   */
+  protected int getMaxFetchBytes() {
+    return maxFetchBytes;
+  }
+
+  /**
+   * Returns the maximum poll interval in milliseconds.
+   *
+   * @return the maximum poll interval in milliseconds
+   */
+  protected int getMaxPollInterval() {
+    return maxPollInterval;
+  }
+
+  /**
+   * Returns the maximum number of records returned in a call to poll().
+   *
+   * @return the maximum number of records returned in a call to poll()
+   */
+  protected int getMaxPollRecords() {
+    return maxPollRecords;
+  }
+
+  /**
+   * Returns whether metrics are enabled.
+   *
+   * @return <b>true</b> if metrics are enabled <b>false</b> otherwise
+   */
+  protected boolean getMetricsEnabled() {
+    return metricsEnabled;
+  }
+
+  /**
+   * Returns the timeout when polling for records from the Apache Kafka topic.
+   *
+   * @return the timeout when polling for records from the Apache Kafka topic
+   */
+  protected int getPollTimeout() {
+    return pollTimeout;
+  }
+
+  /**
+   * Returns the time in milliseconds between attempts to log that a processor is still active.
+   *
+   * @return the time in milliseconds between attempts to log that a processor is still active
+   */
+  protected long getProcessorActiveLoggingInterval() {
+    return processorActiveLoggingInterval;
+  }
+
+  /**
+   * Returns the amount of time in milliseconds the processor will pause when it is unable to handle
+   * the failed processing of a record.
+   *
+   * @return the amount of time in milliseconds the processor will pause when it is unable to handle
+   *     the failed processing of a record
+   */
+  protected int getRecordProcessingFailurePause() {
+    return recordProcessingFailurePause;
+  }
+
+  /**
+   * Returns the amount of time in milliseconds the processor will pause when the processor or one
+   * of its dependencies is temporarily unavailable.
+   *
+   * @return the amount of time in milliseconds the processor will pause when the processor or one
+   *     of its dependencies is temporarily unavailable
+   */
+  protected int getTemporarilyUnavailablePause() {
+    return temporarilyUnavailablePause;
   }
 
   /**

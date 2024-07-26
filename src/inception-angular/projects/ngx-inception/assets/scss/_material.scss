@@ -1,9 +1,6 @@
 @use "sass:map";
 @use '@angular/material' as mat;
-@use '@material/feature-targeting/feature-targeting';
-@use '@material/theme/theme';
-@use "@material/typography/typography";
-
+@use "@angular/material/core/typography/typography";
 
 
 @include mat.core();
@@ -13,7 +10,7 @@
 @import 'default-theme-variables';
 
 
-$inception-typography: mat.define-typography-config(
+$inception-typography: mat.m2-define-typography-config(
   $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
   //$headline-1: null,
   //$headline-2: null,
@@ -21,18 +18,18 @@ $inception-typography: mat.define-typography-config(
   //$headline-4: null,
   //$headline-5: null,
   //$headline-6: null,
-  $subtitle-1: mat.define-typography-level(1rem, 1.5rem, 500),
-  $subtitle-2: mat.define-typography-level(14px, 24px, 500),
-  $body-1: mat.define-typography-level(1rem),
-  $body-2: mat.define-typography-level(14px),
-  $caption: mat.define-typography-level(12px, 20px, 400, null, normal),
-  $button: mat.define-typography-level(1rem, 1rem),
+  $subtitle-1: mat.m2-define-typography-level(1rem, 1.5rem, 500),
+  $subtitle-2: mat.m2-define-typography-level(14px, 24px, 500),
+  $body-1: mat.m2-define-typography-level(1rem),
+  $body-2: mat.m2-define-typography-level(14px),
+  $caption: mat.m2-define-typography-level(12px, 20px, 400, null, normal),
+  $button: mat.m2-define-typography-level(1rem, 1rem),
   // $overline: null,
 );
 
 
 
-$inception-legacy-typography: mat.define-legacy-typography-config(
+$inception-legacy-typography: mat.m2-define-legacy-typography-config(
   $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
   //$display-4:     define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
   //$display-3:     define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
@@ -41,12 +38,12 @@ $inception-legacy-typography: mat.define-legacy-typography-config(
   //$headline:      define-typography-level(24px, 32px, 400),
   //$title:         define-typography-level(20px, 32px, 500),
   //$subheading-2:  define-typography-level(16px, 28px, 400),
-  $subheading-1: mat.define-typography-level(1rem, 1.5rem, 500), // DEFAULT: define-typography-level(15px, 24px, 400),
-  $subheading-2: mat.define-typography-level(14px, 24px, 500),
-  $body-1: mat.define-typography-level(1rem),
-  $body-2: mat.define-typography-level(14px),
-  $caption: mat.define-typography-level(12px, 20px, 400, null, normal),
-  $button: mat.define-typography-level(1rem, 1rem),
+  $subheading-1: mat.m2-define-typography-level(1rem, 1.5rem, 500), // DEFAULT: define-typography-level(15px, 24px, 400),
+  $subheading-2: mat.m2-define-typography-level(14px, 24px, 500),
+  $body-1: mat.m2-define-typography-level(1rem),
+  $body-2: mat.m2-define-typography-level(14px),
+  $caption: mat.m2-define-typography-level(12px, 20px, 400, null, normal),
+  $button: mat.m2-define-typography-level(1rem, 1rem),
   // Line-height must be unit-less fraction of the font-size.
   //$input:         define-typography-level(inherit, 1.125, 400)
 );
@@ -54,11 +51,11 @@ $inception-legacy-typography: mat.define-legacy-typography-config(
 
 
 //$inception-primary: mat.define-palette($inception-palette);
-$inception-primary: mat.define-palette(mat.$blue-palette);
-$inception-accent:  mat.define-palette(mat.$light-blue-palette);
-$inception-warn: mat.define-palette(mat.$red-palette);
+$inception-primary: mat.m2-define-palette(mat.$m2-blue-palette);
+$inception-accent:  mat.m2-define-palette(mat.$m2-light-blue-palette);
+$inception-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-$inception-theme: mat.define-light-theme((
+$inception-theme: mat.m2-define-light-theme((
   color: (
     primary: $inception-primary,
     accent: $inception-accent,
@@ -181,7 +178,7 @@ $inception-theme: mat.define-light-theme((
 
   &.mat-card-primary {
     .mat-mdc-card-header {
-      background-color: mat.get-color-from-palette($inception-primary, default);
+      background-color: mat.m2-get-color-from-palette($inception-primary, default);
     }
 
     .mat-mdc-card-subtitle {
@@ -195,7 +192,7 @@ $inception-theme: mat.define-light-theme((
 
   &.mat-card-accent {
     .mat-mdc-card-header {
-      background-color: mat.get-color-from-palette($inception-accent, default);
+      background-color: mat.m2-get-color-from-palette($inception-accent, default);
     }
 
     .mat-mdc-card-subtitle {
@@ -209,7 +206,7 @@ $inception-theme: mat.define-light-theme((
 
   &.mat-card-warn {
     .mat-mdc-card-header {
-      background-color: mat.get-color-from-palette($inception-warn, default);
+      background-color: mat.m2-get-color-from-palette($inception-warn, default);
     }
 
     .mat-mdc-card-subtitle {
@@ -285,7 +282,7 @@ $inception-theme: mat.define-light-theme((
 
   .confirmation-dialog {
     .header {
-      background-color: mat.get-color-from-palette($inception-primary, default);
+      background-color: mat.m2-get-color-from-palette($inception-primary, default);
     }
 
     .button {
@@ -298,7 +295,7 @@ $inception-theme: mat.define-light-theme((
 
   .error-dialog {
     .header {
-      background-color: mat.get-color-from-palette($inception-warn, default);
+      background-color: mat.m2-get-color-from-palette($inception-warn, default);
     }
 
     .button {
@@ -311,7 +308,7 @@ $inception-theme: mat.define-light-theme((
 
   .information-dialog {
     .header {
-      background-color: mat.get-color-from-palette($inception-primary, default);
+      background-color: mat.m2-get-color-from-palette($inception-primary, default);
     }
 
     .button {
@@ -324,7 +321,7 @@ $inception-theme: mat.define-light-theme((
 
   .warning-dialog {
     .header {
-      background-color: mat.get-color-from-palette($inception-warn, default);
+      background-color: mat.m2-get-color-from-palette($inception-warn, default);
     }
 
     .button {
@@ -580,11 +577,11 @@ $inception-theme: mat.define-light-theme((
 
   .mat-mdc-nested-header-cell {
     color: var(--mdc-filled-text-field-label-text-color);
-    @include mat.typography-level($inception-typography, 'subtitle-2');
+    @include mat.m2-typography-level($inception-typography, 'subtitle-2');
   }
 
   .mat-mdc-nested-cell, .mat-mdc-nested-footer-cell {
-    @include mat.typography-level($inception-typography, 'body-2');
+    @include mat.m2-typography-level($inception-typography, 'body-2');
   }
 
   .mat-mdc-nested-header-cell, .mat-mdc-nested-cell, .mat-mdc-nested-footer-cell {
@@ -861,16 +858,16 @@ $inception-theme: mat.define-light-theme((
   }
 
   &.mat-primary {
-    border: 1px solid mat.get-color-from-palette($inception-primary, default);
+    border: 1px solid mat.m2-get-color-from-palette($inception-primary, default);
   }
 
   &.mat-accent {
     color: white !important;
-    border: 1px solid mat.get-color-from-palette($inception-accent, default);
+    border: 1px solid mat.m2-get-color-from-palette($inception-accent, default);
   }
 
   &.mat-warn {
-    border: 1px solid mat.get-color-from-palette($inception-warn, default);
+    border: 1px solid mat.m2-get-color-from-palette($inception-warn, default);
   }
 
   &[disabled] {

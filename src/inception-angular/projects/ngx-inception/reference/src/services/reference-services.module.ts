@@ -15,7 +15,7 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import '@angular/localize/init';
 import {ReferenceService} from './reference.service';
@@ -25,14 +25,10 @@ import {ReferenceService} from './reference.service';
  *
  * @author Marcus Portmann
  */
-@NgModule({
-  declarations: [],
-  imports: [
-    // Angular modules
-    CommonModule, HttpClientModule
-  ],
-  exports: []
-})
+@NgModule({ declarations: [],
+    exports: [], imports: [
+        // Angular modules
+        CommonModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class ReferenceServicesModule {
   constructor() {
   }

@@ -17,65 +17,39 @@ Complete the following steps to setup a development environment on MacOS.
    ```
 2. Install Homebrew by executing the following command in a Terminal window.
    ```
-   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
-3. Install OpenJDK 21 by executing the following commands in a Terminal window.
+3. Install OpenJDK by executing the following commands in a Terminal window.
    ```
-   brew install openjdk@21
+   brew install openjdk
+   sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
    ```
 4. Install Apache Maven by executing the following command in a Terminal window.
    ```
    brew install maven
    ```
-5. Install jenv by executing the following commands in a Terminal window.
+5. Install Postgres by executing the following command in a Terminal window.
    ```
-   brew install jenv
+   brew install postgresql
    ```
-6. Add the following lines to your .zshrc or .bash_profile file to enable jenv and restart
-   your Terminal.
+6. Install liquibase by executing the following commands in a Terminal window.
    ```
-   export PATH="$HOME/.jenv/bin:$PATH"
-   eval "$(jenv init -)"
+   brew install liquibase
    ```
-7. Set OpenJDK 21 as the default java verison by executing the following commands in a
-   Terminal window.
+7. Install node by executing the following commands in a Terminal window.
    ```
-   Intel Mac:
-   jenv add /usr/local/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home
-   jenv global 21.0
-   sudo ln -s -f /usr/local/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk
-   
-   M1 Mac:
-   jenv add /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home
-   jenv global 21.0
-   sudo ln -s -f /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk
+   brew install n
+   sudo n lts_latest
    ```
-8. Install the maven plugin for jenv by executing the following command in a Terminal
-   window.
+8. Install yarn by executing the following commands in a Terminal window.
    ```
-   jenv enable-plugin maven
+   brew install yarn
    ```
-9. Install Postgres by executing the following command in a Terminal window.
+9. Execute the following command to change to use explicit version dependencies with yarn.
    ```
-   brew install postgres
+   yarn config set save-prefix ''
    ```
-10. Install liquibase by executing the following commands in a Terminal window.
-    ```
-    brew install liquibase
-    ```
-11. Install node by executing the following commands in a Terminal window.
-    ```
-    brew install node
-    ```
-12. Install yarn by executing the following commands in a Terminal window.
-    ```
-    brew install yarn
-    ```
-13. Execute the following command to change to use explicit version dependencies with yarn.
-    ```
-    yarn config set save-prefix ''
-    ```
-14. Execute the following command to install the Angular CLI globally using yarn.
+10. Execute the following command to install the Angular CLI globally using yarn.
     ```
     yarn global add @angular/cli
     ```
