@@ -226,9 +226,9 @@ $inception-theme: mat.m2-define-light-theme((
   padding: 0 !important;
 
   .mat-mdc-dialog-title {
-    color: #ffffff;
-    background-color: #007bff;
-    padding: 16px;
+    color: #ffffff !important;
+    background-color: #2196f3;
+    padding-bottom: 16px;
   }
 
   .mat-mdc-dialog-content {
@@ -236,10 +236,10 @@ $inception-theme: mat.m2-define-light-theme((
   }
 
   .mat-mdc-dialog-actions {
-    float: right;
+    display: flex;
+    justify-content: flex-end;
     padding: 8px 16px 16px;
     margin: 0;
-    text-align: right;
 
     .mat-mdc-button:not(:last-child), .mat-mdc-flat-button:not(:last-child), .mat-mdc-raised-button:not(:last-child), .mat-mdc-icon-button:not(:last-child) {
       margin-right: 10px;
