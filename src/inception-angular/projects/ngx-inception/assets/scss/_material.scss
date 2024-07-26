@@ -232,7 +232,7 @@ $inception-theme: mat.m2-define-light-theme((
   }
 
   .mat-mdc-dialog-content {
-    padding: 16px;
+    padding: 16px !important;
   }
 
   .mat-mdc-dialog-actions {
