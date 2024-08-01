@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.1</version>
+    <version>3.3.2</version>
   </parent>
 
   <repositories>
@@ -97,7 +97,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>21</java.version>
 
-    <agroal-pool.version>2.4</agroal-pool.version>
+    <agroal-pool.version>2.5</agroal-pool.version>
     <authzforce-ce-core-pdp-engine.version>21.0.1</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.11.3</avro.version>
     <azure-identity.version>1.13.0</azure-identity.version>
@@ -109,24 +109,24 @@
     <flowable.version>7.0.1</flowable.version>
     <freemarker.version>2.3.33</freemarker.version>
     <greenmail.version>2.0.1</greenmail.version>
-    <groovy.version>4.0.21</groovy.version>
+    <groovy.version>4.0.22</groovy.version>
     <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
     <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-    <jakarta.el.jakarta.el-api.version>6.0.0</jakarta.el.jakarta.el-api.version>
     <jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
     <jakarta.xml.ws-api.version>4.0.2</jakarta.xml.ws-api.version>
     <jasperreports.version>7.0.0</jasperreports.version>
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.0.Final</jboss-transaction-spi.version>
     <liquibase-slf4j.version>5.0.0</liquibase-slf4j.version>
+    <lombok.version>1.18.34</lombok.version>
     <mssql-jdbc.version>12.6.3.jre11</mssql-jdbc.version>
     <narayana.version>7.0.2.Final</narayana.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.3</postgresql.version>
-    <spring-boot.version>3.3.1</spring-boot.version>
-    <spring-shell-starter.version>3.3.1</spring-shell-starter.version>
-    <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
+    <spring-boot.version>3.3.2</spring-boot.version>
+    <spring-shell-starter.version>3.3.2</spring-shell-starter.version>
+    <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
     <swagger.version>2.2.22</swagger.version>
     <uuid-creator.version>5.3.7</uuid-creator.version>
@@ -207,11 +207,6 @@
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-models-jakarta</artifactId>
         <version>${swagger.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>jakarta.el</groupId>
-        <artifactId>jakarta.el-api</artifactId>
-        <version>${jakarta.el.jakarta.el-api.version}</version>
       </dependency>
       <dependency>
         <groupId>jakarta.xml.bind</groupId>

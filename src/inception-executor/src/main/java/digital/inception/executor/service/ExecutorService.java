@@ -1022,8 +1022,8 @@ public class ExecutorService implements IExecutorService {
       OffsetDateTime lockedBefore =
           OffsetDateTime.now().minus(taskExecutionTimeout, ChronoUnit.MILLIS);
 
-      if (inDebugMode) {
-        logger.info(
+      if (logger.isDebugEnabled()) {
+        logger.debug(
             "Resetting the hung tasks that were locked for execution before " + lockedBefore);
       }
 

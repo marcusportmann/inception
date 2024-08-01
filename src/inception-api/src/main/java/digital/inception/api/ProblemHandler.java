@@ -17,6 +17,7 @@
 package digital.inception.api;
 
 import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.service.BusinessException;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
@@ -93,21 +94,22 @@ public class ProblemHandler {
       problemDetails.setType(problem.type());
       problemDetails.setTitle(problem.title());
       problemDetails.setStatus(problem.status());
-
-    } else if (serviceException instanceof InvalidArgumentException invalidArgumentException) {
+    } else if (serviceException instanceof BusinessException businessException) {
+      problemDetails.setType("https://inception.digital/problems/business-error");
+      problemDetails.setTitle(businessException.getMessage());
+      problemDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+    }  else if (serviceException instanceof InvalidArgumentException invalidArgumentException) {
       problemDetails.setType("https://inception.digital/problems/invalid-argument");
       problemDetails.setTitle("Invalid argument.");
       problemDetails.setStatus(HttpStatus.BAD_REQUEST.value());
 
       problemDetails.setParameter(invalidArgumentException.getParameter());
       problemDetails.setValidationErrors(invalidArgumentException.getValidationErrors());
-
     } else if (serviceException instanceof ServiceUnavailableException) {
       problemDetails.setType("https://inception.digital/problems/service-unavailable");
       problemDetails.setTitle(
           "An error has occurred and your request could not be processed at this time.");
       problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-
     } else {
       problemDetails.setType("about:blank");
       problemDetails.setTitle(
