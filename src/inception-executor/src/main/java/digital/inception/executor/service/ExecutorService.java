@@ -66,7 +66,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -830,16 +829,6 @@ public class ExecutorService implements IExecutorService {
   @PostConstruct
   public void init() {
     logger.info("Initializing the Executor Service (" + instanceName + ")");
-
-    // Initialize the task executors for the task types
-    try {
-      for (TaskType taskType : getTaskTypes()) {
-        getTaskExecutorForTaskType(taskType);
-      }
-    } catch (Throwable e) {
-      throw new BeanInitializationException(
-          "Failed to initialize the task executors for the task types", e);
-    }
   }
 
   @Override

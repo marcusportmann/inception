@@ -118,6 +118,7 @@
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.0.Final</jboss-transaction-spi.version>
     <liquibase-slf4j.version>5.0.0</liquibase-slf4j.version>
+    <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
     <lombok.version>1.18.34</lombok.version>
     <mssql-jdbc.version>12.6.3.jre11</mssql-jdbc.version>
     <narayana.version>7.0.2.Final</narayana.version>
@@ -217,6 +218,11 @@
         <groupId>jakarta.xml.ws</groupId>
         <artifactId>jakarta.xml.ws-api</artifactId>
         <version>${jakarta.xml.ws-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.logstash.logback</groupId>
+        <artifactId>logstash-logback-encoder</artifactId>
+        <version>${logstash-logback-encoder.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.avro</groupId>

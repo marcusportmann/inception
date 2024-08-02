@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
+  <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
+  <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
+  <logger name="org.apache.sshd.common.util.SecurityUtils" level="WARN"/>
+  <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"/>
+  <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+  <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+
+  <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+  <springProfile name="default">
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <root level="INFO">
+      <appender-ref ref="CONSOLE" />
+    </root>
+  </springProfile>
+  <springProfile name="local">
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <root level="INFO">
+      <appender-ref ref="CONSOLE" />
+    </root>
+  </springProfile>
+  <springProfile name="dev | qa | prod">
+    <springProperty scope="context" name="APP" source="spring.application.name"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      </encoder>
+    </appender>
+    <appender name="ASYNC" class="net.logstash.logback.appender.LoggingEventAsyncDisruptorAppender">
+      <appender-ref ref="CONSOLE" />
+    </appender>
+    <root level="INFO">
+      <appender-ref ref="ASYNC" />
+    </root>
+  </springProfile>
+
+</configuration>
