@@ -57,3 +57,5 @@ target/
 /.apt_generated/
 
 ObjectStore
+
+reportPDF.pdf
