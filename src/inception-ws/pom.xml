@@ -45,6 +45,11 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
       <scope>provided</scope>
@@ -80,6 +85,7 @@
                     <exclude>com.google.guava:guava:[32,33)</exclude>
                     <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
+                    <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
                   </excludes>
                 </dependencyConvergence>
               </rules>

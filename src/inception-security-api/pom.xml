@@ -23,6 +23,13 @@
       <artifactId>inception-api</artifactId>
     </dependency>
 
+    <!-- Provided Dependencies -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
@@ -42,6 +49,30 @@
             <phase>deploy</phase>
             <goals>
               <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <configuration>
+              <rules>
+                <dependencyConvergence>
+                  <excludes>
+                    <exclude>com.google.guava:guava:[32,33)</exclude>
+                    <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
+                    <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
+                    <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
+                  </excludes>
+                </dependencyConvergence>
+              </rules>
+            </configuration>
+            <goals>
+              <goal>enforce</goal>
             </goals>
           </execution>
         </executions>

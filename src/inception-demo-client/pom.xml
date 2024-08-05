@@ -33,6 +33,13 @@
       <artifactId>spring-boot-starter</artifactId>
     </dependency>
 
+    <!-- Provided Dependencies -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
@@ -95,6 +102,7 @@
                     <exclude>org.apache.commons:commons-collections4:[4,5)</exclude>
                     <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
+                    <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
                     <exclude>org.checkerframework:checker-qual:[3,4)</exclude>
                     <exclude>org.ow2.asm:asm:[9,10)</exclude>
                   </excludes>
