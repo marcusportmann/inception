@@ -18,19 +18,16 @@ package digital.inception.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import digital.inception.core.jdbc.DataSourceConfiguration;
+import digital.inception.core.jdbc.DataSourceUtil;
 import digital.inception.jpa.JpaUtil;
 import digital.inception.json.DateTimeModule;
-import io.agroal.api.AgroalDataSource;
-import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
-import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
-import io.agroal.api.transaction.TransactionIntegration;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.Executor;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
@@ -128,37 +125,25 @@ public class TestConfiguration {
    */
   @Bean
   @Primary
+  @Qualifier("applicationDataSource")
   public DataSource applicationDataSource() {
     synchronized (dataSourceLock) {
       if (dataSource == null) {
         try {
-          Properties agroalProperties = new Properties();
-          agroalProperties.setProperty(
-              AgroalPropertiesReader.JDBC_URL,
-              "jdbc:h2:mem:"
-                  + Thread.currentThread().getName()
-                  + ";AUTOCOMMIT=OFF;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE");
-
-          agroalProperties.setProperty(
-              AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
-          agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE, "5");
-
-          AgroalPropertiesReader agroalReaderProperties2 =
-              new AgroalPropertiesReader().readProperties(agroalProperties);
-          AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
-              agroalReaderProperties2.modify();
-
-          TransactionIntegration transactionIntegration =
-              applicationContext.getBean(TransactionIntegration.class);
-
-          if (transactionIntegration != null) {
-            agroalDataSourceConfigurationSupplier
-                .connectionPoolConfiguration()
-                .transactionIntegration(transactionIntegration);
-          }
+          DataSourceConfiguration dataSourceConfiguration =
+              new DataSourceConfiguration(
+                  "org.h2.jdbcx.JdbcDataSource",
+                  "jdbc:h2:mem:"
+                      + Thread.currentThread().getName()
+                      + ";AUTOCOMMIT=OFF;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE",
+                  "sa",
+                  "",
+                  1,
+                  5,
+                  30);
 
           dataSource =
-              new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
+              DataSourceUtil.initAgroalDataSource(applicationContext, dataSourceConfiguration);
 
           // Initialize the in-memory database using Liquibase changeSets
           try (Connection connection = dataSource.getConnection()) {

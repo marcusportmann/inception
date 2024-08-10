@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.demo;
+package digital.inception.demo.test;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import java.sql.Connection;

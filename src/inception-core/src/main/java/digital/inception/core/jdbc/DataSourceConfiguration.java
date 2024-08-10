@@ -43,11 +43,71 @@ public class DataSourceConfiguration {
   /** The username for the database. */
   private String username;
 
-  /** The timeout when validating a connection in the database connection pool. */
+  /** The timeout in seconds when validating a connection in the database connection pool. */
   private int validationTimeout = 30;
 
   /** Constructs a new <b>DataSourceConfiguration</b>. */
   public DataSourceConfiguration() {}
+
+  /**
+   * Constructs a new <b>DataSourceConfiguration</b>.
+   *
+   * @param className the fully qualified name of the data source class used to connect to the
+   *     database
+   * @param url the URL used to connect to the database
+   * @param username the username for the database
+   * @param password the password for the database
+   * @param minPoolSize the minimum size of the database connection pool used to connect to the
+   *     database
+   * @param maxPoolSize the maximum size of the database connection pool used to connect to the
+   *     database
+   */
+  public DataSourceConfiguration(
+      String className,
+      String url,
+      String username,
+      String password,
+      int minPoolSize,
+      int maxPoolSize) {
+    this.className = className;
+    this.url = url;
+    this.username = username;
+    this.password = password;
+    this.minPoolSize = minPoolSize;
+    this.maxPoolSize = maxPoolSize;
+  }
+
+  /**
+   * Constructs a new <b>DataSourceConfiguration</b>.
+   *
+   * @param className the fully qualified name of the data source class used to connect to the
+   *     database
+   * @param url the URL used to connect to the database
+   * @param username the username for the database
+   * @param password the password for the database
+   * @param minPoolSize the minimum size of the database connection pool used to connect to the
+   *     database
+   * @param maxPoolSize the maximum size of the database connection pool used to connect to the
+   *     database
+   * @param validationTimeout the timeout in seconds when validating a connection in the database
+   *     connection pool
+   */
+  public DataSourceConfiguration(
+      String className,
+      String url,
+      String username,
+      String password,
+      int minPoolSize,
+      int maxPoolSize,
+      int validationTimeout) {
+    this.className = className;
+    this.url = url;
+    this.username = username;
+    this.password = password;
+    this.minPoolSize = minPoolSize;
+    this.maxPoolSize = maxPoolSize;
+    this.validationTimeout = validationTimeout;
+  }
 
   /**
    * Returns the fully qualified name of the data source class used to connect to the database.
@@ -104,9 +164,9 @@ public class DataSourceConfiguration {
   }
 
   /**
-   * Returns the timeout when validating a connection in the database connection pool.
+   * Returns the timeout in seconds when validating a connection in the database connection pool.
    *
-   * @return the timeout when validating a connection in the database connection pool
+   * @return the timeout in seconds when validating a connection in the database connection pool
    */
   public int getValidationTimeout() {
     return validationTimeout;
@@ -170,10 +230,10 @@ public class DataSourceConfiguration {
   }
 
   /**
-   * Set the timeout when validating a connection in the database connection pool.
+   * Set the timeout in seconds when validating a connection in the database connection pool.
    *
-   * @param validationTimeout the timeout when validating a connection in the database connection
-   *     pool
+   * @param validationTimeout the timeout in seconds when validating a connection in the database
+   *     connection pool
    */
   public void setValidationTimeout(int validationTimeout) {
     this.validationTimeout = validationTimeout;

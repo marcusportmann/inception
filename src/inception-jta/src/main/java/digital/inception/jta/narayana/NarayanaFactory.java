@@ -18,14 +18,13 @@ package digital.inception.jta.narayana;
 
 import com.arjuna.ats.arjuna.coordinator.TxControl;
 import com.arjuna.ats.arjuna.recovery.RecoveryManager;
-import digital.inception.jta.agroal.NarayanaTransactionIntegration;
-import io.agroal.api.transaction.TransactionIntegration;
 import jakarta.transaction.TransactionManager;
 import jakarta.transaction.TransactionSynchronizationRegistry;
 import jakarta.transaction.UserTransaction;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
@@ -74,7 +73,7 @@ public class NarayanaFactory {
    *
    * @return the Narayana recovery manager
    */
-  @Bean
+  @Bean("narayanaRecoveryManager")
   public RecoveryManager narayanaRecoveryManager() {
     RecoveryManager recoveryManager = RecoveryManager.manager();
 
@@ -84,28 +83,12 @@ public class NarayanaFactory {
   }
 
   /**
-   * Returns the Narayana transaction integration.
-   *
-   * @param transactionManager the transaction manager
-   * @param transactionSynchronizationRegistry the transaction synchronization registry
-   * @param recoveryManager the recovery manager
-   * @return the Narayana transaction integration
-   */
-  @Bean
-  public TransactionIntegration narayanaTransactionIntegration(
-      TransactionManager transactionManager,
-      TransactionSynchronizationRegistry transactionSynchronizationRegistry,
-      RecoveryManager recoveryManager) {
-    return new NarayanaTransactionIntegration(
-        transactionManager, transactionSynchronizationRegistry, recoveryManager);
-  }
-
-  /**
    * Returns the Narayana JTA transaction manager.
    *
    * @return the Narayana JTA transaction manager
    */
-  @Bean
+  @Bean("narayanaTransactionManager")
+  @Primary
   public TransactionManager narayanaTransactionManager() {
     return com.arjuna.ats.jta.TransactionManager.transactionManager();
   }
@@ -116,7 +99,7 @@ public class NarayanaFactory {
    * @param transactionManager the transaction manager
    * @return the Narayana JTA transaction synchronization registry
    */
-  @Bean
+  @Bean("narayanaTransactionSynchronizationRegistry")
   public TransactionSynchronizationRegistry narayanaTransactionSynchronizationRegistry(
       TransactionManager transactionManager) {
     return new com.arjuna.ats.internal.jta.transaction.arjunacore
@@ -141,6 +124,7 @@ public class NarayanaFactory {
    * @return the Spring JTA platform transaction manager
    */
   @Bean
+  @Primary
   public PlatformTransactionManager transactionManager(
       UserTransaction userTransaction, TransactionManager transactionManager) {
     try {

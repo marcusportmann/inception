@@ -61,10 +61,10 @@ import java.util.Objects;
   "eventTypes",
   "eventTypesWithTaskData"
 })
-@XmlRootElement(name = "TaskType", namespace = "https://nova.discovery.co.za/executor")
+@XmlRootElement(name = "TaskType", namespace = "https://inception.digital/executor")
 @XmlType(
     name = "TaskType",
-    namespace = "https://nova.discovery.co.za/executor",
+    namespace = "https://inception.digital/executor",
     propOrder = {
       "code",
       "name",

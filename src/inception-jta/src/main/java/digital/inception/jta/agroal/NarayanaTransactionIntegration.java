@@ -29,6 +29,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.transaction.xa.XAResource;
+import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>NarayanaTransactionIntegration</b> class.
@@ -76,6 +78,27 @@ public class NarayanaTransactionIntegration
     this.transactionManager = transactionManager;
     this.transactionSynchronizationRegistry = transactionSynchronizationRegistry;
     this.recoveryManager = recoveryManager;
+  }
+
+  /**
+   * Constructs a new <b>NarayanaTransactionIntegration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public NarayanaTransactionIntegration(ApplicationContext applicationContext) {
+    try {
+      this.transactionManager =
+          applicationContext.getBean("narayanaTransactionManager", TransactionManager.class);
+      this.transactionSynchronizationRegistry =
+          applicationContext.getBean(
+              "narayanaTransactionSynchronizationRegistry",
+              TransactionSynchronizationRegistry.class);
+      this.recoveryManager =
+          applicationContext.getBean("narayanaRecoveryManager", RecoveryManager.class);
+    } catch (Throwable e) {
+      throw new BeanInitializationException(
+          "Failed to initialize the Narayana Transaction Integration", e);
+    }
   }
 
   @Override

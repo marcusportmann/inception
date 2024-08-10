@@ -134,7 +134,7 @@
     <wss4j-ws-security-common.version>3.0.3</wss4j-ws-security-common.version>
 
     <node.version>v21.6.2</node.version>
-    <npm.version>10.2.3</npm.version>
+    <yarn.version>v1.22.22</yarn.version>
   </properties>
 
   <dependencyManagement>

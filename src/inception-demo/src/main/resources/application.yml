@@ -198,3 +198,11 @@ inception:
 #      url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Demo;user=Demo;password=Password1
 #      min-pool-size: 5
 #      max-pool-size: 10
+
+
+logging:
+  level:
+    org:
+      springframework:
+        beans:
+          factory=DEBUG:

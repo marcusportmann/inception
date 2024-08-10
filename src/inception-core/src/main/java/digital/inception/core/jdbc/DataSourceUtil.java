@@ -21,8 +21,11 @@ import io.agroal.api.configuration.AgroalConnectionPoolConfiguration;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
+import java.lang.reflect.Constructor;
 import java.util.Properties;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -34,6 +37,9 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 public final class DataSourceUtil {
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(DataSourceUtil.class);
 
   /** Private default constructor to prevent instantiation. */
   private DataSourceUtil() {}
@@ -47,6 +53,16 @@ public final class DataSourceUtil {
    */
   public static DataSource initAgroalDataSource(
       ApplicationContext applicationContext, DataSourceConfiguration dataSourceConfiguration) {
+
+    logger.info(
+        "Initializing the data source with URL ("
+            + dataSourceConfiguration.getUrl()
+            + ") using the Agroal connection pool with max pool size "
+            + dataSourceConfiguration.getMaxPoolSize()
+            + " and a validation timeout of "
+            + dataSourceConfiguration.getValidationTimeout()
+            + " seconds");
+
     try {
       // See: https://agroal.github.io/docs.html
       Properties agroalProperties = new Properties();
@@ -84,7 +100,7 @@ public final class DataSourceUtil {
 
       try {
         TransactionIntegration transactionIntegration =
-            applicationContext.getBean(TransactionIntegration.class);
+            createTransactionIntegration(applicationContext);
 
         agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
             cp ->
@@ -118,37 +134,28 @@ public final class DataSourceUtil {
     }
   }
 
-  //  /**
-  //   * The <b>ConnectionValidator</b> class.
-  //   */
-  //  private static final class ConnectionValidator implements
-  // AgroalConnectionPoolConfiguration.ConnectionValidator {
-  //
-  //    /**
-  //     * The validation query.
-  //     */
-  //    private final String validationQuery;
-  //
-  //    /**
-  //     * Constructs a new <b>ConnectionValidator</b>.
-  //     * @param validationQuery the validation query
-  //     */
-  //    public ConnectionValidator(String validationQuery) {
-  //      this.validationQuery = validationQuery;
-  //    }
-  //
-  //    @Override
-  //    public boolean isValid(Connection connection) {
-  //      if (StringUtils.hasText(validationQuery)) {
-  //        try {
-  //
-  //        } catch (Throwable e) {
-  //          logger.error("Failed to validate the database connection", e);
-  //          return false;
-  //        }
-  //      }
-  //
-  //      return false;
-  //    }
-  //  }
+  private static TransactionIntegration createTransactionIntegration(
+      ApplicationContext applicationContext) {
+    try {
+      Class<?> transactionIntegrationClass =
+          Class.forName("digital.inception.jta.agroal.NarayanaTransactionIntegration");
+
+      Constructor<?> transactionIntegrationConstructor =
+          transactionIntegrationClass.getConstructor(ApplicationContext.class);
+
+      Object transactionIntegrationObject =
+          transactionIntegrationConstructor.newInstance(applicationContext);
+
+      if (transactionIntegrationObject instanceof TransactionIntegration transactionIntegration) {
+        return transactionIntegration;
+      }
+    } catch (ClassNotFoundException ignored) {
+    } catch (Throwable e) {
+      throw new RuntimeException(
+          "Failed to create the Narayana transaction integration for the Agroal data source", e);
+    }
+
+    return TransactionIntegration.none();
+  }
 }
+
