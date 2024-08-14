@@ -46,12 +46,18 @@ import java.util.List;
   "type",
   "title",
   "status",
+  "code",
   "detail",
   "parameter",
   "validationErrors",
   "stackTrace"
 })
 public class ProblemDetails {
+
+  /** The optional error code associated with the problem. */
+  @Schema(description = "The optional error code associated with the problem")
+  @JsonProperty
+  private String code;
 
   /** The human-readable explanation specific to this occurrence of the problem. */
   @Schema(
@@ -115,6 +121,15 @@ public class ProblemDetails {
 
   /** Constructs a new <b>ProblemDetails</b>. */
   public ProblemDetails() {}
+
+  /**
+   * Returns the optional error code associated with the problem.
+   *
+   * @return the optional error code associated with the problem
+   */
+  public String getCode() {
+    return code;
+  }
 
   /**
    * Returns the human-readable explanation specific to this occurrence of the problem.
@@ -186,6 +201,15 @@ public class ProblemDetails {
    */
   public List<ValidationError> getValidationErrors() {
     return validationErrors;
+  }
+
+  /**
+   * Set the optional error code associated with the problem.
+   *
+   * @param code the optional error code associated with the problem
+   */
+  public void setCode(String code) {
+    this.code = code;
   }
 
   /**

@@ -40,22 +40,39 @@ public class BusinessException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>BusinessException</b> with the specified message.
+   * The error code identifying the business error.
+   */
+  private final String code;
+
+  /**
+   * Constructs a new <b>BusinessException</b> with the specified code and message.
    *
+   * @param code    The error code identifying the business error.
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
-  public BusinessException(String message) {
+  public BusinessException(String code, String message) {
     super(message);
+    this.code = code;
   }
 
   /**
-   * Constructs a new <b>BusinessException</b> with the specified message and cause.
+   * Constructs a new <b>BusinessException</b> with the specified code, message and cause.
    *
+   * @param code    The error code identifying the business error.
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
-  public BusinessException(String message, Throwable cause) {
+  public BusinessException(String code, String message, Throwable cause) {
     super(message, cause);
+    this.code = code;
+  }
+
+  /**
+   * Returns the error code identifying the business error.
+   * @return the error code identifying the business error
+   */
+  public String getCode() {
+    return code;
   }
 }
