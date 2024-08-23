@@ -2443,6 +2443,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       environment.put(Context.SECURITY_AUTHENTICATION, connectionType);
       environment.put(Context.SECURITY_PRINCIPAL, userDN);
       environment.put(Context.SECURITY_CREDENTIALS, password);
+      environment.put(Context.REFERRAL, "follow");
 
       return new InitialDirContext(environment);
     } catch (Throwable e) {

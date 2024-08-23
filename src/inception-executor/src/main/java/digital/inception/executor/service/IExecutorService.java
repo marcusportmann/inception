@@ -302,6 +302,18 @@ public interface IExecutorService {
   List<TaskType> getTaskTypes() throws ServiceUnavailableException;
 
   /**
+   * Returns whether a task with the specified task type is currently queued or executing.
+   *
+   * @param taskTypeCode the code for the task type
+   * @return <b>true</b> if a task with the specified task type is currently queued or executing
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if existence of a task with the specified task type that is
+   *     currently queued or executing could not be verified
+   */
+  boolean isTaskWithTaskTypeQueuedOrExecuting(String taskTypeCode)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Queue a task for execution.
    *
    * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
@@ -476,7 +488,7 @@ public interface IExecutorService {
    * Returns whether the task type exists.
    *
    * @param taskTypeCode the code for the task type
-   * @return <b>true</b> if the task type exists or false otherwise
+   * @return <b>true</b> if the task type exists or <b>false</b> otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if existence of the task type could not be verified
    */

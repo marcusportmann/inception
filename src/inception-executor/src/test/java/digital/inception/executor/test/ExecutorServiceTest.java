@@ -198,6 +198,8 @@ public class ExecutorServiceTest {
             new QueueTaskRequest(
                 testSimpleTaskType.getCode(), objectMapper.writeValueAsString(testSimpleTaskData)));
 
+    assertTrue(executorService.isTaskWithTaskTypeQueuedOrExecuting(testSimpleTaskType.getCode()));
+
     waitForTaskToDelay(taskId);
 
     Task retrievedTask = executorService.getTask(taskId);

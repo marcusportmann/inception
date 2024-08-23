@@ -34,6 +34,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -74,15 +75,6 @@ public class ProblemHandler {
   protected ResponseEntity<ProblemDetails> handle(
       HttpServletRequest request, ServiceException serviceException) {
 
-    if (inDebugMode || verboseErrorHandling) {
-      logger.error(
-          "Failed to process the HTTP servlet request ("
-              + request.getRequestURI()
-              + "): "
-              + serviceException.getMessage(),
-          serviceException);
-    }
-
     ProblemDetails problemDetails = new ProblemDetails();
 
     problemDetails.setTimestamp(serviceException.getTimestamp());
@@ -91,14 +83,38 @@ public class ProblemHandler {
         AnnotatedElementUtils.findMergedAnnotation(serviceException.getClass(), Problem.class);
 
     if (problem != null) {
+      if (inDebugMode || verboseErrorHandling) {
+        logger.error("A service error ({}) occurred while processing the request: {}",
+            problem.type(), serviceException.getMessage(), serviceException);
+      }
       problemDetails.setType(problem.type());
       problemDetails.setTitle(problem.title());
       problemDetails.setStatus(problem.status());
     } else if (serviceException instanceof BusinessException businessException) {
+      logger.error("A business error occurred while processing the request: {}",
+          serviceException.getMessage(), serviceException);
+
       problemDetails.setType("https://inception.digital/problems/business-error");
-      problemDetails.setTitle(businessException.getMessage());
+      problemDetails.setTitle(
+          "A business error has occurred and your request could not be processed.");
+      problemDetails.setCode(businessException.getCode());
       problemDetails.setStatus(HttpStatus.BAD_REQUEST.value());
-    }  else if (serviceException instanceof InvalidArgumentException invalidArgumentException) {
+    } else if (serviceException instanceof InvalidArgumentException invalidArgumentException) {
+      if (inDebugMode || verboseErrorHandling) {
+        String validationErrorsAsString = invalidArgumentException.getValidationErrorsAsString();
+
+        if (StringUtils.hasText(validationErrorsAsString)) {
+          logger.error(
+              "An invalid argument error occurred while processing the request ({}): {}",
+              invalidArgumentException.getParameter(),
+              validationErrorsAsString);
+        } else {
+          logger.error(
+              "An invalid argument error occurred while processing the request ({})",
+              invalidArgumentException.getParameter());
+        }
+      }
+
       problemDetails.setType("https://inception.digital/problems/invalid-argument");
       problemDetails.setTitle("Invalid argument.");
       problemDetails.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -106,11 +122,18 @@ public class ProblemHandler {
       problemDetails.setParameter(invalidArgumentException.getParameter());
       problemDetails.setValidationErrors(invalidArgumentException.getValidationErrors());
     } else if (serviceException instanceof ServiceUnavailableException) {
+      logger.error("A service unavailable error occurred while processing the request: {}",
+          serviceException.getMessage(), serviceException);
+
       problemDetails.setType("https://inception.digital/problems/service-unavailable");
       problemDetails.setTitle(
           "An error has occurred and your request could not be processed at this time.");
       problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     } else {
+      logger.error(
+          "An unknown service error with no problem details occurred while processing the request: {}",
+          serviceException.getMessage(), serviceException);
+
       problemDetails.setType("about:blank");
       problemDetails.setTitle(
           "An error has occurred and your request could not be processed at this time.");
@@ -119,7 +142,8 @@ public class ProblemHandler {
 
     problemDetails.setDetail(serviceException.getMessage());
 
-    if (inDebugMode || verboseErrorHandling) {
+    if ((inDebugMode || verboseErrorHandling)
+        && (!(serviceException instanceof InvalidArgumentException))) {
       problemDetails.setStackTrace(dumpStackTrace(serviceException));
     }
 
@@ -137,6 +161,10 @@ public class ProblemHandler {
   @ResponseBody
   protected ResponseEntity<ProblemDetails> handle(
       HttpServletRequest request, AccessDeniedException accessDeniedException) {
+
+    if (inDebugMode || verboseErrorHandling) {
+      logger.error("An access denied error occurred while processing the request");
+    }
 
     ProblemDetails problemDetails = new ProblemDetails();
 
@@ -164,14 +192,8 @@ public class ProblemHandler {
   @ResponseBody
   protected ResponseEntity<ProblemDetails> handle(HttpServletRequest request, Throwable cause) {
 
-    if (inDebugMode || verboseErrorHandling) {
-      logger.error(
-          "Failed to process the HTTP servlet request ("
-              + request.getRequestURI()
-              + "): "
-              + cause.getMessage(),
-          cause);
-    }
+    logger.error("An unexpected error occurred while processing the request: {}",
+        cause.getMessage(), cause);
 
     ProblemDetails problemDetails = new ProblemDetails();
 

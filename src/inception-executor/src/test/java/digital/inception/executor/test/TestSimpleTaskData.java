@@ -90,7 +90,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Returns whether the task should be failed.
    *
-   * @return <b>true</b> if the task should be failed or false otherwise
+   * @return <b>true</b> if the task should be failed or <b>false</b> otherwise
    */
   public boolean getFailTask() {
     return failTask;
@@ -162,7 +162,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Set whether the message should be updated.
    *
-   * @param updateMessage <b>true</b> if the message should be updated or false otherwise
+   * @param updateMessage <b>true</b> if the message should be updated or <b>false</b> otherwise
    */
   public void setUpdateMessage(boolean updateMessage) {
     this.updateMessage = updateMessage;

@@ -35,7 +35,7 @@ public final class TransactionUtil {
    * Check whether there is an existing JTA transaction.
    *
    * @param transactionManager the JTA transaction manager
-   * @return true if there is an existing JTA transaction or false otherwise
+   * @return <b>true</b> if there is an existing JTA transaction or <b>false</b> otherwise
    */
   public static boolean transactionExists(TransactionManager transactionManager) {
     try {

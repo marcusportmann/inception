@@ -313,7 +313,7 @@ public class Element implements Serializable, Content {
   /**
    * Returns true if the element has attributes.
    *
-   * @return true if the element has attributes or false otherwise
+   * @return <b>true</b> if the element has attributes or <b>false</b> otherwise
    */
   public boolean hasAttributes() {
     return (attributes.size() > 0);
@@ -342,7 +342,7 @@ public class Element implements Serializable, Content {
   /**
    * Returns true if the element has child elements.
    *
-   * @return true if the element has child elements or false otherwise
+   * @return <b>true</b> if the element has child elements or <b>false</b> otherwise
    */
   public boolean hasChildren() {
     for (Content tmpContent : content) {
@@ -357,7 +357,7 @@ public class Element implements Serializable, Content {
   /**
    * Returns true if the element has content.
    *
-   * @return true if the element has content or false otherwise
+   * @return <b>true</b> if the element has content or <b>false</b> otherwise
    */
   public boolean hasContent() {
     return (content.size() > 0);

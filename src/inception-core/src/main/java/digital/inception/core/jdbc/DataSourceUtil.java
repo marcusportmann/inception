@@ -53,6 +53,21 @@ public final class DataSourceUtil {
    */
   public static DataSource initAgroalDataSource(
       ApplicationContext applicationContext, DataSourceConfiguration dataSourceConfiguration) {
+    return initAgroalDataSource(applicationContext, dataSourceConfiguration, true);
+  }
+
+  /**
+   * Initialise the Agroal data source.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSourceConfiguration the data source configuration
+   * @param enableTransactionIntegration enable transaction integration
+   * @return the Agroal data source
+   */
+  public static DataSource initAgroalDataSource(
+      ApplicationContext applicationContext,
+      DataSourceConfiguration dataSourceConfiguration,
+      boolean enableTransactionIntegration) {
 
     logger.info(
         "Initializing the data source with URL ("
@@ -98,19 +113,29 @@ public final class DataSourceUtil {
       AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
           agroalReaderProperties.modify();
 
-      try {
-        TransactionIntegration transactionIntegration =
-            createTransactionIntegration(applicationContext);
+      if (enableTransactionIntegration) {
+        try {
+          TransactionIntegration transactionIntegration =
+              createTransactionIntegration(applicationContext);
 
-        agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
-            cp ->
-                cp.connectionValidator(
-                        AgroalConnectionPoolConfiguration.ConnectionValidator
-                            .defaultValidatorWithTimeout(
-                                dataSourceConfiguration.getValidationTimeout()))
-                    .validateOnBorrow(true)
-                    .transactionIntegration(transactionIntegration));
-      } catch (NoSuchBeanDefinitionException ignored) {
+          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
+              cp ->
+                  cp.connectionValidator(
+                          AgroalConnectionPoolConfiguration.ConnectionValidator
+                              .defaultValidatorWithTimeout(
+                                  dataSourceConfiguration.getValidationTimeout()))
+                      .validateOnBorrow(true)
+                      .transactionIntegration(transactionIntegration));
+        } catch (NoSuchBeanDefinitionException ignored) {
+          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
+              cp ->
+                  cp.connectionValidator(
+                          AgroalConnectionPoolConfiguration.ConnectionValidator
+                              .defaultValidatorWithTimeout(
+                                  dataSourceConfiguration.getValidationTimeout()))
+                      .validateOnBorrow(true));
+        }
+      } else {
         agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
             cp ->
                 cp.connectionValidator(
@@ -158,4 +183,3 @@ public final class DataSourceUtil {
     return TransactionIntegration.none();
   }
 }
-

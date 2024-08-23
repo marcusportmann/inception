@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -42,6 +43,26 @@ public class JDBCUtil {
 
   /** Private default constructor to enforce utility pattern. */
   private JDBCUtil() {}
+
+  /**
+   * Convert the CLOB to a String value.
+   *
+   * @param clob the CLOB to convert
+   * @return the String value for the CLOB
+   */
+  public static String clobToString(Clob clob) {
+    StringBuilder sb = new StringBuilder();
+    try (java.io.Reader reader = clob.getCharacterStream()) {
+      char[] buffer = new char[2048];
+      int bytesRead;
+      while ((bytesRead = reader.read(buffer, 0, buffer.length)) != -1) {
+        sb.append(buffer, 0, bytesRead);
+      }
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to convert the CLOB to a string", e);
+    }
+    return sb.toString();
+  }
 
   /**
    * Close the connection.
@@ -302,7 +323,7 @@ public class JDBCUtil {
    * @param connection the database connection to use
    * @param catalog the catalog name or <b>null</b> if a catalog should not be used
    * @param schema the schema name
-   * @return true if the schema exists or false otherwise
+   * @return <b>true</b> if the schema exists or <b>false</b> otherwise
    * @throws SQLException if the schema check failed
    */
   @SuppressWarnings("resource")
@@ -339,7 +360,7 @@ public class JDBCUtil {
    * @param dataSource the data source to use
    * @param catalog the catalog name or <b>null</b> if a catalog should not be used
    * @param schema the schema name
-   * @return true if the schema exists or false otherwise
+   * @return <b>true</b> if the schema exists or <b>false</b> otherwise
    * @throws SQLException if the check for the existing schema failed
    */
   @SuppressWarnings("resource")
@@ -378,7 +399,7 @@ public class JDBCUtil {
    * @param catalog the catalog name or <b>null</b> if a catalog should not be used
    * @param schema the schema name or <b>null</b> if a schema should not be used
    * @param table the name of the table
-   * @return true if the table exists or false otherwise
+   * @return <b>true</b> if the table exists or <b>false</b> otherwise
    * @throws SQLException if the check for the existing table failed
    */
   @SuppressWarnings("resource")
@@ -417,7 +438,7 @@ public class JDBCUtil {
    * @param catalog the catalog name or <b>null</b> if a catalog should not be used
    * @param schema the schema name or <b>null</b> if a schema should not be used
    * @param table the name of the table
-   * @return true if the table exists or false otherwise
+   * @return <b>true</b> if the table exists or <b>false</b> otherwise
    * @throws SQLException if the check for the existing table failed
    */
   @SuppressWarnings("resource")

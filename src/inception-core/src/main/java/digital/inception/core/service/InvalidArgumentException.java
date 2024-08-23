@@ -101,4 +101,20 @@ public class InvalidArgumentException extends ServiceException {
   public List<ValidationError> getValidationErrors() {
     return invalidArgumentError.getValidationErrors();
   }
+
+  /**
+   * Returns the string representation of the validation errors.
+   *
+   * @return the string representation of the validation errors
+   */
+  public String getValidationErrorsAsString() {
+    if ((invalidArgumentError != null) && (invalidArgumentError.getValidationErrors() != null)) {
+      return invalidArgumentError.getValidationErrors().stream()
+          .map(ValidationError::toString)
+          .reduce((acc, curr) -> acc + "; " + curr)
+          .orElse("");
+    } else {
+      return "";
+    }
+  }
 }

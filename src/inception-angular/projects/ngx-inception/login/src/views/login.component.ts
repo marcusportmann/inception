@@ -71,6 +71,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  applicationVersion(): string {
+    if ((!!this.config) && (!!this.config.applicationVersion)) {
+      return this.config.applicationVersion;
+    } else {
+      return "unknown";
+    }
+  }
+
   forgotPassword(): void {
     this.router.navigate(['forgotten-password'], {
       relativeTo: this.activatedRoute

@@ -221,4 +221,9 @@ public class ValidationError implements Serializable, Cloneable {
   public void setProperty(String property) {
     this.property = property;
   }
+
+  @Override
+  public String toString() {
+    return String.format("Property: %s, Message: %s", property, message);
+  }
 }

@@ -72,7 +72,7 @@ public class TestMultistepTaskData implements Serializable {
   /**
    * Returns whether the task should be failed.
    *
-   * @return <b>true</b> if the task should be failed or false otherwise
+   * @return <b>true</b> if the task should be failed or <b>false</b> otherwise
    */
   public boolean getFailTask() {
     return failTask;

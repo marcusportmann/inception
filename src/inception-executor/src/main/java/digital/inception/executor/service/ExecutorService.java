@@ -832,6 +832,24 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
+  public boolean isTaskWithTaskTypeQueuedOrExecuting(String taskTypeCode)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(taskTypeCode)) {
+      throw new InvalidArgumentException("taskTypeCode");
+    }
+
+    try {
+      return taskRepository.countTasksWithTaskTypeQueuedOrExecuting(taskTypeCode) > 0;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether a task with the task type ("
+              + taskTypeCode
+              + ") is queued or executing",
+          e);
+    }
+  }
+
+  @Override
   public UUID queueTask(
       String type, String batchId, String externalReference, boolean suspended, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {

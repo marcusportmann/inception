@@ -170,6 +170,19 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   int countByBatchId(String batchId);
 
   /**
+   * Retrieve the number of tasks with the specified task type that are currently queued or
+   * executing.
+   *
+   * @param taskTypeCode the code for the task type
+   * @return the number of tasks with the specified task type that are currently queued or executing
+   */
+  @Query(
+      "SELECT count(t.id) FROM Task t WHERE t.type = :taskTypeCode and "
+          + "((t.status = digital.inception.executor.model.TaskStatus.QUEUED) or "
+          + "(t.status = digital.inception.executor.model.TaskStatus.EXECUTING))")
+  int countTasksWithTaskTypeQueuedOrExecuting(@Param("taskTypeCode") String taskTypeCode);
+
+  /**
    * Delay the task.
    *
    * @param taskId the ID for the task
