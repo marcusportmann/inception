@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.validation.constraint.NoScriptOrSQLInjection;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -56,6 +57,7 @@ import java.util.Objects;
     namespace = "https://inception.digital/demo",
     propOrder = {"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoScriptOrSQLInjection
 @Entity
 @Table(name = "demo_data")
 @SuppressWarnings({"unused", "WeakerAccess"})

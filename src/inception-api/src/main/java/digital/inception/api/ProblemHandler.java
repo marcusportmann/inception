@@ -97,8 +97,10 @@ public class ProblemHandler {
       problemDetails.setType("https://inception.digital/problems/business-error");
       problemDetails.setTitle(
           "A business error has occurred and your request could not be processed.");
-      problemDetails.setCode(businessException.getCode());
-      problemDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+      if (StringUtils.hasText(businessException.getCode())) {
+        problemDetails.setCode(businessException.getCode());
+      }
+      problemDetails.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
     } else if (serviceException instanceof InvalidArgumentException invalidArgumentException) {
       if (inDebugMode || verboseErrorHandling) {
         String validationErrorsAsString = invalidArgumentException.getValidationErrorsAsString();

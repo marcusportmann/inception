@@ -39,15 +39,23 @@ public class BusinessException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /**
-   * The error code identifying the business error.
-   */
+  /** The optional error code identifying the business error. */
   private final String code;
+
+  /**
+   * Constructs a new <b>BusinessException</b> with the specified message.
+   *
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   */
+  public BusinessException(String message) {
+    super(message);
+    this.code = "";
+  }
 
   /**
    * Constructs a new <b>BusinessException</b> with the specified code and message.
    *
-   * @param code    The error code identifying the business error.
+   * @param code The error code identifying the business error.
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public BusinessException(String code, String message) {
@@ -58,7 +66,7 @@ public class BusinessException extends ServiceException {
   /**
    * Constructs a new <b>BusinessException</b> with the specified code, message and cause.
    *
-   * @param code    The error code identifying the business error.
+   * @param code The error code identifying the business error.
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
@@ -69,8 +77,21 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Returns the error code identifying the business error.
-   * @return the error code identifying the business error
+   * Constructs a new <b>BusinessException</b> with the specified code, message and cause.
+   *
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   */
+  public BusinessException(String message, Throwable cause) {
+    super(message, cause);
+    this.code = "";
+  }
+
+  /**
+   * Returns the optional error code identifying the business error.
+   *
+   * @return the optional error code identifying the business error
    */
   public String getCode() {
     return code;
