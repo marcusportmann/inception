@@ -64,8 +64,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -90,15 +89,13 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings({"unused"})
 public class ExecutorService implements IExecutorService {
 
   /** The maximum number of filtered tasks. */
   private static final int MAX_FILTERED_TASKS = 100;
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ExecutorService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -213,7 +210,7 @@ public class ExecutorService implements IExecutorService {
               try {
                 taskType = getTaskType(task.getType());
               } catch (Throwable e) {
-                logger.error(
+                log.error(
                     "Failed to retrieve the task type ("
                         + task.getType()
                         + ") for the task ("
@@ -225,8 +222,8 @@ public class ExecutorService implements IExecutorService {
               if (taskType != null) {
                 if (((task.getStatus() == TaskStatus.COMPLETED) && (taskType.getArchiveCompleted()))
                     || ((task.getStatus() == TaskStatus.FAILED) && (taskType.getArchiveFailed()))) {
-                  if (logger.isDebugEnabled()) {
-                    logger.debug(
+                  if (log.isDebugEnabled()) {
+                    log.debug(
                         "Archiving the task ("
                             + task.getId()
                             + ") with type ("
@@ -239,8 +236,8 @@ public class ExecutorService implements IExecutorService {
                   archiveTask(task);
                 }
 
-                if (logger.isDebugEnabled()) {
-                  logger.debug(
+                if (log.isDebugEnabled()) {
+                  log.debug(
                       "Deleting the task ("
                           + task.getId()
                           + ") with type ("
@@ -252,8 +249,8 @@ public class ExecutorService implements IExecutorService {
 
                 taskRepository.deleteById(task.getId());
               } else {
-                if (logger.isDebugEnabled()) {
-                  logger.debug(
+                if (log.isDebugEnabled()) {
+                  log.debug(
                       "Deleting the task ("
                           + task.getId()
                           + ") with type ("
@@ -828,7 +825,7 @@ public class ExecutorService implements IExecutorService {
   /** Initialize the Executor Service. */
   @PostConstruct
   public void init() {
-    logger.info("Initializing the Executor Service (" + instanceName + ")");
+    log.info("Initializing the Executor Service (" + instanceName + ")");
   }
 
   @Override
@@ -964,7 +961,7 @@ public class ExecutorService implements IExecutorService {
               : this.maximumTaskExecutionAttempts;
 
       if (task.getExecutionAttempts() >= maximumTaskExecutionAttempts) {
-        logger.warn(
+        log.warn(
             "The task ("
                 + task.getId()
                 + ") has exceeded the maximum number of execution attempts ("
@@ -1003,7 +1000,7 @@ public class ExecutorService implements IExecutorService {
               OffsetDateTime.now().minus(taskType.getExecutionTimeout(), ChronoUnit.MILLIS);
 
           if (inDebugMode) {
-            logger.info(
+            log.info(
                 "Resetting the hung tasks of type ("
                     + taskType.getCode()
                     + ") that were locked for execution before "
@@ -1014,7 +1011,7 @@ public class ExecutorService implements IExecutorService {
               taskRepository.resetHungTasks(taskType.getCode(), lockedBefore);
 
           if (numberOfResetHungTasks > 0) {
-            logger.warn(
+            log.warn(
                 "Reset "
                     + numberOfResetHungTasks
                     + " hung tasks of type ("
@@ -1030,14 +1027,13 @@ public class ExecutorService implements IExecutorService {
           OffsetDateTime.now().minus(taskExecutionTimeout, ChronoUnit.MILLIS);
 
       if (inDebugMode) {
-        logger.info(
-            "Resetting the hung tasks that were locked for execution before " + lockedBefore);
+        log.info("Resetting the hung tasks that were locked for execution before " + lockedBefore);
       }
 
       int numberOfResetHungTasks = taskRepository.resetHungTasks(lockedBefore);
 
       if (numberOfResetHungTasks > 0) {
-        logger.warn(
+        log.warn(
             "Reset "
                 + numberOfResetHungTasks
                 + " hung tasks that were locked for execution before "

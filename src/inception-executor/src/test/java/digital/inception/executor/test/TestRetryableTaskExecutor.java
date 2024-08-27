@@ -22,18 +22,15 @@ import digital.inception.executor.model.Task;
 import digital.inception.executor.model.TaskExecutionDelayedException;
 import digital.inception.executor.model.TaskExecutionFailedException;
 import digital.inception.executor.model.TaskExecutionRetryableException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The <b>TestRetryableTaskExecutor</b> class.
  *
  * @author Marcus Portmann
  */
+@Slf4j
 public class TestRetryableTaskExecutor extends SimpleTaskExecutor<TestRetryableTaskData> {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(TestRetryableTaskExecutor.class);
 
   /**
    * Constructs a new <b>TestRetryableTaskExecutor</b>
@@ -49,7 +46,7 @@ public class TestRetryableTaskExecutor extends SimpleTaskExecutor<TestRetryableT
       throws TaskExecutionFailedException,
           TaskExecutionRetryableException,
           TaskExecutionDelayedException {
-    logger.info(
+    log.info(
         "Executing the retryable task (" + task.getId() + ") with type (" + task.getType() + ")");
 
     if (task.getExecutionAttempts() <= 5) {

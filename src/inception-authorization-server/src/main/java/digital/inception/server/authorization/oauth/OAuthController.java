@@ -30,8 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -45,13 +44,11 @@ import org.springframework.web.bind.annotation.RequestParam;
  * The <b>OAuthController</b> class implements a simple OAuth authorization server that provides
  * support for the Resource Owner Password Grant.
  */
+@Slf4j
 @Controller
 @RequestMapping("oauth")
 @CrossOrigin
 public class OAuthController {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(OAuthController.class);
 
   /* Security Service */
   private final ISecurityService securityService;
@@ -156,7 +153,7 @@ public class OAuthController {
     } catch (InvalidOAuth2RefreshTokenException e) {
       return new InvalidGrantErrorResponse("Invalid refresh token");
     } catch (Throwable e) {
-      logger.error("Failed to process the 'Refresh Access Token Grant' request", e);
+      log.error("Failed to process the 'Refresh Access Token Grant' request", e);
       return new SystemUnavailableResponse(
           "Failed to process the 'Refresh Access Token Grant' request", e);
     }
@@ -190,7 +187,7 @@ public class OAuthController {
     } catch (ExpiredPasswordException e) {
       return new InvalidGrantErrorResponse("Credentials expired");
     } catch (Throwable e) {
-      logger.error(
+      log.error(
           "Failed to process the 'Resource Owner Password Credentials Grant' request for the user ("
               + request.getUsername()
               + ")",

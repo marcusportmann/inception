@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.DecisionType;
 import org.aopalliance.intercept.MethodInvocation;
 import org.ow2.authzforce.core.pdp.api.DecisionRequest;
@@ -45,8 +46,6 @@ import org.ow2.authzforce.xacml.identifiers.XacmlAttributeId;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractAttributeProvider;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractDecisionCache;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractPolicyProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.access.AccessDeniedException;
@@ -64,11 +63,9 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Component
 public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(PolicyDecisionPoint.class);
 
   /** The policy decision point context providers. */
   private final Map<
@@ -139,7 +136,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
               methodInvocation.getMethod().getDeclaringClass(), RequestMapping.class);
 
       if (classRequestMapping == null) {
-        logger.error(
+        log.error(
             "Policy decision point authorization failed: "
                 + "No RequestMapping annotation found on class ("
                 + methodInvocation.getMethod().getDeclaringClass().getName()
@@ -155,7 +152,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
       }
 
       if (classPathMappingUris.length == 0) {
-        logger.error(
+        log.error(
             "Policy decision point authorization failed: "
                 + "No path mapping URIs specified for RequestMapping annotation on class ("
                 + methodInvocation.getMethod().getDeclaringClass().getName()
@@ -168,7 +165,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
           AnnotationUtils.findAnnotation(methodInvocation.getMethod(), RequestMapping.class);
 
       if (methodRequestMapping == null) {
-        logger.error(
+        log.error(
             "Policy decision point authorization failed: "
                 + "No RequestMapping annotation found on method ("
                 + methodInvocation.getMethod().getName()
@@ -186,7 +183,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
       }
 
       if (methodPathMappingUris.length == 0) {
-        logger.error(
+        log.error(
             "Policy decision point authorization failed: "
                 + "No path mapping URIs specified for RequestMapping annotation on method ("
                 + methodInvocation.getMethod().getName()
@@ -379,7 +376,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
       if (decisionResult.getDecision() == DecisionType.PERMIT) {
         if (inDebugMode) {
           if (authenticationObject instanceof Authentication authentication) {
-            logger.info(
+            log.info(
                 "Policy decision point authorization successful for class ("
                     + methodInvocation.getMethod().getDeclaringClass().getName()
                     + ") and method ("
@@ -390,7 +387,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
                     + XacmlUtil.policiesToString(decisionResult.getApplicablePolicies())
                     + ")");
           } else {
-            logger.info(
+            log.info(
                 "Policy decision point authorization successful for class ("
                     + methodInvocation.getMethod().getDeclaringClass().getName()
                     + ") and method ("
@@ -405,7 +402,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
       } else {
         if (inDebugMode) {
           if (authenticationObject instanceof Authentication authentication) {
-            logger.info(
+            log.info(
                 "Policy decision point authorization failed for class ("
                     + methodInvocation.getMethod().getDeclaringClass().getName()
                     + ") and method ("
@@ -416,7 +413,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
                     + XacmlUtil.policiesToString(decisionResult.getApplicablePolicies())
                     + ")");
           } else {
-            logger.info(
+            log.info(
                 "Policy decision point authorization failed for class ("
                     + methodInvocation.getMethod().getDeclaringClass().getName()
                     + ") and method ("
@@ -432,7 +429,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
     } catch (AccessDeniedException e) {
       throw e;
     } catch (Throwable e) {
-      logger.error(
+      log.error(
           "Policy decision point authorization failed for class ("
               + methodInvocation.getMethod().getDeclaringClass().getName()
               + ") and method ("

@@ -86,8 +86,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,13 +103,11 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SecurityApiController extends SecureApiController implements ISecurityApiController {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(SecurityApiController.class);
 
   /** The Security Service. */
   private final ISecurityService securityService;
@@ -1228,7 +1225,7 @@ public class SecurityApiController extends SecureApiController implements ISecur
 
         return userDirectoryIdsForUser.stream().anyMatch(userDirectoryId::equals);
       } catch (Throwable e) {
-        logger.error(
+        log.error(
             "Failed to check if the user ("
                 + authentication.getName()
                 + ") has access to the user directory ("

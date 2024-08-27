@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +39,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Configuration
 @ConditionalOnClass(
     name = {
@@ -49,9 +49,6 @@ import org.springframework.util.StringUtils;
       "org.springframework.transaction.PlatformTransactionManager"
     })
 public class ApplicationJpaConfiguration {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ApplicationJpaConfiguration.class);
 
   private final ApplicationContext applicationContext;
 
@@ -117,7 +114,7 @@ public class ApplicationJpaConfiguration {
       }
     }
 
-    logger.info(
+    log.info(
         "Scanning the following packages for JPA entities: "
             + StringUtils.collectionToDelimitedString(packagesToScan, ","));
 

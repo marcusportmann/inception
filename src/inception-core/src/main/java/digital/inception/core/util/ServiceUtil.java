@@ -17,17 +17,14 @@
 package digital.inception.core.util;
 
 import javax.naming.InitialContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The <b>ServiceUtil</b> class provides utility methods that are useful when creating internal
  * application services.
  */
+@Slf4j
 public final class ServiceUtil {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ServiceUtil.class);
 
   /** Private constructor to prevent instantiation. */
   private ServiceUtil() {}
@@ -60,7 +57,7 @@ public final class ServiceUtil {
 
       instanceName += localMachine.getHostName().toLowerCase();
     } catch (Throwable e) {
-      logger.error(
+      log.error(
           "Failed to retrieve the server hostname while constructing the %s instance name"
               .formatted(serviceName),
           e);
@@ -106,7 +103,7 @@ public final class ServiceUtil {
         try {
           instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
         } catch (Throwable e) {
-          logger.error(
+          log.error(
               "Failed to retrieve the name of the WebSphere server instance from JNDI while constructing the %s instance name"
                   .formatted(serviceName),
               e);

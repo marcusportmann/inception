@@ -17,8 +17,7 @@
 package digital.inception.executor.service;
 
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +27,10 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class BackgroundTaskArchiver {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(BackgroundTaskArchiver.class);
 
   /** The Executor Service. */
   private final IExecutorService executorService;
@@ -53,13 +50,13 @@ public class BackgroundTaskArchiver {
     try {
       executorService.archiveAndDeleteHistoricalTasks();
     } catch (Throwable e) {
-      logger.error("Failed to archive and delete the historical tasks", e);
+      log.error("Failed to archive and delete the historical tasks", e);
     }
   }
 
   /** Initialize the Background Task Archiver. */
   @PostConstruct
   public void init() {
-    logger.info("Initializing the Background Task Archiver");
+    log.info("Initializing the Background Task Archiver");
   }
 }

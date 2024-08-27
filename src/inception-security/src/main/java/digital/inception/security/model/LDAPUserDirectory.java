@@ -43,8 +43,7 @@ import javax.naming.directory.SearchResult;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.sql.DataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
@@ -54,6 +53,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @SuppressWarnings({"unused", "Duplicates", "SpringJavaAutowiredMembersInspection"})
 public class LDAPUserDirectory extends UserDirectoryBase {
 
@@ -68,9 +68,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   /** The empty attribute list. */
   private static final String[] EMPTY_ATTRIBUTE_LIST = new String[0];
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(LDAPUserDirectory.class);
 
   private final LdapName baseDN;
 
@@ -595,7 +592,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                   + getUserDirectoryId()
                   + ")");
         } else {
-          logger.error(
+          log.error(
               "Failed to authenticate the user ("
                   + username
                   + ") for the user directory ("
@@ -674,7 +671,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                   + username
                   + ")");
         } else {
-          logger.error(
+          log.error(
               "Failed to authenticate the user ("
                   + username
                   + ") for the user directory ("

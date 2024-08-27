@@ -55,8 +55,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -69,12 +68,10 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class PartyService implements IPartyService {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;

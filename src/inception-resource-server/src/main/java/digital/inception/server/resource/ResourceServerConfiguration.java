@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.crypto.spec.SecretKeySpec;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,15 +67,13 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @ConditionalOnWebApplication(type = Type.ANY)
 @ConfigurationProperties(prefix = "inception.resource-server", ignoreUnknownFields = false)
 @EnableConfigurationProperties
 public class ResourceServerConfiguration implements InitializingBean {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ResourceServerConfiguration.class);
 
   /** The JWT configuration. */
   private JwtConfiguration jwtConfiguration;
@@ -91,7 +90,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   public void afterPropertiesSet() throws Exception {
     try {
       if ((policyDecisionPoint != null) && (policyDecisionPoint.isRuleDebuggingEnabled())) {
-        logger.info("Enabling rule debugging for the policy decision point");
+        log.info("Enabling rule debugging for the policy decision point");
 
         ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
 
@@ -117,7 +116,7 @@ public class ResourceServerConfiguration implements InitializingBean {
         }
       }
     } catch (Throwable e) {
-      logger.error("Failed to enable rule debugging for the policy decision point", e);
+      log.error("Failed to enable rule debugging for the policy decision point", e);
     }
   }
 
@@ -203,7 +202,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   private JwtDecoder getJwtDecoder() {
 
     if (jwtConfiguration.getRsaPublicKey() != null) {
-      logger.info("Using a RS256 RSA public key JWT decoder");
+      log.info("Using a RS256 RSA public key JWT decoder");
 
       RSAPublicKey jwtRsaPublicKey =
           ResourceUtil.getRSAPublicKeyResource(resourceLoader, jwtConfiguration.getRsaPublicKey());
@@ -212,7 +211,7 @@ public class ResourceServerConfiguration implements InitializingBean {
           .signatureAlgorithm(SignatureAlgorithm.from("RS256"))
           .build();
     } else if (StringUtils.hasText(jwtConfiguration.getSecretKey())) {
-      logger.info("Using a HS256 secret key JWT decoder");
+      log.info("Using a HS256 secret key JWT decoder");
 
       SecretKeySpec secretKeySpec =
           new SecretKeySpec(jwtConfiguration.getSecretKey().getBytes(), MacAlgorithm.HS256.name());
@@ -302,7 +301,7 @@ public class ResourceServerConfiguration implements InitializingBean {
         }
       }
 
-      logger.info("Using a multi-issuer JWT decoder with " + jwtDecoders.size() + " decoders");
+      log.info("Using a multi-issuer JWT decoder with " + jwtDecoders.size() + " decoders");
 
       if (jwtConfiguration.getRevokedTokens() != null) {
         return new MultiIssuerJwtDecoder(

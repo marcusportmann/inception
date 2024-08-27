@@ -47,8 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -64,12 +63,10 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings({"unused"})
 public class MailService implements IMailService {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -297,7 +294,7 @@ public class MailService implements IMailService {
     try {
       javaMailSender = applicationContext.getBean(JavaMailSender.class);
     } catch (NoSuchBeanDefinitionException ignored) {
-      logger.warn("No JavaMailSender implementation found");
+      log.warn("No JavaMailSender implementation found");
     }
   }
 

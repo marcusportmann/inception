@@ -35,8 +35,7 @@ import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -49,12 +48,10 @@ import org.springframework.context.ApplicationContext;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @SpringBootApplication
 @EnableCaching
 public class DemoApplication extends Application {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 
   /** The Executor Service. */
   private final IExecutorService executorService;
@@ -107,7 +104,7 @@ public class DemoApplication extends Application {
 
       if (!reportingService.reportDefinitionExists(demoReportDefinition.getId())) {
         reportingService.createReportDefinition(demoReportDefinition);
-        logger.info("Saved the \"Demo Report\" report definition");
+        log.info("Saved the \"Demo Report\" report definition");
       }
 
       String demoPolicyData =

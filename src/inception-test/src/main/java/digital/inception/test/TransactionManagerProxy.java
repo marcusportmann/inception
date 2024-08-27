@@ -26,8 +26,7 @@ import jakarta.transaction.Transaction;
 import jakarta.transaction.TransactionManager;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The <b>TransactionManagerProxy</b> class provides a proxy that tracks the Java Transaction (JTA)
@@ -36,15 +35,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @SuppressWarnings({"unused"})
 public class TransactionManagerProxy implements TransactionManager {
 
   /** The stack traces for the active transactions associated with the current thread. */
   private static final ThreadLocal<Map<Transaction, StackTraceElement[]>>
       activeTransactionStackTraces = ThreadLocal.withInitial(ConcurrentHashMap::new);
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(TransactionManagerProxy.class);
 
   /** The JTA transaction manager. */
   private final TransactionManager transactionManager;

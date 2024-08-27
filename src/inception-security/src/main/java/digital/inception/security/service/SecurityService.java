@@ -145,8 +145,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
@@ -167,6 +166,7 @@ import org.xml.sax.SAXParseException;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
 public class SecurityService implements ISecurityService {
@@ -183,9 +183,6 @@ public class SecurityService implements ISecurityService {
   /** The code for the password reset mail template. */
   private static final String PASSWORD_RESET_MAIL_TEMPLATE_ID =
       "Inception.Security.PasswordResetMail";
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -325,7 +322,7 @@ public class SecurityService implements ISecurityService {
       this.jwtRsaKeyId = "inception";
     }
 
-    logger.info("Using the JWT RSA key ID (" + jwtRsaKeyId + ") when issuing JWT tokens");
+    log.info("Using the JWT RSA key ID (" + jwtRsaKeyId + ") when issuing JWT tokens");
 
     String jwtRsaPrivateKeyLocation =
         applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-private-key");
@@ -342,7 +339,7 @@ public class SecurityService implements ISecurityService {
         this.jwtRsaPrivateKey =
             ResourceUtil.getRSAPrivateKeyResource(resourceLoader, jwtRsaPrivateKeyLocation);
       } catch (ResourceException e) {
-        logger.error(
+        log.error(
             "Failed to initialize the JWT RSA private key (" + jwtRsaPrivateKeyLocation + ")", e);
       }
     }
@@ -362,7 +359,7 @@ public class SecurityService implements ISecurityService {
         this.jwtRsaPublicKey =
             ResourceUtil.getRSAPublicKeyResource(resourceLoader, jwtRsaPublicKeyLocation);
       } catch (Throwable e) {
-        logger.error(
+        log.error(
             "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyLocation + ")", e);
       }
     }
@@ -749,7 +746,7 @@ public class SecurityService implements ISecurityService {
       try {
         reloadUserDirectories();
       } catch (Throwable e) {
-        logger.error("Failed to reload the user directories", e);
+        log.error("Failed to reload the user directories", e);
       }
 
       return Optional.ofNullable(userDirectory);
@@ -804,7 +801,7 @@ public class SecurityService implements ISecurityService {
       try {
         reloadUserDirectories();
       } catch (Throwable e) {
-        logger.error("Failed to reload the user directories", e);
+        log.error("Failed to reload the user directories", e);
       }
     } catch (DuplicateUserDirectoryException e) {
       throw e;
@@ -961,7 +958,7 @@ public class SecurityService implements ISecurityService {
       try {
         reloadUserDirectories();
       } catch (Throwable e) {
-        logger.error("Failed to reload the user directories", e);
+        log.error("Failed to reload the user directories", e);
       }
     } catch (ExistingGroupsException | ExistingUsersException | UserDirectoryNotFoundException e) {
       throw e;
@@ -2368,7 +2365,7 @@ public class SecurityService implements ISecurityService {
 
         passwordResetRepository.saveAndFlush(passwordReset);
       } else {
-        logger.warn(
+        log.warn(
             "Failed to send the password reset communication to the user ("
                 + username
                 + ") who does not have a valid email address");
@@ -2466,7 +2463,7 @@ public class SecurityService implements ISecurityService {
                 .orElse(null);
 
         if (userDirectoryType == null) {
-          logger.error(
+          log.error(
               "Failed to load the user directory ("
                   + userDirectory.getId()
                   + "): The user directory type ("

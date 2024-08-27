@@ -20,8 +20,7 @@ import digital.inception.sms.model.SMS;
 import digital.inception.sms.model.SMSStatus;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,12 +30,10 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class BackgroundSMSSender {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
   /* SMS Service */
   private final ISMSService smsService;
@@ -53,7 +50,7 @@ public class BackgroundSMSSender {
   /** Initialize the Background SMS Sender. */
   @PostConstruct
   public void init() {
-    logger.info("Initializing the Background SMS Sender");
+    log.info("Initializing the Background SMS Sender");
 
     if (smsService != null) {
       /*
@@ -61,15 +58,14 @@ public class BackgroundSMSSender {
        * SMS sender.
        */
       try {
-        logger.info("Resetting the locks for the SMSs being sent");
+        log.info("Resetting the locks for the SMSs being sent");
 
         smsService.resetSMSLocks(SMSStatus.SENDING, SMSStatus.QUEUED);
       } catch (Throwable e) {
-        logger.error("Failed to reset the locks for the SMSs being sent", e);
+        log.error("Failed to reset the locks for the SMSs being sent", e);
       }
     } else {
-      logger.error(
-          "Failed to initialize the Background SMS Sender: The SMS Service was NOT injected");
+      log.error("Failed to initialize the Background SMS Sender: The SMS Service was NOT injected");
     }
   }
 
@@ -85,14 +81,14 @@ public class BackgroundSMSSender {
         smsOptional = smsService.getNextSMSQueuedForSending();
 
         if (smsOptional.isEmpty()) {
-          if (logger.isDebugEnabled()) {
-            logger.debug("No SMSs queued for sending");
+          if (log.isDebugEnabled()) {
+            log.debug("No SMSs queued for sending");
           }
 
           return;
         }
       } catch (Throwable e) {
-        logger.error("Failed to retrieve the next SMS queued for sending", e);
+        log.error("Failed to retrieve the next SMS queued for sending", e);
         return;
       }
 
@@ -100,8 +96,8 @@ public class BackgroundSMSSender {
 
       // Send the SMS
       try {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Sending the queued SMS (%s)".formatted(sms.getId()));
+        if (log.isDebugEnabled()) {
+          log.debug("Sending the queued SMS (%s)".formatted(sms.getId()));
         }
 
         if (smsService.sendSMSSynchronously(sms.getId(), sms.getMobileNumber(), sms.getMessage())) {
@@ -112,7 +108,7 @@ public class BackgroundSMSSender {
           smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
         }
       } catch (Throwable e) {
-        logger.error("Failed to send the queued SMS (%s)".formatted(sms.getId()), e);
+        log.error("Failed to send the queued SMS (%s)".formatted(sms.getId()), e);
 
         try {
           /*
@@ -120,7 +116,7 @@ public class BackgroundSMSSender {
            * and set its status to "Failed" otherwise unlock it and set its status to "Queued".
            */
           if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts()) {
-            logger.warn(
+            log.warn(
                 "The queued SMS ("
                     + sms.getId()
                     + ") has exceeded the maximum number of send attempts and will be marked as FAILED");
@@ -130,7 +126,7 @@ public class BackgroundSMSSender {
             smsService.unlockSMS(sms.getId(), SMSStatus.QUEUED);
           }
         } catch (Throwable f) {
-          logger.error(
+          log.error(
               "Failed to unlock and set the status for the queued SMS (%s)".formatted(sms.getId()),
               f);
         }

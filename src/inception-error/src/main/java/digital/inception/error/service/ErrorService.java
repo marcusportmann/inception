@@ -39,8 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -55,15 +54,13 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings({"unused"})
 public class ErrorService implements IErrorService {
 
   /** The maximum number of filtered error report summaries. */
   private static final int MAX_FILTERED_ERROR_REPORT_SUMMARIES = 100;
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ErrorService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -160,7 +157,7 @@ public class ErrorService implements IErrorService {
         ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
 
         if (objectMapper != null) {
-          logger.info(
+          log.info(
               "Error Report: "
                   + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorReport));
         }

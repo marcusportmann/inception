@@ -24,13 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.serialization.Deserializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -46,10 +45,8 @@ import org.springframework.util.StringUtils;
  * @param <V> the value type
  * @author Marcus Portmann
  */
+@Slf4j
 public abstract class Processor<K, V> extends Thread {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(Processor.class);
 
   /** Is the processor active? */
   private final AtomicBoolean isActive = new AtomicBoolean(true);
@@ -168,7 +165,7 @@ public abstract class Processor<K, V> extends Thread {
 
     setName("Processor (" + getClass().getSimpleName() + ") for topic (" + getTopic() + ")");
 
-    logger.debug(
+    log.debug(
         "Initialized the processor ("
             + getClass().getSimpleName()
             + ") for the topic ("
@@ -205,8 +202,8 @@ public abstract class Processor<K, V> extends Thread {
             ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG,
             Integer.min(
                 Integer.max(
-                    getCommitFailurePause(),
-                    Integer.max(getTemporarilyUnavailablePause(), getCriticalErrorPause()))
+                        getCommitFailurePause(),
+                        Integer.max(getTemporarilyUnavailablePause(), getCriticalErrorPause()))
                     + 5000,
                 60000));
       }
@@ -232,12 +229,12 @@ public abstract class Processor<K, V> extends Thread {
 
       while (isActive.get()) {
         try {
-          if (logger.isDebugEnabled()) {
+          if (log.isDebugEnabled()) {
             if ((processorActiveLastLogTime == -1)
                 || ((System.currentTimeMillis() - processorActiveLastLogTime)
-                >= getProcessorActiveLoggingInterval())) {
+                    >= getProcessorActiveLoggingInterval())) {
               processorActiveLastLogTime = System.currentTimeMillis();
-              logger.debug(
+              log.debug(
                   "The processor ({}) is still active and processing with thread ID ({})",
                   getClass().getSimpleName(),
                   Thread.currentThread().threadId());
@@ -246,8 +243,8 @@ public abstract class Processor<K, V> extends Thread {
 
           ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(getPollTimeout()));
 
-          if (logger.isTraceEnabled()) {
-            logger.trace(
+          if (log.isTraceEnabled()) {
+            log.trace(
                 "Retrieved {} records for {} partitions from the topic {}",
                 records.count(),
                 records.partitions().size(),
@@ -257,8 +254,8 @@ public abstract class Processor<K, V> extends Thread {
           for (TopicPartition partition : records.partitions()) {
             List<ConsumerRecord<K, V>> partitionRecords = records.records(partition);
 
-            if (logger.isTraceEnabled()) {
-              logger.trace(
+            if (log.isTraceEnabled()) {
+              log.trace(
                   "Retrieved {} records for the partition {} from the topic {}",
                   partitionRecords.size(),
                   partition.partition(),
@@ -272,8 +269,8 @@ public abstract class Processor<K, V> extends Thread {
                 value = record.value();
 
                 if (value != null) {
-                  if (logger.isTraceEnabled()) {
-                    logger.trace("Processing the record value: {}", value);
+                  if (log.isTraceEnabled()) {
+                    log.trace("Processing the record value: {}", value);
                   }
 
                   Map<String, byte[]> headers = new HashMap<>();
@@ -284,8 +281,8 @@ public abstract class Processor<K, V> extends Thread {
 
                   processRecordTimed(headers, value);
 
-                  if (logger.isDebugEnabled()) {
-                    logger.debug(
+                  if (log.isDebugEnabled()) {
+                    log.debug(
                         "Committing the record with key ("
                             + record.key()
                             + ") and offset ("
@@ -298,7 +295,7 @@ public abstract class Processor<K, V> extends Thread {
                             + ")");
                   }
                 } else {
-                  logger.error(
+                  log.error(
                       "The value for the record with key ("
                           + record.key()
                           + ") and offset ("
@@ -317,7 +314,7 @@ public abstract class Processor<K, V> extends Thread {
                 try {
                   handleInvalidRecordValue(value);
 
-                  logger.error(
+                  log.error(
                       "The value for the record with key ("
                           + record.key()
                           + ") and offset ("
@@ -334,7 +331,7 @@ public abstract class Processor<K, V> extends Thread {
                       Collections.singletonMap(
                           partition, new OffsetAndMetadata(record.offset() + 1)));
                 } catch (Throwable t) {
-                  logger.error(
+                  log.error(
                       "Failed to handle the invalid value for the record with key ("
                           + record.key()
                           + ") and offset ("
@@ -359,7 +356,7 @@ public abstract class Processor<K, V> extends Thread {
                 try {
                   handleRecordProcessingFailure(value);
 
-                  logger.error(
+                  log.error(
                       "Failed to process the record with key ("
                           + record.key()
                           + ") and offset ("
@@ -376,7 +373,7 @@ public abstract class Processor<K, V> extends Thread {
                       Collections.singletonMap(
                           partition, new OffsetAndMetadata(record.offset() + 1)));
                 } catch (Throwable t) {
-                  logger.error(
+                  log.error(
                       "Failed to handle the processing failure for the record with key ("
                           + record.key()
                           + ") and offset ("
@@ -399,8 +396,8 @@ public abstract class Processor<K, V> extends Thread {
                 }
               } catch (TransientErrorException e) {
                 try {
-                  if (logger.isDebugEnabled()) {
-                    logger.debug(
+                  if (log.isDebugEnabled()) {
+                    log.debug(
                         "Sleeping "
                             + temporarilyUnavailablePause
                             + "ms for transient error exception",
@@ -413,7 +410,7 @@ public abstract class Processor<K, V> extends Thread {
                 }
 
               } catch (Throwable e) {
-                logger.error(
+                log.error(
                     "A critical error occurred while attempting to process the record with key ("
                         + record.key()
                         + ") and offset ("
@@ -426,7 +423,7 @@ public abstract class Processor<K, V> extends Thread {
                         + ")",
                     e);
 
-                logger.warn(
+                log.warn(
                     "Shutting down processor ("
                         + getClass().getSimpleName()
                         + ") for topic ("
@@ -442,7 +439,7 @@ public abstract class Processor<K, V> extends Thread {
         } catch (CommitFailedException e) {
           commitFailureCount++;
 
-          logger.error(
+          log.error(
               "Failed to commit the record retrieved from the topic ({}). This error has occurred {} time(s). Sleeping for {} ms.",
               getTopic(),
               commitFailureCount,
@@ -459,17 +456,17 @@ public abstract class Processor<K, V> extends Thread {
     } catch (WakeupException e) {
       // Ignore the exception if closing
       if (isActive.get()) {
-        logger.error("Failed to execute the processor (" + getClass().getSimpleName() + ")", e);
+        log.error("Failed to execute the processor (" + getClass().getSimpleName() + ")", e);
       }
     } catch (Throwable e) {
-      logger.error("Failed to execute the processor (" + getClass().getSimpleName() + ")", e);
+      log.error("Failed to execute the processor (" + getClass().getSimpleName() + ")", e);
     } finally {
       try {
         if (consumer != null) {
           consumer.close();
         }
       } catch (Throwable e) {
-        logger.error("Failed to close the consumer", e);
+        log.error("Failed to close the consumer", e);
       }
     }
   }
@@ -484,14 +481,14 @@ public abstract class Processor<K, V> extends Thread {
       }
     }
 
-    logger.info("Waiting for processor (" + getClass().getSimpleName() + ") to shutdown");
+    log.info("Waiting for processor (" + getClass().getSimpleName() + ") to shutdown");
 
     try {
       join();
     } catch (Throwable ignored) {
     }
 
-    logger.info("Processor (" + getClass().getSimpleName() + ") shutdown");
+    log.info("Processor (" + getClass().getSimpleName() + ") shutdown");
   }
 
   /**

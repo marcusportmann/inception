@@ -51,23 +51,20 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.x500.X500Principal;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.wss4j.common.crypto.CryptoBase;
 import org.apache.wss4j.common.crypto.CryptoType;
 import org.apache.wss4j.common.ext.WSPasswordCallback;
 import org.apache.wss4j.common.ext.WSSecurityException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The <b>Crypto</b> class.
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @SuppressWarnings("unused")
 public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto.Crypto {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(Crypto.class);
 
   /** The certificate revocation list store. */
   private final CertStore crlStore;
@@ -162,7 +159,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       try {
         String message = "Failed to find the private key for the public key";
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
+        log.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
             WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
@@ -198,7 +195,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       if ((identifier == null) || (!keyStore.isKeyEntry(identifier))) {
         String message = "Failed to find the private key for the alias (" + identifier + ")";
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
+        log.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
             WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
@@ -213,7 +210,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       if (!(key instanceof PrivateKey)) {
         String message = "The key with the alias (" + identifier + ") is not a private key";
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
+        log.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
             WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
@@ -257,7 +254,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       try {
         String message = "Failed to find the private key for the X.509 certificate";
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
+        log.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
             WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
@@ -543,8 +540,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    */
   private Certificate[] getCertificateChainForIssuerAndSerialNumber(
       Object issuerRDN, BigInteger serialNumber, KeyStore keyStore) throws WSSecurityException {
-    if (logger.isDebugEnabled()) {
-      logger.debug(
+    if (log.isDebugEnabled()) {
+      log.debug(
           "Searching the key store for the certificate with issuer {} and serial {}",
           issuerRDN,
           serialNumber);
@@ -567,8 +564,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
             && (certificateChain[0] instanceof X509Certificate)) {
           X509Certificate certificate = (X509Certificate) certificateChain[0];
 
-          if (logger.isDebugEnabled()) {
-            logger.debug(
+          if (log.isDebugEnabled()) {
+            log.debug(
                 "The key store alias {} has issuer {} and serial {}",
                 alias,
                 certificate.getIssuerX500Principal().getName(),
@@ -579,8 +576,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
             Object certificateName =
                 createBCX509Name(certificate.getIssuerX500Principal().getName());
             if (certificateName.equals(issuerRDN)) {
-              if (logger.isDebugEnabled()) {
-                logger.debug("Issuer serial match found using the key store alias {}", alias);
+              if (log.isDebugEnabled()) {
+                log.debug("Issuer serial match found using the key store alias {}", alias);
               }
 
               return certificateChain;
@@ -592,8 +589,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, e, "keystore");
     }
 
-    if (logger.isDebugEnabled()) {
-      logger.debug("No issuer serial match found in the key store");
+    if (log.isDebugEnabled()) {
+      log.debug("No issuer serial match found in the key store");
     }
 
     return new Certificate[] {};
@@ -610,7 +607,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    */
   private Certificate[] getCertificateChainForSKI(byte[] skiBytes, KeyStore keyStore)
       throws WSSecurityException {
-    logger.debug(
+    log.debug(
         "Searching the key store for the certificate or certificate chain matching the subject key identifier");
 
     try {
@@ -631,7 +628,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           X509Certificate certificate = (X509Certificate) certificateChain[0];
           byte[] data = getSKIBytesFromCert(certificate);
           if ((data.length == skiBytes.length) && (Arrays.equals(data, skiBytes))) {
-            logger.debug(
+            log.debug(
                 "Found the certificate or certificate chain matching the subject key identifier with alias {}",
                 alias);
 
@@ -643,7 +640,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, e, "keystore");
     }
 
-    logger.debug(
+    log.debug(
         "Failed to find the certificate or certificate chain matching the subject key identifier in the key store");
 
     return new Certificate[] {};
@@ -661,8 +658,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   private Certificate[] getCertificateChainForThumbprint(
       byte[] thumbprint, KeyStore keyStore, MessageDigest sha1MessageDigest)
       throws WSSecurityException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Searching the keystore for the certificate using a SHA-1 thumbprint");
+    if (log.isDebugEnabled()) {
+      log.debug("Searching the keystore for the certificate using a SHA-1 thumbprint");
     }
 
     try {
@@ -691,8 +688,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           byte[] data = sha1MessageDigest.digest();
 
           if (Arrays.equals(data, thumbprint)) {
-            if (logger.isDebugEnabled()) {
-              logger.debug("Thumbprint match found using key store alias {}", alias);
+            if (log.isDebugEnabled()) {
+              log.debug("Thumbprint match found using key store alias {}", alias);
             }
 
             return certificateChain;
@@ -703,8 +700,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, e, "keystore");
     }
 
-    if (logger.isDebugEnabled()) {
-      logger.debug("No thumbprint match found in the key store");
+    if (log.isDebugEnabled()) {
+      log.debug("No thumbprint match found in the key store");
     }
 
     return new Certificate[] {};
@@ -719,7 +716,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    */
   private List<Certificate[]> getCertificateChainsForSubject(Object subjectDN, KeyStore store)
       throws WSSecurityException {
-    logger.debug(
+    log.debug(
         "Searching the key store for the certificates and certificate chains with subject ({})",
         subjectDN);
 
@@ -744,7 +741,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           Object certificateX500PrincipalName = createBCX509Name(certificateDN.getName());
 
           if (subjectDN.equals(certificateX500PrincipalName)) {
-            logger.debug(
+            log.debug(
                 "Found the certificate with subject ({}) and alias ({}) in the key store",
                 subjectDN,
                 alias);
@@ -757,7 +754,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
     }
 
     if (foundCertificates.isEmpty()) {
-      logger.debug(
+      log.debug(
           "Failed to find the certificates or certificate chains with subject ({}) in the key store",
           subjectDN);
     }
@@ -987,8 +984,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       return false;
     }
 
-    if (logger.isDebugEnabled()) {
-      logger.debug("Searching the key store for the public key {}", publicKey);
+    if (log.isDebugEnabled()) {
+      log.debug("Searching the key store for the public key {}", publicKey);
     }
 
     try {
@@ -1007,8 +1004,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
             && (certificateChain.length > 0)
             && (certificateChain[0] instanceof X509Certificate)
             && (publicKey.equals(certificateChain[0].getPublicKey()))) {
-          if (logger.isDebugEnabled()) {
-            logger.debug("Found a matching public key in the key store with alias {}", alias);
+          if (log.isDebugEnabled()) {
+            log.debug("Found a matching public key in the key store with alias {}", alias);
           }
 
           return true;
@@ -1018,8 +1015,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       return false;
     }
 
-    if (logger.isDebugEnabled()) {
-      logger.debug("No matching public key found in the key store");
+    if (log.isDebugEnabled()) {
+      log.debug("No matching public key found in the key store");
     }
 
     return false;
@@ -1067,8 +1064,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
               WSSecurityException.ErrorCode.FAILED_CHECK, e, "invalidCert");
         }
 
-        if (logger.isDebugEnabled()) {
-          logger.debug(
+        if (log.isDebugEnabled()) {
+          log.debug(
               "Direct trust for the certificate ({})",
               certificateChain[0].getSubjectX500Principal().getName());
         }
@@ -1105,8 +1102,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           || (issuingCertificateChainsToVerifyAgainst.get(0).length < 1)) {
         String subjectDN = certificateChain[0].getSubjectX500Principal().getName();
 
-        if (logger.isDebugEnabled()) {
-          logger.debug(
+        if (log.isDebugEnabled()) {
+          log.debug(
               "No certificates found in the key store for the issuer ({}) of the certificate ({})",
               issuerDN,
               subjectDN);
@@ -1124,8 +1121,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
      *
      *  Check the certificate trust path for the issuer certificate chain.
      */
-    if (logger.isDebugEnabled()) {
-      logger.debug("Preparing to validate the certificate path for the issuer ({})", issuerDN);
+    if (log.isDebugEnabled()) {
+      log.debug("Preparing to validate the certificate path for the issuer ({})", issuerDN);
     }
 
     try {

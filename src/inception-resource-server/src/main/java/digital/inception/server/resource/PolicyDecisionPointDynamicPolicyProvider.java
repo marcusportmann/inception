@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.xml.namespace.QName;
+import lombok.extern.slf4j.Slf4j;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.AdviceExpressions;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.DefaultsType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.IdReferenceType;
@@ -58,8 +59,6 @@ import org.ow2.authzforce.core.pdp.api.policy.TopLevelPolicyElementEvaluator;
 import org.ow2.authzforce.core.pdp.api.policy.TopLevelPolicyElementType;
 import org.ow2.authzforce.core.pdp.impl.policy.PolicyEvaluators;
 import org.ow2.authzforce.core.pdp.impl.policy.PolicyVersions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -78,12 +77,9 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 public class PolicyDecisionPointDynamicPolicyProvider
     implements CloseablePolicyProvider<TopLevelPolicyElementEvaluator> {
-
-  /* Logger */
-  private static final Logger logger =
-      LoggerFactory.getLogger(PolicyDecisionPointDynamicPolicyProvider.class);
 
   /** Should policy sets and policies be loaded from the classpath under pdp/policies? */
   private final Boolean classpathPoliciesEnabled;
@@ -338,7 +334,7 @@ public class PolicyDecisionPointDynamicPolicyProvider
             loadPolicyOrPolicySet(new InputSource(inputStream));
           }
         } catch (Throwable e) {
-          logger.error(
+          log.error(
               "Failed to load the classpath policy resource ("
                   + policyResource.getFilename()
                   + ") for the policy decision point",
@@ -346,7 +342,7 @@ public class PolicyDecisionPointDynamicPolicyProvider
         }
       }
 
-      logger.info(
+      log.info(
           "Successfully loaded the classpath policy sets and policies for the policy decision point");
     } catch (Throwable e) {
       throw new PolicyDecisionPointException(
@@ -380,8 +376,8 @@ public class PolicyDecisionPointDynamicPolicyProvider
       policySetVersions.put(
           policySetVersion, new ParsedPolicySet(policySet, xacmlParser.getNamespacePrefixUriMap()));
 
-      if (logger.isDebugEnabled()) {
-        logger.debug(
+      if (log.isDebugEnabled()) {
+        log.debug(
             "Loaded the policy set ("
                 + policySet.getPolicySetId()
                 + ") with version ("
@@ -403,8 +399,8 @@ public class PolicyDecisionPointDynamicPolicyProvider
       policyVersions.put(
           policyVersion, new ParsedPolicy(policy, xacmlParser.getNamespacePrefixUriMap()));
 
-      if (logger.isDebugEnabled()) {
-        logger.debug(
+      if (log.isDebugEnabled()) {
+        log.debug(
             "Loaded the policy ("
                 + policy.getPolicyId()
                 + ") with version ("
@@ -437,13 +433,13 @@ public class PolicyDecisionPointDynamicPolicyProvider
                   loadPolicyOrPolicySet(new InputSource(new StringReader(externalPolicy.data())));
                 } catch (Throwable e) {
                   if ("xacml_policy_set".equals(externalPolicy.type())) {
-                    logger.error(
+                    log.error(
                         "Failed to load the external policy set ("
                             + externalPolicy.id()
                             + ") for the policy decision point",
                         e);
                   } else if ("xacml_policy".equals(externalPolicy.type())) {
-                    logger.error(
+                    log.error(
                         "Failed to load the external policy ("
                             + externalPolicy.id()
                             + ")  for the policy decision point",
@@ -458,13 +454,13 @@ public class PolicyDecisionPointDynamicPolicyProvider
             reloadExternalPoliciesWhen =
                 LocalDateTime.now().plusSeconds(externalPoliciesReloadPeriod);
 
-            logger.info(
+            log.info(
                 "Successfully loaded the external policy sets and policies for the "
                     + "policy decision point");
           }
 
         } catch (Throwable e) {
-          logger.error(
+          log.error(
               "Failed to load the external policy sets and policies for the "
                   + "policy decision point using the API endpoint ("
                   + externalPoliciesEndpoint

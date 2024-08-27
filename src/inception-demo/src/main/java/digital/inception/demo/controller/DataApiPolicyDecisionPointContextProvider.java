@@ -20,21 +20,17 @@ import digital.inception.core.api.IPolicyDecisionPointContextProvider;
 import digital.inception.demo.model.Data;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInvocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The <b>DataApiPolicyDecisionPointContextProvider</b> class.
  *
  * @author Marcus Portmann
  */
+@Slf4j
 public class DataApiPolicyDecisionPointContextProvider
     implements IPolicyDecisionPointContextProvider {
-
-  /* Logger */
-  private static final Logger logger =
-      LoggerFactory.getLogger(DataApiPolicyDecisionPointContextProvider.class);
 
   /** Constructs a new <b>DataApiPolicyDecisionPointContextProvider</b>. */
   public DataApiPolicyDecisionPointContextProvider() {}

@@ -23,18 +23,15 @@ import digital.inception.executor.model.TaskExecutionFailedException;
 import digital.inception.executor.model.TaskExecutionRetryableException;
 import digital.inception.executor.model.TaskStep;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The <b>DemoTaskExecutor</b> class.
  *
  * @author Marcus Portmann
  */
+@Slf4j
 public class DemoTaskExecutor extends MultistepTaskExecutor<DemoTaskData> {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(DemoTaskExecutor.class);
 
   /**
    * Constructs a new <b>DemoTaskExecutor</b>
@@ -55,7 +52,7 @@ public class DemoTaskExecutor extends MultistepTaskExecutor<DemoTaskData> {
   @Override
   public boolean executeTaskStep(Task task, TaskStep taskStep, DemoTaskData taskData)
       throws TaskExecutionFailedException, TaskExecutionRetryableException {
-    logger.info(
+    log.info(
         "Executing the step ("
             + taskStep.getName()
             + ") for the task ("

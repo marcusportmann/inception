@@ -25,8 +25,7 @@ import liquibase.command.CommandScope;
 import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +43,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Configuration
 @ConditionalOnProperty({
   "inception.application.data-source.class-name",
@@ -51,10 +51,6 @@ import org.springframework.util.StringUtils;
 })
 // @SuppressWarnings({"unused", "LombokGetterMayBeUsed"})
 public class ApplicationDataSourceConfiguration {
-
-  /* Logger */
-  private static final Logger logger =
-      LoggerFactory.getLogger(ApplicationDataSourceConfiguration.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -125,7 +121,7 @@ public class ApplicationDataSourceConfiguration {
   @Primary
   @Qualifier("applicationDataSource")
   public DataSource applicationDataSource() {
-    logger.info(
+    log.info(
         "Initializing the application source with URL ("
             + url
             + ") using the Agroal connection pool with max pool size "
@@ -153,7 +149,7 @@ public class ApplicationDataSourceConfiguration {
       try (Connection connection = dataSource.getConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
 
-        logger.info(
+        log.info(
             "Connected to the "
                 + metaData.getDatabaseProductName()
                 + " application database with version "
@@ -162,7 +158,7 @@ public class ApplicationDataSourceConfiguration {
         if (metaData.getDatabaseProductName().equals("H2")) {
           isInMemoryH2Database = true;
         } else {
-          logger.info(
+          log.info(
               "The default database tables will not be populated for the database type ("
                   + metaData.getDatabaseProductName()
                   + ")");
@@ -172,7 +168,7 @@ public class ApplicationDataSourceConfiguration {
       // Initialize the in-memory database using Liquibase changeSets
       if (isInMemoryH2Database || liquibaseEnabled) {
         if (isInMemoryH2Database) {
-          logger.info("Initializing the in-memory H2 database using Liquibase");
+          log.info("Initializing the in-memory H2 database using Liquibase");
         }
 
         try (Connection connection = dataSource.getConnection()) {
@@ -185,7 +181,7 @@ public class ApplicationDataSourceConfiguration {
               if (!changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
                 String changelogFile = "db/" + changelogResource.getFilename();
 
-                logger.info("Applying Liquibase changelog: " + changelogResource.getFilename());
+                log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
@@ -200,8 +196,7 @@ public class ApplicationDataSourceConfiguration {
               if (changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
                 String changelogFile = "db/" + changelogResource.getFilename();
 
-                logger.info(
-                    "Applying Liquibase data changelog: " + changelogResource.getFilename());
+                log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)

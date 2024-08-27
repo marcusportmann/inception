@@ -27,8 +27,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -39,12 +38,10 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class BackgroundTaskExecutor {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(BackgroundTaskExecutor.class);
 
   /** The Executor Service. */
   private final IExecutorService executorService;
@@ -95,7 +92,7 @@ public class BackgroundTaskExecutor {
       // Retrieve the next task queued for execution
       try {
         if (taskExecutionQueue.size() == maximumTaskExecutionQueueLength) {
-          logger.warn(
+          log.warn(
               "The maximum number of tasks queued for execution has been reached ("
                   + maximumTaskExecutionQueueLength
                   + ")");
@@ -105,14 +102,14 @@ public class BackgroundTaskExecutor {
         taskOptional = executorService.getNextTaskQueuedForExecution();
 
         if (taskOptional.isEmpty()) {
-          if (logger.isDebugEnabled()) {
-            logger.debug("No tasks queued for execution");
+          if (log.isDebugEnabled()) {
+            log.debug("No tasks queued for execution");
           }
 
           return;
         }
       } catch (Throwable e) {
-        logger.error("Failed to retrieve the next task queued for execution", e);
+        log.error("Failed to retrieve the next task queued for execution", e);
         return;
       }
 
@@ -123,7 +120,7 @@ public class BackgroundTaskExecutor {
   /** Initialize the Background Task Executor. */
   @PostConstruct
   public void init() {
-    logger.info("Initializing the Background Task Executor");
+    log.info("Initializing the Background Task Executor");
 
     if (executorService != null) {
       // Initialize the task executor
@@ -139,14 +136,14 @@ public class BackgroundTaskExecutor {
 
       // Reset any locks for tasks that were previously being executed
       try {
-        logger.info("Resetting the locks for the tasks being executed");
+        log.info("Resetting the locks for the tasks being executed");
 
         executorService.resetTaskLocks(TaskStatus.EXECUTING, TaskStatus.QUEUED);
       } catch (Throwable e) {
-        logger.error("Failed to reset the locks for the tasks being executed", e);
+        log.error("Failed to reset the locks for the tasks being executed", e);
       }
     } else {
-      logger.error(
+      log.error(
           "Failed to initialize the Background Task Executor: "
               + "The Executor Service was NOT injected");
     }
@@ -157,10 +154,8 @@ public class BackgroundTaskExecutor {
    *
    * @author Marcus Portmann
    */
+  @Slf4j
   public static class TaskExecutor implements Runnable {
-
-    /* Logger */
-    private static final Logger logger = LoggerFactory.getLogger(TaskExecutor.class);
 
     /** The Executor Service. */
     private final IExecutorService executorService;
@@ -182,8 +177,8 @@ public class BackgroundTaskExecutor {
     @Override
     public void run() {
       try {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Executing the task (%s)".formatted(task.getId()));
+        if (log.isDebugEnabled()) {
+          log.debug("Executing the task (%s)".formatted(task.getId()));
         }
 
         long startTime = System.currentTimeMillis();
@@ -196,12 +191,12 @@ public class BackgroundTaskExecutor {
         try {
           executorService.completeTask(task, taskExecutionResult, finishTime - startTime);
         } catch (Throwable e) {
-          logger.error("Failed to complete the task (%s)".formatted(task.getId()), e);
+          log.error("Failed to complete the task (%s)".formatted(task.getId()), e);
 
           try {
             executorService.unlockTask(task.getId(), TaskStatus.FAILED);
           } catch (Throwable f) {
-            logger.error(
+            log.error(
                 "Failed to unlock and set the status for the task (%s) to FAILED"
                     .formatted(task.getId()),
                 f);
@@ -211,30 +206,30 @@ public class BackgroundTaskExecutor {
         try {
           executorService.requeueTask(task);
         } catch (Throwable f) {
-          logger.error("Failed to requeue the task (%s)".formatted(task.getId()), f);
+          log.error("Failed to requeue the task (%s)".formatted(task.getId()), f);
         }
       } catch (TaskExecutionDelayedException e) {
         try {
           executorService.delayTask(task, e.getDelay());
         } catch (Throwable f) {
-          logger.error(
+          log.error(
               "Failed to delay the task (%s) by %d milliseconds"
                   .formatted(task.getId(), e.getDelay()),
               f);
         }
       } catch (Throwable e) {
-        logger.error("Failed to execute the task (%s)".formatted(task.getId()), e);
+        log.error("Failed to execute the task (%s)".formatted(task.getId()), e);
 
         // Fail the task
         try {
           executorService.failTask(task);
         } catch (Throwable f) {
-          logger.error("Failed to fail the task (%s)".formatted(task.getId()), f);
+          log.error("Failed to fail the task (%s)".formatted(task.getId()), f);
 
           try {
             executorService.unlockTask(task.getId(), TaskStatus.FAILED);
           } catch (Throwable g) {
-            logger.error(
+            log.error(
                 "Failed to unlock and set the status for the task (%s) to FAILED"
                     .formatted(task.getId()),
                 g);

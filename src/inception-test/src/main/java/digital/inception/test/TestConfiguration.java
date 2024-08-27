@@ -34,8 +34,7 @@ import liquibase.command.CommandScope;
 import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -72,6 +71,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Configuration
 @EnableAsync
 @EnableConfigurationProperties
@@ -87,9 +87,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class TestConfiguration {
 
   private static final Object dataSourceLock = new Object();
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(TestConfiguration.class);
 
   private static DataSource dataSource;
 
@@ -155,7 +152,7 @@ public class TestConfiguration {
               if (!changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
                 String changelogFile = "db/" + changelogResource.getFilename();
 
-                logger.info("Applying Liquibase changelog: " + changelogResource.getFilename());
+                log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
@@ -168,8 +165,7 @@ public class TestConfiguration {
               if (changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
                 String changelogFile = "db/" + changelogResource.getFilename();
 
-                logger.info(
-                    "Applying Liquibase data changelog: " + changelogResource.getFilename());
+                log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
@@ -323,7 +319,7 @@ public class TestConfiguration {
       }
     }
 
-    logger.info(
+    log.info(
         "Scanning the following packages for JPA entities: "
             + StringUtils.collectionToDelimitedString(packagesToScan, ","));
 

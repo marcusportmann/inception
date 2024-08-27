@@ -26,8 +26,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -45,10 +44,8 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 public class MultiIssuerJwtDecoder implements JwtDecoder {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(MultiIssuerJwtDecoder.class);
 
   /** The JWT decoders for the different issuers using different RSA keys or secret keys. */
   private final Map<String, JwtDecoder> jwtDecoders;
@@ -190,9 +187,9 @@ public class MultiIssuerJwtDecoder implements JwtDecoder {
 
             retrieveRevokedTokensWhen = LocalDateTime.now().plusSeconds(revokedTokensReloadPeriod);
 
-            logger.info("Successfully retrieved the revoked tokens");
+            log.info("Successfully retrieved the revoked tokens");
           } else {
-            logger.error(
+            log.error(
                 "Failed to retrieve the revoked tokens using the API endpoint ("
                     + revokedTokensEndpoint
                     + "): "
@@ -201,7 +198,7 @@ public class MultiIssuerJwtDecoder implements JwtDecoder {
             revokedTokens = null;
           }
         } catch (Throwable e) {
-          logger.error(
+          log.error(
               "Failed to retrieve the revoked tokens using the API endpoint ("
                   + revokedTokensEndpoint
                   + ")",

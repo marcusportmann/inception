@@ -19,25 +19,22 @@ package digital.inception.demo.job;
 import digital.inception.scheduler.model.IJob;
 import digital.inception.scheduler.model.JobExecutionContext;
 import digital.inception.scheduler.model.JobExecutionFailedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The <b>DemoJob</b> class.
  *
  * @author Marcus Portmann
  */
+@Slf4j
 public class DemoJob implements IJob {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(DemoJob.class);
 
   /** Constructs a new <b>DemoJob</b>. */
   public DemoJob() {}
 
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionFailedException {
-    logger.info("Demo job execution started");
+    log.info("Demo job execution started");
 
     //    if (true) {
     //      throw new JobExecutionFailedException("Testing 1.. 2.. 3..");
@@ -48,6 +45,6 @@ public class DemoJob implements IJob {
     } catch (Throwable e) {
     }
 
-    logger.info("Demo job execution finished");
+    log.info("Demo job execution finished");
   }
 }

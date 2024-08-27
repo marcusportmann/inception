@@ -49,8 +49,7 @@ import java.util.Optional;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -63,6 +62,7 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class CodesService implements ICodesService {
@@ -72,9 +72,6 @@ public class CodesService implements ICodesService {
    * classpath.
    */
   private static final String CODE_PROVIDERS_CONFIGURATION_PATH = "META-INF/code-providers.xml";
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(CodesService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -602,7 +599,7 @@ public class CodesService implements ICodesService {
   /** Initialize the Codes Service. */
   @PostConstruct
   public void init() {
-    logger.info("Initializing the Codes Service");
+    log.info("Initializing the Codes Service");
 
     codeProviders = new ArrayList<>();
 
@@ -697,7 +694,7 @@ public class CodesService implements ICodesService {
     // Initialize each code provider
     for (CodeProviderConfig codeProviderConfig : codeProviderConfigs) {
       try {
-        logger.info(
+        log.info(
             "Initializing the code provider ("
                 + codeProviderConfig.getName()
                 + ") with class ("
@@ -726,14 +723,14 @@ public class CodesService implements ICodesService {
 
           codeProviders.add(codeProvider);
         } else {
-          logger.error(
+          log.error(
               "Failed to register the code provider ("
                   + codeProviderConfig.getClassName()
                   + "): The code provider class does not provide a constructor with the required "
                   + "signature");
         }
       } catch (Throwable e) {
-        logger.error(
+        log.error(
             "Failed to initialize the code provider ("
                 + codeProviderConfig.getName()
                 + ") with class ("
@@ -761,8 +758,8 @@ public class CodesService implements ICodesService {
       while (codeProviderConfigurationFiles.hasMoreElements()) {
         URL codeProviderConfigurationFile = codeProviderConfigurationFiles.nextElement();
 
-        if (logger.isDebugEnabled()) {
-          logger.debug(
+        if (log.isDebugEnabled()) {
+          log.debug(
               "Reading the code provider configuration file ("
                   + codeProviderConfigurationFile.toURI()
                   + ")");

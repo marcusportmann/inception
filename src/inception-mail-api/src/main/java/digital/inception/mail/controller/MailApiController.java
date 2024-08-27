@@ -26,8 +26,7 @@ import digital.inception.mail.model.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplateSummary;
 import digital.inception.mail.service.IMailService;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,13 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused"})
 public class MailApiController extends SecureApiController implements IMailApiController {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(MailApiController.class);
 
   /** The Mail Service. */
   private final IMailService mailService;

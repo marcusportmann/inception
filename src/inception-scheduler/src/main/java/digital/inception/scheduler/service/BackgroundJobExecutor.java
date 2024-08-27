@@ -24,8 +24,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -35,12 +34,10 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class BackgroundJobExecutor {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
   /** The Scheduler Service. */
   private final ISchedulerService schedulerService;
@@ -91,7 +88,7 @@ public class BackgroundJobExecutor {
       // Retrieve the next job scheduled for execution
       try {
         if (jobExecutionQueue.size() == maximumJobExecutionQueueLength) {
-          logger.warn(
+          log.warn(
               "The maximum number of jobs queued for execution has been reached ("
                   + maximumJobExecutionQueueLength
                   + ")");
@@ -101,8 +98,8 @@ public class BackgroundJobExecutor {
         jobOptional = schedulerService.getNextJobScheduledForExecution();
 
         if (jobOptional.isEmpty()) {
-          if (logger.isDebugEnabled()) {
-            logger.debug("No jobs scheduled for execution");
+          if (log.isDebugEnabled()) {
+            log.debug("No jobs scheduled for execution");
           }
 
           // Schedule any unscheduled jobs
@@ -111,7 +108,7 @@ public class BackgroundJobExecutor {
           return;
         }
       } catch (Throwable e) {
-        logger.error("Failed to retrieve the next job scheduled for execution", e);
+        log.error("Failed to retrieve the next job scheduled for execution", e);
         return;
       }
 
@@ -123,7 +120,7 @@ public class BackgroundJobExecutor {
   @SuppressWarnings("StatementWithEmptyBody")
   @PostConstruct
   public void init() {
-    logger.info("Initializing the Background Job Executor");
+    log.info("Initializing the Background Job Executor");
 
     if (schedulerService != null) {
       // Initialize the job executor
@@ -139,21 +136,21 @@ public class BackgroundJobExecutor {
 
       // Reset any locks for jobs that were previously being executed
       try {
-        logger.info("Resetting the locks for the jobs being executed");
+        log.info("Resetting the locks for the jobs being executed");
 
         schedulerService.resetJobLocks(JobStatus.EXECUTING, JobStatus.SCHEDULED);
       } catch (Throwable e) {
-        logger.error("Failed to reset the locks for the jobs being executed", e);
+        log.error("Failed to reset the locks for the jobs being executed", e);
       }
 
       // Schedule any unscheduled jobs
       try {
         while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
       } catch (Throwable e) {
-        logger.error("Failed to schedule the unscheduled jobs for execution");
+        log.error("Failed to schedule the unscheduled jobs for execution");
       }
     } else {
-      logger.error(
+      log.error(
           "Failed to initialize the Background Job Executor: "
               + "The Scheduler Service was NOT injected");
     }
@@ -164,10 +161,8 @@ public class BackgroundJobExecutor {
    *
    * @author Marcus Portmann
    */
+  @Slf4j
   public static class JobExecutor implements Runnable {
-
-    /* Logger */
-    private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
 
     private final Job job;
 
@@ -187,8 +182,8 @@ public class BackgroundJobExecutor {
     @Override
     public void run() {
       try {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Executing the job (%s)".formatted(job.getId()));
+        if (log.isDebugEnabled()) {
+          log.debug("Executing the job (%s)".formatted(job.getId()));
         }
 
         schedulerService.executeJob(job);
@@ -200,27 +195,27 @@ public class BackgroundJobExecutor {
           try {
             schedulerService.unlockJob(job.getId(), JobStatus.SCHEDULED);
           } catch (Throwable f) {
-            logger.error(
+            log.error(
                 "Failed to unlock and set the status for the job (%s) to SCHEDULED"
                     .formatted(job.getId()),
                 f);
           }
         } catch (Throwable e) {
-          logger.warn(
+          log.warn(
               "The job (%s) could not be rescheduled and will be marked as FAILED"
                   .formatted(job.getId()));
 
           try {
             schedulerService.unlockJob(job.getId(), JobStatus.FAILED);
           } catch (Throwable f) {
-            logger.error(
+            log.error(
                 "Failed to unlock and set the status for the job (%s) to FAILED"
                     .formatted(job.getId()),
                 f);
           }
         }
       } catch (Throwable e) {
-        logger.error("Failed to execute the job (%s)".formatted(job.getId()), e);
+        log.error("Failed to execute the job (%s)".formatted(job.getId()), e);
 
         try {
           /*
@@ -229,7 +224,7 @@ public class BackgroundJobExecutor {
            * "Scheduled".
            */
           if (job.getExecutionAttempts() >= schedulerService.getMaximumJobExecutionAttempts()) {
-            logger.warn(
+            log.warn(
                 "The job (%s) has exceeded the maximum  number of execution attempts and will be marked as FAILED"
                     .formatted(job.getId()));
 
@@ -238,7 +233,7 @@ public class BackgroundJobExecutor {
             schedulerService.unlockJob(job.getId(), JobStatus.SCHEDULED);
           }
         } catch (Throwable f) {
-          logger.error(
+          log.error(
               "Failed to unlock and set the status for the job (%s)".formatted(job.getId()), f);
         }
       }

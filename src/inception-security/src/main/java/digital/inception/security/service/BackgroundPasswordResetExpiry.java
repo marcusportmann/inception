@@ -18,8 +18,7 @@ package digital.inception.security.service;
 
 import digital.inception.security.persistence.PasswordResetRepository;
 import java.time.OffsetDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,11 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 public class BackgroundPasswordResetExpiry {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(BackgroundPasswordResetExpiry.class);
 
   /** The Password Reset Repository. */
   private final PasswordResetRepository passwordResetRepository;
@@ -62,7 +59,7 @@ public class BackgroundPasswordResetExpiry {
 
       passwordResetRepository.expirePasswordResets(OffsetDateTime.now(), requestedBefore);
     } catch (Throwable e) {
-      logger.error("Failed to expire the password resets", e);
+      log.error("Failed to expire the password resets", e);
     }
   }
 }

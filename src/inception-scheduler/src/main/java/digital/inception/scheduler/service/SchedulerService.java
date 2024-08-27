@@ -42,8 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -59,11 +58,9 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 public class SchedulerService implements ISchedulerService {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -352,7 +349,7 @@ public class SchedulerService implements ISchedulerService {
   /** Initialize the Scheduler Service. */
   @PostConstruct
   public void init() {
-    logger.info("Initializing the Scheduler Service (" + instanceName + ")");
+    log.info("Initializing the Scheduler Service (" + instanceName + ")");
   }
 
   @Override
@@ -419,7 +416,7 @@ public class SchedulerService implements ISchedulerService {
 
           nextExecution = predictor.nextMatchingOffsetDateTime();
         } catch (Throwable e) {
-          logger.error(
+          log.error(
               "The next execution date could not be determined for the unscheduled job ("
                   + job.getId()
                   + ") with the scheduling pattern ("
@@ -431,7 +428,7 @@ public class SchedulerService implements ISchedulerService {
         if (nextExecution == null) {
           jobRepository.setJobStatus(job.getId(), JobStatus.FAILED);
         } else {
-          logger.info(
+          log.info(
               "Scheduling the unscheduled job ("
                   + job.getId()
                   + ") for execution at ("

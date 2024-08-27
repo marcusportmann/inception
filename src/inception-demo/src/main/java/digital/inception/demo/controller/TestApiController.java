@@ -21,8 +21,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.demo.model.CarType;
 import java.time.OffsetDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,13 +35,11 @@ import org.springframework.web.reactive.function.client.WebClient;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused"})
 public class TestApiController extends SecureApiController implements ITestApiController {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(TestApiController.class);
 
   private final WebClient.Builder webClientBuilder;
 
@@ -71,10 +68,10 @@ public class TestApiController extends SecureApiController implements ITestApiCo
               .bodyToMono(String.class)
               .block();
 
-      logger.info("Retrieved the enum value: " + enumValue);
+      log.info("Retrieved the enum value: " + enumValue);
 
     } catch (Throwable e) {
-      logger.error("Failed to invoke the API", e);
+      log.error("Failed to invoke the API", e);
     }
   }
 
@@ -103,9 +100,9 @@ public class TestApiController extends SecureApiController implements ITestApiCo
       throw new InvalidArgumentException("anotherPathVariable");
     }
 
-    logger.info("pathVariable = " + pathVariable);
-    logger.info("anotherPathVariable = " + anotherPathVariable);
-    logger.info("requestParameter = " + requestParameter);
+    log.info("pathVariable = " + pathVariable);
+    log.info("anotherPathVariable = " + anotherPathVariable);
+    log.info("requestParameter = " + requestParameter);
 
     try {
       StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -123,7 +120,7 @@ public class TestApiController extends SecureApiController implements ITestApiCo
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication != null) {
-      logger.info("Processing secure API call for authenticated user: " + authentication.getName());
+      log.info("Processing secure API call for authenticated user: " + authentication.getName());
     }
 
     return CarType.PETROL;

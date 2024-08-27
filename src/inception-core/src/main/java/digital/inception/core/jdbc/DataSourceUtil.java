@@ -24,8 +24,7 @@ import io.agroal.api.transaction.TransactionIntegration;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 import javax.sql.DataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -36,10 +35,8 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 public final class DataSourceUtil {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(DataSourceUtil.class);
 
   /** Private default constructor to prevent instantiation. */
   private DataSourceUtil() {}
@@ -69,7 +66,7 @@ public final class DataSourceUtil {
       DataSourceConfiguration dataSourceConfiguration,
       boolean enableTransactionIntegration) {
 
-    logger.info(
+    log.info(
         "Initializing the data source with URL ("
             + dataSourceConfiguration.getUrl()
             + ") using the Agroal connection pool with max pool size "

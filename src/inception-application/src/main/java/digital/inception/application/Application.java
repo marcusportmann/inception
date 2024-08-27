@@ -20,8 +20,7 @@ import digital.inception.core.support.MergedMessageSource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +38,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Component
 @ComponentScan(
     basePackages = {"digital.inception"},
@@ -47,9 +47,6 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 @SuppressWarnings({"unused"})
 public abstract class Application {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;

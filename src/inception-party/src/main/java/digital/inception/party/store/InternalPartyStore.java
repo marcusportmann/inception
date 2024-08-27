@@ -61,8 +61,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -76,13 +75,11 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @Conditional(InternalPartyStoreEnabledCondition.class)
 @SuppressWarnings("unused")
 public class InternalPartyStore implements IPartyStore {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(InternalPartyStore.class);
 
   /** The Association Repository. */
   private final AssociationRepository associationRepository;

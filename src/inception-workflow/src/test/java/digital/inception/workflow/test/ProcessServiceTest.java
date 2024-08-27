@@ -41,6 +41,7 @@ import javax.sql.DataSource;
 // import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 // import org.camunda.bpm.engine.task.Task;
 // import org.camunda.bpm.engine.task.TaskQuery;
+import lombok.extern.slf4j.Slf4j;
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
@@ -52,8 +53,6 @@ import org.flowable.job.api.JobQuery;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
@@ -71,6 +70,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
@@ -83,9 +83,6 @@ import org.springframework.transaction.PlatformTransactionManager;
       TransactionalTestExecutionListener.class
     })
 public class ProcessServiceTest {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ProcessServiceTest.class);
 
   /** The data source used to provide connections to the application database. */
   @Autowired

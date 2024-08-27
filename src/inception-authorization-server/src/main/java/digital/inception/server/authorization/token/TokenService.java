@@ -31,8 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
@@ -44,6 +43,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class TokenService implements ITokenService {
@@ -59,9 +59,6 @@ public class TokenService implements ITokenService {
 
   /** The refresh token validity in seconds. */
   public static final int REFRESH_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
   /* Security Service */
   private final ISecurityService securityService;
@@ -121,7 +118,7 @@ public class TokenService implements ITokenService {
         this.jwtRsaPrivateKey =
             ResourceUtil.getRSAPrivateKeyResource(resourceLoader, jwtRsaPrivateKeyLocation);
       } catch (ResourceException e) {
-        logger.error(
+        log.error(
             "Failed to initialize the JWT RSA private key (" + jwtRsaPrivateKeyLocation + ")", e);
       }
     }
@@ -141,7 +138,7 @@ public class TokenService implements ITokenService {
         this.jwtRsaPublicKey =
             ResourceUtil.getRSAPublicKeyResource(resourceLoader, jwtRsaPublicKeyLocation);
       } catch (Throwable e) {
-        logger.error(
+        log.error(
             "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyLocation + ")", e);
       }
     }

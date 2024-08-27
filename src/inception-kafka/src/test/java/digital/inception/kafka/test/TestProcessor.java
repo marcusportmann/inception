@@ -18,9 +18,8 @@ package digital.inception.kafka.test;
 
 import digital.inception.kafka.*;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Component;
 
@@ -29,11 +28,9 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Component
 public class TestProcessor extends Processor<String, String> {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(TestProcessor.class);
 
   /**
    * Constructs a new <code>TestProcessor</code>.
@@ -51,12 +48,12 @@ public class TestProcessor extends Processor<String, String> {
 
   @Override
   protected void handleInvalidRecordValue(String value) throws Exception {
-    logger.error("Failed to process the invalid record value: " + value);
+    log.error("Failed to process the invalid record value: " + value);
   }
 
   @Override
   protected void handleRecordProcessingFailure(String value) throws Exception {
-    logger.error("Failed to process the record value: " + value);
+    log.error("Failed to process the record value: " + value);
   }
 
   @Override
@@ -64,8 +61,8 @@ public class TestProcessor extends Processor<String, String> {
       throws InvalidRecordValueException, TransientErrorException, ProcessingFailedException {
     headers.forEach(
         (headerKey, headerValue) -> {
-          logger.info("Found the record header: " + headerKey + " = " + new String(headerValue));
+          log.info("Found the record header: " + headerKey + " = " + new String(headerValue));
         });
-    logger.info("Processing the record value: " + value);
+    log.info("Processing the record value: " + value);
   }
 }

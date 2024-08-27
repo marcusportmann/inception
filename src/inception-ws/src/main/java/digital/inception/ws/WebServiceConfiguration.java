@@ -25,11 +25,10 @@ import jakarta.xml.ws.Endpoint;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -51,12 +50,10 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Configuration
 @Conditional(WebServiceConfigurationEnabledCondition.class)
 public class WebServiceConfiguration {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(WebServiceConfiguration.class);
 
   /** The Spring application context */
   private final ApplicationContext applicationContext;
@@ -252,7 +249,7 @@ public class WebServiceConfiguration {
 
     scanner.addIncludeFilter(new AnnotationTypeFilter(WebService.class));
 
-    logger.info(
+    log.info(
         "Scanning the following packages for web services: "
             + StringUtils.collectionToDelimitedString(packagesToScanForWebServices, ","));
 

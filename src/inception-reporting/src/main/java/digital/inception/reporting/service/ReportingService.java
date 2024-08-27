@@ -36,13 +36,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import javax.sql.DataSource;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -53,12 +52,10 @@ import org.w3c.dom.Document;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class ReportingService implements IReportingService {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
   /** The data source used to provide connections to the application database. */
   private final DataSource dataSource;

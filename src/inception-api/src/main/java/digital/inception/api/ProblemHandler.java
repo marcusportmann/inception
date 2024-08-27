@@ -26,8 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.time.OffsetDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
@@ -45,12 +44,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author Marcus Portmann
  */
+@Slf4j
 @ControllerAdvice
 @SuppressWarnings("unused")
 public class ProblemHandler {
-
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ProblemHandler.class);
 
   /** Is debugging enabled for the Inception Framework? */
   @Value("${inception.debug.enabled:#{false}}")
@@ -84,15 +81,20 @@ public class ProblemHandler {
 
     if (problem != null) {
       if (inDebugMode || verboseErrorHandling) {
-        logger.error("A service error ({}) occurred while processing the request: {}",
-            problem.type(), serviceException.getMessage(), serviceException);
+        log.error(
+            "A service error ({}) occurred while processing the request: {}",
+            problem.type(),
+            serviceException.getMessage(),
+            serviceException);
       }
       problemDetails.setType(problem.type());
       problemDetails.setTitle(problem.title());
       problemDetails.setStatus(problem.status());
     } else if (serviceException instanceof BusinessException businessException) {
-      logger.error("A business error occurred while processing the request: {}",
-          serviceException.getMessage(), serviceException);
+      log.error(
+          "A business error occurred while processing the request: {}",
+          serviceException.getMessage(),
+          serviceException);
 
       problemDetails.setType("https://inception.digital/problems/business-error");
       problemDetails.setTitle(
@@ -106,12 +108,12 @@ public class ProblemHandler {
         String validationErrorsAsString = invalidArgumentException.getValidationErrorsAsString();
 
         if (StringUtils.hasText(validationErrorsAsString)) {
-          logger.error(
+          log.error(
               "An invalid argument error occurred while processing the request ({}): {}",
               invalidArgumentException.getParameter(),
               validationErrorsAsString);
         } else {
-          logger.error(
+          log.error(
               "An invalid argument error occurred while processing the request ({})",
               invalidArgumentException.getParameter());
         }
@@ -124,17 +126,20 @@ public class ProblemHandler {
       problemDetails.setParameter(invalidArgumentException.getParameter());
       problemDetails.setValidationErrors(invalidArgumentException.getValidationErrors());
     } else if (serviceException instanceof ServiceUnavailableException) {
-      logger.error("A service unavailable error occurred while processing the request: {}",
-          serviceException.getMessage(), serviceException);
+      log.error(
+          "A service unavailable error occurred while processing the request: {}",
+          serviceException.getMessage(),
+          serviceException);
 
       problemDetails.setType("https://inception.digital/problems/service-unavailable");
       problemDetails.setTitle(
           "An error has occurred and your request could not be processed at this time.");
       problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     } else {
-      logger.error(
+      log.error(
           "An unknown service error with no problem details occurred while processing the request: {}",
-          serviceException.getMessage(), serviceException);
+          serviceException.getMessage(),
+          serviceException);
 
       problemDetails.setType("about:blank");
       problemDetails.setTitle(
@@ -165,7 +170,7 @@ public class ProblemHandler {
       HttpServletRequest request, AccessDeniedException accessDeniedException) {
 
     if (inDebugMode || verboseErrorHandling) {
-      logger.error("An access denied error occurred while processing the request");
+      log.error("An access denied error occurred while processing the request");
     }
 
     ProblemDetails problemDetails = new ProblemDetails();
@@ -194,8 +199,8 @@ public class ProblemHandler {
   @ResponseBody
   protected ResponseEntity<ProblemDetails> handle(HttpServletRequest request, Throwable cause) {
 
-    logger.error("An unexpected error occurred while processing the request: {}",
-        cause.getMessage(), cause);
+    log.error(
+        "An unexpected error occurred while processing the request: {}", cause.getMessage(), cause);
 
     ProblemDetails problemDetails = new ProblemDetails();
 
