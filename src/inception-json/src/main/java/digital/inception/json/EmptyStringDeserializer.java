@@ -19,6 +19,7 @@ package digital.inception.json;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import java.io.IOException;
 
 /**
@@ -38,5 +39,11 @@ public class EmptyStringDeserializer extends JsonDeserializer<String> {
       throws IOException {
     String value = jsonParser.getValueAsString();
     return value == null ? "" : value;
+  }
+
+  @Override
+  public String getNullValue(DeserializationContext deserializationContext)
+      throws JsonMappingException {
+    return "";
   }
 }
