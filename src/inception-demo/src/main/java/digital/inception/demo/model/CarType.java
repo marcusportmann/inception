@@ -97,9 +97,9 @@ public enum CarType {
   }
 
   /**
-   * Returns the string representation of the car type enumeration value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the car type enumeration value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;
