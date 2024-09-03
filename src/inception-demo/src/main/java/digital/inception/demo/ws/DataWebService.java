@@ -79,7 +79,8 @@ public class DataWebService {
   public Data getData() throws ServiceUnavailableException {
     long id = System.currentTimeMillis();
 
-    Data data = new Data(id, 777, "Test Value " + id, LocalDate.now(), OffsetDateTime.now());
+    Data data =
+        new Data(id, 777, "Test Value " + id, LocalDate.now(), OffsetDateTime.now(), "ZA", "EN");
 
     dataService.createData(data);
 

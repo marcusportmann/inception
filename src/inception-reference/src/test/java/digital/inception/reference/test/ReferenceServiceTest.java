@@ -32,6 +32,7 @@ import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,5 +224,56 @@ public class ReferenceServiceTest {
     assertTrue(referenceService.isValidMeasurementUnitType("length"));
     assertTrue(referenceService.isValidTimeZone("Africa/Johannesburg"));
     assertTrue(referenceService.isValidRegion("ZA-EC"));
+  }
+
+  /**
+   * Generate the Country list for the static reference class.
+   */
+  @Test
+  @Disabled
+  public void generateCountryList() throws Exception {
+    List<Country> countries = referenceService.getCountries();
+
+    StringBuilder buffer = new StringBuilder();
+
+    for (Country country : countries) {
+      if (!buffer.isEmpty()) {
+        buffer.append(",").append(System.lineSeparator());
+      }
+      buffer.append("new  Country(\"").append(country.getCode()).append("\", \"")
+          .append(country.getIso3Code()).append("\", ")
+          .append((country.getSortIndex() == null) ? 1 : country.getSortIndex()).append(", \"")
+          .append(country.getName()).append("\", \"").append(country.getShortName())
+          .append("\", \"").append(country.getDescription()).append("\", \"")
+          .append(country.getSovereignState()).append("\", \"").append(country.getNationality())
+          .append("\")");
+    }
+
+    System.out.println("private static final List<Country> countries = List.of(" + System.lineSeparator() + buffer + ");");
+  }
+
+
+  /**
+   * Generate the Language list for the static reference class.
+   */
+  @Test
+  @Disabled
+  public void generateLanguageList() throws Exception {
+    List<Language> languages = referenceService.getLanguages();
+
+    StringBuilder buffer = new StringBuilder();
+
+    for (Language language : languages) {
+      if (!buffer.isEmpty()) {
+        buffer.append(",").append(System.lineSeparator());
+      }
+      buffer.append("new  Language(\"").append(language.getCode()).append("\", \"")
+          .append(language.getIso3Code()).append("\", ")
+          .append((language.getSortIndex() == null) ? 1 : language.getSortIndex()).append(", \"")
+          .append(language.getName()).append("\", \"").append(language.getShortName())
+          .append("\", \"").append(language.getDescription()).append("\")");
+    }
+
+    System.out.println("private static final List<Language> languages = List.of(" + System.lineSeparator() + buffer + ");");
   }
 }

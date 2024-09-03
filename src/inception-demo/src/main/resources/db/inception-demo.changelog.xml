@@ -26,6 +26,8 @@
       <column name="string_value" type="nvarchar(2000)" remarks="The string value for the data"/>
       <column name="date_value" type="date" remarks="The date value for the data"/>
       <column name="timestamp_value" type="timestamp with time zone" remarks="The timestamp value for the data"/>
+      <column name="country" type="nvarchar(2)" remarks="The ISO 3166-1 country code value for the data"/>
+      <column name="language" type="nvarchar(2)" remarks="The ISO 639-1 language code value for the data"/>
     </createTable>
 
     <createTable tableName="demo_vehicles" remarks="Vehicles">

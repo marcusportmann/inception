@@ -24,16 +24,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>NoScriptOrSQLInjection</b> annotation implements the custom constraint annotation used to
- * apply the string validation, which detects whether a <b>String</b> or the <b>String</b>
- * properties of an object contain unsafe script or SQL injection content.
+ * The <b>ValidISOLanguageCode</b> annotation implements the custom constraint annotation used to
+ * validate whether a <b>String</b> contains a valid ISO 639-1 alpha-2 or ISO 639-1 alpha-3 country
+ * code.
  *
  * @author Marcus Portmann
  */
-@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE})
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = NoScriptOrSQLInjectionValidator.class)
-public @interface NoScriptOrSQLInjection {
+@Constraint(validatedBy = ValidISOLanguageCodeValidator.class)
+public @interface ValidISOLanguageCode {
+
   /**
    * The target groups.
    *
@@ -46,7 +47,7 @@ public @interface NoScriptOrSQLInjection {
    *
    * @return the error message key
    */
-  String message() default "invalid string value containing script or SQL injection";
+  String message() default "invalid ISO 639-1 language code";
 
   /**
    * The payload type.
