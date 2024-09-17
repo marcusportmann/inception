@@ -216,6 +216,43 @@ public class TaskType implements Serializable {
    *     type
    * @param archiveCompleted archive completed tasks of this type
    * @param archiveFailed archive failed tasks of this type
+   * @param maximumExecutionAttempts the maximum execution attempts for tasks of this type
+   * @param retryDelay the retry delay for tasks of this type
+   * @param executionTimeout the amount of time in milliseconds after which a locked and executing
+   *     task of this type will be considered hung and will be reset
+   */
+  public TaskType(
+      String code,
+      String name,
+      TaskPriority priority,
+      String executorClass,
+      boolean archiveCompleted,
+      boolean archiveFailed,
+      int maximumExecutionAttempts,
+      int retryDelay,
+      int executionTimeout) {
+    this.code = code;
+    this.name = name;
+    this.priority = priority;
+    this.executorClass = executorClass;
+    this.archiveCompleted = archiveCompleted;
+    this.archiveFailed = archiveFailed;
+    this.maximumExecutionAttempts = maximumExecutionAttempts;
+    this.retryDelay = retryDelay;
+    this.executionTimeout = executionTimeout;
+    this.enabled = true;
+  }
+
+  /**
+   * Constructs a new <b>TaskType</b>.
+   *
+   * @param code the code for the task type
+   * @param name the name of the task type
+   * @param priority the priority for tasks of this type
+   * @param executorClass the fully qualified name of the Java class that executes tasks of this
+   *     type
+   * @param archiveCompleted archive completed tasks of this type
+   * @param archiveFailed archive failed tasks of this type
    */
   public TaskType(
       String code,

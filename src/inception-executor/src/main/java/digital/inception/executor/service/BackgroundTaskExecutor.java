@@ -67,7 +67,7 @@ public class BackgroundTaskExecutor {
   private int taskExecutionThreadKeepAlive;
 
   /** The executor responsible for executing tasks. */
-  private Executor taskExecutor;
+  private ThreadPoolExecutor taskExecutor;
 
   /**
    * Constructs a new <b>BackgroundTaskExecutor</b>.
@@ -91,11 +91,13 @@ public class BackgroundTaskExecutor {
     while (true) {
       // Retrieve the next task queued for execution
       try {
-        if (taskExecutionQueue.size() == maximumTaskExecutionQueueLength) {
-          log.warn(
-              "The maximum number of tasks queued for execution has been reached ("
-                  + maximumTaskExecutionQueueLength
-                  + ")");
+        if (taskExecutor.getQueue().remainingCapacity() == 0) {
+          if (log.isDebugEnabled()) {
+            log.debug(
+                "The maximum number of tasks queued for execution has been reached ("
+                    + maximumTaskExecutionQueueLength
+                    + ")");
+          }
           return;
         }
 

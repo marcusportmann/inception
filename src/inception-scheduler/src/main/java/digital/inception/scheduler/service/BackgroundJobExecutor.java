@@ -53,7 +53,7 @@ public class BackgroundJobExecutor {
   private int jobExecutionThreadKeepAlive;
 
   /** The executor responsible for executing jobs. */
-  private Executor jobExecutor;
+  private ThreadPoolExecutor jobExecutor;
 
   /**
    * The maximum number of jobs to queue for execution if no job execution threads are available.
@@ -87,11 +87,13 @@ public class BackgroundJobExecutor {
     while (true) {
       // Retrieve the next job scheduled for execution
       try {
-        if (jobExecutionQueue.size() == maximumJobExecutionQueueLength) {
-          log.warn(
-              "The maximum number of jobs queued for execution has been reached ("
-                  + maximumJobExecutionQueueLength
-                  + ")");
+        if (jobExecutor.getQueue().remainingCapacity() == 0) {
+          if (log.isDebugEnabled()) {
+            log.warn(
+                "The maximum number of jobs queued for execution has been reached ("
+                    + maximumJobExecutionQueueLength
+                    + ")");
+          }
           return;
         }
 
