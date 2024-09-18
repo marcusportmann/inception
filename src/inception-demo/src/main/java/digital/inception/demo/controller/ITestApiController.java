@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public interface ITestApiController {
 
   /**
-   * Test an API cll.
+   * Test an API call.
    *
    * @throws ServiceUnavailableException if an error occurred
    */
@@ -196,5 +196,22 @@ public interface ITestApiController {
               required = true)
           @RequestParam
           Boolean throwException)
+      throws ServiceUnavailableException;
+
+  /**
+   * Test task execution.
+   *
+   * @param slowTask test the execution of a slow task
+   *
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test task execution", description = "Test task execution")
+  @RequestMapping(
+      value = "/test-task-execution",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  void testTaskExecution(
+      @Parameter(name = "slowTask", description = "Test the execution of a slow task") @RequestParam
+          Boolean slowTask)
       throws ServiceUnavailableException;
 }

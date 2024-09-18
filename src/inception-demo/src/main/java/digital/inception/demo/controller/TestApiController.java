@@ -20,6 +20,8 @@ import digital.inception.api.SecureApiController;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.demo.model.CarType;
+import digital.inception.demo.task.DemoTaskData;
+import digital.inception.executor.service.IExecutorService;
 import java.time.OffsetDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -41,6 +43,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SuppressWarnings({"unused"})
 public class TestApiController extends SecureApiController implements ITestApiController {
 
+  private final IExecutorService executorService;
+
   private final WebClient.Builder webClientBuilder;
 
   /**
@@ -48,11 +52,15 @@ public class TestApiController extends SecureApiController implements ITestApiCo
    *
    * @param applicationContext the Spring application context
    * @param webClientBuilder the web client builder
+   * @param executorService the Executor Service
    */
   public TestApiController(
-      ApplicationContext applicationContext, WebClient.Builder webClientBuilder) {
+      ApplicationContext applicationContext,
+      WebClient.Builder webClientBuilder,
+      IExecutorService executorService) {
     super(applicationContext);
     this.webClientBuilder = webClientBuilder;
+    this.executorService = executorService;
   }
 
   @Override
@@ -132,6 +140,21 @@ public class TestApiController extends SecureApiController implements ITestApiCo
       throw new ServiceUnavailableException("This is a test exception");
     } else {
       return "This is a test string";
+    }
+  }
+
+  @Override
+  public void testTaskExecution(Boolean slowTask) throws ServiceUnavailableException {
+    try {
+      DemoTaskData demoTaskData = new DemoTaskData("This is a test message.");
+
+      if ((slowTask != null) && (slowTask)) {
+        demoTaskData.setSlowTask(true);
+      }
+
+      executorService.queueTask("demo_task", demoTaskData);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to execute the Demo Task");
     }
   }
 }

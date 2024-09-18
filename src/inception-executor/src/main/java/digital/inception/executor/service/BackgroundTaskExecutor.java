@@ -16,22 +16,22 @@
 
 package digital.inception.executor.service;
 
-import digital.inception.executor.model.Task;
-import digital.inception.executor.model.TaskExecutionDelayedException;
-import digital.inception.executor.model.TaskExecutionResult;
-import digital.inception.executor.model.TaskExecutionRetryableException;
-import digital.inception.executor.model.TaskStatus;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.SmartLifecycle;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import digital.inception.executor.model.Task;
+import digital.inception.executor.model.TaskExecutionDelayedException;
+import digital.inception.executor.model.TaskExecutionResult;
+import digital.inception.executor.model.TaskExecutionRetryableException;
+import digital.inception.executor.model.TaskStatus;
 
 /**
  * The <b>BackgroundTaskExecutor</b> class implements the Background Task Executor.
@@ -41,7 +41,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @SuppressWarnings("unused")
-public class BackgroundTaskExecutor {
+public class BackgroundTaskExecutor implements IBackgroundTaskExecutor, SmartLifecycle {
+
+  /** The number of milliseconds to wait for an executing or queued task to complete. */
+  @Value("${inception.executor.task-completion-timeout:#{60000L}}")
+  private long taskCompletionTimeout;
 
   /** The Executor Service. */
   private final IExecutorService executorService;
@@ -49,6 +53,9 @@ public class BackgroundTaskExecutor {
   /** The number of task execution threads to start initially. */
   @Value("${inception.executor.initial-task-execution-threads:#{1}}")
   private int initialTaskExecutionThreads;
+
+  /** Is the Background Task Executor running. */
+  private boolean isRunning;
 
   /**
    * The maximum number of tasks to queue for execution if no task execution threads are available.
@@ -88,7 +95,7 @@ public class BackgroundTaskExecutor {
       return;
     }
 
-    while (true) {
+    while (isRunning) {
       // Retrieve the next task queued for execution
       try {
         if (taskExecutor.getQueue().remainingCapacity() == 0) {
@@ -148,6 +155,49 @@ public class BackgroundTaskExecutor {
       log.error(
           "Failed to initialize the Background Task Executor: "
               + "The Executor Service was NOT injected");
+    }
+  }
+
+  @Override
+  public boolean isRunning() {
+    return isRunning || taskExecutor.isTerminating();
+  }
+
+  @Override
+  public void start() {
+    log.info("Starting the Background Task Executor");
+    isRunning = true;
+  }
+
+  @Override
+  public void stop() {
+    long terminationTimeout =
+        Math.max(
+            5 * 60000L,
+            (taskExecutor.getActiveCount() + taskExecutor.getQueue().size())
+                * taskCompletionTimeout);
+
+    log.info(
+        "Shutting down the Background Task Executor with "
+            + taskExecutor.getActiveCount()
+            + " active tasks and "
+            + taskExecutor.getQueue().size()
+            + " queued tasks (Timeout is "
+            + terminationTimeout
+            + " milliseconds)");
+
+    isRunning = false;
+
+    try {
+      taskExecutor.shutdown();
+
+      if (taskExecutor.awaitTermination(terminationTimeout, TimeUnit.MILLISECONDS)) {
+        log.info("Successfully shutdown the Background Task Executor");
+      } else {
+        log.warn("Failed to cleanly shutdown the Background Task Executor");
+      }
+    } catch (InterruptedException e) {
+      log.warn("The shutdown of the Background Task Executor was interrupted");
     }
   }
 

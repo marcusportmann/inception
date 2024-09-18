@@ -17,6 +17,34 @@
 package digital.inception.executor.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -48,34 +76,6 @@ import digital.inception.executor.persistence.TaskEventRepository;
 import digital.inception.executor.persistence.TaskRepository;
 import digital.inception.executor.persistence.TaskSummaryRepository;
 import digital.inception.executor.persistence.TaskTypeRepository;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>ExecutorService</b> class provides the Executor Service implementation.
@@ -356,7 +356,7 @@ public class ExecutorService implements IExecutorService {
 
         createTaskEvent(TaskEventType.STEP_COMPLETED, taskType, task);
 
-        applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
+        applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
       }
       // Complete the single step task, or the last step of a multistep task
       else {
@@ -847,6 +847,53 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
+  public UUID queueTask(QueueTaskRequest queueTaskRequest)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
+    validateQueueTaskRequest(queueTaskRequest);
+
+    try {
+      TaskType taskType = getTaskType(queueTaskRequest.getType());
+
+      ITaskExecutor taskExecutor = getTaskExecutorForTaskType(taskType);
+
+      String initialTaskStep = taskExecutor.getInitialTaskStep();
+
+      Task task;
+
+      if (initialTaskStep == null) {
+        task = new Task(queueTaskRequest.getType(), queueTaskRequest.getData());
+
+      } else {
+        task = new Task(queueTaskRequest.getType(), initialTaskStep, queueTaskRequest.getData());
+      }
+
+      if ((queueTaskRequest.getSuspended() != null) && queueTaskRequest.getSuspended()) {
+        task.setStatus(TaskStatus.SUSPENDED);
+      }
+
+      if (StringUtils.hasText(queueTaskRequest.getBatchId())) {
+        task.setBatchId(queueTaskRequest.getBatchId());
+      }
+
+      if (StringUtils.hasText(queueTaskRequest.getExternalReference())) {
+        task.setExternalReference(queueTaskRequest.getExternalReference());
+      }
+
+      taskRepository.saveAndFlush(task);
+
+      applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
+
+      return task.getId();
+    } catch (TaskTypeNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to queue the task with type (" + queueTaskRequest.getType() + ") for execution",
+          e);
+    }
+  }
+
+  @Override
   public UUID queueTask(
       String type, String batchId, String externalReference, boolean suspended, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
@@ -894,53 +941,6 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
-  public UUID queueTask(QueueTaskRequest queueTaskRequest)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    validateQueueTaskRequest(queueTaskRequest);
-
-    try {
-      TaskType taskType = getTaskType(queueTaskRequest.getType());
-
-      ITaskExecutor taskExecutor = getTaskExecutorForTaskType(taskType);
-
-      String initialTaskStep = taskExecutor.getInitialTaskStep();
-
-      Task task;
-
-      if (initialTaskStep == null) {
-        task = new Task(queueTaskRequest.getType(), queueTaskRequest.getData());
-
-      } else {
-        task = new Task(queueTaskRequest.getType(), initialTaskStep, queueTaskRequest.getData());
-      }
-
-      if ((queueTaskRequest.getSuspended() != null) && queueTaskRequest.getSuspended()) {
-        task.setStatus(TaskStatus.SUSPENDED);
-      }
-
-      if (StringUtils.hasText(queueTaskRequest.getBatchId())) {
-        task.setBatchId(queueTaskRequest.getBatchId());
-      }
-
-      if (StringUtils.hasText(queueTaskRequest.getExternalReference())) {
-        task.setExternalReference(queueTaskRequest.getExternalReference());
-      }
-
-      taskRepository.saveAndFlush(task);
-
-      applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
-
-      return task.getId();
-    } catch (TaskTypeNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to queue the task with type (" + queueTaskRequest.getType() + ") for execution",
-          e);
-    }
-  }
-
-  @Override
   public void requeueTask(Task task)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
     if (task == null) {
@@ -981,7 +981,7 @@ public class ExecutorService implements IExecutorService {
 
         taskRepository.requeueTask(task.getId(), nextExecution);
 
-        applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
+        applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
       }
     } catch (TaskNotFoundException e) {
       throw e;
@@ -1191,7 +1191,7 @@ public class ExecutorService implements IExecutorService {
         throw new InvalidTaskStatusException(taskId);
       }
 
-      applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
+      applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
     } catch (TaskNotFoundException | InvalidTaskStatusException e) {
       throw e;
     } catch (Throwable e) {
