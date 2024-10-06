@@ -35,6 +35,6 @@ public interface SegmentRepository extends JpaRepository<Segment, SegmentId> {
    *
    * @return all the segments sorted by locale ID, sort index, and name.
    */
-  @Query("select s from Segment s order by s.localeId, -s.sortIndex DESC, s.type, s.name")
+  @Query("select s from Segment s order by s.localeId, s.sortIndex DESC, s.type, s.name")
   List<Segment> getAllSegments();
 }

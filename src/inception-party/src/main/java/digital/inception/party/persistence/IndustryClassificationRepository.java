@@ -37,6 +37,6 @@ public interface IndustryClassificationRepository
    * @return all the industry classifications sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select ic from IndustryClassification ic order by ic.localeId, -ic.sortIndex DESC, ic.name")
+      "select ic from IndustryClassification ic order by ic.localeId, ic.sortIndex DESC, ic.name")
   List<IndustryClassification> getAllIndustryClassifications();
 }

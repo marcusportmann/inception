@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
@@ -43,7 +45,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Slf4j
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class TokenService implements ITokenService {
@@ -59,6 +60,9 @@ public class TokenService implements ITokenService {
 
   /** The refresh token validity in seconds. */
   public static final int REFRESH_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(TokenService.class);
 
   /* Security Service */
   private final ISecurityService securityService;

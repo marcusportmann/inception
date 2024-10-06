@@ -19,7 +19,6 @@ package digital.inception.reporting;
 import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -38,16 +37,10 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.reporting"})
 public class ReportingConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
   /**
    * Constructs a new <b>ReportingConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
    */
-  public ReportingConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
+  public ReportingConfiguration() {
   }
 
   /**

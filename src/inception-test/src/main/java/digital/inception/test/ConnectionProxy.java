@@ -40,6 +40,7 @@ import java.util.concurrent.Executor;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("SqlSourceToSinkFlow")
 public class ConnectionProxy implements Connection {
 
   private final Connection connection;
@@ -188,7 +189,7 @@ public class ConnectionProxy implements Connection {
   }
 
   @Override
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     return iface.isAssignableFrom(getClass());
   }
 

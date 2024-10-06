@@ -37,6 +37,6 @@ public interface StatusTypeCategoryRepository
    * @return all the status type categories sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select stc from StatusTypeCategory stc order by stc.localeId, -stc.sortIndex DESC, stc.name")
+      "select stc from StatusTypeCategory stc order by stc.localeId, stc.sortIndex DESC, stc.name")
   List<StatusTypeCategory> getAllStatusTypeCategories();
 }

@@ -35,6 +35,6 @@ public interface NextOfKinTypeRepository extends JpaRepository<NextOfKinType, Ne
    *
    * @return all the next of kin types sorted by locale ID, sort index, and name.
    */
-  @Query("select nok from NextOfKinType nok order by nok.localeId, -nok.sortIndex DESC, nok.name")
+  @Query("select nok from NextOfKinType nok order by nok.localeId, nok.sortIndex DESC, nok.name")
   List<NextOfKinType> getAllNextOfKinTypes();
 }

@@ -24,16 +24,20 @@ import digital.inception.executor.model.TaskExecutionFailedException;
 import digital.inception.executor.model.TaskExecutionRetryableException;
 import digital.inception.executor.model.TaskStep;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <b>TestMultistepWithDelayTaskExecutor</b> class.
  *
  * @author Marcus Portmann
  */
-@Slf4j
 public class TestMultistepWithDelayTaskExecutor
     extends MultistepTaskExecutor<TestMultistepTaskData> {
+
+  /* Logger */
+  private static final Logger log =
+      LoggerFactory.getLogger(TestMultistepWithDelayTaskExecutor.class);
 
   /**
    * Constructs a new <b>TestMultistepWithDelayTaskExecutor</b>

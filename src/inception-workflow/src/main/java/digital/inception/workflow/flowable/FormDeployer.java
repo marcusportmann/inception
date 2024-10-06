@@ -17,22 +17,26 @@
 package digital.inception.workflow.flowable;
 
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+
 import org.flowable.common.engine.api.repository.EngineDeployment;
 import org.flowable.common.engine.api.repository.EngineResource;
 import org.flowable.common.engine.impl.EngineDeployer;
 import org.flowable.engine.impl.persistence.entity.DeploymentEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <b>FormDeployer</b> class.
  *
  * @author Marcus Portmann
  */
-@Slf4j
 public class FormDeployer implements EngineDeployer {
 
   /** The suffixes for form resources. */
   public static final String[] FORM_RESOURCE_SUFFIXES = new String[] {".form"};
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(FormDeployer.class);
 
   /** Constructs a new <b>FormDeployer</b>. */
   public FormDeployer() {}

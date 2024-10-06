@@ -19,7 +19,6 @@ package digital.inception.ws.security;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.security.KeyStore;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManager;
@@ -63,17 +62,15 @@ public final class CXFMutualSSLSecurityProxyConfigurator {
       throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
-    if (invocationHandler instanceof ClientProxy) {
-      ClientProxy clientProxy = (ClientProxy) invocationHandler;
+    if (invocationHandler instanceof ClientProxy clientProxy) {
 
       Conduit conduit = clientProxy.getClient().getConduit();
 
-      if (conduit instanceof HTTPConduit) {
-        HTTPConduit httpConduit = (HTTPConduit) conduit;
+      if (conduit instanceof HTTPConduit httpConduit) {
 
         TLSClientParameters tlsClientParameters = new TLSClientParameters();
 
-        // Setup the key manager for the client SSL socket factory
+        // Set up the key manager for the client SSL socket factory
         KeyManagerFactory keyManagerFactory =
             KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 
@@ -86,13 +83,11 @@ public final class CXFMutualSSLSecurityProxyConfigurator {
           TrustManager[] trustAllCerts =
               new TrustManager[] {
                 new X509TrustManager() {
-                  public void checkClientTrusted(X509Certificate[] chain, String authType)
-                      throws CertificateException {
+                  public void checkClientTrusted(X509Certificate[] chain, String authType) {
                     // Skip client verification
                   }
 
-                  public void checkServerTrusted(X509Certificate[] chain, String authType)
-                      throws CertificateException {
+                  public void checkServerTrusted(X509Certificate[] chain, String authType) {
                     // Skip server verification
                   }
 

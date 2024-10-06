@@ -35,6 +35,6 @@ public interface OccupationRepository extends JpaRepository<Occupation, Occupati
    *
    * @return all the occupations sorted by locale ID, sort index, and name.
    */
-  @Query("select o from Occupation o order by o.localeId, -o.sortIndex DESC, o.name")
+  @Query("select o from Occupation o order by o.localeId, o.sortIndex DESC, o.name")
   List<Occupation> getAllOccupations();
 }

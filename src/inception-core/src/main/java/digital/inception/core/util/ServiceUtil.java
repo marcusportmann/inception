@@ -17,14 +17,17 @@
 package digital.inception.core.util;
 
 import javax.naming.InitialContext;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <b>ServiceUtil</b> class provides utility methods that are useful when creating internal
  * application services.
  */
-@Slf4j
 public final class ServiceUtil {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(ServiceUtil.class);
 
   /** Private constructor to prevent instantiation. */
   private ServiceUtil() {}

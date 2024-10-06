@@ -37,6 +37,6 @@ public interface AssociationPropertyTypeRepository
    * @return all the association property types sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select apt from AssociationPropertyType apt order by apt.localeId, -apt.sortIndex DESC, apt.name")
+      "select apt from AssociationPropertyType apt order by apt.localeId, apt.sortIndex DESC, apt.name")
   List<AssociationPropertyType> getAllAssociationPropertyTypes();
 }

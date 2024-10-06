@@ -26,7 +26,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -44,8 +45,11 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 public class MultiIssuerJwtDecoder implements JwtDecoder {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(MultiIssuerJwtDecoder.class);
 
   /** The JWT decoders for the different issuers using different RSA keys or secret keys. */
   private final Map<String, JwtDecoder> jwtDecoders;

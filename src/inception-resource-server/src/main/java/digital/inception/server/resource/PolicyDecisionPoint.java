@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.DecisionType;
 import org.aopalliance.intercept.MethodInvocation;
 import org.ow2.authzforce.core.pdp.api.DecisionRequest;
@@ -46,6 +45,8 @@ import org.ow2.authzforce.xacml.identifiers.XacmlAttributeId;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractAttributeProvider;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractDecisionCache;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractPolicyProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.access.AccessDeniedException;
@@ -63,9 +64,12 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Component
 public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(PolicyDecisionPoint.class);
 
   /** The policy decision point context providers. */
   private final Map<
@@ -121,6 +125,7 @@ public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
     this.externalPoliciesReloadPeriod = externalPoliciesReloadPeriod;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean authorize(
       Object authenticationObject,

@@ -37,6 +37,6 @@ public interface PreferenceTypeCategoryRepository
    * @return all the preference type categories sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select ptc from PreferenceTypeCategory ptc order by ptc.localeId, -ptc.sortIndex DESC, ptc.name")
+      "select ptc from PreferenceTypeCategory ptc order by ptc.localeId, ptc.sortIndex DESC, ptc.name")
   List<PreferenceTypeCategory> getAllPreferenceTypeCategories();
 }

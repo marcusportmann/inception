@@ -37,6 +37,6 @@ public interface MandatePropertyTypeRepository
    * @return all the mandate property types sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select mpt from MandatePropertyType mpt order by mpt.localeId, -mpt.sortIndex DESC, mpt.name")
+      "select mpt from MandatePropertyType mpt order by mpt.localeId, mpt.sortIndex DESC, mpt.name")
   List<MandatePropertyType> getAllMandatePropertyTypes();
 }

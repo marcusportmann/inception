@@ -35,6 +35,6 @@ public interface TimeToContactRepository extends JpaRepository<TimeToContact, Ti
    *
    * @return all the times to contact sorted by locale ID, sort index, and name.
    */
-  @Query("select ttc from TimeToContact ttc order by ttc.localeId, -ttc.sortIndex DESC, ttc.name")
+  @Query("select ttc from TimeToContact ttc order by ttc.localeId, ttc.sortIndex DESC, ttc.name")
   List<TimeToContact> getAllTimesToContact();
 }

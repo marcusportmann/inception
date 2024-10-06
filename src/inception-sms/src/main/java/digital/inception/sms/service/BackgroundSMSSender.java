@@ -20,7 +20,9 @@ import digital.inception.sms.model.SMS;
 import digital.inception.sms.model.SMSStatus;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,10 +32,12 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
-@Slf4j
 @Service
 @SuppressWarnings("unused")
 public class BackgroundSMSSender {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
   /* SMS Service */
   private final ISMSService smsService;

@@ -35,6 +35,6 @@ public interface MandataryRoleRepository extends JpaRepository<MandataryRole, Ma
    *
    * @return all the mandatary roles sorted by locale ID, sort index, and name.
    */
-  @Query("select mr from MandataryRole mr order by mr.localeId, -mr.sortIndex DESC, mr.name")
+  @Query("select mr from MandataryRole mr order by mr.localeId, mr.sortIndex DESC, mr.name")
   List<MandataryRole> getAllMandataryRoles();
 }

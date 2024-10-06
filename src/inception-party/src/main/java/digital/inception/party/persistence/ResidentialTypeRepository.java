@@ -36,6 +36,6 @@ public interface ResidentialTypeRepository
    *
    * @return all the residential types sorted by locale ID, sort index, and name.
    */
-  @Query("select rt from ResidentialType rt order by rt.localeId, -rt.sortIndex DESC, rt.name")
+  @Query("select rt from ResidentialType rt order by rt.localeId, rt.sortIndex DESC, rt.name")
   List<ResidentialType> getAllResidentialTypes();
 }

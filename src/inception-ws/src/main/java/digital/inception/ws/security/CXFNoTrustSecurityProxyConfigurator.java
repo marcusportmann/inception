@@ -18,7 +18,6 @@ package digital.inception.ws.security;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -29,7 +28,7 @@ import org.apache.cxf.transport.http.HTTPConduit;
 
 /**
  * The <b>CXFNoTrustSecurityProxyConfigurator</b> class provides the capability to configure a CXF
- * web service proxy to disable verification of the remote server's certificate when using a HTTPS
+ * web service proxy to disable verification of the remote server's certificate when using an HTTPS
  * connection.
  *
  * @author Marcus Portmann
@@ -41,7 +40,7 @@ public final class CXFNoTrustSecurityProxyConfigurator {
 
   /**
    * Configure the CXF web service proxy to disable verification of the remote server's certificate
-   * when using a HTTPS connection.
+   * when using an HTTPS connection.
    *
    * @param proxy the web service proxy to configure
    */
@@ -60,13 +59,11 @@ public final class CXFNoTrustSecurityProxyConfigurator {
         TrustManager[] trustAllCerts =
             new TrustManager[] {
               new X509TrustManager() {
-                public void checkClientTrusted(X509Certificate[] chain, String authType)
-                    throws CertificateException {
+                public void checkClientTrusted(X509Certificate[] chain, String authType) {
                   // Skip client verification
                 }
 
-                public void checkServerTrusted(X509Certificate[] chain, String authType)
-                    throws CertificateException {
+                public void checkServerTrusted(X509Certificate[] chain, String authType) {
                   // Skip server verification
                 }
 

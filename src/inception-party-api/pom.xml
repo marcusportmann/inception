@@ -24,13 +24,6 @@
       <groupId>digital.inception</groupId>
     </dependency>
 
-    <!-- Provided Dependencies -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
     <!-- Test Dependencies -->
     <dependency>
       <artifactId>inception-test</artifactId>

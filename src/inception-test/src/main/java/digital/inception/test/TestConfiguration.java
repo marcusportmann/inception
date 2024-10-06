@@ -28,13 +28,16 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
-import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
+import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -71,7 +74,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Configuration
 @EnableAsync
 @EnableConfigurationProperties
@@ -87,6 +90,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class TestConfiguration {
 
   private static final Object dataSourceLock = new Object();
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(TestConfiguration.class);
 
   private static DataSource dataSource;
 
@@ -149,26 +155,30 @@ public class TestConfiguration {
                     .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
             for (Resource changelogResource : liquibaseChangelogResources) {
-              if (!changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+              if (!Objects.requireNonNull(changelogResource.getFilename())
+                  .toLowerCase()
+                  .endsWith("-data.changelog.xml")) {
                 String changelogFile = "db/" + changelogResource.getFilename();
 
                 log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }
             }
 
             for (Resource changelogResource : liquibaseChangelogResources) {
-              if (changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+              if (Objects.requireNonNull(changelogResource.getFilename())
+                  .toLowerCase()
+                  .endsWith("-data.changelog.xml")) {
                 String changelogFile = "db/" + changelogResource.getFilename();
 
                 log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }
@@ -248,7 +258,7 @@ public class TestConfiguration {
    */
   @Bean
   public TaskScheduler taskScheduler() {
-    return new ConcurrentTaskScheduler();
+    return new ConcurrentTaskScheduler(Executors.newSingleThreadScheduledExecutor());
   }
 
   /**

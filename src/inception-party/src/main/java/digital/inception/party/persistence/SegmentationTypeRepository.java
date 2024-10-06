@@ -36,6 +36,6 @@ public interface SegmentationTypeRepository
    *
    * @return all the segmentation types sorted by locale ID, sort index, and name.
    */
-  @Query("select st from SegmentationType st order by st.localeId, -st.sortIndex DESC, st.name")
+  @Query("select st from SegmentationType st order by st.localeId, st.sortIndex DESC, st.name")
   List<SegmentationType> getAllSegmentationTypes();
 }

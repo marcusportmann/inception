@@ -35,6 +35,6 @@ public interface RolePurposeRepository extends JpaRepository<RolePurpose, RolePu
    *
    * @return all the role purposes sorted by locale ID, sort index, and name.
    */
-  @Query("select rp from RolePurpose rp order by rp.localeId, -rp.sortIndex DESC, rp.name")
+  @Query("select rp from RolePurpose rp order by rp.localeId, rp.sortIndex DESC, rp.name")
   List<RolePurpose> getAllRolePurposes();
 }

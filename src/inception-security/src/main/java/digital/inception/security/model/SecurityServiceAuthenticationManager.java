@@ -27,6 +27,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 /**
  * The <b>SecurityServiceAuthenticationManager</b> class provides an authentication manager
@@ -35,6 +36,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
+@Component
 public class SecurityServiceAuthenticationManager implements AuthenticationManager {
 
   /** The Security Service. */

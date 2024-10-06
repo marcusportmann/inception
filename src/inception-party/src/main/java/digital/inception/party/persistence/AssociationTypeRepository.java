@@ -36,6 +36,6 @@ public interface AssociationTypeRepository
    *
    * @return all the association types sorted by locale ID, sort index, and name.
    */
-  @Query("select at from AssociationType at order by at.localeId, -at.sortIndex DESC, at.name")
+  @Query("select at from AssociationType at order by at.localeId, at.sortIndex DESC, at.name")
   List<AssociationType> getAllAssociationTypes();
 }

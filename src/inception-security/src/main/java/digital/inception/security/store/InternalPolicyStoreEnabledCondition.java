@@ -19,6 +19,7 @@ package digital.inception.security.store;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.lang.NonNull;
 
 /**
  * The <b>InternalPolicyStoreEnabledCondition</b> class implements the condition that must be
@@ -32,7 +33,7 @@ public class InternalPolicyStoreEnabledCondition implements Condition {
   public InternalPolicyStoreEnabledCondition() {}
 
   @Override
-  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+  public boolean matches(ConditionContext context, @NonNull AnnotatedTypeMetadata metadata) {
     String policyStoreType =
         context.getEnvironment().getProperty("inception.security.policy-store-type");
 

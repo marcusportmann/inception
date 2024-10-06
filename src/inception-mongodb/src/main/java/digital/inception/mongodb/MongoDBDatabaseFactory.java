@@ -26,9 +26,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.bson.UuidRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.DisposableBean;
@@ -52,9 +52,11 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Slf4j
 @SuppressWarnings({"unused", "NullableProblems"})
 public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableBean {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(MongoDBDatabaseFactory.class);
 
   private final String databaseName;
 
@@ -63,10 +65,11 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
   private final MongoClient mongoClient;
 
   /** The writeConcern controlling the acknowledgment of write operations. */
-  @Setter private WriteConcern writeConcern;
+  private WriteConcern writeConcern;
 
   /**
    * Constructs a new <b>MongoDBDatabaseFactory</b>.
+   *
    * @param applicationContext the Spring application context
    * @param uri the MongoDB URI
    * @param databaseName the MongoDB database name
@@ -90,6 +93,7 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
 
   /**
    * Constructs a new <b>MongoDBDatabaseFactory</b>.
+   *
    * @param applicationContext the Spring application context
    * @param databaseName the MongoDB database name
    */
@@ -120,6 +124,7 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
 
   /**
    * Constructs a new <b>MongoDBDatabaseFactory</b>.
+   *
    * @param applicationContext the Spring application context
    */
   public MongoDBDatabaseFactory(ApplicationContext applicationContext) {
@@ -187,6 +192,15 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
   @Override
   public ClientSession getSession(ClientSessionOptions options) {
     return mongoClient.startSession(options);
+  }
+
+  /**
+   * Set the writeConcern controlling the acknowledgment of write operations.
+   *
+   * @param writeConcern the writeConcern controlling the acknowledgment of write operations
+   */
+  public void setWriteConcern(WriteConcern writeConcern) {
+    this.writeConcern = writeConcern;
   }
 
   @Override

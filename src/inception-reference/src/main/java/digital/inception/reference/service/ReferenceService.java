@@ -297,7 +297,7 @@ public class ReferenceService implements IReferenceService {
               .stream()
               .filter(timeZoneId -> (!timeZoneId.startsWith("SystemV")))
               .filter(timeZoneId -> (timeZoneId.contains("/")))
-              .collect(Collectors.toList())) {
+              .toList()) {
 
         maxLength = Math.max(maxLength, timeZoneId.length());
 
@@ -336,7 +336,7 @@ public class ReferenceService implements IReferenceService {
               .stream()
               .filter(timeZoneId -> (!timeZoneId.startsWith("SystemV")))
               .filter(timeZoneId -> (timeZoneId.contains("/")))
-              .collect(Collectors.toList())) {
+              .toList()) {
 
         maxLength = Math.max(maxLength, timeZoneId.length());
 

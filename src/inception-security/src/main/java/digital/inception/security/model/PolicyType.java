@@ -57,15 +57,13 @@ public enum PolicyType {
    */
   @JsonCreator
   public static PolicyType fromCode(String code) {
-    switch (code) {
-      case "xacml_policy_set":
-        return PolicyType.XACML_POLICY_SET;
-      case "xacml_policy":
-        return PolicyType.XACML_POLICY;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the policy type with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "xacml_policy_set" -> PolicyType.XACML_POLICY_SET;
+      case "xacml_policy" -> PolicyType.XACML_POLICY;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the policy type with the invalid code (" + code + ")");
+    };
   }
 
   /**

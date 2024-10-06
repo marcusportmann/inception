@@ -21,6 +21,7 @@ import digital.inception.core.service.ServiceException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
+import java.io.Serial;
 
 /**
  * The <b>DuplicateProcessDefinitionException</b> exception is thrown to indicate an error condition
@@ -40,9 +41,10 @@ import jakarta.xml.ws.WebFault;
     targetNamespace = "https://inception.digital/workflow",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@SuppressWarnings("unused")
 public class DuplicateProcessDefinitionException extends ServiceException {
 
-  private static final long serialVersionUID = 1000000;
+  @Serial private static final long serialVersionUID = 1000000;
 
   /**
    * Constructs a new <b>DuplicateProcessDefinitionException</b>.

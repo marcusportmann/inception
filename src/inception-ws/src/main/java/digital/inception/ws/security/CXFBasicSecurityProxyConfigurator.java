@@ -45,13 +45,11 @@ public final class CXFBasicSecurityProxyConfigurator {
   public static void configureProxy(Object proxy, String username, String password) {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
-    if (invocationHandler instanceof ClientProxy) {
-      ClientProxy clientProxy = (ClientProxy) invocationHandler;
+    if (invocationHandler instanceof ClientProxy clientProxy) {
 
       Conduit conduit = clientProxy.getClient().getConduit();
 
-      if (conduit instanceof HTTPConduit) {
-        HTTPConduit httpConduit = (HTTPConduit) conduit;
+      if (conduit instanceof HTTPConduit httpConduit) {
 
         AuthorizationPolicy authorizationPolicy = httpConduit.getAuthorization();
 

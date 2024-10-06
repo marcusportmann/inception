@@ -61,17 +61,14 @@ public enum UserSortBy {
    */
   @JsonCreator
   public static UserSortBy fromCode(String code) {
-    switch (code) {
-      case "name":
-        return UserSortBy.NAME;
-      case "preferred_name":
-        return UserSortBy.PREFERRED_NAME;
-      case "username":
-        return UserSortBy.USERNAME;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the user sort by with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "name" -> UserSortBy.NAME;
+      case "preferred_name" -> UserSortBy.PREFERRED_NAME;
+      case "username" -> UserSortBy.USERNAME;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the user sort by with the invalid code (" + code + ")");
+    };
   }
 
   /**

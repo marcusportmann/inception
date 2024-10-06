@@ -37,17 +37,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.config"})
 public class ConfigConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /**
-   * Constructs a new <b>ConfigConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
-   */
-  public ConfigConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+  /** Constructs a new <b>ConfigConfiguration</b>. */
+  public ConfigConfiguration() {}
 
   /**
    * Returns the config entity manager factory bean associated with the application data source.

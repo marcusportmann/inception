@@ -41,7 +41,6 @@ import javax.sql.DataSource;
 // import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 // import org.camunda.bpm.engine.task.Task;
 // import org.camunda.bpm.engine.task.TaskQuery;
-import lombok.extern.slf4j.Slf4j;
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
@@ -70,7 +69,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(

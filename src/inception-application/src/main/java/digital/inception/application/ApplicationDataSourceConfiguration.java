@@ -22,10 +22,11 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
-import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
+import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +44,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Configuration
 @ConditionalOnProperty({
   "inception.application.data-source.class-name",
@@ -51,6 +52,9 @@ import org.springframework.util.StringUtils;
 })
 // @SuppressWarnings({"unused", "LombokGetterMayBeUsed"})
 public class ApplicationDataSourceConfiguration {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(ApplicationDataSourceConfiguration.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -184,7 +188,7 @@ public class ApplicationDataSourceConfiguration {
                 log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }
@@ -199,7 +203,7 @@ public class ApplicationDataSourceConfiguration {
                 log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }

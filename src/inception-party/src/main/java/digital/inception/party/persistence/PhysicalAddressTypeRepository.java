@@ -37,6 +37,6 @@ public interface PhysicalAddressTypeRepository
    * @return all the physical address types sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select pat from PhysicalAddressType pat order by pat.localeId, -pat.sortIndex DESC, pat.name")
+      "select pat from PhysicalAddressType pat order by pat.localeId, pat.sortIndex DESC, pat.name")
   List<PhysicalAddressType> getAllPhysicalAddressTypes();
 }

@@ -20,11 +20,11 @@ import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobStatus;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -34,10 +34,13 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Service
 @SuppressWarnings("unused")
 public class BackgroundJobExecutor {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
   /** The Scheduler Service. */
   private final ISchedulerService schedulerService;
@@ -163,7 +166,7 @@ public class BackgroundJobExecutor {
    *
    * @author Marcus Portmann
    */
-  @Slf4j
+  
   public static class JobExecutor implements Runnable {
 
     private final Job job;

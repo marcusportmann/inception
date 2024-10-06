@@ -39,17 +39,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableScheduling
 public class SMSConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /**
-   * Constructs a new <b>SMSConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
-   */
-  public SMSConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+  /** Constructs a new <b>SMSConfiguration</b>. */
+  public SMSConfiguration() {}
 
   /**
    * Returns the sms entity manager factory bean associated with the application data source.

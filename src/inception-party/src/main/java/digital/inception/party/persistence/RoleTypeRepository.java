@@ -35,6 +35,6 @@ public interface RoleTypeRepository extends JpaRepository<RoleType, RoleTypeId> 
    *
    * @return all the role types sorted by locale ID, sort index, and name.
    */
-  @Query("select rt from RoleType rt order by rt.localeId, -rt.sortIndex DESC, rt.name")
+  @Query("select rt from RoleType rt order by rt.localeId, rt.sortIndex DESC, rt.name")
   List<RoleType> getAllRoleTypes();
 }

@@ -36,6 +36,6 @@ public interface EmploymentStatusRepository
    *
    * @return all the employment statuses sorted by locale ID, sort index, and name.
    */
-  @Query("select es from EmploymentStatus es order by es.localeId, -es.sortIndex DESC, es.name")
+  @Query("select es from EmploymentStatus es order by es.localeId, es.sortIndex DESC, es.name")
   List<EmploymentStatus> getAllEmploymentStatuses();
 }

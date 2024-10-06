@@ -56,17 +56,17 @@ public final class WebServiceClientSecurityHelper {
 
   private static boolean apacheCxfCheckFailed;
 
-  private static Class apacheCxfClientClass;
+  private static Class<?> apacheCxfClientClass;
 
   private static Method apacheCxfClientGetConduitMethod;
 
-  private static Class apacheCxfClientProxyClass;
+  private static Class<?> apacheCxfClientProxyClass;
 
   private static Method apacheCxfClientProxyGetClientMethod;
 
   private static Method apacheCxfHttpConduitSetTlsClientParametersMethod;
 
-  private static Class apacheCxfTlsClientParametersClass;
+  private static Class<?> apacheCxfTlsClientParametersClass;
 
   private static Method apacheCxfTlsClientParametersSetDisableCNCheckMethod;
 
@@ -120,8 +120,7 @@ public final class WebServiceClientSecurityHelper {
             webServiceClient);
       }
 
-      T proxy =
-          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
+      T proxy = webServiceClient.service().getPort(webServiceClient.portQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
@@ -174,8 +173,7 @@ public final class WebServiceClientSecurityHelper {
         webServiceClientCache.put(serviceClass.getName(), webServiceClient);
       }
 
-      T proxy =
-          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
+      T proxy = webServiceClient.service().getPort(webServiceClient.portQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
@@ -219,7 +217,6 @@ public final class WebServiceClientSecurityHelper {
    *     level security using mutual SSL authentication
    * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
-  @SuppressWarnings("unchecked")
   public static <T> T getMutualSSLServiceProxy(
       Class<?> serviceClass,
       Class<T> serviceInterface,
@@ -244,8 +241,7 @@ public final class WebServiceClientSecurityHelper {
             webServiceClient);
       }
 
-      T proxy =
-          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
+      T proxy = webServiceClient.service().getPort(webServiceClient.portQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
@@ -296,7 +292,6 @@ public final class WebServiceClientSecurityHelper {
    *     server certificate
    * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
-  @SuppressWarnings("unchecked")
   public static <T> T getNoTrustServiceProxy(
       Class<?> serviceClass,
       Class<T> serviceInterface,
@@ -317,8 +312,7 @@ public final class WebServiceClientSecurityHelper {
             webServiceClient);
       }
 
-      T proxy =
-          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
+      T proxy = webServiceClient.service().getPort(webServiceClient.portQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
@@ -426,7 +420,7 @@ public final class WebServiceClientSecurityHelper {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
         if (handlerResolver != null) {
-          webServiceClient.getService().setHandlerResolver(handlerResolver);
+          webServiceClient.service().setHandlerResolver(handlerResolver);
         }
 
         if (useClientCache) {
@@ -434,8 +428,7 @@ public final class WebServiceClientSecurityHelper {
         }
       }
 
-      T proxy =
-          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
+      T proxy = webServiceClient.service().getPort(webServiceClient.portQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
@@ -530,8 +523,7 @@ public final class WebServiceClientSecurityHelper {
             webServiceClient);
       }
 
-      T proxy =
-          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
+      T proxy = webServiceClient.service().getPort(webServiceClient.portQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
@@ -631,8 +623,7 @@ public final class WebServiceClientSecurityHelper {
             webServiceClient);
       }
 
-      T proxy =
-          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
+      T proxy = webServiceClient.service().getPort(webServiceClient.portQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
@@ -770,14 +761,10 @@ public final class WebServiceClientSecurityHelper {
    * The <b>WebServiceClient</b> class holds the information for a web service client.
    *
    * @author Marcus Portmann
+   * @param portQName The QName for the port.
+   * @param service The web service client.
    */
-  public static class WebServiceClient {
-
-    /** The QName for the port. */
-    private final QName portQName;
-
-    /** The web service client. */
-    private final Service service;
+  public record WebServiceClient(QName portQName, Service service) {
 
     /**
      * Constructs a new <b>CachedWebServiceClient</b>.
@@ -785,27 +772,6 @@ public final class WebServiceClientSecurityHelper {
      * @param portQName the QName for the port
      * @param service the web service client
      */
-    public WebServiceClient(QName portQName, Service service) {
-      this.portQName = portQName;
-      this.service = service;
-    }
-
-    /**
-     * Returns the QName for the port.
-     *
-     * @return the QName for the port
-     */
-    public QName getPortQName() {
-      return portQName;
-    }
-
-    /**
-     * Returns the web service client.
-     *
-     * @return the web service client
-     */
-    public Service getService() {
-      return service;
-    }
+    public WebServiceClient {}
   }
 }

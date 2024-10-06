@@ -35,6 +35,6 @@ public interface LanguageRepository extends JpaRepository<Language, LanguageId> 
    *
    * @return all the languages sorted by locale ID, sort index, and name.
    */
-  @Query("select l from Language l order by l.localeId, -l.sortIndex DESC, l.shortName")
+  @Query("select l from Language l order by l.localeId, l.sortIndex DESC, l.shortName")
   List<Language> getAllLanguages();
 }

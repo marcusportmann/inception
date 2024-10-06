@@ -35,6 +35,6 @@ public interface PreferenceTypeRepository extends JpaRepository<PreferenceType, 
    *
    * @return all the preference types sorted by locale ID, sort index, and name.
    */
-  @Query("select pt from PreferenceType pt order by pt.localeId, -pt.sortIndex DESC, pt.name")
+  @Query("select pt from PreferenceType pt order by pt.localeId, pt.sortIndex DESC, pt.name")
   List<PreferenceType> getAllPreferenceTypes();
 }

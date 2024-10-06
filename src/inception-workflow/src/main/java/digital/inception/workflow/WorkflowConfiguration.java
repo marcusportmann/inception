@@ -75,7 +75,6 @@ public class WorkflowConfiguration {
    * @param dataSource the data source used to provide connections to the application database
    * @param transactionManager the Spring platform transaction manager
    */
-  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   public WorkflowConfiguration(
       ApplicationContext applicationContext,
       @Qualifier("applicationDataSource") DataSource dataSource,
@@ -157,7 +156,6 @@ public class WorkflowConfiguration {
    * @param platformTransactionManager the platform transaction manager
    * @return the workflow entity manager factory bean associated with the application data source
    */
-  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
   public LocalContainerEntityManagerFactoryBean workflowEntityManagerFactory(
       @Qualifier("applicationDataSource") DataSource dataSource,
@@ -191,9 +189,7 @@ public class WorkflowConfiguration {
    * @return the form engine configuration
    */
   protected FormEngineConfiguration formEngineConfiguration() {
-    FormEngineConfiguration formEngineConfiguration = new FormEngineConfiguration();
-
-    return formEngineConfiguration;
+    return new FormEngineConfiguration();
   }
 
   //

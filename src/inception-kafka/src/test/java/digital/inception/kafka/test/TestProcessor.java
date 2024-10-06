@@ -18,8 +18,9 @@ package digital.inception.kafka.test;
 
 import digital.inception.kafka.*;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +29,12 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Component
 public class TestProcessor extends Processor<String, String> {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(TestProcessor.class);
 
   /**
    * Constructs a new <code>TestProcessor</code>.

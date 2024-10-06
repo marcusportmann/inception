@@ -53,13 +53,12 @@ public enum TokenType {
    */
   @JsonCreator
   public static TokenType fromCode(String code) {
-    switch (code) {
-      case "jwt":
-        return TokenType.JWT;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the token type with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "jwt" -> TokenType.JWT;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the token type with the invalid code (" + code + ")");
+    };
   }
 
   /**

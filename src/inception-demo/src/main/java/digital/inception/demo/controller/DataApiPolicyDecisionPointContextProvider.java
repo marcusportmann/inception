@@ -20,7 +20,7 @@ import digital.inception.core.api.IPolicyDecisionPointContextProvider;
 import digital.inception.demo.model.Data;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
@@ -28,7 +28,6 @@ import org.aopalliance.intercept.MethodInvocation;
  *
  * @author Marcus Portmann
  */
-@Slf4j
 public class DataApiPolicyDecisionPointContextProvider
     implements IPolicyDecisionPointContextProvider {
 

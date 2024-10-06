@@ -41,6 +41,7 @@ import java.io.Serial;
     targetNamespace = "https://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@SuppressWarnings("unused")
 public class InvalidPolicyDataException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;

@@ -49,7 +49,8 @@ import java.util.Optional;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -62,7 +63,7 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Service
 @SuppressWarnings("unused")
 public class CodesService implements ICodesService {
@@ -72,6 +73,9 @@ public class CodesService implements ICodesService {
    * classpath.
    */
   private static final String CODE_PROVIDERS_CONFIGURATION_PATH = "META-INF/code-providers.xml";
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(CodesService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;

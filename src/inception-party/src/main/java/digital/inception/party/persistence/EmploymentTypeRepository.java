@@ -35,6 +35,6 @@ public interface EmploymentTypeRepository extends JpaRepository<EmploymentType, 
    *
    * @return all the employment types sorted by locale ID, sort index, and name.
    */
-  @Query("select et from EmploymentType et order by et.localeId, -et.sortIndex DESC, et.name")
+  @Query("select et from EmploymentType et order by et.localeId, et.sortIndex DESC, et.name")
   List<EmploymentType> getAllEmploymentTypes();
 }

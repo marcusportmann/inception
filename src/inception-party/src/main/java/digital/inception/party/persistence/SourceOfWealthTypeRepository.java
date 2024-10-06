@@ -37,6 +37,6 @@ public interface SourceOfWealthTypeRepository
    * @return all the source of wealth types sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select sowt from SourceOfWealthType sowt order by sowt.localeId, -sowt.sortIndex DESC, sowt.name")
+      "select sowt from SourceOfWealthType sowt order by sowt.localeId, sowt.sortIndex DESC, sowt.name")
   List<SourceOfWealthType> getAllSourceOfWealthTypes();
 }

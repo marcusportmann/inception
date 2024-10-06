@@ -37,6 +37,6 @@ public interface MeasurementUnitTypeRepository
    * @return all the measurement unit types sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select mut from MeasurementUnitType mut order by mut.localeId, -mut.sortIndex DESC, mut.name")
+      "select mut from MeasurementUnitType mut order by mut.localeId, mut.sortIndex DESC, mut.name")
   List<MeasurementUnitType> getAllMeasurementUnitTypes();
 }

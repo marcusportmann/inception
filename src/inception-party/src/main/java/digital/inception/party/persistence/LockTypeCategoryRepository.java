@@ -36,7 +36,6 @@ public interface LockTypeCategoryRepository
    *
    * @return all the lock type categories sorted by locale ID, sort index, and name.
    */
-  @Query(
-      "select ltc from LockTypeCategory ltc order by ltc.localeId, -ltc.sortIndex DESC, ltc.name")
+  @Query("select ltc from LockTypeCategory ltc order by ltc.localeId, ltc.sortIndex DESC, ltc.name")
   List<LockTypeCategory> getAllLockTypeCategories();
 }

@@ -18,7 +18,9 @@ package digital.inception.kafka;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -32,9 +34,11 @@ import org.springframework.context.ApplicationContext;
  *
  * @author Marcus Portmann
  */
-@Slf4j
 public abstract class ProcessorApplication
     implements ApplicationRunner, InitializingBean, DisposableBean {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(ProcessorApplication.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -52,7 +56,7 @@ public abstract class ProcessorApplication
   }
 
   @Override
-  public void afterPropertiesSet() throws Exception {
+  public void afterPropertiesSet() {
     for (Class<? extends Processor<?, ?>> processorClass : getProcessorClasses()) {
       try {
         processors.add(applicationContext.getBean(processorClass));
@@ -65,7 +69,7 @@ public abstract class ProcessorApplication
 
   /** Shutdown the processor application and its associated processors. */
   @Override
-  public void destroy() throws Exception {
+  public void destroy() {
     for (Processor<?, ?> processor : processors) {
       try {
         log.info("Shutting down the processor (" + processor.getClass().getSimpleName() + ")");

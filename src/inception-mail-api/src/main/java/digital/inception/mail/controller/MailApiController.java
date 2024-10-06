@@ -26,7 +26,6 @@ import digital.inception.mail.model.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplateSummary;
 import digital.inception.mail.service.IMailService;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Slf4j
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused"})

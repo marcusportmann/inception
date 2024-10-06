@@ -28,6 +28,7 @@ import org.flowable.common.engine.impl.interceptor.EngineConfigurationConstants;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"LombokGetterMayBeUsed", "unused"})
 public class FormEngineConfigurator implements EngineConfigurator {
 
   private FormEngineConfiguration formEngineConfiguration;

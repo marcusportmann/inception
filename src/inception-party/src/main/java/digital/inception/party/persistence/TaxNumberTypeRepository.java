@@ -35,6 +35,6 @@ public interface TaxNumberTypeRepository extends JpaRepository<TaxNumberType, Ta
    *
    * @return all the tax number types sorted by locale ID, sort index, and name.
    */
-  @Query("select tnt from TaxNumberType tnt order by tnt.localeId, -tnt.sortIndex DESC, tnt.name")
+  @Query("select tnt from TaxNumberType tnt order by tnt.localeId, tnt.sortIndex DESC, tnt.name")
   List<TaxNumberType> getAllTaxNumberTypes();
 }

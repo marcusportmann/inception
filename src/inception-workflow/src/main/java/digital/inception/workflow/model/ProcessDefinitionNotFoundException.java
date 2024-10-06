@@ -21,6 +21,7 @@ import digital.inception.core.service.ServiceException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
+import java.io.Serial;
 
 /**
  * The <b>ProcessDefinitionNotFoundException</b> exception is thrown to indicate an error condition
@@ -39,9 +40,10 @@ import jakarta.xml.ws.WebFault;
     targetNamespace = "https://inception.digital/workflow",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@SuppressWarnings("unused")
 public class ProcessDefinitionNotFoundException extends ServiceException {
 
-  private static final long serialVersionUID = 1000000;
+  @Serial private static final long serialVersionUID = 1000000;
 
   /**
    * w Constructs a new <b>ProcessDefinitionNotFoundException</b>.

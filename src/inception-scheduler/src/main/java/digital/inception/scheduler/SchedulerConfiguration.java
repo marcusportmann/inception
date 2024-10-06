@@ -19,7 +19,6 @@ package digital.inception.scheduler;
 import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -40,17 +39,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableScheduling
 public class SchedulerConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /**
-   * Constructs a new <b>SchedulerConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
-   */
-  public SchedulerConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+  /** Constructs a new <b>SchedulerConfiguration</b>. */
+  public SchedulerConfiguration() {}
 
   /**
    * Returns the scheduler entity manager factory bean associated with the application data source.

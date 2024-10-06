@@ -84,11 +84,8 @@ public class TokenClaimListConverter implements AttributeConverter<List<TokenCla
 
     if (StringUtils.hasText(dbData)) {
       try {
-        List<TokenClaim> tokenClaims =
-            objectMapper.convertValue(
-                objectMapper.readValue(dbData, List.class), new TypeReference<>() {});
-
-        return tokenClaims;
+        return objectMapper.convertValue(
+            objectMapper.readValue(dbData, List.class), new TypeReference<>() {});
       } catch (Throwable e) {
         throw new RuntimeException("Failed to deserialize the token claims JSON", e);
       }

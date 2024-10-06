@@ -19,7 +19,6 @@ package digital.inception.codes;
 import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -37,17 +36,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.codes"})
 public class CodesConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /**
-   * Constructs a new <b>CodesConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
-   */
-  public CodesConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+  /** Constructs a new <b>CodesConfiguration</b>. */
+  public CodesConfiguration() {}
 
   /**
    * Returns the codes entity manager factory bean associated with the application data source.

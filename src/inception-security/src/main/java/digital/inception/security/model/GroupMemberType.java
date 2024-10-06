@@ -57,15 +57,13 @@ public enum GroupMemberType {
    */
   @JsonCreator
   public static GroupMemberType fromCode(String code) {
-    switch (code) {
-      case "user":
-        return GroupMemberType.USER;
-      case "group":
-        return GroupMemberType.GROUP;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the group member type with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "user" -> GroupMemberType.USER;
+      case "group" -> GroupMemberType.GROUP;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the group member type with the invalid code (" + code + ")");
+    };
   }
 
   /**

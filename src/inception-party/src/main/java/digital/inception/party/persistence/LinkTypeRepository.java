@@ -35,6 +35,6 @@ public interface LinkTypeRepository extends JpaRepository<LinkType, LinkTypeId> 
    *
    * @return all the link types sorted by locale ID, sort index, and name.
    */
-  @Query("select lt from LinkType lt order by lt.localeId, -lt.sortIndex DESC, lt.name")
+  @Query("select lt from LinkType lt order by lt.localeId, lt.sortIndex DESC, lt.name")
   List<LinkType> getAllLinkTypes();
 }

@@ -20,7 +20,6 @@ import digital.inception.core.support.MergedMessageSource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +37,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Component
 @ComponentScan(
     basePackages = {"digital.inception"},
@@ -68,7 +67,7 @@ public abstract class Application {
    *
    * @return the Spring application context
    */
-  public ApplicationContext getApplicationContext() {
+  protected ApplicationContext getApplicationContext() {
     return applicationContext;
   }
 

@@ -26,7 +26,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.time.OffsetDateTime;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
@@ -44,10 +45,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @ControllerAdvice
 @SuppressWarnings("unused")
 public class ProblemHandler {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(ProblemHandler.class);
 
   /** Is debugging enabled for the Inception Framework? */
   @Value("${inception.debug.enabled:#{false}}")

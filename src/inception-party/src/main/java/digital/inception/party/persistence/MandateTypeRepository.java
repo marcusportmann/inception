@@ -35,6 +35,6 @@ public interface MandateTypeRepository extends JpaRepository<MandateType, Mandat
    *
    * @return all the mandate types sorted by locale ID, sort index, and name.
    */
-  @Query("select mt from MandateType mt order by mt.localeId, -mt.sortIndex DESC, mt.name")
+  @Query("select mt from MandateType mt order by mt.localeId, mt.sortIndex DESC, mt.name")
   List<MandateType> getAllMandateTypes();
 }

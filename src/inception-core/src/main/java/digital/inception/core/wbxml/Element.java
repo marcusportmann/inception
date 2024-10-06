@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class Element implements Serializable, Content {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -132,11 +133,7 @@ public class Element implements Serializable, Content {
   public Optional<String> getAttributeValue(String name) {
     Optional<Attribute> attributeOptional = getAttribute(name);
 
-    if (attributeOptional.isPresent()) {
-      return Optional.of(attributeOptional.get().getValue());
-    } else {
-      return Optional.empty();
-    }
+    return attributeOptional.map(Attribute::getValue);
   }
 
   /**
@@ -316,7 +313,7 @@ public class Element implements Serializable, Content {
    * @return <b>true</b> if the element has attributes or <b>false</b> otherwise
    */
   public boolean hasAttributes() {
-    return (attributes.size() > 0);
+    return (!attributes.isEmpty());
   }
 
   /**
@@ -360,7 +357,7 @@ public class Element implements Serializable, Content {
    * @return <b>true</b> if the element has content or <b>false</b> otherwise
    */
   public boolean hasContent() {
-    return (content.size() > 0);
+    return (!content.isEmpty());
   }
 
   /**

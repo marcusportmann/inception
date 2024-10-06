@@ -66,7 +66,7 @@ Complete the following steps to setup MailSlurper on MacOS.
 2. Create a directory named *mailslurper* and extract the MailSlurper package under it.
 3. Edit the *config.json* file and set the *wwwPort* value to *8090*.
 4. Launch the *createcredentials* binary in a Terminal window and enter the username as
-   *nova* and password as *nova* when prompted.
+   *inception* and password as *inception* when prompted.
 
    **NOTE:** You may need to enable the execution of the *mailslurper* binary under
    *System Preferences > Security & Privacy > General*

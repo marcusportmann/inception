@@ -43,7 +43,8 @@ import java.util.Set;
 import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -61,13 +62,16 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Service
 @SuppressWarnings("unused")
 public class SMSService implements ISMSService {
 
   /** The maximum SMS length. */
   private static final int MAXIMUM_SMS_LENGTH = 160;
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(SMSService.class);
 
   /** The SMS Portal provider. */
   private final String PROVIDER_SMS_PORTAL = "sms-portal";

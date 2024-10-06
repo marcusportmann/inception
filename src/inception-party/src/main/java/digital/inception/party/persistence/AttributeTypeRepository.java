@@ -35,6 +35,6 @@ public interface AttributeTypeRepository extends JpaRepository<AttributeType, At
    *
    * @return all the attribute types sorted by locale ID, sort index, and name.
    */
-  @Query("select at from AttributeType at order by at.localeId, -at.sortIndex DESC, at.name")
+  @Query("select at from AttributeType at order by at.localeId, at.sortIndex DESC, at.name")
   List<AttributeType> getAllAttributeTypes();
 }

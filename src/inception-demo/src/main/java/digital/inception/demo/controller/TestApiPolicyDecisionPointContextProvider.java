@@ -19,8 +19,10 @@ package digital.inception.demo.controller;
 import digital.inception.core.api.IPolicyDecisionPointContextProvider;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -28,9 +30,12 @@ import org.springframework.security.core.Authentication;
  *
  * @author Marcus Portmann
  */
-@Slf4j
 public class TestApiPolicyDecisionPointContextProvider
     implements IPolicyDecisionPointContextProvider {
+
+  /* Logger */
+  private static final Logger log =
+      LoggerFactory.getLogger(TestApiPolicyDecisionPointContextProvider.class);
 
   /** Constructs a new <b>TestApiPolicyDecisionPointContextProvider</b>. */
   public TestApiPolicyDecisionPointContextProvider() {}

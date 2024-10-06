@@ -35,6 +35,6 @@ public interface FieldOfStudyRepository extends JpaRepository<FieldOfStudy, Fiel
    *
    * @return all the fields of study sorted by locale ID, sort index, and name.
    */
-  @Query("select fos from FieldOfStudy fos order by fos.localeId, -fos.sortIndex DESC, fos.name")
+  @Query("select fos from FieldOfStudy fos order by fos.localeId, fos.sortIndex DESC, fos.name")
   List<FieldOfStudy> getAllFieldsOfStudy();
 }

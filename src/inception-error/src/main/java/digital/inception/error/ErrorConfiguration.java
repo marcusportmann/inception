@@ -37,17 +37,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.error"})
 public class ErrorConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /**
-   * Constructs a new <b>ErrorConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
-   */
-  public ErrorConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+  /** Constructs a new <b>ErrorConfiguration</b>. */
+  public ErrorConfiguration() {}
 
   /**
    * Returns the error entity manager factory bean associated with the application data source.

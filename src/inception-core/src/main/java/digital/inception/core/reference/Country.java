@@ -19,16 +19,13 @@ package digital.inception.core.reference;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The <b>Country</b> class holds the information for a country.
  *
  * @author Marcus Portmann
  */
-@Getter
-@Setter
+@SuppressWarnings("unused")
 public class Country implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -118,6 +115,78 @@ public class Country implements Serializable {
   }
 
   /**
+   * Returns the ISO 3166-1 alpha-2 code for the country.
+   *
+   * @return the ISO 3166-1 alpha-2 code for the country
+   */
+  public String getCode() {
+    return code;
+  }
+
+  /**
+   * Returns the description for the country.
+   *
+   * @return the description for the country
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Returns the ISO 3166-1 alpha-3 code for the country.
+   *
+   * @return the ISO 3166-1 alpha-3 code for the country
+   */
+  public String getIso3Code() {
+    return iso3Code;
+  }
+
+  /**
+   * Returns the name of the country.
+   *
+   * @return the name of the country
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the nationality for the country.
+   *
+   * @return the nationality for the country
+   */
+  public String getNationality() {
+    return nationality;
+  }
+
+  /**
+   * Returns the short name for the country.
+   *
+   * @return the short name for the country
+   */
+  public String getShortName() {
+    return shortName;
+  }
+
+  /**
+   * Returns the sort index for the country.
+   *
+   * @return the sort index for the country
+   */
+  public Integer getSortIndex() {
+    return sortIndex;
+  }
+
+  /**
+   * Returns the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with.
+   *
+   * @return the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with
+   */
+  public String getSovereignState() {
+    return sovereignState;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -125,5 +194,78 @@ public class Country implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode());
+  }
+
+  /**
+   * Set the ISO 3166-1 alpha-2 code for the country.
+   *
+   * @param code the ISO 3166-1 alpha-2 code for the country
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the country.
+   *
+   * @param description the description for the country
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the ISO 3166-1 alpha-3 code for the country.
+   *
+   * @param iso3Code the ISO 3166-1 alpha-3 code for the country
+   */
+  public void setIso3Code(String iso3Code) {
+    this.iso3Code = iso3Code;
+  }
+
+  /**
+   * Set the name of the country.
+   *
+   * @param name the name of the country
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the nationality for the country.
+   *
+   * @param nationality the nationality for the country
+   */
+  public void setNationality(String nationality) {
+    this.nationality = nationality;
+  }
+
+  /**
+   * Set the short name for the country.
+   *
+   * @param shortName the short name for the country
+   */
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
+  }
+
+  /**
+   * Set the sort index for the country.
+   *
+   * @param sortIndex the sort index for the country
+   */
+  public void setSortIndex(Integer sortIndex) {
+    this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with.
+   *
+   * @param sovereignState the ISO 3166-1 alpha-2 code for the sovereign state the country is
+   *     associated with
+   */
+  public void setSovereignState(String sovereignState) {
+    this.sovereignState = sovereignState;
   }
 }

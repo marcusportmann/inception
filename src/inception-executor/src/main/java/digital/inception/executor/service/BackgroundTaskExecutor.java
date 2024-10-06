@@ -16,36 +16,36 @@
 
 package digital.inception.executor.service;
 
-import jakarta.annotation.PostConstruct;
-import java.util.Optional;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.SmartLifecycle;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 import digital.inception.executor.model.Task;
 import digital.inception.executor.model.TaskExecutionDelayedException;
 import digital.inception.executor.model.TaskExecutionResult;
 import digital.inception.executor.model.TaskExecutionRetryableException;
 import digital.inception.executor.model.TaskStatus;
+import jakarta.annotation.PostConstruct;
+import java.util.Optional;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.SmartLifecycle;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 /**
  * The <b>BackgroundTaskExecutor</b> class implements the Background Task Executor.
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Service
 @SuppressWarnings("unused")
 public class BackgroundTaskExecutor implements IBackgroundTaskExecutor, SmartLifecycle {
 
-  /** The number of milliseconds to wait for an executing or queued task to complete. */
-  @Value("${inception.executor.task-completion-timeout:#{60000L}}")
-  private long taskCompletionTimeout;
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(BackgroundTaskExecutor.class);
 
   /** The Executor Service. */
   private final IExecutorService executorService;
@@ -66,6 +66,10 @@ public class BackgroundTaskExecutor implements IBackgroundTaskExecutor, SmartLif
   /** The maximum number of task execution threads to create to execute tasks. */
   @Value("${inception.executor.maximum-task-execution-threads:#{10}}")
   private int maximumTaskExecutionThreads;
+
+  /** The number of milliseconds to wait for an executing or queued task to complete. */
+  @Value("${inception.executor.task-completion-timeout:#{60000L}}")
+  private long taskCompletionTimeout;
 
   private LinkedBlockingQueue<Runnable> taskExecutionQueue;
 
@@ -206,7 +210,7 @@ public class BackgroundTaskExecutor implements IBackgroundTaskExecutor, SmartLif
    *
    * @author Marcus Portmann
    */
-  @Slf4j
+  
   public static class TaskExecutor implements Runnable {
 
     /** The Executor Service. */

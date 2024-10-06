@@ -51,20 +51,24 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.x500.X500Principal;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.wss4j.common.crypto.CryptoBase;
 import org.apache.wss4j.common.crypto.CryptoType;
 import org.apache.wss4j.common.ext.WSPasswordCallback;
 import org.apache.wss4j.common.ext.WSSecurityException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <b>Crypto</b> class.
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @SuppressWarnings("unused")
 public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto.Crypto {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(Crypto.class);
 
   /** The certificate revocation list store. */
   private final CertStore crlStore;
@@ -128,7 +132,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         + ") with size ("
         + keyStore.size()
         + ") and aliases: {"
-        + buffer.toString()
+        + buffer
         + "}";
   }
 
@@ -561,8 +565,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
 
         if ((certificateChain != null)
             && (certificateChain.length > 0)
-            && (certificateChain[0] instanceof X509Certificate)) {
-          X509Certificate certificate = (X509Certificate) certificateChain[0];
+            && (certificateChain[0] instanceof X509Certificate certificate)) {
 
           if (log.isDebugEnabled()) {
             log.debug(
@@ -624,8 +627,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
 
         if ((certificateChain != null)
             && (certificateChain.length > 0)
-            && (certificateChain[0] instanceof X509Certificate)) {
-          X509Certificate certificate = (X509Certificate) certificateChain[0];
+            && (certificateChain[0] instanceof X509Certificate certificate)) {
           byte[] data = getSKIBytesFromCert(certificate);
           if ((data.length == skiBytes.length) && (Arrays.equals(data, skiBytes))) {
             log.debug(
@@ -676,8 +678,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
 
         if ((certificateChain != null)
             && (certificateChain.length > 0)
-            && (certificateChain[0] instanceof X509Certificate)) {
-          X509Certificate certificate = (X509Certificate) certificateChain[0];
+            && (certificateChain[0] instanceof X509Certificate certificate)) {
           try {
             sha1MessageDigest.update(certificate.getEncoded());
           } catch (CertificateEncodingException ex) {
@@ -933,7 +934,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
 
     // We just choose the first entry
     return Arrays.copyOf(
-        certificateChains.get(0), certificateChains.get(0).length, X509Certificate[].class);
+        certificateChains.getFirst(), certificateChains.getFirst().length, X509Certificate[].class);
   }
 
   /**
@@ -1099,7 +1100,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
 
       if ((issuingCertificateChainsToVerifyAgainst == null)
           || issuingCertificateChainsToVerifyAgainst.isEmpty()
-          || (issuingCertificateChainsToVerifyAgainst.get(0).length < 1)) {
+          || (issuingCertificateChainsToVerifyAgainst.getFirst().length < 1)) {
         String subjectDN = certificateChain[0].getSubjectX500Principal().getName();
 
         if (log.isDebugEnabled()) {
@@ -1139,7 +1140,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       // Verify the trust path using the above settings
       String provider = getCryptoProvider();
       CertPathValidator validator;
-      if ((provider == null) || (provider.length() == 0)) {
+      if ((provider == null) || (provider.isEmpty())) {
         validator = CertPathValidator.getInstance("PKIX");
       } else {
         validator = CertPathValidator.getInstance("PKIX", provider);

@@ -35,6 +35,6 @@ public interface MaritalStatusRepository extends JpaRepository<MaritalStatus, Ma
    *
    * @return all the marital statuses sorted by locale ID, sort index, and name.
    */
-  @Query("select ms from MaritalStatus ms order by ms.localeId, -ms.sortIndex DESC, ms.name")
+  @Query("select ms from MaritalStatus ms order by ms.localeId, ms.sortIndex DESC, ms.name")
   List<MaritalStatus> getAllMaritalStatuses();
 }

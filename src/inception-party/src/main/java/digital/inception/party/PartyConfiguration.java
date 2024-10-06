@@ -19,7 +19,6 @@ package digital.inception.party;
 import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -37,16 +36,10 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.party"})
 public class PartyConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
   /**
    * Constructs a new <b>PartyConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
    */
-  public PartyConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
+  public PartyConfiguration() {
   }
 
   /**

@@ -37,6 +37,6 @@ public interface IdentificationTypeRepository
    * @return all the identification types sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select idt from IdentificationType idt order by idt.localeId, -idt.sortIndex DESC, idt.name")
+      "select idt from IdentificationType idt order by idt.localeId, idt.sortIndex DESC, idt.name")
   List<IdentificationType> getAllIdentificationTypes();
 }

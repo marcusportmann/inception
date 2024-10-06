@@ -26,7 +26,6 @@ import jakarta.transaction.Transaction;
 import jakarta.transaction.TransactionManager;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * The <b>TransactionManagerProxy</b> class provides a proxy that tracks the Java Transaction (JTA)
@@ -35,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @SuppressWarnings({"unused"})
 public class TransactionManagerProxy implements TransactionManager {
 
@@ -134,7 +133,7 @@ public class TransactionManagerProxy implements TransactionManager {
   public void setRollbackOnly() throws IllegalStateException, SystemException {
     /*
      * This check to confirm that we have a valid transaction was added to handle the issue
-     * where the Hibernate JPA implementation would try to rollback a transaction even if one
+     * where the Hibernate JPA implementation would try to roll back a transaction even if one
      * didn't exist when a non-hibernate exception was thrown.
      */
     if (getTransaction() != null) {

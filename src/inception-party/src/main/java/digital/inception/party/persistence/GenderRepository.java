@@ -34,6 +34,6 @@ public interface GenderRepository extends JpaRepository<Gender, GenderId> {
    *
    * @return all the genders sorted by locale ID, sort index, and name.
    */
-  @Query("select g from Gender g order by g.localeId, -g.sortIndex DESC, g.name")
+  @Query("select g from Gender g order by g.localeId, g.sortIndex DESC, g.name")
   List<Gender> getAllGenders();
 }

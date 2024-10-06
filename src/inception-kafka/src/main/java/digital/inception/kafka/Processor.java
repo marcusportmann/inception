@@ -24,12 +24,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.serialization.Deserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -45,8 +46,12 @@ import org.springframework.util.StringUtils;
  * @param <V> the value type
  * @author Marcus Portmann
  */
-@Slf4j
+
+@SuppressWarnings("unused")
 public abstract class Processor<K, V> extends Thread {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(Processor.class);
 
   /** Is the processor active? */
   private final AtomicBoolean isActive = new AtomicBoolean(true);

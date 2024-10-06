@@ -19,8 +19,9 @@ package digital.inception.api;
 import digital.inception.core.api.IPolicyDecisionPoint;
 import digital.inception.core.api.IPolicyDecisionPointContextProvider;
 import java.util.function.Supplier;
-import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
@@ -33,9 +34,12 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 public class SecureApiSecurityExpressionRoot extends SecurityExpressionRoot
     implements MethodSecurityExpressionOperations {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(SecureApiSecurityExpressionRoot.class);
 
   /** Is debugging enabled for the Inception Framework? */
   private final boolean inDebugMode;

@@ -89,7 +89,7 @@ public class WordUtil {
    * @see #capitalizeFully(String)
    */
   public static String capitalize(final String str, final char... delimiters) {
-    if (StringUtils.isEmpty(str)) {
+    if (!StringUtils.hasText(str)) {
       return str;
     }
     final Predicate<Integer> isDelimiter = generateIsDelimiterFunction(delimiters);
@@ -162,7 +162,7 @@ public class WordUtil {
    * @return capitalized String, {@code null} if null String input
    */
   public static String capitalizeFully(String str, final char... delimiters) {
-    if (StringUtils.isEmpty(str)) {
+    if (!StringUtils.hasText(str)) {
       return str;
     }
     str = str.toLowerCase();
@@ -190,7 +190,7 @@ public class WordUtil {
    */
   public static boolean containsAllWords(final String word, final String... words) {
 
-    if (StringUtils.isEmpty(word) || ((words == null) || (words.length == 0))) {
+    if (!StringUtils.hasText(word) || ((words == null) || (words.length == 0))) {
       return false;
     }
     for (final String w : words) {
@@ -254,7 +254,7 @@ public class WordUtil {
    * @see #initials(String)
    */
   public static String initials(final String str, final char... delimiters) {
-    if (StringUtils.isEmpty(str)) {
+    if (!StringUtils.hasText(str)) {
       return str;
     }
     if (delimiters != null && delimiters.length == 0) {
@@ -346,7 +346,7 @@ public class WordUtil {
    * @return The changed String, {@code null} if null String input
    */
   public static String swapCase(final String str) {
-    if (StringUtils.isEmpty(str)) {
+    if (!StringUtils.hasText(str)) {
       return str;
     }
     final int strLen = str.length();
@@ -422,7 +422,7 @@ public class WordUtil {
    * @see #capitalize(String)
    */
   public static String uncapitalize(final String str, final char... delimiters) {
-    if (StringUtils.isEmpty(str)) {
+    if (!StringUtils.hasText(str)) {
       return str;
     }
     final Predicate<Integer> isDelimiter = generateIsDelimiterFunction(delimiters);

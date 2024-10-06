@@ -35,6 +35,6 @@ public interface MarriageTypeRepository extends JpaRepository<MarriageType, Marr
    *
    * @return all the marriage types sorted by locale ID, sort index, and name.
    */
-  @Query("select mt from MarriageType mt order by mt.localeId, -mt.sortIndex DESC, mt.name")
+  @Query("select mt from MarriageType mt order by mt.localeId, mt.sortIndex DESC, mt.name")
   List<MarriageType> getAllMarriageTypes();
 }

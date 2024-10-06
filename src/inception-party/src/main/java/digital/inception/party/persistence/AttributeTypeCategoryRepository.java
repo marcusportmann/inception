@@ -36,6 +36,6 @@ public interface AttributeTypeCategoryRepository
    *
    * @return all the attribute type categories sorted by locale ID, sort index, and name.
    */
-  @Query("select atc from AttributeTypeCategory atc order by -atc.sortIndex DESC, atc.name")
+  @Query("select atc from AttributeTypeCategory atc order by atc.sortIndex DESC, atc.name")
   List<AttributeTypeCategory> getAllAttributeTypeCategories();
 }

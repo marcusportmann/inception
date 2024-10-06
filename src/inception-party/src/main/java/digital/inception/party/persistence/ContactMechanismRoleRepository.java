@@ -37,6 +37,6 @@ public interface ContactMechanismRoleRepository
    * @return all the contact mechanism roles sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select cmr from ContactMechanismRole cmr order by cmr.localeId, -cmr.sortIndex DESC, cmr.name")
+      "select cmr from ContactMechanismRole cmr order by cmr.localeId, cmr.sortIndex DESC, cmr.name")
   List<ContactMechanismRole> getAllContactMechanismRoles();
 }

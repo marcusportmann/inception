@@ -36,6 +36,6 @@ public interface ResidencyStatusRepository
    *
    * @return all the residency statuses sorted by locale ID, sort index, and name.
    */
-  @Query("select rs from ResidencyStatus rs order by rs.localeId, -rs.sortIndex DESC, rs.name")
+  @Query("select rs from ResidencyStatus rs order by rs.localeId, rs.sortIndex DESC, rs.name")
   List<ResidencyStatus> getAllResidencyStatuses();
 }

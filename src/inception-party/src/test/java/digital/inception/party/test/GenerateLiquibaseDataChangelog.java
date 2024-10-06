@@ -63,7 +63,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -79,7 +80,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @SpringBootApplication
 @ComponentScan(
     basePackages = {"digital.inception"},
@@ -99,6 +100,9 @@ import org.springframework.util.StringUtils;
 public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
 
   private static final Set<String> LOCALE_IDS = Set.of("en-US", "en-ZA");
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(GenerateLiquibaseDataChangelog.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;

@@ -183,11 +183,10 @@ public class InternalPolicyStore implements IPolicyStore {
         policySummaryPage =
             policySummaryRepository.findAll(
                 (Specification<PolicySummary>)
-                    (root, query, criteriaBuilder) -> {
-                      return criteriaBuilder.like(
-                          criteriaBuilder.lower(root.get("name")),
-                          "%" + filter.toLowerCase() + "%");
-                    },
+                    (root, query, criteriaBuilder) ->
+                        criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + filter.toLowerCase() + "%"),
                 pageRequest);
       } else {
         policySummaryPage = policySummaryRepository.findAll(pageRequest);

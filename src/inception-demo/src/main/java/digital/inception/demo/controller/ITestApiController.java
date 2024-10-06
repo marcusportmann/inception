@@ -202,7 +202,6 @@ public interface ITestApiController {
    * Test task execution.
    *
    * @param slowTask test the execution of a slow task
-   *
    * @throws ServiceUnavailableException if an error occurred
    */
   @Operation(summary = "Test task execution", description = "Test task execution")

@@ -34,6 +34,6 @@ public interface RaceRepository extends JpaRepository<Race, RaceId> {
    *
    * @return all the races sorted by locale ID, sort index, and name.
    */
-  @Query("select r from Race r order by r.localeId, -r.sortIndex DESC, r.name")
+  @Query("select r from Race r order by r.localeId, r.sortIndex DESC, r.name")
   List<Race> getAllRaces();
 }

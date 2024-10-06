@@ -37,6 +37,6 @@ public interface PhysicalAddressRoleRepository
    * @return all the physical address roles sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select par from PhysicalAddressRole par order by par.localeId, -par.sortIndex DESC, par.name")
+      "select par from PhysicalAddressRole par order by par.localeId, par.sortIndex DESC, par.name")
   List<PhysicalAddressRole> getAllPhysicalAddressRoles();
 }

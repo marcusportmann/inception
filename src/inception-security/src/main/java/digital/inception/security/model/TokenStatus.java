@@ -70,21 +70,16 @@ public enum TokenStatus {
    */
   @JsonCreator
   public static TokenStatus fromCode(String code) {
-    switch (code) {
-      case "all":
-        return TokenStatus.ALL;
-      case "active":
-        return TokenStatus.ACTIVE;
-      case "expired":
-        return TokenStatus.EXPIRED;
-      case "pending":
-        return TokenStatus.PENDING;
-      case "revoked":
-        return TokenStatus.REVOKED;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the token status with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "all" -> TokenStatus.ALL;
+      case "active" -> TokenStatus.ACTIVE;
+      case "expired" -> TokenStatus.EXPIRED;
+      case "pending" -> TokenStatus.PENDING;
+      case "revoked" -> TokenStatus.REVOKED;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the token status with the invalid code (" + code + ")");
+    };
   }
 
   /**

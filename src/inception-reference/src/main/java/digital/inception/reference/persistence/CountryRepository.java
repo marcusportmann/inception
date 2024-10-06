@@ -35,6 +35,6 @@ public interface CountryRepository extends JpaRepository<Country, CountryId> {
    *
    * @return all the countries sorted by locale ID, sort index, and name.
    */
-  @Query("select c from Country c order by c.localeId, -c.sortIndex DESC, c.shortName")
+  @Query("select c from Country c order by c.localeId, c.sortIndex DESC, c.shortName")
   List<Country> getAllCountries();
 }

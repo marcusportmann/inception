@@ -35,6 +35,6 @@ public interface ConsentTypeRepository extends JpaRepository<ConsentType, Consen
    *
    * @return all the consent types sorted by locale ID, sort index, and name.
    */
-  @Query("select ct from ConsentType ct order by ct.localeId, -ct.sortIndex DESC, ct.name")
+  @Query("select ct from ConsentType ct order by ct.localeId, ct.sortIndex DESC, ct.name")
   List<ConsentType> getAllConsentTypes();
 }

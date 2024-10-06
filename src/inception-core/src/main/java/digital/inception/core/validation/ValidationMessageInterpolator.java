@@ -18,12 +18,13 @@ package digital.inception.core.validation;
 
 import java.util.Collections;
 import java.util.Locale;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.engine.messageinterpolation.DefaultLocaleResolver;
 import org.hibernate.validator.internal.engine.messageinterpolation.InterpolationTerm;
 import org.hibernate.validator.internal.engine.messageinterpolation.ParameterTermResolver;
 import org.hibernate.validator.messageinterpolation.AbstractMessageInterpolator;
 import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <b>ValidationMessageInterpolator</b> provides a bundle-backed message interpolator, which
@@ -31,9 +32,12 @@ import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @SuppressWarnings("unused")
 public class ValidationMessageInterpolator extends AbstractMessageInterpolator {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(ValidationMessageInterpolator.class);
 
   /** Constructs a new <b>ValidationMessageInterpolator</b>. */
   public ValidationMessageInterpolator() {

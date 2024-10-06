@@ -35,6 +35,6 @@ public interface SkillTypeRepository extends JpaRepository<SkillType, SkillTypeI
    *
    * @return all the skill types sorted by locale ID, sort index, and name.
    */
-  @Query("select st from SkillType st order by st.localeId, -st.sortIndex DESC, st.name")
+  @Query("select st from SkillType st order by st.localeId, st.sortIndex DESC, st.name")
   List<SkillType> getAllSkillTypes();
 }

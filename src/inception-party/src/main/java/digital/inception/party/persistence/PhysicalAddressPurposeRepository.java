@@ -37,6 +37,6 @@ public interface PhysicalAddressPurposeRepository
    * @return all the physical address purposes sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select pap from PhysicalAddressPurpose pap order by pap.localeId, -pap.sortIndex DESC, pap.name")
+      "select pap from PhysicalAddressPurpose pap order by pap.localeId, pap.sortIndex DESC, pap.name")
   List<PhysicalAddressPurpose> getAllPhysicalAddressPurposes();
 }

@@ -36,6 +36,6 @@ public interface QualificationTypeRepository
    *
    * @return all the qualification types sorted by locale ID, sort index, and name.
    */
-  @Query("select qt from QualificationType qt order by qt.localeId, -qt.sortIndex DESC, qt.name")
+  @Query("select qt from QualificationType qt order by qt.localeId, qt.sortIndex DESC, qt.name")
   List<QualificationType> getAllQualificationTypes();
 }

@@ -25,6 +25,7 @@ import java.io.Serial;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class WebServiceInitializationException extends RichRuntimeException {
 
   @Serial private static final long serialVersionUID = 1000000;

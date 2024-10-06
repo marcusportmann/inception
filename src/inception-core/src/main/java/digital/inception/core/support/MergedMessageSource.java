@@ -21,6 +21,7 @@ import java.util.Properties;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.lang.Nullable;
 
 /**
  * The <b>MergedMessageSource</b> class implements the merged message source that provides support
@@ -39,7 +40,8 @@ public class MergedMessageSource extends ReloadableResourceBundleMessageSource {
   public MergedMessageSource() {}
 
   @Override
-  protected PropertiesHolder refreshProperties(String filename, PropertiesHolder propertiesHolder) {
+  protected PropertiesHolder refreshProperties(
+      String filename, @Nullable PropertiesHolder propertiesHolder) {
     if (filename.startsWith(PathMatchingResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX)) {
       return refreshClassPathProperties(filename, propertiesHolder);
     } else {

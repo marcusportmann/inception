@@ -37,6 +37,6 @@ public interface ContactMechanismPurposeRepository
    * @return all the contact mechanism purposes sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select cmp from ContactMechanismPurpose cmp order by cmp.localeId, -cmp.sortIndex DESC, cmp.name")
+      "select cmp from ContactMechanismPurpose cmp order by cmp.localeId, cmp.sortIndex DESC, cmp.name")
   List<ContactMechanismPurpose> getAllContactMechanismPurposes();
 }

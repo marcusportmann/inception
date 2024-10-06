@@ -37,6 +37,6 @@ public interface IndustryClassificationCategoryRepository
    * @return all the industry classification categories sorted by locale ID, sort index, and name.
    */
   @Query(
-      "select icc from IndustryClassificationCategory icc order by icc.localeId, -icc.sortIndex DESC, icc.name")
+      "select icc from IndustryClassificationCategory icc order by icc.localeId, icc.sortIndex DESC, icc.name")
   List<IndustryClassificationCategory> getAllIndustryClassificationCategories();
 }

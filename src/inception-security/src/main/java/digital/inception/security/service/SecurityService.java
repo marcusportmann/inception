@@ -145,7 +145,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
@@ -166,7 +167,7 @@ import org.xml.sax.SAXParseException;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Service
 @SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
 public class SecurityService implements ISecurityService {
@@ -183,6 +184,9 @@ public class SecurityService implements ISecurityService {
   /** The code for the password reset mail template. */
   private static final String PASSWORD_RESET_MAIL_TEMPLATE_ID =
       "Inception.Security.PasswordResetMail";
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(SecurityService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -204,9 +208,6 @@ public class SecurityService implements ISecurityService {
 
   /** The Policy Data Store. */
   private final IPolicyStore policyDataStore;
-
-  /** The Spring resource loader. */
-  private final ResourceLoader resourceLoader;
 
   /** The Role Repository. */
   private final RoleRepository roleRepository;
@@ -290,7 +291,6 @@ public class SecurityService implements ISecurityService {
       UserDirectoryTypeRepository userDirectoryTypeRepository,
       UserRepository userRepository) {
     this.applicationContext = applicationContext;
-    this.resourceLoader = resourceLoader;
     this.validator = validator;
     this.mailService = mailService;
     this.policyDataStore = policyDataStore;
@@ -569,8 +569,7 @@ public class SecurityService implements ISecurityService {
         }
       } else {
         /*
-         * Check all of the "external" user directories to see if one of them can authenticate this
-         * user.
+         * Check the "external" user directories to see if one of them can authenticate this user.
          */
         for (UUID userDirectoryId : userDirectories.keySet()) {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -641,8 +640,7 @@ public class SecurityService implements ISecurityService {
         }
       } else {
         /*
-         * Check all of the "external" user directories to see if one of them can change the
-         * password for this user.
+         * Check the "external" user directories to see if one of them can change the password for this user.
          */
         for (UUID userDirectoryId : userDirectories.keySet()) {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1576,11 +1574,10 @@ public class SecurityService implements ISecurityService {
         tenantPage =
             tenantRepository.findAll(
                 (Specification<Tenant>)
-                    (root, query, criteriaBuilder) -> {
-                      return criteriaBuilder.like(
-                          criteriaBuilder.lower(root.get("name")),
-                          "%" + filter.toLowerCase() + "%");
-                    },
+                    (root, query, criteriaBuilder) ->
+                        criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + filter.toLowerCase() + "%"),
                 pageRequest);
       } else {
         tenantPage = tenantRepository.findAll(pageRequest);
@@ -1600,9 +1597,7 @@ public class SecurityService implements ISecurityService {
         message += " matching the filter \"%s\"".formatted(filter);
       }
 
-      if ((pageIndex != null) && (pageSize != null)) {
-        message += " for the page " + pageIndex + " using the page size " + pageSize;
-      }
+      message += " for the page " + pageIndex + " using the page size " + pageSize;
 
       message += ": ";
 
@@ -1876,11 +1871,10 @@ public class SecurityService implements ISecurityService {
         userDirectoryPage =
             userDirectoryRepository.findAll(
                 (Specification<UserDirectory>)
-                    (root, query, criteriaBuilder) -> {
-                      return criteriaBuilder.like(
-                          criteriaBuilder.lower(root.get("name")),
-                          "%" + filter.toLowerCase() + "%");
-                    },
+                    (root, query, criteriaBuilder) ->
+                        criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + filter.toLowerCase() + "%"),
                 pageRequest);
       } else {
         userDirectoryPage = userDirectoryRepository.findAll(pageRequest);
@@ -1975,8 +1969,7 @@ public class SecurityService implements ISecurityService {
         return internalUserDirectoryIdOptional;
       } else {
         /*
-         * Check all of the "external" user directories to see if the user is associated with one
-         * of them.
+         * Check the "external" user directories to see if the user is associated with one of them.
          */
         for (UUID userDirectoryId : userDirectories.keySet()) {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2124,11 +2117,10 @@ public class SecurityService implements ISecurityService {
         userDirectorySummaryPage =
             userDirectorySummaryRepository.findAll(
                 (Specification<UserDirectorySummary>)
-                    (root, query, criteriaBuilder) -> {
-                      return criteriaBuilder.like(
-                          criteriaBuilder.lower(root.get("name")),
-                          "%" + filter.toLowerCase() + "%");
-                    },
+                    (root, query, criteriaBuilder) ->
+                        criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + filter.toLowerCase() + "%"),
                 pageRequest);
       } else {
         userDirectorySummaryPage = userDirectorySummaryRepository.findAll(pageRequest);
@@ -3006,12 +2998,9 @@ public class SecurityService implements ISecurityService {
 
         schemaFactory.setResourceResolver(
             (type, namespaceURI, publicId, systemId, baseURI) -> {
-              switch (systemId) {
-                case "http://www.w3.org/2001/xml.xsd":
-                  {
-                    return new XmlSchemaClasspathInputSource(
-                        namespaceURI, publicId, systemId, baseURI, "META-INF/xacml/xml.xsd");
-                  }
+              if (systemId.equals("http://www.w3.org/2001/xml.xsd")) {
+                return new XmlSchemaClasspathInputSource(
+                    namespaceURI, publicId, systemId, baseURI, "META-INF/xacml/xml.xsd");
               }
 
               throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");

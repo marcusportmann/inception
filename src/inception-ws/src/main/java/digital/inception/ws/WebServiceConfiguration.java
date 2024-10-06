@@ -25,10 +25,11 @@ import jakarta.xml.ws.Endpoint;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -50,10 +51,13 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @Configuration
 @Conditional(WebServiceConfigurationEnabledCondition.class)
 public class WebServiceConfiguration {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(WebServiceConfiguration.class);
 
   /** The Spring application context */
   private final ApplicationContext applicationContext;
@@ -226,11 +230,11 @@ public class WebServiceConfiguration {
 
     for (Object annotated :
         applicationContext.getBeansWithAnnotation(ComponentScan.class).values()) {
-      Class clazz = ClassUtils.getUserClass(annotated);
+      Class<?> clazz = ClassUtils.getUserClass(annotated);
 
       ComponentScan componentScan =
           AnnotatedElementUtils.getMergedAnnotation(clazz, ComponentScan.class);
-      if (componentScan != null) { // For some reasons, this might still be null.
+      if (componentScan != null) { // For some reason, this might still be null.
         for (String basePackage : componentScan.basePackages()) {
           // Replace any existing packages to scan with the higher level package
           packagesToScanForWebServices.removeIf(
@@ -249,9 +253,8 @@ public class WebServiceConfiguration {
 
     scanner.addIncludeFilter(new AnnotationTypeFilter(WebService.class));
 
-    log.info(
-        "Scanning the following packages for web services: "
-            + StringUtils.collectionToDelimitedString(packagesToScanForWebServices, ","));
+    log.info("Scanning the following packages for web services: {}",
+        StringUtils.collectionToDelimitedString(packagesToScanForWebServices, ","));
 
     for (String packageToScanForWebServices : packagesToScanForWebServices) {
       for (BeanDefinition beanDefinition :

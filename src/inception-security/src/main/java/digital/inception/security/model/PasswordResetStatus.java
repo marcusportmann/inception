@@ -61,17 +61,14 @@ public enum PasswordResetStatus {
    */
   @JsonCreator
   public static PasswordResetStatus fromCode(String code) {
-    switch (code) {
-      case "requested":
-        return PasswordResetStatus.REQUESTED;
-      case "completed":
-        return PasswordResetStatus.COMPLETED;
-      case "expired":
-        return PasswordResetStatus.EXPIRED;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the password reset status with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "requested" -> PasswordResetStatus.REQUESTED;
+      case "completed" -> PasswordResetStatus.COMPLETED;
+      case "expired" -> PasswordResetStatus.EXPIRED;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the password reset status with the invalid code (" + code + ")");
+    };
   }
 
   /**

@@ -47,9 +47,10 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
@@ -65,7 +66,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@Slf4j
+
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
@@ -78,6 +79,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
       TransactionalTestExecutionListener.class
     })
 public class ExecutorServiceTest {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(ExecutorServiceTest.class);
 
   /** The Executor Service. */
   @Autowired private IExecutorService executorService;

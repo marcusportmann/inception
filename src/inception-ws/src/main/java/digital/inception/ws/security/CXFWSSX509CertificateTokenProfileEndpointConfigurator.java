@@ -23,7 +23,6 @@ import java.util.Map;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
-import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
@@ -100,10 +99,10 @@ public final class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
       outProperties.put(WSHandlerConstants.SIG_PROP_FILE, "INTERNAL");
 
       WSS4JOutInterceptor wss4JOutInterceptor =
-          new WSS4JOutInterceptor(inProperties) {
+          new WSS4JOutInterceptor(outProperties) {
             @Override
             protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
-                String propFilename, RequestData reqData) throws WSSecurityException {
+                String propFilename, RequestData reqData) {
               return crypto;
             }
           };

@@ -21,6 +21,7 @@ import digital.inception.core.service.ServiceException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
+import java.io.Serial;
 import java.util.UUID;
 
 /**
@@ -42,7 +43,7 @@ import java.util.UUID;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class SMSNotFoundException extends ServiceException {
 
-  private static final long serialVersionUID = 1000000;
+  @Serial private static final long serialVersionUID = 1000000;
 
   /**
    * Constructs a new <b>SMSNotFoundException</b>.

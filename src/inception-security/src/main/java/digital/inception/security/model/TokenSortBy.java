@@ -69,21 +69,16 @@ public enum TokenSortBy {
    */
   @JsonCreator
   public static TokenSortBy fromCode(String code) {
-    switch (code) {
-      case "expires":
-        return TokenSortBy.EXPIRES;
-      case "issued":
-        return TokenSortBy.ISSUED;
-      case "name":
-        return TokenSortBy.NAME;
-      case "revoked":
-        return TokenSortBy.REVOKED;
-      case "type":
-        return TokenSortBy.TYPE;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the token sort by with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "expires" -> TokenSortBy.EXPIRES;
+      case "issued" -> TokenSortBy.ISSUED;
+      case "name" -> TokenSortBy.NAME;
+      case "revoked" -> TokenSortBy.REVOKED;
+      case "type" -> TokenSortBy.TYPE;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the token sort by with the invalid code (" + code + ")");
+    };
   }
 
   /**

@@ -29,6 +29,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class MimeData implements java.io.Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;

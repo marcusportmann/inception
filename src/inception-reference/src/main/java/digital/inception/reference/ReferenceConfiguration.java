@@ -38,17 +38,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.reference"})
 public class ReferenceConfiguration {
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /**
-   * Constructs a new <b>ReferenceConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
-   */
-  public ReferenceConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+  /** Constructs a new <b>ReferenceConfiguration</b>. */
+  public ReferenceConfiguration() {}
 
   /**
    * Returns the reference entity manager factory bean associated with the application data source.

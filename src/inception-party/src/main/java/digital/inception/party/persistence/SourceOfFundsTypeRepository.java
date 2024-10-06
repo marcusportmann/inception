@@ -36,6 +36,6 @@ public interface SourceOfFundsTypeRepository
    *
    * @return all the source of funds types sorted by locale ID, sort index, and name.
    */
-  @Query("select soft from SourceOfFundsType soft order by -soft.sortIndex DESC, soft.name")
+  @Query("select soft from SourceOfFundsType soft order by soft.sortIndex DESC, soft.name")
   List<SourceOfFundsType> getAllSourceOfFundsTypes();
 }

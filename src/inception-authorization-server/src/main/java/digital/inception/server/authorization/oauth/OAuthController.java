@@ -30,7 +30,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,11 +45,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  * The <b>OAuthController</b> class implements a simple OAuth authorization server that provides
  * support for the Resource Owner Password Grant.
  */
-@Slf4j
 @Controller
 @RequestMapping("oauth")
 @CrossOrigin
 public class OAuthController {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(OAuthController.class);
 
   /* Security Service */
   private final ISecurityService securityService;

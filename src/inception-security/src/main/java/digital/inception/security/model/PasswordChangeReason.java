@@ -62,17 +62,16 @@ public enum PasswordChangeReason {
    */
   @JsonCreator
   public static PasswordChangeReason fromCode(String code) {
-    switch (code) {
-      case "user":
-        return PasswordChangeReason.USER;
-      case "administrative":
-        return PasswordChangeReason.ADMINISTRATIVE;
-      case "reset":
-        return PasswordChangeReason.RESET;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the password change reason with the invalid code (" + code + ")");
-    }
+    return switch (code) {
+      case "user" -> PasswordChangeReason.USER;
+      case "administrative" -> PasswordChangeReason.ADMINISTRATIVE;
+      case "reset" -> PasswordChangeReason.RESET;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the password change reason with the invalid code ("
+                  + code
+                  + ")");
+    };
   }
 
   /**

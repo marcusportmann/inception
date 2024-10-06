@@ -44,8 +44,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The <b>Data</b> class.
@@ -55,31 +53,29 @@ import lombok.Setter;
 @Schema(description = "Data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id",
-    "stringValue",
-    "integerValue",
-    "dateValue",
-    "timestampValue",
-    "country",
-    "language"
+  "id",
+  "stringValue",
+  "integerValue",
+  "dateValue",
+  "timestampValue",
+  "country",
+  "language"
 })
 @XmlRootElement(name = "Data", namespace = "https://inception.digital/demo")
 @XmlType(
     name = "Data",
     namespace = "https://inception.digital/demo",
     propOrder = {
-        "id",
-        "stringValue",
-        "integerValue",
-        "dateValue",
-        "timestampValue",
-        "country",
-        "language"
+      "id",
+      "stringValue",
+      "integerValue",
+      "dateValue",
+      "timestampValue",
+      "country",
+      "language"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @NoScriptOrSQLInjection
-@Getter
-@Setter
 @Entity
 @Table(name = "demo_data")
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -220,6 +216,132 @@ public class Data implements Serializable {
     Data other = (Data) object;
 
     return Objects.equals(id, other.id);
+  }
+
+  /**
+   * Returns the ISO 3166-1 country code value for the data.
+   *
+   * @return the ISO 3166-1 country code value for the data
+   */
+  public String getCountry() {
+    return country;
+  }
+
+  /**
+   * Returns the date value for the data.
+   *
+   * @return the date value for the data
+   */
+  public LocalDate getDateValue() {
+    return dateValue;
+  }
+
+  /**
+   * Returns the ID for the data.
+   *
+   * @return the ID for the data
+   */
+  public long getId() {
+    return id;
+  }
+
+  /**
+   * Returns the integer value for the data.
+   *
+   * @return the integer value for the data
+   */
+  public Integer getIntegerValue() {
+    return integerValue;
+  }
+
+  /**
+   * Returns the ISO 639-1 language code value for the data.
+   *
+   * @return the ISO 639-1 language code value for the data
+   */
+  public String getLanguage() {
+    return language;
+  }
+
+  /**
+   * Returns the string value for the data.
+   *
+   * @return the string value for the data
+   */
+  public String getStringValue() {
+    return stringValue;
+  }
+
+  /**
+   * Returns the timestamp value for the data.
+   *
+   * @return the timestamp value for the data
+   */
+  public OffsetDateTime getTimestampValue() {
+    return timestampValue;
+  }
+
+  /**
+   * Set the ISO 3166-1 country code value for the data.
+   *
+   * @param country the ISO 3166-1 country code value for the data
+   */
+  public void setCountry(String country) {
+    this.country = country;
+  }
+
+  /**
+   * Set the date value for the data.
+   *
+   * @param dateValue the date value for the data
+   */
+  public void setDateValue(LocalDate dateValue) {
+    this.dateValue = dateValue;
+  }
+
+  /**
+   * Set the ID for the data.
+   *
+   * @param id the ID for the data.
+   */
+  public void setId(@NotNull long id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the integer value for the data.
+   *
+   * @param integerValue the integer value for the data
+   */
+  public void setIntegerValue(Integer integerValue) {
+    this.integerValue = integerValue;
+  }
+
+  /**
+   * Set the ISO 639-1 language code value for the data.
+   *
+   * @param language the ISO 639-1 language code value for the data
+   */
+  public void setLanguage(@NotNull @Size(min = 2, max = 2) String language) {
+    this.language = language;
+  }
+
+  /**
+   * Set the string value for the data.
+   *
+   * @param stringValue the string value for the data
+   */
+  public void setStringValue(String stringValue) {
+    this.stringValue = stringValue;
+  }
+
+  /**
+   * Set the timestamp value for the data.
+   *
+   * @param timestampValue the timestamp value for the data
+   */
+  public void setTimestampValue(OffsetDateTime timestampValue) {
+    this.timestampValue = timestampValue;
   }
 
   /**

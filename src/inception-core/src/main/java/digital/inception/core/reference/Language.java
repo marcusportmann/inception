@@ -19,8 +19,6 @@ package digital.inception.core.reference;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The <b>Language</b> class holds the information for a language.
@@ -29,8 +27,7 @@ import lombok.Setter;
  *
  * @author Marcus Portmann
  */
-@Getter
-@Setter
+@SuppressWarnings("unused")
 public class Language implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -107,6 +104,60 @@ public class Language implements Serializable {
   }
 
   /**
+   * Returns the ISO 639-1 alpha-2 code for the language.
+   *
+   * @return the ISO 639-1 alpha-2 code for the language
+   */
+  public String getCode() {
+    return code;
+  }
+
+  /**
+   * Returns the description for the language.
+   *
+   * @return the description for the language
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Returns the ISO 639-2 alpha-3 code for the language.
+   *
+   * @return the ISO 639-2 alpha-3 code for the language
+   */
+  public String getIso3Code() {
+    return iso3Code;
+  }
+
+  /**
+   * Returns the name of the language.
+   *
+   * @return the name of the language
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the short name for the language.
+   *
+   * @return the short name for the language
+   */
+  public String getShortName() {
+    return shortName;
+  }
+
+  /**
+   * Returns the sort index for the language.
+   *
+   * @return the sort index for the language
+   */
+  public Integer getSortIndex() {
+    return sortIndex;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -114,5 +165,59 @@ public class Language implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode());
+  }
+
+  /**
+   * Set the ISO 639-1 alpha-2 code for the language.
+   *
+   * @param code the ISO 639-1 alpha-2 code for the language
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the language.
+   *
+   * @param description the description for the language
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the ISO 639-2 alpha-3 code for the language.
+   *
+   * @param iso3Code the ISO 639-2 alpha-3 code for the language
+   */
+  public void setIso3Code(String iso3Code) {
+    this.iso3Code = iso3Code;
+  }
+
+  /**
+   * Set the name of the language.
+   *
+   * @param name the name of the language
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the short name for the language.
+   *
+   * @param shortName the short name for the language
+   */
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
+  }
+
+  /**
+   * Set the sort index for the language.
+   *
+   * @param sortIndex the sort index for the language
+   */
+  public void setSortIndex(Integer sortIndex) {
+    this.sortIndex = sortIndex;
   }
 }
