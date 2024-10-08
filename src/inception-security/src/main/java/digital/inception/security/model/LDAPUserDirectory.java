@@ -1488,7 +1488,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
             LdapName groupMemberDn = new LdapName(String.valueOf(attribute.get(i)));
 
             for (Rdn rdn : groupMemberDn.getRdns()) {
-              if (rdn.getType().equalsIgnoreCase(userUsernameAttribute)) {
+              if (rdn.getType().equalsIgnoreCase("cn")) {
                 groupMembers.add(
                     new GroupMember(
                         getUserDirectoryId(),
@@ -1562,7 +1562,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
             LdapName groupMemberDn = new LdapName(String.valueOf(attribute.get(i)));
 
             for (Rdn rdn : groupMemberDn.getRdns()) {
-              if (rdn.getType().equalsIgnoreCase(userUsernameAttribute)) {
+              if (rdn.getType().equalsIgnoreCase("cn")) {
                 if (!StringUtils.hasText(filter)) {
                   groupMembers.add(
                       new GroupMember(
