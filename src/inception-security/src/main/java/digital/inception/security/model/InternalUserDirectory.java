@@ -190,7 +190,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         throw new RoleNotFoundException(roleCode);
       }
 
-      if (getGroupRepository().roleToGroupMappingExists(groupIdOptional.get(), roleCode)) {
+      if (getGroupRepository().roleToGroupMappingExists(groupIdOptional.get(), roleCode) > 0) {
         return;
       }
 

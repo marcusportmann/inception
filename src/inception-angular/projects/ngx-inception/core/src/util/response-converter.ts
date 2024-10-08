@@ -18,20 +18,26 @@ import {map} from 'rxjs/operators';
 import {ISO8601Util} from './iso-8601-util';
 
 function convertStringValuesToTypes(value: any): any {
-  if (value) {
-    if ((typeof (value) === 'string') && ((value.length == 23) || (value.length == 29))) {
-      return ISO8601Util.toDate(value);
-    } else if (Array.isArray(value)) {
-      for (let i = 0; i < value.length; i++) {
-        value[i] = convertStringValuesToTypes(value[i]);
-      }
-    } else if (typeof (value) === 'object') {
-      Object.entries(value).forEach(([entryKey, entryValue]) => {
-        if (entryValue) {
-          // @ts-ignore
-          value[entryKey] = convertStringValuesToTypes(entryValue);
-        }
-      });
+  if (!value) return value;
+
+  if (typeof value === 'string') {
+    const trimmedValue = value.trim();
+
+    // Check if it's a valid ISO date string (example for length 23 or 29 or similar future formats)
+    const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[\+\-]\d{2}:\d{2})?$/;
+    if (iso8601Regex.test(trimmedValue)) {
+      const parsedDate: Date = ISO8601Util.toDate(trimmedValue);
+      return isNaN(parsedDate.getTime()) ? value : parsedDate;
+    }
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(convertStringValuesToTypes);
+  }
+
+  if (typeof value === 'object') {
+    for (const [key, val] of Object.entries(value)) {
+      value[key] = convertStringValuesToTypes(val);
     }
   }
 

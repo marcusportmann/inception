@@ -32,6 +32,7 @@ import java.util.UUID;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.naming.SizeLimitExceededException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
@@ -81,6 +82,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /** The user directory capabilities supported by this user directory instance. */
   private final UserDirectoryCapabilities capabilities;
 
+  private final String[] groupAttributesArray;
+
   private final LdapName groupBaseDN;
 
   private final String groupMemberAttribute;
@@ -105,6 +108,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   private final int port;
 
   private final boolean useSSL;
+
+  private final String[] userAttributesArray;
 
   private final LdapName userBaseDN;
 
@@ -147,6 +152,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       RoleRepository roleRepository)
       throws ServiceUnavailableException {
     super(userDirectoryId, parameters, groupRepository, userRepository, roleRepository);
+
+    List<String> userAttributesList = new ArrayList<>();
+    List<String> groupAttributesList = new ArrayList<>();
 
     try {
       if (UserDirectoryParameter.contains(parameters, "Host")) {
@@ -213,6 +221,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "UserUsernameAttribute")) {
         userUsernameAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserUsernameAttribute");
+
+        userAttributesList.add(userUsernameAttribute);
       } else {
         throw new ServiceUnavailableException(
             "No UserUsernameAttribute parameter found for the user directory ("
@@ -222,6 +232,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       if (UserDirectoryParameter.contains(parameters, "UserNameAttribute")) {
         userNameAttribute = UserDirectoryParameter.getStringValue(parameters, "UserNameAttribute");
+
+        userAttributesList.add(userNameAttribute);
       } else {
         throw new ServiceUnavailableException(
             "No UserNameAttribute parameter found for the user directory ("
@@ -232,6 +244,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "UserPreferredNameAttribute")) {
         userPreferredNameAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserPreferredNameAttribute");
+
+        userAttributesList.add(userPreferredNameAttribute);
       } else {
         throw new ServiceUnavailableException(
             "No UserPreferredNameAttribute parameter found for the user directory ("
@@ -242,6 +256,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "UserPhoneNumberAttribute")) {
         userPhoneNumberAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserPhoneNumberAttribute");
+
+        userAttributesList.add(userPhoneNumberAttribute);
       } else {
         throw new ServiceUnavailableException(
             "No UserPhoneNumberAttribute parameter found for the user directory ("
@@ -252,6 +268,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "UserMobileNumberAttribute")) {
         userMobileNumberAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserMobileNumberAttribute");
+
+        userAttributesList.add(userMobileNumberAttribute);
       } else {
         throw new ServiceUnavailableException(
             "No UserMobileNumberAttribute parameter found for the user directory ("
@@ -262,6 +280,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "UserEmailAttribute")) {
         userEmailAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserEmailAttribute");
+
+        userAttributesList.add(userEmailAttribute);
       } else {
         throw new ServiceUnavailableException(
             "No UserEmailAttribute parameter found for the user directory ("
@@ -279,6 +299,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "GroupNameAttribute")) {
         groupNameAttribute =
             UserDirectoryParameter.getStringValue(parameters, "GroupNameAttribute");
+
+        groupAttributesList.add(groupNameAttribute);
       } else {
         throw new ServiceUnavailableException(
             "No GroupNameAttribute parameter found for the user directory ("
@@ -290,6 +312,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         groupMemberAttribute =
             UserDirectoryParameter.getStringValue(parameters, "GroupMemberAttribute");
 
+        groupAttributesList.add(groupMemberAttribute);
         groupMemberAttributeArray = new String[] {groupMemberAttribute};
       } else {
         throw new ServiceUnavailableException(
@@ -301,6 +324,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "GroupDescriptionAttribute")) {
         groupDescriptionAttribute =
             UserDirectoryParameter.getStringValue(parameters, "GroupDescriptionAttribute");
+
+        groupAttributesList.add(groupDescriptionAttribute);
       }
 
       if (UserDirectoryParameter.contains(parameters, "MaxFilteredUsers")) {
@@ -351,6 +376,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         supportsUserAdministration =
             UserDirectoryParameter.getBooleanValue(parameters, "SupportsUserAdministration");
       }
+
+      userAttributesArray = userAttributesList.toArray(new String[0]);
+      groupAttributesArray = groupAttributesList.toArray(new String[0]);
 
       capabilities =
           new UserDirectoryCapabilities(
@@ -425,7 +453,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         getGroupRepository().saveAndFlush(group);
       }
 
-      if (getGroupRepository().roleToGroupMappingExists(groupId, roleCode)) {
+      if (getGroupRepository().roleToGroupMappingExists(groupId, roleCode) > 0) {
         return;
       }
 
@@ -1048,6 +1076,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
       searchControls.setCountLimit(maxFilteredUsers);
+      searchControls.setReturningAttributes(userAttributesArray);
 
       List<User> users = new ArrayList<>();
 
@@ -1093,6 +1122,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(groupMemberAttributeArray);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1145,6 +1175,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(groupAttributesArray);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1189,7 +1220,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       List<String> groupNames = new ArrayList<>();
 
-      while (searchResults.hasMore() && (groupNames.size() <= maxFilteredGroups)) {
+      while (searchResults.hasMore() && (groupNames.size() < maxFilteredGroups)) {
         SearchResult searchResult = searchResults.next();
 
         Attributes attributes = searchResult.getAttributes();
@@ -1231,6 +1262,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(new String[] {groupNameAttribute});
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1276,13 +1308,23 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
       searchControls.setCountLimit(maxFilteredGroups);
+      searchControls.setReturningAttributes(groupAttributesArray);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
       List<Group> groups = new ArrayList<>();
 
-      while (searchResults.hasMore() && (groups.size() <= maxFilteredGroups)) {
-        groups.add(buildGroupFromSearchResult(searchResults.next()));
+      // TODO: Handle SizeLimitExceededException gracefully
+      try {
+        while (searchResults.hasMore() && (groups.size() < maxFilteredGroups)) {
+          groups.add(buildGroupFromSearchResult(searchResults.next()));
+        }
+      } catch (SizeLimitExceededException ex) {
+        log.error(
+            "Size limit exceeded while retrieving groups for user directory ("
+                + getUserDirectoryId()
+                + ")",
+            ex);
       }
 
       return groups;
@@ -1317,14 +1359,24 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
-      searchControls.setCountLimit(maxFilteredGroups);
+      searchControls.setCountLimit(0);
+      searchControls.setReturningAttributes(groupAttributesArray);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
       List<Group> groups = new ArrayList<>();
 
-      while (searchResults.hasMore() && (groups.size() <= maxFilteredGroups)) {
-        groups.add(buildGroupFromSearchResult(searchResults.next()));
+      // TODO: Handle SizeLimitExceededException gracefully
+      try {
+        while (searchResults.hasMore() && (groups.size() < maxFilteredGroups)) {
+          groups.add(buildGroupFromSearchResult(searchResults.next()));
+        }
+      } catch (SizeLimitExceededException ex) {
+        log.error(
+            "Size limit exceeded while retrieving groups for user directory ("
+                + getUserDirectoryId()
+                + ")",
+            ex);
       }
 
       if (sortDirection == SortDirection.ASCENDING) {
@@ -1332,6 +1384,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       } else {
         groups.sort((Group group1, Group group2) -> group2.getName().compareTo(group1.getName()));
       }
+      if (groups.size() == maxFilteredGroups)
+        groups.add(new Group("Size Limit Exceeded - there are more groups than can be displayed"));
 
       long totalGroups = groups.size();
 
@@ -1376,6 +1430,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(groupAttributesArray);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1417,6 +1472,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(groupMemberAttributeArray);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1490,6 +1546,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(groupMemberAttributeArray);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1643,6 +1700,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(new String[] {groupNameAttribute});
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1806,6 +1864,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
       searchControls.setCountLimit(maxFilteredUsers);
+      searchControls.setReturningAttributes(userAttributesArray);
 
       List<User> users = new ArrayList<>();
 
@@ -1859,6 +1918,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
       searchControls.setCountLimit(maxFilteredUsers);
+      searchControls.setReturningAttributes(userAttributesArray);
 
       // TODO: Implement sorting of users for LDAP queries -- MARCUS
 
@@ -1934,6 +1994,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(new String[] {userNameAttribute});
 
       searchResults = dirContext.search(userBaseDN, searchFilter, searchControls);
 
@@ -2445,6 +2506,12 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       environment.put(Context.SECURITY_CREDENTIALS, password);
       environment.put(Context.REFERRAL, "follow");
 
+      // Set connection and read timeouts
+      environment.put(
+          "com.sun.jndi.ldap.connect.timeout", "15000"); // 15 seconds connection timeout
+      environment.put(
+          "com.sun.jndi.ldap.read.timeout", "60000"); // 60 seconds read timeout (search timeout)
+
       return new InitialDirContext(environment);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -2516,6 +2583,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(userAttributesArray);
 
       // First search for a non-shared user
       searchResults = dirContext.search(userBaseDN, searchFilter, searchControls);
@@ -2524,15 +2592,15 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         users.add(buildUserFromSearchResult(searchResults.next()));
       }
 
-      if (users.size() == 0) {
+      if (users.isEmpty()) {
         return null;
       } else if (users.size() == 1) {
-        return users.get(0);
+        return users.getFirst();
       } else {
         StringBuilder buffer = new StringBuilder();
 
         for (User user : users) {
-          if (buffer.length() > 0) {
+          if (!buffer.isEmpty()) {
             buffer.append(" ");
           }
 
@@ -2574,10 +2642,10 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         userDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));
       }
 
-      if (userDNs.size() == 0) {
+      if (userDNs.isEmpty()) {
         return null;
       } else if (userDNs.size() == 1) {
-        return userDNs.get(0);
+        return userDNs.getFirst();
       } else {
         StringBuilder buffer = new StringBuilder();
 

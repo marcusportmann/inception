@@ -461,8 +461,8 @@
       <column name="status" value="active"/>
       <column name="name" value="Jonas Lang"/>
       <column name="preferred_name" value="Jonas"/>
-      <column name="phone_number" value=""/>
-      <column name="mobile_number" value=""/>
+      <column name="phone_number" value="+27115551234"/>
+      <column name="mobile_number" value="+27835551234"/>
       <column name="email" value="jonas@demo.com"/>
       <column name="encoded_password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
@@ -1488,8 +1488,8 @@
       <column name="status" value="active"/>
       <column name="name" value="Jonas Lang"/>
       <column name="preferred_name" value="Jonas"/>
-      <column name="phone_number" value=""/>
-      <column name="mobile_number" value=""/>
+      <column name="phone_number" value="+27115551234"/>
+      <column name="mobile_number" value="+27835551234"/>
       <column name="email" value="jonas@demo.com"/>
       <column name="encoded_password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>

@@ -255,13 +255,11 @@ public interface GroupRepository
    *
    * @param groupId the ID for the group
    * @param roleCode the code for the role
-   * @return <b>true</b> if the role to group mapping exists or <b>false</b> otherwise
+   * @return <b>1</b> if the role to group mapping exists or <b>0</b> otherwise
    */
   @Query(
       value =
-          "select (count(role_code) > 0) from security_role_to_group_map where "
-              + "role_code = :roleCode and group_id = :groupId",
+          "select case when count(1) > 0 then 1 else 0 end as row_exists from security_role_to_group_map where role_code = :roleCode and group_id = :groupId",
       nativeQuery = true)
-  boolean roleToGroupMappingExists(
-      @Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
+  int roleToGroupMappingExists(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
 }
