@@ -1935,7 +1935,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
 
-      searchResults = dirContext.search(baseDN, searchFilter, searchControls);
+      searchResults = dirContext.search(userBaseDN, searchFilter, searchControls);
 
       return searchResults.hasMore();
     } catch (Throwable e) {
@@ -2518,7 +2518,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setReturningObjFlag(false);
 
       // First search for a non-shared user
-      searchResults = dirContext.search(baseDN, searchFilter, searchControls);
+      searchResults = dirContext.search(userBaseDN, searchFilter, searchControls);
 
       while (searchResults.hasMore()) {
         users.add(buildUserFromSearchResult(searchResults.next()));
@@ -2568,7 +2568,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setReturningObjFlag(false);
       searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
 
-      searchResults = dirContext.search(baseDN, searchFilter, searchControls);
+      searchResults = dirContext.search(userBaseDN, searchFilter, searchControls);
 
       while (searchResults.hasMore()) {
         userDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));

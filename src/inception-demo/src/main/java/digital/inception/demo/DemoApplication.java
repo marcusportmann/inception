@@ -92,6 +92,8 @@ public class DemoApplication extends Application {
    * @param args the command-line arguments
    */
   public static void main(String[] args) {
+    System.setProperty("com.sun.jndi.ldap.object.disableEndpointIdentification", "true");
+
     SpringApplication.run(DemoApplication.class, args);
   }
 
