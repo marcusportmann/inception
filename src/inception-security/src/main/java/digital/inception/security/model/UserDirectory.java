@@ -178,7 +178,7 @@ public class UserDirectory implements Serializable {
       buffer.append("<name>").append(parameter.getName()).append("</name>");
       buffer
           .append("<value>")
-          .append(StringUtils.hasText(parameter.getValue()) ? parameter.getValue() : "")
+          .append(StringUtils.hasText(parameter.getValue()) ? escapeXml(parameter.getValue()) : "")
           .append("</value>");
       buffer.append("</parameter>");
     }
@@ -333,5 +333,17 @@ public class UserDirectory implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  private String escapeXml(String input) {
+    if (input == null) {
+      return null;
+    }
+    return input
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&apos;");
   }
 }
