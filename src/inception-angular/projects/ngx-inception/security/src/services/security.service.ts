@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
@@ -98,27 +98,8 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
         groupName) + '/members', groupMember, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
-        return throwError(() => new UserNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to add the group member to the group.',
-          httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to add the group member to the group.')));
   }
 
   /**
@@ -137,26 +118,8 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
         groupName) + '/roles', groupRole, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, RoleNotFoundError.TYPE)) {
-        return throwError(() => new RoleNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to add the role to the group.',
-        httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to add the role to the group.')));
   }
 
   /**
@@ -174,26 +137,8 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directories',
       tenantUserDirectory, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
-        return throwError(() => new TenantNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
-        UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to add the user directory to the tenant.',
-          httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204), catchError(
+      SecurityService.handleApiError('Failed to add the user directory to the tenant.')));
   }
 
   /**
@@ -218,24 +163,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + encodeURIComponent(
         username) + '/password', passwordChange, {
         observe: 'response'
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
-        return throwError(() => new UserNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError(
-        'Failed to administratively change the password for the user.', httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204), catchError(SecurityService.handleApiError(
+      'Failed to administratively change the password for the user.')));
   }
 
   /**
@@ -254,27 +183,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/users/' + encodeURIComponent(username) + '/password',
       passwordChange, {
         observe: 'response'
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, AuthenticationFailedError.TYPE)) {
-        return throwError(() => new AuthenticationFailedError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingPasswordError.TYPE)) {
-        return throwError(() => new ExistingPasswordError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserLockedError.TYPE)) {
-        return throwError(() => new UserLockedError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to change the password for the user.',
-          httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to change the password for the user.')));
   }
 
   /**
@@ -289,24 +199,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + group.userDirectoryId + '/groups',
       group, {
         observe: 'response'
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateGroupError.TYPE)) {
-        return throwError(() => new DuplicateGroupError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to create the group.', httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the group.')));
   }
 
   /**
@@ -322,26 +216,8 @@ export class SecurityService {
     return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/security/policies', policy, {
       params: httpParams,
       observe: 'response'
-    }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicatePolicyError.TYPE)) {
-        return throwError(() => new DuplicatePolicyError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, InvalidPolicyDataError.TYPE)) {
-        return throwError(() => new InvalidPolicyDataError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyDataMismatchError.TYPE)) {
-        return throwError(() => new PolicyDataMismatchError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to create the policy.', httpErrorResponse));
-    }));
+    }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the policy.')));
   }
 
   /**
@@ -361,22 +237,8 @@ export class SecurityService {
     return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/security/tenants', tenant, {
       params: httpParams,
       observe: 'response'
-    }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateTenantError.TYPE)) {
-        return throwError(() => new DuplicateTenantError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to create the tenant.', httpErrorResponse));
-    }));
+    }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the tenant.')));
   }
 
   /**
@@ -400,24 +262,8 @@ export class SecurityService {
       user, {
         params: httpParams,
         observe: 'response'
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateUserError.TYPE)) {
-        return throwError(() => new DuplicateUserError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to create the user.', httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the user.')));
   }
 
   /**
@@ -430,22 +276,8 @@ export class SecurityService {
   createUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
     return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/security/user-directories',
       userDirectory, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateUserDirectoryError.TYPE)) {
-        return throwError(() => new DuplicateUserDirectoryError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to create the user directory.',
-        httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the user directory.')));
   }
 
   /**
@@ -460,27 +292,8 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
         groupName), {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
-        ExistingGroupMembersError.TYPE)) {
-        return throwError(() => new ExistingGroupMembersError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to delete the group.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the group.')));
   }
 
   /**
@@ -493,22 +306,8 @@ export class SecurityService {
   deletePolicy(policyId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       this.config.apiUrlPrefix + '/security/policies/' + policyId, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyNotFoundError.TYPE)) {
-        return throwError(() => new PolicyNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to delete the policy.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the policy.')));
   }
 
   /**
@@ -521,22 +320,8 @@ export class SecurityService {
   deleteTenant(tenantId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       this.config.apiUrlPrefix + '/security/tenants/' + tenantId, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
-        return throwError(() => new TenantNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to delete the tenant.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the tenant.')));
   }
 
   /**
@@ -549,22 +334,8 @@ export class SecurityService {
   deleteToken(tokenId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TokenNotFoundError.TYPE)) {
-        return throwError(() => new TokenNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to delete the token.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the token.')));
   }
 
   /**
@@ -579,24 +350,8 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + encodeURIComponent(
         username), {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
-        return throwError(() => new UserNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to delete the user.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the user.')));
   }
 
   /**
@@ -610,27 +365,8 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingGroupsError.TYPE)) {
-        return throwError(() => new ExistingGroupsError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingUsersError.TYPE)) {
-        return throwError(() => new ExistingUsersError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
-        UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to delete the user directory.',
-        httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the user directory.')));
   }
 
   /**
@@ -642,20 +378,8 @@ export class SecurityService {
    */
   generateToken(generateTokenRequest: GenerateTokenRequest): Observable<Token> {
     return this.httpClient.post<Token>(this.config.apiUrlPrefix + '/security/generate-token',
-      generateTokenRequest).pipe(map((token: Token) => {
-      return token;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to generate the token.', httpErrorResponse));
-    }));
+      generateTokenRequest).pipe(
+      catchError(SecurityService.handleApiError('Failed to generate the token.')));
   }
 
   /**
@@ -669,24 +393,8 @@ export class SecurityService {
   getGroup(userDirectoryId: string, groupName: string): Observable<Group> {
     return this.httpClient.get<Group>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
-        groupName), {reportProgress: true}).pipe(map((group: Group) => {
-      return group;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the group.', httpErrorResponse));
-    }));
+        groupName), {reportProgress: true}).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the group.')));
   }
 
   /**
@@ -700,22 +408,7 @@ export class SecurityService {
     return this.httpClient.get<string[]>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/group-names', {
         reportProgress: true,
-      }).pipe(map((groupNames: string[]) => {
-      return groupNames;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the group names.',
-        httpErrorResponse));
-    }));
+      }).pipe(catchError(SecurityService.handleApiError('Failed to retrieve the group names.')));
   }
 
   /**
@@ -730,25 +423,8 @@ export class SecurityService {
     return this.httpClient.get<string[]>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + encodeURIComponent(
         username) + '/group-names', {reportProgress: true})
-    .pipe(map((groupNames: string[]) => {
-      return groupNames;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
-        return throwError(() => new UserNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the group names for the user.',
-          httpErrorResponse));
-    }));
+    .pipe(catchError(
+      SecurityService.handleApiError('Failed to retrieve the group names for the user.')));
   }
 
   /**
@@ -787,22 +463,7 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups', {
         params,
         reportProgress: true,
-      }).pipe(map((groups: Groups) => {
-      return groups;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the groups.', httpErrorResponse));
-    }));
+      }).pipe(catchError(SecurityService.handleApiError('Failed to retrieve the groups.')));
   }
 
   /**
@@ -844,25 +505,8 @@ export class SecurityService {
         groupName) + '/members', {
         params,
         reportProgress: true,
-      }).pipe(map((groupMembers: GroupMembers) => {
-      return groupMembers;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the members for the group.',
-          httpErrorResponse));
-    }));
+      }).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the members for the group.')));
   }
 
   /**
@@ -873,20 +517,7 @@ export class SecurityService {
   getPolicies(): Observable<Policy[]> {
     return this.httpClient.get<Policy[]>(this.config.apiUrlPrefix + '/security/policies', {
       reportProgress: true,
-    }).pipe(map((policies: Policy[]) => {
-      return policies;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the policies.', httpErrorResponse));
-    }));
+    }).pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policies.')));
   }
 
   /**
@@ -899,22 +530,7 @@ export class SecurityService {
   getPolicy(policyId: string): Observable<Policy> {
     return this.httpClient.get<Policy>(this.config.apiUrlPrefix + '/security/policies/' + policyId,
       {reportProgress: true})
-    .pipe(map((policy: Policy) => {
-      return policy;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyNotFoundError.TYPE)) {
-        return throwError(() => new PolicyNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the policy.', httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policy.')));
   }
 
   /**
@@ -927,22 +543,8 @@ export class SecurityService {
   getPolicyName(policyId: string): Observable<string> {
     return this.httpClient.get<string>(
       this.config.apiUrlPrefix + '/security/policies/' + policyId + '/name',
-      {reportProgress: true}).pipe(map((policyName: string) => {
-      return policyName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyNotFoundError.TYPE)) {
-        return throwError(() => new PolicyNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the policy name.',
-        httpErrorResponse));
-    }));
+      {reportProgress: true}).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the policy name.')));
   }
 
   /**
@@ -986,21 +588,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/policy-summaries', {
         params,
         reportProgress: true,
-      }).pipe(map((policySummaries: PolicySummaries) => {
-      return policySummaries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the policy summaries.',
-          httpErrorResponse));
-    }));
+      }).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the policy summaries.')));
   }
 
   /**
@@ -1016,25 +605,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
         groupName) + '/role-codes', {
         reportProgress: true,
-      }).pipe(map((roleCodes: string[]) => {
-      return roleCodes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the role codes for the group.',
-          httpErrorResponse));
-    }));
+      }).pipe(catchError(
+      SecurityService.handleApiError('Failed to retrieve the role codes for the group.')));
   }
 
   /**
@@ -1045,20 +617,7 @@ export class SecurityService {
   getRoles(): Observable<Role[]> {
     return this.httpClient.get<Role[]>(this.config.apiUrlPrefix + '/security/roles', {
       reportProgress: true,
-    }).pipe(map((roles: Role[]) => {
-      return roles;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the roles.', httpErrorResponse));
-    }));
+    }).pipe(catchError(SecurityService.handleApiError('Failed to retrieve the roles.')));
   }
 
   /**
@@ -1074,25 +633,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
         groupName) + '/roles', {
         reportProgress: true,
-      }).pipe(map((groupRoles: GroupRole[]) => {
-      return groupRoles;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the roles for the group.',
-          httpErrorResponse));
-    }));
+      }).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the roles for the group.')));
   }
 
   /**
@@ -1105,22 +647,7 @@ export class SecurityService {
   getTenant(tenantId: string): Observable<Tenant> {
     return this.httpClient.get<Tenant>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId,
       {reportProgress: true})
-    .pipe(map((tenant: Tenant) => {
-      return tenant;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
-        return throwError(() => new TenantNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the tenant.', httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenant.')));
   }
 
   /**
@@ -1133,22 +660,8 @@ export class SecurityService {
   getTenantName(tenantId: string): Observable<string> {
     return this.httpClient.get<string>(
       this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/name',
-      {reportProgress: true}).pipe(map((tenantName: string) => {
-      return tenantName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
-        return throwError(() => new TenantNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the tenant name.',
-        httpErrorResponse));
-    }));
+      {reportProgress: true}).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the tenant name.')));
   }
 
   /**
@@ -1185,20 +698,7 @@ export class SecurityService {
     return this.httpClient.get<Tenants>(this.config.apiUrlPrefix + '/security/tenants', {
       params,
       reportProgress: true,
-    }).pipe(map((tenants: Tenants) => {
-      return tenants;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the tenants.', httpErrorResponse));
-    }));
+    }).pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenants.')));
   }
 
   /**
@@ -1212,22 +712,8 @@ export class SecurityService {
     return this.httpClient.get<Tenant[]>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/tenants',
       {reportProgress: true})
-    .pipe(map((tenants: Tenant[]) => {
-      return tenants;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError(
-        'Failed to retrieve the tenants associated with the user directory.', httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError(
+      'Failed to retrieve the tenants associated with the user directory.')));
   }
 
   /**
@@ -1240,22 +726,7 @@ export class SecurityService {
   getToken(tokenId: string): Observable<Token> {
     return this.httpClient.get<Token>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId,
       {reportProgress: true})
-    .pipe(map((token: Token) => {
-      return token;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TokenNotFoundError.TYPE)) {
-        return throwError(() => new TokenNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the token.', httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the token.')));
   }
 
   /**
@@ -1268,22 +739,8 @@ export class SecurityService {
   getTokenName(tokenId: string): Observable<string> {
     return this.httpClient.get<string>(
       this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/name',
-      {reportProgress: true}).pipe(map((tokenName: string) => {
-      return tokenName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TokenNotFoundError.TYPE)) {
-        return throwError(() => new TokenNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the token name.', httpErrorResponse));
-    }));
+      {reportProgress: true}).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the token name.')));
   }
 
   /**
@@ -1332,20 +789,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/token-summaries', {
         params,
         reportProgress: true,
-      }).pipe(map((tokenSummaries: TokenSummaries) => {
-      return tokenSummaries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the token summaries.',
-        httpErrorResponse));
-    }));
+      }).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the token summaries.')));
   }
 
   /**
@@ -1359,24 +804,8 @@ export class SecurityService {
   @ResponseConverter getUser(userDirectoryId: string, username: string): Observable<User> {
     return this.httpClient.get<User>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + encodeURIComponent(
-        username), {reportProgress: true}).pipe(map((user: User) => {
-      return user;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
-        return throwError(() => new UserNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the user.', httpErrorResponse));
-    }));
+        username), {reportProgress: true}).pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the user.')));
   }
 
   /**
@@ -1390,22 +819,7 @@ export class SecurityService {
     return this.httpClient.get<UserDirectory>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId,
       {reportProgress: true})
-    .pipe(map((userDirectory: UserDirectory) => {
-      return userDirectory;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the user directory.',
-        httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the user directory.')));
   }
 
   /**
@@ -1419,22 +833,8 @@ export class SecurityService {
     return this.httpClient.get<UserDirectoryCapabilities>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/capabilities',
       {reportProgress: true})
-    .pipe(map((capabilities: UserDirectoryCapabilities) => {
-      return capabilities;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError(
-        'Failed to retrieve the capabilities for the user directory.', httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError(
+      'Failed to retrieve the capabilities for the user directory.')));
   }
 
   /**
@@ -1448,23 +848,8 @@ export class SecurityService {
     return this.httpClient.get<string>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/name',
       {reportProgress: true})
-    .pipe(map((userDirectoryName: string) => {
-      return userDirectoryName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the user directory name.',
-          httpErrorResponse));
-    }));
+    .pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the user directory name.')));
   }
 
   /**
@@ -1502,21 +887,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directory-summaries', {
         params,
         reportProgress: true,
-      }).pipe(map((userDirectorySummaries: UserDirectorySummaries) => {
-      return userDirectorySummaries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the user directory summaries.',
-          httpErrorResponse));
-    }));
+      }).pipe(catchError(
+      SecurityService.handleApiError('Failed to retrieve the user directory summaries.')));
   }
 
   /**
@@ -1530,23 +902,8 @@ export class SecurityService {
     return this.httpClient.get<UserDirectorySummary[]>(
       this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directory-summaries',
       {reportProgress: true})
-    .pipe(map((codeCategories: UserDirectorySummary[]) => {
-      return codeCategories;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
-        return throwError(() => new TenantNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError(
-        'Failed to retrieve the summaries for the user directories associated with the tenant.',
-        httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError(
+      'Failed to retrieve the summaries for the user directories associated with the tenant.')));
   }
 
   /**
@@ -1560,22 +917,8 @@ export class SecurityService {
     return this.httpClient.get<UserDirectoryType>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/user-directory-type',
       {reportProgress: true})
-    .pipe(map((userDirectoryType: UserDirectoryType) => {
-      return userDirectoryType;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError(
-        'Failed to retrieve the user directory type for the user directory.', httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError(
+      'Failed to retrieve the user directory type for the user directory.')));
   }
 
   /**
@@ -1586,21 +929,8 @@ export class SecurityService {
   getUserDirectoryTypes(): Observable<UserDirectoryType[]> {
     return this.httpClient.get<UserDirectoryType[]>(
       this.config.apiUrlPrefix + '/security/user-directory-types', {reportProgress: true})
-    .pipe(map((userDirectoryTypes: UserDirectoryType[]) => {
-      return userDirectoryTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the user directory types.',
-          httpErrorResponse));
-    }));
+    .pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the user directory types.')));
   }
 
   /**
@@ -1615,25 +945,7 @@ export class SecurityService {
     return this.httpClient.get<string>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + encodeURIComponent(
         username) + '/name', {reportProgress: true})
-    .pipe(map((userName: string) => {
-      return userName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
-        return throwError(() => new UserNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the name of the user.',
-          httpErrorResponse));
-    }));
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the name of the user.')));
   }
 
   /**
@@ -1678,22 +990,7 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users', {
         params,
         reportProgress: true,
-      }).pipe(map((users: Users) => {
-      return users;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the users.', httpErrorResponse));
-    }));
+      }).pipe(catchError(SecurityService.handleApiError('Failed to retrieve the users.')));
   }
 
   /**
@@ -1713,20 +1010,8 @@ export class SecurityService {
         username) + '/reset-password', null, {
         observe: 'response',
         params,
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to initiate the password reset.',
-        httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to initiate the password reset.')));
   }
 
   /**
@@ -1740,22 +1025,8 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/reinstate', null,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TokenNotFoundError.TYPE)) {
-        return throwError(() => new TokenNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to reinstate the token.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to reinstate the token.')));
   }
 
   /**
@@ -1774,28 +1045,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
         groupName) + '/members/' + memberType + '/' + encodeURIComponent(memberName),
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
-        GroupMemberNotFoundError.TYPE)) {
-        return throwError(() => new GroupMemberNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to remove the group member from the group.',
-          httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204), catchError(
+      SecurityService.handleApiError('Failed to remove the group member from the group.')));
   }
 
   /**
@@ -1812,27 +1063,8 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' + encodeURIComponent(
         groupName) + '/roles/' + roleCode, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupRoleNotFoundError.TYPE)) {
-        return throwError(() => new GroupRoleNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to remove the role from the group.',
-          httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to remove the role from the group.')));
   }
 
   /**
@@ -1848,26 +1080,8 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directories/' + userDirectoryId,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
-        return throwError(() => new TenantNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
-        TenantUserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new TenantUserDirectoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to remove the user directory from the tenant.',
-          httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204), catchError(
+      SecurityService.handleApiError('Failed to remove the user directory from the tenant.')));
   }
 
   /**
@@ -1887,23 +1101,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/users/' + encodeURIComponent(username) + '/password',
       passwordChange, {
         observe: 'response'
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, InvalidSecurityCodeError.TYPE)) {
-        return throwError(() => new InvalidSecurityCodeError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to reset the password for the user.',
-          httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to reset the password for the user.')));
   }
 
   /**
@@ -1917,22 +1116,8 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/revoke', null,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TokenNotFoundError.TYPE)) {
-        return throwError(() => new TokenNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to revoke the token.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to revoke the token.')));
   }
 
   /**
@@ -1947,24 +1132,8 @@ export class SecurityService {
       this.config.apiUrlPrefix + '/security/user-directories/' + group.userDirectoryId + '/groups/' + encodeURIComponent(
         group.name), group, {
         observe: 'response'
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
-        return throwError(() => new GroupNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to update the group.', httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the group.')));
   }
 
   /**
@@ -1977,26 +1146,8 @@ export class SecurityService {
   updatePolicy(policy: Policy): Observable<boolean> {
     return this.httpClient.put<boolean>(
       this.config.apiUrlPrefix + '/security/policies/' + policy.id, policy, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyNotFoundError.TYPE)) {
-        return throwError(() => new PolicyNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, InvalidPolicyDataError.TYPE)) {
-        return throwError(() => new InvalidPolicyDataError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyDataMismatchError.TYPE)) {
-        return throwError(() => new PolicyDataMismatchError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to update the policy.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the policy.')));
   }
 
   /**
@@ -2009,22 +1160,8 @@ export class SecurityService {
   updateTenant(tenant: Tenant): Observable<boolean> {
     return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/security/tenants/' + tenant.id,
       tenant, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
-        return throwError(() => new TenantNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to update the tenant.', httpErrorResponse));
-    }));
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the tenant.')));
   }
 
   /**
@@ -2048,24 +1185,8 @@ export class SecurityService {
         user.username), user, {
         params: httpParams,
         observe: 'response'
-      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
-        return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
-        return throwError(() => new UserNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to update the user.', httpErrorResponse));
-    }));
+      }).pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the user.')));
   }
 
   /**
@@ -2079,11 +1200,66 @@ export class SecurityService {
     return this.httpClient.put<boolean>(
       this.config.apiUrlPrefix + '/security/user-directories/' + userDirectory.id, userDirectory,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+    .pipe(map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the user directory.')));
+  }
+
+  private static handleApiError(defaultMessage: string) {
+    return (httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, AuthenticationFailedError.TYPE)) {
+        return throwError(() => new AuthenticationFailedError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateGroupError.TYPE)) {
+        return throwError(() => new DuplicateGroupError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicatePolicyError.TYPE)) {
+        return throwError(() => new DuplicatePolicyError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateTenantError.TYPE)) {
+        return throwError(() => new DuplicateTenantError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
+        DuplicateUserDirectoryError.TYPE)) {
+        return throwError(() => new DuplicateUserDirectoryError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateUserError.TYPE)) {
+        return throwError(() => new DuplicateUserError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
+        ExistingGroupMembersError.TYPE)) {
+        return throwError(() => new ExistingGroupMembersError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingGroupsError.TYPE)) {
+        return throwError(() => new ExistingGroupsError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingPasswordError.TYPE)) {
+        return throwError(() => new ExistingPasswordError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingUsersError.TYPE)) {
+        return throwError(() => new ExistingUsersError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
+        GroupMemberNotFoundError.TYPE)) {
+        return throwError(() => new GroupMemberNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(() => new GroupNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupRoleNotFoundError.TYPE)) {
+        return throwError(() => new GroupRoleNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, InvalidPolicyDataError.TYPE)) {
+        return throwError(() => new InvalidPolicyDataError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
+        InvalidSecurityCodeError.TYPE)) {
+        return throwError(() => new InvalidSecurityCodeError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyDataMismatchError.TYPE)) {
+        return throwError(() => new PolicyDataMismatchError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PolicyNotFoundError.TYPE)) {
+        return throwError(() => new PolicyNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, RoleNotFoundError.TYPE)) {
+        return throwError(() => new RoleNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(() => new TenantNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
+        TenantUserDirectoryNotFoundError.TYPE)) {
+        return throwError(() => new TenantUserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, TokenNotFoundError.TYPE)) {
+        return throwError(() => new TokenNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
+        UserDirectoryNotFoundError.TYPE)) {
         return throwError(() => new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserLockedError.TYPE)) {
+        return throwError(() => new UserLockedError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(() => new UserNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
         return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -2092,10 +1268,17 @@ export class SecurityService {
         return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(() => new ServiceUnavailableError('Failed to update the user directory.',
-        httpErrorResponse));
-    }));
+      return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
+    };
   }
 
-
+  /**
+   * Helper method to check if the response status is 204.
+   *
+   * @param httpResponse The HTTP response.
+   * @return True if the status is 204, otherwise false.
+   */
+  private static isResponse204(httpResponse: HttpResponse<boolean>): boolean {
+    return httpResponse.status === 204;
+  }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
@@ -53,7 +53,7 @@ export class MailService {
   static getMailTemplateContentTypeDescription(mailTemplateContentType: MailTemplateContentType): string {
     switch (mailTemplateContentType) {
       case MailTemplateContentType.HTML:
-        return $localize`:@@mail_mail_template_content_type_text:HTML`;
+        return $localize`:@@mail_mail_template_content_type_html:HTML`;
       case MailTemplateContentType.Text:
         return $localize`:@@mail_mail_template_content_type_text:Text`;
       default:
@@ -69,25 +69,11 @@ export class MailService {
    * @return True if the mail template was created successfully or false otherwise.
    */
   createMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/mail/mail-templates',
-      mailTemplate,
+    return this.httpClient
+    .post<boolean>(`${this.config.apiUrlPrefix}/mail/mail-templates`, mailTemplate,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateMailTemplateError.TYPE)) {
-        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to create the mail template.',
-        httpErrorResponse));
-    }));
+    .pipe(map(MailService.isResponse204), catchError(
+      (error) => MailService.handleApiError(error, 'Failed to create the mail template.')));
   }
 
   /**
@@ -98,25 +84,12 @@ export class MailService {
    * @return True if the mail template was deleted or false otherwise.
    */
   deleteMailTemplate(mailTemplateId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(
-      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(mailTemplateId),
+    return this.httpClient
+    .delete<boolean>(
+      `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplateId)}`,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to delete the mail template.',
-        httpErrorResponse));
-    }));
+    .pipe(map(MailService.isResponse204), catchError(
+      (error) => MailService.handleApiError(error, 'Failed to delete the mail template.')));
   }
 
   /**
@@ -127,25 +100,12 @@ export class MailService {
    * @return The mail template.
    */
   getMailTemplate(mailTemplateId: string): Observable<MailTemplate> {
-    return this.httpClient.get<MailTemplate>(
-      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(mailTemplateId),
+    return this.httpClient
+    .get<MailTemplate>(
+      `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplateId)}`,
       {reportProgress: true})
-    .pipe(map((mailTemplate: MailTemplate) => {
-      return mailTemplate;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mail template.',
-        httpErrorResponse));
-    }));
+    .pipe(catchError(
+      (error) => MailService.handleApiError(error, 'Failed to retrieve the mail template.')));
   }
 
   /**
@@ -156,27 +116,12 @@ export class MailService {
    * @return The name of the mail template.
    */
   getMailTemplateName(mailTemplateId: string): Observable<string> {
-    return this.httpClient.get<string>(
-      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(
-        mailTemplateId) + '/name', {
-        reportProgress: true,
-      }).pipe(map((mailTemplateName: string) => {
-      return mailTemplateName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the mail template name.',
-          httpErrorResponse));
-    }));
+    return this.httpClient
+    .get<string>(
+      `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplateId)}/name`,
+      {reportProgress: true})
+    .pipe(catchError(
+      (error) => MailService.handleApiError(error, 'Failed to retrieve the mail template name.')));
   }
 
   /**
@@ -185,21 +130,11 @@ export class MailService {
    * @return The summaries for all the mail templates.
    */
   getMailTemplateSummaries(): Observable<MailTemplateSummary[]> {
-    return this.httpClient.get<MailTemplateSummary[]>(
-      this.config.apiUrlPrefix + '/mail/mail-template-summaries',
+    return this.httpClient
+    .get<MailTemplateSummary[]>(`${this.config.apiUrlPrefix}/mail/mail-template-summaries`,
       {reportProgress: true})
-    .pipe(map((mailTemplateSummaries: MailTemplateSummary[]) => {
-      return mailTemplateSummaries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError(
-        'Failed to retrieve the summaries for the mail templates.', httpErrorResponse));
-    }));
+    .pipe(catchError((error) => MailService.handleApiError(error,
+      'Failed to retrieve the summaries for the mail templates.')));
   }
 
   /**
@@ -208,49 +143,46 @@ export class MailService {
    * @return The mail templates.
    */
   getMailTemplates(): Observable<MailTemplate[]> {
-    return this.httpClient.get<MailTemplate[]>(this.config.apiUrlPrefix + '/mail/mail-templates',
-      {reportProgress: true})
-    .pipe(map((mailTemplates: MailTemplate[]) => {
-      return mailTemplates;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mail templates.',
-        httpErrorResponse));
-    }));
+    return this.httpClient
+    .get<MailTemplate[]>(`${this.config.apiUrlPrefix}/mail/mail-templates`, {reportProgress: true})
+    .pipe(catchError(
+      (error) => MailService.handleApiError(error, 'Failed to retrieve the mail templates.')));
   }
 
   /**
    * Update the mail template.
    *
-   * @param mailTemplate The mail template
+   * @param mailTemplate The mail template.
    *
    * @return True if the mail template was updated successfully or false otherwise.
    */
   updateMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
-    return this.httpClient.put<boolean>(
-      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(mailTemplate.id),
-      mailTemplate,
-      {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
+    return this.httpClient
+    .put<boolean>(
+      `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplate.id)}`,
+      mailTemplate, {observe: 'response'})
+    .pipe(map(MailService.isResponse204), catchError(
+      (error) => MailService.handleApiError(error, 'Failed to update the mail template.')));
+  }
 
-      return throwError(() => new ServiceUnavailableError('Failed to update the mail template.',
-        httpErrorResponse));
-    }));
+  private static handleApiError(httpErrorResponse: HttpErrorResponse,
+                                defaultMessage: string): Observable<never> {
+    if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateMailTemplateError.TYPE)) {
+      return throwError(() => new DuplicateMailTemplateError(httpErrorResponse));
+    } else if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
+      return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
+    } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+      return throwError(() => new AccessDeniedError(httpErrorResponse));
+    } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+      return throwError(() => new CommunicationError(httpErrorResponse));
+    } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+      return throwError(() => new InvalidArgumentError(httpErrorResponse));
+    }
+
+    return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
+  }
+
+  private static isResponse204(httpResponse: HttpResponse<boolean>): boolean {
+    return httpResponse.status === 204;
   }
 }

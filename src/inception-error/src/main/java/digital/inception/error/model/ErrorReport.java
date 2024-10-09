@@ -82,7 +82,7 @@ import java.util.UUID;
 public class ErrorReport implements Serializable {
 
   /** The maximum size of the error report detail. */
-  public static final int MAX_DETAIL_SIZE = 102400;
+  public static final int MAX_DETAIL_SIZE = 1024000;
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -140,7 +140,7 @@ public class ErrorReport implements Serializable {
   @Schema(description = "The error detail")
   @JsonProperty
   @XmlElement(name = "Detail")
-  @Size(max = 102400)
+  @Size(max = 1024000)
   @Column(name = "detail")
   private String detail;
 

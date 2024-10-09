@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
@@ -28,6 +28,7 @@ import {CodeCategorySummary} from './code-category-summary';
 import {
   CodeCategoryNotFoundError, CodeNotFoundError, DuplicateCodeCategoryError, DuplicateCodeError
 } from './codes.service.errors';
+
 
 /**
  * The Codes Service implementation.
@@ -59,27 +60,10 @@ export class CodesService {
    */
   createCode(code: Code): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(
-        code.codeCategoryId) + '/codes', code,
-      {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
-        return throwError(() => new CodeCategoryNotFoundError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateCodeError.TYPE)) {
-        return throwError(() => new DuplicateCodeError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to create the code.', httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(
+        code.codeCategoryId)}/codes`, code, {observe: 'response'})
+    .pipe(map(CodesService.isResponse204),
+      catchError((error) => CodesService.handleApiError(error, 'Failed to create the code.')));
   }
 
   /**
@@ -90,25 +74,10 @@ export class CodesService {
    * @return True if the code category was created successfully or false otherwise.
    */
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/codes/code-categories',
-      codeCategory,
-      {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateCodeCategoryError.TYPE)) {
-        return throwError(() => new DuplicateCodeCategoryError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to create the code category.',
-        httpErrorResponse));
-    }));
+    return this.httpClient.post<boolean>(`${this.config.apiUrlPrefix}/codes/code-categories`,
+      codeCategory, {observe: 'response'})
+    .pipe(map(CodesService.isResponse204), catchError(
+      (error) => CodesService.handleApiError(error, 'Failed to create the code category.')));
   }
 
   /**
@@ -121,25 +90,10 @@ export class CodesService {
    */
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(
-        codeCategoryId) + '/codes/' +
-      encodeURIComponent(codeId), {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
-        return throwError(() => new CodeNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to delete the code.', httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(
+        codeCategoryId)}/codes/${encodeURIComponent(codeId)}`, {observe: 'response'})
+    .pipe(map(CodesService.isResponse204),
+      catchError((error) => CodesService.handleApiError(error, 'Failed to delete the code.')));
   }
 
   /**
@@ -151,24 +105,10 @@ export class CodesService {
    */
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId),
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(codeCategoryId)}`,
       {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
-        return throwError(() => new CodeCategoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to delete the code category.',
-        httpErrorResponse));
-    }));
+    .pipe(map(CodesService.isResponse204), catchError(
+      (error) => CodesService.handleApiError(error, 'Failed to delete the code category.')));
   }
 
   /**
@@ -181,24 +121,10 @@ export class CodesService {
    */
   getCode(codeCategoryId: string, codeId: string): Observable<Code> {
     return this.httpClient.get<Code>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(
-        codeCategoryId) + '/codes/' +
-      encodeURIComponent(codeId), {reportProgress: true}).pipe(map((code: Code) => {
-      return code;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
-        return throwError(() => new CodeNotFoundError(httpErrorResponse))
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the code.', httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(
+        codeCategoryId)}/codes/${encodeURIComponent(codeId)}`, {reportProgress: true})
+    .pipe(
+      catchError((error) => CodesService.handleApiError(error, 'Failed to retrieve the code.')));
   }
 
   /**
@@ -206,22 +132,11 @@ export class CodesService {
    *
    * @return The code categories.
    */
-  @ResponseConverter
-  getCodeCategories(): Observable<CodeCategory[]> {
-    return this.httpClient.get<CodeCategory[]>(this.config.apiUrlPrefix + '/codes/code-categories',
+  @ResponseConverter getCodeCategories(): Observable<CodeCategory[]> {
+    return this.httpClient.get<CodeCategory[]>(`${this.config.apiUrlPrefix}/codes/code-categories`,
       {reportProgress: true})
-    .pipe(map((codeCategories: CodeCategory[]) => {
-      return codeCategories;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the code categories.',
-        httpErrorResponse));
-    }));
+    .pipe(catchError(
+      (error) => CodesService.handleApiError(error, 'Failed to retrieve the code categories.')));
   }
 
   /**
@@ -231,27 +146,12 @@ export class CodesService {
    *
    * @return The code category.
    */
-  @ResponseConverter
-  getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
+  @ResponseConverter getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
     return this.httpClient.get<CodeCategory>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId),
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(codeCategoryId)}`,
       {reportProgress: true})
-    .pipe(map((codeCategory: CodeCategory) => {
-      return codeCategory;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
-        return throwError(() => new CodeCategoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the code category.',
-        httpErrorResponse));
-    }));
+    .pipe(catchError(
+      (error) => CodesService.handleApiError(error, 'Failed to retrieve the code category.')));
   }
 
   /**
@@ -263,26 +163,10 @@ export class CodesService {
    */
   getCodeCategoryName(codeCategoryId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(
-        codeCategoryId) + '/name', {
-        reportProgress: true,
-      }).pipe(map((codeCategoryName: string) => {
-      return codeCategoryName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
-        return throwError(() => new CodeCategoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the code category name.',
-          httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(
+        codeCategoryId)}/name`, {reportProgress: true})
+    .pipe(catchError((error) => CodesService.handleApiError(error,
+      'Failed to retrieve the code category name.')));
   }
 
   /**
@@ -290,23 +174,11 @@ export class CodesService {
    *
    * @return The code category summaries.
    */
-  @ResponseConverter
-  getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
+  @ResponseConverter getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
     return this.httpClient.get<CodeCategorySummary[]>(
-      this.config.apiUrlPrefix + '/codes/code-category-summaries',
-      {reportProgress: true})
-    .pipe(map((codeCategorySummaries: CodeCategorySummary[]) => {
-      return codeCategorySummaries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError(
-        'Failed to retrieve the summaries for the code categories.', httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/codes/code-category-summaries`, {reportProgress: true})
+    .pipe(catchError((error) => CodesService.handleApiError(error,
+      'Failed to retrieve the summaries for the code categories.')));
   }
 
   /**
@@ -319,26 +191,10 @@ export class CodesService {
    */
   getCodeName(codeCategoryId: string, codeId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(
-        codeCategoryId) + '/codes/' +
-      encodeURIComponent(codeId) + '/name', {
-        reportProgress: true
-      }).pipe(map((codeName: string) => {
-      return codeName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
-        return throwError(() => new CodeNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the code name.', httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(
+        codeCategoryId)}/codes/${encodeURIComponent(codeId)}/name`, {reportProgress: true})
+    .pipe(catchError(
+      (error) => CodesService.handleApiError(error, 'Failed to retrieve the code name.')));
   }
 
   /**
@@ -350,24 +206,10 @@ export class CodesService {
    */
   getCodesForCodeCategory(codeCategoryId: string): Observable<Code[]> {
     return this.httpClient.get<Code[]>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(
-        codeCategoryId) + '/codes',
-      {reportProgress: true}).pipe(map((codes: Code[]) => {
-      return codes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
-        return throwError(() => new CodeCategoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the codes.', httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(
+        codeCategoryId)}/codes`, {reportProgress: true})
+    .pipe(
+      catchError((error) => CodesService.handleApiError(error, 'Failed to retrieve the codes.')));
   }
 
   /**
@@ -379,25 +221,10 @@ export class CodesService {
    */
   updateCode(code: Code): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(
-        code.codeCategoryId) + '/codes/' +
-      encodeURIComponent(code.id), code, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
-          return throwError(() => new CodeNotFoundError(httpErrorResponse));
-        } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-          return throwError(() => new AccessDeniedError(httpErrorResponse));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(() => new CommunicationError(httpErrorResponse));
-        } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-          return throwError(() => new InvalidArgumentError(httpErrorResponse));
-        }
-
-        return throwError(
-          () => new ServiceUnavailableError('Failed to update the code.', httpErrorResponse));
-      }));
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(
+        code.codeCategoryId)}/codes/${encodeURIComponent(code.id)}`, code, {observe: 'response'})
+    .pipe(map(CodesService.isResponse204),
+      catchError((error) => CodesService.handleApiError(error, 'Failed to update the code.')));
   }
 
   /**
@@ -409,23 +236,35 @@ export class CodesService {
    */
   updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategory.id),
-      codeCategory,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
-        return throwError(() => new CodeCategoryNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
+      `${this.config.apiUrlPrefix}/codes/code-categories/${encodeURIComponent(codeCategory.id)}`,
+      codeCategory, {observe: 'response'})
+    .pipe(map(CodesService.isResponse204), catchError(
+      (error) => CodesService.handleApiError(error, 'Failed to update the code category.')));
+  }
 
-      return throwError(() => new ServiceUnavailableError('Failed to update the code category.',
-        httpErrorResponse));
-    }));
+  private static handleApiError(httpErrorResponse: HttpErrorResponse,
+                                defaultMessage: string): Observable<never> {
+    if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
+      return throwError(() => new CodeCategoryNotFoundError(httpErrorResponse));
+    } else if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
+      return throwError(() => new CodeNotFoundError(httpErrorResponse));
+    } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateCodeError.TYPE)) {
+      return throwError(() => new DuplicateCodeError(httpErrorResponse));
+    } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
+      DuplicateCodeCategoryError.TYPE)) {
+      return throwError(() => new DuplicateCodeCategoryError(httpErrorResponse));
+    } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+      return throwError(() => new AccessDeniedError(httpErrorResponse));
+    } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+      return throwError(() => new CommunicationError(httpErrorResponse));
+    } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+      return throwError(() => new InvalidArgumentError(httpErrorResponse));
+    }
+
+    return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
+  }
+
+  private static isResponse204(httpResponse: HttpResponse<boolean>): boolean {
+    return httpResponse.status === 204;
   }
 }

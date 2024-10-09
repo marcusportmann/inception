@@ -133,8 +133,8 @@ public class ErrorService implements IErrorService {
 
       String detail = StringUtils.hasText(errorReport.getDetail()) ? errorReport.getDetail() : "";
 
-      if (detail.length() > 2000) {
-        detail = detail.substring(0, 2000);
+      if (detail.length() > ErrorReport.MAX_DETAIL_SIZE) {
+        detail = detail.substring(0, ErrorReport.MAX_DETAIL_SIZE);
       }
 
       errorReport.setDetail(detail);

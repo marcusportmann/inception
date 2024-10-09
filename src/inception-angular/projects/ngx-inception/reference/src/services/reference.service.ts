@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
   AccessDeniedError, CacheService, CommunicationError, INCEPTION_CONFIG, InceptionConfig,
@@ -43,11 +43,12 @@ export class ReferenceService {
    * @param config     The Inception configuration.
    * @param localeId   The Unicode locale identifier for the locale for the application.
    * @param httpClient The HTTP client.
+   * @param cacheService The cache service for caching reference data.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
               @Inject(LOCALE_ID) private localeId: string, private httpClient: HttpClient,
               private cacheService: CacheService) {
-    console.log('Initializing the Reference Service (' + localeId + ')');
+    console.log(`Initializing the Reference Service (${localeId})`);
   }
 
   /**
@@ -56,41 +57,7 @@ export class ReferenceService {
    * @return The countries.
    */
   getCountries(): Observable<Map<string, Country>> {
-    let cachedCountries: Map<string, Country> = this.cacheService.get('countries');
-
-    if (cachedCountries !== undefined) {
-      return of(cachedCountries);
-    } else {
-      let params = new HttpParams();
-
-      params = params.append('localeId', this.localeId);
-
-      return this.httpClient.get<Country[]>(this.config.apiUrlPrefix + '/reference/countries',
-        {
-          params,
-          reportProgress: true
-        })
-      .pipe(map((countries: Country[]) => {
-        cachedCountries = new Map<string, Country>();
-
-        for (const country of countries) {
-          cachedCountries.set(country.code, country);
-        }
-
-        this.cacheService.set('countries', cachedCountries);
-
-        return cachedCountries;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-          return throwError(() => new AccessDeniedError(httpErrorResponse));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(() => new CommunicationError(httpErrorResponse));
-        }
-
-        return throwError(() => new ServiceUnavailableError('Failed to retrieve the countries.',
-          httpErrorResponse));
-      }));
-    }
+    return this.getData('countries', '/reference/countries', (country: Country) => country.code);
   }
 
   /**
@@ -99,41 +66,7 @@ export class ReferenceService {
    * @return The languages.
    */
   getLanguages(): Observable<Map<string, Language>> {
-    let cachedLanguages: Map<string, Language> = this.cacheService.get('languages');
-
-    if (cachedLanguages !== undefined) {
-      return of(cachedLanguages);
-    } else {
-      let params = new HttpParams();
-
-      params = params.append('localeId', this.localeId);
-
-      return this.httpClient.get<Language[]>(this.config.apiUrlPrefix + '/reference/languages',
-        {
-          params,
-          reportProgress: true
-        })
-      .pipe(map((languages: Language[]) => {
-        cachedLanguages = new Map<string, Language>();
-
-        for (const language of languages) {
-          cachedLanguages.set(language.code, language);
-        }
-
-        this.cacheService.set('languages', cachedLanguages);
-
-        return cachedLanguages;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-          return throwError(() => new AccessDeniedError(httpErrorResponse));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(() => new CommunicationError(httpErrorResponse));
-        }
-
-        return throwError(() => new ServiceUnavailableError('Failed to retrieve the languages.',
-          httpErrorResponse));
-      }));
-    }
+    return this.getData('languages', '/reference/languages', (language: Language) => language.code);
   }
 
   /**
@@ -142,41 +75,7 @@ export class ReferenceService {
    * @return The regions.
    */
   getRegions(): Observable<Map<string, Region>> {
-    let cachedRegions: Map<string, Region> = this.cacheService.get('regions');
-
-    if (cachedRegions !== undefined) {
-      return of(cachedRegions);
-    } else {
-      let params = new HttpParams();
-
-      params = params.append('localeId', this.localeId);
-
-      return this.httpClient.get<Region[]>(this.config.apiUrlPrefix + '/reference/regions',
-        {
-          params,
-          reportProgress: true
-        })
-      .pipe(map((regions: Region[]) => {
-        cachedRegions = new Map<string, Region>();
-
-        for (const region of regions) {
-          cachedRegions.set(region.code, region);
-        }
-
-        this.cacheService.set('regions', cachedRegions);
-
-        return cachedRegions;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-          return throwError(() => new AccessDeniedError(httpErrorResponse));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(() => new CommunicationError(httpErrorResponse));
-        }
-
-        return throwError(
-          () => new ServiceUnavailableError('Failed to retrieve the regions.', httpErrorResponse));
-      }));
-    }
+    return this.getData('regions', '/reference/regions', (region: Region) => region.code);
   }
 
   /**
@@ -185,40 +84,54 @@ export class ReferenceService {
    * @return The time zones.
    */
   getTimeZones(): Observable<Map<string, TimeZone>> {
-    let cachedTimeZones: Map<string, TimeZone> = this.cacheService.get('timeZones');
+    return this.getData('timeZones', '/reference/time-zones', (timeZone: TimeZone) => timeZone.id);
+  }
 
-    if (cachedTimeZones !== undefined) {
-      return of(cachedTimeZones);
-    } else {
-      let params = new HttpParams();
+  /**
+   * Generic method to retrieve reference data, cache it, and return it as a Map.
+   *
+   * @param cacheKey  The key used to cache the data.
+   * @param endpoint  The API endpoint for retrieving the data.
+   * @param keyGetter A function to extract the key for each entity (e.g., code or id).
+   *
+   * @return An observable with the cached or retrieved data.
+   */
+  private getData<T>(cacheKey: string, endpoint: string,
+                     keyGetter: (item: T) => string): Observable<Map<string, T>> {
+    let cachedData: Map<string, T> = this.cacheService.get(cacheKey);
 
-      params = params.append('localeId', this.localeId);
-
-      return this.httpClient.get<TimeZone[]>(this.config.apiUrlPrefix + '/reference/time-zones',
-        {
-          params,
-          reportProgress: true
-        })
-      .pipe(map((timeZones: TimeZone[]) => {
-        cachedTimeZones = new Map<string, TimeZone>();
-
-        for (const timeZone of timeZones) {
-          cachedTimeZones.set(timeZone.id, timeZone);
-        }
-
-        this.cacheService.set('timeZones', cachedTimeZones);
-
-        return cachedTimeZones;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-          return throwError(() => new AccessDeniedError(httpErrorResponse));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(() => new CommunicationError(httpErrorResponse));
-        }
-
-        return throwError(() => new ServiceUnavailableError('Failed to retrieve the time zones.',
-          httpErrorResponse));
-      }));
+    if (cachedData !== undefined) {
+      return of(cachedData);
     }
+
+    const params = new HttpParams().set('localeId', this.localeId);
+
+    return this.httpClient.get<T[]>(this.config.apiUrlPrefix + endpoint, {
+      params,
+      reportProgress: true
+    })
+    .pipe(map((items: T[]) => {
+      cachedData = new Map<string, T>();
+
+      for (const item of items) {
+        cachedData.set(keyGetter(item), item);
+      }
+
+      this.cacheService.set(cacheKey, cachedData);
+
+      return cachedData;
+    }), catchError(this.handleApiError(`Failed to retrieve the ${cacheKey}.`)));
+  }
+
+  private handleApiError(defaultMessage: string) {
+    return (httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(() => new CommunicationError(httpErrorResponse));
+      }
+      return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
+    };
   }
 }
+

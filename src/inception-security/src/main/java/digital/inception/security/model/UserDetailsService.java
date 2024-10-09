@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 /**
  * The <b>UserDetailsService</b> class provides the User Details Service implementation that
@@ -31,14 +31,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  *
  * @author Marcus Portmann
  */
+@Component
 public class UserDetailsService
     implements org.springframework.security.core.userdetails.UserDetailsService {
 
   /* Security Service */
-  @Autowired private ISecurityService securityService;
+  private final ISecurityService securityService;
 
-  /** Constructs a new <b>UserDetailsService</b>. */
-  public UserDetailsService() {}
+  /**
+   * Constructs a new <b>UserDetailsService</b>.
+   *
+   * @param securityService the Security Service
+   */
+  public UserDetailsService(ISecurityService securityService) {
+    this.securityService = securityService;
+  }
 
   /**
    * Locates the user based on the username. In the actual implementation, the search may possibly

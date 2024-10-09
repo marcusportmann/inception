@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, Error, INCEPTION_CONFIG, InceptionConfig,
@@ -59,24 +59,9 @@ export class ErrorService {
    */
   @ResponseConverter getErrorReport(errorReportId: string): Observable<ErrorReport> {
     return this.httpClient.get<ErrorReport>(
-      this.config.apiUrlPrefix + '/error/error-reports/' + encodeURIComponent(errorReportId),
-      {reportProgress: true})
-    .pipe(map((errorReport: ErrorReport) => {
-      return errorReport;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, ErrorReportNotFoundError.TYPE)) {
-        return throwError(() => new ErrorReportNotFoundError(httpErrorResponse));
-      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the error report.',
-        httpErrorResponse));
-    }));
+      `${this.config.apiUrlPrefix}/error/error-reports/${encodeURIComponent(errorReportId)}`,
+      {reportProgress: true}).pipe(catchError(
+      (error) => ErrorService.handleApiError(error, 'Failed to retrieve the error report.')));
   }
 
   /**
@@ -102,53 +87,40 @@ export class ErrorService {
 
     let params = new HttpParams();
 
-    if (filter != null) {
+    if (filter) {
       params = params.append('filter', filter);
     }
 
-    if (fromDate != null) {
+    if (fromDate) {
       params = params.append('fromDate', fromDate);
     }
 
-    if (toDate != null) {
+    if (toDate) {
       params = params.append('toDate', toDate);
     }
 
-    if (sortBy != null) {
+    if (sortBy) {
       params = params.append('sortBy', String(sortBy));
     }
 
-    if (sortDirection != null) {
+    if (sortDirection) {
       params = params.append('sortDirection', sortDirection);
     }
 
-    if (pageIndex != null) {
+    if (pageIndex !== undefined) {
       params = params.append('pageIndex', String(pageIndex));
     }
 
-    if (pageSize != null) {
+    if (pageSize !== undefined) {
       params = params.append('pageSize', String(pageSize));
     }
 
     return this.httpClient.get<ErrorReportSummaries>(
-      this.config.apiUrlPrefix + '/error/error-report-summaries', {
+      `${this.config.apiUrlPrefix}/error/error-report-summaries`, {
         params,
-        reportProgress: true,
-      }).pipe(map((errorReportSummaries: ErrorReportSummaries) => {
-      return errorReportSummaries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
-
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the error report summaries.',
-          httpErrorResponse));
-    }));
+        reportProgress: true
+      }).pipe(catchError((error) => ErrorService.handleApiError(error,
+      'Failed to retrieve the error report summaries.')));
   }
 
   /**
@@ -163,21 +135,28 @@ export class ErrorService {
       this.config.applicationVersion, error.message, error.cause ? JSON.stringify(error.cause) : '',
       error.timestamp, email, feedback);
 
-    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/error/error-reports',
-      errorReport, {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
+    return this.httpClient.post<boolean>(`${this.config.apiUrlPrefix}/error/error-reports`,
+      errorReport, {observe: 'response'}).pipe(map(ErrorService.isResponse204), catchError(
+      (error) => ErrorService.handleApiError(error, 'Failed to send the error report.')));
+  }
 
-      return throwError(
-        () => new ServiceUnavailableError('Failed to send the error report.', httpErrorResponse));
-    }));
+  private static handleApiError(httpErrorResponse: HttpErrorResponse,
+                                defaultMessage: string): Observable<never> {
+    if (ProblemDetails.isProblemDetails(httpErrorResponse, ErrorReportNotFoundError.TYPE)) {
+      return throwError(() => new ErrorReportNotFoundError(httpErrorResponse));
+    } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+      return throwError(() => new AccessDeniedError(httpErrorResponse));
+    } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+      return throwError(() => new CommunicationError(httpErrorResponse));
+    } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+      return throwError(() => new InvalidArgumentError(httpErrorResponse));
+    }
+
+    return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
+  }
+
+  // Centralized method to check if HTTP response status is 204 (No Content)
+  private static isResponse204(httpResponse: HttpResponse<boolean>): boolean {
+    return httpResponse.status === 204;
   }
 }
