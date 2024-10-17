@@ -170,6 +170,27 @@ inception:
         trust-store-type: pkcs12
         trust-store-password: Password1
 
+logging:
+  level:
+    org:
+      springframework:
+        beans:
+          factory=DEBUG:
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health
+  health:
+    mail:
+      enabled: false
+  metrics:
+    enable:
+      all: true
 
 
 
@@ -200,9 +221,3 @@ inception:
 #      max-pool-size: 10
 
 
-logging:
-  level:
-    org:
-      springframework:
-        beans:
-          factory=DEBUG:

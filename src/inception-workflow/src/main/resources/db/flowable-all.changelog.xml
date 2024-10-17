@@ -1,0 +1,1091 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <!--
+  Extracted from the following file:
+
+  https://raw.githubusercontent.com/flowable/flowable-engine/flowable-7.0.0/distro/sql/create/all/flowable.postgres.all.create.sql
+
+  -->
+  <changeSet id="flowable-all-7.0.0" author="Marcus Portmann">
+    <comment>flowable-all-7.0.0</comment>
+
+    <createTable tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="VALUE_" type="nvarchar(300)"/>
+      <column name="REV_" type="int"/>
+    </createTable>
+
+    <createTable tableName="ACT_GE_BYTEARRAY">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(64)"/>
+      <column name="BYTES_" type="${blob_type}"/>
+      <column name="GENERATED_" type="boolean"/>
+    </createTable>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="common.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="next.dbid"/>
+      <column name="VALUE_" value="1"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_RU_ENTITYLINK">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" value="int"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="LINK_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="PARENT_ELEMENT_ID_" type="nvarchar(255)"/>
+      <column name="REF_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="REF_SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="REF_SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="ROOT_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="ROOT_SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="HIERARCHY_TYPE_" type="nvarchar(255)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_ENT_LNK_SCOPE" tableName="ACT_RU_ENTITYLINK">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_ENT_LNK_REF_SCOPE" tableName="ACT_RU_ENTITYLINK">
+      <column name="REF_SCOPE_ID_"/>
+      <column name="REF_SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_ENT_LNK_ROOT_SCOPE" tableName="ACT_RU_ENTITYLINK">
+      <column name="ROOT_SCOPE_ID_"/>
+      <column name="ROOT_SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_ENT_LNK_SCOPE_DEF" tableName="ACT_RU_ENTITYLINK">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="entitylink.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_HI_ENTITYLINK">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="LINK_TYPE_" type="nvarchar(255)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="PARENT_ELEMENT_ID_" type="nvarchar(255)"/>
+      <column name="REF_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="REF_SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="REF_SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="ROOT_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="ROOT_SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="HIERARCHY_TYPE_" type="nvarchar(255)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_HI_ENT_LNK_SCOPE" tableName="ACT_HI_ENTITYLINK">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_ENT_LNK_REF_SCOPE" tableName="ACT_HI_ENTITYLINK">
+      <column name="REF_SCOPE_ID_"/>
+      <column name="REF_SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_ENT_LNK_ROOT_SCOPE" tableName="ACT_HI_ENTITYLINK">
+      <column name="ROOT_SCOPE_ID_"/>
+      <column name="ROOT_SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_ENT_LNK_SCOPE_DEF" tableName="ACT_HI_ENTITYLINK">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+      <column name="LINK_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RU_IDENTITYLINK">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="GROUP_ID_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)"/>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_IDENT_LNK_USER" tableName="ACT_RU_IDENTITYLINK">
+      <column name="USER_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_IDENT_LNK_GROUP" tableName="ACT_RU_IDENTITYLINK">
+      <column name="GROUP_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_IDENT_LNK_SCOPE" tableName="ACT_RU_IDENTITYLINK">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_IDENT_LNK_SUB_SCOPE" tableName="ACT_RU_IDENTITYLINK">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_IDENT_LNK_SCOPE_DEF" tableName="ACT_RU_IDENTITYLINK">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="identitylink.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_HI_IDENTITYLINK">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="GROUP_ID_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)"/>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_HI_IDENT_LNK_USER" tableName="ACT_HI_IDENTITYLINK">
+      <column name="USER_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_IDENT_LNK_SCOPE" tableName="ACT_HI_IDENTITYLINK">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_IDENT_LNK_SUB_SCOPE" tableName="ACT_HI_IDENTITYLINK">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_IDENT_LNK_SCOPE_DEF" tableName="ACT_HI_IDENTITYLINK">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RU_JOB">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LOCK_EXP_TIME_" type="timestamp"/>
+      <column name="LOCK_OWNER_" type="nvarchar(255)"/>
+      <column name="EXCLUSIVE_" type="boolean"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROCESS_INSTANCE_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="ELEMENT_ID_" type="nvarchar(255)"/>
+      <column name="ELEMENT_NAME_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="CORRELATION_ID_" type="nvarchar(255)"/>
+      <column name="RETRIES_" type="int"/>
+      <column name="EXCEPTION_STACK_ID_" type="nvarchar(64)"/>
+      <column name="EXCEPTION_MSG_" type="nvarchar(4000)"/>
+      <column name="DUEDATE_" type="timestamp"/>
+      <column name="REPEAT_" type="nvarchar(255)"/>
+      <column name="HANDLER_TYPE_" type="nvarchar(255)"/>
+      <column name="HANDLER_CFG_" type="nvarchar(4000)"/>
+      <column name="CUSTOM_VALUES_ID_" type="nvarchar(64)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_JOB_CORRELATION_ID" tableName="ACT_RU_JOB">
+      <column name="CORRELATION_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_JOB_CUSTOM_VALUES_ID" tableName="ACT_RU_JOB">
+      <column name="CUSTOM_VALUES_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_JOB_EXCEPTION_STACK_ID" tableName="ACT_RU_JOB">
+      <column name="EXCEPTION_STACK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_JOB_SCOPE" tableName="ACT_RU_JOB">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_JOB_SCOPE_DEF" tableName="ACT_RU_JOB">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_JOB_SUB_SCOPE" tableName="ACT_RU_JOB">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RU_TIMER_JOB">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LOCK_EXP_TIME_" type="timestamp"/>
+      <column name="LOCK_OWNER_" type="nvarchar(255)"/>
+      <column name="EXCLUSIVE_" type="boolean"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROCESS_INSTANCE_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="ELEMENT_ID_" type="nvarchar(255)"/>
+      <column name="ELEMENT_NAME_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="CORRELATION_ID_" type="nvarchar(255)"/>
+      <column name="RETRIES_" type="int"/>
+      <column name="EXCEPTION_STACK_ID_" type="nvarchar(64)"/>
+      <column name="EXCEPTION_MSG_" type="nvarchar(4000)"/>
+      <column name="DUEDATE_" type="timestamp"/>
+      <column name="REPEAT_" type="nvarchar(255)"/>
+      <column name="HANDLER_TYPE_" type="nvarchar(255)"/>
+      <column name="HANDLER_CFG_" type="nvarchar(4000)"/>
+      <column name="CUSTOM_VALUES_ID_" type="nvarchar(64)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_TIMER_JOB_CORRELATION_ID" tableName="ACT_RU_TIMER_JOB">
+      <column name="CORRELATION_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TIMER_JOB_CUSTOM_VALUES_ID" tableName="ACT_RU_TIMER_JOB">
+      <column name="CUSTOM_VALUES_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TIMER_JOB_DUEDATE" tableName="ACT_RU_TIMER_JOB">
+      <column name="DUEDATE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TIMER_JOB_EXCEPTION_STACK_ID" tableName="ACT_RU_TIMER_JOB">
+      <column name="EXCEPTION_STACK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TJOB_SCOPE" tableName="ACT_RU_TIMER_JOB">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TJOB_SCOPE_DEF" tableName="ACT_RU_TIMER_JOB">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TJOB_SUB_SCOPE" tableName="ACT_RU_TIMER_JOB">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RU_SUSPENDED_JOB">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EXCLUSIVE_" type="boolean"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROCESS_INSTANCE_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="ELEMENT_ID_" type="nvarchar(255)"/>
+      <column name="ELEMENT_NAME_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="CORRELATION_ID_" type="nvarchar(255)"/>
+      <column name="RETRIES_" type="int"/>
+      <column name="EXCEPTION_STACK_ID_" type="nvarchar(64)"/>
+      <column name="EXCEPTION_MSG_" type="nvarchar(4000)"/>
+      <column name="DUEDATE_" type="timestamp"/>
+      <column name="REPEAT_" type="nvarchar(255)"/>
+      <column name="HANDLER_TYPE_" type="nvarchar(255)"/>
+      <column name="HANDLER_CFG_" type="nvarchar(4000)"/>
+      <column name="CUSTOM_VALUES_ID_" type="nvarchar(64)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_SUSPENDED_JOB_CORRELATION_ID" tableName="ACT_RU_SUSPENDED_JOB">
+      <column name="CORRELATION_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_SUSPENDED_JOB_CUSTOM_VALUES_ID" tableName="ACT_RU_SUSPENDED_JOB">
+      <column name="CUSTOM_VALUES_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_SUSPENDED_JOB_EXCEPTION_STACK_ID" tableName="ACT_RU_SUSPENDED_JOB">
+      <column name="EXCEPTION_STACK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_SJOB_SCOPE" tableName="ACT_RU_SUSPENDED_JOB">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_SJOB_SCOPE_DEF" tableName="ACT_RU_SUSPENDED_JOB">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_SJOB_SUB_SCOPE" tableName="ACT_RU_SUSPENDED_JOB">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RU_DEADLETTER_JOB">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EXCLUSIVE_" type="boolean"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROCESS_INSTANCE_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="ELEMENT_ID_" type="nvarchar(255)"/>
+      <column name="ELEMENT_NAME_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="CORRELATION_ID_" type="nvarchar(255)"/>
+      <column name="EXCEPTION_STACK_ID_" type="nvarchar(64)"/>
+      <column name="EXCEPTION_MSG_" type="nvarchar(4000)"/>
+      <column name="DUEDATE_" type="timestamp"/>
+      <column name="REPEAT_" type="nvarchar(255)"/>
+      <column name="HANDLER_TYPE_" type="nvarchar(255)"/>
+      <column name="HANDLER_CFG_" type="nvarchar(4000)"/>
+      <column name="CUSTOM_VALUES_ID_" type="nvarchar(64)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_DEADLETTER_JOB_CORRELATION_ID" tableName="ACT_RU_DEADLETTER_JOB">
+      <column name="CORRELATION_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_DEADLETTER_JOB_CUSTOM_VALUES_ID" tableName="ACT_RU_DEADLETTER_JOB">
+      <column name="CUSTOM_VALUES_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_DEADLETTER_JOB_EXCEPTION_STACK_ID" tableName="ACT_RU_DEADLETTER_JOB">
+      <column name="EXCEPTION_STACK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_DJOB_SCOPE" tableName="ACT_RU_DEADLETTER_JOB">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_DJOB_SCOPE_DEF" tableName="ACT_RU_DEADLETTER_JOB">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_DJOB_SUB_SCOPE" tableName="ACT_RU_DEADLETTER_JOB">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RU_HISTORY_JOB">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="LOCK_EXP_TIME_" type="timestamp"/>
+      <column name="LOCK_OWNER_" type="nvarchar(255)"/>
+      <column name="RETRIES_" type="int"/>
+      <column name="EXCEPTION_STACK_ID_" type="nvarchar(64)"/>
+      <column name="EXCEPTION_MSG_" type="nvarchar(4000)"/>
+      <column name="HANDLER_TYPE_" type="nvarchar(255)"/>
+      <column name="HANDLER_CFG_" type="nvarchar(4000)"/>
+      <column name="CUSTOM_VALUES_ID_" type="nvarchar(64)"/>
+      <column name="ADV_HANDLER_CFG_ID_" type="nvarchar(64)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+
+    <createTable tableName="ACT_RU_EXTERNAL_JOB">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LOCK_EXP_TIME_" type="timestamp"/>
+      <column name="LOCK_OWNER_" type="nvarchar(255)"/>
+      <column name="EXCLUSIVE_" type="boolean"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROCESS_INSTANCE_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="ELEMENT_ID_" type="nvarchar(255)"/>
+      <column name="ELEMENT_NAME_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="CORRELATION_ID_" type="nvarchar(255)"/>
+      <column name="RETRIES_" type="int"/>
+      <column name="EXCEPTION_STACK_ID_" type="nvarchar(64)"/>
+      <column name="EXCEPTION_MSG_" type="nvarchar(4000)"/>
+      <column name="DUEDATE_" type="timestamp"/>
+      <column name="REPEAT_" type="nvarchar(255)"/>
+      <column name="HANDLER_TYPE_" type="nvarchar(255)"/>
+      <column name="HANDLER_CFG_" type="nvarchar(4000)"/>
+      <column name="CUSTOM_VALUES_ID_" type="nvarchar(64)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_EXTERNAL_JOB_CORRELATION_ID" tableName="ACT_RU_EXTERNAL_JOB">
+      <column name="CORRELATION_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EXTERNAL_JOB_CUSTOM_VALUES_ID" tableName="ACT_RU_EXTERNAL_JOB">
+      <column name="CUSTOM_VALUES_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EXTERNAL_JOB_EXCEPTION_STACK_ID" tableName="ACT_RU_EXTERNAL_JOB">
+      <column name="EXCEPTION_STACK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EJOB_SCOPE" tableName="ACT_RU_EXTERNAL_JOB">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EJOB_SCOPE_DEF" tableName="ACT_RU_EXTERNAL_JOB">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EJOB_SUB_SCOPE" tableName="ACT_RU_EXTERNAL_JOB">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="job.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="FLW_RU_BATCH">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="TYPE_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SEARCH_KEY_" type="nvarchar(255)"/>
+      <column name="SEARCH_KEY2_" type="nvarchar(255)"/>
+      <column name="CREATE_TIME_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="COMPLETE_TIME_" type="timestamp"/>
+      <column name="STATUS_" type="nvarchar(255)"/>
+      <column name="BATCH_DOC_ID_" type="nvarchar(64)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+
+    <createTable tableName="FLW_RU_BATCH_PART">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="BATCH_ID_" type="nvarchar(64)"/>
+      <column name="TYPE_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SCOPE_ID_" type="nvarchar(64)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(64)"/>
+      <column name="SEARCH_KEY_" type="nvarchar(255)"/>
+      <column name="SEARCH_KEY2_" type="nvarchar(255)"/>
+      <column name="CREATE_TIME_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="COMPLETE_TIME_" type="timestamp"/>
+      <column name="STATUS_" type="nvarchar(255)"/>
+      <column name="RESULT_DOC_ID_" type="nvarchar(64)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+    <createIndex indexName="FLW_IDX_BATCH_PART" tableName="FLW_RU_BATCH_PART">
+      <column name="BATCH_ID_"/>
+    </createIndex>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="batch.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_RU_TASK">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="TASK_DEF_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="PROPAGATED_STAGE_INST_ID_" type="nvarchar(255)"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="PARENT_TASK_ID_" type="nvarchar(64)"/>
+      <column name="DESCRIPTION_" type="nvarchar(4000)"/>
+      <column name="TASK_DEF_KEY_" type="nvarchar(255)"/>
+      <column name="OWNER_" type="nvarchar(255)"/>
+      <column name="ASSIGNEE_" type="nvarchar(255)"/>
+      <column name="DELEGATION_" type="nvarchar(64)"/>
+      <column name="PRIORITY_" type="int"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="DUE_DATE_" type="timestamp"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="SUSPENSION_STATE_" type="int"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+      <column name="FORM_KEY_" type="nvarchar(255)"/>
+      <column name="CLAIM_TIME_" type="timestamp"/>
+      <column name="IS_COUNT_ENABLED_" type="boolean"/>
+      <column name="VAR_COUNT_" type="int"/>
+      <column name="ID_LINK_COUNT_" type="int"/>
+      <column name="SUB_TASK_COUNT_" type="int"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_TASK_CREATE" tableName="ACT_RU_TASK">
+      <column name="CREATE_TIME_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TASK_SCOPE" tableName="ACT_RU_TASK">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TASK_SUB_SCOPE" tableName="ACT_RU_TASK">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_TASK_SCOPE_DEF" tableName="ACT_RU_TASK">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="task.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_HI_TASKINST">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int" defaultValue="1"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="TASK_DEF_ID_" type="nvarchar(64)"/>
+      <column name="TASK_DEF_KEY_" type="nvarchar(255)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="PROPAGATED_STAGE_INST_ID_" type="nvarchar(255)"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="PARENT_TASK_ID_" type="nvarchar(64)"/>
+      <column name="DESCRIPTION_" type="nvarchar(4000)"/>
+      <column name="OWNER_" type="nvarchar(255)"/>
+      <column name="ASSIGNEE_" type="nvarchar(255)"/>
+      <column name="START_TIME_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CLAIM_TIME_" type="timestamp"/>
+      <column name="END_TIME_" type="timestamp"/>
+      <column name="DURATION_" type="bigint"/>
+      <column name="DELETE_REASON_" type="nvarchar(4000)"/>
+      <column name="PRIORITY_" type="int"/>
+      <column name="DUE_DATE_" type="timestamp"/>
+      <column name="FORM_KEY_" type="nvarchar(266)"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+      <column name="LAST_UPDATED_TIME_" type="timestamp"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_HI_TASK_SCOPE" tableName="ACT_HI_TASKINST">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_TASK_SUB_SCOPE" tableName="ACT_HI_TASKINST">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_TASK_SCOPE_DEF" tableName="ACT_HI_TASKINST">
+      <column name="SCOPE_DEFINITION_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_HI_TSK_LOG">
+      <column name="ID_" type="int" autoIncrement="true" incrementBy="1">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="TYPE_" type="nvarchar(64)"/>
+      <column name="TASK_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TIME_STAMP_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="DATA_" type="nvarchar(4000)"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+      <column name="" type=""/>
+    </createTable>
+
+    <createTable tableName="ACT_RU_VARIABLE">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="NAME_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="BYTEARRAY_ID_" type="nvarchar(64)"/>
+      <column name="DOUBLE_" type="double"/>
+      <column name="LONG_" type="bigint"/>
+      <column name="TEXT_" type="nvarchar(4000)"/>
+      <column name="TEXT2_" type="nvarchar(4000)"/>
+      <column name="META_INFO_" type="nvarchar(4000)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_RU_VAR_SCOPE_ID_TYPE" tableName="ACT_RU_VARIABLE">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_RU_VAR_SUB_ID_TYPE" tableName="ACT_RU_VARIABLE">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_VAR_BYTEARRAY" tableName="ACT_RU_VARIABLE">
+      <column name="BYTEARRAY_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_VARIABLE_TASK_ID" tableName="ACT_RU_VARIABLE">
+      <column name="TASK_ID_"/>
+    </createIndex>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="variable.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_HI_VARINST">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int" defaultValue="1"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="NAME_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VAR_TYPE_" type="nvarchar(100)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="BYTEARRAY_ID_" type="nvarchar(64)"/>
+      <column name="DOUBLE_" type="double"/>
+      <column name="LONG_" type="bigint"/>
+      <column name="TEXT_" type="nvarchar(4000)"/>
+      <column name="TEXT2_" type="nvarchar(4000)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="LAST_UPDATED_TIME_" type="timestamp"/>
+      <column name="META_INFO_" type="nvarchar(4000)"/>
+      <column name="" type=""/>
+      <column name="" type=""/>
+      <column name="" type=""/>
+      <column name="" type=""/>
+      <column name="" type=""/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_HI_PROCVAR_NAME_TYPE" tableName="ACT_HI_VARINST">
+      <column name="NAME_"/>
+      <column name="VAR_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_VAR_SCOPE_ID_TYPE" tableName="ACT_HI_VARINST">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_VAR_SUB_ID_TYPE" tableName="ACT_HI_VARINST">
+      <column name="SUB_SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RU_EVENT_SUBSCR">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="EVENT_TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EVENT_NAME_" type="nvarchar(255)"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="ACTIVITY_ID_" type="nvarchar(64)"/>
+      <column name="CONFIGURATION_" type="nvarchar(255)"/>
+      <column name="CREATED_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="SUB_SCOPE_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(64)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(64)"/>
+      <column name="LOCK_TIME_" type="timestamp"/>
+      <column name="LOCK_OWNER_" type="nvarchar(255)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_EVENT_SUBSCR_CONFIG_" tableName="ACT_RU_EVENT_SUBSCR">
+      <column name="CONFIGURATION_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EVENT_SUBSCR" tableName="ACT_RU_EVENT_SUBSCR">
+      <column name="EXECUTION_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EVENT_SUBSCR_SCOPEREF_" tableName="ACT_RU_EVENT_SUBSCR">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+    <insert tableName="ACT_GE_PROPERTY">
+      <column name="NAME_" value="eventsubscription.schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_RE_DEPLOYMENT">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="KEY_" type="nvarchar(255)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+      <column name="DEPLOY_TIME_" type="timestamp"/>
+      <column name="DERIVED_FROM_" type="nvarchar(64)"/>
+      <column name="DERIVED_FROM_ROOT_" type="nvarchar(64)"/>
+      <column name="PARENT_DEPLOYMENT_ID_" type="nvarchar(255)"/>
+      <column name="ENGINE_VERSION_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createTable tableName="ACT_RE_MODEL">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="KEY_" type="nvarchar(255)"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="CREATE_TIME_" type="timestamp"/>
+      <column name="LAST_UPDATE_TIME_" type="timestamp"/>
+      <column name="VERSION_" type="int"/>
+      <column name="META_INFO_" type="nvarchar(4000)"/>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(64)"/>
+      <column name="EDITOR_SOURCE_VALUE_ID_" type="nvarchar(64)"/>
+      <column name="EDITOR_SOURCE_EXTRA_VALUE_ID_" type="nvarchar(64)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+
+    <createTable tableName="ACT_RU_EXECUTION">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="BUSINESS_KEY_" type="nvarchar(255)"/>
+      <column name="PARENT_ID_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="SUPER_EXEC_" type="nvarchar(64)"/>
+      <column name="ROOT_PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="ACT_ID_" type="nvarchar(255)"/>
+      <column name="IS_ACTIVE_" type="boolean"/>
+      <column name="IS_CONCURRENT_" type="boolean"/>
+      <column name="IS_SCOPE_" type="boolean"/>
+      <column name="IS_EVENT_SCOPE_" type="boolean"/>
+      <column name="IS_MI_ROOT_" type="boolean"/>
+      <column name="SUSPENSION_STATE_" type="int"/>
+      <column name="CACHED_ENT_STATE_" type="int"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="START_ACT_ID_" type="nvarchar(255)"/>
+      <column name="START_TIME_" type="timestamp"/>
+      <column name="START_USER_ID_" type="nvarchar(255)"/>
+      <column name="LOCK_TIME_" type="timestamp"/>
+      <column name="LOCK_OWNER_" type="nvarchar(255)"/>
+      <column name="IS_COUNT_ENABLED_" type="boolean"/>
+      <column name="EVT_SUBSCR_COUNT_" type="int"/>
+      <column name="TASK_COUNT_" type="int"/>
+      <column name="JOB_COUNT_" type="int"/>
+      <column name="TIMER_JOB_COUNT_" type="int"/>
+      <column name="SUSP_JOB_COUNT_" type="int"/>
+      <column name="DEADLETTER_JOB_COUNT_" type="int"/>
+      <column name="EXTERNAL_WORKER_JOB_COUNT_" type="int"/>
+      <column name="VAR_COUNT_" type="int"/>
+      <column name="ID_LINK_COUNT_" type="int"/>
+      <column name="CALLBACK_ID_" type="nvarchar(255)"/>
+      <column name="CALLBACK_TYPE_" type="nvarchar(255)"/>
+      <column name="REFERENCE_ID_" type="nvarchar(255)"/>
+      <column name="REFERENCE_TYPE_" type="nvarchar(255)"/>
+      <column name="PROPAGATED_STAGE_INST_ID_" type="nvarchar(255)"/>
+      <column name="BUSINESS_STATUS_" type="nvarchar(255)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_EXEC_BUSKEY" tableName="ACT_RU_EXECUTION">
+      <column name="BUSINESS_KEY_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EXE_ROOT" tableName="ACT_RU_EXECUTION">
+      <column name="ROOT_PROC_INST_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_EXEC_REF_ID_" tableName="ACT_RU_EXECUTION">
+      <column name="REFERENCE_ID_"/>
+    </createIndex>
+
+    <createTable tableName="ACT_RE_PROCDEF">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="KEY_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VERSION_" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(64)"/>
+      <column name="RESOURCE_NAME_" type="nvarchar(4000)"/>
+      <column name="DGRM_RESOURCE_NAME_" type="nvarchar(4000)"/>
+      <column name="DESCRIPTION_" type="nvarchar(4000)"/>
+      <column name="HAS_START_FORM_KEY_" type="boolean"/>
+      <column name="HAS_GRAPHICAL_NOTATION_" type="boolean"/>
+      <column name="SUSPENSION_STATE_" type="int"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+      <column name="DERIVED_FROM_" type="nvarchar(64)"/>
+      <column name="DERIVED_FROM_ROOT_" type="nvarchar((64)"/>
+      <column name="DERIVED_VERSION_" type="int" defaultValue="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ENGINE_VERSION_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createTable tableName="ACT_EVT_LOG">
+      <column name="LOG_NR_" type="int" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="TYPE_" type="nvarchar(64)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="TIME_STAMP_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="DATA_" type="${blob_type}"/>
+      <column name="LOCK_OWNER_" type="nvarchar(255)"/>
+      <column name="LOCK_TIME_" type="timestamp"/>
+      <column name="IS_PROCESSED_" type="smallint" defaultValue="0"/>
+    </createTable>
+
+    <createTable tableName="ACT_PROCDEF_INFO">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="INFO_JSON_ID_" type="nvarchar(64)"/>
+    </createTable>
+
+    <createTable tableName="ACT_RU_ACTINST">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int" defaultValue="1"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PROC_INST_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EXECUTION_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ACT_ID_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="CALL_PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="ACT_NAME_" type="nvarchar(255)"/>
+      <column name="ACT_TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ASSIGNEE_" type="nvarchar(255)"/>
+      <column name="START_TIME_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="END_TIME_" type="timestamp"/>
+      <column name="DURATION_" type="bigint"/>
+      <column name="TRANSACTION_ORDER_" type="int"/>
+      <column name="DELETE_REASON_" type="nvarchar(4000)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="""/>
+      <column name="" type=""/>
+
+
+    </createTable>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </changeSet>
+
+</databaseChangeLog>
+
+
+
+
+<!--
+
+
+    <createTable tableName="">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="" type=""/>
+      <column name="" type=""/>
+      <column name="" type=""/>
+    </createTable>
+
+
+
+-->

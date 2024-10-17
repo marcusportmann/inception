@@ -17,14 +17,16 @@
 package digital.inception.core.jdbc;
 
 import io.agroal.api.AgroalDataSource;
+import io.agroal.api.AgroalDataSourceMetrics;
 import io.agroal.api.configuration.AgroalConnectionPoolConfiguration;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
@@ -109,6 +111,8 @@ public final class DataSourceUtil {
               ? Integer.toString(dataSourceConfiguration.getMaxPoolSize())
               : "5");
 
+      agroalProperties.setProperty(AgroalPropertiesReader.METRICS_ENABLED, "true");
+
       AgroalPropertiesReader agroalReaderProperties =
           new AgroalPropertiesReader().readProperties(agroalProperties);
       AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
@@ -146,7 +150,12 @@ public final class DataSourceUtil {
                     .validateOnBorrow(true));
       }
 
-      return AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
+      AgroalDataSource agroalDataSource =
+          AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
+
+      bindAgroalDataSourceMetrics(applicationContext, dataSourceConfiguration, agroalDataSource);
+
+      return agroalDataSource;
     } catch (Throwable e) {
       throw new FatalBeanException(
           "Failed to initialize the Agroal data source with url ("
@@ -157,6 +166,60 @@ public final class DataSourceUtil {
               + dataSourceConfiguration.getClassName()
               + ")",
           e);
+    }
+  }
+
+  private static void bindAgroalDataSourceMetrics(
+      ApplicationContext applicationContext,
+      DataSourceConfiguration dataSourceConfiguration,
+      AgroalDataSource agroalDataSource) {
+    try {
+      String databaseName =
+          DatabaseNameExtractor.getDatabaseNameFromJdbcUrl(dataSourceConfiguration.getUrl());
+
+      MeterRegistry meterRegistry = applicationContext.getBean(MeterRegistry.class);
+
+      AgroalDataSourceMetrics agroalDataSourceMetrics = agroalDataSource.getMetrics();
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.active",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::activeCount)
+          .description("Number of active (in-use) connections")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.available",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::availableCount)
+          .description("Number of available connections")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.flushes",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::flushCount)
+          .description("Number of connection flushes")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.acquired",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::acquireCount)
+          .description("Total number of connections acquired")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.maxUsed",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::maxUsedCount)
+          .description("Maximum number of connections ever in use at the same time")
+          .register(meterRegistry);
+
+    } catch (NoSuchBeanDefinitionException ignored) {
+      // No MeterRegistry bean found, metrics will not be available for the Agroal data source
+    } catch (Throwable e) {
+      log.error("Failed to bind the metrics for the Agroal data source", e);
     }
   }
 

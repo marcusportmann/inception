@@ -74,6 +74,11 @@
       </column>
       <column name="DECISION_TYPE_" type="nvarchar(255)" />
     </createTable>
+    <createIndex indexName="ACT_IDX_DMN_DEC_UNIQ" tableName="ACT_DMN_DECISION" unique="true">
+      <column name="KEY_" />
+      <column name="VERSION_" />
+      <column name="TENANT_ID_" />
+    </createIndex>
 
     <createTable tableName="ACT_DMN_HI_DECISION_EXECUTION">
       <column name="ID_" type="nvarchar(255)">
@@ -103,14 +108,7 @@
       </column>
       <column name="SCOPE_TYPE_" type="nvarchar(255)" />
     </createTable>
-
-    <createIndex tableName="ACT_DMN_DECISION" indexName="ACT_IDX_DMN_DEC_UNIQ" unique="true">
-      <column name="KEY_" />
-      <column name="VERSION_" />
-      <column name="TENANT_ID_" />
-    </createIndex>
-
-    <createIndex tableName="ACT_DMN_HI_DECISION_EXECUTION" indexName="ACT_IDX_DMN_INSTANCE_ID">
+    <createIndex indexName="ACT_IDX_DMN_INSTANCE_ID" tableName="ACT_DMN_HI_DECISION_EXECUTION" >
       <column name="INSTANCE_ID_" />
     </createIndex>
 
@@ -130,13 +128,3 @@
 
 </databaseChangeLog>
 
-
-<!--
-<changeSet id="5" author="flowable" dbms="mysql,mariadb">
-
-<modifyDataType tableName="ACT_DMN_DEPLOYMENT" columnName="DEPLOY_TIME_" newDataType="datetime(3)" />
-<modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="START_TIME_" newDataType="datetime(3)" />
-<modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="END_TIME_" newDataType="datetime(3)" />
-
-</changeSet>
--->
