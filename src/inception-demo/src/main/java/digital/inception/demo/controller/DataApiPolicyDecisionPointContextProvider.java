@@ -20,7 +20,6 @@ import digital.inception.core.api.IPolicyDecisionPointContextProvider;
 import digital.inception.demo.model.Data;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.aopalliance.intercept.MethodInvocation;
 
 /**

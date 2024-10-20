@@ -68,19 +68,13 @@ public enum WebServiceSecurityType {
    */
   @JsonCreator
   public static WebServiceSecurityType fromCode(String code) {
-    return switch (code) {
-      case "none" -> WebServiceSecurityType.NONE;
-      case "wss_security_x509_token" -> WebServiceSecurityType.WSS_SECURITY_X509_TOKEN;
-      case "wss_security_username_token" -> WebServiceSecurityType.WSS_SECURITY_USERNAME_TOKEN;
-      case "mutual_ssl" -> WebServiceSecurityType.MUTUAL_SSL;
-      case "http_authentication" -> WebServiceSecurityType.HTTP_AUTHENTICATION;
-      case "digest_authentication" -> WebServiceSecurityType.DIGEST_AUTHENTICATION;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the web service security type with the invalid code ("
-                  + code
-                  + ")");
-    };
+    for (WebServiceSecurityType value : WebServiceSecurityType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the web service security type with the invalid code (" + code + ")");
   }
 
   /**

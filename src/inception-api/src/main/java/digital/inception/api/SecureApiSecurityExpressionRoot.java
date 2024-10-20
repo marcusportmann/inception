@@ -34,7 +34,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 public class SecureApiSecurityExpressionRoot extends SecurityExpressionRoot
     implements MethodSecurityExpressionOperations {
 

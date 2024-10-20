@@ -64,7 +64,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @SuppressWarnings({"unused"})
 public class MailService implements IMailService {

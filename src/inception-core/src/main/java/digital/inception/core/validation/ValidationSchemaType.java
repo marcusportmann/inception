@@ -64,15 +64,13 @@ public enum ValidationSchemaType {
    */
   @JsonCreator
   public static ValidationSchemaType fromCode(String code) {
-    return switch (code) {
-      case "json" -> ValidationSchemaType.JSON;
-      case "xml" -> ValidationSchemaType.XML;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the validation schema type with the invalid code ("
-                  + code
-                  + ")");
-    };
+    for (ValidationSchemaType value : ValidationSchemaType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the validation schema type with the invalid code (" + code + ")");
   }
 
   /**

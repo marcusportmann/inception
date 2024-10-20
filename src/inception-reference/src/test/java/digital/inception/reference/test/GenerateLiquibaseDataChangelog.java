@@ -45,7 +45,6 @@ import org.springframework.context.annotation.FilterType;
  *
  * @author Marcus Portmann
  */
-
 @SpringBootApplication
 @ComponentScan(
     basePackages = {"digital.inception"},

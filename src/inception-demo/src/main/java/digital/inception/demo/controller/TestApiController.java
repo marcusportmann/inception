@@ -23,7 +23,6 @@ import digital.inception.demo.model.CarType;
 import digital.inception.demo.task.DemoTaskData;
 import digital.inception.executor.service.IExecutorService;
 import java.time.OffsetDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

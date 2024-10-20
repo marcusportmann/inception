@@ -61,14 +61,13 @@ public enum PartyType {
    */
   @JsonCreator
   public static PartyType fromCode(String code) {
-    return switch (code) {
-      case "organization" -> PartyType.ORGANIZATION;
-      case "person" -> PartyType.PERSON;
-      case "unknown" -> PartyType.UNKNOWN;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the party type with the invalid code (" + code + ")");
-    };
+    for (PartyType value : PartyType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the party type with the invalid code (" + code + ")");
   }
 
   /**

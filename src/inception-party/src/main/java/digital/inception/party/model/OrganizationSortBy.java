@@ -54,14 +54,13 @@ public enum OrganizationSortBy {
    */
   @JsonCreator
   public static OrganizationSortBy fromCode(String code) {
-    switch (code) {
-      case "name":
-        return OrganizationSortBy.NAME;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the organization sort by with the invalid code (" + code + ")");
+    for (OrganizationSortBy value : OrganizationSortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
     }
+    throw new RuntimeException(
+        "Failed to determine the organization sort by with the invalid code (" + code + ")");
   }
 
   /**

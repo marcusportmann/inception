@@ -59,7 +59,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Service
 public class SchedulerService implements ISchedulerService {
 

@@ -46,7 +46,6 @@ import org.springframework.util.StringUtils;
  * @param <V> the value type
  * @author Marcus Portmann
  */
-
 @SuppressWarnings("unused")
 public abstract class Processor<K, V> extends Thread {
 

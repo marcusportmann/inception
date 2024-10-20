@@ -58,17 +58,13 @@ public enum SortDirection {
    */
   @JsonCreator
   public static SortDirection fromCode(String code) {
-    switch (code) {
-      case "asc":
-        return SortDirection.ASCENDING;
-
-      case "desc":
-        return SortDirection.DESCENDING;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the sort direction with the invalid code (" + code + ")");
+    for (SortDirection value : SortDirection.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
     }
+    throw new RuntimeException(
+        "Failed to determine the sort direction with the invalid code (" + code + ")");
   }
 
   /**

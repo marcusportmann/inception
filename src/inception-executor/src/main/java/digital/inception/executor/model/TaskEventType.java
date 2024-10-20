@@ -62,14 +62,13 @@ public enum TaskEventType {
    */
   @JsonCreator
   public static TaskEventType fromCode(String code) {
-    return switch (code) {
-      case "step_completed" -> TaskEventType.STEP_COMPLETED;
-      case "task_completed" -> TaskEventType.TASK_COMPLETED;
-      case "task_failed" -> TaskEventType.TASK_FAILED;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the task event type with the invalid code (" + code + ")");
-    };
+    for (TaskEventType value : TaskEventType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the task event type with the invalid code (" + code + ")");
   }
 
   /**

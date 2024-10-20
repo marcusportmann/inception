@@ -58,13 +58,13 @@ public enum TaskSortBy {
    */
   @JsonCreator
   public static TaskSortBy fromCode(String code) {
-    return switch (code) {
-      case "queued" -> TaskSortBy.QUEUED;
-      case "type" -> TaskSortBy.TYPE;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the task sort by with the invalid code (" + code + ")");
-    };
+    for (TaskSortBy value : TaskSortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the task sort by with the invalid code (" + code + ")");
   }
 
   /**

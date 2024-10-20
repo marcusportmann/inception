@@ -57,13 +57,13 @@ public enum TenantStatus {
    */
   @JsonCreator
   public static TenantStatus fromCode(String code) {
-    return switch (code) {
-      case "inactive" -> TenantStatus.INACTIVE;
-      case "active" -> TenantStatus.ACTIVE;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the tenant status with the invalid code (" + code + ")");
-    };
+    for (TenantStatus value : TenantStatus.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the tenant status with the invalid code (" + code + ")");
   }
 
   /**

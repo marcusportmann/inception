@@ -36,11 +36,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.security"})
 public class SecurityConfiguration {
 
-  /**
-   * Constructs a new <b>SecurityConfiguration</b>.
-   */
-  public SecurityConfiguration() {
-  }
+  /** Constructs a new <b>SecurityConfiguration</b>. */
+  public SecurityConfiguration() {}
 
   /**
    * Returns the security entity manager factory bean associated with the application data source.

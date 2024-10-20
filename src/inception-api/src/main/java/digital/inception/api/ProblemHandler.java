@@ -45,7 +45,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author Marcus Portmann
  */
-
 @ControllerAdvice
 @SuppressWarnings("unused")
 public class ProblemHandler {

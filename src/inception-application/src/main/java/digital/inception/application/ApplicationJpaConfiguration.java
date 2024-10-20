@@ -40,7 +40,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Configuration
 @ConditionalOnClass(
     name = {

@@ -51,7 +51,6 @@ import org.w3c.dom.Document;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @SuppressWarnings("unused")
 public class ReportingService implements IReportingService {

@@ -104,20 +104,13 @@ public enum MeasurementUnit {
    */
   @JsonCreator
   public static MeasurementUnit fromCode(String code) {
-    return switch (code) {
-      case "metric_centimeter" -> MeasurementUnit.METRIC_CENTIMETER;
-      case "metric_meter" -> MeasurementUnit.METRIC_METER;
-      case "metric_kilogram" -> MeasurementUnit.METRIC_KILOGRAM;
-      case "imperial_inch" -> MeasurementUnit.IMPERIAL_INCH;
-      case "imperial_foot" -> MeasurementUnit.IMPERIAL_FOOT;
-      case "imperial_pound" -> MeasurementUnit.IMPERIAL_POUND;
-      case "customary_inch" -> MeasurementUnit.CUSTOMARY_INCH;
-      case "customary_foot" -> MeasurementUnit.CUSTOMARY_FOOT;
-      case "customary_pound" -> MeasurementUnit.CUSTOMARY_POUND;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the measurement unit with the invalid code (" + code + ")");
-    };
+    for (MeasurementUnit value : MeasurementUnit.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the measurement unit with the invalid code (" + code + ")");
   }
 
   /**

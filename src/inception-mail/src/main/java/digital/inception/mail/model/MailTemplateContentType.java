@@ -58,15 +58,13 @@ public enum MailTemplateContentType {
    */
   @JsonCreator
   public static MailTemplateContentType fromCode(String code) {
-    return switch (code) {
-      case "text" -> MailTemplateContentType.TEXT;
-      case "html" -> MailTemplateContentType.HTML;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the mail template content type with the invalid code ("
-                  + code
-                  + ")");
-    };
+    for (MailTemplateContentType value : MailTemplateContentType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the mail template content type with the invalid code (" + code + ")");
   }
 
   /**

@@ -53,14 +53,13 @@ public enum PartySortBy {
    */
   @JsonCreator
   public static PartySortBy fromCode(String code) {
-    switch (code) {
-      case "name":
-        return PartySortBy.NAME;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the party sort by with the invalid code (" + code + ")");
+    for (PartySortBy value : PartySortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
     }
+    throw new RuntimeException(
+        "Failed to determine the party sort by with the invalid code (" + code + ")");
   }
 
   /**

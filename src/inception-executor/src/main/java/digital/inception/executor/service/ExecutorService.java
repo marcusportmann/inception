@@ -90,7 +90,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @SuppressWarnings({"unused"})
 public class ExecutorService implements IExecutorService {

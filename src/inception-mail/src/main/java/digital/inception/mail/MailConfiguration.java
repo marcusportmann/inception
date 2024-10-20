@@ -36,11 +36,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.mail"})
 public class MailConfiguration {
 
-  /**
-   * Constructs a new <b>MailConfiguration</b>.
-   */
-  public MailConfiguration() {
-  }
+  /** Constructs a new <b>MailConfiguration</b>. */
+  public MailConfiguration() {}
 
   /**
    * Returns the mail entity manager factory bean associated with the application data source.

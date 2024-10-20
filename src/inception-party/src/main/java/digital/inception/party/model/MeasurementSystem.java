@@ -67,14 +67,13 @@ public enum MeasurementSystem {
    */
   @JsonCreator
   public static MeasurementSystem fromCode(String code) {
-    return switch (code) {
-      case "customary" -> MeasurementSystem.CUSTOMARY;
-      case "imperial" -> MeasurementSystem.IMPERIAL;
-      case "metric" -> MeasurementSystem.METRIC;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the measurement system with the invalid code (" + code + ")");
-    };
+    for (MeasurementSystem value : MeasurementSystem.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the measurement system with the invalid code (" + code + ")");
   }
 
   /**

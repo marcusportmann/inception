@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-
 public class TestSimpleTaskExecutor extends SimpleTaskExecutor<TestSimpleTaskData> {
 
   /* Logger */

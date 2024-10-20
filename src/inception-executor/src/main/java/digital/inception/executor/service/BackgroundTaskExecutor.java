@@ -39,7 +39,6 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @SuppressWarnings("unused")
 public class BackgroundTaskExecutor implements IBackgroundTaskExecutor, SmartLifecycle {
@@ -210,7 +209,6 @@ public class BackgroundTaskExecutor implements IBackgroundTaskExecutor, SmartLif
    *
    * @author Marcus Portmann
    */
-  
   public static class TaskExecutor implements Runnable {
 
     /** The Executor Service. */

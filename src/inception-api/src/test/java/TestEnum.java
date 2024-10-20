@@ -48,13 +48,13 @@ public enum TestEnum {
    */
   @JsonCreator
   public static TestEnum fromCode(String code) {
-    return switch (code) {
-      case "option1" -> TestEnum.OPTION1;
-      case "option2" -> TestEnum.OPTION2;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the test enum with the invalid code (" + code + ")");
-    };
+    for (TestEnum value : TestEnum.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the test enum with the invalid code (" + code + ")");
   }
 
   /**

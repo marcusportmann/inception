@@ -64,7 +64,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Marcus Portmann
  */
-
 @Component
 public final class PolicyDecisionPoint implements IPolicyDecisionPoint {
 

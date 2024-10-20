@@ -65,15 +65,13 @@ public enum UserStatus {
    */
   @JsonCreator
   public static UserStatus fromCode(String code) {
-    return switch (code) {
-      case "inactive" -> UserStatus.INACTIVE;
-      case "active" -> UserStatus.ACTIVE;
-      case "locked" -> UserStatus.LOCKED;
-      case "expired" -> UserStatus.EXPIRED;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the user status with the invalid code (" + code + ")");
-    };
+    for (UserStatus value : UserStatus.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the user status with the invalid code (" + code + ")");
   }
 
   /**

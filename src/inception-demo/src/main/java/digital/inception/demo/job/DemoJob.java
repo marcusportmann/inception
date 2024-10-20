@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-
 public class DemoJob implements IJob {
 
   /* Logger */

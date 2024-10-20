@@ -61,14 +61,13 @@ public enum UserSortBy {
    */
   @JsonCreator
   public static UserSortBy fromCode(String code) {
-    return switch (code) {
-      case "name" -> UserSortBy.NAME;
-      case "preferred_name" -> UserSortBy.PREFERRED_NAME;
-      case "username" -> UserSortBy.USERNAME;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the user sort by with the invalid code (" + code + ")");
-    };
+    for (UserSortBy value : UserSortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the user sort by with the invalid code (" + code + ")");
   }
 
   /**

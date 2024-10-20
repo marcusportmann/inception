@@ -51,7 +51,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Configuration
 @Conditional(WebServiceConfigurationEnabledCondition.class)
 public class WebServiceConfiguration {
@@ -253,7 +252,8 @@ public class WebServiceConfiguration {
 
     scanner.addIncludeFilter(new AnnotationTypeFilter(WebService.class));
 
-    log.info("Scanning the following packages for web services: {}",
+    log.info(
+        "Scanning the following packages for web services: {}",
         StringUtils.collectionToDelimitedString(packagesToScanForWebServices, ","));
 
     for (String packageToScanForWebServices : packagesToScanForWebServices) {

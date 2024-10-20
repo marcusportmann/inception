@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Marcus Portmann
  */
-
 @SuppressWarnings({"unused", "SpringJavaAutowiredMembersInspection"})
 public class TestJob implements IJob {
 

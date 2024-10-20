@@ -36,11 +36,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.audit"})
 public class AuditConfiguration {
 
-  /**
-   * Constructs a new <b>AuditConfiguration</b>.
-   */
-  public AuditConfiguration() {
-  }
+  /** Constructs a new <b>AuditConfiguration</b>. */
+  public AuditConfiguration() {}
 
   /**
    * Returns the audit entity manager factory bean associated with the application data source.

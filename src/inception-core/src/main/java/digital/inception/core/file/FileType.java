@@ -240,55 +240,6 @@ public enum FileType {
   @XmlEnumValue("ZIP")
   ZIP("zip", new String[] {".zip"}, "application/zip", "ZIP");
 
-  /** The file types. */
-  public static final FileType[] FILE_TYPES =
-      new FileType[] {
-        AUDIO_3GPP,
-        AUDIO_3GPP2,
-        AUDIO_AAC,
-        AUDIO_MP3,
-        AUDIO_OGG,
-        AUDIO_OPUS,
-        AUDIO_WAV,
-        AUDIO_WEBM,
-        BINARY,
-        CSV,
-        HTML,
-        IMAGE_BMP,
-        IMAGE_GIF,
-        IMAGE_JPEG,
-        IMAGE_PNG,
-        IMAGE_SVG,
-        IMAGE_TIFF,
-        IMAGE_WEBP,
-        JSON,
-        MICROSOFT_EXCEL,
-        MICROSOFT_POWERPOINT,
-        MICROSOFT_VISIO,
-        MICROSOFT_WORD,
-        ODF_PRESENTATION,
-        ODF_SPREADSHEET,
-        ODF_TEXT,
-        OOXML_DOCUMENT,
-        OOXML_PRESENTATION,
-        OOXML_SPREADSHEET,
-        OGG,
-        PDF,
-        RTF,
-        TEXT,
-        VIDEO_3GPP,
-        VIDEO_3GPP2,
-        VIDEO_AVI,
-        VIDEO_MP4,
-        VIDEO_MPEG,
-        VIDEO_MP2T,
-        VIDEO_OGG,
-        VIDEO_WEBM,
-        XHTML,
-        XML,
-        ZIP
-      };
-
   private final String code;
 
   private final String description;
@@ -312,14 +263,11 @@ public enum FileType {
    */
   @JsonCreator
   public static FileType fromCode(String code) {
-    if (StringUtils.hasText(code)) {
-      for (FileType fileType : FILE_TYPES) {
-        if (fileType.code.equals(code)) {
-          return fileType;
-        }
+    for (FileType value : FileType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
       }
     }
-
     throw new RuntimeException(
         "Failed to determine the file type with the invalid code (" + code + ")");
   }
@@ -334,7 +282,7 @@ public enum FileType {
     if (StringUtils.hasText(filename)) {
       filename = filename.toLowerCase();
 
-      for (FileType fileType : FILE_TYPES) {
+      for (FileType fileType : values()) {
 
         for (String extension : fileType.extensions) {
           if (filename.endsWith(extension)) {
@@ -356,7 +304,7 @@ public enum FileType {
    */
   public static FileType fromMimeType(String mimeType) {
     if (StringUtils.hasText(mimeType)) {
-      for (FileType fileType : FILE_TYPES) {
+      for (FileType fileType : values()) {
         if (fileType.mimeType.equals(mimeType)) {
           return fileType;
         }

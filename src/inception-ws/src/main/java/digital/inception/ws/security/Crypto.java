@@ -63,7 +63,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-
 @SuppressWarnings("unused")
 public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto.Crypto {
 

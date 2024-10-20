@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-
 @SuppressWarnings("unused")
 public class ValidationMessageInterpolator extends AbstractMessageInterpolator {
 

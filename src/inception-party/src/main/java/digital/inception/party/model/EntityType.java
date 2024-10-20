@@ -65,15 +65,13 @@ public enum EntityType {
    */
   @JsonCreator
   public static EntityType fromCode(String code) {
-    return switch (code) {
-      case "association" -> EntityType.ASSOCIATION;
-      case "mandate" -> EntityType.MANDATE;
-      case "organization" -> EntityType.ORGANIZATION;
-      case "person" -> EntityType.PERSON;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the entity type with the invalid code (" + code + ")");
-    };
+    for (EntityType value : EntityType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the entity type with the invalid code (" + code + ")");
   }
 
   /**

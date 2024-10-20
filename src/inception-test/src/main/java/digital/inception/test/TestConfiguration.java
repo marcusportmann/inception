@@ -74,7 +74,6 @@ import org.springframework.web.reactive.function.client.WebClient;
  *
  * @author Marcus Portmann
  */
-
 @Configuration
 @EnableAsync
 @EnableConfigurationProperties

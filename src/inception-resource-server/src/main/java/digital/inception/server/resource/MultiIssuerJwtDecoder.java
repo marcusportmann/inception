@@ -45,7 +45,6 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Marcus Portmann
  */
-
 public class MultiIssuerJwtDecoder implements JwtDecoder {
 
   /* Logger */

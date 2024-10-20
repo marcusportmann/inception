@@ -69,7 +69,6 @@ import org.springframework.transaction.PlatformTransactionManager;
  *
  * @author Marcus Portmann
  */
-
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(

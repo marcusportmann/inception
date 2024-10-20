@@ -74,17 +74,13 @@ public enum RequiredMandataries {
    */
   @JsonCreator
   public static RequiredMandataries fromCode(String code) {
-    return switch (code) {
-      case "all" -> RequiredMandataries.ALL;
-      case "any" -> RequiredMandataries.ANY;
-      case "any_two" -> RequiredMandataries.ANY_TWO;
-      case "any_three" -> RequiredMandataries.ANY_THREE;
-      case "any_four" -> RequiredMandataries.ANY_FOUR;
-      case "any_five" -> RequiredMandataries.ANY_FIVE;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the required mandataries with the invalid code (" + code + ")");
-    };
+    for (RequiredMandataries value : RequiredMandataries.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the required mandataries with the invalid code (" + code + ")");
   }
 
   /**

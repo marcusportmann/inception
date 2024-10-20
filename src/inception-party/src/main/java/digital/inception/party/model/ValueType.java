@@ -73,17 +73,13 @@ public enum ValueType {
    */
   @JsonCreator
   public static ValueType fromCode(String code) {
-    return switch (code) {
-      case "boolean" -> ValueType.BOOLEAN;
-      case "date" -> ValueType.DATE;
-      case "decimal" -> ValueType.DECIMAL;
-      case "double" -> ValueType.DOUBLE;
-      case "integer" -> ValueType.INTEGER;
-      case "string" -> ValueType.STRING;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the value type with the invalid code (" + code + ")");
-    };
+    for (ValueType value : ValueType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the value type with the invalid code (" + code + ")");
   }
 
   /**

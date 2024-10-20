@@ -80,7 +80,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @SpringBootApplication
 @ComponentScan(
     basePackages = {"digital.inception"},

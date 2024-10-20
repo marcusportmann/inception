@@ -54,14 +54,13 @@ public enum AssociationSortBy {
    */
   @JsonCreator
   public static AssociationSortBy fromCode(String code) {
-    switch (code) {
-      case "type":
-        return AssociationSortBy.TYPE;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the association sort by with the invalid code (" + code + ")");
+    for (AssociationSortBy value : AssociationSortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
     }
+    throw new RuntimeException(
+        "Failed to determine the association sort by with the invalid code (" + code + ")");
   }
 
   /**

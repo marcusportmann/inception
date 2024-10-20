@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @SuppressWarnings("unused")
 public class BackgroundTaskResetter {

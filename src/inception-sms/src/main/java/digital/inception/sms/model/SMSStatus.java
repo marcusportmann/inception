@@ -73,17 +73,13 @@ public enum SMSStatus {
    */
   @JsonCreator
   public static SMSStatus fromCode(String code) {
-    return switch (code) {
-      case "unknown" -> SMSStatus.UNKNOWN;
-      case "queued" -> SMSStatus.QUEUED;
-      case "sending" -> SMSStatus.SENDING;
-      case "sent" -> SMSStatus.SENT;
-      case "failed" -> SMSStatus.FAILED;
-      case "any" -> SMSStatus.ANY;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the SMS status with the invalid code (" + code + ")");
-    };
+    for (SMSStatus value : SMSStatus.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the SMS status with the invalid code (" + code + ")");
   }
 
   /**

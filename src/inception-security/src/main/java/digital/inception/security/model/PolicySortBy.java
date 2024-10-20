@@ -57,13 +57,13 @@ public enum PolicySortBy {
    */
   @JsonCreator
   public static PolicySortBy fromCode(String code) {
-    return switch (code) {
-      case "name" -> PolicySortBy.NAME;
-      case "type" -> PolicySortBy.TYPE;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the policy sort by with the invalid code (" + code + ")");
-    };
+    for (PolicySortBy value : PolicySortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the policy sort by with the invalid code (" + code + ")");
   }
 
   /**

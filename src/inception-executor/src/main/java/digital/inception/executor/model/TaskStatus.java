@@ -74,17 +74,13 @@ public enum TaskStatus {
    */
   @JsonCreator
   public static TaskStatus fromCode(String code) {
-    return switch (code) {
-      case "queued" -> TaskStatus.QUEUED;
-      case "executing" -> TaskStatus.EXECUTING;
-      case "completed" -> TaskStatus.COMPLETED;
-      case "failed" -> TaskStatus.FAILED;
-      case "cancelled" -> TaskStatus.CANCELLED;
-      case "suspended" -> TaskStatus.SUSPENDED;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the task status with the invalid code (" + code + ")");
-    };
+    for (TaskStatus value : TaskStatus.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the task status with the invalid code (" + code + ")");
   }
 
   /**

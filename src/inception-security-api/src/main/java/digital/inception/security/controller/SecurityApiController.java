@@ -104,7 +104,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})

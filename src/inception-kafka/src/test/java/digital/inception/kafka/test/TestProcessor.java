@@ -29,7 +29,6 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
-
 @Component
 public class TestProcessor extends Processor<String, String> {
 

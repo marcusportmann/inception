@@ -54,12 +54,13 @@ public enum MandateSortBy {
    */
   @JsonCreator
   public static MandateSortBy fromCode(String code) {
-    return switch (code) {
-      case "type" -> MandateSortBy.TYPE;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the mandate sort by with the invalid code (" + code + ")");
-    };
+    for (MandateSortBy value : MandateSortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the mandate sort by with the invalid code (" + code + ")");
   }
 
   /**

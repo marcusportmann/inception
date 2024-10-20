@@ -19,7 +19,6 @@ package digital.inception.demo.controller;
 import digital.inception.core.api.IPolicyDecisionPointContextProvider;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -74,7 +74,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @Conditional(InternalPartyStoreEnabledCondition.class)
 @SuppressWarnings("unused")

@@ -66,7 +66,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(

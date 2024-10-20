@@ -37,11 +37,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.reporting"})
 public class ReportingConfiguration {
 
-  /**
-   * Constructs a new <b>ReportingConfiguration</b>.
-   */
-  public ReportingConfiguration() {
-  }
+  /** Constructs a new <b>ReportingConfiguration</b>. */
+  public ReportingConfiguration() {}
 
   /**
    * Returns the reporting entity manager factory bean associated with the application data source.

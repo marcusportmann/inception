@@ -34,7 +34,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Marcus Portmann
  */
-
 @SuppressWarnings({"unused"})
 public class TransactionManagerProxy implements TransactionManager {
 

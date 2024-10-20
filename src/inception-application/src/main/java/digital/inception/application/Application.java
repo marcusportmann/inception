@@ -37,7 +37,6 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
-
 @Component
 @ComponentScan(
     basePackages = {"digital.inception"},

@@ -36,11 +36,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.party"})
 public class PartyConfiguration {
 
-  /**
-   * Constructs a new <b>PartyConfiguration</b>.
-   */
-  public PartyConfiguration() {
-  }
+  /** Constructs a new <b>PartyConfiguration</b>. */
+  public PartyConfiguration() {}
 
   /**
    * Returns the party entity manager factory bean associated with the application data source.

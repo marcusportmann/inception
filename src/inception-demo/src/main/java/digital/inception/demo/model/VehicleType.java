@@ -61,20 +61,13 @@ public enum VehicleType {
    */
   @JsonCreator
   public static VehicleType fromCode(String code) {
-    switch (code) {
-      case "car":
-        return VehicleType.CAR;
-
-      case "motorbike":
-        return VehicleType.MOTORBIKE;
-
-      case "unknown":
-        return VehicleType.UNKNOWN;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the vehicle type with the invalid code (" + code + ")");
+    for (VehicleType value : VehicleType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
     }
+    throw new RuntimeException(
+        "Failed to determine the vehicle type with the invalid code (" + code + ")");
   }
 
   /**

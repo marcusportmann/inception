@@ -74,17 +74,13 @@ public enum ConstraintType {
    */
   @JsonCreator
   public static ConstraintType fromCode(String code) {
-    return switch (code) {
-      case "max_size" -> ConstraintType.MAX_SIZE;
-      case "min_size" -> ConstraintType.MIN_SIZE;
-      case "pattern" -> ConstraintType.PATTERN;
-      case "reference" -> ConstraintType.REFERENCE;
-      case "required" -> ConstraintType.REQUIRED;
-      case "size" -> ConstraintType.SIZE;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the constraint type with the invalid code (" + code + ")");
-    };
+    for (ConstraintType value : ConstraintType.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the constraint type with the invalid code (" + code + ")");
   }
 
   /**

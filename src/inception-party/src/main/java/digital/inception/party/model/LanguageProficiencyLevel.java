@@ -75,18 +75,13 @@ public enum LanguageProficiencyLevel {
    */
   @JsonCreator
   public static LanguageProficiencyLevel fromCode(String code) {
-    return switch (code) {
-      case "beginner" -> LanguageProficiencyLevel.BEGINNER;
-      case "elementary" -> LanguageProficiencyLevel.ELEMENTARY;
-      case "intermediate" -> LanguageProficiencyLevel.INTERMEDIATE;
-      case "advanced" -> LanguageProficiencyLevel.ADVANCED;
-      case "proficient" -> LanguageProficiencyLevel.PROFICIENT;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the language proficiency level with the invalid code ("
-                  + code
-                  + ")");
-    };
+    for (LanguageProficiencyLevel value : LanguageProficiencyLevel.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the language proficiency level with the invalid code (" + code + ")");
   }
 
   /**

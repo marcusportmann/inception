@@ -44,7 +44,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Configuration
 @ConditionalOnProperty({
   "inception.application.data-source.class-name",
@@ -54,7 +53,8 @@ import org.springframework.util.StringUtils;
 public class ApplicationDataSourceConfiguration {
 
   /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(ApplicationDataSourceConfiguration.class);
+  private static final Logger log =
+      LoggerFactory.getLogger(ApplicationDataSourceConfiguration.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 /**
  * The <b>AnotherTestEnum</b> enumeration.
  *
@@ -44,13 +45,13 @@ public enum AnotherTestEnum {
    * @return the another test enum given by the specified code value
    */
   public static AnotherTestEnum fromCode(String code) {
-    return switch (code) {
-      case "option1" -> AnotherTestEnum.OPTION1;
-      case "option2" -> AnotherTestEnum.OPTION2;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the another test enum with the invalid code (" + code + ")");
-    };
+    for (AnotherTestEnum value : AnotherTestEnum.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the another test enum with the invalid code (" + code + ")");
   }
 
   /**

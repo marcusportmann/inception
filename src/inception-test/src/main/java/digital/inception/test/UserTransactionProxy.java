@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-
 @SuppressWarnings({"unused"})
 public class UserTransactionProxy implements UserTransaction {
 
@@ -82,8 +81,10 @@ public class UserTransactionProxy implements UserTransaction {
     } finally {
       Optional<Transaction> afterTransactionOptional = getCurrentTransaction();
 
-      afterTransactionOptional.ifPresent(transaction -> getActiveTransactionStackTraces()
-          .put(transaction, Thread.currentThread().getStackTrace()));
+      afterTransactionOptional.ifPresent(
+          transaction ->
+              getActiveTransactionStackTraces()
+                  .put(transaction, Thread.currentThread().getStackTrace()));
     }
   }
 

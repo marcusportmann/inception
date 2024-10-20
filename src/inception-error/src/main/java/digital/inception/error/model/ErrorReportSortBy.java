@@ -58,17 +58,13 @@ public enum ErrorReportSortBy {
    */
   @JsonCreator
   public static ErrorReportSortBy fromCode(String code) {
-    switch (code) {
-      case "created":
-        return ErrorReportSortBy.CREATED;
-
-      case "who":
-        return ErrorReportSortBy.WHO;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the error report sort by with the invalid code (" + code + ")");
+    for (ErrorReportSortBy value : ErrorReportSortBy.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
     }
+    throw new RuntimeException(
+        "Failed to determine the error report sort by with the invalid code (" + code + ")");
   }
 
   /**

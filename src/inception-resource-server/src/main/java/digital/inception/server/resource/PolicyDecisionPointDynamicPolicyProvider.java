@@ -78,12 +78,12 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
-
 public class PolicyDecisionPointDynamicPolicyProvider
     implements CloseablePolicyProvider<TopLevelPolicyElementEvaluator> {
 
   /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(PolicyDecisionPointDynamicPolicyProvider.class);
+  private static final Logger log =
+      LoggerFactory.getLogger(PolicyDecisionPointDynamicPolicyProvider.class);
 
   /** Should policy sets and policies be loaded from the classpath under pdp/policies? */
   private final Boolean classpathPoliciesEnabled;

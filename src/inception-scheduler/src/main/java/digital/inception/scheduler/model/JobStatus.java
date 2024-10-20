@@ -77,25 +77,13 @@ public enum JobStatus {
    */
   @JsonCreator
   public static JobStatus fromCode(String code) {
-    switch (code) {
-      case "unscheduled":
-        return JobStatus.UNSCHEDULED;
-      case "scheduled":
-        return JobStatus.SCHEDULED;
-      case "executing":
-        return JobStatus.EXECUTING;
-      case "executed":
-        return JobStatus.EXECUTED;
-      case "aborted":
-        return JobStatus.ABORTED;
-      case "failed":
-        return JobStatus.FAILED;
-      case "once_off":
-        return JobStatus.ONCE_OFF;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the job status with the invalid code (" + code + ")");
+    for (JobStatus value : JobStatus.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
     }
+    throw new RuntimeException(
+        "Failed to determine the job status with the invalid code (" + code + ")");
   }
 
   /**

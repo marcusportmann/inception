@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @SuppressWarnings("unused")
 public class BackgroundJobExecutor {
@@ -166,7 +165,6 @@ public class BackgroundJobExecutor {
    *
    * @author Marcus Portmann
    */
-  
   public static class JobExecutor implements Runnable {
 
     private final Job job;

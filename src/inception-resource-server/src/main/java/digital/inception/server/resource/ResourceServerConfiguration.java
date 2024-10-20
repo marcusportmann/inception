@@ -66,7 +66,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-
 @Configuration
 @EnableWebSecurity
 @ConditionalOnWebApplication(type = Type.ANY)

@@ -167,7 +167,6 @@ import org.xml.sax.SAXParseException;
  *
  * @author Marcus Portmann
  */
-
 @Service
 @SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
 public class SecurityService implements ISecurityService {

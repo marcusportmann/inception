@@ -69,18 +69,13 @@ public enum SkillProficiencyLevel {
    */
   @JsonCreator
   public static SkillProficiencyLevel fromCode(String code) {
-    return switch (code) {
-      case "novice" -> SkillProficiencyLevel.NOVICE;
-      case "advanced_beginner" -> SkillProficiencyLevel.ADVANCED_BEGINNER;
-      case "competence" -> SkillProficiencyLevel.COMPETENCE;
-      case "proficient" -> SkillProficiencyLevel.PROFICIENT;
-      case "expert" -> SkillProficiencyLevel.EXPERT;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the skill proficiency level with the invalid code ("
-                  + code
-                  + ")");
-    };
+    for (SkillProficiencyLevel value : SkillProficiencyLevel.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the skill proficiency level with the invalid code (" + code + ")");
   }
 
   /**

@@ -69,15 +69,13 @@ public enum TaskPriority {
    */
   @JsonCreator
   public static TaskPriority fromCode(String code) {
-    return switch (code) {
-      case "low" -> TaskPriority.LOW;
-      case "normal" -> TaskPriority.NORMAL;
-      case "high" -> TaskPriority.HIGH;
-      case "critical" -> TaskPriority.CRITICAL;
-      default ->
-          throw new RuntimeException(
-              "Failed to determine the task priority with the invalid code (" + code + ")");
-    };
+    for (TaskPriority value : TaskPriority.values()) {
+      if (value.code.equalsIgnoreCase(code)) {
+        return value;
+      }
+    }
+    throw new RuntimeException(
+        "Failed to determine the task priority with the invalid code (" + code + ")");
   }
 
   /**

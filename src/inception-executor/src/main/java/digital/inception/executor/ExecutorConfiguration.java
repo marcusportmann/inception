@@ -36,11 +36,8 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.executor"})
 public class ExecutorConfiguration {
 
-  /**
-   * Constructs a new <b>ExecutorConfiguration</b>.
-   */
-  public ExecutorConfiguration() {
-  }
+  /** Constructs a new <b>ExecutorConfiguration</b>. */
+  public ExecutorConfiguration() {}
 
   /**
    * Returns the executor entity manager factory bean associated with the application data source.
