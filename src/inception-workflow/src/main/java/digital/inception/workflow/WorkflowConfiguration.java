@@ -20,14 +20,17 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.jpa.JpaUtil;
+import digital.inception.workflow.flowable.DmnDbSchemaManager;
 import digital.inception.workflow.flowable.FormEngineConfiguration;
 import digital.inception.workflow.flowable.FormEngineConfigurator;
 import digital.inception.workflow.flowable.FormService;
 import java.lang.reflect.Field;
 import javax.sql.DataSource;
 import org.flowable.common.engine.impl.AbstractEngineConfiguration;
+import org.flowable.common.engine.impl.db.SchemaManager;
 import org.flowable.dmn.engine.DmnEngineConfiguration;
 import org.flowable.dmn.engine.configurator.DmnEngineConfigurator;
+
 import org.flowable.dmn.spring.SpringDmnEngineConfiguration;
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.ProcessEngineConfiguration;
@@ -184,9 +187,16 @@ public class WorkflowConfiguration {
     dmnEngineConfiguration.setDataSource(dataSource);
     dmnEngineConfiguration.setTransactionManager(transactionManager);
     dmnEngineConfiguration.setDbHistoryUsed(true);
+    dmnEngineConfiguration.setSchemaManager(new DmnDbSchemaManager());
+
+    //dmnEngineConfiguration.setDeploymentMode();
 
     return dmnEngineConfiguration;
   }
+
+
+
+
 
   /**
    * Returns the form engine configuration.
@@ -293,4 +303,6 @@ public class WorkflowConfiguration {
           "Failed to unwrap the data source (" + dataSource.getClass().getName() + ")", e);
     }
   }
+
+
 }
