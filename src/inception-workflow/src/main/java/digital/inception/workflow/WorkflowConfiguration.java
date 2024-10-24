@@ -105,8 +105,13 @@ public class WorkflowConfiguration {
       // TODO: Only do this if we detect an H2 database running in Postgres mode -- MARCUS
       processEngineConfiguration.setDatabaseType(
           AbstractEngineConfiguration.DATABASE_TYPE_POSTGRES);
-      processEngineConfiguration.setDatabaseSchemaUpdate(
-          ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE);
+
+//      processEngineConfiguration.setDatabaseSchemaUpdate(
+//          ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+
+
+//      processEngineConfiguration.setDatabaseSchemaUpdate(
+//          ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE);
       processEngineConfiguration.setDataSource(dataSource);
       processEngineConfiguration.setTransactionManager(transactionManager);
       processEngineConfiguration.setDbHistoryUsed(true);
