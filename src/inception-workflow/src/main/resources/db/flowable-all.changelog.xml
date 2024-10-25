@@ -16,14 +16,29 @@
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <!--
-  Extracted from the following file:
 
-  https://raw.githubusercontent.com/flowable/flowable-engine/flowable-7.0.0/distro/sql/create/all/flowable.postgres.all.create.sql
+    __ _                    _     _                  _ _     _____ ___   ___
+   / _| | _____      ____ _| |__ | | ___        __ _| | |   |___  / _ \ / _ \
+  | |_| |/ _ \ \ /\ / / _` | '_ \| |/ _ \_____ / _` | | |_____ / / | | | | | |
+  |  _| | (_) \ V  V / (_| | |_) | |  __/_____| (_| | | |_____/ /| |_| | |_| |
+  |_| |_|\___/ \_/\_/ \__,_|_.__/|_|\___|      \__,_|_|_|    /_(_)\___(_)___/
 
   -->
   <changeSet id="flowable-all-7.0.0" author="Marcus Portmann">
     <comment>flowable-all-7.0.0</comment>
 
+    <!--
+
+      ___ ___  _ __ ___  _ __ ___   ___  _ __
+     / __/ _ \| '_ ` _ \| '_ ` _ \ / _ \| '_ \
+    | (_| (_) | | | | | | | | | | | (_) | | | |
+     \___\___/|_| |_| |_|_| |_| |_|\___/|_| |_|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-engine-common/src/main/resources/org/flowable/common/db/create/flowable.postgres.create.common.sql
+
+    -->
     <createTable tableName="ACT_GE_PROPERTY">
       <column name="NAME_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -54,6 +69,21 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+
+                _   _ _         _ _       _
+      ___ _ __ | |_(_) |_ _   _| (_)_ __ | | __
+     / _ \ '_ \| __| | __| | | | | | '_ \| |/ /
+    |  __/ | | | |_| | |_| |_| | | | | | |   <
+     \___|_| |_|\__|_|\__|\__, |_|_|_| |_|_|\_\
+                          |___/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-entitylink-service/src/main/resources/org/flowable/entitylink/service/db/create/flowable.postgres.create.entitylink.sql
+
+    -->
     <createTable tableName="ACT_RU_ENTITYLINK">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -101,6 +131,20 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+
+                _   _ _         _ _       _         _     _     _
+      ___ _ __ | |_(_) |_ _   _| (_)_ __ | | __    | |__ (_)___| |_ ___  _ __ _   _
+     / _ \ '_ \| __| | __| | | | | | '_ \| |/ /____| '_ \| / __| __/ _ \| '__| | | |
+    |  __/ | | | |_| | |_| |_| | | | | | |   <_____| | | | \__ \ || (_) | |  | |_| |
+     \___|_| |_|\__|_|\__|\__, |_|_|_| |_|_|\_\    |_| |_|_|___/\__\___/|_|   \__, |
+                          |___/                                               |___/
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-entitylink-service/src/main/resources/org/flowable/entitylink/service/db/create/flowable.postgres.create.entitylink.history.sql
+
+    -->
     <createTable tableName="ACT_HI_ENTITYLINK">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -141,6 +185,20 @@
       <column name="LINK_TYPE_"/>
     </createIndex>
 
+
+    <!--
+
+     _     _            _   _ _         _ _       _
+    (_) __| | ___ _ __ | |_(_) |_ _   _| (_)_ __ | | __
+    | |/ _` |/ _ \ '_ \| __| | __| | | | | | '_ \| |/ /
+    | | (_| |  __/ | | | |_| | |_| |_| | | | | | |   <
+    |_|\__,_|\___|_| |_|\__|_|\__|\__, |_|_|_| |_|_|\_\
+                                 |___/
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-identitylink-service/src/main/resources/org/flowable/identitylink/service/db/create/flowable.postgres.create.identitylink.sql
+
+    -->
     <createTable tableName="ACT_RU_IDENTITYLINK">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -183,6 +241,21 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+
+     _     _            _   _ _         _ _       _         _     _     _
+    (_) __| | ___ _ __ | |_(_) |_ _   _| (_)_ __ | | __    | |__ (_)___| |_ ___  _ __ _   _
+    | |/ _` |/ _ \ '_ \| __| | __| | | | | | '_ \| |/ /____| '_ \| / __| __/ _ \| '__| | | |
+    | | (_| |  __/ | | | |_| | |_| |_| | | | | | |   <_____| | | | \__ \ || (_) | |  | |_| |
+    |_|\__,_|\___|_| |_|\__|_|\__|\__, |_|_|_| |_|_|\_\    |_| |_|_|___/\__\___/|_|   \__, |
+                                 |___/                                               |___/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-identitylink-service/src/main/resources/org/flowable/identitylink/service/db/create/flowable.postgres.create.identitylink.history.sql
+
+    -->
     <createTable tableName="ACT_HI_IDENTITYLINK">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -215,6 +288,21 @@
       <column name="SCOPE_TYPE_"/>
     </createIndex>
 
+
+    <!--
+
+       _       _
+      (_) ___ | |__
+      | |/ _ \| '_ \
+      | | (_) | |_) |
+     _/ |\___/|_.__/
+    |__/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-job-service/src/main/resources/org/flowable/job/service/db/create/flowable.postgres.create.job.sql
+
+    -->
     <createTable tableName="ACT_RU_JOB">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -563,6 +651,20 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+
+     _           _       _
+    | |__   __ _| |_ ___| |__
+    | '_ \ / _` | __/ __| '_ \
+    | |_) | (_| | || (__| | | |
+    |_.__/ \__,_|\__\___|_| |_|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-batch-service/src/main/resources/org/flowable/batch/service/db/create/flowable.postgres.create.batch.sql
+
+    -->
     <createTable tableName="FLW_RU_BATCH">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -619,6 +721,20 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+
+     _            _
+    | |_ __ _ ___| | __
+    | __/ _` / __| |/ /
+    | || (_| \__ \   <
+     \__\__,_|___/_|\_\
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-task-service/src/main/resources/org/flowable/task/service/db/create/flowable.postgres.create.task.sql
+
+    -->
     <createTable tableName="ACT_RU_TASK">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -676,6 +792,20 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+
+     _            _         _     _     _
+    | |_ __ _ ___| | __    | |__ (_)___| |_ ___  _ __ _   _
+    | __/ _` / __| |/ /____| '_ \| / __| __/ _ \| '__| | | |
+    | || (_| \__ \   <_____| | | | \__ \ || (_) | |  | |_| |
+     \__\__,_|___/_|\_\    |_| |_|_|___/\__\___/|_|   \__, |
+                                                      |___/
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-task-service/src/main/resources/org/flowable/task/service/db/create/flowable.postgres.create.task.history.sql
+
+    -->
     <createTable tableName="ACT_HI_TASKINST">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -747,6 +877,19 @@
       <column name="SCOPE_TYPE_"/>
     </createIndex>
 
+
+    <!--
+                     _       _     _
+    __   ____ _ _ __(_) __ _| |__ | | ___
+    \ \ / / _` | '__| |/ _` | '_ \| |/ _ \
+     \ V / (_| | |  | | (_| | |_) | |  __/
+      \_/ \__,_|_|  |_|\__,_|_.__/|_|\___|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-variable-service/src/main/resources/org/flowable/variable/service/db/create/flowable.postgres.create.variable.sql
+
+    -->
     <createTable tableName="ACT_RU_VARIABLE">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -794,6 +937,21 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+
+                     _       _     _            _     _     _
+    __   ____ _ _ __(_) __ _| |__ | | ___      | |__ (_)___| |_ ___  _ __ _   _
+    \ \ / / _` | '__| |/ _` | '_ \| |/ _ \_____| '_ \| / __| __/ _ \| '__| | | |
+     \ V / (_| | |  | | (_| | |_) | |  __/_____| | | | \__ \ || (_) | |  | |_| |
+      \_/ \__,_|_|  |_|\__,_|_.__/|_|\___|     |_| |_|_|___/\__\___/|_|   \__, |
+                                                                          |___/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-variable-service/src/main/resources/org/flowable/variable/service/db/create/flowable.postgres.create.variable.history.sql
+
+    -->
     <createTable tableName="ACT_HI_VARINST">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -832,6 +990,20 @@
       <column name="SCOPE_TYPE_"/>
     </createIndex>
 
+
+    <!--
+
+                         _             _                   _       _   _
+     _____   _____ _ __ | |_ ___ _   _| |__  ___  ___ _ __(_)_ __ | |_(_) ___  _ __
+    / _ \ \ / / _ \ '_ \| __/ __| | | | '_ \/ __|/ __| '__| | '_ \| __| |/ _ \| '_ \
+   |  __/\ V /  __/ | | | |_\__ \ |_| | |_) \__ \ (__| |  | | |_) | |_| | (_) | | | |
+    \___| \_/ \___|_| |_|\__|___/\__,_|_.__/|___/\___|_|  |_| .__/ \__|_|\___/|_| |_|
+                                                            |_|
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-eventsubscription-service/src/main/resources/org/flowable/eventsubscription/service/db/create/flowable.postgres.create.eventsubscription.sql
+
+    -->
     <createTable tableName="ACT_RU_EVENT_SUBSCR">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -875,6 +1047,20 @@
       <column name="REV_" value="1"/>
     </insert>
 
+
+    <!--
+                       _
+       ___ _ __   __ _(_)_ __   ___
+      / _ \ '_ \ / _` | | '_ \ / _ \
+     |  __/ | | | (_| | | | | |  __/
+      \___|_| |_|\__, |_|_| |_|\___|
+                 |___/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-engine/src/main/resources/org/flowable/db/create/flowable.postgres.create.engine.sql
+
+    -->
     <createTable tableName="ACT_RE_DEPLOYMENT">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
@@ -1005,7 +1191,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="PROC_DEF_ID_" type="nvarchar(64)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
       <column name="REV_" type="int"/>
       <column name="INFO_JSON_ID_" type="nvarchar(64)"/>
@@ -1098,7 +1284,6 @@
     <createIndex indexName="ACT_IDX_EXE_PROCINST" tableName="ACT_RU_EXECUTION">
       <column name="PROC_INST_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_EXE_PROCINST"
       baseTableName="ACT_RU_EXECUTION" baseColumnNames="PROC_INST_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1106,7 +1291,6 @@
     <createIndex indexName="ACT_IDX_EXE_PARENT" tableName="ACT_RU_EXECUTION">
       <column name="PARENT_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_EXE_PARENT"
       baseTableName="ACT_RU_EXECUTION" baseColumnNames="PARENT_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1114,7 +1298,6 @@
     <createIndex indexName="ACT_IDX_EXE_SUPER" tableName="ACT_RU_EXECUTION">
       <column name="SUPER_EXEC_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_EXE_SUPER"
       baseTableName="ACT_RU_EXECUTION" baseColumnNames="SUPER_EXEC_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1122,7 +1305,6 @@
     <createIndex indexName="ACT_IDX_EXE_PROCDEF" tableName="ACT_RU_EXECUTION">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_EXE_PROCDEF"
       baseTableName="ACT_RU_EXECUTION" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
@@ -1130,7 +1312,6 @@
     <createIndex indexName="ACT_IDX_TSKASS_TASK" tableName="ACT_RU_IDENTITYLINK">
       <column name="TASK_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_TSKASS_TASK"
       baseTableName="ACT_RU_IDENTITYLINK" baseColumnNames="TASK_ID_"
       referencedTableName="ACT_RU_TASK" referencedColumnNames="ID_"/>
@@ -1138,7 +1319,6 @@
     <createIndex indexName="ACT_IDX_ATHRZ_PROCEDEF" tableName="ACT_RU_IDENTITYLINK">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_ATHRZ_PROCEDEF"
       baseTableName="ACT_RU_IDENTITYLINK" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
@@ -1146,7 +1326,6 @@
     <createIndex indexName="ACT_IDX_IDL_PROCINST" tableName="ACT_RU_IDENTITYLINK">
       <column name="PROC_INST_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_IDL_PROCINST"
       baseTableName="ACT_RU_IDENTITYLINK" baseColumnNames="PROC_INST_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1154,7 +1333,6 @@
     <createIndex indexName="ACT_IDX_TASK_EXEC" tableName="ACT_RU_TASK">
       <column name="EXECUTION_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_TASK_EXE"
       baseTableName="ACT_RU_TASK" baseColumnNames="EXECUTION_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1162,7 +1340,6 @@
     <createIndex indexName="ACT_IDX_TASK_PROCINST" tableName="ACT_RU_TASK">
       <column name="PROC_INST_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_TASK_PROCINST"
       baseTableName="ACT_RU_TASK" baseColumnNames="PROC_INST_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1170,7 +1347,6 @@
     <createIndex indexName="ACT_IDX_TASK_PROCDEF" tableName="ACT_RU_TASK">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_TASK_PROCDEF"
       baseTableName="ACT_RU_TASK" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
@@ -1178,7 +1354,6 @@
     <createIndex indexName="ACT_IDX_VAR_EXE" tableName="ACT_RU_VARIABLE">
       <column name="EXECUTION_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_VAR_EXE"
       baseTableName="ACT_RU_VARIABLE" baseColumnNames="EXECUTION_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1186,7 +1361,6 @@
     <createIndex indexName="ACT_IDX_VAR_PROCINST" tableName="ACT_RU_VARIABLE">
       <column name="PROC_INST_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_VAR_PROCINST"
       baseTableName="ACT_RU_VARIABLE" baseColumnNames="PROC_INST_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1194,7 +1368,6 @@
     <createIndex indexName="ACT_IDX_JOB_EXECUTION_ID" tableName="ACT_RU_JOB">
       <column name="EXECUTION_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_JOB_EXECUTION"
       baseTableName="ACT_RU_JOB" baseColumnNames="EXECUTION_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1202,7 +1375,6 @@
     <createIndex indexName="ACT_IDX_JOB_PROCESS_INSTANCE_ID" tableName="ACT_RU_JOB">
       <column name="PROCESS_INSTANCE_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_JOB_PROCESS_INSTANCE"
       baseTableName="ACT_RU_JOB" baseColumnNames="PROCESS_INSTANCE_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1210,7 +1382,6 @@
     <createIndex indexName="ACT_IDX_JOB_PROC_DEF_ID" tableName="ACT_RU_JOB">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_JOB_PROC_DEF"
       baseTableName="ACT_RU_JOB" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
@@ -1218,7 +1389,6 @@
     <createIndex indexName="ACT_IDX_TIMER_JOB_EXECUTION_ID" tableName="ACT_RU_TIMER_JOB">
       <column name="EXECUTION_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_TIMER_JOB_EXECUTION"
       baseTableName="ACT_RU_TIMER_JOB" baseColumnNames="EXECUTION_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1226,7 +1396,6 @@
     <createIndex indexName="ACT_IDX_TIMER_JOB_PROCESS_INSTANCE_ID" tableName="ACT_RU_TIMER_JOB">
       <column name="PROCESS_INSTANCE_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_TIMER_JOB_PROCESS_INSTANCE"
       baseTableName="ACT_RU_TIMER_JOB" baseColumnNames="PROCESS_INSTANCE_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1234,7 +1403,6 @@
     <createIndex indexName="ACT_IDX_TIMER_JOB_PROC_DEF_ID" tableName="ACT_RU_TIMER_JOB">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_TIMER_JOB_PROC_DEF"
       baseTableName="ACT_RU_TIMER_JOB" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
@@ -1242,7 +1410,6 @@
     <createIndex indexName="ACT_IDX_SUSPENDED_JOB_EXECUTION_ID" tableName="ACT_RU_SUSPENDED_JOB">
       <column name="EXECUTION_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_SUSPENDED_JOB_EXECUTION"
       baseTableName="ACT_RU_SUSPENDED_JOB" baseColumnNames="EXECUTION_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1250,7 +1417,6 @@
     <createIndex indexName="ACT_IDX_SUSPENDED_JOB_PROCESS_INSTANCE_ID" tableName="ACT_RU_SUSPENDED_JOB">
       <column name="PROCESS_INSTANCE_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_SUSPENDED_JOB_PROCESS_INSTANCE"
       baseTableName="ACT_RU_SUSPENDED_JOB" baseColumnNames="PROCESS_INSTANCE_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1258,7 +1424,6 @@
     <createIndex indexName="ACT_IDX_SUSPENDED_JOB_PROC_DEF_ID" tableName="ACT_RU_SUSPENDED_JOB">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_SUSPENDED_JOB_PROC_DEF"
       baseTableName="ACT_RU_SUSPENDED_JOB" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
@@ -1266,7 +1431,6 @@
     <createIndex indexName="ACT_IDX_DEADLETTER_JOB_EXECUTION_ID" tableName="ACT_RU_DEADLETTER_JOB">
       <column name="EXECUTION_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_DEADLETTER_JOB_EXECUTION"
       baseTableName="ACT_RU_DEADLETTER_JOB" baseColumnNames="EXECUTION_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1274,7 +1438,6 @@
     <createIndex indexName="ACT_IDX_DEADLETTER_JOB_PROCESS_INSTANCE_ID" tableName="ACT_RU_DEADLETTER_JOB">
       <column name="PROCESS_INSTANCE_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_DEADLETTER_JOB_PROCESS_INSTANCE"
       baseTableName="ACT_RU_DEADLETTER_JOB" baseColumnNames="PROCESS_INSTANCE_ID_"
       referencedTableName="ACT_RU_EXECUTION" referencedColumnNames="ID_"/>
@@ -1282,7 +1445,6 @@
     <createIndex indexName="ACT_IDX_DEADLETTER_JOB_PROC_DEF_ID" tableName="ACT_RU_DEADLETTER_JOB">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_DEADLETTER_JOB_PROC_DEF"
       baseTableName="ACT_RU_DEADLETTER_JOB" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
@@ -1294,7 +1456,6 @@
     <createIndex indexName="ACT_IDX_MODEL_SOURCE" tableName="ACT_RE_MODEL">
       <column name="EDITOR_SOURCE_VALUE_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_MODEL_SOURCE"
       baseTableName="ACT_RE_MODEL" baseColumnNames="EDITOR_SOURCE_VALUE_ID_"
       referencedTableName="ACT_GE_BYTEARRAY" referencedColumnNames="ID_"/>
@@ -1302,7 +1463,6 @@
     <createIndex indexName="ACT_IDX_MODEL_SOURCE_EXTRA" tableName="ACT_RE_MODEL">
       <column name="EDITOR_SOURCE_EXTRA_VALUE_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_MODEL_SOURCE_EXTRA"
       baseTableName="ACT_RE_MODEL" baseColumnNames="EDITOR_SOURCE_EXTRA_VALUE_ID_"
       referencedTableName="ACT_GE_BYTEARRAY" referencedColumnNames="ID_"/>
@@ -1310,7 +1470,6 @@
     <createIndex indexName="ACT_IDX_MODEL_DEPLOYMENT" tableName="ACT_RE_MODEL">
       <column name="DEPLOYMENT_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_MODEL_DEPLOYMENT"
       baseTableName="ACT_RE_MODEL" baseColumnNames="DEPLOYMENT_ID_"
       referencedTableName="ACT_RE_DEPLOYMENT" referencedColumnNames="ID_"/>
@@ -1318,7 +1477,6 @@
     <createIndex indexName="ACT_IDX_PROCDEF_INFO_JSON" tableName="ACT_PROCDEF_INFO">
       <column name="INFO_JSON_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_INFO_JSON_BA"
       baseTableName="ACT_PROCDEF_INFO" baseColumnNames="INFO_JSON_ID_"
       referencedTableName="ACT_GE_BYTEARRAY" referencedColumnNames="ID_"/>
@@ -1326,12 +1484,11 @@
     <createIndex indexName="ACT_IDX_PROCDEF_INFO_PROC" tableName="ACT_PROCDEF_INFO">
       <column name="PROC_DEF_ID_"/>
     </createIndex>
-
     <addForeignKeyConstraint constraintName="ACT_FK_INFO_PROCDEF"
       baseTableName="ACT_PROCDEF_INFO" baseColumnNames="PROC_DEF_ID_"
       referencedTableName="ACT_RE_PROCDEF" referencedColumnNames="ID_"/>
 
-    <addUniqueConstraint tableName="ACT_PROCDEF_INFO" columnNames="PROC_DEF_ID_"/>
+    <addUniqueConstraint constraintName="ACT_UNIQ_INFO_PROCDEF" tableName="ACT_PROCDEF_INFO" columnNames="PROC_DEF_ID_"/>
 
     <insert tableName="ACT_GE_PROPERTY">
       <column name="NAME_" value="schema.version"/>
@@ -1341,17 +1498,32 @@
 
     <insert tableName="ACT_GE_PROPERTY">
       <column name="NAME_" value="schema.history"/>
-      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="VALUE_" value="create(7.0.0.0)"/>
       <column name="REV_" value="1"/>
     </insert>
 
-    <createTable tableName="">
+
+    <!--
+
+                      _                  _     _     _
+      ___ _ __   __ _(_)_ __   ___      | |__ (_)___| |_ ___  _ __ _   _
+     / _ \ '_ \ / _` | | '_ \ / _ \_____| '_ \| / __| __/ _ \| '__| | | |
+    |  __/ | | | (_| | | | | |  __/_____| | | | \__ \ || (_) | |  | |_| |
+     \___|_| |_|\__, |_|_| |_|\___|     |_| |_|_|___/\__\___/|_|   \__, |
+                |___/                                              |___/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-engine/src/main/resources/org/flowable/db/create/flowable.postgres.create.history.sql
+
+    -->
+    <createTable tableName="ACT_HI_PROCINST">
       <column name="ID_" type="nvarchar(64)">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="REV_" type="int" defaultValue="1"/>
       <column name="PROC_INST_ID_" type="nvarchar(64)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
       <column name="BUSINESS_KEY_" type="nvarchar(255)"/>
       <column name="PROC_DEF_ID_" type="nvarchar(64)">
@@ -1373,18 +1545,848 @@
       <column name="CALLBACK_TYPE_" type="nvarchar(255)"/>
       <column name="REFERENCE_ID_" type="nvarchar(255)"/>
       <column name="REFERENCE_TYPE_" type="nvarchar(255)"/>
-      <column name="" type=""/>
-      <column name="" type=""/>
-      <column name="" type=""/>
-      <column name="" type=""/>
-      <column name="" type=""/>
-      <column name="" type=""/>
-
+      <column name="PROPAGATED_STAGE_INST_ID_" type="nvarchar(255)"/>
+      <column name="BUSINESS_STATUS_" type="nvarchar(255)"/>
     </createTable>
 
+    <createTable tableName="ACT_HI_ACTINST">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int" defaultValue="1"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PROC_INST_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EXECUTION_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ACT_ID_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="CALL_PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="ACT_NAME_" type="nvarchar(255)"/>
+      <column name="ACT_TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ASSIGNEE_" type="nvarchar(255)"/>
+      <column name="START_TIME_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="END_TIME_" type="timestamp"/>
+      <column name="TRANSACTION_ORDER_" type="integer"/>
+      <column name="DURATION_" type="bigint"/>
+      <column name="DELETE_REASON_" type="nvarchar(4000)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+
+    <createTable tableName="ACT_HI_DETAIL">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="TYPE_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="EXECUTION_ID_" type="nvarchar(64)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="ACT_INST_ID_" type="nvarchar(64)"/>
+      <column name="NAME_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VAR_TYPE_" type="nvarchar(64)"/>
+      <column name="REV_" type="int"/>
+      <column name="TIME_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BYTEARRAY_ID_" type="nvarchar(64)"/>
+      <column name="DOUBLE_" type="double"/>
+      <column name="LONG_" type="bigint"/>
+      <column name="TEXT_" type="nvarchar(4000)"/>
+      <column name="TEXT2_" type="nvarchar(4000)"/>
+    </createTable>
+
+    <createTable tableName="ACT_HI_COMMENT">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="TYPE_" type="nvarchar(255)"/>
+      <column name="TIME_" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="ACTION_" type="nvarchar(255)"/>
+      <column name="MESSAGE_" type="nvarchar(4000)"/>
+      <column name="FULL_MSG_" type="${blob_type}"/>
+    </createTable>
+
+    <createTable tableName="ACT_HI_ATTACHMENT">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="DESCRIPTION_" type="nvarchar(4000)"/>
+      <column name="TYPE_" type="nvarchar(255)"/>
+      <column name="TASK_ID_" type="nvarchar(64)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(64)"/>
+      <column name="URL_" type="nvarchar(4000)"/>
+      <column name="CONTENT_ID_" type="nvarchar(64)"/>
+      <column name="TIME_" type="timestamp"/>
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_HI_PRO_INST_END" tableName="ACT_HI_PROCINST">
+      <column name="END_TIME_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_PRO_I_BUSKEY" tableName="ACT_HI_PROCINST">
+      <column name="BUSINESS_KEY_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_PRO_SUPER_PROCINST" tableName="ACT_HI_PROCINST">
+      <column name="SUPER_PROCESS_INSTANCE_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_ACT_INST_START" tableName="ACT_HI_ACTINST">
+      <column name="START_TIME_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_ACT_INST_END" tableName="ACT_HI_ACTINST">
+      <column name="END_TIME_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_DETAIL_PROC_INST" tableName="ACT_HI_DETAIL">
+      <column name="PROC_INST_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_DETAIL_ACT_INST" tableName="ACT_HI_DETAIL">
+      <column name="ACT_INST_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_DETAIL_TIME" tableName="ACT_HI_DETAIL">
+      <column name="TIME_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_DETAIL_NAME" tableName="ACT_HI_DETAIL">
+      <column name="NAME_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_DETAIL_TASK_ID" tableName="ACT_HI_DETAIL">
+      <column name="TASK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_PROCVAR_PROC_INST" tableName="ACT_HI_VARINST">
+      <column name="PROC_INST_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_PROCVAR_TASK_ID" tableName="ACT_HI_VARINST">
+      <column name="TASK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_PROCVAR_EXE" tableName="ACT_HI_VARINST">
+      <column name="EXECUTION_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_ACT_INST_PROCINST" tableName="ACT_HI_ACTINST">
+      <column name="PROC_INST_ID_"/>
+      <column name="ACT_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_ACT_INST_EXEC" tableName="ACT_HI_ACTINST">
+      <column name="EXECUTION_ID_"/>
+      <column name="ACT_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_IDENT_LNK_TASK" tableName="ACT_HI_IDENTITYLINK">
+      <column name="TASK_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_IDENT_LNK_PROCINST" tableName="ACT_HI_IDENTITYLINK">
+      <column name="PROC_INST_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_HI_TASK_INST_PROCINST" tableName="ACT_HI_TASKINST">
+      <column name="PROC_INST_ID_"/>
+    </createIndex>
+
+
+    <!--
+
+     _     _            _   _ _
+    (_) __| | ___ _ __ | |_(_) |_ _   _
+    | |/ _` |/ _ \ '_ \| __| | __| | | |
+    | | (_| |  __/ | | | |_| | |_| |_| |
+    |_|\__,_|\___|_| |_|\__|_|\__|\__, |
+                                  |___/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-idm-engine/src/main/resources/org/flowable/idm/db/create/flowable.postgres.create.identity.sql
+
+    -->
+    <createTable tableName="ACT_ID_PROPERTY">
+      <column name="NAME_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="VALUE_" type="nvarchar(300)"/>
+      <column name="REV_" type="int"/>
+    </createTable>
+
+    <insert tableName="ACT_ID_PROPERTY">
+      <column name="NAME_" value="schema.version"/>
+      <column name="VALUE_" value="7.0.0.0"/>
+      <column name="REV_" value="1"/>
+    </insert>
+
+    <createTable tableName="ACT_ID_BYTEARRAY">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="BYTES_" type="${blob_type}"/>
+    </createTable>
+
+    <createTable tableName="ACT_ID_GROUP">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createTable tableName="ACT_ID_MEMBERSHIP">
+      <column name="USER_ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="GROUP_ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="ACT_ID_USER">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="FIRST_" type="nvarchar(255)"/>
+      <column name="LAST_" type="nvarchar(255)"/>
+      <column name="DISPLAY_NAME_" type="nvarchar(255)"/>
+      <column name="EMAIL_" type="nvarchar(255)"/>
+      <column name="PWD_" type="nvarchar(255)"/>
+      <column name="PICTURE_ID_" type="nvarchar(64)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue=""/>
+    </createTable>
+
+    <createTable tableName="ACT_ID_INFO">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="USER_ID_" type="nvarchar(64)"/>
+      <column name="TYPE_" type="nvarchar(64)"/>
+      <column name="KEY_" type="nvarchar(255)"/>
+      <column name="VALUE_" type="nvarchar(255)"/>
+      <column name="PASSWORD_" type="${blob_type}"/>
+      <column name="PARENT_ID_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createTable tableName="ACT_ID_TOKEN">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="TOKEN_VALUE_" type="nvarchar(255)"/>
+      <column name="TOKEN_DATE_" type="timestamp"/>
+      <column name="IP_ADDRESS_" type="nvarchar(255)"/>
+      <column name="USER_AGENT_" type="nvarchar(255)"/>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="TOKEN_DATA_" type="nvarchar(2000)"/>
+    </createTable>
+
+    <createTable tableName="ACT_ID_PRIV">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="NAME_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="ACT_ID_PRIV_MAPPING">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="PRIV_ID_" type="nvarchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID_" type="nvarchar(255)"/>
+      <column name="GROUP_ID_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_MEMB_GROUP" tableName="ACT_ID_MEMBERSHIP">
+      <column name="GROUP_ID_"/>
+    </createIndex>
+    <addForeignKeyConstraint constraintName="ACT_FK_MEMB_GROUP"
+      baseTableName="ACT_ID_MEMBERSHIP" baseColumnNames="GROUP_ID_"
+      referencedTableName="ACT_ID_GROUP" referencedColumnNames="ID_"/>
+
+    <createIndex indexName="ACT_IDX_MEMB_USER" tableName="ACT_ID_MEMBERSHIP">
+      <column name="USER_ID_"/>
+    </createIndex>
+    <addForeignKeyConstraint constraintName="ACT_FK_MEMB_USER"
+      baseTableName="ACT_ID_MEMBERSHIP" baseColumnNames="USER_ID_"
+      referencedTableName="ACT_ID_USER" referencedColumnNames="ID_"/>
+
+    <createIndex indexName="ACT_IDX_PRIV_MAPPING" tableName="ACT_ID_PRIV_MAPPING">
+      <column name="PRIV_ID_"/>
+    </createIndex>
+    <addForeignKeyConstraint constraintName="ACT_FK_PRIV_MAPPING"
+      baseTableName="ACT_ID_PRIV_MAPPING" baseColumnNames="PRIV_ID_"
+      referencedTableName="ACT_ID_PRIV" referencedColumnNames="ID_"/>
+
+    <createIndex indexName="ACT_IDX_PRIV_USER" tableName="ACT_ID_PRIV_MAPPING">
+      <column name="USER_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_PRIV_GROUP" tableName="ACT_ID_PRIV_MAPPING">
+      <column name="GROUP_ID_"/>
+    </createIndex>
+
+    <addUniqueConstraint constraintName="ACT_UNIQ_PRIV_NAME" tableName="ACT_ID_PRIV" columnNames="NAME_"/>
+
+
+    <!--
+
+      __ _ _ __  _ __
+     / _` | '_ \| '_ \
+    | (_| | |_) | |_) |
+     \__,_| .__/| .__/
+          |_|   |_|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-idm-engine/src/main/resources/org/flowable/idm/db/create/flowable.postgres.create.identity.sql
+
+    -->
+    <createTable tableName="ACT_APP_DEPLOYMENT">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="KEY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOY_TIME_" type="datetime">
+        <constraints nullable="true" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+    </createTable>
+
+    <createTable tableName="ACT_APP_DEPLOYMENT_RESOURCE">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_APP_DEPLOYMENT_RESOURCE" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="RESOURCE_BYTES_" type="${blob_type}">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_APP_RSRC_DPL"
+      baseTableName="ACT_APP_DEPLOYMENT_RESOURCE" baseColumnNames="DEPLOYMENT_ID_"
+      referencedTableName="ACT_APP_DEPLOYMENT" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_APP_RSRC_DPL" tableName="ACT_APP_DEPLOYMENT_RESOURCE">
+      <column name="DEPLOYMENT_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_APP_APPDEF">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="KEY_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="VERSION_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="CATEGORY_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="RESOURCE_NAME_" type="nvarchar(4000)" />
+      <column name="DESCRIPTION_" type="nvarchar(4000)" />
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_APP_DEF_DPLY"
+      baseTableName="ACT_APP_APPDEF" baseColumnNames="DEPLOYMENT_ID_"
+      referencedTableName="ACT_APP_DEPLOYMENT" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_APP_DEF_DPLY" tableName="ACT_APP_APPDEF" >
+      <column name="DEPLOYMENT_ID_" />
+    </createIndex>
+
+    <createIndex indexName="ACT_IDX_APP_DEF_UNIQ" tableName="ACT_APP_APPDEF" unique="true">
+      <column name="KEY_" />
+      <column name="VERSION_" />
+      <column name="TENANT_ID_" />
+    </createIndex>
+
+
+    <!--
+
+      ___ _ __ ___  _ __ ___  _ __
+     / __| '_ ` _ \| '_ ` _ \| '_ \
+    | (__| | | | | | | | | | | | | |
+     \___|_| |_| |_|_| |_| |_|_| |_|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-cmmn-engine/src/main/resources/org/flowable/cmmn/db/liquibase/flowable-cmmn-db-changelog.xml
+
+    -->
+    <createTable tableName="ACT_CMMN_DEPLOYMENT">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="KEY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOY_TIME_" type="datetime">
+        <constraints nullable="true" />
+      </column>
+      <column name="PARENT_DEPLOYMENT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+    </createTable>
+
+    <createTable tableName="ACT_CMMN_DEPLOYMENT_RESOURCE">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_CMMN_DEPLOYMENT_RESOURCE" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="RESOURCE_BYTES_" type="${blob_type}">
+        <constraints nullable="true" />
+      </column>
+      <column name="GENERATED_" type="boolean"/>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_CMMN_RSRC_DPL"
+      baseTableName="ACT_CMMN_DEPLOYMENT_RESOURCE" baseColumnNames="DEPLOYMENT_ID_"
+      referencedTableName="ACT_CMMN_DEPLOYMENT" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_CMMN_RSRC_DPL" tableName="ACT_CMMN_DEPLOYMENT_RESOURCE">
+      <column name="DEPLOYMENT_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_CMMN_CASEDEF">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="KEY_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="VERSION_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="CATEGORY_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="RESOURCE_NAME_" type="nvarchar(4000)" />
+      <column name="DESCRIPTION_" type="nvarchar(4000)" />
+      <column name="HAS_GRAPHICAL_NOTATION_" type="boolean" />
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+      <column name="DGRM_RESOURCE_NAME_" type="nvarchar(4000)"/>
+      <column name="HAS_START_FORM_KEY_" type="boolean"/>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_CASE_DEF_DPLY"
+      baseTableName="ACT_CMMN_CASEDEF" baseColumnNames="DEPLOYMENT_ID_"
+      referencedTableName="ACT_CMMN_DEPLOYMENT" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_CASE_DEF_DPLY" tableName="ACT_CMMN_CASEDEF">
+      <column name="DEPLOYMENT_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_CMMN_RU_CASE_INST">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="BUSINESS_KEY_" type="nvarchar(255)" />
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="PARENT_ID_" type="nvarchar(255)" />
+      <column name="CASE_DEF_ID_" type="nvarchar(255)" />
+      <column name="STATE_" type="nvarchar(255)" />
+      <column name="START_TIME_" type="datetime" />
+      <column name="START_USER_ID_" type="nvarchar(255)" />
+      <column name="CALLBACK_ID_" type="nvarchar(255)" />
+      <column name="CALLBACK_TYPE_" type="nvarchar(255)" />
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+      <column name="LOCK_TIME_" type="datetime" />
+      <column name="IS_COMPLETEABLE_" type="boolean" />
+      <column name="REFERENCE_ID_" type="nvarchar(255)" />
+      <column name="REFERENCE_TYPE_" type="nvarchar(255)" />
+      <column name="LOCK_OWNER_" type="nvarchar(255)" />
+      <column name="LAST_REACTIVATION_TIME_" type="datetime(3)" />
+      <column name="LAST_REACTIVATION_USER_ID_" type="nvarchar(255)" />
+      <column name="BUSINESS_STATUS_" type="nvarchar(255)" />
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_CASE_INST_CASE_DEF"
+      baseTableName="ACT_CMMN_RU_CASE_INST" baseColumnNames="CASE_DEF_ID_"
+      referencedTableName="ACT_CMMN_CASEDEF" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_CASE_INST_CASE_DEF" tableName="ACT_CMMN_RU_CASE_INST">
+      <column name="CASE_DEF_ID_" />
+    </createIndex>
+
+    <!-- Note: no foreign key for parent id, as this won't work for non-blocking subcases -->
+    <createIndex indexName="ACT_IDX_CASE_INST_PARENT" tableName="ACT_CMMN_RU_CASE_INST">
+      <column name="PARENT_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_CMMN_RU_PLAN_ITEM_INST">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_CMMN_PLAN_ITEM_INST" />
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="CASE_DEF_ID_" type="nvarchar(255)" />
+      <column name="CASE_INST_ID_" type="nvarchar(255)" />
+      <column name="STAGE_INST_ID_" type="nvarchar(255)" />
+      <column name="IS_STAGE_" type="boolean" />
+      <column name="ELEMENT_ID_" type="nvarchar(255)" />
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="STATE_" type="nvarchar(255)" />
+      <column name="CREATE_TIME_" type="datetime(3)" />
+      <column name="START_USER_ID_" type="nvarchar(255)" />
+      <column name="REFERENCE_ID_" type="nvarchar(255)" />
+      <column name="REFERENCE_TYPE_" type="nvarchar(255)" />
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+      <column name="ITEM_DEFINITION_ID_" type="nvarchar(255)" />
+      <column name="ITEM_DEFINITION_TYPE_" type="nvarchar(255)" />
+      <column name="IS_COMPLETEABLE_" type="boolean" />
+      <column name="IS_COUNT_ENABLED_" type="boolean" />
+      <column name="VAR_COUNT_" type="integer" />
+      <column name="SENTRY_PART_INST_COUNT_" type="integer" />
+      <column name="LAST_AVAILABLE_TIME_" type="datetime(3)" />
+      <column name="LAST_ENABLED_TIME_" type="datetime(3)" />
+      <column name="LAST_DISABLED_TIME_" type="datetime(3)" />
+      <column name="LAST_STARTED_TIME_" type="datetime(3)" />
+      <column name="LAST_SUSPENDED_TIME_" type="datetime(3)" />
+      <column name="COMPLETED_TIME_" type="datetime(3)" />
+      <column name="OCCURRED_TIME_" type="datetime(3)" />
+      <column name="TERMINATED_TIME_" type="datetime(3)" />
+      <column name="EXIT_TIME_" type="datetime(3)" />
+      <column name="ENDED_TIME_" type="datetime(3)" />
+      <column name="ENTRY_CRITERION_ID_" type="nvarchar(255)" />
+      <column name="EXIT_CRITERION_ID_" type="nvarchar(255)" />
+      <column name="EXTRA_VALUE_" type="nvarchar(255)" />
+      <column name="DERIVED_CASE_DEF_ID_" type="nvarchar(255)" />
+      <column name="LAST_UNAVAILABLE_TIME_" type="datetime(3)" />
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_PLAN_ITEM_CASE_DEF"
+      baseTableName="ACT_CMMN_RU_PLAN_ITEM_INST" baseColumnNames="CASE_DEF_ID_"
+      referencedTableName="ACT_CMMN_CASEDEF" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_PLAN_ITEM_CASE_DEF" tableName="ACT_CMMN_RU_PLAN_ITEM_INST">
+      <column name="CASE_DEF_ID_" />
+    </createIndex>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_PLAN_ITEM_CASE_INST"
+      baseTableName="ACT_CMMN_RU_PLAN_ITEM_INST" baseColumnNames="CASE_INST_ID_"
+      referencedTableName="ACT_CMMN_RU_CASE_INST" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_PLAN_ITEM_CASE_INST" tableName="ACT_CMMN_RU_PLAN_ITEM_INST">
+      <column name="CASE_INST_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_CMMN_RU_SENTRY_PART_INST">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_CMMN_SENTRY_PART_INST"/>
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="CASE_DEF_ID_" type="nvarchar(255)" />
+      <column name="CASE_INST_ID_" type="nvarchar(255)" />
+      <column name="PLAN_ITEM_INST_ID_" type="nvarchar(255)" />
+      <column name="ON_PART_ID_" type="nvarchar(255)" />
+      <column name="IF_PART_ID_" type="nvarchar(255)" />
+      <column name="TIME_STAMP_" type="datetime" />
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_SENTRY_CASE_DEF"
+      baseTableName="ACT_CMMN_RU_SENTRY_PART_INST" baseColumnNames="CASE_DEF_ID_"
+      referencedTableName="ACT_CMMN_CASEDEF" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_SENTRY_CASE_DEF" tableName="ACT_CMMN_RU_SENTRY_PART_INST">
+      <column name="CASE_DEF_ID_" />
+    </createIndex>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_SENTRY_CASE_INST"
+      baseTableName="ACT_CMMN_RU_SENTRY_PART_INST" baseColumnNames="CASE_INST_ID_"
+      referencedTableName="ACT_CMMN_RU_CASE_INST" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_SENTRY_CASE_INST" tableName="ACT_CMMN_RU_SENTRY_PART_INST">
+      <column name="CASE_INST_ID_" />
+    </createIndex>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_SENTRY_PLAN_ITEM"
+      baseTableName="ACT_CMMN_RU_SENTRY_PART_INST" baseColumnNames="PLAN_ITEM_INST_ID_"
+      referencedTableName="ACT_CMMN_RU_PLAN_ITEM_INST" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_SENTRY_PLAN_ITEM" tableName="ACT_CMMN_RU_SENTRY_PART_INST">
+      <column name="PLAN_ITEM_INST_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_CMMN_RU_MIL_INST">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="TIME_STAMP_" type="datetime">
+        <constraints nullable="false" />
+      </column>
+      <column name="CASE_INST_ID_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="CASE_DEF_ID_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="ELEMENT_ID_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_MIL_CASE_DEF"
+      baseTableName="ACT_CMMN_RU_MIL_INST" baseColumnNames="CASE_DEF_ID_"
+      referencedTableName="ACT_CMMN_CASEDEF" referencedColumnNames="ID_" />
+
+    <createIndex indexName="ACT_IDX_MIL_CASE_DEF" tableName="ACT_CMMN_RU_MIL_INST">
+      <column name="CASE_DEF_ID_" />
+    </createIndex>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_MIL_CASE_INST"
+      baseTableName="ACT_CMMN_RU_MIL_INST" baseColumnNames="CASE_INST_ID_"
+      referencedTableName="ACT_CMMN_RU_CASE_INST" referencedColumnNames="ID_" />
+
+    <createIndex  indexName="ACT_IDX_MIL_CASE_INST" tableName="ACT_CMMN_RU_MIL_INST">
+      <column name="CASE_INST_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_CMMN_HI_CASE_INST">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="BUSINESS_KEY_" type="nvarchar(255)" />
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="PARENT_ID_" type="nvarchar(255)" />
+      <column name="CASE_DEF_ID_" type="nvarchar(255)" />
+      <column name="STATE_" type="nvarchar(255)" />
+      <column name="START_TIME_" type="datetime" />
+      <column name="END_TIME_" type="datetime" />
+      <column name="START_USER_ID_" type="nvarchar(255)" />
+      <column name="CALLBACK_ID_" type="nvarchar(255)" />
+      <column name="CALLBACK_TYPE_" type="nvarchar(255)" />
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+      <column name="REFERENCE_ID_" type="nvarchar(255)" />
+      <column name="REFERENCE_TYPE_" type="nvarchar(255)" />
+      <column name="LAST_REACTIVATION_TIME_" type="datetime(3)" />
+      <column name="LAST_REACTIVATION_USER_ID_" type="nvarchar(255)" />
+      <column name="BUSINESS_STATUS_" type="nvarchar(255)" />
+    </createTable>
+
+    <createTable tableName="ACT_CMMN_HI_MIL_INST">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="TIME_STAMP_" type="datetime">
+        <constraints nullable="false" />
+      </column>
+      <column name="CASE_INST_ID_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="CASE_DEF_ID_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="ELEMENT_ID_" type="nvarchar(255)">
+        <constraints nullable="false" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_PLAN_ITEM_STAGE_INST" tableName="ACT_CMMN_RU_PLAN_ITEM_INST">
+      <column name="STAGE_INST_ID_" />
+    </createIndex>
+
+    <createTable tableName="ACT_CMMN_HI_PLAN_ITEM_INST">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="REV_" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="STATE_" type="nvarchar(255)" />
+      <column name="CASE_DEF_ID_" type="nvarchar(255)" />
+      <column name="CASE_INST_ID_" type="nvarchar(255)" />
+      <column name="STAGE_INST_ID_" type="nvarchar(255)" />
+      <column name="IS_STAGE_" type="boolean" />
+      <column name="ELEMENT_ID_" type="nvarchar(255)" />
+      <column name="ITEM_DEFINITION_ID_" type="nvarchar(255)" />
+      <column name="ITEM_DEFINITION_TYPE_" type="nvarchar(255)" />
+      <column name="CREATE_TIME_" type="datetime(3)" />
+      <column name="LAST_AVAILABLE_TIME_" type="datetime" />
+      <column name="LAST_ENABLED_TIME_" type="datetime" />
+      <column name="LAST_DISABLED_TIME_" type="datetime" />
+      <column name="LAST_STARTED_TIME_" type="datetime" />
+      <column name="LAST_SUSPENDED_TIME_" type="datetime" />
+      <column name="COMPLETED_TIME_" type="datetime" />
+      <column name="OCCURRED_TIME_" type="datetime" />
+      <column name="TERMINATED_TIME_" type="datetime" />
+      <column name="EXIT_TIME_" type="datetime" />
+      <column name="ENDED_TIME_" type="datetime" />
+      <column name="LAST_UPDATED_TIME_" type="datetime" />
+      <column name="START_USER_ID_" type="nvarchar(255)" />
+      <column name="REFERENCE_ID_" type="nvarchar(255)" />
+      <column name="REFERENCE_TYPE_" type="nvarchar(255)" />
+      <column name="TENANT_ID_" type="nvarchar(255)" defaultValue="" />
+      <column name="ENTRY_CRITERION_ID_" type="nvarchar(255)" />
+      <column name="EXIT_CRITERION_ID_" type="nvarchar(255)" />
+      <column name="SHOW_IN_OVERVIEW_" type="boolean" />
+      <column name="EXTRA_VALUE_" type="nvarchar(255)" />
+      <column name="DERIVED_CASE_DEF_ID_" type="nvarchar(255)" />
+      <column name="LAST_UNAVAILABLE_TIME_" type="datetime(3)" />
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_CASE_DEF_UNIQ" tableName="ACT_CMMN_CASEDEF" unique="true">
+      <column name="KEY_" />
+      <column name="VERSION_" />
+      <column name="TENANT_ID_" />
+    </createIndex>
+
+    <createIndex indexName="ACT_IDX_CASE_INST_REF_ID_" tableName="ACT_CMMN_RU_CASE_INST">
+      <column name="REFERENCE_ID_"/>
+    </createIndex>
+
+    <createIndex indexName="ACT_IDX_HI_CASE_INST_END" tableName="ACT_CMMN_HI_CASE_INST">
+      <column name="END_TIME_"/>
+    </createIndex>
 
 
 
+
+  </changeSet>
+
+
+  <!--
+
+   __ _                    _     _                  _ _                                 _     _____ ___   ___
+  / _| | _____      ____ _| |__ | | ___        __ _| | |      _ __ ___  _   _ ___  __ _| |   |___  / _ \ / _ \
+ | |_| |/ _ \ \ /\ / / _` | '_ \| |/ _ \_____ / _` | | |_____| '_ ` _ \| | | / __|/ _` | |_____ / / | | | | | |
+ |  _| | (_) \ V  V / (_| | |_) | |  __/_____| (_| | | |_____| | | | | | |_| \__ \ (_| | |_____/ /| |_| | |_| |
+ |_| |_|\___/ \_/\_/ \__,_|_.__/|_|\___|      \__,_|_|_|     |_| |_| |_|\__, |___/\__, |_|    /_(_)\___(_)___/
+                                                                        |___/        |_|
+
+  -->
+  <changeSet id="flowable-all-mysql-7.0.0" author="Marcus Portmann">
+    <comment>flowable-all-mysql-7.0.0</comment>
+
+    <!-- TODO: Add column type changes for MySQL and MariaDB for core tables -->
+
+    <!-- entitylink -->
+    <modifyDataType tableName="ACT_RU_ENTITYLINK" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+
+    <!-- entitylink-history -->
+    <modifyDataType tableName="ACT_HI_ENTITYLINK" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+
+    <!-- identitylink-history -->
+    <modifyDataType tableName="ACT_HI_IDENTITYLINK" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+
+    <!-- batch -->
+    <modifyDataType tableName="FLW_RU_BATCH" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="FLW_RU_BATCH" columnName="COMPLETE_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="FLW_RU_BATCH_PART" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="FLW_RU_BATCH_PART" columnName="COMPLETE_TIME_" newDataType="datetime(3)" />
+
+    <!-- task -->
+    <modifyDataType tableName="ACT_RU_TASK" columnName="DUE_DATE_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_RU_TASK" columnName="CLAIM_TIME_" newDataType="datetime(3)" />
+
+    <!-- task-history -->
+    <modifyDataType tableName="ACT_HI_TASKINST" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_TASKINST" columnName="CLAIM_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_TASKINST" columnName="END_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_TASKINST" columnName="DUE_DATE_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_TASKINST" columnName="LAST_UPDATED_TIME_" newDataType="datetime(3)" />
+
+    <!-- variable-history -->
+    <modifyDataType tableName="ACT_HI_VARINST" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_VARINST" columnName="LAST_UPDATED_TIME_" newDataType="datetime(3)" />
+
+    <!-- engine -->
+    <modifyDataType tableName="ACT_RU_EXECUTION" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_RU_ACTINST" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_RU_ACTINST" columnName="END_TIME_" newDataType="datetime(3)" />
+
+    <!-- engine-history -->
+    <modifyDataType tableName="ACT_HI_PROCINST" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_PROCINST" columnName="END_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_ACTINST" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_ACTINST" columnName="END_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_DETAIL" columnName="TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_COMMENT" columnName="TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_HI_ATTACHMENT" columnName="TIME_" newDataType="datetime(3)" />
+
+    <!-- app -->
+    <modifyDataType tableName="ACT_APP_DEPLOYMENT" columnName="DEPLOY_TIME_" newDataType="datetime(3)" />
+
+    <!-- cmmn -->
+    <modifyDataType tableName="ACT_CMMN_DEPLOYMENT" columnName="DEPLOY_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_RU_CASE_INST" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_RU_PLAN_ITEM_INST" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_RU_SENTRY_PART_INST" columnName="TIME_STAMP_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_RU_MIL_INST" columnName="TIME_STAMP_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_CASE_INST" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_CASE_INST" columnName="END_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_MIL_INST" columnName="TIME_STAMP_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_RU_CASE_INST" columnName="LOCK_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="CREATE_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="LAST_AVAILABLE_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="LAST_ENABLED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="LAST_DISABLED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="LAST_STARTED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="LAST_SUSPENDED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="COMPLETED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="OCCURRED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="TERMINATED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="EXIT_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="ENDED_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="LAST_UPDATED_TIME_" newDataType="datetime(3)" />
 
 
   </changeSet>
@@ -1395,6 +2397,9 @@
 
 
 <!--
+
+
+  <modifyDataType tableName="" columnName="" newDataType="datetime(3)" />
 
 
     <createTable tableName="">
@@ -1414,6 +2419,34 @@
     <addForeignKeyConstraint constraintName=""
       baseTableName="" baseColumnNames=""
       referencedTableName="" referencedColumnNames=""/>
+
+
+
+
+-->
+
+
+
+
+  <!--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
