@@ -2298,6 +2298,349 @@
     </createIndex>
 
 
+    <!--
+
+                          _                  _     _
+      _____   _____ _ __ | |_ _ __ ___  __ _(_)___| |_ _ __ _   _
+     / _ \ \ / / _ \ '_ \| __| '__/ _ \/ _` | / __| __| '__| | | |
+    |  __/\ V /  __/ | | | |_| | |  __/ (_| | \__ \ |_| |  | |_| |
+     \___| \_/ \___|_| |_|\__|_|  \___|\__, |_|___/\__|_|   \__, |
+                                       |___/                |___/
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-event-registry/src/main/resources/org/flowable/eventregistry/db/liquibase/flowable-eventregistry-db-changelog.xml
+
+    -->
+    <createTable tableName="FLW_EVENT_DEPLOYMENT">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOY_TIME_" type="datetime(3)">
+        <constraints nullable="true" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="PARENT_DEPLOYMENT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <createTable tableName="FLW_EVENT_RESOURCE">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="RESOURCE_BYTES_" type="${blob_type}">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <createTable tableName="FLW_EVENT_DEFINITION">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="VERSION_" type="int" />
+      <column name="KEY_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="RESOURCE_NAME_" type="nvarchar(255)" />
+      <column name="DESCRIPTION_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_EVENT_DEF_UNIQ" tableName="FLW_EVENT_DEFINITION" unique="true">
+      <column name="KEY_" />
+      <column name="VERSION_" />
+      <column name="TENANT_ID_" />
+    </createIndex>
+
+    <createTable tableName="FLW_CHANNEL_DEFINITION">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="VERSION_" type="int" />
+      <column name="KEY_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="CREATE_TIME_" type="datetime(3)">
+        <constraints nullable="true" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="RESOURCE_NAME_" type="nvarchar(255)" />
+      <column name="DESCRIPTION_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="TYPE_" type="nvarchar(255)"/>
+      <column name="IMPLEMENTATION_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_CHANNEL_DEF_UNIQ" tableName="FLW_CHANNEL_DEFINITION" unique="true">
+      <column name="KEY_" />
+      <column name="VERSION_" />
+      <column name="TENANT_ID_" />
+    </createIndex>
+
+    <customChange class="org.flowable.eventregistry.impl.db.SetChannelDefinitionTypeAndImplementationCustomChange" />
+
+
+    <!--
+
+         _
+      __| |_ __ ___  _ __
+     / _` | '_ ` _ \| '_ \
+    | (_| | | | | | | | | |
+     \__,_|_| |_| |_|_| |_|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/modules/flowable-dmn-engine/src/main/resources/org/flowable/dmn/db/liquibase/flowable-dmn-db-changelog.xml
+
+    -->
+    <createTable tableName="ACT_DMN_DEPLOYMENT">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOY_TIME_" type="datetime">
+        <constraints nullable="true" />
+      </column>
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="PARENT_DEPLOYMENT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <createTable tableName="ACT_DMN_DEPLOYMENT_RESOURCE">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="RESOURCE_BYTES_" type="${blob_type}">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <createTable tableName="ACT_DMN_DECISION">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="NAME_" type="nvarchar(255)" />
+      <column name="VERSION_" type="int" />
+      <column name="KEY_" type="nvarchar(255)" />
+      <column name="CATEGORY_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="RESOURCE_NAME_" type="nvarchar(255)" />
+      <column name="DESCRIPTION_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="DECISION_TYPE_" type="nvarchar(255)" />
+    </createTable>
+
+    <createTable tableName="ACT_DMN_HI_DECISION_EXECUTION">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="DECISION_DEFINITION_ID_" type="nvarchar(255)" />
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)" />
+      <column name="START_TIME_" type="datetime" />
+      <column name="END_TIME_" type="datetime">
+        <constraints nullable="true" />
+      </column>
+      <column name="INSTANCE_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="EXECUTION_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="ACTIVITY_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="FAILED_" type="boolean" defaultValueBoolean="false" />
+      <column name="TENANT_ID_" type="nvarchar(255)">
+        <constraints nullable="true" />
+      </column>
+      <column name="EXECUTION_JSON_" type="longtext">
+        <constraints nullable="true" />
+      </column>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)" />
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_DMN_DEC_UNIQ" tableName="ACT_DMN_DECISION" unique="true">
+      <column name="KEY_" />
+      <column name="VERSION_" />
+      <column name="TENANT_ID_" />
+    </createIndex>
+
+    <createIndex indexName="ACT_IDX_DMN_INSTANCE_ID" tableName="ACT_DMN_HI_DECISION_EXECUTION">
+      <column name="INSTANCE_ID_" />
+    </createIndex>
+
+
+    <!--
+
+      __
+     / _| ___  _ __ _ __ ___
+    | |_ / _ \| '__| '_ ` _ \
+    |  _| (_) | |  | | | | | |
+    |_|  \___/|_|  |_| |_| |_|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/distro/sql/create/all/flowable.postgres.all.create.sql
+
+    -->
+    <createTable tableName="ACT_FO_FORM_DEPLOYMENT">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="ACT_FO_FORM_DEPLOYMENT_PKEY"/>
+      </column>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="DEPLOY_TIME_" type="timestamp without timezone"/>
+      <column name="TENANT_ID_" type="nvarchar(255)"/>
+      <column name="PARENT_DEPLOYMENT_ID_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createTable tableName="ACT_FO_FORM_RESOURCE">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="ACT_FO_FORM_RESOURCE_PKEY"/>
+      </column>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)"/>
+      <column name="RESOURCE_BYTES_" type="${blob_type}"/>
+    </createTable>
+
+    <createTable tableName="ACT_FO_FORM_DEFINITION">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="ACT_FO_FORM_DEFINITION_PKEY"/>
+      </column>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="VERSION_" type="int"/>
+      <column name="KEY_" type="nvarchar(255)"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(255)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)"/>
+      <column name="RESOURCE_NAME_" type="nvarchar(255)"/>
+      <column name="DESCRIPTION_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createTable tableName="ACT_FO_FORM_INSTANCE">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="ACT_FO_FORM_INSTANCE_PKEY"/>
+      </column>
+      <column name="FORM_DEFINITION_ID_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TASK_ID_" type="nvarchar(255)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(255)"/>
+      <column name="PROC_DEF_ID_" type="nvarchar(255)"/>
+      <column name="SUBMITTED_DATE_" type="timestamp without timezone"/>
+      <column name="SUBMITTED_BY_" type="nvarchar(255)"/>
+      <column name="FORM_VALUES_ID_" type="nvarchar(255)"/>
+      <column name="TENANT_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+      <column name="SCOPE_DEFINITION_ID_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createIndex indexName="ACT_IDX_FORM_DEF_UNIQ" tableName="ACT_FO_FORM_DEFINITION" unique="true">
+      <column name="KEY_"/>
+      <column name="VERSION_"/>
+      <column name="TENANT_ID_"/>
+    </createIndex>
+
+    <createIndex indexName="ACT_IDX_FORM_TASK" tableName="ACT_FO_FORM_INSTANCE">
+      <column name="TASK_ID_"/>
+    </createIndex>
+
+    <createIndex indexName="ACT_IDX_FORM_PROC" tableName="ACT_FO_FORM_INSTANCE">
+      <column name="PROC_INST_ID_"/>
+    </createIndex>
+
+    <createIndex indexName="ACT_IDX_FORM_SCOPE" tableName="ACT_FO_FORM_INSTANCE">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
+
+
+    <!--
+
+                     _             _
+      ___ ___  _ __ | |_ ___ _ __ | |_
+     / __/ _ \| '_ \| __/ _ \ '_ \| __|
+    | (_| (_) | | | | ||  __/ | | | |_
+     \___\___/|_| |_|\__\___|_| |_|\__|
+
+    Extracted from the following file:
+
+    https://github.com/flowable/flowable-engine/blob/flowable-7.0.0/distro/sql/create/all/flowable.postgres.all.create.sql
+
+    -->
+    <createTable tableName="ACT_CO_CONTENT_ITEM">
+      <column name="ID_" type="nvarchar(255)">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="ACT_CO_CONTENT_ITEM_PKEY"/>
+      </column>
+      <column name="NAME_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="MIME_TYPE_" type="nvarchar(255)"/>
+      <column name="TASK_ID_" type="nvarchar(255)"/>
+      <column name="PROC_INST_ID_" type="nvarchar(255)"/>
+      <column name="CONTENT_STORE_ID_" type="nvarchar(255)"/>
+      <column name="CONTENT_STORE_NAME_" type="nvarchar(255)"/>
+      <column name="FIELD_" type="nvarchar(400)"/>
+      <column name="CONTENT_AVAILABLE_" type="boolean" defaultValue="false"/>
+      <column name="CREATED_" type="timestamp(6) without timezone"/>
+      <column name="CREATED_BY_" type="nvarchar(255)"/>
+      <column name="LAST_MODIFIED_" type="timestamp(6) without timezone"/>
+      <column name="LAST_MODIFIED_BY_" type="nvarchar(255)"/>
+      <column name="CONTENT_SIZE_" type="bigint" defaultValue="0"/>
+      <column name="TENANT_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_ID_" type="nvarchar(255)"/>
+      <column name="SCOPE_TYPE_" type="nvarchar(255)"/>
+    </createTable>
+
+    <createIndex indexName="IDX_CONTITEM_TASKID" tableName="ACT_CO_CONTENT_ITEM">
+      <column name="TASK_ID_"/>
+    </createIndex>
+
+    <createIndex indexName="IDX_CONTITEM_PROCID" tableName="ACT_CO_CONTENT_ITEM">
+      <column name="PROC_INST_ID_"/>
+    </createIndex>
+
+    <createIndex indexName="IDX_CONTITEM_SCOPE" tableName="ACT_CO_CONTENT_ITEM">
+      <column name="SCOPE_ID_"/>
+      <column name="SCOPE_TYPE_"/>
+    </createIndex>
 
 
   </changeSet>
@@ -2388,6 +2731,18 @@
     <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="ENDED_TIME_" newDataType="datetime(3)" />
     <modifyDataType tableName="ACT_CMMN_HI_PLAN_ITEM_INST" columnName="LAST_UPDATED_TIME_" newDataType="datetime(3)" />
 
+    <!-- dmn -->
+    <modifyDataType tableName="ACT_DMN_DEPLOYMENT" columnName="DEPLOY_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="START_TIME_" newDataType="datetime(3)" />
+    <modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="END_TIME_" newDataType="datetime(3)" />
+
+
+
+
+
+
+
+
 
   </changeSet>
 
@@ -2411,9 +2766,6 @@
       <column name="" type=""/>
     </createTable>
 
-    <createIndex indexName="" tableName="">
-      <column name=""/>
-    </createIndex>
 
 
     <addForeignKeyConstraint constraintName=""
