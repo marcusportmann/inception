@@ -218,7 +218,7 @@ Complete the following steps to create a new application based on the Inception 
       openssl pkey -pubout -inform pem -outform pem -in src/main/resources/META-INF/jwt-key -out src/main/resources/META-INF/jwt-key.pub
       ```
    2. Create the *pom.xml* file under the top-level directory for the new application with the following contents,
-      changing the *groupId*, *artifactId*, *version*, *name* and *description* values
+      changing the *groupId*, *artifactId*, *version*, *name*, *description* and *finalName* values
       as appropriate.
 
       **NOTE:** If you do not require all the capabilities provided by the Inception
@@ -233,7 +233,7 @@ Complete the following steps to create a new application based on the Inception 
 
         <groupId>demo</groupId>
         <artifactId>demo</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
 
         <name>demo</name>
 
@@ -279,6 +279,10 @@ Complete the following steps to create a new application based on the Inception 
           <dependency>
             <groupId>digital.inception</groupId>
             <artifactId>inception-error-api</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>digital.inception</groupId>
+            <artifactId>inception-executor-api</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
@@ -330,6 +334,7 @@ Complete the following steps to create a new application based on the Inception 
         </dependencies>
 
         <build>
+          <finalName>demo</finalName>
           <plugins>
             <plugin>
               <groupId>org.springframework.boot</groupId>
@@ -428,7 +433,7 @@ Complete the following steps to create a new application based on the Inception 
       public class DemoApplication extends Application {
 
         /* Logger */
-        private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
+        private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 
         /**
          * Constructs a new <code>DemoApplication</code>.
