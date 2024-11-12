@@ -33,7 +33,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
-import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
+import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import org.slf4j.Logger;
@@ -95,6 +95,9 @@ public class TestConfiguration {
 
   private static DataSource dataSource;
 
+  /** The active Spring profiles. */
+  private final String[] activeSpringProfiles;
+
   private final ApplicationContext applicationContext;
 
   /** Execute the Liquibase changelogs using the data context. */
@@ -114,6 +117,7 @@ public class TestConfiguration {
    */
   public TestConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
+    this.activeSpringProfiles = this.applicationContext.getEnvironment().getActiveProfiles();
   }
 
   /**
@@ -162,7 +166,9 @@ public class TestConfiguration {
                 log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(
+                        "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }
@@ -177,7 +183,9 @@ public class TestConfiguration {
                 log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(
+                        "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }
