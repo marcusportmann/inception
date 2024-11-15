@@ -121,7 +121,7 @@
     <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
     <mssql-jdbc.version>12.8.1.jre11</mssql-jdbc.version>
     <narayana.version>7.0.2.Final</narayana.version>
-    <ojdbc11.version>23.5.0.24.07</ojdbc11.version>
+    <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.4</postgresql.version>
     <spring-boot.version>3.3.4</spring-boot.version>

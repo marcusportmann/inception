@@ -198,6 +198,15 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       @Param("taskId") UUID taskId, @Param("nextExecution") OffsetDateTime nextExecution);
 
   /**
+   * Delete the task with the specified ID if it exists.
+   *
+   * @param taskId the ID for the task
+   */
+  @Modifying
+  @Query("delete from Task t where t.id = :taskId")
+  void deleteTaskIfExists(@Param("taskId") UUID taskId);
+
+  /**
    * Fail the task.
    *
    * @param taskId the ID for the task
@@ -223,6 +232,25 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @return an Optional containing the task or an empty Optional if the task could not be found
    */
   Optional<Task> findByExternalReference(String externalReference);
+
+  /**
+   * Retrieves a task by its ID with a "SELECT FOR UPDATE" lock to prevent other transactions from
+   * modifying or deleting the task until the current transaction completes.
+   *
+   * <p>This method is intended for use in scenarios where a pessimistic lock is required to ensure
+   * data consistency during concurrent updates. The method applies a PESSIMISTIC_WRITE lock on the
+   * selected row, effectively blocking other transactions from making changes to it until the
+   * current transaction finishes.
+   *
+   * <p>Note: This method must be called within a transactional context, as the lock is held only
+   * for the duration of the transaction.
+   *
+   * @param taskId the ID for the task
+   * @return the task
+   */
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  @Query("select t FROM Task t WHERE t.id = :taskId")
+  Task findByIdForUpdate(@Param("taskId") UUID taskId);
 
   /**
    * Retrieve all tasks with the specified statuses.
@@ -258,6 +286,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param pageable the pagination information
    * @return the tasks to archive and delete
    */
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
       "SELECT t FROM Task t WHERE (t.executed <= :executedBefore) and "
           + "((t.status = digital.inception.executor.model.TaskStatus.COMPLETED) or "

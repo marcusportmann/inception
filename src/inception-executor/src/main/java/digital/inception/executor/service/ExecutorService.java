@@ -192,6 +192,7 @@ public class ExecutorService implements IExecutorService {
   }
 
   @Override
+  @Transactional
   public void archiveAndDeleteHistoricalTasks() throws ServiceUnavailableException {
     try {
       OffsetDateTime executedBefore = OffsetDateTime.now().minusDays(historicalTaskRetentionDays);
