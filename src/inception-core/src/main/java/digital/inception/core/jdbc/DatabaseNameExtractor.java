@@ -39,32 +39,36 @@ public final class DatabaseNameExtractor {
    *     not recognized
    */
   public static String getDatabaseNameFromJdbcUrl(String jdbcUrl) {
-    if (jdbcUrl == null || jdbcUrl.isEmpty()) {
+    try {
+      if (jdbcUrl == null || jdbcUrl.isEmpty()) {
+        return "Unknown";
+      }
+
+      // H2 Database URL: jdbc:h2:~/test
+      if (jdbcUrl.startsWith("jdbc:h2:")) {
+        return removeParametersFromDatabaseName(extractH2DatabaseName(jdbcUrl));
+      }
+
+      // Microsoft SQL Server URL: jdbc:sqlserver://localhost:1433;databaseName=mydb
+      if (jdbcUrl.startsWith("jdbc:sqlserver:")) {
+        return removeParametersFromDatabaseName(extractSqlServerDatabaseName(jdbcUrl));
+      }
+
+      // PostgreSQL URL: jdbc:postgresql://localhost:5432/mydb
+      if (jdbcUrl.startsWith("jdbc:postgresql:")) {
+        return removeParametersFromDatabaseName(extractPostgresDatabaseName(jdbcUrl));
+      }
+
+      // Oracle URL: jdbc:oracle:thin:@//localhost:1521/SID or jdbc:oracle:thin:@localhost:1521:SID
+      if (jdbcUrl.startsWith("jdbc:oracle:thin:")) {
+        return removeParametersFromDatabaseName(extractOracleSid(jdbcUrl));
+      }
+
+      // Unknown database type
+      return "Unknown";
+    } catch (Throwable e) {
       return "Unknown";
     }
-
-    // H2 Database URL: jdbc:h2:~/test
-    if (jdbcUrl.startsWith("jdbc:h2:")) {
-      return removeParametersFromDatabaseName(extractH2DatabaseName(jdbcUrl));
-    }
-
-    // Microsoft SQL Server URL: jdbc:sqlserver://localhost:1433;databaseName=mydb
-    if (jdbcUrl.startsWith("jdbc:sqlserver:")) {
-      return removeParametersFromDatabaseName(extractSqlServerDatabaseName(jdbcUrl));
-    }
-
-    // PostgreSQL URL: jdbc:postgresql://localhost:5432/mydb
-    if (jdbcUrl.startsWith("jdbc:postgresql:")) {
-      return removeParametersFromDatabaseName(extractPostgresDatabaseName(jdbcUrl));
-    }
-
-    // Oracle URL: jdbc:oracle:thin:@//localhost:1521/SID or jdbc:oracle:thin:@localhost:1521:SID
-    if (jdbcUrl.startsWith("jdbc:oracle:thin:")) {
-      return removeParametersFromDatabaseName(extractOracleSid(jdbcUrl));
-    }
-
-    // Unknown database type
-    return "Unknown";
   }
 
   // Extract database name for H2

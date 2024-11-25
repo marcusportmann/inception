@@ -73,7 +73,9 @@ public final class DataSourceUtil {
       boolean enableTransactionIntegration) {
 
     log.info(
-        "Initializing the data source with URL ("
+        "Initializing the data source with class ("
+            + dataSourceConfiguration.getClassName()
+            + ") and URL ("
             + dataSourceConfiguration.getUrl()
             + ") using the Agroal connection pool with max pool size "
             + dataSourceConfiguration.getMaxPoolSize()
@@ -110,6 +112,10 @@ public final class DataSourceUtil {
           (dataSourceConfiguration.getMaxPoolSize() > 0)
               ? Integer.toString(dataSourceConfiguration.getMaxPoolSize())
               : "5");
+
+      agroalProperties.setProperty(AgroalPropertiesReader.ENHANCED_LEAK_REPORT, "true");
+
+      agroalProperties.setProperty(AgroalPropertiesReader.LEAK_TIMEOUT_S, "300");
 
       agroalProperties.setProperty(AgroalPropertiesReader.METRICS_ENABLED, "true");
 
@@ -151,7 +157,9 @@ public final class DataSourceUtil {
       }
 
       AgroalDataSource agroalDataSource =
-          AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
+          AgroalDataSource.from(
+              agroalDataSourceConfigurationSupplier,
+              new AgroalDataSourceListener(dataSourceConfiguration));
 
       bindAgroalDataSourceMetrics(applicationContext, dataSourceConfiguration, agroalDataSource);
 
@@ -173,47 +181,115 @@ public final class DataSourceUtil {
       ApplicationContext applicationContext,
       DataSourceConfiguration dataSourceConfiguration,
       AgroalDataSource agroalDataSource) {
-    try {
-      String databaseName =
-          DatabaseNameExtractor.getDatabaseNameFromJdbcUrl(dataSourceConfiguration.getUrl());
+    String databaseName =
+        DatabaseNameExtractor.getDatabaseNameFromJdbcUrl(dataSourceConfiguration.getUrl());
 
+    try {
+      Class.forName("io.micrometer.core.instrument.MeterRegistry");
+    } catch (ClassNotFoundException e) {
+      log.info(
+          "Micrometer not found, metrics will be disabled for the Agroal data source ("
+              + databaseName
+              + ")");
+      return;
+    }
+
+    try {
       MeterRegistry meterRegistry = applicationContext.getBean(MeterRegistry.class);
 
       AgroalDataSourceMetrics agroalDataSourceMetrics = agroalDataSource.getMetrics();
 
       Gauge.builder(
+              "agroal." + databaseName + ".connections.acquired",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::acquireCount)
+          .description("Number of times an acquire operation succeeded")
+          .register(meterRegistry);
+
+      Gauge.builder(
               "agroal." + databaseName + ".connections.active",
               agroalDataSourceMetrics,
               AgroalDataSourceMetrics::activeCount)
-          .description("Number of active (in-use) connections")
+          .description(
+              "Number of active connections (These connections are in use and not available to be acquired)")
           .register(meterRegistry);
 
       Gauge.builder(
               "agroal." + databaseName + ".connections.available",
               agroalDataSourceMetrics,
               AgroalDataSourceMetrics::availableCount)
-          .description("Number of available connections")
+          .description("Number of idle connections in the pool, available to be acquired")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.awaiting",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::awaitingCount)
+          .description("Number of threads blocked, waiting to acquire a connection")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.blockingTimeAverage",
+              agroalDataSourceMetrics,
+              metrics -> metrics.blockingTimeAverage().toMillis())
+          .description("Average time threads are blocked waiting for a connection (ms)")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.blockingTimeMax",
+              agroalDataSourceMetrics,
+              metrics -> metrics.blockingTimeMax().toMillis())
+          .description("Maximum time a thread was blocked waiting for a connection (ms)")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.destroyed",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::destroyCount)
+          .description("Number of destroyed connections")
           .register(meterRegistry);
 
       Gauge.builder(
               "agroal." + databaseName + ".connections.flushes",
               agroalDataSourceMetrics,
               AgroalDataSourceMetrics::flushCount)
-          .description("Number of connection flushes")
+          .description("Number of connections removed from the pool, not counting invalid / idle")
           .register(meterRegistry);
 
       Gauge.builder(
-              "agroal." + databaseName + ".connections.acquired",
+              "agroal." + databaseName + ".connections.invalid",
               agroalDataSourceMetrics,
-              AgroalDataSourceMetrics::acquireCount)
-          .description("Total number of connections acquired")
+              AgroalDataSourceMetrics::invalidCount)
+          .description("Number of connections removed from the pool for being invalid")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.leakDetections",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::leakDetectionCount)
+          .description(
+              "Number of times a leak was detected (A single connection can be detected multiple times)")
           .register(meterRegistry);
 
       Gauge.builder(
               "agroal." + databaseName + ".connections.maxUsed",
               agroalDataSourceMetrics,
               AgroalDataSourceMetrics::maxUsedCount)
-          .description("Maximum number of connections ever in use at the same time")
+          .description("Maximum number of connections active simultaneously")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.reaped",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::reapCount)
+          .description("Number of connections removed from the pool for being idle")
+          .register(meterRegistry);
+
+      Gauge.builder(
+              "agroal." + databaseName + ".connections.invalid",
+              agroalDataSourceMetrics,
+              AgroalDataSourceMetrics::invalidCount)
+          .description("Number of connections removed from pool for being invalid")
           .register(meterRegistry);
 
     } catch (NoSuchBeanDefinitionException ignored) {

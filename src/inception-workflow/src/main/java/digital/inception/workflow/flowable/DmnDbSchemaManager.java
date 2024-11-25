@@ -10,6 +10,9 @@ package digital.inception.workflow.flowable;
  */
 public class DmnDbSchemaManager extends org.flowable.dmn.engine.impl.db.DmnDbSchemaManager {
 
+  /** Constructs a new <b>DmnDbSchemaManager</b>. */
+  public DmnDbSchemaManager() {}
+
   @Override
   public void initSchema(String databaseSchemaUpdate) {
     // Defer database schema management to the Inception Framework.
