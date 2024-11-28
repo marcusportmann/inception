@@ -25,7 +25,7 @@ Complete the following steps to set up a development environment on MacOS.
    
    brew install openjdk@21
    
-   brew pin openjdk@8
+   brew pin openjdk@21
    
    sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
    ```
