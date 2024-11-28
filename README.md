@@ -25,6 +25,8 @@ Complete the following steps to set up a development environment on MacOS.
    
    brew install openjdk@21
    
+   brew pin openjdk@8
+   
    sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
    ```
 4. Configure the Java Environment Variables by adding the following lines to your shell configuration file (~/.zshrc for Zsh or ~/.bash_profile for Bash):
