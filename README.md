@@ -43,7 +43,7 @@ Complete the following steps to set up a development environment on MacOS.
    ```
    brew install --ignore-dependencies maven
    ```
-6. Install jenv to manage multiple Java versions by executing the following commands:
+6. Install jenv to manage multiple Java versions by executing the following commands in a Terminal window.
    ```
    brew install jenv  
    
