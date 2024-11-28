@@ -55,13 +55,13 @@ Complete the following steps to set up a development environment on MacOS.
    jenv add /Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/
    jenv add /Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home/
    ```
-7. Install Postgres by executing the following command in a Terminal window.
-   ```
-   brew install postgresql
-   ```
-8. Install liquibase by executing the following commands in a Terminal window.
+7. Install liquibase by executing the following commands in a Terminal window.
    ```
    brew install --ignore-dependencies liquibase
+   ```
+8. Install Postgres by executing the following command in a Terminal window.
+   ```
+   brew install postgresql
    ```
 9. Install node by executing the following commands in a Terminal window.
    ```
