@@ -45,7 +45,9 @@ Complete the following steps to set up a development environment on MacOS.
    ```
 6. Install jenv to manage multiple Java versions by executing the following commands:
    ```
-   brew install jenv    
+   brew install jenv  
+   
+   jenv enable-plugin export  
    ```
    Add jenv to your shell configuration file (~/.zshrc or ~/.bash_profile):
    ```
