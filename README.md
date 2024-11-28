@@ -8,7 +8,7 @@ back-end and Angular front-end.
 
 ### Setup a development environment on MacOS
 
-Complete the following steps to setup a development environment on MacOS.
+Complete the following steps to set up a development environment on MacOS.
 
 1. Install the Xcode Command Line Tools by executing the following command in a Terminal
    window.
@@ -19,37 +19,64 @@ Complete the following steps to setup a development environment on MacOS.
    ```
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
-3. Install OpenJDK by executing the following commands in a Terminal window.
+3. Install the latest OpenJDK by executing the following commands in a Terminal window.
    ```
-   brew install openjdk
-   sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+   brew install --cask zulu@8
+   
+   brew install openjdk@21
+   
+   sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
    ```
-4. Install Apache Maven by executing the following command in a Terminal window.
+4. Configure the Java Environment Variables by adding the following lines to your shell configuration file (~/.zshrc for Zsh or ~/.bash_profile for Bash):
    ```
-   brew install maven
+   export JAVA_8_HOME="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
+   export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home"
+   export JDK_HOME=$JAVA_HOME
    ```
-5. Install Postgres by executing the following command in a Terminal window.
+   Source the shell configuration file to apply the changes:
+   ```
+   source ~/.zshrc
+   ```
+5. Install Apache Maven by executing the following command in a Terminal window.
+   ```
+   brew install --ignore-dependencies maven
+   ```
+6. Install jenv to manage multiple Java versions by executing the following commands:
+   ```
+   brew install jenv    
+   ```
+   Add jenv to your shell configuration file (~/.zshrc or ~/.bash_profile):
+   ```
+   export PATH="$HOME/.jenv/bin:$PATH"
+   eval "$(jenv init -)"
+   ``` 
+   Add the installed Java versions to jenv:
+   ```
+   jenv add /Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/
+   jenv add /Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home/
+   ```
+7. Install Postgres by executing the following command in a Terminal window.
    ```
    brew install postgresql
    ```
-6. Install liquibase by executing the following commands in a Terminal window.
+8. Install liquibase by executing the following commands in a Terminal window.
    ```
-   brew install liquibase
+   brew install --ignore-dependencies liquibase
    ```
-7. Install node by executing the following commands in a Terminal window.
+9. Install node by executing the following commands in a Terminal window.
    ```
    brew install n
    sudo n lts_latest
    ```
-8. Install yarn by executing the following commands in a Terminal window.
-   ```
-   brew install yarn
-   ```
-9. Execute the following command to change to use explicit version dependencies with yarn.
-   ```
-   yarn config set save-prefix ''
-   ```
-10. Execute the following command to install the Angular CLI globally using yarn.
+10. Install yarn by executing the following commands in a Terminal window.
+    ```
+    brew install yarn
+    ```
+11. Execute the following command to change to use explicit version dependencies with yarn.
+    ```
+    yarn config set save-prefix ''
+    ```
+12. Execute the following command to install the Angular CLI globally using yarn.
     ```
     yarn global add @angular/cli
     ```
