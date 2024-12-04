@@ -177,14 +177,19 @@ logging:
         beans:
           factory=DEBUG:
 
+
+
 management:
   endpoint:
+    health:
+      probes:
+        enabled: true
     metrics:
       enabled: true
   endpoints:
     web:
       exposure:
-        include: metrics,health
+        include: health,info,loggers,metrics,mappings,httpexchanges,threaddump,prometheus
   health:
     mail:
       enabled: false
@@ -192,9 +197,16 @@ management:
     enable:
       all: true
 
-
-
-
+otel:
+  exporter:
+    otlp:
+      endpoint: http://localhost:4318
+  logs:
+    exporter: none
+  metrics:
+    exporter: none
+  traces:
+    exporter: none
 
 
 

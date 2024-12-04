@@ -77,8 +77,9 @@
               <rules>
                 <dependencyConvergence>
                   <excludes>
-                    <exclude>com.google.guava:guava:[32,33)</exclude>
+                    <exclude>com.google.guava:guava:[31,34)</exclude>
                     <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
+                    <exclude>org.bouncycastle:bcpkix-jdk18on:[1,2)</exclude>
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
                     <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
                   </excludes>
