@@ -125,12 +125,11 @@
           </additionalDependencies>
           <failOnWarnings>true</failOnWarnings>
           <quiet>true</quiet>
-
-
         </configuration>
         <executions>
           <execution>
             <id>attach-javadocs</id>
+            <phase>package</phase>
             <goals>
               <goal>jar</goal>
             </goals>

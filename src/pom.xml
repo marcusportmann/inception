@@ -728,6 +728,10 @@
         <configuration>
           <compilerArgs>
             <arg>-proc:full</arg>
+<!--            <arg>-Werror</arg>-->
+<!--            <arg>-XprintProcessorInfo</arg>-->
+<!--            <arg>-XprintRounds</arg>-->
+<!--            <arg>-verbose</arg>-->
           </compilerArgs>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -745,6 +749,16 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <forkCount>1</forkCount>
+          <reuseForks>true</reuseForks>
+          <parallel>classes</parallel>
+          <threadCount>4</threadCount>
+        </configuration>
       </plugin>
       <!-- Plugins required to publish to Maven Central -->
       <plugin>

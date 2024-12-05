@@ -194,7 +194,10 @@ public class ApplicationDataSourceConfiguration {
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(
-                        "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                        "labels",
+                        activeSpringProfiles.length > 0
+                            ? StringUtils.arrayToCommaDelimitedString(activeSpringProfiles)
+                            : "default")
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }
@@ -211,7 +214,10 @@ public class ApplicationDataSourceConfiguration {
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(
-                        "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                        "labels",
+                        activeSpringProfiles.length > 0
+                            ? StringUtils.arrayToCommaDelimitedString(activeSpringProfiles)
+                            : "default")
                     .addArgumentValue("changeLogFile", changelogFile)
                     .execute();
               }
