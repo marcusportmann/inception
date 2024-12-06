@@ -15,8 +15,8 @@
   <property name="now" value="sysdate" dbms="oracle"/>
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
-  <changeSet id="inception-workflow-1.0.0" author="Marcus Portmann">
-    <comment>inception-workflow-1.0.0</comment>
+  <changeSet id="inception-flowable-1.0.0" author="Marcus Portmann">
+    <comment>inception-flowable-1.0.0</comment>
 
 
 

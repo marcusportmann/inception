@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import javax.sql.DataSource;
+import org.flowable.app.engine.AppEngineConfiguration;
 import org.flowable.common.engine.impl.AbstractEngineConfiguration;
 
 import org.flowable.engine.ProcessEngine;
@@ -165,11 +166,10 @@ public class FlowableConfiguration {
 
       FormEngineConfiguration formEngineConfiguration = new FormEngineConfiguration();
 
-
-
       FormEngineConfigurator formEngineConfigurator = new FormEngineConfigurator();
       formEngineConfigurator.setFormEngineConfiguration(formEngineConfiguration);
       processEngineConfiguration.addConfigurator(formEngineConfigurator);
+
 
 
 
@@ -181,6 +181,7 @@ public class FlowableConfiguration {
 
 
       ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+
 
 
 

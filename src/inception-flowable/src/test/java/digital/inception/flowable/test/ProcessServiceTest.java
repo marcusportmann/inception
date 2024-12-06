@@ -74,7 +74,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
-    classes = {TestConfiguration.class, FlowableServiceTestConfiguration.class},
+    classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
