@@ -16,6 +16,7 @@
 
 package digital.inception.jpa;
 
+import io.agroal.api.AgroalDataSource;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.lang.reflect.Array;
@@ -27,6 +28,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import javax.sql.DataSource;
+import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -92,6 +94,9 @@ public final class JpaUtil {
 
           case "Oracle":
             jpaVendorAdapter.setDatabase(Database.ORACLE);
+            // NOTE: DO NOT REMOVE THE LINE BELOW!
+            //       IT WILL RESULT IN DATA NOT BEING RETRIEVED CORRECTLY FROM ORACLE IN JPA QUERIES
+            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.OracleDialect");
             jpaVendorAdapter.setShowSql(false);
 
             break;
@@ -114,9 +119,16 @@ public final class JpaUtil {
 
       Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
 
+      if (dataSource.isWrapperFor(AgroalDataSource.class)) {
+        AgroalDataSource agroalDataSource = dataSource.unwrap(AgroalDataSource.class);
+
+        jpaPropertyMap.put(
+            AvailableSettings.CONNECTION_PROVIDER, new AgroalConnectionProvider(agroalDataSource));
+      }
+
       if (platformTransactionManager instanceof JtaTransactionManager) {
-        jpaPropertyMap.put("hibernate.transaction.coordinator_class", "jta");
-        jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
+        jpaPropertyMap.put(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "jta");
+        jpaPropertyMap.put(AvailableSettings.JTA_PLATFORM, "JBossTS");
       }
 
       return entityManagerFactoryBean;

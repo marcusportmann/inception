@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.6</version>
+    <version>3.4.0</version>
   </parent>
 
   <repositories>
@@ -125,9 +125,9 @@
     <opentelemetry-instrumentation-bom.version>2.10.0</opentelemetry-instrumentation-bom.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.4</postgresql.version>
-    <spring-boot.version>3.3.6</spring-boot.version>
+    <spring-boot.version>3.4.0</spring-boot.version>
     <spring-shell-starter.version>3.3.3</spring-shell-starter.version>
-    <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
+    <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
     <swagger.version>2.2.26</swagger.version>
     <uuid-creator.version>6.0.0</uuid-creator.version>

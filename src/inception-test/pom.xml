@@ -109,7 +109,11 @@
             <id>enforce</id>
             <configuration>
               <rules>
-                <dependencyConvergence/>
+                <dependencyConvergence>
+                  <excludes>
+                    <exclude>org.apache.commons:commons-text:[1,2)</exclude>
+                  </excludes>
+                </dependencyConvergence>
               </rules>
             </configuration>
             <goals>

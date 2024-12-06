@@ -15,6 +15,9 @@ spring:
     port: 2500
     username: demo
     password: demo
+  threads:
+    virtual:
+      enabled: true
 
 springdoc:
   writer-with-order-by-keys: true

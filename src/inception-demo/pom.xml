@@ -203,6 +203,7 @@
                     <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
                     <exclude>net.java.dev.jna:jna-platform:[5,6)</exclude>
                     <exclude>org.apache.commons:commons-collections4:[4,5)</exclude>
+                    <exclude>org.apache.commons:commons-text:[1,2)</exclude>
                     <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
                     <exclude>org.bouncycastle:bcpkix-jdk18on:[1,2)</exclude>
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
