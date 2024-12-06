@@ -55,15 +55,15 @@ public class ConfigApiController extends SecureApiController implements IConfigA
   }
 
   @Override
-  public void deleteConfig(String key)
+  public void deleteConfig(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    configService.deleteConfig(key);
+    configService.deleteConfig(id);
   }
 
   @Override
-  public Config getConfig(String key)
+  public Config getConfig(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    return configService.getConfig(key);
+    return configService.getConfig(id);
   }
 
   @Override
@@ -72,9 +72,9 @@ public class ConfigApiController extends SecureApiController implements IConfigA
   }
 
   @Override
-  public String getConfigValue(String key)
+  public String getConfigValue(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    return ApiUtil.quote(configService.getString(key));
+    return ApiUtil.quote(configService.getString(id));
   }
 
   @Override

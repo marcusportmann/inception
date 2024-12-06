@@ -51,7 +51,7 @@ public interface IConfigApiController {
   /**
    * Delete the config.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
    * @throws ServiceUnavailableException if the config could not be deleted
@@ -91,22 +91,21 @@ public interface IConfigApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/configs/{key}",
+      value = "/configs/{id}",
       method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   void deleteConfig(
-      @Parameter(name = "key", description = "The key for the config", required = true)
-          @PathVariable
-          String key)
+      @Parameter(name = "id", description = "The ID for the config", required = true) @PathVariable
+          String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the config.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @return the config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
@@ -147,15 +146,14 @@ public interface IConfigApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/configs/{key}",
+      value = "/configs/{id}",
       method = RequestMethod.GET,
       produces = "application/json")
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   Config getConfig(
-      @Parameter(name = "key", description = "The key for the config", required = true)
-          @PathVariable
-          String key)
+      @Parameter(name = "id", description = "The ID for the config", required = true) @PathVariable
+          String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**
@@ -197,7 +195,7 @@ public interface IConfigApiController {
   /**
    * Retrieve the config value.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @return the config value
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
@@ -238,15 +236,14 @@ public interface IConfigApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/configs/{key}/value",
+      value = "/configs/{id}/value",
       method = RequestMethod.GET,
       produces = "text/plain")
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   String getConfigValue(
-      @Parameter(name = "key", description = "The key for the config", required = true)
-          @PathVariable
-          String key)
+      @Parameter(name = "id", description = "The ID for the config", required = true) @PathVariable
+          String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**

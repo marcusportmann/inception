@@ -19,7 +19,7 @@
     <comment>inception-config-1.0.0</comment>
 
     <createTable tableName="config_config" remarks="Config">
-      <column name="key" type="nvarchar(100)" remarks="The key for the config">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the config">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="clob" remarks="The value for the config">

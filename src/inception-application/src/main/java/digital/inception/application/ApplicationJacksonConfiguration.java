@@ -16,6 +16,7 @@
 
 package digital.inception.application;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.json.DateTimeModule;
@@ -42,7 +43,10 @@ public class ApplicationJacksonConfiguration {
    */
   @Bean
   public ObjectMapper objectMapper() {
-    return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
+    return jackson2ObjectMapperBuilder()
+        .build()
+        .disable(SerializationFeature.INDENT_OUTPUT)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
   /**

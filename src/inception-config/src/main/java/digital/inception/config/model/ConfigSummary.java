@@ -42,12 +42,12 @@ import java.util.Objects;
  */
 @Schema(description = "A config summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"key", "description"})
+@JsonPropertyOrder({"id", "description"})
 @XmlRootElement(name = "ConfigSummary", namespace = "https://inception.digital/config")
 @XmlType(
     name = "ConfigSummary",
     namespace = "https://inception.digital/config",
-    propOrder = {"key", "description"})
+    propOrder = {"id", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "config_config")
@@ -66,15 +66,15 @@ public class ConfigSummary implements Serializable {
   @Column(name = "description", length = 100, nullable = false)
   private String description;
 
-  /** The key for the config. */
-  @Schema(description = "The key for the config", requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The ID for the config. */
+  @Schema(description = "The ID for the config", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Key", required = true)
+  @XmlElement(name = "Id", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "key", length = 100, nullable = false)
-  private String key;
+  @Column(name = "id", length = 100, nullable = false)
+  private String id;
 
   /** Constructs a new <b>ConfigSummary</b>. */
   public ConfigSummary() {}
@@ -82,11 +82,11 @@ public class ConfigSummary implements Serializable {
   /**
    * Constructs a new <b>ConfigSummary</b>.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @param description the description for the config
    */
-  ConfigSummary(String key, String description) {
-    this.key = key;
+  ConfigSummary(String id, String description) {
+    this.id = id;
     this.description = description;
   }
 
@@ -112,7 +112,7 @@ public class ConfigSummary implements Serializable {
 
     ConfigSummary other = (ConfigSummary) object;
 
-    return Objects.equals(key, other.key);
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -125,12 +125,12 @@ public class ConfigSummary implements Serializable {
   }
 
   /**
-   * Returns the key for the config.
+   * Returns the ID for the config.
    *
-   * @return the key for the config
+   * @return the ID for the config
    */
-  public String getKey() {
-    return key;
+  public String getId() {
+    return id;
   }
 
   /**
@@ -140,6 +140,6 @@ public class ConfigSummary implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (key == null) ? 0 : key.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 }

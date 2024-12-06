@@ -16,6 +16,7 @@
 
 package digital.inception.test;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.jdbc.DataSourceConfiguration;
@@ -141,7 +142,7 @@ public class TestConfiguration {
                   "org.h2.jdbcx.JdbcDataSource",
                   "jdbc:h2:mem:"
                       + Thread.currentThread().getName()
-                      + ";AUTOCOMMIT=OFF;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE",
+                      + ";DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=KEY,VALUE",
                   "sa",
                   "",
                   1,
@@ -245,7 +246,10 @@ public class TestConfiguration {
    */
   @Bean
   public ObjectMapper objectMapper() {
-    return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
+    return jackson2ObjectMapperBuilder()
+        .build()
+        .disable(SerializationFeature.INDENT_OUTPUT)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
   /**

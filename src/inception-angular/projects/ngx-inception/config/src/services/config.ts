@@ -15,7 +15,7 @@
  */
 
 /**
- * The Config class stores the key, value and description for the config.
+ * The Config class stores the ID, value and description for the config.
  *
  * @author Marcus Portmann
  */
@@ -27,9 +27,9 @@ export class Config {
   description: string;
 
   /**
-   * The key for the config.
+   * The ID for the config.
    */
-  key: string;
+  id: string;
 
   /**
    * The value for the config.
@@ -39,13 +39,12 @@ export class Config {
   /**
    * Constructs a new Config.
    *
-   * @param key         The key for the config.
+   * @param id         The ID for the config.
    * @param value       The value for the config.
    * @param description The description for the config.
    */
-  constructor(key: string, value: string, description: string) {
-
-    this.key = key;
+  constructor(id: string, value: string, description: string) {
+    this.id = id;
     this.value = value;
     this.description = description;
   }

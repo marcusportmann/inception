@@ -40,7 +40,7 @@ export class NewConfigComponent extends AdminContainerView implements AfterViewI
 
   descriptionControl: FormControl;
 
-  keyControl: FormControl;
+  idControl: FormControl;
 
   newConfigForm: FormGroup;
 
@@ -53,13 +53,13 @@ export class NewConfigComponent extends AdminContainerView implements AfterViewI
 
     // Initialise the form controls
     this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
-    this.keyControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.valueControl = new FormControl('', [Validators.maxLength(4000)]);
 
     // Initialise the form
     this.newConfigForm = new FormGroup({
       description: this.descriptionControl,
-      key: this.keyControl,
+      id: this.idControl,
       value: this.valueControl
     });
   }
@@ -85,7 +85,7 @@ export class NewConfigComponent extends AdminContainerView implements AfterViewI
   ok(): void {
     if (this.config && this.newConfigForm.valid) {
       this.config.description = this.descriptionControl.value;
-      this.config.key = this.keyControl.value;
+      this.config.id = this.idControl.value;
       this.config.value = this.valueControl.value;
 
       this.spinnerService.showSpinner();

@@ -58,7 +58,7 @@ public class TestTransactionalService implements ITestTransactionalService {
    * @param testData the test data
    */
   public void createTestData(TestData testData) throws TestTransactionalServiceException {
-    String createTestDataSQL = "INSERT INTO test_data  (id, name, \"value\") VALUES (?, ?, ?)";
+    String createTestDataSQL = "INSERT INTO test_data  (id, name, value) VALUES (?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(createTestDataSQL)) {
@@ -90,7 +90,7 @@ public class TestTransactionalService implements ITestTransactionalService {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createTestDataInNewTransaction(TestData testData)
       throws TestTransactionalServiceException {
-    String createTestDataSQL = "INSERT INTO test_data  (id, name, \"value\") VALUES (?, ?, ?)";
+    String createTestDataSQL = "INSERT INTO test_data  (id, name, value) VALUES (?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(createTestDataSQL)) {
@@ -170,7 +170,7 @@ public class TestTransactionalService implements ITestTransactionalService {
    *     found
    */
   public Optional<TestData> getTestData(String id) throws TestTransactionalServiceException {
-    String getTestDataSQL = "SELECT id, name, \"value\" FROM test_data WHERE id=?";
+    String getTestDataSQL = "SELECT id, name, value FROM test_data WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(getTestDataSQL)) {

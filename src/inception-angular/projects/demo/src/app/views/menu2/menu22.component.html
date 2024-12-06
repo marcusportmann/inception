@@ -3,7 +3,7 @@
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort
-             matSortActive="key" matSortDirection="asc" matSortDisableClear>
+             matSortActive="id" matSortDirection="asc" matSortDisableClear>
 
     <!-- ID Column -->
     <ng-container matColumnDef="id">

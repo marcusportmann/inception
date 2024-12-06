@@ -33,52 +33,52 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ConfigRepository extends JpaRepository<Config, String> {
 
   /**
-   * Delete the config with the specified key.
+   * Delete the config with the specified ID.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    */
   @Transactional
   @Modifying
-  void deleteByKeyIgnoreCase(String key);
+  void deleteByIdIgnoreCase(String id);
 
   /**
    * Check whether the config exists.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @return <b>true</b> if the config exists or <b>false</b> otherwise
    */
-  boolean existsByKeyIgnoreCase(String key);
+  boolean existsByIdIgnoreCase(String id);
 
   /**
-   * Retrieve all the configs ordered by key ascending.
+   * Retrieve all the configs ordered by ID ascending.
    *
-   * @return all the configs ordered by key ascending
+   * @return all the configs ordered by ID ascending
    */
-  List<Config> findAllByOrderByKeyAsc();
+  List<Config> findAllByOrderByIdAsc();
 
   /**
    * Retrieve the config.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @return an Optional containing the config or an empty Optional if the config could not be found
    */
-  Optional<Config> findByKeyIgnoreCase(String key);
+  Optional<Config> findByIdIgnoreCase(String id);
 
   /**
    * Retrieve the filtered configs.
    *
-   * @param filter the filter to apply to the keys for the configs
+   * @param filter the filter to apply to the IDs for the configs
    * @return the filtered configs
    */
-  List<Config> findByKeyIgnoreCaseContaining(String filter);
+  List<Config> findByIdIgnoreCaseContaining(String filter);
 
   /**
    * Retrieve the value for the config.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @return an Optional containing the value for the config or an empty Optional if the config
    *     could not be found
    */
-  @Query("select c.value from Config c where lower(c.key) = lower(:key)")
-  Optional<String> getValueByKeyIgnoreCase(@Param("key") String key);
+  @Query("select c.value from Config c where lower(c.id) = lower(:id)")
+  Optional<String> getValueByIdIgnoreCase(@Param("id") String id);
 }

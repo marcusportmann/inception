@@ -67,7 +67,7 @@ public abstract class Application {
    * @return the Spring task executor to use for @Async method invocations
    */
   @Bean
-  protected Executor asyncTaskExecutor() {
+  protected Executor taskExecutor() {
     return new SimpleAsyncTaskExecutor();
   }
 

@@ -374,7 +374,7 @@ $inception-theme: mat.m2-define-light-theme((
 
         .mat-mdc-form-field-infix {
           padding-top: 26px;
-          padding-bottom: 6px;
+          padding-bottom: 8px;
 
           .mat-mdc-floating-label {
 
@@ -939,7 +939,8 @@ $inception-theme: mat.m2-define-light-theme((
 
 // To fix cut-off text in single line textareas
 textarea.mat-mdc-input-element {
-  margin-bottom: 8px
+  margin-bottom: 8px;
+  min-height: 16px;
 }
 
 

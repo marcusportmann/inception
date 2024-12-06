@@ -129,4 +129,6 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
     return tenants.filter(tenant => tenant.name.toLowerCase().indexOf(filterValue) === 0);
   }
+
+  protected readonly HTMLInputElement = HTMLInputElement;
 }

@@ -42,9 +42,9 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
 
   editConfigForm: FormGroup;
 
-  key: string;
+  id: string;
 
-  keyControl: FormControl;
+  idControl: FormControl;
 
   valueControl: FormControl;
 
@@ -54,17 +54,17 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
     super();
 
     // Retrieve the route parameters
-    const key = this.activatedRoute.snapshot.paramMap.get('key');
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
 
-    if (key == null) {
-      throw (new Error('No key route parameter found'));
+    if (id == null) {
+      throw (new Error('No id route parameter found'));
     }
 
-    this.key = decodeURIComponent(key);
+    this.id = decodeURIComponent(id);
 
     // Initialise the form controls
     this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
-    this.keyControl = new FormControl({
+    this.idControl = new FormControl({
       value: '',
       disabled: true
     }, [Validators.required, Validators.maxLength(100)]);
@@ -73,7 +73,7 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
     // Initialise the form
     this.editConfigForm = new FormGroup({
       description: this.descriptionControl,
-      key: this.keyControl,
+      id: this.idControl,
       value: this.valueControl
     });
   }
@@ -96,12 +96,12 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
     // Retrieve the existing config and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.configService.getConfig(this.key)
+    this.configService.getConfig(this.id)
     .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
     .subscribe((config: Config) => {
       this.config = config;
 
-      this.keyControl.setValue(config.key);
+      this.idControl.setValue(config.id);
       this.valueControl.setValue(config.value);
       this.descriptionControl.setValue(config.description);
     }, (error: Error) => {

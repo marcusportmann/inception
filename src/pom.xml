@@ -273,17 +273,32 @@
       </dependency>
       <dependency>
         <groupId>org.flowable</groupId>
-        <artifactId>flowable-spring-boot-starter</artifactId>
+        <artifactId>flowable-engine</artifactId>
         <version>${flowable.version}</version>
       </dependency>
       <dependency>
         <groupId>org.flowable</groupId>
-        <artifactId>flowable-spring-boot-starter-dmn</artifactId>
+        <artifactId>flowable-app-engine</artifactId>
         <version>${flowable.version}</version>
       </dependency>
       <dependency>
         <groupId>org.flowable</groupId>
-        <artifactId>flowable-spring-boot-starter-process</artifactId>
+        <artifactId>flowable-cmmn-engine</artifactId>
+        <version>${flowable.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.flowable</groupId>
+        <artifactId>flowable-dmn-engine</artifactId>
+        <version>${flowable.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.flowable</groupId>
+        <artifactId>flowable-event-registry</artifactId>
+        <version>${flowable.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.flowable</groupId>
+        <artifactId>flowable-idm-engine</artifactId>
         <version>${flowable.version}</version>
       </dependency>
       <dependency>
@@ -444,6 +459,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-flowable</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>      
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-jpa</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -594,11 +614,6 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-workflow</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-ws</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -620,13 +635,14 @@
     <module>inception-config</module>
     <module>inception-config-api</module>
     <module>inception-config-ws</module>
+    <module>inception-core</module>
     <module>inception-error</module>
     <module>inception-error-api</module>
     <module>inception-error-ws</module>
     <module>inception-executor</module>
     <module>inception-executor-api</module>
     <module>inception-executor-ws</module>
-    <module>inception-core</module>
+<!--    <module>inception-flowable</module>-->
     <module>inception-jpa</module>
     <module>inception-jta</module>
     <module>inception-json</module>
@@ -656,7 +672,6 @@
     <module>inception-sms-api</module>
     <module>inception-sms-ws</module>
     <module>inception-test</module>
-    <!--<module>inception-workflow</module>-->
     <module>inception-ws</module>
 
     <module>inception-service-parent</module>

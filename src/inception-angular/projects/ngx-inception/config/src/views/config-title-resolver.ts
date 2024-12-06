@@ -41,14 +41,14 @@ export class ConfigTitleResolver {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    let key = activatedRouteSnapshot.paramMap.get('key');
+    let id = activatedRouteSnapshot.paramMap.get('id');
 
-    if (!key) {
-      throw (new Error('No key route parameter found'));
+    if (!id) {
+      throw (new Error('No id route parameter found'));
     }
 
-    key = decodeURIComponent(key);
+    id = decodeURIComponent(id);
 
-    return of(key);
+    return of(id);
   }
 }

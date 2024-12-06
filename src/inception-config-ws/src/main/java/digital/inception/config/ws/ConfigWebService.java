@@ -58,21 +58,21 @@ public class ConfigWebService {
   /**
    * Delete the config.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
    * @throws ServiceUnavailableException if the config could not be deleted
    */
   @WebMethod(operationName = "DeleteConfig")
-  public void deleteConfig(@WebParam(name = "Key") @XmlElement(required = true) String key)
+  public void deleteConfig(@WebParam(name = "Id") @XmlElement(required = true) String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    configService.deleteConfig(key);
+    configService.deleteConfig(id);
   }
 
   /**
    * Retrieve the config.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @return the config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
@@ -80,9 +80,9 @@ public class ConfigWebService {
    */
   @WebMethod(operationName = "GetConfig")
   @WebResult(name = "Config")
-  public Config getConfig(@WebParam(name = "Key") @XmlElement(required = true) String key)
+  public Config getConfig(@WebParam(name = "Id") @XmlElement(required = true) String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    return configService.getConfig(key);
+    return configService.getConfig(id);
   }
 
   /**
@@ -100,7 +100,7 @@ public class ConfigWebService {
   /**
    * Retrieve the config value.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @return the config value
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
@@ -108,9 +108,9 @@ public class ConfigWebService {
    */
   @WebMethod(operationName = "GetConfigValue")
   @WebResult(name = "ConfigValue")
-  public String getConfigValue(@WebParam(name = "Key") @XmlElement(required = true) String key)
+  public String getConfigValue(@WebParam(name = "Id") @XmlElement(required = true) String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    return configService.getString(key);
+    return configService.getString(id);
   }
 
   /**

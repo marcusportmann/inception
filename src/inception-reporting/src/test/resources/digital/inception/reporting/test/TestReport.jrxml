@@ -1,10 +1,10 @@
-<!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
 <jasperReport name="TestReport" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e1ff656a-3188-46cf-be1d-1a133bb6c336">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<query language="sql"><![CDATA[SELECT td.name AS data_name, td."value" AS data_value FROM test_data td ORDER BY td.name]]></query>
+	<query language="sql"><![CDATA[SELECT td.name AS data_name, td.value AS data_value FROM test_data td ORDER BY td.name]]></query>
 	<field name="data_name" class="java.lang.String"/>
 	<field name="data_value" class="java.lang.String"/>
 	<title height="70" splitType="Stretch">

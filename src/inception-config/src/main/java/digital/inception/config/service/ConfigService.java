@@ -68,118 +68,118 @@ public class ConfigService implements IConfigService {
   }
 
   @Override
-  public void deleteConfig(String key)
+  public void deleteConfig(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      if (!configRepository.existsByKeyIgnoreCase(key)) {
-        throw new ConfigNotFoundException(key);
+      if (!configRepository.existsByIdIgnoreCase(id)) {
+        throw new ConfigNotFoundException(id);
       }
 
-      configRepository.deleteByKeyIgnoreCase(key);
+      configRepository.deleteByIdIgnoreCase(id);
     } catch (ConfigNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the config with the key (" + key + ")", e);
+          "Failed to delete the config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public byte[] getBinary(String key)
+  public byte[] getBinary(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Base64.getDecoder().decode(valueOptional.get());
       } else {
-        throw new ConfigNotFoundException(key);
+        throw new ConfigNotFoundException(id);
       }
     } catch (ConfigNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the binary config with the key (" + key + ")", e);
+          "Failed to retrieve the binary config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public byte[] getBinary(String key, byte[] defaultValue)
+  public byte[] getBinary(String id, byte[] defaultValue)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       return valueOptional.map(Base64.getDecoder()::decode).orElse(defaultValue);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the binary config with the key (" + key + ")", e);
+          "Failed to retrieve the binary config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public boolean getBoolean(String key)
+  public boolean getBoolean(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Boolean.parseBoolean(valueOptional.get());
       } else {
-        throw new ConfigNotFoundException(key);
+        throw new ConfigNotFoundException(id);
       }
     } catch (ConfigNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Boolean config with the key (" + key + ")", e);
+          "Failed to retrieve the Boolean config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public boolean getBoolean(String key, boolean defaultValue)
+  public boolean getBoolean(String id, boolean defaultValue)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       return valueOptional.map(Boolean::parseBoolean).orElse(defaultValue);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Boolean config with the key (" + key + ")", e);
+          "Failed to retrieve the Boolean config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public Config getConfig(String key)
+  public Config getConfig(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<Config> configOptional = configRepository.findByKeyIgnoreCase(key);
+      Optional<Config> configOptional = configRepository.findByIdIgnoreCase(id);
 
       if (configOptional.isEmpty()) {
-        throw new ConfigNotFoundException(key);
+        throw new ConfigNotFoundException(id);
       } else {
         return configOptional.get();
       }
@@ -187,14 +187,14 @@ public class ConfigService implements IConfigService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the config with the key (" + key + ")", e);
+          "Failed to retrieve the config with the ID (" + id + ")", e);
     }
   }
 
   @Override
   public List<ConfigSummary> getConfigSummaries() throws ServiceUnavailableException {
     try {
-      return configSummaryRepository.findAllByOrderByKeyAsc();
+      return configSummaryRepository.findAllByOrderByIdAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the config summaries", e);
     }
@@ -203,49 +203,49 @@ public class ConfigService implements IConfigService {
   @Override
   public List<Config> getConfigs() throws ServiceUnavailableException {
     try {
-      return configRepository.findAllByOrderByKeyAsc();
+      return configRepository.findAllByOrderByIdAsc();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the configs", e);
     }
   }
 
   @Override
-  public Double getDouble(String key)
+  public Double getDouble(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Double.parseDouble(valueOptional.get());
       } else {
-        throw new ConfigNotFoundException(key);
+        throw new ConfigNotFoundException(id);
       }
     } catch (ConfigNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Double config with the key (" + key + ")", e);
+          "Failed to retrieve the Double config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public double getDouble(String key, double defaultValue)
+  public double getDouble(String id, double defaultValue)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       return valueOptional.map(Double::parseDouble).orElse(defaultValue);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Double config with the key (" + key + ")", e);
+          "Failed to retrieve the Double config with the ID (" + id + ")", e);
     }
   }
 
@@ -254,9 +254,9 @@ public class ConfigService implements IConfigService {
       throws ServiceUnavailableException {
     try {
       if (StringUtils.hasText(filter)) {
-        return configSummaryRepository.findByKeyIgnoreCaseContaining(filter);
+        return configSummaryRepository.findByIdIgnoreCaseContaining(filter);
       } else {
-        return configSummaryRepository.findAllByOrderByKeyAsc();
+        return configSummaryRepository.findAllByOrderByIdAsc();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -268,9 +268,9 @@ public class ConfigService implements IConfigService {
   public List<Config> getFilteredConfigs(String filter) throws ServiceUnavailableException {
     try {
       if (StringUtils.hasText(filter)) {
-        return configRepository.findByKeyIgnoreCaseContaining(filter);
+        return configRepository.findByIdIgnoreCaseContaining(filter);
       } else {
-        return configRepository.findAllByOrderByKeyAsc();
+        return configRepository.findAllByOrderByIdAsc();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -279,137 +279,136 @@ public class ConfigService implements IConfigService {
   }
 
   @Override
-  public Integer getInteger(String key)
+  public Integer getInteger(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Integer.parseInt(valueOptional.get());
       } else {
-        throw new ConfigNotFoundException(key);
+        throw new ConfigNotFoundException(id);
       }
     } catch (ConfigNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Integer config with the key (" + key + ")", e);
+          "Failed to retrieve the Integer config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public int getInteger(String key, int defaultValue)
+  public int getInteger(String id, int defaultValue)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       return valueOptional.map(Integer::parseInt).orElse(defaultValue);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Integer config with the key (" + key + ")", e);
+          "Failed to retrieve the Integer config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public Long getLong(String key)
+  public Long getLong(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Long.parseLong(valueOptional.get());
       } else {
-        throw new ConfigNotFoundException(key);
+        throw new ConfigNotFoundException(id);
       }
     } catch (ConfigNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Long config with the key (" + key + ")", e);
+          "Failed to retrieve the Long config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public long getLong(String key, long defaultValue)
+  public long getLong(String id, long defaultValue)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       return valueOptional.map(Long::parseLong).orElse(defaultValue);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the Long config with the key (" + key + ")", e);
+          "Failed to retrieve the Long config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public String getString(String key)
+  public String getString(String id)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return valueOptional.get();
       } else {
-        throw new ConfigNotFoundException(key);
+        throw new ConfigNotFoundException(id);
       }
     } catch (ConfigNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the String config with the key (" + key + ")", e);
+          "Failed to retrieve the String config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public String getString(String key, String defaultValue)
+  public String getString(String id, String defaultValue)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
 
       return valueOptional.orElse(defaultValue);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the String config with the key (" + key + ")", e);
+          "Failed to retrieve the String config with the ID (" + id + ")", e);
     }
   }
 
   @Override
-  public boolean keyExists(String key)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+  public boolean idExists(String id) throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     try {
-      return configRepository.existsByKeyIgnoreCase(key);
+      return configRepository.existsByIdIgnoreCase(id);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to checked whether the config key (" + key + ") exists", e);
+          "Failed to checked whether the config ID (" + id + ") exists", e);
     }
   }
 
@@ -431,15 +430,15 @@ public class ConfigService implements IConfigService {
       configRepository.saveAndFlush(config);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to set the config with the key (" + config.getKey() + ")", e);
+          "Failed to set the config with the ID (" + config.getId() + ")", e);
     }
   }
 
   @Override
-  public void setConfig(String key, Object value, String description)
+  public void setConfig(String id, Object value, String description)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
+    if (!StringUtils.hasText(id)) {
+      throw new InvalidArgumentException("id");
     }
 
     if (value == null) {
@@ -461,10 +460,9 @@ public class ConfigService implements IConfigService {
         stringValue = value.toString();
       }
 
-      configRepository.save(new Config(key, stringValue, description));
+      configRepository.save(new Config(id, stringValue, description));
     } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to set the config with the key (" + key + ")", e);
+      throw new ServiceUnavailableException("Failed to set the config with the ID (" + id + ")", e);
     }
   }
 }

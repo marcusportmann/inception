@@ -49,13 +49,13 @@ export class ConfigService {
   /**
    * Delete the config.
    *
-   * @param key The key for the config.
+   * @param id The ID for the config.
    *
    * @return True if the config was deleted or false otherwise.
    */
-  deleteConfig(key: string): Observable<boolean> {
+  deleteConfig(id: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(key)}`,
+      `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`,
       {observe: 'response'})
     .pipe(map(ConfigService.isResponse204),
       catchError((error) => ConfigService.handleApiError(error, 'Failed to delete the config.')));
@@ -64,13 +64,13 @@ export class ConfigService {
   /**
    * Retrieve the config.
    *
-   * @param key The key for the config.
+   * @param id The ID for the config.
    *
    * @return The config.
    */
-  getConfig(key: string): Observable<Config> {
+  getConfig(id: string): Observable<Config> {
     return this.httpClient.get<Config>(
-      `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(key)}`,
+      `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`,
       {reportProgress: true})
     .pipe(
       catchError((error) => ConfigService.handleApiError(error, 'Failed to retrieve the config.')));
@@ -79,13 +79,13 @@ export class ConfigService {
   /**
    * Retrieve the config value.
    *
-   * @param key The key for the config.
+   * @param id The ID for the config.
    *
    * @return The config value.
    */
-  getConfigValue(key: string): Observable<string> {
+  getConfigValue(id: string): Observable<string> {
     return this.httpClient.get<string>(
-      `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(key)}/value`,
+      `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}/value`,
       {reportProgress: true})
     .pipe(catchError(
       (error) => ConfigService.handleApiError(error, 'Failed to retrieve the config value.')));

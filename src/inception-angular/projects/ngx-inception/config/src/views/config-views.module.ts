@@ -48,11 +48,11 @@ const routes: Routes = [
       title: NewConfigTitleResolver
     }
   }, {
-    path: ':key',
+    path: ':id',
     pathMatch: 'full',
-    redirectTo: ':key/edit'
+    redirectTo: ':id/edit'
   }, {
-    path: ':key',
+    path: ':id',
     resolve: {
       title: ConfigTitleResolver
     },

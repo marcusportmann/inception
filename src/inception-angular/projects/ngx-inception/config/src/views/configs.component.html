@@ -3,12 +3,12 @@
     <button mat-flat-button color="primary" (click)="newConfig()" i18n="@@config_configs_component_button_new">New</button>
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="key" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
 
-    <!-- Key Column -->
-    <ng-container matColumnDef="key">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@config_configs_component_table_header_key">Key</mat-header-cell>
-      <mat-cell  *matCellDef="let row"><span class="ellipsis">{{row.key}}</span></mat-cell>
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@config_configs_component_table_header_id">ID</mat-header-cell>
+      <mat-cell  *matCellDef="let row"><span class="ellipsis">{{row.id}}</span></mat-cell>
     </ng-container>
 
     <!-- Value Column -->
@@ -21,7 +21,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@config_configs_component_table_header_actions">Actions</mat-header-cell>
       <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row">
-        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{key: row.key}">
+        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
           <i class="fas fa-ellipsis-v"></i>
         </button>
       </mat-cell>
@@ -35,12 +35,12 @@
   <mat-paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
-    <ng-template matMenuContent let-key="key">
-      <button mat-menu-item (click)="editConfig(key)">
+    <ng-template matMenuContent let-id="id">
+      <button mat-menu-item (click)="editConfig(id)">
         <i class="fas fa-edit"></i>
         <span i18n="@@config_configs_component_menu_item_edit">Edit</span>
       </button>
-      <button mat-menu-item (click)="deleteConfig(key)">
+      <button mat-menu-item (click)="deleteConfig(id)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@config_configs_component_menu_item_delete">Delete</span>
       </button>

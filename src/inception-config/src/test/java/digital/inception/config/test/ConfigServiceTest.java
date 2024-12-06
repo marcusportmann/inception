@@ -56,37 +56,37 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     })
 public class ConfigServiceTest {
 
-  private static final String TEST_BINARY_KEY = "TestBinaryKey";
+  private static final String TEST_BINARY_ID = "TestBinaryId";
 
   private static final byte[] TEST_BINARY_UPDATED_VALUE = "TestBinaryUpdatedValue".getBytes();
 
   private static final byte[] TEST_BINARY_VALUE = "TestBinaryValue".getBytes();
 
-  private static final String TEST_BOOLEAN_KEY = "TestBooleanKey";
+  private static final String TEST_BOOLEAN_ID = "TestBooleanId";
 
   private static final boolean TEST_BOOLEAN_VALUE = true;
 
-  private static final String TEST_CONFIGURATION_KEY = "TestConfigKey";
+  private static final String TEST_CONFIGURATION_ID = "TestConfigId";
 
   private static final String TEST_CONFIGURATION_VALUE = "TestConfigValue";
 
   private static final String TEST_DESCRIPTION = "Test Description";
 
-  private static final String TEST_DOUBLE_KEY = "TestDoubleKey";
+  private static final String TEST_DOUBLE_ID = "TestDoubleId";
 
   private static final Double TEST_DOUBLE_VALUE = 1234.4321;
 
-  private static final String TEST_FILTERED_KEY = "TestFilteredKey";
+  private static final String TEST_FILTERED_ID = "TestFilteredId";
 
-  private static final String TEST_INTEGER_KEY = "TestIntegerKey";
+  private static final String TEST_INTEGER_ID = "TestIntegerId";
 
   private static final Integer TEST_INTEGER_VALUE = 1234;
 
-  private static final String TEST_LONG_KEY = "TestLongKey";
+  private static final String TEST_LONG_ID = "TestLongId";
 
   private static final Long TEST_LONG_VALUE = 4321L;
 
-  private static final String TEST_STRING_KEY = "TestStringKey";
+  private static final String TEST_STRING_ID = "TestStringId";
 
   private static final String TEST_STRING_VALUE = "TestStringValue";
 
@@ -96,118 +96,116 @@ public class ConfigServiceTest {
   /** Test the <b>Binary</b> config. */
   @Test
   public void binaryConfigTest() throws Exception {
-    if (configService.keyExists(TEST_BINARY_KEY)) {
-      fail("Found the Binary config key (" + TEST_BINARY_KEY + ") that should not exist");
+    if (configService.idExists(TEST_BINARY_ID)) {
+      fail("Found the Binary config ID (" + TEST_BINARY_ID + ") that should not exist");
     }
 
-    configService.setConfig(TEST_BINARY_KEY, TEST_BINARY_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_BINARY_ID, TEST_BINARY_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_BINARY_KEY)) {
-      fail("Failed to confirm that the Binary config key (" + TEST_BINARY_KEY + ") exists");
+    if (!configService.idExists(TEST_BINARY_ID)) {
+      fail("Failed to confirm that the Binary config ID (" + TEST_BINARY_ID + ") exists");
     }
 
-    byte[] value = configService.getBinary(TEST_BINARY_KEY);
+    byte[] value = configService.getBinary(TEST_BINARY_ID);
 
     assertArrayEquals(
         TEST_BINARY_VALUE,
         value,
-        "The required Binary value was not retrieved for the config key (" + TEST_BINARY_KEY + ")");
+        "The required Binary value was not retrieved for the config ID (" + TEST_BINARY_ID + ")");
 
     configService.setConfig(
-        TEST_BINARY_KEY, TEST_BINARY_UPDATED_VALUE, TEST_DESCRIPTION + " Updated");
+        TEST_BINARY_ID, TEST_BINARY_UPDATED_VALUE, TEST_DESCRIPTION + " Updated");
 
-    if (!configService.keyExists(TEST_BINARY_KEY)) {
-      fail("Failed to confirm that the Binary config key (" + TEST_BINARY_KEY + ") exists");
+    if (!configService.idExists(TEST_BINARY_ID)) {
+      fail("Failed to confirm that the Binary config ID (" + TEST_BINARY_ID + ") exists");
     }
 
-    value = configService.getBinary(TEST_BINARY_KEY);
+    value = configService.getBinary(TEST_BINARY_ID);
 
     assertArrayEquals(
         TEST_BINARY_UPDATED_VALUE,
         value,
-        "The required updated Binary value was not retrieved for the config key ("
-            + TEST_BINARY_KEY
+        "The required updated Binary value was not retrieved for the config ID ("
+            + TEST_BINARY_ID
             + ")");
 
-    value = configService.getBinary(TEST_BINARY_KEY, new byte[0]);
+    value = configService.getBinary(TEST_BINARY_ID, new byte[0]);
 
     assertArrayEquals(
         TEST_BINARY_UPDATED_VALUE,
         value,
-        "The required updated Binary value was not retrieved for the config key ("
-            + TEST_BINARY_KEY
+        "The required updated Binary value was not retrieved for the config ID ("
+            + TEST_BINARY_ID
             + ")");
   }
 
   /** Test the <b>Boolean</b> config. */
   @Test
   public void booleanConfigTest() throws Exception {
-    if (configService.keyExists(TEST_BOOLEAN_KEY)) {
-      fail("Found the Boolean config key (" + TEST_BOOLEAN_KEY + ") that should not exist");
+    if (configService.idExists(TEST_BOOLEAN_ID)) {
+      fail("Found the Boolean config ID (" + TEST_BOOLEAN_ID + ") that should not exist");
     }
 
-    configService.setConfig(TEST_BOOLEAN_KEY, TEST_BOOLEAN_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_BOOLEAN_ID, TEST_BOOLEAN_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_BOOLEAN_KEY)) {
-      fail("Failed to confirm that the Boolean config key (" + TEST_BOOLEAN_KEY + ") exists");
+    if (!configService.idExists(TEST_BOOLEAN_ID)) {
+      fail("Failed to confirm that the Boolean config ID (" + TEST_BOOLEAN_ID + ") exists");
     }
 
-    boolean value = configService.getBoolean(TEST_BOOLEAN_KEY);
+    boolean value = configService.getBoolean(TEST_BOOLEAN_ID);
 
     assertEquals(
         TEST_BOOLEAN_VALUE,
         value,
-        "The required Boolean value was not retrieved for the config key ("
-            + TEST_BOOLEAN_KEY
-            + ")");
+        "The required Boolean value was not retrieved for the config ID (" + TEST_BOOLEAN_ID + ")");
 
-    boolean booleanValue = configService.getBoolean(TEST_BOOLEAN_KEY, false);
+    boolean booleanValue = configService.getBoolean(TEST_BOOLEAN_ID, false);
 
     assertEquals(
         TEST_BOOLEAN_VALUE,
         booleanValue,
-        "The required double value was not retrieved for the config key (" + booleanValue + ")");
+        "The required double value was not retrieved for the config ID (" + booleanValue + ")");
 
-    configService.setConfig(TEST_BOOLEAN_KEY, false, TEST_DESCRIPTION + " Updated");
+    configService.setConfig(TEST_BOOLEAN_ID, false, TEST_DESCRIPTION + " Updated");
 
-    if (!configService.keyExists(TEST_BOOLEAN_KEY)) {
-      fail("Failed to confirm that the Boolean config key (" + TEST_BOOLEAN_KEY + ") exists");
+    if (!configService.idExists(TEST_BOOLEAN_ID)) {
+      fail("Failed to confirm that the Boolean config ID (" + TEST_BOOLEAN_ID + ") exists");
     }
 
-    value = configService.getBoolean(TEST_BOOLEAN_KEY);
+    value = configService.getBoolean(TEST_BOOLEAN_ID);
 
     assertFalse(
         value,
-        "The required updated Boolean value was not retrieved for the config key ("
-            + TEST_BOOLEAN_KEY
+        "The required updated Boolean value was not retrieved for the config ID ("
+            + TEST_BOOLEAN_ID
             + ")");
   }
 
   /** Test the <b>Config</b> config. */
   @Test
   public void configConfigTest() throws Exception {
-    if (configService.keyExists(TEST_CONFIGURATION_KEY)) {
-      fail("Found the config key (" + TEST_BINARY_KEY + ") that should not exist");
+    if (configService.idExists(TEST_CONFIGURATION_ID)) {
+      fail("Found the config ID (" + TEST_BINARY_ID + ") that should not exist");
     }
 
     Config config = new Config();
 
-    config.setKey(TEST_CONFIGURATION_KEY);
+    config.setId(TEST_CONFIGURATION_ID);
     config.setValue(TEST_CONFIGURATION_VALUE);
     config.setDescription(TEST_DESCRIPTION);
 
-    configService.setConfig(config.getKey(), config.getValue(), config.getDescription());
+    configService.setConfig(config.getId(), config.getValue(), config.getDescription());
 
-    Config retrievedConfig = configService.getConfig(TEST_CONFIGURATION_KEY);
+    Config retrievedConfig = configService.getConfig(TEST_CONFIGURATION_ID);
 
     compareConfig(config, retrievedConfig);
 
     config.setValue(TEST_CONFIGURATION_VALUE + " Updated");
     config.setDescription(TEST_DESCRIPTION + " Updated");
 
-    configService.setConfig(config.getKey(), config.getValue(), config.getDescription());
+    configService.setConfig(config.getId(), config.getValue(), config.getDescription());
 
-    retrievedConfig = configService.getConfig(TEST_CONFIGURATION_KEY);
+    retrievedConfig = configService.getConfig(TEST_CONFIGURATION_ID);
 
     compareConfig(config, retrievedConfig);
   }
@@ -215,10 +213,10 @@ public class ConfigServiceTest {
   /** Test the config summaries. */
   @Test
   public void configSummariesTest() throws Exception {
-    configService.setConfig(TEST_FILTERED_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_FILTERED_ID, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_FILTERED_KEY)) {
-      fail("Failed to confirm that the config key (" + TEST_FILTERED_KEY + ") exists");
+    if (!configService.idExists(TEST_FILTERED_ID)) {
+      fail("Failed to confirm that the config ID (" + TEST_FILTERED_ID + ") exists");
     }
 
     List<ConfigSummary> filteredConfigSummaries =
@@ -246,57 +244,56 @@ public class ConfigServiceTest {
   /** Test the <b>Double</b> config. */
   @Test
   public void doubleConfigTest() throws Exception {
-    if (configService.keyExists(TEST_DOUBLE_KEY)) {
-      fail("Found the Double config key (" + TEST_DOUBLE_KEY + ") that should not exist");
+    if (configService.idExists(TEST_DOUBLE_ID)) {
+      fail("Found the Double config ID (" + TEST_DOUBLE_ID + ") that should not exist");
     }
 
-    configService.setConfig(TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_DOUBLE_ID, TEST_DOUBLE_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_DOUBLE_KEY)) {
-      fail("Failed to confirm that the Double config key (" + TEST_DOUBLE_KEY + ") exists");
+    if (!configService.idExists(TEST_DOUBLE_ID)) {
+      fail("Failed to confirm that the Double config ID (" + TEST_DOUBLE_ID + ") exists");
     }
 
-    Double value = configService.getDouble(TEST_DOUBLE_KEY);
+    Double value = configService.getDouble(TEST_DOUBLE_ID);
 
     assertEquals(
         TEST_DOUBLE_VALUE,
         value,
         0.0,
-        "The required Double value was not retrieved for the config key (" + TEST_DOUBLE_KEY + ")");
+        "The required Double value was not retrieved for the config ID (" + TEST_DOUBLE_ID + ")");
 
-    double doubleValue = configService.getDouble(TEST_DOUBLE_KEY, 666.666);
+    double doubleValue = configService.getDouble(TEST_DOUBLE_ID, 666.666);
 
     assertEquals(
         TEST_DOUBLE_VALUE,
         doubleValue,
         0.0,
-        "The required double value was not retrieved for the config key (" + doubleValue + ")");
+        "The required double value was not retrieved for the config ID (" + doubleValue + ")");
 
-    configService.setConfig(
-        TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE + 1.1, TEST_DESCRIPTION + " Updated");
+    configService.setConfig(TEST_DOUBLE_ID, TEST_DOUBLE_VALUE + 1.1, TEST_DESCRIPTION + " Updated");
 
-    if (!configService.keyExists(TEST_DOUBLE_KEY)) {
-      fail("Failed to confirm that the Double config key (" + TEST_DOUBLE_KEY + ") exists");
+    if (!configService.idExists(TEST_DOUBLE_ID)) {
+      fail("Failed to confirm that the Double config ID (" + TEST_DOUBLE_ID + ") exists");
     }
 
-    value = configService.getDouble(TEST_DOUBLE_KEY);
+    value = configService.getDouble(TEST_DOUBLE_ID);
 
     assertEquals(
         TEST_DOUBLE_VALUE + 1.1,
         value,
         0.0,
-        "The required updated Double value was not retrieved for the config key ("
-            + TEST_DOUBLE_KEY
+        "The required updated Double value was not retrieved for the config ID ("
+            + TEST_DOUBLE_ID
             + ")");
   }
 
   /** Test the filtered configs. */
   @Test
   public void filteredConfigsTest() throws Exception {
-    configService.setConfig(TEST_FILTERED_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_FILTERED_ID, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_FILTERED_KEY)) {
-      fail("Failed to confirm that the config key (" + TEST_FILTERED_KEY + ") exists");
+    if (!configService.idExists(TEST_FILTERED_ID)) {
+      fail("Failed to confirm that the config ID (" + TEST_FILTERED_ID + ") exists");
     }
 
     List<Config> filteredConfigs = configService.getFilteredConfigs("testfiltered");
@@ -313,154 +310,147 @@ public class ConfigServiceTest {
   /** Test the <b>Integer</b> config. */
   @Test
   public void integerConfigTest() throws Exception {
-    if (configService.keyExists(TEST_INTEGER_KEY)) {
-      fail("Found the Integer config key (" + TEST_INTEGER_KEY + ") that should not exist");
+    if (configService.idExists(TEST_INTEGER_ID)) {
+      fail("Found the Integer config ID (" + TEST_INTEGER_ID + ") that should not exist");
     }
 
-    configService.setConfig(TEST_INTEGER_KEY, TEST_INTEGER_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_INTEGER_ID, TEST_INTEGER_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_INTEGER_KEY)) {
-      fail("Failed to confirm that the Integer config key (" + TEST_INTEGER_KEY + ") exists");
+    if (!configService.idExists(TEST_INTEGER_ID)) {
+      fail("Failed to confirm that the Integer config ID (" + TEST_INTEGER_ID + ") exists");
     }
 
-    Integer value = configService.getInteger(TEST_INTEGER_KEY);
+    Integer value = configService.getInteger(TEST_INTEGER_ID);
 
     assertEquals(
         TEST_INTEGER_VALUE,
         value,
-        "The required Integer value was not retrieved for the Integer config key ("
-            + TEST_INTEGER_KEY
+        "The required Integer value was not retrieved for the Integer config ID ("
+            + TEST_INTEGER_ID
             + ")");
 
-    int integerValue = configService.getInteger(TEST_INTEGER_KEY, 666);
+    int integerValue = configService.getInteger(TEST_INTEGER_ID, 666);
 
     assertEquals(
         (int) TEST_INTEGER_VALUE,
         integerValue,
-        "The required integer value was not retrieved for the Integer config key ("
-            + TEST_INTEGER_KEY
+        "The required integer value was not retrieved for the Integer config ID ("
+            + TEST_INTEGER_ID
             + ")");
 
-    configService.setConfig(
-        TEST_INTEGER_KEY, TEST_INTEGER_VALUE + 1, TEST_DESCRIPTION + " Updated");
+    configService.setConfig(TEST_INTEGER_ID, TEST_INTEGER_VALUE + 1, TEST_DESCRIPTION + " Updated");
 
-    if (!configService.keyExists(TEST_INTEGER_KEY)) {
-      fail("Failed to confirm that the Integer config key (" + TEST_INTEGER_KEY + ") exists");
+    if (!configService.idExists(TEST_INTEGER_ID)) {
+      fail("Failed to confirm that the Integer config ID (" + TEST_INTEGER_ID + ") exists");
     }
 
-    value = configService.getInteger(TEST_INTEGER_KEY);
+    value = configService.getInteger(TEST_INTEGER_ID);
 
     assertEquals(
         TEST_INTEGER_VALUE + 1,
         value.intValue(),
-        "The required updated Integer value was not retrieved for the config key ("
-            + TEST_INTEGER_KEY
+        "The required updated Integer value was not retrieved for the config ID ("
+            + TEST_INTEGER_ID
             + ")");
   }
 
   /** Test the <b>Long</b> config. */
   @Test
   public void longConfigTest() throws Exception {
-    if (configService.keyExists(TEST_LONG_KEY)) {
-      fail("Found the Long config key (" + TEST_LONG_KEY + ") that should not exist");
+    if (configService.idExists(TEST_LONG_ID)) {
+      fail("Found the Long config ID (" + TEST_LONG_ID + ") that should not exist");
     }
 
-    configService.setConfig(TEST_LONG_KEY, TEST_LONG_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_LONG_ID, TEST_LONG_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_LONG_KEY)) {
-      fail("Failed to confirm that the Long config key (" + TEST_LONG_KEY + ") exists");
+    if (!configService.idExists(TEST_LONG_ID)) {
+      fail("Failed to confirm that the Long config ID (" + TEST_LONG_ID + ") exists");
     }
 
-    Long value = configService.getLong(TEST_LONG_KEY);
+    Long value = configService.getLong(TEST_LONG_ID);
 
     assertEquals(
         TEST_LONG_VALUE,
         value,
-        "The required Long value was not retrieved for the Long config key ("
-            + TEST_LONG_KEY
-            + ")");
+        "The required Long value was not retrieved for the Long config ID (" + TEST_LONG_ID + ")");
 
-    Long longValue = configService.getLong(TEST_LONG_KEY, 666);
+    Long longValue = configService.getLong(TEST_LONG_ID, 666);
 
     assertEquals(
         TEST_LONG_VALUE,
         longValue,
-        "The required Long value was not retrieved for the Long config key ("
-            + TEST_LONG_KEY
-            + ")");
+        "The required Long value was not retrieved for the Long config ID (" + TEST_LONG_ID + ")");
 
-    configService.setConfig(TEST_LONG_KEY, TEST_LONG_VALUE + 1, TEST_DESCRIPTION + " Updated");
+    configService.setConfig(TEST_LONG_ID, TEST_LONG_VALUE + 1, TEST_DESCRIPTION + " Updated");
 
-    if (!configService.keyExists(TEST_LONG_KEY)) {
-      fail("Failed to confirm that the Long config key (" + TEST_LONG_KEY + ") exists");
+    if (!configService.idExists(TEST_LONG_ID)) {
+      fail("Failed to confirm that the Long config ID (" + TEST_LONG_ID + ") exists");
     }
 
-    value = configService.getLong(TEST_LONG_KEY);
+    value = configService.getLong(TEST_LONG_ID);
 
     assertEquals(
         TEST_LONG_VALUE + 1L,
         value.longValue(),
-        "The required updated Long value was not retrieved for the config key ("
-            + TEST_LONG_KEY
+        "The required updated Long value was not retrieved for the config ID ("
+            + TEST_LONG_ID
             + ")");
   }
 
   /** Test the <b>String</b> config. */
   @Test
   public void stringConfigTest() throws Exception {
-    if (configService.keyExists(TEST_STRING_KEY)) {
-      fail("Found the String config key (" + TEST_STRING_KEY + ") that should not exist");
+    if (configService.idExists(TEST_STRING_ID)) {
+      fail("Found the String config ID (" + TEST_STRING_ID + ") that should not exist");
     }
 
-    configService.setConfig(TEST_STRING_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
+    configService.setConfig(TEST_STRING_ID, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
-    if (!configService.keyExists(TEST_STRING_KEY)) {
-      fail("Failed to confirm that the String config key (" + TEST_STRING_KEY + ") exists");
+    if (!configService.idExists(TEST_STRING_ID)) {
+      fail("Failed to confirm that the String config ID (" + TEST_STRING_ID + ") exists");
     }
 
-    String value = configService.getString(TEST_STRING_KEY);
+    String value = configService.getString(TEST_STRING_ID);
 
     assertEquals(
         TEST_STRING_VALUE,
         value,
-        "The required String value was not retrieved for the String config key ("
-            + TEST_STRING_KEY
+        "The required String value was not retrieved for the String config ID ("
+            + TEST_STRING_ID
             + ")");
 
     configService.setConfig(
-        TEST_STRING_KEY, TEST_STRING_VALUE + "Updated", TEST_DESCRIPTION + " Updated");
+        TEST_STRING_ID, TEST_STRING_VALUE + "Updated", TEST_DESCRIPTION + " Updated");
 
-    if (!configService.keyExists(TEST_STRING_KEY)) {
-      fail("Failed to confirm that the String config key (" + TEST_STRING_KEY + ") exists");
+    if (!configService.idExists(TEST_STRING_ID)) {
+      fail("Failed to confirm that the String config ID (" + TEST_STRING_ID + ") exists");
     }
 
-    value = configService.getString(TEST_STRING_KEY);
+    value = configService.getString(TEST_STRING_ID);
 
     assertEquals(
         TEST_STRING_VALUE + "Updated",
         value,
-        "The required updated String value was not retrieved for the config key ("
-            + TEST_STRING_KEY
+        "The required updated String value was not retrieved for the config ID ("
+            + TEST_STRING_ID
             + ")");
 
-    configService.deleteConfig(TEST_STRING_KEY);
+    configService.deleteConfig(TEST_STRING_ID);
 
-    if (configService.keyExists(TEST_STRING_KEY)) {
-      fail("Failed to confirm that the String config key (" + TEST_STRING_KEY + ") does not exist");
+    if (configService.idExists(TEST_STRING_ID)) {
+      fail("Failed to confirm that the String config ID (" + TEST_STRING_ID + ") does not exist");
     }
 
-    value = configService.getString(TEST_STRING_KEY, "DEFAULT VALUE");
+    value = configService.getString(TEST_STRING_ID, "DEFAULT VALUE");
 
     if (!value.equals("DEFAULT VALUE")) {
       fail(
-          "Failed to retrieve the default value for the String config key ("
-              + TEST_STRING_KEY
-              + ")");
+          "Failed to retrieve the default value for the String config ID (" + TEST_STRING_ID + ")");
     }
   }
 
   private void compareConfig(Config config1, Config config2) {
-    assertEquals(config1.getKey(), config2.getKey(), "The key values for the codes do not match");
+    assertEquals(config1.getId(), config2.getId(), "The ID values for the codes do not match");
     assertEquals(
         config1.getValue(), config2.getValue(), "The value values for the codes do not match");
     assertEquals(

@@ -47,9 +47,9 @@ public class ConfigNotFoundException extends ServiceException {
   /**
    * Constructs a new <b>ConfigNotFoundException</b>.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    */
-  public ConfigNotFoundException(String key) {
-    super("The config (" + key + ") could not be found");
+  public ConfigNotFoundException(String id) {
+    super("The config (" + id + ") could not be found");
   }
 }

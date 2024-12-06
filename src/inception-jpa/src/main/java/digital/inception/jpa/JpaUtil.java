@@ -79,11 +79,7 @@ public final class JpaUtil {
 
         switch (metaData.getDatabaseProductName()) {
           case "H2":
-            jpaVendorAdapter.setDatabase(Database.H2);
             jpaVendorAdapter.setShowSql(true);
-            entityManagerFactoryBean
-                .getJpaPropertyMap()
-                .put("hibernate.globally_quoted_identifiers", "true");
 
             break;
 
@@ -91,15 +87,17 @@ public final class JpaUtil {
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
             jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
             jpaVendorAdapter.setShowSql(false);
-            entityManagerFactoryBean
-                .getJpaPropertyMap()
-                .put("hibernate.globally_quoted_identifiers", "true");
 
             break;
 
           case "Oracle":
             jpaVendorAdapter.setDatabase(Database.ORACLE);
-            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.OracleDialect");
+            jpaVendorAdapter.setShowSql(false);
+
+            break;
+
+          case "PostgreSQL":
+            jpaVendorAdapter.setDatabase(Database.POSTGRESQL);
             jpaVendorAdapter.setShowSql(false);
 
             break;

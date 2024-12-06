@@ -969,12 +969,12 @@
     <!--    | |__| |_| | |\  |  _|  | | |_| |    -->
     <!--    \____\___/|_| \_|_|   |___\____|     -->
     <insert tableName="config_config">
-      <column name="key" value="TestKey"/>
+      <column name="id" value="TestId"/>
       <column name="value" value="TestValue"/>
       <column name="description" value="TestDescription"/>
     </insert>
     <insert tableName="config_config">
-      <column name="key" value="AnotherTestKey"/>
+      <column name="id" value="AnotherTestId"/>
       <column name="value" value="AnotherTestValue"/>
       <column name="description" value="AnotherTestDescription"/>
     </insert>
@@ -997,10 +997,10 @@
       </delete>
 
       <delete tableName="config_config">
-        <where>key = 'TestKey'</where>
+        <where>id = 'TestId'</where>
       </delete>
       <delete tableName="config_config">
-        <where>key = 'AnotherTestKey'</where>
+        <where>id = 'AnotherTestId'</where>
       </delete>
 
       <delete tableName="codes_code_categories">
@@ -1996,12 +1996,12 @@
     <!--    | |__| |_| | |\  |  _|  | | |_| |    -->
     <!--    \____\___/|_| \_|_|   |___\____|     -->
     <insert tableName="config_config">
-      <column name="key" value="TestKey"/>
+      <column name="id" value="TestId"/>
       <column name="value" value="TestValue"/>
       <column name="description" value="TestDescription"/>
     </insert>
     <insert tableName="config_config">
-      <column name="key" value="AnotherTestKey"/>
+      <column name="id" value="AnotherTestId"/>
       <column name="value" value="AnotherTestValue"/>
       <column name="description" value="AnotherTestDescription"/>
     </insert>
@@ -2025,10 +2025,10 @@
       </delete>
 
       <delete tableName="config_config">
-        <where>key = 'TestKey'</where>
+        <where>id = 'TestId'</where>
       </delete>
       <delete tableName="config_config">
-        <where>key = 'AnotherTestKey'</where>
+        <where>id = 'AnotherTestId'</where>
       </delete>
 
       <delete tableName="codes_code_categories">

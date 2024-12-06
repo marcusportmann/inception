@@ -29,17 +29,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ConfigSummaryRepository extends JpaRepository<ConfigSummary, String> {
 
   /**
-   * Retrieve all the config summaries ordered by key ascending.
+   * Retrieve all the config summaries ordered by ID ascending.
    *
-   * @return all the config summaries ordered by key ascending
+   * @return all the config summaries ordered by ID ascending
    */
-  List<ConfigSummary> findAllByOrderByKeyAsc();
+  List<ConfigSummary> findAllByOrderByIdAsc();
 
   /**
    * Retrieve the filtered config summaries.
    *
-   * @param filter the filter to apply to the keys for the config summaries
+   * @param filter the filter to apply to the IDs for the config summaries
    * @return the filtered config summaries
    */
-  List<ConfigSummary> findByKeyIgnoreCaseContaining(String filter);
+  List<ConfigSummary> findByIdIgnoreCaseContaining(String filter);
 }

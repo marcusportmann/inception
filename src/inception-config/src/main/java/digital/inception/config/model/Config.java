@@ -36,18 +36,18 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>Config</b> class stores the key, value and description for the config.
+ * The <b>Config</b> class stores the id, value and description for the config.
  *
  * @author Marcus Portmann
  */
 @Schema(description = "A config")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"key", "value", "description"})
+@JsonPropertyOrder({"id", "value", "description"})
 @XmlRootElement(name = "Config", namespace = "https://inception.digital/config")
 @XmlType(
     name = "Config",
     namespace = "https://inception.digital/config",
-    propOrder = {"key", "value", "description"})
+    propOrder = {"id", "value", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "config_config")
@@ -66,15 +66,15 @@ public class Config implements Serializable {
   @Column(name = "description", length = 100, nullable = false)
   private String description;
 
-  /** The key for the config. */
-  @Schema(description = "The key for the config", requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The ID for the config. */
+  @Schema(description = "The ID for the config", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Key", required = true)
+  @XmlElement(name = "Id", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "key", length = 100, nullable = false)
-  private String key;
+  @Column(name = "id", length = 100, nullable = false)
+  private String id;
 
   /** The value for the config. */
   @Schema(description = "The value for the config", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -91,12 +91,12 @@ public class Config implements Serializable {
   /**
    * Constructs a new <b>Config</b>.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    * @param value the value for the config
    * @param description the description for the config
    */
-  public Config(String key, String value, String description) {
-    this.key = key;
+  public Config(String id, String value, String description) {
+    this.id = id;
     this.value = value;
     this.description = description;
   }
@@ -123,7 +123,7 @@ public class Config implements Serializable {
 
     Config other = (Config) object;
 
-    return Objects.equals(key, other.key);
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -136,12 +136,12 @@ public class Config implements Serializable {
   }
 
   /**
-   * Returns the key for the config.
+   * Returns the ID for the config.
    *
-   * @return the key for the config
+   * @return the ID for the config
    */
-  public String getKey() {
-    return key;
+  public String getId() {
+    return id;
   }
 
   /**
@@ -160,7 +160,7 @@ public class Config implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (key == null) ? 0 : key.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**
@@ -173,12 +173,12 @@ public class Config implements Serializable {
   }
 
   /**
-   * Set the key for the config.
+   * Set the ID for the config.
    *
-   * @param key the key for the config
+   * @param id the ID for the config
    */
-  public void setKey(String key) {
-    this.key = key;
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**

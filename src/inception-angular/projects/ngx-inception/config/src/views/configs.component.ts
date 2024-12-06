@@ -43,7 +43,7 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
 
   dataSource = new MatTableDataSource<Config>();
 
-  displayedColumns = ['key', 'value', 'actions'];
+  displayedColumns = ['id', 'value', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
@@ -57,7 +57,7 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.key.toLowerCase().includes(
+    this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
       filter);
   }
 
@@ -71,7 +71,7 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
     this.dataSource.filter = filterValue;
   }
 
-  deleteConfig(key: string): void {
+  deleteConfig(id: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: $localize`:@@config_configs_confirm_delete_config:Are you sure you want to delete the config?`
@@ -83,7 +83,7 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
-        this.configService.deleteConfig(key)
+        this.configService.deleteConfig(id)
         .pipe(first())
         .subscribe(() => {
           this.loadConfigs();
@@ -101,9 +101,9 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
     });
   }
 
-  editConfig(key: string): void {
+  editConfig(id: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(key) + '/edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(id) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadConfigs(): void {
