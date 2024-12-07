@@ -18,6 +18,7 @@ package digital.inception.mongodb.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
@@ -105,7 +106,16 @@ public class EmbeddedMongoTemplateTest {
     TestDocument retrievedDocument =
         defaultMongoTemplate.findById(savedDocument.getId(), TestDocument.class);
 
+    assertNotNull(retrievedDocument);
+
     assertEquals(originalDocument, retrievedDocument);
+
+    defaultMongoTemplate.remove(retrievedDocument);
+
+    TestDocument deletedDocument =
+        defaultMongoTemplate.findById(savedDocument.getId(), TestDocument.class);
+
+    assertNull(deletedDocument, "The document should be deleted from the database");
 
     //    Mongod mongod =
     //        Mongod.builder()
@@ -134,7 +144,16 @@ public class EmbeddedMongoTemplateTest {
     //      TestDocument retrievedDocument =
     //          defaultMongoTemplate.findById(savedDocument.getId(), TestDocument.class);
     //
-    //      assertEquals(originalDocument, retrievedDocument);
+    //    assertNotNull(retrievedDocument);
+    //
+    //    assertEquals(originalDocument, retrievedDocument);
+    //
+    //    defaultMongoTemplate.remove(retrievedDocument);
+    //
+    //    TestDocument deletedDocument =
+    //        defaultMongoTemplate.findById(savedDocument.getId(), TestDocument.class);
+    //
+    //    assertNull(deletedDocument, "The document should be deleted from the database");
     //    }
   }
 }
