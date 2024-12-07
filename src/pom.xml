@@ -124,8 +124,10 @@
     <narayana.version>7.1.0.Final</narayana.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
     <opentelemetry-instrumentation-bom.version>2.10.0</opentelemetry-instrumentation-bom.version>
+    <oracle-r2dbc.version>1.2.0</oracle-r2dbc.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.4</postgresql.version>
+    <r2dbc-h2.version>1.0.0.RELEASE</r2dbc-h2.version>
     <spring-boot.version>3.4.0</spring-boot.version>
     <spring-shell-starter.version>3.3.3</spring-shell-starter.version>
     <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
@@ -176,6 +178,11 @@
         <version>${ojdbc11.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.oracle.database.r2dbc</groupId>
+        <artifactId>oracle-r2dbc</artifactId>
+        <version>${oracle-r2dbc.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.sun.activation</groupId>
         <artifactId>javax.activation</artifactId>
         <version>${sun-activation.version}</version>
@@ -211,6 +218,11 @@
         <version>${opentelemetry-instrumentation-bom.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.r2dbc</groupId>
+        <artifactId>r2dbc-h2</artifactId>
+        <version>${r2dbc-h2.version}</version>
       </dependency>
       <dependency>
         <groupId>io.swagger.core.v3</groupId>

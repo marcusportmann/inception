@@ -270,7 +270,7 @@ public class ResourceServerConfiguration implements InitializingBean {
                     .contentSecurityPolicy(
                         contentSecurityPolicy ->
                             contentSecurityPolicy.policyDirectives(
-                                "default-src 'self'; frame-ancestors 'none'; script-src 'self';"))
+                                "default-src 'self'; img-src 'self' data:; frame-ancestors 'none'; script-src 'self';"))
                     .httpStrictTransportSecurity(
                         hstsConfig -> hstsConfig.includeSubDomains(true).maxAgeInSeconds(31536000))
                     .referrerPolicy(
