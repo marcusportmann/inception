@@ -16,6 +16,7 @@
 
 package digital.inception.server.resource;
 
+import static org.springframework.security.web.access.IpAddressAuthorizationManager.hasIpAddress;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import digital.inception.core.util.ResourceUtil;
@@ -36,18 +37,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -57,8 +61,14 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 /**
  * The <b>ResourceServerConfiguration</b> class provides the Spring configuration for the Inception
@@ -75,6 +85,10 @@ public class ResourceServerConfiguration implements InitializingBean {
 
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(ResourceServerConfiguration.class);
+
+  /** The CORS allowed origin pattern. */
+  @Value("${inception.api.security.cors-allowed-origin-pattern:#{null}}")
+  private String corsAllowedOriginPattern;
 
   /** The JWT configuration. */
   private JwtConfiguration jwtConfiguration;
@@ -122,39 +136,44 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Returns the security filter chain.
+   * Returns the CORS configuration source.
    *
-   * @param httpSecurity the HTTP security
-   * @return the security filter chain
-   * @throws Exception if the filter chain could not be initialized
+   * @return the CORS configuration source
    */
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity
-        .httpBasic(Customizer.withDefaults())
-        .csrf(
-            csrfCustomizer -> {
-              csrfCustomizer.disable();
-            })
-        .authorizeHttpRequests(
-            authorizeRequests ->
-                authorizeRequests
-                    .requestMatchers(antMatcher("/**"))
-                    .permitAll()
-                    .requestMatchers(antMatcher("/api/**"))
-                    .authenticated())
-        .oauth2ResourceServer(
-            oauth2ResourceServerCustomizer ->
-                oauth2ResourceServerCustomizer.jwt(
-                    jwt -> {
-                      jwt.decoder(getJwtDecoder());
-                      jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter());
-                    }))
-        .sessionManagement(
-            sessionManagement ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+  public CorsConfigurationSource corsConfigurationSource() {
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowCredentials(true);
+    config.addAllowedOriginPattern(
+        StringUtils.hasText(corsAllowedOriginPattern) ? corsAllowedOriginPattern : "*");
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+    source.registerCorsConfiguration("/**", config);
+    return source;
+  }
 
-    return httpSecurity.build();
+  /**
+   * Returns the CORS filter.
+   *
+   * @return the CORS filter
+   */
+  @Bean
+  public CorsFilter corsFilter() {
+    return new CorsFilter(corsConfigurationSource());
+  }
+
+  /**
+   * Returns the CORS filter registration.
+   *
+   * @return the CORS filter registration
+   */
+  @Bean
+  public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
+    FilterRegistrationBean<CorsFilter> registrationBean =
+        new FilterRegistrationBean<>(corsFilter());
+    registrationBean.setOrder(0);
+    return registrationBean;
   }
 
   /**
@@ -173,6 +192,108 @@ public class ResourceServerConfiguration implements InitializingBean {
    */
   public PolicyDecisionPointConfiguration getPolicyDecisionPoint() {
     return policyDecisionPoint;
+  }
+
+  /**
+   * Returns the security filter chain.
+   *
+   * @param httpSecurity the HTTP security
+   * @return the security filter chain
+   * @throws Exception if the filter chain could not be initialized
+   */
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+    // Define reusable authorization manager for internal network
+    var internalNetworkAccess =
+        AuthorizationManagers.anyOf(
+            hasIpAddress("127.0.0.0/8"),
+            hasIpAddress("0:0:0:0:0:0:0:1"),
+            hasIpAddress("::1"),
+            hasIpAddress("192.168.0.0/16"),
+            hasIpAddress("10.0.0.0/8"),
+            hasIpAddress("172.16.0.0/12"));
+
+    // Configure HTTP security
+    httpSecurity
+        // Enable and configure CORS
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+        // Disable CSRF
+        .csrf(AbstractHttpConfigurer::disable)
+
+        // Configure authorization rules
+        .authorizeHttpRequests(
+            authorizeRequests ->
+                authorizeRequests
+                    // Unauthenticated access to security endpoints for internal network
+                    .requestMatchers(
+                        antMatcher("/api/security/revoked-tokens"),
+                        antMatcher("/api/security/policies"))
+                    .access(internalNetworkAccess)
+
+                    // Require authentication for /api/** endpoints
+                    .requestMatchers(antMatcher("/api/**"))
+                    .authenticated()
+
+                    // Permit unauthenticated access to /oauth/token
+                    .requestMatchers(antMatcher("/oauth/token"))
+                    .permitAll()
+
+                    // Permit access to static resources
+                    .requestMatchers(
+                        antMatcher("/**/*.{js,css,html,png,jpg,svg,ico}"),
+                        antMatcher("/webjars/**"))
+                    .permitAll()
+
+                    // Unauthenticated access to actuator endpoints for the internal network
+                    .requestMatchers(antMatcher("/actuator/**"))
+                    .access(internalNetworkAccess)
+
+                    // Unauthenticated access to Swagger UI endpoints for internal network
+                    .requestMatchers(
+                        antMatcher("/swagger-ui/**"),
+                        antMatcher("/swagger-ui.html"),
+                        antMatcher("/v3/api-docs/swagger-config"),
+                        antMatcher("/v3/api-docs/**"))
+                    // .permitAll()
+                    .access(internalNetworkAccess)
+
+                    // Deny all other requests
+                    .anyRequest()
+                    .denyAll())
+
+        // Add security headers
+        .headers(
+            headers ->
+                headers
+                    .contentSecurityPolicy(
+                        contentSecurityPolicy ->
+                            contentSecurityPolicy.policyDirectives(
+                                "default-src 'self'; frame-ancestors 'none'; script-src 'self';"))
+                    .httpStrictTransportSecurity(
+                        hstsConfig -> hstsConfig.includeSubDomains(true).maxAgeInSeconds(31536000))
+                    .referrerPolicy(
+                        referrerPolicyConfig ->
+                            referrerPolicyConfig.policy(ReferrerPolicy.NO_REFERRER))
+                    .addHeaderWriter(
+                        new StaticHeadersWriter(
+                            "Permissions-Policy", "geolocation=(), microphone=(), camera=()")))
+
+        // Configure OAuth2 resource server for JWT-based authentication
+        .oauth2ResourceServer(
+            oauth2 ->
+                oauth2.jwt(
+                    jwt -> {
+                      jwt.decoder(getJwtDecoder());
+                      jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter());
+                    }))
+
+        // Set session management policy to stateless
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+    return httpSecurity.build();
   }
 
   /**
