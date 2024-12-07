@@ -105,6 +105,7 @@
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-io.version>2.18.0</commons-io.version>
     <cxf.version>4.0.2</cxf.version>
+    <de.flapdoodle.embed.mongo.version>4.18.1</de.flapdoodle.embed.mongo.version>
     <easymock.version>5.5.0</easymock.version>
     <flowable.version>7.1.0</flowable.version>
     <freemarker.version>2.3.33</freemarker.version>
@@ -188,6 +189,11 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>de.flapdoodle.embed</groupId>
+        <artifactId>de.flapdoodle.embed.mongo</artifactId>
+        <version>${de.flapdoodle.embed.mongo.version}</version>
       </dependency>
       <dependency>
         <groupId>io.agroal</groupId>
@@ -769,6 +775,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.10/byte-buddy-agent-1.15.10.jar</argLine>
           <forkCount>1</forkCount>
           <reuseForks>true</reuseForks>
           <parallel>classes</parallel>
