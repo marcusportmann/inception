@@ -105,6 +105,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /** The maximum number of filtered users to return. */
   private final int maxFilteredUsers;
 
+  private final String groupNamePrefixFilter;
+
   private final int port;
 
   private final boolean useSSL;
@@ -306,6 +308,15 @@ public class LDAPUserDirectory extends UserDirectoryBase {
             "No GroupNameAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "GroupNamePrefixFilter")) {
+        groupNamePrefixFilter =
+            UserDirectoryParameter.getStringValue(parameters, "GroupNamePrefixFilter");
+
+        groupAttributesList.add(groupNamePrefixFilter);
+      } else {
+        groupNamePrefixFilter = "";
       }
 
       if (UserDirectoryParameter.contains(parameters, "GroupMemberAttribute")) {
@@ -1208,7 +1219,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     try {
       dirContext = getDirContext(bindDN, bindPassword);
 
-      String searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
+      String searchFilter;
+      if (StringUtils.hasText(groupNamePrefixFilter)) {
+        searchFilter = "(&(objectClass=%s)(%s=%s*))".formatted(
+            groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
+      } else {
+        searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
+      }
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1302,7 +1319,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     try {
       dirContext = getDirContext(bindDN, bindPassword);
 
-      String searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
+      String searchFilter;
+      if (StringUtils.hasText(groupNamePrefixFilter)) {
+        searchFilter = "(&(objectClass=%s)(%s=%s*))".formatted(
+            groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
+      } else {
+        searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
+      }
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1348,10 +1371,15 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter;
-
-      if (StringUtils.hasText(filter)) {
-        searchFilter =
-            "(&(objectClass=%s)(%s=*%s*))".formatted(groupObjectClass, groupNameAttribute, filter);
+      if (StringUtils.hasText(filter) && StringUtils.hasText(groupNamePrefixFilter)) {
+        searchFilter = "(&(objectClass=%s)(%s=%s*)(%s=*%s*))".formatted(
+            groupObjectClass, groupNameAttribute, groupNamePrefixFilter, groupNameAttribute, filter);
+      } else if (StringUtils.hasText(filter)) {
+        searchFilter = "(&(objectClass=%s)(%s=*%s*))".formatted(
+            groupObjectClass, groupNameAttribute, filter);
+      } else if (StringUtils.hasText(groupNamePrefixFilter)) {
+        searchFilter = "(&(objectClass=%s)(%s=%s*))".formatted(
+            groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
       } else {
         searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
       }

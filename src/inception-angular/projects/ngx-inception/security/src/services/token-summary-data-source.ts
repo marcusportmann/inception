@@ -16,8 +16,8 @@
 
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {SortDirection} from 'ngx-inception/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
 import {SecurityService} from './security.service';
 import {TokenSortBy} from './token-sort-by';
 import {TokenStatus} from './token-status';
@@ -25,19 +25,18 @@ import {TokenSummaries} from './token-summaries';
 import {TokenSummary} from './token-summary';
 
 /**
- * The TokenSummaryDatasource class implements the token summary data source.
+ * The TokenSummaryDataSource class implements the token summary data source.
  *
  * @author Marcus Portmann
  */
-export class TokenSummaryDatasource implements DataSource<TokenSummary> {
+export class TokenSummaryDataSource implements DataSource<TokenSummary> {
+  private dataSubject$ = new BehaviorSubject<TokenSummary[]>([]);
 
-  private dataSubject$: Subject<TokenSummary[]> = new ReplaySubject<TokenSummary[]>(1);
-
-  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
 
   loading$ = this.loadingSubject$.asObservable();
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>(1);
+  private totalSubject$ = new BehaviorSubject<number>(0);
 
   total$ = this.totalSubject$.asObservable();
 
@@ -52,27 +51,14 @@ export class TokenSummaryDatasource implements DataSource<TokenSummary> {
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<TokenSummary[] | ReadonlyArray<TokenSummary>> {
+  connect(collectionViewer: CollectionViewer): Observable<TokenSummary[]> {
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
-  }
-
-  getTokenStatus(tokenSummary: TokenSummary): TokenStatus {
-    if (!!tokenSummary.revocationDate) {
-      return TokenStatus.Revoked;
-    } else if ((!!tokenSummary.expiryDate) && (new Date().getTime() > Date.parse(
-      tokenSummary.expiryDate))) {
-      return TokenStatus.Expired;
-    } else if ((!!tokenSummary.validFromDate) && (Date.parse(
-      tokenSummary.validFromDate) > new Date().getTime())) {
-      return TokenStatus.Pending;
-    } else {
-      return TokenStatus.Active;
-    }
+    this.totalSubject$.complete();
   }
 
   /**
@@ -83,26 +69,41 @@ export class TokenSummaryDatasource implements DataSource<TokenSummary> {
    * @param sortDirection  The optional sort direction to apply to the token summaries.
    * @param pageIndex      The optional page index.
    * @param pageSize       The optional page size.
+   *
+   * @return The token summaries.
    */
   load(requiredStatus: TokenStatus, filter?: string, sortDirection?: SortDirection,
-       pageIndex?: number, pageSize?: number): void {
+       pageIndex?: number, pageSize?: number): Observable<TokenSummaries> {
     this.loadingSubject$.next(true);
 
-    this.securityService.getTokenSummaries(requiredStatus, filter, TokenSortBy.Name, sortDirection,
-      pageIndex, pageSize)
-    .pipe(first())
-    .subscribe((tokenSummaries: TokenSummaries) => {
-      this.loadingSubject$.next(false);
+    return this.securityService.getTokenSummaries(requiredStatus, filter, TokenSortBy.Name,
+      sortDirection, pageIndex, pageSize).pipe(tap((tokenSummaries: TokenSummaries) => {
+        this.updateData(tokenSummaries);
+      }), catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false)));
+  }
 
-      this.totalSubject$.next(tokenSummaries.total);
+  /**
+   * Handle errors during the token summaries load operation.
+   *
+   * @param error The error encountered.
+   *
+   * @return An observable that emits the error.
+   */
+  private handleError(error: Error): Observable<never> {
+    console.error('Failed to load the token summaries:', error);
+    this.totalSubject$.next(0);
+    this.dataSubject$.next([]);
+    return throwError(() => error);
+  }
 
-      this.dataSubject$.next(tokenSummaries.tokenSummaries);
-    }, (error: Error) => {
-      this.loadingSubject$.next(false);
-
-      this.totalSubject$.next(0);
-
-      this.loadingSubject$.error(error);
-    });
+  /**
+   * Update the data source with the fetched token summaries.
+   *
+   * @param tokenSummaries The token summaries to update.
+   */
+  private updateData(tokenSummaries: TokenSummaries): void {
+    this.totalSubject$.next(tokenSummaries.total);
+    this.dataSubject$.next(tokenSummaries.tokenSummaries);
   }
 }

@@ -16,27 +16,26 @@
 
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {SortDirection} from 'ngx-inception/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
 import {ErrorReportSortBy} from './error-report-sort-by';
 import {ErrorReportSummaries} from './error-report-summaries';
 import {ErrorReportSummary} from './error-report-summary';
 import {ErrorService} from './error.service';
 
 /**
- * The ErrorReportSummaryDatasource class implements the error report summary data source.
+ * The ErrorReportSummaryDataSource class implements the error report summary data source.
  *
  * @author Marcus Portmann
  */
-export class ErrorReportSummaryDatasource implements DataSource<ErrorReportSummary> {
+export class ErrorReportSummaryDataSource implements DataSource<ErrorReportSummary> {
+  private dataSubject$ = new BehaviorSubject<ErrorReportSummary[]>([]);
 
-  private dataSubject$: Subject<ErrorReportSummary[]> = new ReplaySubject<ErrorReportSummary[]>(1);
-
-  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
 
   loading$ = this.loadingSubject$.asObservable();
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>(1);
+  private totalSubject$ = new BehaviorSubject<number>(0);
 
   total$ = this.totalSubject$.asObservable();
 
@@ -51,13 +50,14 @@ export class ErrorReportSummaryDatasource implements DataSource<ErrorReportSumma
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<ErrorReportSummary[] | ReadonlyArray<ErrorReportSummary>> {
+  connect(collectionViewer: CollectionViewer): Observable<ErrorReportSummary[]> {
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
+    this.totalSubject$.complete();
   }
 
   /**
@@ -73,26 +73,42 @@ export class ErrorReportSummaryDatasource implements DataSource<ErrorReportSumma
    * @param sortDirection The optional sort direction to apply to the error report summaries.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
+   *
+   * @return The error report summaries.
    */
   load(filter?: string, fromDate?: string, toDate?: string, sortBy?: ErrorReportSortBy,
-       sortDirection?: SortDirection, pageIndex?: number, pageSize?: number): void {
+       sortDirection?: SortDirection, pageIndex?: number,
+       pageSize?: number): Observable<ErrorReportSummaries> {
     this.loadingSubject$.next(true);
 
-    this.errorService.getErrorReportSummaries(filter, fromDate, toDate, sortBy, sortDirection,
-      pageIndex, pageSize)
-    .pipe(first())
-    .subscribe((errorReportSummaries: ErrorReportSummaries) => {
-      this.loadingSubject$.next(false);
+    return this.errorService.getErrorReportSummaries(filter, fromDate, toDate, sortBy,
+      sortDirection, pageIndex, pageSize).pipe(tap((errorReportSummaries: ErrorReportSummaries) => {
+        this.updateData(errorReportSummaries);
+      }), catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false)));
+  }
 
-      this.totalSubject$.next(errorReportSummaries.total);
+  /**
+   * Handle errors during the error report summaries load operation.
+   *
+   * @param error The error encountered.
+   *
+   * @return An observable that emits the error.
+   */
+  private handleError(error: Error): Observable<never> {
+    console.error('Failed to load the error report summaries:', error);
+    this.totalSubject$.next(0);
+    this.dataSubject$.next([]);
+    return throwError(() => error);
+  }
 
-      this.dataSubject$.next(errorReportSummaries.errorReportSummaries);
-    }, (error: Error) => {
-      this.loadingSubject$.next(false);
-
-      this.totalSubject$.next(0);
-
-      this.loadingSubject$.error(error);
-    });
+  /**
+   * Update the data source with the fetched error report summaries.
+   *
+   * @param errorReportSummaries The error report summaries to update.
+   */
+  private updateData(errorReportSummaries: ErrorReportSummaries): void {
+    this.totalSubject$.next(errorReportSummaries.total);
+    this.dataSubject$.next(errorReportSummaries.errorReportSummaries);
   }
 }

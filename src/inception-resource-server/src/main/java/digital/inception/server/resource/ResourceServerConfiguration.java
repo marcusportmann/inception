@@ -48,6 +48,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -61,6 +62,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.util.StreamUtils;
@@ -86,9 +88,17 @@ public class ResourceServerConfiguration implements InitializingBean {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(ResourceServerConfiguration.class);
 
+  /** Is API security enabled for the Inception Framework? */
+  @Value("${inception.api.security.enabled:#{true}}")
+  private boolean apiSecurityEnabled;
+
   /** The CORS allowed origin pattern. */
   @Value("${inception.api.security.cors-allowed-origin-pattern:#{null}}")
   private String corsAllowedOriginPattern;
+
+  /** Is debugging enabled for the Inception Framework? */
+  @Value("${inception.debug.enabled:#{false}}")
+  private boolean inDebugMode;
 
   /** The JWT configuration. */
   private JwtConfiguration jwtConfiguration;
@@ -204,8 +214,8 @@ public class ResourceServerConfiguration implements InitializingBean {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-    // Define reusable authorization manager for internal network
-    var internalNetworkAccess =
+    // Define reusable authorization manager for internal network access
+    AuthorizationManager<RequestAuthorizationContext> internalNetworkAccess =
         AuthorizationManagers.anyOf(
             hasIpAddress("127.0.0.0/8"),
             hasIpAddress("0:0:0:0:0:0:0:1"),
@@ -214,84 +224,105 @@ public class ResourceServerConfiguration implements InitializingBean {
             hasIpAddress("10.0.0.0/8"),
             hasIpAddress("172.16.0.0/12"));
 
-    // Configure HTTP security
+    httpSecurity.authorizeHttpRequests(
+        authorizeRequests -> {
+          /*
+           * Check if the digital.inception.security.controller.ISecurityApiController class exists
+           * on the classpath, and if so, enable non-authenticated internal network access to the
+           * /api/security/policies and /api/security/revoked-tokens Security API endpoints.
+           */
+          try {
+            Class.forName("digital.inception.security.controller.ISecurityApiController");
+
+            authorizeRequests
+                .requestMatchers(
+                    antMatcher("/api/security/policies"),
+                    antMatcher("/api/security/revoked-tokens"))
+                .access(internalNetworkAccess);
+          } catch (Throwable ignored) {
+          }
+
+          // Enable non-authenticated access to API endpoints if API security is disabled, or we are
+          // running in debug mode, otherwise require authenticated access using a JWT bearer token.
+          if ((!apiSecurityEnabled) || inDebugMode) {
+            authorizeRequests.requestMatchers(antMatcher("/api/**")).permitAll();
+          } else {
+            authorizeRequests.requestMatchers(antMatcher("/api/**")).authenticated();
+          }
+
+          /*
+           * Check if the digital.inception.server.authorization.oauth.OAuthController class exists
+           * on the classpath, and if so, enable non-authenticated access to the OAuth endpoints.
+           */
+          try {
+            Class.forName("digital.inception.server.authorization.oauth.OAuthController");
+
+            authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
+          } catch (Throwable ignored) {
+          }
+
+          // Static resources authorization rules
+          authorizeRequests
+              .requestMatchers(
+                  antMatcher("/"),
+                  antMatcher("/**/*.{js,css,html,png,jpg,svg,ico}"),
+                  antMatcher("/webjars/**"))
+              .permitAll();
+
+          // Enable non-authenticated internal network access to the actuator endpoints
+          authorizeRequests
+              .requestMatchers(antMatcher("/actuator/**"))
+              .access(internalNetworkAccess);
+
+          // Enable non-authenticated internal network access to the Swagger endpoints
+          authorizeRequests
+              .requestMatchers(
+                  antMatcher("/swagger-ui/**"),
+                  antMatcher("/swagger-ui.html"),
+                  antMatcher("/v3/api-docs/swagger-config"),
+                  antMatcher("/v3/api-docs/**"))
+              .access(internalNetworkAccess);
+
+          // Deny all other requests
+          authorizeRequests.anyRequest().denyAll();
+        });
+
+    // Configure security headers
+    httpSecurity.headers(
+        headers ->
+            headers
+                .contentSecurityPolicy(
+                    csp ->
+                        csp.policyDirectives(
+                            "default-src 'self'; "
+                                + "img-src 'self' data:; "
+                                + "frame-ancestors 'none'; "
+                                + "script-src 'self' 'unsafe-inline'; "
+                                + "style-src 'self' 'unsafe-inline';"))
+                .httpStrictTransportSecurity(
+                    hsts -> hsts.includeSubDomains(true).maxAgeInSeconds(31536000))
+                .referrerPolicy(referrerPolicy -> referrerPolicy.policy(ReferrerPolicy.NO_REFERRER))
+                .addHeaderWriter(
+                    new StaticHeadersWriter(
+                        "Permissions-Policy", "geolocation=(), microphone=(), camera=()")));
+
+    // Enable CORS and disable CSRF
     httpSecurity
-        // Enable and configure CORS
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(AbstractHttpConfigurer::disable);
 
-        // Disable CSRF
-        .csrf(AbstractHttpConfigurer::disable)
+    // Configure OAuth2 resource server for JWT-based authentication
+    httpSecurity.oauth2ResourceServer(
+        oauth2 ->
+            oauth2.jwt(
+                jwt -> {
+                  jwt.decoder(getJwtDecoder());
+                  jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter());
+                }));
 
-        // Configure authorization rules
-        .authorizeHttpRequests(
-            authorizeRequests ->
-                authorizeRequests
-                    // Unauthenticated access to security endpoints for internal network
-                    .requestMatchers(
-                        antMatcher("/api/security/revoked-tokens"),
-                        antMatcher("/api/security/policies"))
-                    .access(internalNetworkAccess)
-
-                    // Require authentication for /api/** endpoints
-                    .requestMatchers(antMatcher("/api/**"))
-                    .authenticated()
-
-                    // Permit unauthenticated access to /oauth/token
-                    .requestMatchers(antMatcher("/oauth/token"))
-                    .permitAll()
-
-                    // Permit access to static resources
-                    .requestMatchers(
-                        antMatcher("/**/*.{js,css,html,png,jpg,svg,ico}"),
-                        antMatcher("/webjars/**"))
-                    .permitAll()
-
-                    // Unauthenticated access to actuator endpoints for the internal network
-                    .requestMatchers(antMatcher("/actuator/**"))
-                    .access(internalNetworkAccess)
-
-                    // Unauthenticated access to Swagger UI endpoints for internal network
-                    .requestMatchers(
-                        antMatcher("/swagger-ui/**"),
-                        antMatcher("/swagger-ui.html"),
-                        antMatcher("/v3/api-docs/swagger-config"),
-                        antMatcher("/v3/api-docs/**"))
-                    // .permitAll()
-                    .access(internalNetworkAccess)
-
-                    // Deny all other requests
-                    .anyRequest()
-                    .denyAll())
-
-        // Add security headers
-        .headers(
-            headers ->
-                headers
-                    .contentSecurityPolicy(
-                        contentSecurityPolicy ->
-                            contentSecurityPolicy.policyDirectives(
-                                "default-src 'self'; img-src 'self' data:; frame-ancestors 'none'; script-src 'self';"))
-                    .httpStrictTransportSecurity(
-                        hstsConfig -> hstsConfig.includeSubDomains(true).maxAgeInSeconds(31536000))
-                    .referrerPolicy(
-                        referrerPolicyConfig ->
-                            referrerPolicyConfig.policy(ReferrerPolicy.NO_REFERRER))
-                    .addHeaderWriter(
-                        new StaticHeadersWriter(
-                            "Permissions-Policy", "geolocation=(), microphone=(), camera=()")))
-
-        // Configure OAuth2 resource server for JWT-based authentication
-        .oauth2ResourceServer(
-            oauth2 ->
-                oauth2.jwt(
-                    jwt -> {
-                      jwt.decoder(getJwtDecoder());
-                      jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter());
-                    }))
-
-        // Set session management policy to stateless
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    // Set session management to stateless
+    httpSecurity.sessionManagement(
+        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
     return httpSecurity.build();
   }

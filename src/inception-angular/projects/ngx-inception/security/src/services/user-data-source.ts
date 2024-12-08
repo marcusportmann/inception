@@ -16,27 +16,26 @@
 
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {SortDirection} from 'ngx-inception/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
 import {SecurityService} from './security.service';
 import {User} from './user';
 import {UserSortBy} from './user-sort-by';
 import {Users} from './users';
 
 /**
- * The UserDatasource class implements the user data source.
+ * The UserDataSource class implements the user data source.
  *
  * @author Marcus Portmann
  */
-export class UserDatasource implements DataSource<User> {
+export class UserDataSource implements DataSource<User> {
+  private dataSubject$ = new BehaviorSubject<User[]>([]);
 
-  private dataSubject$: Subject<User[]> = new ReplaySubject<User[]>(1);
-
-  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
 
   loading$ = this.loadingSubject$.asObservable();
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>(1);
+  private totalSubject$ = new BehaviorSubject<number>(0);
 
   total$ = this.totalSubject$.asObservable();
 
@@ -51,13 +50,14 @@ export class UserDatasource implements DataSource<User> {
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<User[] | ReadonlyArray<User>> {
+  connect(collectionViewer: CollectionViewer): Observable<User[]> {
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
+    this.totalSubject$.complete();
   }
 
   /**
@@ -69,26 +69,41 @@ export class UserDatasource implements DataSource<User> {
    * @param sortDirection   The optional sort direction to apply to the users.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
+   *
+   * @return The users.
    */
   load(userDirectoryId: string, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
-       pageIndex?: number, pageSize?: number): void {
+       pageIndex?: number, pageSize?: number): Observable<Users> {
     this.loadingSubject$.next(true);
 
-    this.securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex,
-      pageSize)
-    .pipe(first())
-    .subscribe((users: Users) => {
-      this.loadingSubject$.next(false);
+    return this.securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex,
+      pageSize).pipe(tap((users: Users) => {
+        this.updateData(users);
+      }), catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false)));
+  }
 
-      this.totalSubject$.next(users.total);
+  /**
+   * Handle errors during the user load operation.
+   *
+   * @param error The error encountered.
+   *
+   * @return An observable that emits the error.
+   */
+  private handleError(error: Error): Observable<never> {
+    console.error('Failed to load the users:', error);
+    this.totalSubject$.next(0);
+    this.dataSubject$.next([]);
+    return throwError(() => error);
+  }
 
-      this.dataSubject$.next(users.users);
-    }, (error: Error) => {
-      this.loadingSubject$.next(false);
-
-      this.totalSubject$.next(0);
-
-      this.loadingSubject$.error(error);
-    });
+  /**
+   * Update the data source with the fetched users.
+   *
+   * @param users The users to update.
+   */
+  private updateData(users: Users): void {
+    this.totalSubject$.next(users.total);
+    this.dataSubject$.next(users.users);
   }
 }

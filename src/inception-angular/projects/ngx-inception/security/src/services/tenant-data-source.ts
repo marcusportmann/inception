@@ -18,19 +18,18 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {SortDirection} from 'ngx-inception/core';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {first} from 'rxjs/operators';
-import {PolicySortBy} from './policy-sort-by';
-import {PolicySummaries} from './policy-summaries';
-import {PolicySummary} from './policy-summary';
 import {SecurityService} from './security.service';
+import {Tenant} from './tenant';
+import {Tenants} from './tenants';
 
 /**
- * The PolicySummaryDatasource class implements the policy summary data source.
+ * The TenantDataSource class implements the tenant data source.
  *
  * @author Marcus Portmann
  */
-export class PolicySummaryDatasource implements DataSource<PolicySummary> {
+export class TenantDataSource implements DataSource<Tenant> {
 
-  private dataSubject$: Subject<PolicySummary[]> = new ReplaySubject<PolicySummary[]>(1);
+  private dataSubject$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>(1);
 
   private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
 
@@ -51,20 +50,21 @@ export class PolicySummaryDatasource implements DataSource<PolicySummary> {
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<PolicySummary[] | ReadonlyArray<PolicySummary>> {
+  connect(collectionViewer: CollectionViewer): Observable<Tenant[] | ReadonlyArray<Tenant>> {
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
+    this.totalSubject$.complete();
   }
 
   /**
-   * Load the policy summaries.
+   * Load the tenants.
    *
-   * @param filter        The optional filter to apply to the policy summaries.
-   * @param sortDirection The optional sort direction to apply to the policy summaries.
+   * @param filter        The optional filter to apply to the tenants.
+   * @param sortDirection The optional sort direction to apply to the tenants.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
@@ -72,15 +72,14 @@ export class PolicySummaryDatasource implements DataSource<PolicySummary> {
        pageSize?: number): void {
     this.loadingSubject$.next(true);
 
-    this.securityService.getPolicySummaries(filter, PolicySortBy.Name, sortDirection, pageIndex,
-      pageSize)
+    this.securityService.getTenants(filter, sortDirection, pageIndex, pageSize)
     .pipe(first())
-    .subscribe((policySummaries: PolicySummaries) => {
+    .subscribe((tenants: Tenants) => {
       this.loadingSubject$.next(false);
 
-      this.totalSubject$.next(policySummaries.total);
+      this.totalSubject$.next(tenants.total);
 
-      this.dataSubject$.next(policySummaries.policySummaries);
+      this.dataSubject$.next(tenants.tenants);
     }, (error: Error) => {
       this.loadingSubject$.next(false);
 

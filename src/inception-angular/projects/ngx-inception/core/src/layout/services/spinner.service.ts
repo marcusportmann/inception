@@ -28,20 +28,14 @@ import {SpinnerComponent} from '../components/spinner.component';
   providedIn: 'root'
 })
 export class SpinnerService {
+  private counter = 0; // Reference count
 
   private overlayRef?: OverlayRef;
 
   private spinnerComponentPortal?: ComponentPortal<SpinnerComponent>;
 
-  /**
-   * Constructs a new SpinnerService.
-   *
-   * @param overlay The overlay.
-   */
   constructor(private overlay: Overlay) {
     console.log('Initializing the Spinner Service');
-
-    // Create ComponentPortal that can be attached to a PortalHost
     this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
   }
 
@@ -49,12 +43,24 @@ export class SpinnerService {
    * Hide the spinner.
    */
   hideSpinner(): void {
-    if (this.spinnerComponentPortal) {
-      // this.spinnerComponentPortal.detach();
-      // this.spinnerComponentPortal = undefined;
+    if (this.counter > 0) {
+      this.counter--;
     }
 
+    if (this.counter === 0 && this.overlayRef) {
+      this.overlayRef.detach();
+      this.overlayRef.dispose();
+      this.overlayRef = undefined;
+    }
+  }
+
+  /**
+   * Reset the spinner reference counter and hide the spinner.
+   */
+  resetSpinner(): void {
+    this.counter = 0;
     if (this.overlayRef) {
+      this.overlayRef.detach();
       this.overlayRef.dispose();
       this.overlayRef = undefined;
     }
@@ -64,14 +70,9 @@ export class SpinnerService {
    * Show the spinner.
    */
   showSpinner(): void {
+    this.counter++;
     if (!this.overlayRef) {
-      // Returns an OverlayRef (which is a PortalHost)
       this.overlayRef = this.overlay.create();
-
-      // // Create ComponentPortal that can be attached to a PortalHost
-      // this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
-
-      // Attach ComponentPortal to PortalHost
       this.overlayRef.attach(this.spinnerComponentPortal);
     }
   }

@@ -16,26 +16,25 @@
 
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {SortDirection} from 'ngx-inception/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
 import {SecurityService} from './security.service';
 import {UserDirectorySummaries} from './user-directory-summaries';
 import {UserDirectorySummary} from './user-directory-summary';
 
 /**
- * The UserDirectorySummaryDatasource class implements the user directory summary data source.
+ * The UserDirectorySummaryDataSource class implements the token summary data source.
  *
  * @author Marcus Portmann
  */
-export class UserDirectorySummaryDatasource implements DataSource<UserDirectorySummary> {
+export class UserDirectorySummaryDataSource implements DataSource<UserDirectorySummary> {
+  private dataSubject$ = new BehaviorSubject<UserDirectorySummary[]>([]);
 
-  private dataSubject$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>(1);
-
-  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
 
   loading$ = this.loadingSubject$.asObservable();
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>(1);
+  private totalSubject$ = new BehaviorSubject<number>(0);
 
   total$ = this.totalSubject$.asObservable();
 
@@ -50,13 +49,14 @@ export class UserDirectorySummaryDatasource implements DataSource<UserDirectoryS
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<UserDirectorySummary[] | ReadonlyArray<UserDirectorySummary>> {
+  connect(collectionViewer: CollectionViewer): Observable<UserDirectorySummary[]> {
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
+    this.totalSubject$.complete();
   }
 
   /**
@@ -66,25 +66,41 @@ export class UserDirectorySummaryDatasource implements DataSource<UserDirectoryS
    * @param sortDirection The optional sort direction to apply to the user directory summaries.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
+   *
+   * @return The user directory summaries.
    */
   load(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-       pageSize?: number): void {
+       pageSize?: number): Observable<UserDirectorySummaries> {
     this.loadingSubject$.next(true);
 
-    this.securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize)
-    .pipe(first())
-    .subscribe((userDirectorySummaries: UserDirectorySummaries) => {
-      this.loadingSubject$.next(false);
+    return this.securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex,
+      pageSize).pipe(tap((userDirectorySummaries: UserDirectorySummaries) => {
+        this.updateData(userDirectorySummaries);
+      }), catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false)));
+  }
 
-      this.totalSubject$.next(userDirectorySummaries.total);
+  /**
+   * Handle errors during the user directory summaries load operation.
+   *
+   * @param error The error encountered.
+   *
+   * @return An observable that emits the error.
+   */
+  private handleError(error: Error): Observable<never> {
+    console.error('Failed to load the user directory summaries:', error);
+    this.totalSubject$.next(0);
+    this.dataSubject$.next([]);
+    return throwError(() => error);
+  }
 
-      this.dataSubject$.next(userDirectorySummaries.userDirectorySummaries);
-    }, (error: Error) => {
-      this.loadingSubject$.next(false);
-
-      this.totalSubject$.next(0);
-
-      this.loadingSubject$.error(error);
-    });
+  /**
+   * Update the data source with the fetched user directory summaries.
+   *
+   * @param userDirectorySummaries The user directory summaries to update.
+   */
+  private updateData(userDirectorySummaries: UserDirectorySummaries): void {
+    this.totalSubject$.next(userDirectorySummaries.total);
+    this.dataSubject$.next(userDirectorySummaries.userDirectorySummaries);
   }
 }

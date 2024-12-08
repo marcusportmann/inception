@@ -26,13 +26,17 @@ import digital.inception.server.authorization.token.InvalidOAuth2RefreshTokenExc
 import digital.inception.server.authorization.token.OAuth2AccessToken;
 import digital.inception.server.authorization.token.OAuth2RefreshToken;
 import digital.inception.server.authorization.token.RefreshedOAuth2Tokens;
+import io.github.bucket4j.Bucket;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -59,15 +63,31 @@ public class OAuthController {
   /* Token Service */
   private final ITokenService tokenService;
 
+  /* The bucket used to limit the issuing of tokens */
+  private final Bucket tokensIssuedRateLimitBucket;
+
   /**
    * Constructs a new <b>OAuthController</b>.
    *
    * @param securityService the Security Service
    * @param tokenService the Token Service
+   * @param tokensIssuedPerSecond the number of tokens that can be issued per second
    */
-  public OAuthController(ISecurityService securityService, ITokenService tokenService) {
+  public OAuthController(
+      ISecurityService securityService,
+      ITokenService tokenService,
+      @Value("${inception.authorization-server.limits.tokens-issued-per-second:10}")
+          int tokensIssuedPerSecond) {
     this.securityService = securityService;
     this.tokenService = tokenService;
+    this.tokensIssuedRateLimitBucket =
+        Bucket.builder()
+            .addLimit(
+                limit ->
+                    limit
+                        .capacity(tokensIssuedPerSecond * 60L)
+                        .refillGreedy(tokensIssuedPerSecond * 60L, Duration.ofMinutes(1)))
+            .build();
   }
 
   /**
@@ -80,6 +100,17 @@ public class OAuthController {
   @PostMapping(value = "/token", produces = "application/json")
   public ResponseEntity<String> token(
       HttpServletRequest request, @RequestParam Map<String, String> parameters) {
+    if (!tokensIssuedRateLimitBucket.tryConsume(1)) {
+      HttpHeaders tooManyRequestsHeaders = new HttpHeaders();
+      tooManyRequestsHeaders.set("Retry-After", "60");
+
+      String errorResponse =
+          "{\"error\": \"temporarily_unavailable\", \"error_description\": \"Rate limit exceeded. Please try again later.\"}";
+
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+          .headers(tooManyRequestsHeaders)
+          .body(errorResponse);
+    }
 
     // TODO: Implement OAuth2 client authentication -- MARCUS
 

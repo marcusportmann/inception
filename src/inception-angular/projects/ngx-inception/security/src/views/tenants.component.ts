@@ -26,7 +26,7 @@ import {
 import {merge, Subscription} from 'rxjs';
 import {finalize, first} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
-import {TenantDatasource} from '../services/tenant.datasource';
+import {TenantDataSource} from '../services/tenant-data-source';
 
 /**
  * The TenantsComponent class implements the tenants component.
@@ -39,7 +39,7 @@ import {TenantDatasource} from '../services/tenant.datasource';
 })
 export class TenantsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
-  dataSource: TenantDatasource;
+  dataSource: TenantDataSource;
 
   displayedColumns = ['name', 'actions'];
 
@@ -58,7 +58,7 @@ export class TenantsComponent extends AdminContainerView implements AfterViewIni
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    this.dataSource = new TenantDatasource(this.securityService);
+    this.dataSource = new TenantDataSource(this.securityService);
   }
 
   get title(): string {

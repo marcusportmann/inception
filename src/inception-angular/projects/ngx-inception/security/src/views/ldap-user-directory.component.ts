@@ -54,6 +54,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
 
   groupNameAttributeControl: FormControl;
 
+  groupNamePrefixFilterControl: FormControl;
+
   groupObjectClassControl: FormControl;
 
   hostControl: FormControl;
@@ -109,6 +111,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       [Validators.required, Validators.maxLength(100)]);
     this.groupNameAttributeControl = new FormControl('',
       [Validators.required, Validators.maxLength(100)]);
+    this.groupNamePrefixFilterControl = new FormControl('',
+      [Validators.maxLength(100)]);
     this.groupObjectClassControl = new FormControl('',
       [Validators.required, Validators.maxLength(100)]);
     this.hostControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
@@ -156,6 +160,7 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       groupDescriptionAttribute: this.groupDescriptionAttributeControl,
       groupMemberAttribute: this.groupMemberAttributeControl,
       groupNameAttribute: this.groupNameAttributeControl,
+      groupNamePrefixFilter: this.groupNamePrefixFilterControl,
       groupObjectClass: this.groupObjectClassControl,
       host: this.hostControl,
       maxFilteredGroupMembers: this.maxFilteredGroupMembersControl,
@@ -193,6 +198,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       this.groupMemberAttributeControl.value);
     UserDirectoryUtil.setParameter(parameters, 'GroupNameAttribute',
       this.groupNameAttributeControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'GroupNamePrefixFilter',
+      this.groupNamePrefixFilterControl.value);
     UserDirectoryUtil.setParameter(parameters, 'GroupObjectClass',
       this.groupObjectClassControl.value);
     UserDirectoryUtil.setParameter(parameters, 'Host', this.hostControl.value);
@@ -270,6 +277,9 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     this.groupNameAttributeControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupNameAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'GroupNameAttribute') : 'cn');
+    this.groupNamePrefixFilterControl.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'GroupNamePrefixFilter') ?
+        UserDirectoryUtil.getParameter(parameters, 'GroupNamePrefixFilter') : '');
     this.groupObjectClassControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupObjectClass') ?
         UserDirectoryUtil.getParameter(parameters, 'GroupObjectClass') : 'groupOfNames');
@@ -340,7 +350,6 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       }
     };
   }
-
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(val: any): void {

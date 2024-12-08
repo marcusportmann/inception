@@ -101,6 +101,7 @@
     <authzforce-ce-core-pdp-engine.version>21.0.1</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.12.0</avro.version>
     <azure-identity.version>1.14.2</azure-identity.version>
+    <bucket4j-core.version>8.10.1</bucket4j-core.version>
     <com.ibm.icu.icu4j.version>76.1</com.ibm.icu.icu4j.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-io.version>2.18.0</commons-io.version>
@@ -146,6 +147,11 @@
         <groupId>com.azure</groupId>
         <artifactId>azure-identity</artifactId>
         <version>${azure-identity.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.bucket4j</groupId>
+        <artifactId>bucket4j-core</artifactId>
+        <version>${bucket4j-core.version}</version>
       </dependency>
       <dependency>
         <groupId>com.github.f4b6a3</groupId>
