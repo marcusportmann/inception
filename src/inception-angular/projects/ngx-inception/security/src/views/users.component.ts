@@ -98,22 +98,9 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
   }
 
   deleteUser(username: string): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: $localize`:@@security_users_confirm_delete_user:Are you sure you want to delete the user?`,
-    });
-
-    dialogRef
-    .afterClosed()
-    .pipe(first(), filter((confirmed) => confirmed === true), switchMap(() => {
-      this.spinnerService.showSpinner();
-      return this.securityService
-      .deleteUser(this.userDirectoryId$.value, username)
-      .pipe(catchError((error) => this.handleError(error)), tap(() => this.resetTable()),
-        // After delete completes
-        switchMap(() => this.loadUsers().pipe(catchError((error) => this.handleError(error)))),
-        finalize(() => this.spinnerService.hideSpinner()));
-    }), takeUntil(this.destroy$))
-    .subscribe();
+    const message = $localize`:@@security_users_confirm_delete_user:Are you sure you want to delete the user?`;
+    this.confirmAndProcessAction(message,
+      () => this.securityService.deleteUser(this.userDirectoryId$.value, username));
   }
 
   editUser(username: string): void {
@@ -159,6 +146,56 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
   }
 
   ngAfterViewInit(): void {
+    this.initializeDataLoaders();
+    this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  resetUserPassword(username: string): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/reset-user-password'],
+      {relativeTo: this.activatedRoute});
+  }
+
+  userGroups(username: string): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/groups'],
+      {relativeTo: this.activatedRoute});
+  }
+
+  private confirmAndProcessAction(confirmationMessage: string,
+                                  action: () => Observable<void | any>): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({message: confirmationMessage});
+
+    dialogRef
+    .afterClosed()
+    .pipe(first(), filter((confirmed) => confirmed === true), switchMap(() => {
+      this.spinnerService.showSpinner();
+      return action().pipe(catchError((error) => this.handleError(error)),
+        tap(() => this.resetTable()),
+        switchMap(() => this.loadUsers().pipe(catchError((error) => this.handleError(error)))),
+        finalize(() => this.spinnerService.hideSpinner()));
+    }), takeUntil(this.destroy$))
+    .subscribe();
+  }
+
+  private handleError(error: Error): Observable<never> {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error);
+    }
+    return throwError(() => error);
+  }
+
+  private initializeDataLoaders(): void {
     // Handle user directory selection changes
     this.userDirectoryId$
     .pipe(takeUntil(this.destroy$), switchMap((userDirectoryId) => {
@@ -191,7 +228,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
     .pipe(takeUntil(this.destroy$))
     .subscribe(() => (this.paginator.pageIndex = 0));
 
-    // Load groups on sort, filter, or pagination changes
+    // Load users on sort, filter, or pagination changes
     merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
     .pipe(debounceTime(200), // Avoid redundant API calls
       takeUntil(this.destroy$))
@@ -204,7 +241,9 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
         .subscribe();
       }
     });
+  }
 
+  private loadData(): void {
     // Load user directories for the tenant
     this.sessionService.session$
     .pipe(first(), switchMap((session) => {
@@ -238,34 +277,6 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
         });
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  resetUserPassword(username: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/reset-user-password'],
-      {relativeTo: this.activatedRoute});
-  }
-
-  userGroups(username: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/groups'],
-      {relativeTo: this.activatedRoute});
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private resetTable(): void {

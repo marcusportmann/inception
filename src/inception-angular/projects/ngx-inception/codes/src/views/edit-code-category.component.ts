@@ -28,7 +28,7 @@ import {CodesService} from '../services/codes.service';
 /**
  * The EditCodeCategoryComponent class implements the edit code category component.
  *
- * @author Marcus Portmann
+ * @author Marcus
  */
 @Component({
   templateUrl: 'edit-code-category.component.html',
@@ -49,20 +49,18 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   nameControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private codesService: CodesService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+              private codesService: CodesService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the route parameters
+    // Retrieve the route parameter
     const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
-
     if (!codeCategoryId) {
-      throw (new Error('No codeCategoryId route parameter found'));
+      throw new Error('No codeCategoryId route parameter found');
     }
-
     this.codeCategoryId = decodeURIComponent(codeCategoryId);
 
-    // Initialise the form controls
+    // Initialize form controls
     this.dataControl = new FormControl('');
     this.idControl = new FormControl({
       value: '',
@@ -70,21 +68,23 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
     }, [Validators.required, Validators.maxLength(100)]);
     this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-    // Initialise the form
+    // Initialize the form group
     this.editCodeCategoryForm = new FormGroup({
       data: this.dataControl,
       id: this.idControl,
-      name: this.nameControl
+      name: this.nameControl,
     });
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@codes_edit_code_category_back_navigation:Code Categories`
-      , ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation(
+      $localize`:@@codes_edit_code_category_back_navigation:Code Categories`, ['../..'], {
+        relativeTo: this.activatedRoute,
+      });
   }
 
   get title(): string {
-    return $localize`:@@codes_edit_code_category_title:Edit Code Category`
+    return $localize`:@@codes_edit_code_category_title:Edit Code Category`;
   }
 
   cancel(): void {
@@ -93,54 +93,52 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the existing code category and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategory(this.codeCategoryId)
+    this.codesService
+    .getCodeCategory(this.codeCategoryId)
     .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((codeCategory: CodeCategory) => {
-      this.codeCategory = codeCategory;
-      this.idControl.setValue(codeCategory.id);
-      this.nameControl.setValue(codeCategory.name);
-      this.dataControl.setValue(codeCategory.data);
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error).afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        });
-      }
+    .subscribe({
+      next: (codeCategory: CodeCategory) => {
+        this.codeCategory = codeCategory;
+        this.idControl.setValue(codeCategory.id);
+        this.nameControl.setValue(codeCategory.name);
+        this.dataControl.setValue(codeCategory.data);
+      },
+      error: (error: Error) => this.handleError(error, true),
     });
   }
 
   ok(): void {
     if (this.codeCategory && this.editCodeCategoryForm.valid) {
-      const data = this.dataControl.value;
-
-      this.codeCategory.name = this.nameControl.value;
-      this.codeCategory.data = (!!data) ? data : null;
+      this.codeCategory.name = this.nameControl.value ?? '';
+      this.codeCategory.data = this.dataControl.value?.trim() || null;
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCodeCategory(this.codeCategory)
+      this.codesService
+      .updateCodeCategory(this.codeCategory)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: () => this.router.navigate(['../..'], {relativeTo: this.activatedRoute}),
+        error: (error: Error) => this.handleError(error, false),
+      });
+    }
+  }
+
+  private handleError(error: Error, navigateOnClose: boolean): void {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService
+      .showErrorDialog(error)
+      .afterClosed()
+      .pipe(first())
       .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
+        if (navigateOnClose) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }
       });
     }

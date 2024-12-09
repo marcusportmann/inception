@@ -28,7 +28,7 @@ import {CodesService} from '../services/codes.service';
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
  *
- * @author Marcus Portmann
+ * @author Marcus
  */
 @Component({
   templateUrl: 'new-code-category.component.html',
@@ -47,20 +47,20 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
   newCodeCategoryForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private codesService: CodesService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+              private codesService: CodesService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
 
-    // Initialise the form controls
+    // Initialize form controls
     this.dataControl = new FormControl('');
     this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-    // Initialise the form
+    // Initialize form group
     this.newCodeCategoryForm = new FormGroup({
       data: this.dataControl,
       id: this.idControl,
-      name: this.nameControl
+      name: this.nameControl,
     });
   }
 
@@ -70,7 +70,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
   }
 
   get title(): string {
-    return $localize`:@@codes_new_code_category_title:New Code Category`
+    return $localize`:@@codes_new_code_category_title:New Code Category`;
   }
 
   cancel(): void {
@@ -79,34 +79,36 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
   }
 
   ngAfterViewInit(): void {
+    // Initialize a new instance of CodeCategory
     this.codeCategory = new CodeCategory('', '');
   }
 
   ok(): void {
     if (this.codeCategory && this.newCodeCategoryForm.valid) {
-      const data = this.dataControl.value;
+      const data = this.dataControl.value?.trim();
 
-      this.codeCategory.id = this.idControl.value;
-      this.codeCategory.name = this.nameControl.value;
-      this.codeCategory.data = (!!data) ? data : null;
+      this.codeCategory.id = this.idControl.value?.trim();
+      this.codeCategory.name = this.nameControl.value?.trim();
+      this.codeCategory.data = data || null;
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCodeCategory(this.codeCategory)
+      this.codesService
+      .createCodeCategory(this.codeCategory)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
+      .subscribe({
+        next: () => this.router.navigate(['..'], {relativeTo: this.activatedRoute}),
+        error: (error: Error) => this.handleError(error),
       });
+    }
+  }
+
+  private handleError(error: Error): void {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error);
     }
   }
 }

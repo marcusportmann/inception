@@ -67,14 +67,12 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
 
     // Retrieve the route parameters
     const errorReportId = this.activatedRoute.snapshot.paramMap.get('errorReportId');
-
     if (!errorReportId) {
-      throw (new Error('No errorReportId route parameter found'));
+      throw new Error('No errorReportId route parameter found');
     }
-
     this.errorReportId = decodeURIComponent(errorReportId);
 
-    // Initialise the form controls
+    // Initialize form controls
     this.applicationIdControl = new FormControl({
       value: '',
       disabled: true
@@ -112,7 +110,7 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
       disabled: true
     });
 
-    // Initialise the form
+    // Initialize form group
     this.errorReportForm = new FormGroup({
       applicationId: this.applicationIdControl,
       applicationVersion: this.applicationVersionControl,
@@ -122,56 +120,64 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
       deviceId: this.deviceIdControl,
       feedback: this.feedbackControl,
       id: this.idControl,
-      who: this.whoControl
+      who: this.whoControl,
     });
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@error_error_report_back_navigation:Error Reports`
-      , ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@error_error_report_back_navigation:Error Reports`,
+      ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return $localize`:@@error_error_report_title:View Error Report`
+    return $localize`:@@error_error_report_title:View Error Report`;
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the error report and initialise the form controls
+    // Retrieve the error report and populate form controls
     this.spinnerService.showSpinner();
 
-    this.errorService.getErrorReport(this.errorReportId)
+    this.errorService
+    .getErrorReport(this.errorReportId)
     .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((errorReport: ErrorReport) => {
-      this.errorReport = errorReport;
-      this.applicationIdControl.setValue(errorReport.applicationId);
-      this.applicationVersionControl.setValue(errorReport.applicationVersion);
-      this.createdControl.setValue(errorReport.created);
-      this.descriptionControl.setValue(errorReport.description);
-      this.detailControl.setValue((!!errorReport.detail) ? errorReport.detail : 'No detail');
-      this.deviceIdControl.setValue(
-        (!!errorReport.deviceId) ? errorReport.deviceId : 'No device ID');
-      this.feedbackControl.setValue(
-        (!!errorReport.feedback) ? errorReport.feedback : 'No feedback');
-      this.idControl.setValue(errorReport.id);
-      this.whoControl.setValue(errorReport.who);
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error).afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        });
-      }
+    .subscribe({
+      next: (errorReport: ErrorReport) => this.populateForm(errorReport),
+      error: (error: Error) => this.handleError(error),
     });
   }
 
   ok(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+  }
+
+  private handleError(error: Error): void {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService
+      .showErrorDialog(error)
+      .afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+      });
+    }
+  }
+
+  private populateForm(errorReport: ErrorReport): void {
+    this.errorReport = errorReport;
+
+    this.applicationIdControl.setValue(errorReport.applicationId);
+    this.applicationVersionControl.setValue(errorReport.applicationVersion);
+    this.createdControl.setValue(errorReport.created);
+    this.descriptionControl.setValue(errorReport.description);
+    this.detailControl.setValue(errorReport.detail || 'No detail');
+    this.deviceIdControl.setValue(errorReport.deviceId || 'No device ID');
+    this.feedbackControl.setValue(errorReport.feedback || 'No feedback');
+    this.idControl.setValue(errorReport.id);
+    this.whoControl.setValue(errorReport.who);
   }
 }

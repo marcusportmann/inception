@@ -86,22 +86,9 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   }
 
   deleteGroup(groupName: string): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: $localize`:@@security_groups_confirm_delete_group:Are you sure you want to delete the group?`,
-    });
-
-    dialogRef
-    .afterClosed()
-    .pipe(first(), filter((confirmed) => confirmed === true), switchMap(() => {
-      this.spinnerService.showSpinner();
-      return this.securityService
-      .deleteGroup(this.userDirectoryId$.value, groupName)
-      .pipe(catchError((error) => this.handleError(error)), tap(() => this.resetTable()),
-        // After delete completes
-        switchMap(() => this.loadGroups().pipe(catchError((error) => this.handleError(error)))),
-        finalize(() => this.spinnerService.hideSpinner()));
-    }), takeUntil(this.destroy$))
-    .subscribe();
+    const message = $localize`:@@security_groups_confirm_delete_group:Are you sure you want to delete the group?`;
+    this.confirmAndProcessAction(message,
+      () => this.securityService.deleteGroup(this.userDirectoryId$.value, groupName));
   }
 
   editGroup(groupName: string): void {
@@ -146,6 +133,41 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   }
 
   ngAfterViewInit(): void {
+    this.initializeDataLoaders();
+    this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private confirmAndProcessAction(confirmationMessage: string,
+                                  action: () => Observable<void | any>): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({message: confirmationMessage});
+
+    dialogRef
+    .afterClosed()
+    .pipe(first(), filter((confirmed) => confirmed === true), switchMap(() => {
+      this.spinnerService.showSpinner();
+      return action().pipe(catchError((error) => this.handleError(error)),
+        tap(() => this.resetTable()),
+        switchMap(() => this.loadGroups().pipe(catchError((error) => this.handleError(error)))),
+        finalize(() => this.spinnerService.hideSpinner()));
+    }), takeUntil(this.destroy$))
+    .subscribe();
+  }
+
+  private handleError(error: Error): Observable<never> {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error);
+    }
+    return throwError(() => error);
+  }
+
+  private initializeDataLoaders(): void {
     // Handle user directory selection changes
     this.userDirectoryId$
     .pipe(takeUntil(this.destroy$), switchMap((userDirectoryId) => {
@@ -191,7 +213,9 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
         .subscribe();
       }
     });
+  }
 
+  private loadData(): void {
     // Load user directories for the tenant
     this.sessionService.session$
     .pipe(first(), switchMap((session) => {
@@ -225,20 +249,6 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
         });
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private resetTable(): void {

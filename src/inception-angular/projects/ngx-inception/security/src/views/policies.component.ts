@@ -70,7 +70,7 @@ export class PoliciesComponent extends AdminContainerView implements AfterViewIn
   }
 
   deletePolicy(policyId: string): void {
-    this.confirmAndProcessAction(policyId,
+    this.confirmAndProcessAction(
       $localize`:@@security_policies_confirm_delete_policy:Are you sure you want to delete the policy?`,
       () => this.securityService.deletePolicy(policyId));
   }
@@ -105,7 +105,7 @@ export class PoliciesComponent extends AdminContainerView implements AfterViewIn
     this.destroy$.complete();
   }
 
-  private confirmAndProcessAction(policyId: string, confirmationMessage: string,
+  private confirmAndProcessAction(confirmationMessage: string,
                                   action: () => Observable<void | boolean>): void {
     const dialogRef = this.dialogService.showConfirmationDialog({message: confirmationMessage});
 
@@ -114,8 +114,8 @@ export class PoliciesComponent extends AdminContainerView implements AfterViewIn
     .pipe(first(), filter((confirmed) => confirmed === true), switchMap(() => {
       this.spinnerService.showSpinner();
       return action().pipe(catchError((error) => this.handleError(error)),
-        tap(() => this.resetTable()), switchMap(() => this.loadPolicySummaries().pipe(
-          catchError((error) => this.handleError(error)))),
+        tap(() => this.resetTable()), switchMap(
+          () => this.loadPolicySummaries().pipe(catchError((error) => this.handleError(error)))),
         finalize(() => this.spinnerService.hideSpinner()));
     }), takeUntil(this.destroy$))
     .subscribe();

@@ -64,21 +64,16 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
               private spinnerService: SpinnerService) {
     super();
 
-    this.fromDateControl = new FormControl({
-      value: add(new Date(), {months: -1}),
-      disabled: false
-    }, [Validators.required]);
+    // Initialize form controls
+    this.fromDateControl = new FormControl(add(new Date(), {months: -1}), [Validators.required]);
+    this.toDateControl = new FormControl(new Date(), [Validators.required]);
 
-    this.toDateControl = new FormControl({
-      value: new Date(),
-      disabled: false
-    }, [Validators.required]);
-
+    // Initialize the data source
     this.dataSource = new ErrorReportSummaryDataSource(this.errorService);
   }
 
   get title(): string {
-    return $localize`:@@error_error_reports_title:Error Reports`
+    return $localize`:@@error_error_reports_title:Error Reports`;
   }
 
   dateRangeChanged(): void {
@@ -116,6 +111,7 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
 
   private handleError(error: Error): Observable<never> {
     if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
       this.router.navigateByUrl('/error/send-error-report', {state: {error}});
     } else {
       this.dialogService.showErrorDialog(error);
@@ -124,7 +120,8 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
   }
 
   private initializeDataLoaders(): void {
-    merge(this.sort.sortChange, this.tableFilter.changed)
+    // Reset paginator and load data on sort, filter, or pagination change
+    this.sort.sortChange
     .pipe(takeUntil(this.destroy$))
     .subscribe(() => (this.paginator.pageIndex = 0));
 

@@ -67,7 +67,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
   }
 
   deleteUserDirectory(userDirectoryId: string): void {
-    this.confirmAndProcessAction(userDirectoryId,
+    this.confirmAndProcessAction(
       $localize`:@@security_user_directories_confirm_delete_user_directory:Are you sure you want to delete the user directory?`,
       () => this.securityService.deleteUserDirectory(userDirectoryId));
   }
@@ -92,7 +92,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
     this.destroy$.complete();
   }
 
-  private confirmAndProcessAction(userDirectoryId: string, confirmationMessage: string,
+  private confirmAndProcessAction(confirmationMessage: string,
                                   action: () => Observable<void | boolean>): void {
     const dialogRef = this.dialogService.showConfirmationDialog({message: confirmationMessage});
 

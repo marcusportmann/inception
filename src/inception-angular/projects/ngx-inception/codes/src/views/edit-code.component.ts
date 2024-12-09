@@ -26,7 +26,7 @@ import {Code} from '../services/code';
 import {CodesService} from '../services/codes.service';
 
 /**
- * The EditCodeComponent class implements the edit code category component.
+ * The EditCodeComponent class implements the edit code component.
  *
  * @author Marcus Portmann
  */
@@ -51,50 +51,46 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   valueControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private codesService: CodesService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+              private codesService: CodesService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the route parameters
+    // Retrieve and decode route parameters
     const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+    const codeId = this.activatedRoute.snapshot.paramMap.get('codeId');
 
-    if (!codeCategoryId) {
-      throw (new Error('No codeCategoryId route parameter found'));
+    if (!codeCategoryId || !codeId) {
+      throw new Error('Required route parameters are missing');
     }
 
     this.codeCategoryId = decodeURIComponent(codeCategoryId);
-
-    const codeId = this.activatedRoute.snapshot.paramMap.get('codeId');
-
-    if (!codeId) {
-      throw (new Error('No codeId route parameter found'));
-    }
-
     this.codeId = decodeURIComponent(codeId);
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.idControl = new FormControl({
       value: '',
       disabled: true
-    }, [Validators.required, Validators.maxLength(100)]);
+    }, [
+      Validators.required, Validators.maxLength(100),]);
     this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.valueControl = new FormControl('', [Validators.required]);
 
-    // Initialise the form
+    // Initialize the form
     this.editCodeForm = new FormGroup({
       id: this.idControl,
       name: this.nameControl,
-      value: this.valueControl
+      value: this.valueControl,
     });
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@codes_edit_code_back_navigation:Codes`,
-      ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@codes_edit_code_back_navigation:Codes`, ['../..'], {
+      relativeTo: this.activatedRoute,
+    });
   }
 
   get title(): string {
-    return $localize`:@@codes_edit_code_title:Edit Code`
+    return $localize`:@@codes_edit_code_title:Edit Code`;
   }
 
   cancel(): void {
@@ -103,29 +99,19 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the existing code and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.codesService.getCode(this.codeCategoryId, this.codeId)
+    this.codesService
+    .getCode(this.codeCategoryId, this.codeId)
     .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((code: Code) => {
-      this.code = code;
-      this.idControl.setValue(code.id);
-      this.nameControl.setValue(code.name);
-      this.valueControl.setValue(code.value);
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error).afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        });
-      }
+    .subscribe({
+      next: (code: Code) => {
+        this.code = code;
+        this.idControl.setValue(code.id);
+        this.nameControl.setValue(code.name);
+        this.valueControl.setValue(code.value);
+      },
+      error: (error: Error) => this.handleError(error, true),
     });
   }
 
@@ -136,19 +122,28 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCode(this.code)
+      this.codesService
+      .updateCode(this.code)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
+      .subscribe({
+        next: () => {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+        },
+        error: (error: Error) => this.handleError(error, false),
+      });
+    }
+  }
+
+  private handleError(error: Error, navigateOnClose: boolean): void {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error).afterClosed().pipe(first()).subscribe(() => {
+        if (navigateOnClose) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }
       });
     }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -23,10 +23,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {
   AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
-  InvalidArgumentError, ServiceUnavailableError, SpinnerService
+  InvalidArgumentError, ServiceUnavailableError, SpinnerService,
 } from 'ngx-inception/core';
 
-import {finalize, first} from 'rxjs/operators';
+import {merge, Observable, Subject, throwError} from 'rxjs';
+import {
+  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil, tap,
+} from 'rxjs/operators';
 import {Config} from '../services/config';
 import {ConfigService} from '../services/config.service';
 
@@ -37,10 +40,9 @@ import {ConfigService} from '../services/config.service';
  */
 @Component({
   templateUrl: 'configs.component.html',
-  styleUrls: ['configs.component.css']
+  styleUrls: ['configs.component.css'],
 })
-export class ConfigsComponent extends AdminContainerView implements AfterViewInit {
-
+export class ConfigsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<Config>();
 
   displayedColumns = ['id', 'value', 'actions'];
@@ -51,78 +53,36 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
+  private destroy$ = new Subject<void>();
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private configService: ConfigService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
 
-    // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
+    this.dataSource.filterPredicate = (data: Config,
+                                       filter: string): boolean => data.id.toLowerCase().includes(
       filter);
   }
 
   get title(): string {
-    return $localize`:@@config_configs_title:Configs`
+    return $localize`:@@config_configs_title:Configs`;
   }
 
   applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
+    filterValue = filterValue.trim().toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
   deleteConfig(id: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: $localize`:@@config_configs_confirm_delete_config:Are you sure you want to delete the config?`
-      });
-
-    dialogRef.afterClosed()
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((confirmation: boolean | undefined) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
-
-        this.configService.deleteConfig(id)
-        .pipe(first())
-        .subscribe(() => {
-          this.loadConfigs();
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-            (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
-      }
-    });
+    this.confirmAndProcessAction(
+      $localize`:@@config_configs_confirm_delete_config:Are you sure you want to delete the config?`,
+      () => this.configService.deleteConfig(id));
   }
 
   editConfig(id: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([encodeURIComponent(id) + '/edit'], {relativeTo: this.activatedRoute});
-  }
-
-  loadConfigs(): void {
-    this.spinnerService.showSpinner();
-
-    this.configService.getConfigs()
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((configs: Config[]) => {
-      this.dataSource.data = configs;
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
   }
 
   newConfig(): void {
@@ -134,7 +94,62 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
-    this.loadConfigs();
+    this.initializeDataLoaders();
+    this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private confirmAndProcessAction(confirmationMessage: string,
+                                  action: () => Observable<void | boolean>): void {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {message: confirmationMessage});
+
+    dialogRef
+    .afterClosed()
+    .pipe(first(), filter((confirmed) => confirmed === true), switchMap(() => {
+      this.spinnerService.showSpinner();
+      return action().pipe(catchError((error) => this.handleError(error)),
+        tap(() => this.loadData()), finalize(() => this.spinnerService.hideSpinner()));
+    }), takeUntil(this.destroy$))
+    .subscribe();
+  }
+
+  private handleError(error: Error): Observable<never> {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error);
+    }
+    return throwError(() => error);
+  }
+
+  private initializeDataLoaders(): void {
+    this.sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(
+      () => (this.paginator.pageIndex = 0));
+
+    merge(this.sort.sortChange, this.paginator.page)
+    .pipe(debounceTime(200), takeUntil(this.destroy$))
+    .subscribe(() => this.loadData());
+  }
+
+  private loadConfigs(): Observable<Config[]> {
+    return this.configService.getConfigs().pipe(catchError((error) => this.handleError(error)));
+  }
+
+  private loadData(): void {
+    this.spinnerService.showSpinner();
+    this.loadConfigs()
+    .pipe(finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe({
+      next: (configs) => {
+        this.dataSource.data = configs;
+      },
+      error: (error) => this.handleError(error),
+    });
   }
 }
-

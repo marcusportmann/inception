@@ -27,26 +27,26 @@ import {DialogData} from '../services/dialog-data';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'information-dialog',
   template: `
-      <div class="header">
-          <i class="fas fa-3x fa-exclamation-circle"></i>
-      </div>
-      <div class="message-holder">
+    <div class="header">
+      <i class="fas fa-3x fa-exclamation-circle"></i>
+    </div>
+    <div class="message-holder">
       <span class="message">
         {{ data.message }}
       </span>
-      </div>
-      <div class="button">
-          <button mat-flat-button *ngIf="data.buttonText; else defaultButton"
-                  (click)="ok()"
-                  tabindex="-1">{{ data.buttonText }}
-          </button>
-          <ng-template #defaultButton>
-              <button mat-flat-button color="primary" (click)="ok()" tabindex="-1"
-                      i18n="@@information_dialog_button_ok">
-                  OK
-              </button>
-          </ng-template>
-      </div>
+    </div>
+    <div class="button">
+      <button mat-flat-button *ngIf="data.buttonText; else defaultButton"
+              (click)="ok()"
+              tabindex="-1">{{ data.buttonText }}
+      </button>
+      <ng-template #defaultButton>
+        <button mat-flat-button color="primary" (click)="ok()" tabindex="-1"
+                i18n="@@information_dialog_button_ok">
+          OK
+        </button>
+      </ng-template>
+    </div>
   `
 })
 export class InformationDialogComponent {

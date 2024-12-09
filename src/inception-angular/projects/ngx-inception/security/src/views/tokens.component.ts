@@ -77,7 +77,7 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   }
 
   deleteToken(tokenId: string): void {
-    this.confirmAndProcessAction(tokenId,
+    this.confirmAndProcessAction(
       $localize`:@@security_tokens_confirm_delete_token:Are you sure you want to delete the token?`,
       () => this.securityService.deleteToken(tokenId));
   }
@@ -121,7 +121,7 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   }
 
   reinstateToken(tokenId: string): void {
-    this.confirmAndProcessAction(tokenId,
+    this.confirmAndProcessAction(
       $localize`:@@security_tokens_confirm_reinstate_token:Are you sure you want to reinstate the token?`,
       () => this.securityService.reinstateToken(tokenId));
   }
@@ -133,7 +133,7 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   }
 
   revokeToken(tokenId: string): void {
-    this.confirmAndProcessAction(tokenId,
+    this.confirmAndProcessAction(
       $localize`:@@security_tokens_confirm_revoke_token:Are you sure you want to revoke the token?`,
       () => this.securityService.revokeToken(tokenId));
   }
@@ -144,7 +144,7 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
       {relativeTo: this.activatedRoute});
   }
 
-  private confirmAndProcessAction(tokenId: string, confirmationMessage: string,
+  private confirmAndProcessAction(confirmationMessage: string,
                                   action: () => Observable<void | boolean>): void {
     const dialogRef = this.dialogService.showConfirmationDialog({message: confirmationMessage});
 

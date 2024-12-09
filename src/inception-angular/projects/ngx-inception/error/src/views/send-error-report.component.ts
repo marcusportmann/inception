@@ -21,7 +21,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {
   DialogService, Error, InformationDialogComponent, ProblemDetails, SpinnerService
 } from 'ngx-inception/core';
-import {first, map} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {catchError, finalize, first, map} from 'rxjs/operators';
 import {ErrorService} from '../services/error.service';
 
 /**
@@ -30,7 +31,7 @@ import {ErrorService} from '../services/error.service';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'send-error-report.component.html'
+  templateUrl: 'send-error-report.component.html',
 })
 export class SendErrorReportComponent implements OnInit {
 
@@ -45,19 +46,18 @@ export class SendErrorReportComponent implements OnInit {
   sendErrorReportForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private dialogService: DialogService,
-              private errorService: ErrorService, private spinnerService: SpinnerService) {
-
-    // Initialise the form controls
+              private dialogService: DialogService, private errorService: ErrorService,
+              private spinnerService: SpinnerService) {
+    // Initialize form controls
     this.emailControl = new FormControl('', Validators.email);
     this.feedbackControl = new FormControl('');
     this.messageControl = new FormControl('');
 
-    // Initialise the form
+    // Initialize form group
     this.sendErrorReportForm = new FormGroup({
       message: this.messageControl,
       email: this.emailControl,
-      feedback: this.feedbackControl
+      feedback: this.feedbackControl,
     });
   }
 
@@ -67,23 +67,10 @@ export class SendErrorReportComponent implements OnInit {
     .subscribe((state) => {
       if (state.error) {
         this.error = state.error;
-
         this.messageControl.setValue(state.error.message);
-
-        if (this.error) {
-          console.log('Error: ', this.error);
-
-          if (this.error.cause) {
-            console.log('Cause: ', this.error.cause);
-
-            if ((this.error.cause as ProblemDetails).stackTrace) {
-              console.log('StackTrace: ', (this.error.cause as ProblemDetails).stackTrace);
-            }
-          }
-        }
+        this.logErrorDetails(this.error!);
       } else {
         console.log('No error found, redirecting to the application root');
-
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigate(['/']);
       }
@@ -94,28 +81,42 @@ export class SendErrorReportComponent implements OnInit {
     if (this.sendErrorReportForm.valid && this.error) {
       this.spinnerService.showSpinner();
 
-      this.errorService.sendErrorReport(this.error, this.emailControl.value,
-        this.feedbackControl.value)
-      .pipe(first())
+      this.errorService
+      .sendErrorReport(this.error, this.emailControl.value, this.feedbackControl.value)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
+        catchError((error) => this.handleError(error)))
       .subscribe(() => {
-        this.spinnerService.hideSpinner();
-
         const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
           {
-            message: 'Your error report was submitted.'
+            message: 'Your error report was submitted.',
           });
 
-        dialogRef.afterClosed()
+        dialogRef
+        .afterClosed()
         .pipe(first())
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
         });
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-
-        this.dialogService.showErrorDialog(error);
       });
+    }
+  }
+
+  private handleError(error: Error): Observable<never> {
+    this.dialogService.showErrorDialog(error);
+    return throwError(() => error);
+  }
+
+  private logErrorDetails(error: Error): void {
+    console.log('Error: ', error);
+
+    if (error.cause) {
+      console.log('Cause: ', error.cause);
+
+      const problemDetails = error.cause as ProblemDetails;
+      if (problemDetails.stackTrace) {
+        console.log('StackTrace: ', problemDetails.stackTrace);
+      }
     }
   }
 }

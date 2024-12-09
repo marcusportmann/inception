@@ -21,7 +21,7 @@ import {
   AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
   ServiceUnavailableError, SpinnerService
 } from 'ngx-inception/core';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {Config} from '../services/config';
 import {ConfigService} from '../services/config.service';
 
@@ -36,7 +36,7 @@ import {ConfigService} from '../services/config.service';
 })
 export class NewConfigComponent extends AdminContainerView implements AfterViewInit {
 
-  config: Config | null = null;
+  config: Config;
 
   descriptionControl: FormControl;
 
@@ -51,26 +51,29 @@ export class NewConfigComponent extends AdminContainerView implements AfterViewI
               private spinnerService: SpinnerService) {
     super();
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
     this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.valueControl = new FormControl('', [Validators.maxLength(4000)]);
 
-    // Initialise the form
+    // Initialize the form
     this.newConfigForm = new FormGroup({
       description: this.descriptionControl,
       id: this.idControl,
-      value: this.valueControl
+      value: this.valueControl,
     });
+
+    // Initialize the config object
+    this.config = new Config('', '', '');
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@config_new_config_back_navigation:Config`,
-      ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@config_new_config_back_navigation:Config`, ['..'],
+      {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return $localize`:@@config_new_config_title:New Config`
+    return $localize`:@@config_new_config_title:New Config`;
   }
 
   cancel(): void {
@@ -79,35 +82,41 @@ export class NewConfigComponent extends AdminContainerView implements AfterViewI
   }
 
   ngAfterViewInit(): void {
-    this.config = new Config('', '', '');
+    // Ensure config object is ready (already initialized in the constructor)
   }
 
   ok(): void {
-    if (this.config && this.newConfigForm.valid) {
-      this.config.description = this.descriptionControl.value;
-      this.config.id = this.idControl.value;
-      this.config.value = this.valueControl.value;
+    if (this.newConfigForm.valid) {
+      // Assign form values to the config object
+      this.config.description = this.descriptionControl.value ?? '';
+      this.config.id = this.idControl.value ?? '';
+      this.config.value = this.valueControl.value ?? '';
 
+      // Show spinner while saving config
       this.spinnerService.showSpinner();
 
       this.configService.saveConfig(this.config)
-      .pipe(first())
-      .subscribe(() => {
-        this.spinnerService.hideSpinner();
-
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()) // Ensure spinner is hidden after the
+        // operation
+      )
+      .subscribe({
+        next: () => {
+          // Navigate back on successful save
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
+          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+        },
+        error: (error: Error) => this.handleError(error)
       });
+    }
+  }
+
+  private handleError(error: Error): void {
+    // Centralized error handling
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error);
     }
   }
 }

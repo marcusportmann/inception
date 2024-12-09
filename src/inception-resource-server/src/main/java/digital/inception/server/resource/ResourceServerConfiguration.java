@@ -298,7 +298,8 @@ public class ResourceServerConfiguration implements InitializingBean {
                                 + "img-src 'self' data:; "
                                 + "frame-ancestors 'none'; "
                                 + "script-src 'self' 'unsafe-inline'; "
-                                + "style-src 'self' 'unsafe-inline';"))
+                                + "style-src 'self' 'unsafe-inline'; "
+                                + "font-src 'self' data:;"))
                 .httpStrictTransportSecurity(
                     hsts -> hsts.includeSubDomains(true).maxAgeInSeconds(31536000))
                 .referrerPolicy(referrerPolicy -> referrerPolicy.policy(ReferrerPolicy.NO_REFERRER))

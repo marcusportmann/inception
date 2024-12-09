@@ -27,25 +27,25 @@ import {DialogData} from '../services/dialog-data';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'warning-dialog',
   template: `
-      <div class="header">
-          <i class="fas fa-3x fa-exclamation-triangle"></i>
-      </div>
-      <div class="message-holder">
+    <div class="header">
+      <i class="fas fa-3x fa-exclamation-triangle"></i>
+    </div>
+    <div class="message-holder">
       <span class="message">
         {{ data.message }}
       </span>
-      </div>
-      <div class="button">
-          <button mat-flat-button color="warn" *ngIf="data.buttonText; else defaultButton"
-                  (click)="ok()"
-                  tabindex="-1">{{ data.buttonText }}
-          </button>
-          <ng-template #defaultButton>
-              <button mat-flat-button color="warn" (click)="ok()" tabindex="-1"
-                      i18n="@@warning_dialog_button_ok">OK
-              </button>
-          </ng-template>
-      </div>
+    </div>
+    <div class="button">
+      <button mat-flat-button color="warn" *ngIf="data.buttonText; else defaultButton"
+              (click)="ok()"
+              tabindex="-1">{{ data.buttonText }}
+      </button>
+      <ng-template #defaultButton>
+        <button mat-flat-button color="warn" (click)="ok()" tabindex="-1"
+                i18n="@@warning_dialog_button_ok">OK
+        </button>
+      </ng-template>
+    </div>
   `
 })
 export class WarningDialogComponent {

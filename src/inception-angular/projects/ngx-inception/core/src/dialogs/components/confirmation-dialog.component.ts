@@ -39,24 +39,24 @@ export interface ConfirmationDialogData {
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'confirmation-dialog',
   template: `
-      <div class="header">
-          <i class="far fa-3x fa-question-circle"></i>
-      </div>
-      <div class="message-holder">
+    <div class="header">
+      <i class="far fa-3x fa-question-circle"></i>
+    </div>
+    <div class="message-holder">
       <span class="message">
         {{ message }}
       </span>
-      </div>
-      <div class="button">
-          <button mat-flat-button color="primary" (click)="no()" tabindex="-1"
-                  i18n="@@confirmation_dialog_button_no">
-              No
-          </button>
-          <button mat-flat-button color="primary" (click)="yes()" tabindex="-1"
-                  i18n="@@confirmation_dialog_button_yes">
-              Yes
-          </button>
-      </div>
+    </div>
+    <div class="button">
+      <button mat-flat-button color="primary" (click)="no()" tabindex="-1"
+              i18n="@@confirmation_dialog_button_no">
+        No
+      </button>
+      <button mat-flat-button color="primary" (click)="yes()" tabindex="-1"
+              i18n="@@confirmation_dialog_button_yes">
+        Yes
+      </button>
+    </div>
   `
 })
 export class ConfirmationDialogComponent {

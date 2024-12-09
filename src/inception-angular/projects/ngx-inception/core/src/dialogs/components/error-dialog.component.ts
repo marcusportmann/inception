@@ -40,19 +40,19 @@ export interface ErrorDialogData {
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'error-dialog',
   template: `
-      <div class="header">
-          <i class="far fa-3x fa-times-circle"></i>
-      </div>
-      <div class="message-holder">
+    <div class="header">
+      <i class="far fa-3x fa-times-circle"></i>
+    </div>
+    <div class="message-holder">
       <span class="message">
         {{ message }}
       </span>
-      </div>
-      <div class="button">
-          <button mat-flat-button color="warn" (click)="ok()" tabindex="-1"
-                  i18n="@@error_dialog_button_ok">OK
-          </button>
-      </div>
+    </div>
+    <div class="button">
+      <button mat-flat-button color="warn" (click)="ok()" tabindex="-1"
+              i18n="@@error_dialog_button_ok">OK
+      </button>
+    </div>
   `
 })
 export class ErrorDialogComponent {
