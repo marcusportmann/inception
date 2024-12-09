@@ -74,7 +74,7 @@ export class ForgottenPasswordComponent {
 
       const resetPasswordUrl = window.location.href.substr(0,
           window.location.href.length - this.router.url.length) +
-        '/#/login/reset-password';
+        '/login/reset-password';
 
       this.spinnerService.showSpinner();
 
