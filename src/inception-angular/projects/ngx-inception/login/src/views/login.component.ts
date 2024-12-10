@@ -22,7 +22,7 @@ import {
   PasswordExpiredError, ServiceUnavailableError, Session, SessionService, SpinnerService
 } from 'ngx-inception/core';
 import {SecurityService, Tenant, Tenants} from 'ngx-inception/security';
-import {finalize, first, map} from 'rxjs/operators';
+import {catchError, finalize, first, map, Observable, throwError} from 'rxjs';
 
 /**
  * The LoginComponent class implements the login component.
@@ -30,59 +30,39 @@ import {finalize, first, map} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'login.component.html'
+  templateUrl: 'login.component.html',
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
 
   passwordControl: FormControl;
 
   usernameControl: FormControl;
 
-  /**
-   * Constructs a new LoginComponent.
-   *
-   * @param config          The Inception configuration.
-   * @param router          The router.
-   * @param activatedRoute  The activated route.
-   * @param dialogService   The dialog service.
-   * @param securityService The security service.
-   * @param sessionService  The session service.
-   * @param spinnerService  The spinner service.
-   */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router,
               private activatedRoute: ActivatedRoute, private dialogService: DialogService,
               private securityService: SecurityService, private sessionService: SessionService,
               private spinnerService: SpinnerService) {
-
     // Initialise the form controls
-    this.passwordControl = new FormControl(
-      !!this.config.prepopulatedLoginPassword ? this.config.prepopulatedLoginPassword : '',
+    this.passwordControl = new FormControl(this.config.prepopulatedLoginPassword || '',
       [Validators.required, Validators.maxLength(100)]);
-    this.usernameControl = new FormControl(
-      !!this.config.prepopulatedLoginUsername ? this.config.prepopulatedLoginUsername : '',
+    this.usernameControl = new FormControl(this.config.prepopulatedLoginUsername || '',
       [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.loginForm = new FormGroup({
       password: this.passwordControl,
-      username: this.usernameControl
+      username: this.usernameControl,
     });
   }
 
   applicationVersion(): string {
-    if ((!!this.config) && (!!this.config.applicationVersion)) {
-      return this.config.applicationVersion;
-    } else {
-      return "unknown";
-    }
+    return this.config.applicationVersion || 'unknown';
   }
 
   forgotPassword(): void {
-    this.router.navigate(['forgotten-password'], {
-      relativeTo: this.activatedRoute
-    });
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['forgotten-password'], {relativeTo: this.activatedRoute});
   }
 
   isForgottenPasswordEnabled(): boolean {
@@ -96,83 +76,16 @@ export class LoginComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.sessionService.login(username, password)
-      .pipe(first())
+      this.sessionService
+      .login(username, password)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
+        catchError((error) => this.handleError(error, username)))
       .subscribe((session: Session | null) => {
         if (session) {
-          if (session.hasRole('Administrator')) {
-            this.securityService.getTenants()
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe((tenants: Tenants) => {
-              if (tenants.total === 1) {
-                session.tenantId = tenants.tenants[0].id;
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['/']);
-              } else {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['select-tenant'], {
-                  relativeTo: this.activatedRoute,
-                  state: {tenants: tenants.tenants}
-                });
-              }
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-                (error instanceof ServiceUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-          } else {
-            this.securityService.getTenantsForUserDirectory(session.userDirectoryId)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe((tenants: Tenant[]) => {
-              if (tenants.length === 1) {
-                session.tenantId = tenants[0].id;
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['/']);
-              } else {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['select-tenant'], {
-                  relativeTo: this.activatedRoute,
-                  state: {tenants}
-                });
-              }
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-                (error instanceof ServiceUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-          }
+          this.handleSession(session);
         } else {
-          this.spinnerService.hideSpinner();
-
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
-        }
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else if (error instanceof PasswordExpiredError) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['expired-password'], {
-            relativeTo: this.activatedRoute,
-            state: {username}
-          });
-        } else {
-          this.dialogService.showErrorDialog(error);
         }
       });
     }
@@ -184,6 +97,51 @@ export class LoginComponent implements OnInit {
     .subscribe((state) => {
       if (state.username) {
         this.usernameControl.setValue(state.username);
+      }
+    });
+  }
+
+  private handleError(error: Error, username?: string): Observable<never> {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else if (error instanceof PasswordExpiredError && username) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate(['expired-password'], {
+        relativeTo: this.activatedRoute,
+        state: {username},
+      });
+    } else {
+      this.dialogService.showErrorDialog(error);
+    }
+    return throwError(() => error);
+  }
+
+  private handleSession(session: Session): void {
+    if (session.hasRole('Administrator')) {
+      this.loadTenants(this.securityService.getTenants(), session);
+    } else {
+      this.loadTenants(this.securityService.getTenantsForUserDirectory(session.userDirectoryId),
+        session);
+    }
+  }
+
+  private loadTenants(tenants$: Observable<Tenants | Tenant[]>, session: Session): void {
+    tenants$
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
+      catchError((error) => this.handleError(error)))
+    .subscribe((tenants) => {
+      const tenantArray = Array.isArray(tenants) ? tenants : tenants.tenants;
+      if (tenantArray.length === 1) {
+        session.tenantId = tenantArray[0].id;
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/']);
+      } else {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['select-tenant'], {
+          relativeTo: this.activatedRoute,
+          state: {tenants: tenantArray},
+        });
       }
     });
   }

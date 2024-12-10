@@ -23,7 +23,7 @@ import {
   ServiceUnavailableError, SpinnerService
 } from 'ngx-inception/core';
 import {SecurityService} from 'ngx-inception/security';
-import {finalize, first} from 'rxjs/operators';
+import {catchError, finalize, first, Observable, throwError} from 'rxjs';
 
 /**
  * The ResetPasswordComponent class implements the reset password component.
@@ -57,11 +57,11 @@ export class ResetPasswordComponent implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private dialogService: DialogService, private securityService: SecurityService,
               private spinnerService: SpinnerService) {
-
     // Initialise the form controls
-    this.confirmNewPasswordControl = new FormControl('',
-      [Validators.required, Validators.maxLength(100)]);
-    this.newPasswordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.confirmNewPasswordControl = new FormControl('', [
+      Validators.required, Validators.maxLength(100),]);
+    this.newPasswordControl = new FormControl('', [
+      Validators.required, Validators.maxLength(100),]);
     this.usernameControl = new FormControl({
       value: '',
       disabled: true
@@ -71,69 +71,68 @@ export class ResetPasswordComponent implements OnInit {
     this.resetPasswordForm = new FormGroup({
       confirmNewPassword: this.confirmNewPasswordControl,
       newPassword: this.newPasswordControl,
-      username: this.usernameControl
+      username: this.usernameControl,
     });
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {
-      relativeTo: this.activatedRoute
-    });
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams
-    .pipe(first())
-    .subscribe((params: Params) => {
+    this.activatedRoute.queryParams.pipe(first()).subscribe((params: Params) => {
       this.usernameControl.setValue(params['username']);
       this.securityCode = params['securityCode'];
     });
   }
 
   resetPassword(): void {
-    if (this.securityCode && this.resetPasswordForm.valid) {
-      const username = this.usernameControl.value;
-      const newPassword = this.newPasswordControl.value;
-      const confirmNewPassword = this.confirmNewPasswordControl.value;
+    if (!this.securityCode || !this.resetPasswordForm.valid) return;
 
-      // Check that the password and confirmation password match
-      if (newPassword !== confirmNewPassword) {
-        this.dialogService.showErrorDialog(new Error('The passwords do not match.'));
+    const username = this.usernameControl.value;
+    const newPassword = this.newPasswordControl.value;
+    const confirmNewPassword = this.confirmNewPasswordControl.value;
 
-        return;
-      }
-
-      this.spinnerService.showSpinner();
-
-      this.securityService.resetPassword(username, newPassword, this.securityCode)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-
-        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-          {
-            message: 'Your password was successfully changed.'
-          });
-
-        dialogRef.afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {
-            relativeTo: this.activatedRoute,
-            state: {username}
-          });
-        });
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    if (newPassword !== confirmNewPassword) {
+      this.dialogService.showErrorDialog(new Error('The passwords do not match.'));
+      return;
     }
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+    .resetPassword(username, newPassword, this.securityCode)
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
+      catchError((error) => this.handleError(error)))
+    .subscribe(() => this.showSuccessDialog(username));
+  }
+
+  private handleError(error: Error): Observable<never> {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error);
+    }
+    return throwError(() => error);
+  }
+
+  private showSuccessDialog(username: string): void {
+    const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+      {
+        message: 'Your password was successfully changed.',
+      });
+
+    dialogRef
+    .afterClosed()
+    .pipe(first())
+    .subscribe(() => {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate(['..'], {
+        relativeTo: this.activatedRoute,
+        state: {username}
+      });
+    });
   }
 }

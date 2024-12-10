@@ -23,7 +23,8 @@ import {
   ServiceUnavailableError, SpinnerService
 } from 'ngx-inception/core';
 import {SecurityService} from 'ngx-inception/security';
-import {finalize, first} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {catchError, finalize, first} from 'rxjs/operators';
 
 /**
  * The ForgottenPasswordComponent class implements the forgotten password component.
@@ -31,79 +32,72 @@ import {finalize, first} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'forgotten-password.component.html'
+  templateUrl: 'forgotten-password.component.html',
 })
 export class ForgottenPasswordComponent {
-
   forgottenPasswordForm: FormGroup;
 
   usernameControl: FormControl;
 
-  /**
-   * Constructs a new ForgottenPasswordComponent.
-   *
-   * @param router          The router.
-   * @param activatedRoute  The activated route.
-   * @param dialogService   The dialog service.
-   * @param securityService The security service.
-   * @param spinnerService  The spinner service.
-   */
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private dialogService: DialogService, private securityService: SecurityService,
               private spinnerService: SpinnerService) {
+    // Initialize the form controls
+    this.usernameControl = new FormControl('', [
+      Validators.required, Validators.maxLength(100),]);
 
-    // Initialise the form controls
-    this.usernameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-
-    // Initialise the form
+    // Initialize the form
     this.forgottenPasswordForm = new FormGroup({
       username: this.usernameControl,
     });
   }
 
   cancel(): void {
+    // Navigate back
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {
-      relativeTo: this.activatedRoute
-    });
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   resetPassword(): void {
     if (this.forgottenPasswordForm.valid) {
       const username = this.usernameControl.value;
 
-      const resetPasswordUrl = window.location.href.substr(0,
-          window.location.href.length - this.router.url.length) +
-        '/login/reset-password';
+      const resetPasswordUrl = window.location.origin + '/#/login/reset-password';
 
       this.spinnerService.showSpinner();
 
-      this.securityService.initiatePasswordReset(username, resetPasswordUrl)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-          {
-            message: 'The password reset process was initiated. Please check your email to proceed.'
-          });
-
-        dialogRef.afterClosed()
-        .pipe(first())
-        .subscribe((confirmation: boolean | undefined) => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {
-            relativeTo: this.activatedRoute
-          });
-        });
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.securityService
+      .initiatePasswordReset(username, resetPasswordUrl)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
+        catchError((error) => this.handleError(error)))
+      .subscribe(() => this.showSuccessDialog());
     }
+  }
+
+  private handleError(error: Error): Observable<never> {
+    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+      // Redirect to error report page
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    } else {
+      this.dialogService.showErrorDialog(error);
+    }
+    return throwError(() => error);
+  }
+
+  private showSuccessDialog(): void {
+    const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+      {
+        message: 'The password reset process was initiated. Please check your email to proceed.',
+      });
+
+    dialogRef
+    .afterClosed()
+    .pipe(first())
+    .subscribe(() => {
+      // Navigate back after dialog is closed
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    });
   }
 }
