@@ -34,6 +34,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -91,7 +92,7 @@ public interface IErrorApiController {
   @RequestMapping(
       value = "/error-reports",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void createErrorReport(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -147,7 +148,7 @@ public interface IErrorApiController {
   @RequestMapping(
       value = "/error-reports/{errorReportId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Error.ErrorReportAdministration') or hasAccessToFunction('Error.ViewErrorReport')")
   ErrorReport getErrorReport(
@@ -208,7 +209,7 @@ public interface IErrorApiController {
   @RequestMapping(
       value = "/error-report-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Error.ErrorReportAdministration') or hasAccessToFunction('Error.ViewErrorReport')")

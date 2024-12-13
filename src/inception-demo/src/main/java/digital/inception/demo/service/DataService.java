@@ -20,6 +20,8 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
 import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
+import digital.inception.demo.persistence.r2dbc.ReactiveDataRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 
 /**
  * The <b>DemoService</b> class provides the Demo Service implementation.
@@ -40,6 +43,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class DataService implements IDataService {
+
+  /** The Reactive Data Repository. */
+  private final ReactiveDataRepository reactiveDataRepository;
 
   /** The JSR-380 validator. */
   private final Validator validator;
@@ -52,9 +58,11 @@ public class DataService implements IDataService {
    * Constructs a new <b>DemoService</b>.
    *
    * @param validator the JSR-380 validator
+   * @param reactiveDataRepository the Reactive Data Repository
    */
-  public DataService(Validator validator) {
+  public DataService(Validator validator, ReactiveDataRepository reactiveDataRepository) {
     this.validator = validator;
+    this.reactiveDataRepository = reactiveDataRepository;
   }
 
   @Override
@@ -96,6 +104,11 @@ public class DataService implements IDataService {
   }
 
   @Override
+  public Flux<ReactiveData> getAllReactiveData() throws ServiceUnavailableException {
+    return reactiveDataRepository.findAll();
+  }
+
+  @Override
   @Transactional
   public Data getData(long id) throws ServiceUnavailableException {
     try {
@@ -106,8 +119,8 @@ public class DataService implements IDataService {
 
       List<Data> list = query.getResultList();
 
-      if (list.size() > 0) {
-        return list.get(0);
+      if (!list.isEmpty()) {
+        return list.getFirst();
       } else {
         return null;
       }

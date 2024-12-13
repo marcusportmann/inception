@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,19 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.flowable;
+// package digital.inception.flowable.flowable;
 //
-///**
-// * The <b>EventDbSchemaManager</b> class provides a no-op database schema manager for the Event Subscription
+/// **
+// * The <b>EventDbSchemaManager</b> class provides a no-op database schema manager for the Event
+// Subscription
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the
 // * <b>db/flowable-all.changelog.xml</b> Liquibase changelog on the classpath.
 // *
 // * @author Marcus Portmann
 // */
-//public class EventSubscriptionDbSchemaManager extends org.flowable.eventsubscription.service.impl.db.EventSubscriptionDbSchemaManager{
+// public class EventSubscriptionDbSchemaManager extends
+// org.flowable.eventsubscription.service.impl.db.EventSubscriptionDbSchemaManager{
 //
 //  @Override
 //  public void schemaCreate() {}
@@ -38,4 +40,4 @@
 //  @Override
 //  public void schemaCheckVersion() {}
 //
-//}
+// }

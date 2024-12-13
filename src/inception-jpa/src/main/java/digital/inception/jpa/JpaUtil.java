@@ -24,12 +24,17 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.sql.DataSource;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -198,6 +203,44 @@ public final class JpaUtil {
               + ")",
           e);
     }
+  }
+
+  /**
+   * Returns the names of the packages to scan for JPA entity classes.
+   *
+   * @param applicationContext the Spring application context
+   * @return the names of the packages to scan for JPA entity classes
+   */
+  public static List<String> packagesToScanForEntities(ApplicationContext applicationContext) {
+    List<String> packagesToScan = new ArrayList<>();
+
+    // Add the base packages specified using the EnableJpaRepositories annotation
+    Map<String, Object> annotatedBeans =
+        applicationContext.getBeansWithAnnotation(EnableJpaRepositories.class);
+
+    for (String beanName : annotatedBeans.keySet()) {
+      Class<?> beanClass = annotatedBeans.get(beanName).getClass();
+
+      EnableJpaRepositories enableJpaRepositories =
+          AnnotationUtils.findAnnotation(beanClass, EnableJpaRepositories.class);
+
+      if (enableJpaRepositories != null) {
+        for (String basePackage : enableJpaRepositories.basePackages()) {
+          if ((!basePackage.startsWith("digital.inception"))
+              || (basePackage.startsWith("digital.inception.demo"))) {
+            // Replace any existing packages to scan with the higher level package
+            packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
+
+            // Check if there is a higher level package already being scanned
+            if (packagesToScan.stream().noneMatch(basePackage::startsWith)) {
+              packagesToScan.add(basePackage);
+            }
+          }
+        }
+      }
+    }
+
+    return packagesToScan;
   }
 
   private static void linkOneToManyEntities(

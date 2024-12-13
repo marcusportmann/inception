@@ -33,8 +33,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "reportingEntityManagerFactory",
-    basePackages = {"digital.inception.reporting"})
+    basePackages = {"digital.inception.reporting"},
+    entityManagerFactoryRef = "reportingEntityManagerFactory")
 public class ReportingConfiguration {
 
   /** Constructs a new <b>ReportingConfiguration</b>. */

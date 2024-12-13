@@ -23,22 +23,25 @@ import digital.inception.core.jdbc.DataSourceConfiguration;
 import digital.inception.core.jdbc.DataSourceUtil;
 import digital.inception.jpa.JpaUtil;
 import digital.inception.json.DateTimeModule;
+import digital.inception.r2dbc.ConnectionFactoryConfiguration;
+import digital.inception.r2dbc.ConnectionFactoryUtil;
+import io.r2dbc.spi.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
-import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
+import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -49,12 +52,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.TaskScheduler;
@@ -89,21 +93,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SuppressWarnings("WeakerAccess")
 public class TestConfiguration {
 
-  private static final Object dataSourceLock = new Object();
+  private static final Object applicationDataSourceLock = new Object();
 
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(TestConfiguration.class);
 
-  private static DataSource dataSource;
+  private static DataSource applicationDataSource;
 
   /** The active Spring profiles. */
   private final String[] activeSpringProfiles;
 
   private final ApplicationContext applicationContext;
-
-  /** Execute the Liquibase changelogs using the data context. */
-  @Value("${inception.application.data-source.liquibase.apply-data-context:#{true}}")
-  private boolean liquibaseApplyDataContext;
 
   /**
    * The Liquibase changelog resources on the classpath used to initialize the application database.
@@ -122,6 +122,38 @@ public class TestConfiguration {
   }
 
   /**
+   * Initialize the in-memory application database and return the R2DBC connection factory that can
+   * be used to create reactive connections to the database.
+   *
+   * @return the R2DBC connection factory that can be used to create reactive connections to the
+   *     in-memory application database
+   */
+  @Bean("applicationConnectionFactory")
+  @DependsOn("applicationDataSource")
+  @Primary
+  public ConnectionFactory applicationConnectionFactory() {
+    try {
+      ConnectionFactoryConfiguration connectionFactoryConfiguration =
+          new ConnectionFactoryConfiguration(
+              "r2dbc:h2:mem:///"
+                  + Thread.currentThread().getName()
+                  + ";DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=VALUE",
+              "sa",
+              "",
+              1,
+              5,
+              Duration.ofMinutes(5));
+
+      return ConnectionFactoryUtil.initConnectionFactory(
+          applicationContext, connectionFactoryConfiguration);
+    } catch (Throwable e) {
+      throw new BeanCreationException(
+          "Failed to initialize the R2DBC application connection factory using the in-memory application database",
+          e);
+    }
+  }
+
+  /**
    * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
    *
@@ -130,82 +162,88 @@ public class TestConfiguration {
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  @Bean
+  @Bean("applicationDataSource")
   @Primary
-  @Qualifier("applicationDataSource")
   public DataSource applicationDataSource() {
-    synchronized (dataSourceLock) {
-      if (dataSource == null) {
-        try {
-          DataSourceConfiguration dataSourceConfiguration =
-              new DataSourceConfiguration(
-                  "org.h2.jdbcx.JdbcDataSource",
-                  "jdbc:h2:mem:"
-                      + Thread.currentThread().getName()
-                      + ";DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=KEY,VALUE",
-                  "sa",
-                  "",
-                  1,
-                  5,
-                  30);
+    try {
+      synchronized (applicationDataSourceLock) {
+        if (applicationDataSource == null) {
+          try {
+            DataSourceConfiguration dataSourceConfiguration =
+                new DataSourceConfiguration(
+                    "org.h2.jdbcx.JdbcDataSource",
+                    "jdbc:h2:mem:"
+                        + Thread.currentThread().getName()
+                        + ";DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=KEY,VALUE",
+                    "sa",
+                    "",
+                    1,
+                    5,
+                    30);
 
-          dataSource =
-              DataSourceUtil.initAgroalDataSource(applicationContext, dataSourceConfiguration);
+            applicationDataSource =
+                DataSourceUtil.initAgroalDataSource(applicationContext, dataSourceConfiguration);
 
-          // Initialize the in-memory database using Liquibase changeSets
-          try (Connection connection = dataSource.getConnection()) {
-            liquibase.database.Database database =
-                DatabaseFactory.getInstance()
-                    .findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            // Initialize the in-memory database using Liquibase changeSets
+            try (Connection connection = applicationDataSource.getConnection()) {
+              liquibase.database.Database database =
+                  DatabaseFactory.getInstance()
+                      .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
-            for (Resource changelogResource : liquibaseChangelogResources) {
-              if (!Objects.requireNonNull(changelogResource.getFilename())
-                  .toLowerCase()
-                  .endsWith("-data.changelog.xml")) {
-                String changelogFile = "db/" + changelogResource.getFilename();
+              for (Resource changelogResource : liquibaseChangelogResources) {
+                if (!Objects.requireNonNull(changelogResource.getFilename())
+                    .toLowerCase()
+                    .endsWith("-data.changelog.xml")) {
+                  String changelogFile = "db/" + changelogResource.getFilename();
 
-                log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
+                  log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
-                new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
-                    .addArgumentValue(
-                        "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
-                    .addArgumentValue("changeLogFile", changelogFile)
-                    .execute();
+                  new CommandScope("update")
+                      .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
+                      .addArgumentValue(
+                          "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                      .addArgumentValue("changeLogFile", changelogFile)
+                      .execute();
+                }
+              }
+
+              for (Resource changelogResource : liquibaseChangelogResources) {
+                if (Objects.requireNonNull(changelogResource.getFilename())
+                    .toLowerCase()
+                    .endsWith("-data.changelog.xml")) {
+                  String changelogFile = "db/" + changelogResource.getFilename();
+
+                  log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
+
+                  new CommandScope("update")
+                      .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
+                      .addArgumentValue(
+                          "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                      .addArgumentValue("changeLogFile", changelogFile)
+                      .execute();
+                }
+              }
+
+              DatabaseMetaData databaseMetaData = connection.getMetaData();
+
+              try (ResultSet catalogsResultSet = databaseMetaData.getCatalogs()) {
+                while (catalogsResultSet.next()) {
+                  String catalogName = catalogsResultSet.getString(1);
+                }
               }
             }
-
-            for (Resource changelogResource : liquibaseChangelogResources) {
-              if (Objects.requireNonNull(changelogResource.getFilename())
-                  .toLowerCase()
-                  .endsWith("-data.changelog.xml")) {
-                String changelogFile = "db/" + changelogResource.getFilename();
-
-                log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
-
-                new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
-                    .addArgumentValue(
-                        "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
-                    .addArgumentValue("changeLogFile", changelogFile)
-                    .execute();
-              }
-            }
-
-            DatabaseMetaData databaseMetaData = connection.getMetaData();
-
-            try (ResultSet catalogsResultSet = databaseMetaData.getCatalogs()) {
-              while (catalogsResultSet.next()) {
-                String catalogName = catalogsResultSet.getString(1);
-              }
-            }
+          } catch (Throwable e) {
+            throw new RuntimeException(
+                "Failed to initialize the in-memory application database", e);
           }
-        } catch (Throwable e) {
-          throw new RuntimeException("Failed to initialize the in-memory application database", e);
         }
-      }
 
-      return dataSource;
+        return applicationDataSource;
+      }
+    } catch (Throwable e) {
+      throw new BeanCreationException(
+          "Failed to initialize the application data source using the in-memory application database",
+          e);
     }
   }
 
@@ -217,16 +255,43 @@ public class TestConfiguration {
    * @param platformTransactionManager the platform transaction manager
    * @return the application entity manager factory bean associated with the application data source
    */
-  @Bean
+  @Bean("applicationEntityManagerFactory")
   @Primary
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory(
       @Qualifier("applicationDataSource") DataSource dataSource,
       PlatformTransactionManager platformTransactionManager) {
-    return JpaUtil.createEntityManager(
-        "application",
-        dataSource,
-        platformTransactionManager,
-        StringUtils.toStringArray(packagesToScanForEntities()));
+    List<String> packagesToScanForEntities = JpaUtil.packagesToScanForEntities(applicationContext);
+
+    log.info(
+        "Scanning the following packages for JPA entities: "
+            + StringUtils.collectionToDelimitedString(packagesToScanForEntities, ","));
+
+    try {
+      return JpaUtil.createEntityManager(
+          "application",
+          dataSource,
+          platformTransactionManager,
+          StringUtils.toStringArray(packagesToScanForEntities));
+    } catch (Throwable e) {
+      throw new BeanCreationException(
+          "Failed to initialize the application entity manager factory using the in-memory application database",
+          e);
+    }
+  }
+
+  /**
+   * The <b>R2dbcEntityOperations</b> instance enabling reactive R2DBC operations with the
+   * application database using entities.
+   *
+   * @param applicationConnectionFactory the R2DBC connection factory for the application database
+   * @return the <b>R2dbcEntityOperations</b> instance enabling reactive R2DBC operations with the
+   *     application database using entities
+   */
+  @Bean("applicationEntityOperations")
+  @Primary
+  public R2dbcEntityOperations applicationEntityOperations(
+      @Qualifier("applicationConnectionFactory") ConnectionFactory applicationConnectionFactory) {
+    return new R2dbcEntityTemplate(applicationConnectionFactory);
   }
 
   /**
@@ -304,46 +369,5 @@ public class TestConfiguration {
     jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
 
     return jackson2ObjectMapperBuilder;
-  }
-
-  /**
-   * Returns the names of the packages to scan for JPA entity classes.
-   *
-   * @return the names of the packages to scan for JPA entity classes
-   */
-  protected List<String> packagesToScanForEntities() {
-    List<String> packagesToScan = new ArrayList<>();
-
-    // Add the base packages specified using the EnableJpaRepositories annotation
-    Map<String, Object> annotatedBeans =
-        applicationContext.getBeansWithAnnotation(EnableJpaRepositories.class);
-
-    for (String beanName : annotatedBeans.keySet()) {
-      Class<?> beanClass = annotatedBeans.get(beanName).getClass();
-
-      EnableJpaRepositories enableJpaRepositories =
-          AnnotationUtils.findAnnotation(beanClass, EnableJpaRepositories.class);
-
-      if (enableJpaRepositories != null) {
-        for (String basePackage : enableJpaRepositories.basePackages()) {
-          if ((!basePackage.startsWith("digital.inception"))
-              || (basePackage.equals("digital.inception.demo"))) {
-            // Replace any existing packages to scan with the higher level package
-            packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
-
-            // Check if there is a higher level package already being scanned
-            if (packagesToScan.stream().noneMatch(basePackage::startsWith)) {
-              packagesToScan.add(basePackage);
-            }
-          }
-        }
-      }
-    }
-
-    log.info(
-        "Scanning the following packages for JPA entities: "
-            + StringUtils.collectionToDelimitedString(packagesToScan, ","));
-
-    return packagesToScan;
   }
 }

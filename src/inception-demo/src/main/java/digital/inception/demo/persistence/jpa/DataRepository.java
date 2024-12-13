@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.persistence;
+package digital.inception.demo.persistence.jpa;
 
-import digital.inception.demo.model.Vehicle;
-import java.util.UUID;
+import digital.inception.demo.model.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>VehicleRepository</b> interface declares the persistence for the <b>Vehicle</b> domain
- * type.
+ * The <b>DataRepository</b> interface declares the persistence for the <b>Data</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface VehicleRepository
-    extends JpaRepository<Vehicle, UUID>, JpaSpecificationExecutor<Vehicle> {}
+public interface DataRepository extends JpaRepository<Data, Long>, JpaSpecificationExecutor<Data> {}

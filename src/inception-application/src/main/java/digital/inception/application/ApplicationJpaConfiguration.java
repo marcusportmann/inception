@@ -17,19 +17,17 @@
 package digital.inception.application;
 
 import digital.inception.jpa.JpaUtil;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.StringUtils;
@@ -48,6 +46,7 @@ import org.springframework.util.StringUtils;
       "org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter",
       "org.springframework.transaction.PlatformTransactionManager"
     })
+@ConditionalOnBean(name = "applicationDataSource")
 public class ApplicationJpaConfiguration {
 
   /* Logger */
@@ -72,55 +71,21 @@ public class ApplicationJpaConfiguration {
    * @param platformTransactionManager the platform transaction manager
    * @return the application entity manager factory bean associated with the application data source
    */
-  @Bean
+  @Bean("applicationEntityManagerFactory")
   @Primary
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory(
-      DataSource applicationDataSource, PlatformTransactionManager platformTransactionManager) {
+      @Qualifier("applicationDataSource") DataSource applicationDataSource,
+      PlatformTransactionManager platformTransactionManager) {
+    List<String> packagesToScanForEntities = JpaUtil.packagesToScanForEntities(applicationContext);
+
+    log.info(
+        "Scanning the following packages for JPA entities: "
+            + StringUtils.collectionToDelimitedString(packagesToScanForEntities, ","));
+
     return JpaUtil.createEntityManager(
         "application",
         applicationDataSource,
         platformTransactionManager,
-        StringUtils.toStringArray(packagesToScanForEntities()));
-  }
-
-  /**
-   * Returns the names of the packages to scan for JPA entity classes.
-   *
-   * @return the names of the packages to scan for JPA entity classes
-   */
-  protected List<String> packagesToScanForEntities() {
-    List<String> packagesToScan = new ArrayList<>();
-
-    // Add the base packages specified using the EnableJpaRepositories annotation
-    Map<String, Object> annotatedBeans =
-        applicationContext.getBeansWithAnnotation(EnableJpaRepositories.class);
-
-    for (String beanName : annotatedBeans.keySet()) {
-      Class<?> beanClass = annotatedBeans.get(beanName).getClass();
-
-      EnableJpaRepositories enableJpaRepositories =
-          AnnotationUtils.findAnnotation(beanClass, EnableJpaRepositories.class);
-
-      if (enableJpaRepositories != null) {
-        for (String basePackage : enableJpaRepositories.basePackages()) {
-          if ((!basePackage.startsWith("digital.inception"))
-              || (basePackage.equals("digital.inception.demo"))) {
-            // Replace any existing packages to scan with the higher level package
-            packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
-
-            // Check if there is a higher level package already being scanned
-            if (packagesToScan.stream().noneMatch(basePackage::startsWith)) {
-              packagesToScan.add(basePackage);
-            }
-          }
-        }
-      }
-    }
-
-    log.info(
-        "Scanning the following packages for JPA entities: "
-            + StringUtils.collectionToDelimitedString(packagesToScan, ","));
-
-    return packagesToScan;
+        StringUtils.toStringArray(packagesToScanForEntities));
   }
 }

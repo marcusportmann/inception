@@ -33,8 +33,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "smsEntityManagerFactory",
-    basePackages = {"digital.inception.sms"})
+    basePackages = {"digital.inception.sms"},
+    entityManagerFactoryRef = "smsEntityManagerFactory")
 @EnableScheduling
 public class SMSConfiguration {
 

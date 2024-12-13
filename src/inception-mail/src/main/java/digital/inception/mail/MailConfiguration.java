@@ -32,8 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "mailEntityManagerFactory",
-    basePackages = {"digital.inception.mail"})
+    basePackages = {"digital.inception.mail"},
+    entityManagerFactoryRef = "mailEntityManagerFactory")
 public class MailConfiguration {
 
   /** Constructs a new <b>MailConfiguration</b>. */

@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.persistence;
+package digital.inception.demo.persistence.jpa;
+
+import digital.inception.demo.model.Car;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>DataRepository</b> interface declares the persistence for the <b>Data</b> domain type.
+ * The <b>CarRepository</b> interface declares the persistence for the <b>Car</b> domain type.
  *
  * @author Marcus Portmann
  */
-public class DataRepository {
-
-  /** Constructs a new <b>DataRepository</b>. */
-  public DataRepository() {}
-}
+public interface CarRepository extends JpaRepository<Car, UUID>, JpaSpecificationExecutor<Car> {}

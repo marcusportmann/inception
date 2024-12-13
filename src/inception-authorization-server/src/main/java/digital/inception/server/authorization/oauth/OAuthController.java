@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -97,7 +98,7 @@ public class OAuthController {
    * @param parameters the request parameter s
    * @return the token response
    */
-  @PostMapping(value = "/token", produces = "application/json")
+  @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> token(
       HttpServletRequest request, @RequestParam Map<String, String> parameters) {
     if (!tokensIssuedRateLimitBucket.tryConsume(1)) {

@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,50 +14,50 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.service;
+// package digital.inception.flowable.service;
 //
-//import digital.inception.core.service.InvalidArgumentException;
-//import digital.inception.core.service.ServiceUnavailableException;
-//import digital.inception.core.util.ResourceUtil;
-//import digital.inception.core.xml.XmlSchemaClasspathInputSource;
-//import digital.inception.flowable.model.InvalidBPMNException;
-//import digital.inception.flowable.model.ProcessDefinitionSummary;
-//import java.io.ByteArrayInputStream;
-//import java.nio.charset.StandardCharsets;
-//import java.util.ArrayList;
-//import java.util.List;
-//import javax.xml.XMLConstants;
-//import javax.xml.parsers.DocumentBuilder;
-//import javax.xml.parsers.DocumentBuilderFactory;
-//import javax.xml.transform.stream.StreamSource;
-//import javax.xml.validation.Schema;
-//import javax.xml.validation.SchemaFactory;
+// import digital.inception.core.service.InvalidArgumentException;
+// import digital.inception.core.service.ServiceUnavailableException;
+// import digital.inception.core.util.ResourceUtil;
+// import digital.inception.core.xml.XmlSchemaClasspathInputSource;
+// import digital.inception.flowable.model.InvalidBPMNException;
+// import digital.inception.flowable.model.ProcessDefinitionSummary;
+// import java.io.ByteArrayInputStream;
+// import java.nio.charset.StandardCharsets;
+// import java.util.ArrayList;
+// import java.util.List;
+// import javax.xml.XMLConstants;
+// import javax.xml.parsers.DocumentBuilder;
+// import javax.xml.parsers.DocumentBuilderFactory;
+// import javax.xml.transform.stream.StreamSource;
+// import javax.xml.validation.Schema;
+// import javax.xml.validation.SchemaFactory;
 //// import org.camunda.bpm.engine.ProcessEngine;
 //// import org.camunda.bpm.engine.persistence.Deployment;
 //// import org.camunda.bpm.engine.persistence.DeploymentBuilder;
 //// import org.camunda.bpm.engine.persistence.ProcessDefinition;
 //// import org.camunda.bpm.engine.persistence.ProcessDefinitionQuery;
 //// import org.camunda.bpm.engine.runtime.ProcessInstance;
-//import org.flowable.engine.ProcessEngine;
-//import org.springframework.stereotype.Service;
-//import org.springframework.util.StringUtils;
-//import org.w3c.dom.Document;
-//import org.w3c.dom.Element;
-//import org.w3c.dom.Node;
-//import org.w3c.dom.NodeList;
-//import org.xml.sax.ErrorHandler;
-//import org.xml.sax.InputSource;
-//import org.xml.sax.SAXException;
-//import org.xml.sax.SAXParseException;
+// import org.flowable.engine.ProcessEngine;
+// import org.springframework.stereotype.Service;
+// import org.springframework.util.StringUtils;
+// import org.w3c.dom.Document;
+// import org.w3c.dom.Element;
+// import org.w3c.dom.Node;
+// import org.w3c.dom.NodeList;
+// import org.xml.sax.ErrorHandler;
+// import org.xml.sax.InputSource;
+// import org.xml.sax.SAXException;
+// import org.xml.sax.SAXParseException;
 //
-///**
+/// **
 // * The <b>ProcessService</b> class provides the Process Service implementation.
 // *
 // * @author Marcus Portmann
 // */
-//@Service
-//@SuppressWarnings({"unused", "WeakerAccess"})
-//public class ProcessService implements IProcessService {
+// @Service
+// @SuppressWarnings({"unused", "WeakerAccess"})
+// public class ProcessService implements IProcessService {
 //
 //  /** The Flowable Process Engine. */
 //  private final ProcessEngine processEngine;
@@ -182,7 +182,8 @@
 //  //      return processDefinitionQuery.count() > 0;
 //  //    } catch (Throwable e) {
 //  //      throw new ServiceUnavailableException(
-//  //          "Failed to check whether the process definition (" + processDefinitionId + ") exists",
+//  //          "Failed to check whether the process definition (" + processDefinitionId + ")
+// exists",
 //  // e);
 //  //    }
 //  //  }
@@ -220,7 +221,8 @@
 //  //  @Override
 //  //  @Transactional
 //  //  public List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
-//  //      throws InvalidArgumentException, InvalidBPMNException, ProcessDefinitionNotFoundException,
+//  //      throws InvalidArgumentException, InvalidBPMNException,
+// ProcessDefinitionNotFoundException,
 //  //          ServiceUnavailableException {
 //  //    if ((processDefinitionData == null) || (processDefinitionData.length == 0)) {
 //  //      throw new InvalidArgumentException("processDefinitionData");
@@ -339,7 +341,8 @@
 //            }
 //          });
 //
-//      Document document = documentBuilder.parse(new InputSource(new ByteArrayInputStream(bpmnXml)));
+//      Document document = documentBuilder.parse(new InputSource(new
+// ByteArrayInputStream(bpmnXml)));
 //
 //      NodeList processElements =
 //          document
@@ -371,4 +374,4 @@
 //      throw new ServiceUnavailableException("Failed to validate the BPMN XML data", e);
 //    }
 //  }
-//}
+// }

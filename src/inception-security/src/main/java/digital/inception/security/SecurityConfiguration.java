@@ -32,8 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "securityEntityManagerFactory",
-    basePackages = {"digital.inception.security"})
+    basePackages = {"digital.inception.security"},
+    entityManagerFactoryRef = "securityEntityManagerFactory")
 public class SecurityConfiguration {
 
   /** Constructs a new <b>SecurityConfiguration</b>. */

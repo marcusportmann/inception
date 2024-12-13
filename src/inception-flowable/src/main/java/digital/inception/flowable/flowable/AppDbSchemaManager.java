@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,18 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.flowable;
+// package digital.inception.flowable.flowable;
 //
-///**
-// * The <b>AppDbSchemaManager</b> class provides a no-op database schema manager for the application
+/// **
+// * The <b>AppDbSchemaManager</b> class provides a no-op database schema manager for the
+// application
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the
 // * <b>db/flowable-all.changelog.xml</b> Liquibase changelog on the classpath.
 // *
 // * @author Marcus Portmann
 // */
-//public class AppDbSchemaManager extends org.flowable.app.engine.impl.db.AppDbSchemaManager {
+// public class AppDbSchemaManager extends org.flowable.app.engine.impl.db.AppDbSchemaManager {
 //
 //  @Override
 //  public void schemaCreate() {}
@@ -37,4 +38,4 @@
 //
 //  @Override
 //  public void schemaCheckVersion() {}
-//}
+// }

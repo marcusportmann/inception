@@ -42,6 +42,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -106,7 +107,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/batches/{batchId}/cancel",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -169,7 +170,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/tasks/{taskId}/cancel",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -224,7 +225,10 @@ public interface IExecutorApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/task-types", method = RequestMethod.POST, produces = "application/json")
+  @RequestMapping(
+      value = "/task-types",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
@@ -281,7 +285,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/tasks/{taskId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -336,7 +340,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/task-types/{taskTypeCode}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
@@ -392,7 +396,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/tasks/{taskId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -450,7 +454,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/tasks/{taskId}/task-events",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -504,7 +508,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/task-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -588,7 +592,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/task-types/{taskTypeCode}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
@@ -682,7 +686,10 @@ public interface IExecutorApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/task-types", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/task-types",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
@@ -731,7 +738,10 @@ public interface IExecutorApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/queue-task", method = RequestMethod.POST, produces = "application/json")
+  @RequestMapping(
+      value = "/queue-task",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -788,7 +798,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/batches/{batchId}/suspend",
       method = RequestMethod.PATCH,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -851,7 +861,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/tasks/{taskId}/suspend",
       method = RequestMethod.PATCH,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -909,7 +919,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/batches/{batchId}/unsuspend",
       method = RequestMethod.PATCH,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -972,7 +982,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/tasks/{taskId}/unsuspend",
       method = RequestMethod.PATCH,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
@@ -1031,7 +1041,7 @@ public interface IExecutorApiController {
   @RequestMapping(
       value = "/task-types/{taskTypeCode}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")

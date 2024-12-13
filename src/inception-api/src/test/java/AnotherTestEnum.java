@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * The <b>AnotherTestEnum</b> enumeration.
  *

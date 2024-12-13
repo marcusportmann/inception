@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,11 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.flowable;
+// package digital.inception.flowable.flowable;
 //
-//import org.flowable.eventregistry.impl.EventRegistryEngineConfiguration;
+// import org.flowable.eventregistry.impl.EventRegistryEngineConfiguration;
 //
-///**
+/// **
 // * The <b>EventDbSchemaManager</b> class provides a no-op database schema manager for the Event
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the
@@ -26,7 +26,8 @@
 // *
 // * @author Marcus Portmann
 // */
-//public class EventDbSchemaManager extends org.flowable.eventregistry.impl.db.EventDbSchemaManager {
+// public class EventDbSchemaManager extends org.flowable.eventregistry.impl.db.EventDbSchemaManager
+// {
 //
 //  @Override
 //  public void schemaCreate() {}
@@ -39,4 +40,4 @@
 //
 //  @Override
 //  public void schemaCheckVersion() {}
-//}
+// }

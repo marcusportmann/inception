@@ -29,6 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.OffsetDateTime;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +55,7 @@ public interface ITestApiController {
   @RequestMapping(
       value = "/test-api-call",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   void testApiCall() throws ServiceUnavailableException;
 
   /**
@@ -79,7 +80,7 @@ public interface ITestApiController {
   @RequestMapping(
       value = "/test-offset-date-time",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   OffsetDateTime testOffsetDateTime(
       @Parameter(name = "offsetDateTime", description = "The offset date time", required = true)
           @RequestParam("offsetDateTime")
@@ -121,7 +122,7 @@ public interface ITestApiController {
   @RequestMapping(
       value = "/test-pdp-authorization/{pathVariable}/{anotherPathVariable}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "authorize(T(digital.inception.demo.controller.TestApiPolicyDecisionPointContextProvider))")
@@ -162,7 +163,7 @@ public interface ITestApiController {
   @RequestMapping(
       value = "/test-returning-enum",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   CarType testReturningEnum() throws ServiceUnavailableException;
 
   /**
@@ -208,7 +209,7 @@ public interface ITestApiController {
   @RequestMapping(
       value = "/test-task-execution",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   void testTaskExecution(
       @Parameter(name = "slowTask", description = "Test the execution of a slow task") @RequestParam
           Boolean slowTask)

@@ -19,7 +19,9 @@ package digital.inception.demo.service;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
 import java.util.List;
+import reactor.core.publisher.Flux;
 
 /**
  * The <b>IDataService</b> interface defines the functionality that must be provided by a Data
@@ -52,6 +54,14 @@ public interface IDataService {
    * @throws ServiceUnavailableException if the data could not be retrieved
    */
   List<Data> getAllData() throws ServiceUnavailableException;
+
+  /**
+   * Returns all the reactive data.
+   *
+   * @return the reactive data
+   * @throws ServiceUnavailableException if the reactive data could not be retrieved
+   */
+  Flux<ReactiveData> getAllReactiveData() throws ServiceUnavailableException;
 
   /**
    * Returns the data.

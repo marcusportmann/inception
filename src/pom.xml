@@ -124,7 +124,6 @@
     <mssql-jdbc.version>12.8.1.jre11</mssql-jdbc.version>
     <narayana.version>7.1.0.Final</narayana.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
-    <opentelemetry-instrumentation-bom.version>2.10.0</opentelemetry-instrumentation-bom.version>
     <oracle-r2dbc.version>1.2.0</oracle-r2dbc.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.4</postgresql.version>
@@ -136,7 +135,7 @@
     <uuid-creator.version>6.0.0</uuid-creator.version>
     <wss4j-ws-security-common.version>3.0.4</wss4j-ws-security-common.version>
 
-    <node.version>v21.6.2</node.version>
+    <node.version>v21.7.3</node.version>
     <yarn.version>v1.22.22</yarn.version>
   </properties>
 
@@ -369,15 +368,6 @@
         <version>${spring-shell-starter.version}</version>
       </dependency>
 
-      <!-- BOM Dependencies -->
-      <dependency>
-        <groupId>io.opentelemetry.instrumentation</groupId>
-        <artifactId>opentelemetry-instrumentation-bom</artifactId>
-        <version>${opentelemetry-instrumentation-bom.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-
       <!-- Inception Dependencies -->
       <dependency>
         <groupId>digital.inception</groupId>
@@ -551,6 +541,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-r2dbc</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-reference</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -682,6 +677,7 @@
     <module>inception-party</module>
     <module>inception-party-api</module>
     <module>inception-party-ws</module>
+    <module>inception-r2dbc</module>
     <module>inception-resource-server</module>    
     <module>inception-reporting</module>
     <module>inception-reporting-api</module>

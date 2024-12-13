@@ -32,8 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "codesEntityManagerFactory",
-    basePackages = {"digital.inception.codes"})
+    basePackages = {"digital.inception.codes"},
+    entityManagerFactoryRef = "codesEntityManagerFactory")
 public class CodesConfiguration {
 
   /** Constructs a new <b>CodesConfiguration</b>. */

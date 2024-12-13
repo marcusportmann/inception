@@ -36,6 +36,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,7 +108,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -175,7 +176,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -233,7 +234,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -296,7 +297,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -356,7 +357,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -410,7 +411,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -462,7 +463,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -585,7 +586,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/last-modified",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -690,7 +691,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-category-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -809,7 +810,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -869,7 +870,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")
@@ -938,7 +939,7 @@ public interface ICodesApiController {
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Codes.CodeAdministration')")

@@ -34,8 +34,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "schedulerEntityManagerFactory",
-    basePackages = {"digital.inception.scheduler"})
+    basePackages = {"digital.inception.scheduler"},
+    entityManagerFactoryRef = "schedulerEntityManagerFactory")
 @EnableScheduling
 public class SchedulerConfiguration {
 

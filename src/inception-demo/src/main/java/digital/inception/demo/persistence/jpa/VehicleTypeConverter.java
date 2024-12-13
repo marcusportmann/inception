@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.persistence;
+package digital.inception.demo.persistence.jpa;
 
 import digital.inception.demo.model.VehicleType;
 import jakarta.persistence.AttributeConverter;

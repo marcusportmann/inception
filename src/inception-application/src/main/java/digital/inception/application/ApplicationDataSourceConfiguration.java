@@ -22,13 +22,12 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
-import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
+import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
@@ -67,10 +66,6 @@ public class ApplicationDataSourceConfiguration {
    */
   @Value("${inception.application.data-source.class-name:#{null}}")
   private String className;
-
-  /** Execute the Liquibase changelogs using the data context. */
-  @Value("${inception.application.data-source.liquibase.apply-data-context:#{true}}")
-  private boolean liquibaseApplyDataContext;
 
   /**
    * The Liquibase changelog resources on the classpath used to initialize the application database.
@@ -125,9 +120,8 @@ public class ApplicationDataSourceConfiguration {
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  @Bean
+  @Bean("applicationDataSource")
   @Primary
-  @Qualifier("applicationDataSource")
   public DataSource applicationDataSource() {
     log.info(
         "Initializing the application source with URL ("
@@ -192,7 +186,7 @@ public class ApplicationDataSourceConfiguration {
                 log.info("Applying Liquibase changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(
                         "labels",
                         activeSpringProfiles.length > 0
@@ -212,7 +206,7 @@ public class ApplicationDataSourceConfiguration {
                 log.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
 
                 new CommandScope("update")
-                    .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
+                    .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(
                         "labels",
                         activeSpringProfiles.length > 0

@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,38 +14,39 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.model;
+// package digital.inception.flowable.model;
 //
-//import com.fasterxml.jackson.annotation.JsonInclude;
-//import com.fasterxml.jackson.annotation.JsonProperty;
-//import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-//import io.swagger.v3.oas.annotations.media.Schema;
-//import jakarta.validation.constraints.NotNull;
-//import jakarta.validation.constraints.Size;
-//import jakarta.xml.bind.annotation.XmlAccessType;
-//import jakarta.xml.bind.annotation.XmlAccessorType;
-//import jakarta.xml.bind.annotation.XmlElement;
-//import jakarta.xml.bind.annotation.XmlRootElement;
-//import jakarta.xml.bind.annotation.XmlType;
-//import java.io.Serializable;
-//import java.util.Objects;
+// import com.fasterxml.jackson.annotation.JsonInclude;
+// import com.fasterxml.jackson.annotation.JsonProperty;
+// import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+// import io.swagger.v3.oas.annotations.media.Schema;
+// import jakarta.validation.constraints.NotNull;
+// import jakarta.validation.constraints.Size;
+// import jakarta.xml.bind.annotation.XmlAccessType;
+// import jakarta.xml.bind.annotation.XmlAccessorType;
+// import jakarta.xml.bind.annotation.XmlElement;
+// import jakarta.xml.bind.annotation.XmlRootElement;
+// import jakarta.xml.bind.annotation.XmlType;
+// import java.io.Serializable;
+// import java.util.Objects;
 //
-///**
+/// **
 // * The <b>ProcessInstanceSummary</b> class holds the summary information for a process§ instance.
 // *
 // * @author Marcus Portmann
 // */
-//@Schema(description = "A process instance summary")
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-//@JsonPropertyOrder({"id", "name", "version"})
-//@XmlRootElement(name = "ProcessInstanceSummary", namespace = "https://inception.digital/workflow")
-//@XmlType(
+// @Schema(description = "A process instance summary")
+// @JsonInclude(JsonInclude.Include.NON_NULL)
+// @JsonPropertyOrder({"id", "name", "version"})
+// @XmlRootElement(name = "ProcessInstanceSummary", namespace =
+// "https://inception.digital/workflow")
+// @XmlType(
 //    name = "ProcessInstanceSummary",
 //    namespace = "https://inception.digital/workflow",
 //    propOrder = {"id", "name", "version"})
-//@XmlAccessorType(XmlAccessType.FIELD)
-//@SuppressWarnings({"unused", "WeakerAccess"})
-//public class ProcessInstanceSummary implements Serializable {
+// @XmlAccessorType(XmlAccessType.FIELD)
+// @SuppressWarnings({"unused", "WeakerAccess"})
+// public class ProcessInstanceSummary implements Serializable {
 //
 //  private static final long serialVersionUID = 1000000;
 //
@@ -166,4 +167,4 @@
 //  public String toString() {
 //    return "ProcessDefinitionSummary {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
 //  }
-//}
+// }

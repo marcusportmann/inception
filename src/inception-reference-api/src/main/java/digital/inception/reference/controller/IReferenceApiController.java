@@ -36,6 +36,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -90,7 +91,10 @@ public interface IReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/countries", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/countries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Country> getCountries(
@@ -144,7 +148,10 @@ public interface IReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/languages", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/languages",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Language> getLanguages(
@@ -202,7 +209,7 @@ public interface IReferenceApiController {
   @RequestMapping(
       value = "/measurement-systems",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MeasurementSystem> getMeasurementSystems(
@@ -260,7 +267,7 @@ public interface IReferenceApiController {
   @RequestMapping(
       value = "/measurement-unit-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MeasurementUnitType> getMeasurementUnitTypes(
@@ -318,7 +325,7 @@ public interface IReferenceApiController {
   @RequestMapping(
       value = "/measurement-units",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MeasurementUnit> getMeasurementUnits(
@@ -373,7 +380,10 @@ public interface IReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/regions", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/regions",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Region> getRegions(
@@ -434,7 +444,10 @@ public interface IReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/time-zones", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/time-zones",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<TimeZone> getTimeZones(

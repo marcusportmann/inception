@@ -62,16 +62,6 @@ public abstract class Application {
   }
 
   /**
-   * Returns the Spring task executor to use for @Async method invocations.
-   *
-   * @return the Spring task executor to use for @Async method invocations
-   */
-  @Bean
-  protected Executor taskExecutor() {
-    return new SimpleAsyncTaskExecutor();
-  }
-
-  /**
    * Returns the Spring application context.
    *
    * @return the Spring application context
@@ -91,6 +81,16 @@ public abstract class Application {
     messageSource.setBasename("classpath*:messages");
 
     return messageSource;
+  }
+
+  /**
+   * Returns the Spring task executor to use for @Async method invocations.
+   *
+   * @return the Spring task executor to use for @Async method invocations
+   */
+  @Bean
+  protected Executor taskExecutor() {
+    return new SimpleAsyncTaskExecutor();
   }
 
   /**

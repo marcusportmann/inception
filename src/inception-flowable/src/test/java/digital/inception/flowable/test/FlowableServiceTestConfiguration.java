@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +14,23 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.test;
+// package digital.inception.flowable.test;
 //
-//import digital.inception.core.util.ServiceUtil;
-//import javax.sql.DataSource;
+// import digital.inception.core.util.ServiceUtil;
+// import javax.sql.DataSource;
 //// import org.camunda.bpm.engine.ProcessEngine;
 //// import org.camunda.bpm.engine.ProcessEngineConfiguration;
 //// import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-//import org.springframework.beans.factory.annotation.Qualifier;
-//import org.springframework.context.ApplicationContext;
-//import org.springframework.transaction.PlatformTransactionManager;
+// import org.springframework.beans.factory.annotation.Qualifier;
+// import org.springframework.context.ApplicationContext;
+// import org.springframework.transaction.PlatformTransactionManager;
 //
-///**
+/// **
 // * The <b>FlowableServiceTestConfiguration/code> class.
 // *
 // * @author Marcus Portmann
 // */
-//public class FlowableServiceTestConfiguration {
+// public class FlowableServiceTestConfiguration {
 //
 //  /** The Spring application context. */
 //  private final ApplicationContext applicationContext;
@@ -93,4 +93,4 @@
 //  //      throw new FatalBeanException("Failed to initialise the Flowable Process Engine", e);
 //  //    }
 //  //  }
-//}
+// }

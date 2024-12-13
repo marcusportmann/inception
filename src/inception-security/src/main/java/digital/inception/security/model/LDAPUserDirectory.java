@@ -92,6 +92,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   private final String groupNameAttribute;
 
+  private final String groupNamePrefixFilter;
+
   private final String groupObjectClass;
 
   private final String host;
@@ -104,8 +106,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   /** The maximum number of filtered users to return. */
   private final int maxFilteredUsers;
-
-  private final String groupNamePrefixFilter;
 
   private final int port;
 

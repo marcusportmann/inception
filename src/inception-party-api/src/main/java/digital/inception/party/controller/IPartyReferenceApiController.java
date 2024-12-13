@@ -81,6 +81,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -142,7 +143,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/association-property-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<AssociationPropertyType> getAssociationPropertyTypes(
@@ -211,7 +212,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/association-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<AssociationType> getAssociationTypes(
@@ -280,7 +281,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/attribute-type-categories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<AttributeTypeCategory> getAttributeTypeCategories(
@@ -348,7 +349,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/attribute-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<AttributeType> getAttributeTypes(
@@ -416,7 +417,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/consent-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ConsentType> getConsentTypes(
@@ -485,7 +486,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/contact-mechanism-purposes",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ContactMechanismPurpose> getContactMechanismPurposes(
@@ -554,7 +555,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/contact-mechanism-roles",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ContactMechanismRole> getContactMechanismRoles(
@@ -623,7 +624,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/contact-mechanism-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ContactMechanismType> getContactMechanismTypes(
@@ -692,7 +693,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/employment-statuses",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<EmploymentStatus> getEmploymentStatuses(
@@ -761,7 +762,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/employment-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<EmploymentType> getEmploymentTypes(
@@ -830,7 +831,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/external-reference-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ExternalReferenceType> getExternalReferenceTypes(
@@ -899,7 +900,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/fields-of-study",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<FieldOfStudy> getFieldsOfStudy(
@@ -964,7 +965,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/genders", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/genders",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Gender> getGenders(
@@ -1032,7 +1036,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/identification-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<IdentificationType> getIdentificationTypes(
@@ -1104,7 +1108,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/industry-classification-categories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<IndustryClassificationCategory> getIndustryClassificationCategories(
@@ -1175,7 +1179,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/industry-classification-systems",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<IndustryClassificationSystem> getIndustryClassificationSystems(
@@ -1244,7 +1248,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/industry-classifications",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<IndustryClassification> getIndustryClassifications(
@@ -1309,7 +1313,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/link-types", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/link-types",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<LinkType> getLinkTypes(
@@ -1377,7 +1384,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/lock-type-categories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<LockTypeCategory> getLockTypeCategories(
@@ -1442,7 +1449,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/lock-types", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/lock-types",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<LockType> getLockTypes(
@@ -1509,7 +1519,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/mandatary-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MandataryRole> getMandataryRoles(
@@ -1578,7 +1588,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/mandate-property-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MandatePropertyType> getMandatePropertyTypes(
@@ -1646,7 +1656,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/mandate-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MandateType> getMandateTypes(
@@ -1713,7 +1723,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/marital-statuses",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MaritalStatus> getMaritalStatuses(
@@ -1781,7 +1791,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/marriage-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<MarriageType> getMarriageTypes(
@@ -1849,7 +1859,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/next-of-kin-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<NextOfKinType> getNextOfKinTypes(
@@ -1914,7 +1924,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/occupations", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/occupations",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Occupation> getOccupations(
@@ -1983,7 +1996,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/physical-address-purposes",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
@@ -2052,7 +2065,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/physical-address-roles",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<PhysicalAddressRole> getPhysicalAddressRoles(
@@ -2121,7 +2134,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/physical-address-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<PhysicalAddressType> getPhysicalAddressTypes(
@@ -2191,7 +2204,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/preference-type-categories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<PreferenceTypeCategory> getPreferenceTypeCategories(
@@ -2260,7 +2273,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/preference-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<PreferenceType> getPreferenceTypes(
@@ -2329,7 +2342,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/qualification-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<QualificationType> getQualificationTypes(
@@ -2394,7 +2407,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/races", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/races",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Race> getRaces(
@@ -2462,7 +2478,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/residence-permit-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ResidencePermitType> getResidencePermitTypes(
@@ -2531,7 +2547,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/residency-statuses",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ResidencyStatus> getResidencyStatuses(
@@ -2600,7 +2616,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/residential-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<ResidentialType> getResidentialTypes(
@@ -2668,7 +2684,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/role-purposes",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<RolePurpose> getRolePurposes(
@@ -2734,7 +2750,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/role-type-attribute-type-constraints",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(
@@ -2787,7 +2803,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/role-type-preference-type-constraints",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
@@ -2838,7 +2854,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/role-types", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/role-types",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<RoleType> getRoleTypes(
@@ -2906,7 +2925,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/segmentation-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<SegmentationType> getSegmentationTypes(
@@ -2971,7 +2990,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/segments", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/segments",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Segment> getSegments(
@@ -3035,7 +3057,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/skill-types", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/skill-types",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<SkillType> getSkillTypes(
@@ -3103,7 +3128,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/source-of-funds-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<SourceOfFundsType> getSourceOfFundsTypes(
@@ -3172,7 +3197,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/source-of-wealth-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<SourceOfWealthType> getSourceOfWealthTypes(
@@ -3241,7 +3266,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/status-type-categories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<StatusTypeCategory> getStatusTypeCategories(
@@ -3309,7 +3334,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/status-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<StatusType> getStatusTypes(
@@ -3377,7 +3402,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/tax-number-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<TaxNumberType> getTaxNumberTypes(
@@ -3446,7 +3471,7 @@ public interface IPartyReferenceApiController {
   @RequestMapping(
       value = "/times-to-contact",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<TimeToContact> getTimesToContact(
@@ -3511,7 +3536,10 @@ public interface IPartyReferenceApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/titles", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/titles",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   List<Title> getTitles(

@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 /**
  * The <b>DemoConfiguration</b> class provides the configuration class for the demo application.
@@ -30,10 +31,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author Marcus Portmann
  */
 @Configuration
-@ComponentScan(basePackages = {"digital.inception"})
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationEntityManagerFactory",
-    basePackages = {"digital.inception.demo"})
+    basePackages = {"digital.inception.demo.model", "digital.inception.demo.persistence.jpa"},
+    entityManagerFactoryRef = "applicationEntityManagerFactory")
+@EnableR2dbcRepositories(
+    basePackages = {"digital.inception.demo.model", "digital.inception.demo.persistence.r2dbc"},
+    entityOperationsRef = "applicationEntityOperations")
 public class DemoConfiguration {
 
   /** Constructs a new <b>DemoConfiguration</b>. */

@@ -20,6 +20,7 @@ import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,11 +29,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import reactor.core.publisher.Flux;
 
 /**
  * The <b>IDataApiController</b> interface.
@@ -49,9 +52,27 @@ public interface IDataApiController {
    * @return the data
    * @throws ServiceUnavailableException if the data could not be retrieved
    */
-  @RequestMapping(value = "/all-data", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/all-data",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @PreAuthorize("isSecurityDisabled() or hasRole('Administrator')")
   List<Data> getAllData() throws ServiceUnavailableException;
+
+  /**
+   * Returns all the reactive data.
+   *
+   * @return the reactive data
+   * @throws ServiceUnavailableException if the reactive data could not be retrieved
+   */
+  @RequestMapping(
+      value = "/all-reactive-data",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_NDJSON_VALUE)
+  // @PreAuthorize("hasAccess('GetAllReactiveData') or isSecurityDisabled() or
+  // hasRole('Administrator')")
+  @PreAuthorize("isSecurityDisabled() or hasRole('Administrator')")
+  Flux<ReactiveData> getAllReactiveData() throws ServiceUnavailableException;
 
   /**
    * Retrieve the data.
@@ -59,7 +80,10 @@ public interface IDataApiController {
    * @return the data
    * @throws ServiceUnavailableException if the data could not be retrieved
    */
-  @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/data",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   Data getData() throws ServiceUnavailableException;
 
   /**
@@ -96,7 +120,10 @@ public interface IDataApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/process", method = RequestMethod.POST, produces = "application/json")
+  @RequestMapping(
+      value = "/process",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "authorize(T(digital.inception.demo.controller.DataApiPolicyDecisionPointContextProvider))")
@@ -142,7 +169,10 @@ public interface IDataApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
+  @RequestMapping(
+      value = "/validate",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void validate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(

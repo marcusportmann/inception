@@ -18,16 +18,14 @@ package digital.inception.flowable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.util.ServiceUtil;
-import digital.inception.jpa.JpaUtil;
 import digital.inception.flowable.flowable.FormEngineConfiguration;
 import digital.inception.flowable.flowable.FormEngineConfigurator;
+import digital.inception.jpa.JpaUtil;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import javax.sql.DataSource;
-import org.flowable.app.engine.AppEngineConfiguration;
 import org.flowable.common.engine.impl.AbstractEngineConfiguration;
-
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.ProcessEngineConfiguration;
 import org.springframework.beans.FatalBeanException;
@@ -46,9 +44,12 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "flowableEntityManagerFactory",
-    basePackages = {"digital.inception.flowable"})
+    basePackages = {"digital.inception.flowable"},
+    entityManagerFactoryRef = "flowableEntityManagerFactory")
 public class FlowableConfiguration {
+
+  /* The name of the App Engine instance. */
+  private final String appEngineName = ServiceUtil.getServiceInstanceName("AppEngine");
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -61,9 +62,6 @@ public class FlowableConfiguration {
 
   /* The name of the Process Engine instance. */
   private final String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
-
-  /* The name of the App Engine instance. */
-  private final String appEngineName = ServiceUtil.getServiceInstanceName("AppEngine");
 
   /** The Spring platform transaction manager. */
   private final PlatformTransactionManager transactionManager;
@@ -91,36 +89,20 @@ public class FlowableConfiguration {
     this.objectMapper = objectMapper;
   }
 
-  private String getDatabaseType(DataSource dataSource) {
-    try (Connection connection = dataSource.getConnection()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-
-      return switch (metaData.getDatabaseProductName()) {
-        case "H2" -> AbstractEngineConfiguration.DATABASE_TYPE_H2;
-        case "Microsoft SQL Server" -> AbstractEngineConfiguration.DATABASE_TYPE_MSSQL;
-        case "Oracle" -> AbstractEngineConfiguration.DATABASE_TYPE_ORACLE;
-        case "PostgreSQL" -> AbstractEngineConfiguration.DATABASE_TYPE_POSTGRES;
-        default -> throw new RuntimeException(
-            "Failed to set the database type using the unknown database product name ("
-                + metaData.getDatabaseProductName() + ")");
-      };
-    }
-    catch (Throwable e) {
-      throw new RuntimeException("Failed to determine the database type", e);
-    }
+  /**
+   * Returns the flowable entity manager factory bean associated with the application data source.
+   *
+   * @param dataSource the application data source
+   * @param platformTransactionManager the platform transaction manager
+   * @return the flowable entity manager factory bean associated with the application data source
+   */
+  @Bean
+  public LocalContainerEntityManagerFactoryBean flowableEntityManagerFactory(
+      @Qualifier("applicationDataSource") DataSource dataSource,
+      PlatformTransactionManager platformTransactionManager) {
+    return JpaUtil.createEntityManager(
+        "flowable", dataSource, platformTransactionManager, "digital.inception.flowable");
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
   /**
    * Returns the Flowable process engine.
@@ -214,19 +196,23 @@ public class FlowableConfiguration {
 //    return appEngineConfiguration;
 //  }
 
-  /**
-   * Returns the flowable entity manager factory bean associated with the application data source.
-   *
-   * @param dataSource the application data source
-   * @param platformTransactionManager the platform transaction manager
-   * @return the flowable entity manager factory bean associated with the application data source
-   */
-  @Bean
-  public LocalContainerEntityManagerFactoryBean flowableEntityManagerFactory(
-      @Qualifier("applicationDataSource") DataSource dataSource,
-      PlatformTransactionManager platformTransactionManager) {
-    return JpaUtil.createEntityManager(
-        "flowable", dataSource, platformTransactionManager, "digital.inception.flowable");
+  private String getDatabaseType(DataSource dataSource) {
+    try (Connection connection = dataSource.getConnection()) {
+      DatabaseMetaData metaData = connection.getMetaData();
+
+      return switch (metaData.getDatabaseProductName()) {
+        case "H2" -> AbstractEngineConfiguration.DATABASE_TYPE_H2;
+        case "Microsoft SQL Server" -> AbstractEngineConfiguration.DATABASE_TYPE_MSSQL;
+        case "Oracle" -> AbstractEngineConfiguration.DATABASE_TYPE_ORACLE;
+        case "PostgreSQL" -> AbstractEngineConfiguration.DATABASE_TYPE_POSTGRES;
+        default -> throw new RuntimeException(
+            "Failed to set the database type using the unknown database product name ("
+                + metaData.getDatabaseProductName() + ")");
+      };
+    }
+    catch (Throwable e) {
+      throw new RuntimeException("Failed to determine the database type", e);
+    }
   }
 
 //  /**

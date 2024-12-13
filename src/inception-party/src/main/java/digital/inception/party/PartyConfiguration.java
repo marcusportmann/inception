@@ -32,8 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "partyEntityManagerFactory",
-    basePackages = {"digital.inception.party"})
+    basePackages = {"digital.inception.party"},
+    entityManagerFactoryRef = "partyEntityManagerFactory")
 public class PartyConfiguration {
 
   /** Constructs a new <b>PartyConfiguration</b>. */

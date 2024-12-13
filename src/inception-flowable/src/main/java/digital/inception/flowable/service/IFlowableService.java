@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,22 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.service;
+// package digital.inception.flowable.service;
 //
-//import digital.inception.core.service.InvalidArgumentException;
-//import digital.inception.core.service.ServiceUnavailableException;
-//import digital.inception.flowable.model.InvalidBPMNException;
-//import digital.inception.flowable.model.ProcessDefinitionSummary;
-//import java.util.List;
+// import digital.inception.core.service.InvalidArgumentException;
+// import digital.inception.core.service.ServiceUnavailableException;
+// import digital.inception.flowable.model.InvalidBPMNException;
+// import digital.inception.flowable.model.ProcessDefinitionSummary;
+// import java.util.List;
 //
-///**
+/// **
 // * The <b>IFlowableService</b> interface defines the functionality provided by a Flowable Service
 // * implementation.
 // *
 // * @author Marcus Portmann
 // */
-//@SuppressWarnings("unused")
-//public interface IFlowableService {
+// @SuppressWarnings("unused")
+// public interface IFlowableService {
 //
 //  //  /**
 //  //   * Create the new process definition(s).
@@ -38,7 +38,8 @@
 //  //   * @return the process definition summaries for the BPMN processes defined by the BPMN XML
 //  // data
 //  //   * @throws InvalidArgumentException if an argument is invalid
-//  //   * @throws InvalidBPMNException if the BPMN XML data for the process definition(s) is invalid
+//  //   * @throws InvalidBPMNException if the BPMN XML data for the process definition(s) is
+// invalid
 //  //   * @throws DuplicateProcessDefinitionException if the process definition already exists
 //  //   * @throws ServiceUnavailableException if the process definition could not be created
 //  //   */
@@ -95,7 +96,8 @@
 //  //   * @param processDefinitionId the ID for the process definition
 //  //   * @return <b>true</b> if the process definition exists or <b>false</b> otherwise
 //  //   * @throws InvalidArgumentException if an argument is invalid
-//  //   * @throws ServiceUnavailableException if the check for the existing process definition failed
+//  //   * @throws ServiceUnavailableException if the check for the existing process definition
+// failed
 //  //   */
 //  //  boolean processDefinitionExists(String processDefinitionId)
 //  //      throws InvalidArgumentException, ServiceUnavailableException;
@@ -120,12 +122,14 @@
 //  //   * @return the process definition summaries for the BPMN processes defined by the BPMN XML
 //  // data
 //  //   * @throws InvalidArgumentException if an argument is invalid
-//  //   * @throws InvalidBPMNException if the BPMN XML data for the process definition(s) is invalid
+//  //   * @throws InvalidBPMNException if the BPMN XML data for the process definition(s) is
+// invalid
 //  //   * @throws ProcessDefinitionNotFoundException if the process definition could not be found
 //  //   * @throws ServiceUnavailableException if the process definition could not be updated
 //  //   */
 //  //  List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
-//  //      throws InvalidArgumentException, InvalidBPMNException, ProcessDefinitionNotFoundException,
+//  //      throws InvalidArgumentException, InvalidBPMNException,
+// ProcessDefinitionNotFoundException,
 //  //          ServiceUnavailableException;
 //
 //  /**
@@ -155,4 +159,4 @@
 //   */
 //  List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
 //      throws InvalidArgumentException, InvalidBPMNException, ServiceUnavailableException;
-//}
+// }

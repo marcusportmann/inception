@@ -18,7 +18,6 @@ package digital.inception.flowable.flowable;
 
 import org.flowable.common.engine.impl.db.SchemaManager;
 
-
 /**
  * The <b>FormSchemaManager</b> class.
  *
@@ -28,6 +27,16 @@ public class FormSchemaManager implements SchemaManager {
 
   /** Constructs a new <b>FormSchemaManager</b>. */
   public FormSchemaManager() {}
+
+  @Override
+  public String getContext() {
+    throw new RuntimeException("FormSchemaManager::getContext() NOT IMPLEMENTED");
+  }
+
+  @Override
+  public void schemaCheckVersion() {
+    throw new RuntimeException("FormSchemaManager::schemaCheckVersion() NOT IMPLEMENTED");
+  }
 
   @Override
   public void schemaCreate() {
@@ -47,15 +56,5 @@ public class FormSchemaManager implements SchemaManager {
   @Override
   public String schemaUpdate(String engineDbVersion) {
     return SchemaManager.super.schemaUpdate(engineDbVersion);
-  }
-
-  @Override
-  public void schemaCheckVersion() {
-    throw new RuntimeException("FormSchemaManager::schemaCheckVersion() NOT IMPLEMENTED");
-  }
-
-  @Override
-  public String getContext() {
-    throw new RuntimeException("FormSchemaManager::getContext() NOT IMPLEMENTED");
   }
 }

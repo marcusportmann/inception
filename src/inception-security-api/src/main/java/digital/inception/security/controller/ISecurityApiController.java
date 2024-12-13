@@ -84,6 +84,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -163,7 +164,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -246,7 +247,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -329,7 +330,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directories",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -399,7 +400,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}/password",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.UserAdministration') or hasAccessToFunction('Security.ResetUserPassword')")
@@ -500,7 +501,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/users/{username}/password",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void changePassword(
       @Parameter(name = "username", description = "The username for the user", required = true)
@@ -574,7 +575,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -639,7 +640,10 @@ public interface ISecurityApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/policies", method = RequestMethod.POST, produces = "application/json")
+  @RequestMapping(
+      value = "/policies",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.PolicyAdministration')")
@@ -698,7 +702,10 @@ public interface ISecurityApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/tenants", method = RequestMethod.POST, produces = "application/json")
+  @RequestMapping(
+      value = "/tenants",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -771,7 +778,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.UserAdministration')")
@@ -847,7 +854,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
@@ -915,7 +922,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -980,7 +987,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/policies/{policyId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.PolicyAdministration')")
@@ -1035,7 +1042,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -1090,7 +1097,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tokens/{tokenId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
@@ -1147,7 +1154,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.UserAdministration')")
@@ -1223,7 +1230,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
@@ -1278,7 +1285,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/generate-token",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
   Token generateToken(
@@ -1337,7 +1344,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -1402,7 +1409,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/group-names",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -1466,7 +1473,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}/group-names",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.UserAdministration')")
@@ -1535,7 +1542,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -1614,7 +1621,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -1666,7 +1673,10 @@ public interface ISecurityApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/policies", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/policies",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   List<Policy> getPolicies() throws ServiceUnavailableException;
 
@@ -1716,7 +1726,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/policies/{policyId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.PolicyAdministration')")
@@ -1828,7 +1838,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/policy-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.PolicyAdministration')")
@@ -1880,7 +1890,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/revoked-tokens",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   List<RevokedToken> getRevokedTokens() throws ServiceUnavailableException;
 
@@ -1935,7 +1945,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/role-codes",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -1980,7 +1990,10 @@ public interface ISecurityApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/roles",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -2037,7 +2050,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -2102,7 +2115,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -2208,7 +2221,10 @@ public interface ISecurityApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/tenants", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/tenants",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -2278,7 +2294,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/tenants",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -2337,7 +2353,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tokens/{tokenId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
@@ -2446,7 +2462,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/token-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
@@ -2505,7 +2521,10 @@ public interface ISecurityApiController {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(value = "/tokens", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(
+      value = "/tokens",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
@@ -2559,7 +2578,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   User getUser(
       @Parameter(
@@ -2619,7 +2638,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
@@ -2691,7 +2710,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directories",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.UserAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -2747,7 +2766,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
@@ -2808,7 +2827,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/capabilities",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration') or hasAccessToFunction('Security.UserAdministration') or hasAccessToFunction('Security.GroupAdministration') or hasAccessToFunction('Security.ResetUserPassword')")
@@ -2925,7 +2944,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directory-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
@@ -2997,7 +3016,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directory-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.ResetUserPassword') or hasAccessToFunction('Security.UserAdministration') or hasAccessToFunction('Security.UserGroups')")
@@ -3057,7 +3076,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/user-directory-type",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration') or hasAccessToFunction('Security.UserAdministration')")
@@ -3104,7 +3123,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directory-types",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
@@ -3230,7 +3249,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.UserAdministration') or hasAccessToFunction('Security.ResetUserPassword')")
@@ -3307,7 +3326,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tokens/{tokenId}/reinstate",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
@@ -3372,7 +3391,7 @@ public interface ISecurityApiController {
       value =
           "/user-directories/{userDirectoryId}/groups/{groupName}/members/{memberType}/{memberName}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -3451,7 +3470,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles/{roleCode}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -3525,7 +3544,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directories/{userDirectoryId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -3593,7 +3612,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/users/{username}/reset-password",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void resetPassword(
       @Parameter(name = "username", description = "The username for the user", required = true)
@@ -3649,7 +3668,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tokens/{tokenId}/revoke",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
@@ -3707,7 +3726,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration') or hasAccessToFunction('Security.GroupAdministration')")
@@ -3779,7 +3798,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/policies/{policyId}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.PolicyAdministration')")
@@ -3844,7 +3863,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/tenants/{tenantId}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
@@ -3909,7 +3928,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void updateUser(
       @Parameter(
@@ -3985,7 +4004,7 @@ public interface ISecurityApiController {
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")

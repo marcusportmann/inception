@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,18 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.model;
+// package digital.inception.flowable.model;
 //
-//import digital.inception.core.service.Problem;
-//import digital.inception.core.service.ServiceException;
-//import jakarta.xml.bind.annotation.XmlAccessType;
-//import jakarta.xml.bind.annotation.XmlAccessorType;
-//import jakarta.xml.ws.WebFault;
-//import java.io.Serial;
+// import digital.inception.core.service.Problem;
+// import digital.inception.core.service.ServiceException;
+// import jakarta.xml.bind.annotation.XmlAccessType;
+// import jakarta.xml.bind.annotation.XmlAccessorType;
+// import jakarta.xml.ws.WebFault;
+// import java.io.Serial;
 //
-///**
-// * The <b>DuplicateProcessDefinitionException</b> exception is thrown to indicate an error condition
+/// **
+// * The <b>DuplicateProcessDefinitionException</b> exception is thrown to indicate an error
+// condition
 // * as a result of an attempt to create a duplicate process definition, i.e. a process definition
 // * with the specified ID already exists.
 // *
@@ -32,17 +33,17 @@
 // *
 // * @author Marcus Portmann
 // */
-//@Problem(
+// @Problem(
 //    type = "https://inception.digital/problems/workflow/duplicate-process-definition",
 //    title = "A process definition with the specified ID already exists.",
 //    status = 409)
-//@WebFault(
+// @WebFault(
 //    name = "DuplicateProcessDefinitionException",
 //    targetNamespace = "https://inception.digital/workflow",
 //    faultBean = "digital.inception.core.service.ServiceError")
-//@XmlAccessorType(XmlAccessType.PROPERTY)
-//@SuppressWarnings("unused")
-//public class DuplicateProcessDefinitionException extends ServiceException {
+// @XmlAccessorType(XmlAccessType.PROPERTY)
+// @SuppressWarnings("unused")
+// public class DuplicateProcessDefinitionException extends ServiceException {
 //
 //  @Serial private static final long serialVersionUID = 1000000;
 //
@@ -54,4 +55,4 @@
 //  public DuplicateProcessDefinitionException(String processDefinitionId) {
 //    super("The process definition with ID (" + processDefinitionId + ") already exists");
 //  }
-//}
+// }

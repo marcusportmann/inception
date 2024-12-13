@@ -35,8 +35,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 @ComponentScan(basePackages = {"digital.inception.application.test"})
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationTestEntityManagerFactory",
-    basePackages = {"digital.inception.application.test"})
+    basePackages = {"digital.inception.application.test"},
+    entityManagerFactoryRef = "applicationTestEntityManagerFactory")
 public class ApplicationTestConfiguration {
 
   /** The Spring application context. */

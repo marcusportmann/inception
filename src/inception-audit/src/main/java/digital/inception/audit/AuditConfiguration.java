@@ -32,8 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "auditEntityManagerFactory",
-    basePackages = {"digital.inception.audit"})
+    basePackages = {"digital.inception.audit"},
+    entityManagerFactoryRef = "auditEntityManagerFactory")
 public class AuditConfiguration {
 
   /** Constructs a new <b>AuditConfiguration</b>. */

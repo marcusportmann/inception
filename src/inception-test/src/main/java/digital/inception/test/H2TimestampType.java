@@ -22,7 +22,7 @@ import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
 import liquibase.datatype.core.TimestampType;
-import liquibase.util.StringUtil;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>H2TimestampType</b> class overrides the default timestamp mapping for Liquibase when
@@ -49,7 +49,10 @@ public class H2TimestampType extends TimestampType {
 
   @Override
   public DatabaseDataType toDatabaseDataType(Database database) {
-    String originalDefinition = StringUtil.trimToEmpty(getRawDefinition());
+    String originalDefinition =
+        StringUtils.hasText(getRawDefinition())
+            ? StringUtils.trimAllWhitespace(getRawDefinition())
+            : "";
 
     if (database instanceof H2Database) {
       if ("timestamp with time zone".equalsIgnoreCase(originalDefinition)) {

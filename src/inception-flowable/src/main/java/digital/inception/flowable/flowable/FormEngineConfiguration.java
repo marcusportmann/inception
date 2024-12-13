@@ -38,11 +38,11 @@ public class FormEngineConfiguration extends AbstractEngineConfiguration
 
   private final String formEngineName = AppEngines.NAME_DEFAULT;
 
-  private final digital.inception.flowable.flowable.FormService formService;
+  private final digital.inception.flowable.flowable.FormManagementService formManagementService;
 
   private final digital.inception.flowable.flowable.FormRepositoryService formRepositoryService;
 
-  private final digital.inception.flowable.flowable.FormManagementService formManagementService;
+  private final digital.inception.flowable.flowable.FormService formService;
 
   private AppEngines FormEngines;
 
@@ -51,11 +51,6 @@ public class FormEngineConfiguration extends AbstractEngineConfiguration
     this.formManagementService = new digital.inception.flowable.flowable.FormManagementService();
     this.formRepositoryService = new digital.inception.flowable.flowable.FormRepositoryService();
     this.formService = new digital.inception.flowable.flowable.FormService();
-  }
-
-  @Override
-  protected SchemaManager createEngineSchemaManager() {
-    return null;
   }
 
   @Override
@@ -95,6 +90,11 @@ public class FormEngineConfiguration extends AbstractEngineConfiguration
 
   @Override
   public InputStream getMyBatisXmlConfigurationStream() {
+    return null;
+  }
+
+  @Override
+  protected SchemaManager createEngineSchemaManager() {
     return null;
   }
 

@@ -47,7 +47,6 @@ public class FormDeployer implements EngineDeployer {
 
       for (EngineResource resource : deploymentEntity.getResources().values()) {
 
-
         if (isFormResource(resource.getName())) {
           log.debug("Processing form resource {}", resource.getName());
 

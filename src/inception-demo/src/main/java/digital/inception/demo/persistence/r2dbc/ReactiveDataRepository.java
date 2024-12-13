@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.persistence;
+package digital.inception.demo.persistence.r2dbc;
 
-import digital.inception.demo.model.Car;
-import java.util.UUID;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import digital.inception.demo.model.ReactiveData;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
 
 /**
- * The <b>CarRepository</b> interface declares the persistence for the <b>Car</b> domain type.
+ * The <b>ReactiveDataRepository</b> interface declares the R2DBC persistence for the
+ * <b>ReactiveData</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface CarRepository extends JpaRepository<Car, UUID>, JpaSpecificationExecutor<Car> {}
+public interface ReactiveDataRepository extends R2dbcRepository<ReactiveData, Long> {}

@@ -32,8 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "executorEntityManagerFactory",
-    basePackages = {"digital.inception.executor"})
+    basePackages = {"digital.inception.executor"},
+    entityManagerFactoryRef = "executorEntityManagerFactory")
 public class ExecutorConfiguration {
 
   /** Constructs a new <b>ExecutorConfiguration</b>. */

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
-//import digital.inception.flowable.service.IProcessService;
+// import digital.inception.flowable.service.IProcessService;
 import jakarta.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
@@ -94,8 +94,8 @@ public class ProcessServiceTest {
   /** The Flowable Process Engine. */
   @Autowired private ProcessEngine processEngine;
 
-//  /** The Process Service. */
-//  @Autowired private IProcessService processService;
+  //  /** The Process Service. */
+  //  @Autowired private IProcessService processService;
 
   // @Test
   @Transactional
@@ -152,7 +152,7 @@ public class ProcessServiceTest {
 
   @Test
   @Disabled
-  //@Transactional
+  // @Transactional
   public void flowableTest() throws Exception {
 
     byte[] deploymentData =
@@ -182,140 +182,135 @@ public class ProcessServiceTest {
           return "";
         });
 
+    ProcessDefinitionQuery processDefinitionQuery =
+        processEngine.getRepositoryService().createProcessDefinitionQuery();
+    processDefinitionQuery.processDefinitionKey("embeddedTestClaimProcess");
 
-      ProcessDefinitionQuery processDefinitionQuery =
-          processEngine.getRepositoryService().createProcessDefinitionQuery();
-      processDefinitionQuery.processDefinitionKey("embeddedTestClaimProcess");
+    long processDefinitionCount = processDefinitionQuery.count();
 
-      long processDefinitionCount = processDefinitionQuery.count();
+    List<ProcessDefinition> processDefinitions = processDefinitionQuery.list();
 
-      List<ProcessDefinition> processDefinitions = processDefinitionQuery.list();
+    assertEquals(1, processDefinitions.size());
 
-      assertEquals(1, processDefinitions.size());
+    ProcessDefinition processDefinition = processDefinitions.get(0);
 
-      ProcessDefinition processDefinition = processDefinitions.get(0);
+    String processDefinitionDeploymentId = processDefinition.getDeploymentId();
 
-      String processDefinitionDeploymentId = processDefinition.getDeploymentId();
+    String startFormKey = processEngine.getFormService().getStartFormKey(processDefinition.getId());
 
-      String startFormKey = processEngine.getFormService().getStartFormKey(processDefinition.getId());
-
-
-
-
-      if (processDefinition.hasStartFormKey()) {
-        ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceWithForm(processDefinition.getId(), null, null, null);
-
-        int xxx = 0;
-        xxx++;
-
-
-
-      }
-
-
-    Map<String, Object> parameters = new HashMap<>();
-
-    if (true)
-      return;
-
+    if (processDefinition.hasStartFormKey()) {
       ProcessInstance processInstance =
-          processEngine.getRuntimeService().startProcessInstanceByKey("embeddedTestProcess", parameters);
-
-      //    FormInfo startFormInfo =
-      //        processEngine
-      //            .getRuntimeService()
-      //            .getStartFormModel(processDefinitions.get(0).getId(), processInstance.getId());
-
-      /*
-       * The start event for the test process is asynchronous. This allows us to retrieve and handle
-       * the start form. After this is done, we need to trigger the execution of the process by
-       * executing the associated job.
-       */
-      JobQuery jobQuery =
           processEngine
-              .getManagementService()
-              .createJobQuery()
-              .processInstanceId(processInstance.getId());
-
-      List<Job> jobs = jobQuery.list();
-
-      assertEquals(
-          1, jobs.size(), "Failed to find the job to asynchronously start the process instance");
-      for (Job job : jobs) {
-        processEngine.getManagementService().executeJob(job.getId());
-      }
-
-      // Retrieve the list of running process instances
-      ProcessInstanceQuery processInstanceQuery =
-          processEngine.getRuntimeService().createProcessInstanceQuery();
-      processInstanceQuery.processDefinitionKey("testProcess");
-
-      List<ProcessInstance> processInstances = processInstanceQuery.list();
-
-      assertEquals(1, processInstances.size(), "Failed to find the running process instance");
-
-      // Retrieve the tasks
-      TaskQuery taskQuery =
-          processEngine
-              .getTaskService()
-              .createTaskQuery()
-              .processInstanceId(processInstances.get(0).getId());
-
-      List<Task> tasks = taskQuery.list();
-
-      assertEquals(1, tasks.size(), "Failed to find the task for the Administrators group");
-      ////
-      ////    String taskId = tasks.get(0).getId();
-      ////
-      ////    TaskFormData taskFormData = processEngine.getFormService().getTaskFormData(taskId);
-      ////
-      ////    processEngine.getTaskService().claim(taskId, "jack");
-      ////
-      ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
-      ////
-      ////    assertEquals(1, tasks.size(), "Failed to find the task");
-      ////    assertEquals(
-      ////        "jack",
-      ////        tasks.get(0).getAssignee(),
-      ////        "Failed to confirm that the task has been claimed by jack");
-      ////
-      ////    processEngine.getTaskService().delegateTask(tasks.get(0).getId(), "jill");
-      ////
-      ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
-      ////
-      ////    assertEquals(1, tasks.size(), "Failed to find the task");
-      ////    assertEquals(
-      ////        "jill",
-      ////        tasks.get(0).getAssignee(),
-      ////        "Failed to confirm that the task has been assigned to jill");
-      ////
-      ////    processEngine.getTaskService().resolveTask(tasks.get(0).getId());
-      ////
-      ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
-      ////
-      ////    assertEquals(1, tasks.size(), "Failed to find the task");
-      ////    assertEquals(
-      ////        "jack",
-      ////        tasks.get(0).getAssignee(),
-      ////        "Failed to confirm that the resolved task has been re-assigned to jack");
-      ////
-      ////    processEngine.getTaskService().setOwner(tasks.get(0).getId(), "jill");
-      ////
-      ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
-      ////
-      ////    assertEquals(1, tasks.size(), "Failed to find the task");
-      ////    assertEquals(
-      ////        "jill",
-      ////        tasks.get(0).getOwner(),
-      ////        "Failed to confirm that the task owner has been changed to to jill");
-      ////
-      ////    processEngine.getTaskService().complete(taskId);
-      ////
-      ////    processService.deleteProcessDefinition("Inception.Test");
+              .getRuntimeService()
+              .startProcessInstanceWithForm(processDefinition.getId(), null, null, null);
 
       int xxx = 0;
       xxx++;
+    }
 
+    Map<String, Object> parameters = new HashMap<>();
+
+    if (true) return;
+
+    ProcessInstance processInstance =
+        processEngine
+            .getRuntimeService()
+            .startProcessInstanceByKey("embeddedTestProcess", parameters);
+
+    //    FormInfo startFormInfo =
+    //        processEngine
+    //            .getRuntimeService()
+    //            .getStartFormModel(processDefinitions.get(0).getId(), processInstance.getId());
+
+    /*
+     * The start event for the test process is asynchronous. This allows us to retrieve and handle
+     * the start form. After this is done, we need to trigger the execution of the process by
+     * executing the associated job.
+     */
+    JobQuery jobQuery =
+        processEngine
+            .getManagementService()
+            .createJobQuery()
+            .processInstanceId(processInstance.getId());
+
+    List<Job> jobs = jobQuery.list();
+
+    assertEquals(
+        1, jobs.size(), "Failed to find the job to asynchronously start the process instance");
+    for (Job job : jobs) {
+      processEngine.getManagementService().executeJob(job.getId());
+    }
+
+    // Retrieve the list of running process instances
+    ProcessInstanceQuery processInstanceQuery =
+        processEngine.getRuntimeService().createProcessInstanceQuery();
+    processInstanceQuery.processDefinitionKey("testProcess");
+
+    List<ProcessInstance> processInstances = processInstanceQuery.list();
+
+    assertEquals(1, processInstances.size(), "Failed to find the running process instance");
+
+    // Retrieve the tasks
+    TaskQuery taskQuery =
+        processEngine
+            .getTaskService()
+            .createTaskQuery()
+            .processInstanceId(processInstances.get(0).getId());
+
+    List<Task> tasks = taskQuery.list();
+
+    assertEquals(1, tasks.size(), "Failed to find the task for the Administrators group");
+    ////
+    ////    String taskId = tasks.get(0).getId();
+    ////
+    ////    TaskFormData taskFormData = processEngine.getFormService().getTaskFormData(taskId);
+    ////
+    ////    processEngine.getTaskService().claim(taskId, "jack");
+    ////
+    ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
+    ////
+    ////    assertEquals(1, tasks.size(), "Failed to find the task");
+    ////    assertEquals(
+    ////        "jack",
+    ////        tasks.get(0).getAssignee(),
+    ////        "Failed to confirm that the task has been claimed by jack");
+    ////
+    ////    processEngine.getTaskService().delegateTask(tasks.get(0).getId(), "jill");
+    ////
+    ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
+    ////
+    ////    assertEquals(1, tasks.size(), "Failed to find the task");
+    ////    assertEquals(
+    ////        "jill",
+    ////        tasks.get(0).getAssignee(),
+    ////        "Failed to confirm that the task has been assigned to jill");
+    ////
+    ////    processEngine.getTaskService().resolveTask(tasks.get(0).getId());
+    ////
+    ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
+    ////
+    ////    assertEquals(1, tasks.size(), "Failed to find the task");
+    ////    assertEquals(
+    ////        "jack",
+    ////        tasks.get(0).getAssignee(),
+    ////        "Failed to confirm that the resolved task has been re-assigned to jack");
+    ////
+    ////    processEngine.getTaskService().setOwner(tasks.get(0).getId(), "jill");
+    ////
+    ////    tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
+    ////
+    ////    assertEquals(1, tasks.size(), "Failed to find the task");
+    ////    assertEquals(
+    ////        "jill",
+    ////        tasks.get(0).getOwner(),
+    ////        "Failed to confirm that the task owner has been changed to to jill");
+    ////
+    ////    processEngine.getTaskService().complete(taskId);
+    ////
+    ////    processService.deleteProcessDefinition("Inception.Test");
+
+    int xxx = 0;
+    xxx++;
   }
 
   //  /** Test the process definition functionality. */

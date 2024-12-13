@@ -33,8 +33,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "referenceEntityManagerFactory",
-    basePackages = {"digital.inception.reference"})
+    basePackages = {"digital.inception.reference"},
+    entityManagerFactoryRef = "referenceEntityManagerFactory")
 public class ReferenceConfiguration {
 
   /** Constructs a new <b>ReferenceConfiguration</b>. */

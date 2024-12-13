@@ -37,53 +37,15 @@ public class FormRepositoryService implements org.flowable.form.api.FormReposito
   public FormRepositoryService() {}
 
   @Override
+  public void changeDeploymentParentDeploymentId(
+      String deploymentId, String newParentDeploymentId) {
+    throw new RuntimeException(
+        "FormRepositoryService::changeDeploymentParentDeploymentId(String deploymentId, String newParentDeploymentId) NOT IMPLEMENTED");
+  }
+
+  @Override
   public FormDeploymentBuilder createDeployment() {
     throw new RuntimeException("FormRepositoryService::createDeployment() NOT IMPLEMENTED");
-  }
-
-  @Override
-  public void deleteDeployment(String deploymentId) {
-    throw new RuntimeException("FormRepositoryService::deleteDeployment(String deploymentId) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public void deleteDeployment(String deploymentId, boolean cascade) {
-    throw new RuntimeException("FormRepositoryService::deleteDeployment(String deploymentId, boolean cascade) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public FormDefinitionQuery createFormDefinitionQuery() {
-    throw new RuntimeException("FormRepositoryService::createFormDefinitionQuery() NOT IMPLEMENTED");
-  }
-
-  @Override
-  public NativeFormDefinitionQuery createNativeFormDefinitionQuery() {
-    throw new RuntimeException("FormRepositoryService::createNativeFormDefinitionQuery() NOT IMPLEMENTED");
-  }
-
-  @Override
-  public void setDeploymentCategory(String deploymentId, String category) {
-    throw new RuntimeException("FormRepositoryService::setDeploymentCategory(String deploymentId, String category) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public void setDeploymentTenantId(String deploymentId, String newTenantId) {
-    throw new RuntimeException("FormRepositoryService::setDeploymentTenantId(String deploymentId, String newTenantId) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public void changeDeploymentParentDeploymentId(String deploymentId, String newParentDeploymentId) {
-    throw new RuntimeException("FormRepositoryService::changeDeploymentParentDeploymentId(String deploymentId, String newParentDeploymentId) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public List<String> getDeploymentResourceNames(String deploymentId) {
-    throw new RuntimeException("FormRepositoryService::getDeploymentResourceNames(String deploymentId) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public InputStream getResourceAsStream(String deploymentId, String resourceName) {
-    throw new RuntimeException("FormRepositoryService::getResourceAsStream(String deploymentId, String resourceName) NOT IMPLEMENTED");
   }
 
   @Override
@@ -92,47 +54,110 @@ public class FormRepositoryService implements org.flowable.form.api.FormReposito
   }
 
   @Override
+  public FormDefinitionQuery createFormDefinitionQuery() {
+    throw new RuntimeException(
+        "FormRepositoryService::createFormDefinitionQuery() NOT IMPLEMENTED");
+  }
+
+  @Override
   public NativeFormDeploymentQuery createNativeDeploymentQuery() {
-    throw new RuntimeException("FormRepositoryService::createNativeDeploymentQuery() NOT IMPLEMENTED");
+    throw new RuntimeException(
+        "FormRepositoryService::createNativeDeploymentQuery() NOT IMPLEMENTED");
+  }
+
+  @Override
+  public NativeFormDefinitionQuery createNativeFormDefinitionQuery() {
+    throw new RuntimeException(
+        "FormRepositoryService::createNativeFormDefinitionQuery() NOT IMPLEMENTED");
+  }
+
+  @Override
+  public void deleteDeployment(String deploymentId) {
+    throw new RuntimeException(
+        "FormRepositoryService::deleteDeployment(String deploymentId) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public void deleteDeployment(String deploymentId, boolean cascade) {
+    throw new RuntimeException(
+        "FormRepositoryService::deleteDeployment(String deploymentId, boolean cascade) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public List<String> getDeploymentResourceNames(String deploymentId) {
+    throw new RuntimeException(
+        "FormRepositoryService::getDeploymentResourceNames(String deploymentId) NOT IMPLEMENTED");
   }
 
   @Override
   public FormDefinition getFormDefinition(String formDefinitionId) {
-    throw new RuntimeException("FormRepositoryService::getFormDefinition(String formDefinitionId) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public FormInfo getFormModelById(String formDefinitionId) {
-    throw new RuntimeException("FormRepositoryService::getFormModelById(String formDefinitionId) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public FormInfo getFormModelByKey(String formDefinitionKey) {
-    throw new RuntimeException("FormRepositoryService::getFormModelByKey(String formDefinitionKey) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public FormInfo getFormModelByKey(String formDefinitionKey, String tenantId, boolean fallbackToDefaultTenant) {
-    throw new RuntimeException("FormRepositoryService::getFormModelByKey(String formDefinitionKey, String tenantId, boolean fallbackToDefaultTenant) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public FormInfo getFormModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId) {
-    throw new RuntimeException("FormRepositoryService::getFormModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId) NOT IMPLEMENTED");
-  }
-
-  @Override
-  public FormInfo getFormModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId, String tenantId, boolean fallbackToDefaultTenant) {
-    throw new RuntimeException("FormRepositoryService::getFormModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId, String tenantId, boolean fallbackToDefaultTenant) NOT IMPLEMENTED");
+    throw new RuntimeException(
+        "FormRepositoryService::getFormDefinition(String formDefinitionId) NOT IMPLEMENTED");
   }
 
   @Override
   public InputStream getFormDefinitionResource(String formDefinitionId) {
-    throw new RuntimeException("FormRepositoryService::getFormDefinitionResource(String formDefinitionId) NOT IMPLEMENTED");
+    throw new RuntimeException(
+        "FormRepositoryService::getFormDefinitionResource(String formDefinitionId) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public FormInfo getFormModelById(String formDefinitionId) {
+    throw new RuntimeException(
+        "FormRepositoryService::getFormModelById(String formDefinitionId) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public FormInfo getFormModelByKey(String formDefinitionKey) {
+    throw new RuntimeException(
+        "FormRepositoryService::getFormModelByKey(String formDefinitionKey) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public FormInfo getFormModelByKey(
+      String formDefinitionKey, String tenantId, boolean fallbackToDefaultTenant) {
+    throw new RuntimeException(
+        "FormRepositoryService::getFormModelByKey(String formDefinitionKey, String tenantId, boolean fallbackToDefaultTenant) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public FormInfo getFormModelByKeyAndParentDeploymentId(
+      String formDefinitionKey, String parentDeploymentId) {
+    throw new RuntimeException(
+        "FormRepositoryService::getFormModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public FormInfo getFormModelByKeyAndParentDeploymentId(
+      String formDefinitionKey,
+      String parentDeploymentId,
+      String tenantId,
+      boolean fallbackToDefaultTenant) {
+    throw new RuntimeException(
+        "FormRepositoryService::getFormModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId, String tenantId, boolean fallbackToDefaultTenant) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public InputStream getResourceAsStream(String deploymentId, String resourceName) {
+    throw new RuntimeException(
+        "FormRepositoryService::getResourceAsStream(String deploymentId, String resourceName) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public void setDeploymentCategory(String deploymentId, String category) {
+    throw new RuntimeException(
+        "FormRepositoryService::setDeploymentCategory(String deploymentId, String category) NOT IMPLEMENTED");
+  }
+
+  @Override
+  public void setDeploymentTenantId(String deploymentId, String newTenantId) {
+    throw new RuntimeException(
+        "FormRepositoryService::setDeploymentTenantId(String deploymentId, String newTenantId) NOT IMPLEMENTED");
   }
 
   @Override
   public void setFormDefinitionCategory(String formDefinitionId, String category) {
-    throw new RuntimeException("FormRepositoryService::setFormDefinitionCategory(String formDefinitionId, String category) NOT IMPLEMENTED");
+    throw new RuntimeException(
+        "FormRepositoryService::setFormDefinitionCategory(String formDefinitionId, String category) NOT IMPLEMENTED");
   }
 }

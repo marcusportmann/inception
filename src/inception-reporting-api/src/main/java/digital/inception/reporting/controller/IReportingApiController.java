@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -97,7 +98,7 @@ public interface IReportingApiController {
   @RequestMapping(
       value = "/report-definitions",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
@@ -158,7 +159,7 @@ public interface IReportingApiController {
   @RequestMapping(
       value = "/report-definitions/{reportDefinitionId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
@@ -280,7 +281,7 @@ public interface IReportingApiController {
   @RequestMapping(
       value = "/report-definitions/{reportDefinitionId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
@@ -387,7 +388,7 @@ public interface IReportingApiController {
   @RequestMapping(
       value = "/report-definition-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
@@ -424,7 +425,7 @@ public interface IReportingApiController {
   @RequestMapping(
       value = "/report-definitions",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
@@ -478,7 +479,7 @@ public interface IReportingApiController {
   @RequestMapping(
       value = "/report-definitions/{reportDefinitionId}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")

@@ -32,8 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "errorEntityManagerFactory",
-    basePackages = {"digital.inception.error"})
+    basePackages = {"digital.inception.error"},
+    entityManagerFactoryRef = "errorEntityManagerFactory")
 public class ErrorConfiguration {
 
   /** Constructs a new <b>ErrorConfiguration</b>. */

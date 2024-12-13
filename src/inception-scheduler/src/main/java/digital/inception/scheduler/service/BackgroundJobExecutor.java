@@ -130,9 +130,14 @@ public class BackgroundJobExecutor {
       // Initialize the job executor
       jobExecutionQueue = new LinkedBlockingQueue<>(maximumJobExecutionQueueLength);
 
+      // NOTE: We set the initial number of threads to the maximum number of threads because
+      //       the implementation of the thread pool executor will never increase the number of
+      //       threads if the queue is not full.
+      //
+      // https://medium.com/@ankithahjpgowda/policies-of-threadpoolexecutor-in-java-75f22fd6f637
       this.jobExecutor =
           new ThreadPoolExecutor(
-              initialJobExecutionThreads,
+              maximumJobExecutionThreads,
               maximumJobExecutionThreads,
               jobExecutionThreadKeepAlive,
               TimeUnit.MINUTES,

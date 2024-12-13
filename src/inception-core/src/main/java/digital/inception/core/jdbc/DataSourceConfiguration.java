@@ -16,6 +16,9 @@
 
 package digital.inception.core.jdbc;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * The <b>DataSourceConfiguration</b> class provides access to the configuration properties for a
  * data source.
@@ -23,7 +26,9 @@ package digital.inception.core.jdbc;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class DataSourceConfiguration {
+public class DataSourceConfiguration implements Serializable {
+
+  @Serial private static final long serialVersionUID = 1000000;
 
   /** The fully qualified name of the data source class used to connect to the database. */
   private String className;

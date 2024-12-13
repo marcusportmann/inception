@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,34 +14,35 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.model;
+// package digital.inception.flowable.model;
 //
-//import digital.inception.core.service.Problem;
-//import digital.inception.core.service.ServiceException;
-//import jakarta.xml.bind.annotation.XmlAccessType;
-//import jakarta.xml.bind.annotation.XmlAccessorType;
-//import jakarta.xml.ws.WebFault;
-//import java.io.Serial;
+// import digital.inception.core.service.Problem;
+// import digital.inception.core.service.ServiceException;
+// import jakarta.xml.bind.annotation.XmlAccessType;
+// import jakarta.xml.bind.annotation.XmlAccessorType;
+// import jakarta.xml.ws.WebFault;
+// import java.io.Serial;
 //
-///**
-// * The <b>InvalidBPMNException</b> exception is thrown to indicate an error condition as a result of
+/// **
+// * The <b>InvalidBPMNException</b> exception is thrown to indicate an error condition as a result
+// of
 // * invalid BPMN 2.0 XML data.
 // *
 // * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
 // *
 // * @author Marcus Portmann
 // */
-//@Problem(
+// @Problem(
 //    type = "https://inception.digital/problems/workflow/invalid-bpmn",
 //    title = "The BPMN 2.0 XML data is invalid.",
 //    status = 400)
-//@WebFault(
+// @WebFault(
 //    name = "InvalidBPMNException",
 //    targetNamespace = "https://inception.digital/workflow",
 //    faultBean = "digital.inception.core.service.ServiceError")
-//@XmlAccessorType(XmlAccessType.PROPERTY)
-//@SuppressWarnings("unused")
-//public class InvalidBPMNException extends ServiceException {
+// @XmlAccessorType(XmlAccessType.PROPERTY)
+// @SuppressWarnings("unused")
+// public class InvalidBPMNException extends ServiceException {
 //
 //  @Serial private static final long serialVersionUID = 1000000;
 //
@@ -63,4 +64,4 @@
 //  public InvalidBPMNException(Throwable cause) {
 //    super("The BPMN 2.0 XML data is invalid", cause);
 //  }
-//}
+// }

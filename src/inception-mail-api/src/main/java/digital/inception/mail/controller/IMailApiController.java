@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,7 +97,7 @@ public interface IMailApiController {
   @RequestMapping(
       value = "/mail-templates",
       method = RequestMethod.POST,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Mail.MailTemplateAdministration')")
@@ -155,7 +156,7 @@ public interface IMailApiController {
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}",
       method = RequestMethod.DELETE,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Mail.MailTemplateAdministration')")
@@ -214,7 +215,7 @@ public interface IMailApiController {
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Mail.MailTemplateAdministration')")
@@ -319,7 +320,7 @@ public interface IMailApiController {
   @RequestMapping(
       value = "/mail-template-summaries",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Mail.MailTemplateAdministration')")
@@ -354,7 +355,7 @@ public interface IMailApiController {
   @RequestMapping(
       value = "/mail-templates",
       method = RequestMethod.GET,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Mail.MailTemplateAdministration')")
@@ -405,7 +406,7 @@ public interface IMailApiController {
   //  @RequestMapping(
   //      value = "/send-test-mail",
   //      method = RequestMethod.POST,
-  //      produces = "application/json")
+  //      produces = MediaType.APPLICATION_JSON_VALUE)
   //  @ResponseStatus(HttpStatus.NO_CONTENT)
   //  @PreAuthorize(
   //      "isSecurityDisabled() or hasRole('Administrator') or
@@ -462,7 +463,7 @@ public interface IMailApiController {
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}",
       method = RequestMethod.PUT,
-      produces = "application/json")
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Mail.MailTemplateAdministration')")

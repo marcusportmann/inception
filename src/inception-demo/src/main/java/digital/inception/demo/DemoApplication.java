@@ -49,7 +49,7 @@ import org.springframework.context.ApplicationContext;
  *
  * @author Marcus Portmann
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"digital.inception"})
 @EnableCaching
 public class DemoApplication extends Application {
 

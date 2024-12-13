@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +14,9 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.flowable.flowable;
+// package digital.inception.flowable.flowable;
 //
-///**
+/// **
 // * The <b>EventDbSchemaManager</b> class provides a no-op database schema manager for the Process
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the
@@ -24,7 +24,7 @@
 // *
 // * @author Marcus Portmann
 // */
-//public class ProcessDbSchemaManager extends org.flowable.engine.impl.db.ProcessDbSchemaManager {
+// public class ProcessDbSchemaManager extends org.flowable.engine.impl.db.ProcessDbSchemaManager {
 //
 //  @Override
 //  public void schemaCreate() {}
@@ -37,4 +37,4 @@
 //
 //  @Override
 //  public void schemaCheckVersion() {}
-//}
+// }

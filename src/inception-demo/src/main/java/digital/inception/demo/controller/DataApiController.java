@@ -20,6 +20,7 @@ import digital.inception.api.SecureApiController;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
 import digital.inception.demo.service.IDataService;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -27,6 +28,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 /**
  * The <b>DataApiController</b> class.
@@ -55,6 +57,11 @@ public class DataApiController extends SecureApiController implements IDataApiCo
   @Override
   public List<Data> getAllData() throws ServiceUnavailableException {
     return dataService.getAllData();
+  }
+
+  @Override
+  public Flux<ReactiveData> getAllReactiveData() throws ServiceUnavailableException {
+    return dataService.getAllReactiveData();
   }
 
   @Override
