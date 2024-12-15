@@ -55,7 +55,9 @@ public class H2TimestampType extends TimestampType {
             : "";
 
     if (database instanceof H2Database) {
-      if ("timestamp with time zone".equalsIgnoreCase(originalDefinition)) {
+      if ("timestampwithtimezone".equalsIgnoreCase(originalDefinition)) {
+        return new DatabaseDataType("TIMESTAMP(9) WITH TIME ZONE");
+      } else if ("timestamp with time zone".equalsIgnoreCase(originalDefinition)) {
         return new DatabaseDataType("TIMESTAMP(9) WITH TIME ZONE");
       } else if ("timestamp".equalsIgnoreCase(originalDefinition)) {
         return new DatabaseDataType("TIMESTAMP(9)");
