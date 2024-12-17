@@ -49,7 +49,7 @@ public final class ConnectionFactoryUtil {
    */
   public static String getValidationQuery(String databaseName) {
     return switch (databaseName.toLowerCase()) {
-      case "oracle" -> "SELECT 1 FROM DUAL";
+      case "oracle", "Oracle Database" -> "SELECT 1 FROM DUAL";
       case "postgresql", "h2", "mssql", "sqlserver" -> "SELECT 1";
       default ->
           throw new UnsupportedOperationException(
