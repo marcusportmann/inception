@@ -25,7 +25,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * The <b>StringToInstantConverter</b> class implements the Spring converter that converts a
- * <b>String</b> type into a <b>Instant</b> type.
+ * <b>String</b> type into an <b>Instant</b> type.
  *
  * @author Marcus Portmann
  */

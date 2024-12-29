@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * The <b>StringToEntityTypeConverter</b> class implements the Spring converter that converts a
- * <b>String</b> type into a <b>EntityType</b> type.
+ * <b>String</b> type into an <b>EntityType</b> type.
  *
  * @author Marcus Portmann
  */

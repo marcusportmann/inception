@@ -333,7 +333,7 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 format string into a <b>Instant</b> instance.
+   * Transform an ISO 8601 format string into an <b>Instant</b> instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
    * @return the <b>Instant</b> instance for the ISO 8601 format string
@@ -401,7 +401,7 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 format string into a <b>OffsetDateTime</b> instance.
+   * Transform an ISO 8601 format string into an <b>OffsetDateTime</b> instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
    * @return the <b>OffsetDateTime</b> instance for the ISO 8601 format string

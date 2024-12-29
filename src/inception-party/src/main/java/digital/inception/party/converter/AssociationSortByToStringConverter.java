@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * The <b>AssociationSortByToStringConverter</b> class implements the Spring converter that converts
- * a <b>AssociationSortBy</b> type into a <b>String</b> type.
+ * an <b>AssociationSortBy</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */

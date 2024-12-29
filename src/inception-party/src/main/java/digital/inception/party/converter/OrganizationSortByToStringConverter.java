@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * The <b>OrganizationSortByToStringConverter</b> class implements the Spring converter that
- * converts a <b>OrganizationSortBy</b> type into a <b>String</b> type.
+ * converts an <b>OrganizationSortBy</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */

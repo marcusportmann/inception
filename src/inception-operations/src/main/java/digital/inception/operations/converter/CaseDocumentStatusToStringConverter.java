@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-package digital.inception.party.converter;
+package digital.inception.operations.converter;
 
-import digital.inception.party.model.AssociationSortBy;
+import digital.inception.operations.model.CaseDocumentStatus;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
-import org.springframework.lang.NonNull;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToAssociationSortByConverter</b> class implements the Spring converter that converts
- * a <b>String</b> type into an <b>AssociationSortBy</b> type.
+ * The <b>CaseDocumentStatusToStringConverter</b> class implements the Spring converter that
+ * converts a <b>CaseDocumentStatus</b> type into a <b>String</b> type.
  *
- * @author Marcus Portmann
+ * <p>* @author Marcus Portmann
  */
 @Component
-@ReadingConverter
-public class StringToAssociationSortByConverter implements Converter<String, AssociationSortBy> {
+@WritingConverter
+public class CaseDocumentStatusToStringConverter implements Converter<CaseDocumentStatus, String> {
 
-  /** Constructs a new <b>StringToAssociationSortByConverter</b>. */
-  public StringToAssociationSortByConverter() {}
+  /** Constructs a new <b>CaseDocumentStatusToStringConverter</b>. */
+  public CaseDocumentStatusToStringConverter() {}
 
   @Override
-  public AssociationSortBy convert(@NonNull String source) {
-    return AssociationSortBy.fromCode(source);
+  public String convert(CaseDocumentStatus source) {
+    return source.code();
   }
 }
