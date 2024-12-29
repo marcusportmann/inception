@@ -17,7 +17,7 @@ for i in {1..600}; do
     -d "grant_type=$GRANT_TYPE" \
     -d "username=$USERNAME" \
     -d "password=$PASSWORD")
-  
+
   HTTP_CODE=${RESPONSE: -3} # Extract the last three characters for the HTTP status code
 
   if [ "$HTTP_CODE" -eq 200 ]; then
@@ -30,3 +30,4 @@ for i in {1..600}; do
     exit 1 # Exit immediately on non-200 HTTP code
   fi
 done
+

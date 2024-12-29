@@ -124,6 +124,7 @@
     <mssql-jdbc.version>12.8.1.jre11</mssql-jdbc.version>
     <narayana.version>7.1.0.Final</narayana.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
+    <opentelemetry-sdk.version>1.45.0</opentelemetry-sdk.version>
     <oracle-r2dbc.version>1.2.0</oracle-r2dbc.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.4</postgresql.version>
@@ -216,6 +217,21 @@
         <groupId>io.agroal</groupId>
         <artifactId>agroal-narayana</artifactId>
         <version>${agroal-pool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk</artifactId>
+        <version>${opentelemetry-sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk-extension-autoconfigure-spi</artifactId>
+        <version>${opentelemetry-sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk-extension-incubator</artifactId>
+        <version>${opentelemetry-sdk.version}-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.r2dbc</groupId>
@@ -521,6 +537,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-opentelemetry</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-operations</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -673,6 +694,7 @@
     <module>inception-mail-api</module>
     <module>inception-mail-ws</module>
     <module>inception-mongodb</module>
+    <module>inception-opentelemetry</module>
 <!--    <module>inception-operations</module>-->
     <module>inception-party</module>
     <module>inception-party-api</module>

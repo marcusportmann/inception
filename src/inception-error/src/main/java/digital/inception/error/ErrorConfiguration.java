@@ -19,11 +19,11 @@ package digital.inception.error;
 import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>ErrorConfiguration</b> class provides the Spring configuration for the Error module.
@@ -42,15 +42,15 @@ public class ErrorConfiguration {
   /**
    * Returns the error entity manager factory bean associated with the application data source.
    *
+   * @param applicationContext the Spring application context
    * @param dataSource the application data source
-   * @param platformTransactionManager the platform transaction manager
    * @return the error entity manager factory bean associated with the application data source
    */
   @Bean
   public LocalContainerEntityManagerFactoryBean errorEntityManagerFactory(
-      @Qualifier("applicationDataSource") DataSource dataSource,
-      PlatformTransactionManager platformTransactionManager) {
+      ApplicationContext applicationContext,
+      @Qualifier("applicationDataSource") DataSource dataSource) {
     return JpaUtil.createEntityManager(
-        "error", dataSource, platformTransactionManager, "digital.inception.error");
+        applicationContext, "error", dataSource, "digital.inception.error");
   }
 }

@@ -43,6 +43,7 @@ server:
 inception:
   debug:
     enabled: true
+    jpa-show-sql: true
 
   api:
     security:

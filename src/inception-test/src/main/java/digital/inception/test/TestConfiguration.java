@@ -65,7 +65,6 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -251,15 +250,15 @@ public class TestConfiguration {
    * Returns the application entity manager factory bean associated with the application data
    * source.
    *
+   * @param applicationContext the Spring application context
    * @param dataSource the application data source
-   * @param platformTransactionManager the platform transaction manager
    * @return the application entity manager factory bean associated with the application data source
    */
   @Bean("applicationEntityManagerFactory")
   @Primary
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory(
-      @Qualifier("applicationDataSource") DataSource dataSource,
-      PlatformTransactionManager platformTransactionManager) {
+      ApplicationContext applicationContext,
+      @Qualifier("applicationDataSource") DataSource dataSource) {
     List<String> packagesToScanForEntities = JpaUtil.packagesToScanForEntities(applicationContext);
 
     log.info(
@@ -268,9 +267,9 @@ public class TestConfiguration {
 
     try {
       return JpaUtil.createEntityManager(
+          applicationContext,
           "application",
           dataSource,
-          platformTransactionManager,
           StringUtils.toStringArray(packagesToScanForEntities));
     } catch (Throwable e) {
       throw new BeanCreationException(

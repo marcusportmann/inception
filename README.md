@@ -39,10 +39,11 @@ Complete the following steps to set up a development environment on MacOS.
    ```
    source ~/.zshrc
    ```
-5. Install Apache Maven by executing the following command in a Terminal window.
+5. Install Apache Maven and Gradle by executing the following command in a Terminal window.
    ```
    brew install --ignore-dependencies maven
    brew install --ignore-dependencies mvndaemon/homebrew-mvnd/mvnd
+   brew install --ignore-dependencies gradle
    ```
 6. Install jenv to manage multiple Java versions by executing the following commands in a Terminal window.
    ```

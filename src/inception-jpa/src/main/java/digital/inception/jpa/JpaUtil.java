@@ -54,20 +54,23 @@ public final class JpaUtil {
   private JpaUtil() {}
 
   /**
-   * Create a new entity manager.
+   * Create a new entity manager factory bean.
    *
+   * @param applicationContext the Spring application context
    * @param persistenceUnitName the name of the persistence unit
    * @param dataSource the data source
-   * @param platformTransactionManager the Spring platform transaction manager
    * @param packagesToScan the packages to scan for entities
-   * @return the entity manager
+   * @return the entity manager factory bean
    */
   public static LocalContainerEntityManagerFactoryBean createEntityManager(
+      ApplicationContext applicationContext,
       String persistenceUnitName,
       DataSource dataSource,
-      PlatformTransactionManager platformTransactionManager,
       String... packagesToScan) {
     try {
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
       LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
           new LocalContainerEntityManagerFactoryBean();
 
@@ -81,19 +84,21 @@ public final class JpaUtil {
       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
       jpaVendorAdapter.setGenerateDdl(false);
 
+      jpaVendorAdapter.setShowSql(
+          applicationContext
+              .getEnvironment()
+              .getProperty("inception.debug.jpa-show-sql", Boolean.class, false));
+
       try (Connection connection = dataSource.getConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
 
         switch (metaData.getDatabaseProductName()) {
           case "H2":
-            jpaVendorAdapter.setShowSql(true);
-
             break;
 
           case "Microsoft SQL Server":
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
             jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
-            jpaVendorAdapter.setShowSql(false);
 
             break;
 
@@ -102,20 +107,14 @@ public final class JpaUtil {
             // NOTE: DO NOT REMOVE THE LINE BELOW!
             //       IT WILL RESULT IN DATA NOT BEING RETRIEVED CORRECTLY FROM ORACLE IN JPA QUERIES
             jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.OracleDialect");
-            jpaVendorAdapter.setShowSql(false);
-
             break;
 
           case "PostgreSQL":
             jpaVendorAdapter.setDatabase(Database.POSTGRESQL);
-            jpaVendorAdapter.setShowSql(false);
-
             break;
 
           default:
             jpaVendorAdapter.setDatabase(Database.DEFAULT);
-            jpaVendorAdapter.setShowSql(false);
-
             break;
         }
       }

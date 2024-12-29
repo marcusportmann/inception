@@ -1,0 +1,82 @@
+# NOTE: With the exception of env var substitution syntax (i.e. ${MY_ENV}), SDKs ignore
+# environment variables when interpreting config files. This includes ignoring all env
+# vars defined in https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/.
+
+# SEE: https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-config.yaml
+# SEE: https://github.com/open-telemetry/opentelemetry-configuration/tree/main/schema
+# SEE: https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/kitchen-sink.yaml
+
+# The file format version.
+file_format: "0.3"
+
+# Configure if the SDK is disabled or not.
+disabled: ${OTEL_SDK_DISABLED}
+
+# Configure the resource attributes for all signals.
+resource:
+  attributes:
+    - name: service.name
+      value: ${APPLICATION_NAME}
+    - name: k8s.namespace.name
+      value: ${KUBERNETES_NAMESPACE_NAME}
+
+# Configure text map context propagators.
+propagator:
+  composite: [ tracecontext, baggage ]
+
+# Configure tracer provider.
+tracer_provider:
+  processors:
+    - batch:
+        exporter:
+          console:
+
+  # Configure the sampler.
+  sampler:
+    # Configure sampler to be parent_based.
+    parent_based:
+      # Configure the parent_based sampler's root sampler to be rate_limited_rule_based sampler
+      root:
+        rate_limited_rule_based:
+          # Enable additional logging during the processing of rules.
+          enable_rule_logging: true
+
+          # Fallback to an always_off sampler if none of the rules match.
+          fallback_sampler:
+            always_off:
+
+          # The spans per second limit (This is an integer value).
+          spans_per_second_limit: 1
+
+          # Rules
+          rules:
+            # Record and sample SERVER spans where url.path attribute matches the regex /api.*
+            - span_kind: SERVER
+              action: RECORD_AND_SAMPLE
+              attribute: url.path
+              pattern: /api.*
+      # Configure remote_parent_sampled sampler.
+      remote_parent_sampled:
+        # Configure sampler to be always_on.
+        always_on: {}
+      # Configure remote_parent_not_sampled sampler.
+      remote_parent_not_sampled:
+        # Configure sampler to be always_off.
+        always_off: {}
+      # Configure local_parent_sampled sampler.
+      local_parent_sampled:
+        # Configure sampler to be always_on.
+        always_on: {}
+      # Configure local_parent_not_sampled sampler.
+      local_parent_not_sampled:
+        # Configure sampler to be always_off.
+        always_off: {}
+
+# NOTE: No meter_provider configuration, so a noop meter provider is used.
+
+# NOTE: No logger_provider configuration, so a noop logger provider is used.
+
+
+
+
+

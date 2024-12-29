@@ -25,7 +25,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>ApplicationTestConfiguration</b> class.
@@ -55,19 +54,16 @@ public class ApplicationTestConfiguration {
    * Returns the application test entity manager factory bean associated with the application data
    * source.
    *
+   * @param applicationContext the Spring application context
    * @param dataSource the application data source
-   * @param platformTransactionManager the platform transaction manager
    * @return the application test entity manager factory bean associated with the application data
    *     source
    */
   @Bean
   public LocalContainerEntityManagerFactoryBean applicationTestEntityManagerFactory(
-      @Qualifier("applicationDataSource") DataSource dataSource,
-      PlatformTransactionManager platformTransactionManager) {
+      ApplicationContext applicationContext,
+      @Qualifier("applicationDataSource") DataSource dataSource) {
     return JpaUtil.createEntityManager(
-        "applicationTest",
-        dataSource,
-        platformTransactionManager,
-        "digital.inception.application.test");
+        applicationContext, "applicationTest", dataSource, "digital.inception.application.test");
   }
 }
