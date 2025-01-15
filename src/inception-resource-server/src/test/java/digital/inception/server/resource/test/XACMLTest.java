@@ -18,8 +18,8 @@ package digital.inception.server.resource.test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import digital.inception.server.resource.PolicyDecisionPoint;
-import digital.inception.server.resource.PolicyDecisionPointAttributeCategory;
+import digital.inception.server.resource.XacmlPolicyDecisionPoint;
+import digital.inception.server.resource.XacmlPolicyDecisionPointAttributeCategory;
 import digital.inception.server.resource.XacmlUtil;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +35,7 @@ import org.ow2.authzforce.core.pdp.api.DecisionResult;
 import org.ow2.authzforce.xacml.identifiers.XacmlAttributeCategory;
 import org.ow2.authzforce.xacml.identifiers.XacmlAttributeId;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
@@ -62,12 +63,13 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public class XACMLTest {
 
   /** The policy decision point. */
-  private static PolicyDecisionPoint policyDecisionPoint;
+  private static XacmlPolicyDecisionPoint xacmlPolicyDecisionPoint;
 
   @BeforeAll
-  public static void init() {
-    policyDecisionPoint =
-        new PolicyDecisionPoint(true, false, "http://localhost:8080/api/security/policies", 43200);
+  public static void init(ApplicationContext applicationContext) {
+    xacmlPolicyDecisionPoint =
+        new XacmlPolicyDecisionPoint(
+            applicationContext, true, false, "http://localhost:8080/api/security/policies", 43200);
   }
 
   @Test
@@ -79,7 +81,7 @@ public class XACMLTest {
      * Create the decision request.
      */
     DecisionRequestBuilder<?> requestBuilder =
-        policyDecisionPoint.getPdpEngine().newRequestBuilder(-1, -1);
+        xacmlPolicyDecisionPoint.getPdpEngine().newRequestBuilder(-1, -1);
 
     /*
      * Add the subject ID attribute (access-subject category), no issuer, string value
@@ -110,7 +112,7 @@ public class XACMLTest {
      */
     XacmlUtil.addAttributeToRequest(
         requestBuilder,
-        PolicyDecisionPointAttributeCategory.JWT_CLAIMS.value(),
+        XacmlPolicyDecisionPointAttributeCategory.JWT_CLAIMS.value(),
         "clients",
         Arrays.asList("0987654321", "1234567890"));
 
@@ -118,7 +120,7 @@ public class XACMLTest {
     for (Entry<String, String> pathVariable : pathVariables.entrySet()) {
       XacmlUtil.addAttributeToRequest(
           requestBuilder,
-          PolicyDecisionPointAttributeCategory.PATH_VARIABLES.value(),
+          XacmlPolicyDecisionPointAttributeCategory.PATH_VARIABLES.value(),
           pathVariable.getKey(),
           pathVariable.getValue());
     }
@@ -141,7 +143,7 @@ public class XACMLTest {
     DecisionRequest decisionRequest = requestBuilder.build(true);
 
     // Evaluate the decision request
-    DecisionResult decisionResult = policyDecisionPoint.evaluate(decisionRequest);
+    DecisionResult decisionResult = xacmlPolicyDecisionPoint.evaluate(decisionRequest);
     if (decisionResult.getDecision() != DecisionType.PERMIT) {
       fail("Failed to successfully evaluate the External Client Access XACML policy");
       // This is a Permit :-)
@@ -154,7 +156,7 @@ public class XACMLTest {
      * Create the decision request.
      */
     DecisionRequestBuilder<?> requestBuilder =
-        policyDecisionPoint.getPdpEngine().newRequestBuilder(-1, -1);
+        xacmlPolicyDecisionPoint.getPdpEngine().newRequestBuilder(-1, -1);
 
     /*
      * Add the subject ID attribute (access-subject category), no issuer, string value
@@ -196,7 +198,7 @@ public class XACMLTest {
     DecisionRequest decisionRequest = requestBuilder.build(true);
 
     // Evaluate the decision request
-    DecisionResult decisionResult = policyDecisionPoint.evaluate(decisionRequest);
+    DecisionResult decisionResult = xacmlPolicyDecisionPoint.evaluate(decisionRequest);
     if (decisionResult.getDecision() != DecisionType.PERMIT) {
       fail("Failed to successfully evaluate the Internal Client Access XACML policy");
       // This is a Permit :-)
@@ -213,12 +215,13 @@ public class XACMLTest {
     /**
      * Returns the policy decision point.
      *
+     * @param applicationContext the Spring application context
      * @return the policy decision point
      */
     @Bean
-    PolicyDecisionPoint policyDecisionPoint() {
-      return new PolicyDecisionPoint(
-          true, false, "http://localhost:8080/api/security/policies", 43200);
+    XacmlPolicyDecisionPoint policyDecisionPoint(ApplicationContext applicationContext) {
+      return new XacmlPolicyDecisionPoint(
+          applicationContext, true, false, "http://localhost:8080/api/security/policies", 43200);
     }
   }
 }

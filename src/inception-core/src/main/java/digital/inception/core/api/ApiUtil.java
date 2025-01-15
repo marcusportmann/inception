@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.api;
+package digital.inception.core.api;
 
 import java.io.StringWriter;
 import org.springframework.util.StringUtils;

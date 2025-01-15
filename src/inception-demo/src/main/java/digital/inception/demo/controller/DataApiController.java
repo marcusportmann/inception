@@ -16,12 +16,6 @@
 
 package digital.inception.demo.controller;
 
-import digital.inception.api.SecureApiController;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.Data;
-import digital.inception.demo.model.ReactiveData;
-import digital.inception.demo.service.IDataService;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -29,6 +23,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import digital.inception.api.SecureApiController;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
+import digital.inception.demo.service.IDataService;
 
 /**
  * The <b>DataApiController</b> class.

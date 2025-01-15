@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package digital.inception.api;
+package digital.inception.server.resource;
 
-import digital.inception.core.api.IPolicyDecisionPoint;
-import digital.inception.core.api.IPolicyDecisionPointContextProvider;
+import java.util.Map;
 import java.util.function.Supplier;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
@@ -29,16 +28,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>SecureApiSecurityExpressionRoot</b> class implements the custom methods, which can be used
- * in conjunction with the <b>@PreAuthorize</b> annotation.
+ * The <b>PolicyDecisionPointSecurityExpressionRoot</b> class implements the custom methods, which
+ * can be used in conjunction with the <b>@PreAuthorize</b> annotation.
  *
  * @author Marcus Portmann
  */
-public class SecureApiSecurityExpressionRoot extends SecurityExpressionRoot
+public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressionRoot
     implements MethodSecurityExpressionOperations {
 
   /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(SecureApiSecurityExpressionRoot.class);
+  private static final Logger log =
+      LoggerFactory.getLogger(PolicyDecisionPointSecurityExpressionRoot.class);
 
   /** Is debugging enabled for the Inception Framework? */
   private final boolean inDebugMode;
@@ -49,8 +49,8 @@ public class SecureApiSecurityExpressionRoot extends SecurityExpressionRoot
   /** The method invocation. */
   private final MethodInvocation methodInvocation;
 
-  /** The policy decision point. */
-  private final IPolicyDecisionPoint policyDecisionPoint;
+  /** The policy decision points. */
+  private final Map<String, PolicyDecisionPoint> policyDecisionPoints;
 
   /** The filter object. */
   private Object filterObject;
@@ -59,76 +59,76 @@ public class SecureApiSecurityExpressionRoot extends SecurityExpressionRoot
   private Object returnObject;
 
   /**
-   * Constructs a new <b>SecureApiSecurityExpressionRoot</b>.
+   * Constructs a new <b>PolicyDecisionPointSecurityExpressionRoot</b>.
    *
+   * @param policyDecisionPoints the policy decision points
    * @param authentication the authentication supplier
    * @param methodInvocation the method invocation
-   * @param policyDecisionPoint the policy decision point
    * @param isSecurityEnabled is API security enabled for the Inception Framework
    * @param inDebugMode is debugging enabled for the Inception Framework
    */
-  public SecureApiSecurityExpressionRoot(
+  public PolicyDecisionPointSecurityExpressionRoot(
+      Map<String, PolicyDecisionPoint> policyDecisionPoints,
       Supplier<Authentication> authentication,
       MethodInvocation methodInvocation,
-      IPolicyDecisionPoint policyDecisionPoint,
       boolean isSecurityEnabled,
       boolean inDebugMode) {
     super(authentication);
+    this.policyDecisionPoints = policyDecisionPoints;
     this.methodInvocation = methodInvocation;
-    this.policyDecisionPoint = policyDecisionPoint;
     this.isSecurityEnabled = isSecurityEnabled;
     this.inDebugMode = inDebugMode;
   }
 
   /**
-   * Constructs a new <b>SecureApiSecurityExpressionRoot</b>.
+   * Constructs a new <b>PolicyDecisionPointSecurityExpressionRoot</b>.
    *
+   * @param policyDecisionPoints the policy decision points
    * @param authentication the authentication
    * @param methodInvocation the method invocation
-   * @param policyDecisionPoint the policy decision point
    * @param isSecurityEnabled is API security enabled for the Inception Framework
    * @param inDebugMode is debugging enabled for the Inception Framework
    */
-  public SecureApiSecurityExpressionRoot(
+  public PolicyDecisionPointSecurityExpressionRoot(
+      Map<String, PolicyDecisionPoint> policyDecisionPoints,
       Authentication authentication,
       MethodInvocation methodInvocation,
-      IPolicyDecisionPoint policyDecisionPoint,
       boolean isSecurityEnabled,
       boolean inDebugMode) {
     this(
+        policyDecisionPoints,
         () -> authentication,
         methodInvocation,
-        policyDecisionPoint,
         isSecurityEnabled,
         inDebugMode);
   }
 
   /**
-   * Authorize using the policy decision point.
+   * Authorize using the policy decision point(s).
    *
    * @return <b>true</b> if the policy decision point authorization was successful or <b>false</b>
    */
   public boolean authorize() {
-    return authorize(null);
-  }
+    if (isSecurityEnabled) {
+      for (var policyDecisionPoint : policyDecisionPoints.entrySet()) {
+        if (!policyDecisionPoint.getValue().authorize(getAuthentication(), methodInvocation)) {
+          String message =
+              String.format(
+                  "Authorization failed for policy decision point (%s)",
+                  policyDecisionPoint.getKey());
 
-  /**
-   * Authorize using the policy decision point.
-   *
-   * @param policyDecisionPointContextProviderClass the policy decision point context provider class
-   *     to use to populate the XACML decision request authorized by the policy decision point
-   * @return <b>true</b> if the policy decision point authorization was successful or <b>false</b>
-   */
-  public boolean authorize(
-      Class<? extends IPolicyDecisionPointContextProvider>
-          policyDecisionPointContextProviderClass) {
-    if (policyDecisionPoint != null) {
-      return policyDecisionPoint.authorize(
-          getAuthentication(), methodInvocation, policyDecisionPointContextProviderClass);
-    } else {
-      log.error("Authorization failed: No policy decision point implementation available");
-      return false;
+          if (inDebugMode) {
+            log.info(message);
+          } else if (log.isDebugEnabled()) {
+            log.debug(message);
+          }
+
+          return false;
+        }
+      }
     }
+
+    return true;
   }
 
   @Override

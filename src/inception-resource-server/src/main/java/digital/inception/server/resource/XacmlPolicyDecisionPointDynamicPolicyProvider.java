@@ -72,18 +72,18 @@ import org.springframework.web.client.RestTemplate;
 import org.xml.sax.InputSource;
 
 /**
- * The <b>PolicyDecisionPointDynamicPolicyProvider</b> class provides a custom AuthZForce dynamic
- * policy provider implementation, which provides the XACML-based policy sets and policies that will
- * be applied by the policy decision point.
+ * The <b>XacmlPolicyDecisionPointDynamicPolicyProvider</b> class provides a custom AuthZForce
+ * dynamic policy provider implementation, which provides the XACML-based policy sets and policies
+ * that will be applied by the XACML policy decision point.
  *
  * @author Marcus Portmann
  */
-public class PolicyDecisionPointDynamicPolicyProvider
+public class XacmlPolicyDecisionPointDynamicPolicyProvider
     implements CloseablePolicyProvider<TopLevelPolicyElementEvaluator> {
 
   /* Logger */
   private static final Logger log =
-      LoggerFactory.getLogger(PolicyDecisionPointDynamicPolicyProvider.class);
+      LoggerFactory.getLogger(XacmlPolicyDecisionPointDynamicPolicyProvider.class);
 
   /** Should policy sets and policies be loaded from the classpath under pdp/policies? */
   private final Boolean classpathPoliciesEnabled;
@@ -117,7 +117,7 @@ public class PolicyDecisionPointDynamicPolicyProvider
   private PolicySet rootPolicySet = null;
 
   /**
-   * Constructs a new <b>PolicyDecisionPointDynamicPolicyProvider</b>.
+   * Constructs a new <b>XacmlPolicyDecisionPointDynamicPolicyProvider</b>.
    *
    * @param xacmlParserFactory the factory used to create XACML parsers
    * @param expressionFactory the expression factory
@@ -130,7 +130,7 @@ public class PolicyDecisionPointDynamicPolicyProvider
    *     policies
    * @param externalPoliciesReloadPeriod the reload period in seconds for external policies
    */
-  public PolicyDecisionPointDynamicPolicyProvider(
+  public XacmlPolicyDecisionPointDynamicPolicyProvider(
       XmlnsFilteringParserFactory xacmlParserFactory,
       ExpressionFactory expressionFactory,
       CombiningAlgRegistry combiningAlgorithmRegistry,
@@ -151,7 +151,7 @@ public class PolicyDecisionPointDynamicPolicyProvider
       loadPolicies();
     } catch (Throwable e) {
       throw new PolicyDecisionPointException(
-          "Failed to initialize the PolicyDecisionPointDynamicPolicyProvider", e);
+          "Failed to initialize the XacmlPolicyDecisionPointDynamicPolicyProvider", e);
     }
   }
 
@@ -483,14 +483,14 @@ public class PolicyDecisionPointDynamicPolicyProvider
    * <b>PolicyDecisionPointCloseableDynamicPolicyProvider</b> instances.
    */
   public static class Factory
-      extends CloseablePolicyProvider.Factory<PolicyDecisionPointPolicyProvider> {
+      extends CloseablePolicyProvider.Factory<XacmlPolicyDecisionPointPolicyProvider> {
 
     /** Constructs a new <b>Factory</b>. */
     public Factory() {}
 
     @Override
     public CloseablePolicyProvider<?> getInstance(
-        PolicyDecisionPointPolicyProvider configuration,
+        XacmlPolicyDecisionPointPolicyProvider configuration,
         XmlnsFilteringParserFactory xacmlParserFactory,
         int maxPolicySetRefDepth,
         ExpressionFactory expressionFactory,
@@ -499,7 +499,7 @@ public class PolicyDecisionPointDynamicPolicyProvider
         Optional<PolicyProvider<?>> otherHelpingPolicyProvider)
         throws IllegalArgumentException {
       try {
-        return new PolicyDecisionPointDynamicPolicyProvider(
+        return new XacmlPolicyDecisionPointDynamicPolicyProvider(
             xacmlParserFactory,
             expressionFactory,
             combiningAlgRegistry,
@@ -509,13 +509,13 @@ public class PolicyDecisionPointDynamicPolicyProvider
             configuration.getExternalPoliciesReloadPeriod());
       } catch (Throwable e) {
         throw new RuntimeException(
-            "Failed to create the PolicyDecisionPointDynamicPolicyProvider instance", e);
+            "Failed to create the XacmlPolicyDecisionPointDynamicPolicyProvider instance", e);
       }
     }
 
     @Override
-    public Class<PolicyDecisionPointPolicyProvider> getJaxbClass() {
-      return PolicyDecisionPointPolicyProvider.class;
+    public Class<XacmlPolicyDecisionPointPolicyProvider> getJaxbClass() {
+      return XacmlPolicyDecisionPointPolicyProvider.class;
     }
   }
 

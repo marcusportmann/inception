@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.api;
+package digital.inception.server.resource;
 
-import digital.inception.core.api.IPolicyDecisionPoint;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Supplier;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -29,15 +32,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>SecureApiMethodSecurityExpressionHandler</b> class.
+ * The <b>PolicyDecisionPointMethodSecurityExpressionHandler</b> class.
  *
  * @author Marcus Portmann
  */
-public class SecureApiMethodSecurityExpressionHandler
+public class PolicyDecisionPointMethodSecurityExpressionHandler
     extends DefaultMethodSecurityExpressionHandler {
 
-  /** The policy decision point. */
-  private final IPolicyDecisionPoint policyDecisionPoint;
+  /* Logger */
+  private static final Logger log =
+      LoggerFactory.getLogger(PolicyDecisionPointMethodSecurityExpressionHandler.class);
+
+  /** The policy decision points. */
+  private final Map<String, PolicyDecisionPoint> policyDecisionPoints;
 
   /** Is debugging enabled for the Inception Framework? */
   private boolean inDebugMode;
@@ -46,14 +53,11 @@ public class SecureApiMethodSecurityExpressionHandler
   private boolean isSecurityEnabled;
 
   /**
-   * Constructs a new <b>SecureApiMethodSecurityExpressionHandler</b>.
+   * Constructs a new <b>PolicyDecisionPointMethodSecurityExpressionHandler</b>.
    *
    * @param applicationContext the Spring application context
-   * @param policyDecisionPoint the optional policy decision point
    */
-  public SecureApiMethodSecurityExpressionHandler(
-      ApplicationContext applicationContext, Optional<IPolicyDecisionPoint> policyDecisionPoint) {
-    this.policyDecisionPoint = policyDecisionPoint.orElse(null);
+  public PolicyDecisionPointMethodSecurityExpressionHandler(ApplicationContext applicationContext) {
 
     // Check if debugging is enabled for the Inception Framework
     try {
@@ -69,7 +73,7 @@ public class SecureApiMethodSecurityExpressionHandler
 
     // Check if security is enabled for the Inception Framework
     try {
-      if (!inDebugMode) {
+      if (inDebugMode) {
         if (StringUtils.hasText(
             applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
           this.isSecurityEnabled =
@@ -79,33 +83,39 @@ public class SecureApiMethodSecurityExpressionHandler
                       .getProperty("inception.api.security.enabled"));
         }
       }
+    } catch (Throwable ignored) {
+    }
+
+    try {
+      this.policyDecisionPoints = applicationContext.getBeansOfType(PolicyDecisionPoint.class);
+
+      for (Entry<String, PolicyDecisionPoint> policyDecisionPointContextProvider :
+          this.policyDecisionPoints.entrySet()) {
+        log.info(
+            "Loaded the policy decision point ({}) with class ({})",
+            policyDecisionPointContextProvider.getKey(),
+            policyDecisionPointContextProvider.getValue().getClass().getName());
+      }
+
     } catch (Throwable e) {
-      this.isSecurityEnabled = (!this.inDebugMode);
+      throw new BeanCreationException("Failed to initialize the policy decision points", e);
     }
   }
 
   @Override
   public EvaluationContext createEvaluationContext(
       Supplier<Authentication> authentication, MethodInvocation methodInvocation) {
-    if (methodInvocation.getThis() instanceof SecureApiController) {
-      SecureApiSecurityExpressionRoot secureApiSecurityExpressionRoot =
-          new SecureApiSecurityExpressionRoot(
-              authentication,
-              methodInvocation,
-              policyDecisionPoint,
-              isSecurityEnabled,
-              inDebugMode);
-      secureApiSecurityExpressionRoot.setPermissionEvaluator(getPermissionEvaluator());
-      secureApiSecurityExpressionRoot.setTrustResolver(new AuthenticationTrustResolverImpl());
-      secureApiSecurityExpressionRoot.setRoleHierarchy(getRoleHierarchy());
-      secureApiSecurityExpressionRoot.setDefaultRolePrefix(getDefaultRolePrefix());
-      StandardEvaluationContext context =
-          (StandardEvaluationContext)
-              super.createEvaluationContext(authentication, methodInvocation);
-      context.setRootObject(secureApiSecurityExpressionRoot);
-      return context;
-    } else {
-      return super.createEvaluationContext(authentication, methodInvocation);
-    }
+    PolicyDecisionPointSecurityExpressionRoot policyDecisionPointSecurityExpressionRoot =
+        new PolicyDecisionPointSecurityExpressionRoot(
+            policyDecisionPoints, authentication, methodInvocation, isSecurityEnabled, inDebugMode);
+    policyDecisionPointSecurityExpressionRoot.setPermissionEvaluator(getPermissionEvaluator());
+    policyDecisionPointSecurityExpressionRoot.setTrustResolver(
+        new AuthenticationTrustResolverImpl());
+    policyDecisionPointSecurityExpressionRoot.setRoleHierarchy(getRoleHierarchy());
+    policyDecisionPointSecurityExpressionRoot.setDefaultRolePrefix(getDefaultRolePrefix());
+    StandardEvaluationContext context =
+        (StandardEvaluationContext) super.createEvaluationContext(authentication, methodInvocation);
+    context.setRootObject(policyDecisionPointSecurityExpressionRoot);
+    return context;
   }
 }

@@ -134,7 +134,8 @@ inception:
       revoked-tokens:
         enabled: true
         endpoint: http://localhost:8080/api/security/revoked-tokens
-    policy-decision-point:
+    xacml-policy-decision-point:
+      enabled: true
       rule-debugging-enabled: true
       classpath-policies:
         enabled: false

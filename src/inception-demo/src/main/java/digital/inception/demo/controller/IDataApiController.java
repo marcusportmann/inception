@@ -16,11 +16,6 @@
 
 package digital.inception.demo.controller;
 
-import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.Data;
-import digital.inception.demo.model.ReactiveData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,6 +31,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import reactor.core.publisher.Flux;
+import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
 
 /**
  * The <b>IDataApiController</b> interface.
@@ -56,6 +56,7 @@ public interface IDataApiController {
       value = "/all-data",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  // @PreAuthorize("hasAccess('GetAllData') or isSecurityDisabled() or hasRole('Administrator')")
   @PreAuthorize("isSecurityDisabled() or hasRole('Administrator')")
   List<Data> getAllData() throws ServiceUnavailableException;
 
@@ -125,8 +126,7 @@ public interface IDataApiController {
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "authorize(T(digital.inception.demo.controller.DataApiPolicyDecisionPointContextProvider))")
+  @PreAuthorize("authorize()")
   void process(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The data to process",

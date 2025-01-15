@@ -16,10 +16,6 @@
 
 package digital.inception.demo.controller;
 
-import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.CarType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,6 +32,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.demo.model.CarType;
 
 /**
  * The <b>ITestApiController</b> interface.
@@ -120,12 +120,11 @@ public interface ITestApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/test-pdp-authorization/{pathVariable}/{anotherPathVariable}",
+      value = {"/test-pdp-authorization/{pathVariable}/{anotherPathVariable}"},
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "authorize(T(digital.inception.demo.controller.TestApiPolicyDecisionPointContextProvider))")
+  @PreAuthorize("authorize()")
   void testPolicyDecisionPointAuthorization(
       @Parameter(name = "pathVariable", description = "The path variable", required = true)
           @PathVariable

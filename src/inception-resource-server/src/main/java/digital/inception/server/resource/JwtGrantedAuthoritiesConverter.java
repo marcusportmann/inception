@@ -36,10 +36,10 @@ public class JwtGrantedAuthoritiesConverter
   public static final String FUNCTIONS_CLAIM = "functions";
 
   /**
-   * The name of the tenants claim that provides the IDs for the tenants the user is associated
-   * with.
+   * The name of the user directory ID claim that provides the ID for the user directory the user is
+   * associated with.
    */
-  public static final String TENANTS_CLAIM = "tenants";
+  public static final String USER_DIRECTORY_ID_CLAIM = "user_directory_id";
 
   /** The name of the roles claim that provides the roles assigned to the user. */
   private static final String ROLES_CLAIM = "roles";
@@ -57,21 +57,17 @@ public class JwtGrantedAuthoritiesConverter
   public Collection<GrantedAuthority> convert(Jwt jwt) {
     Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
+    // User Directory ID claim
+    grantedAuthorities.add(
+        new SimpleGrantedAuthority(
+            "USER_DIRECTORY_ID_ " + jwt.getClaimAsString(USER_DIRECTORY_ID_CLAIM)));
+
     // Function claims
     List<String> functionsClaim = jwt.getClaimAsStringList(FUNCTIONS_CLAIM);
 
     if (functionsClaim != null) {
       for (String functionClaim : functionsClaim) {
         grantedAuthorities.add(new SimpleGrantedAuthority("FUNCTION_" + functionClaim));
-      }
-    }
-
-    // Tenant claims
-    List<String> tenantsClaim = jwt.getClaimAsStringList(TENANTS_CLAIM);
-
-    if (tenantsClaim != null) {
-      for (String tenantClaim : tenantsClaim) {
-        grantedAuthorities.add(new SimpleGrantedAuthority("TENANT_" + tenantClaim));
       }
     }
 

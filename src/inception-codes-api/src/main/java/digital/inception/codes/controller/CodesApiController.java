@@ -16,7 +16,7 @@
 
 package digital.inception.codes.controller;
 
-import digital.inception.api.ApiUtil;
+import digital.inception.core.api.ApiUtil;
 import digital.inception.api.SecureApiController;
 import digital.inception.codes.model.Code;
 import digital.inception.codes.model.CodeCategory;

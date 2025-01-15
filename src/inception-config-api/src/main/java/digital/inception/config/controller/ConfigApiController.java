@@ -16,7 +16,7 @@
 
 package digital.inception.config.controller;
 
-import digital.inception.api.ApiUtil;
+import digital.inception.core.api.ApiUtil;
 import digital.inception.api.SecureApiController;
 import digital.inception.config.model.Config;
 import digital.inception.config.model.ConfigNotFoundException;

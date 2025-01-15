@@ -14,30 +14,31 @@
  * limitations under the License.
  */
 
-package digital.inception.core.api;
+package digital.inception.server.resource;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.ow2.authzforce.core.pdp.api.DecisionRequestBuilder;
 
 /**
- * The <b>IPolicyDecisionPoint</b> interface defines the interface that must be implemented by all
- * policy decision point implementations.
+ * The <b>XacmlPolicyDecisionPointContextProvider</b> interface defines the interface that must be
+ * implemented by a XACML policy decision point context provider, which is used to add additional
+ * attributes to the XACML decision request that will be authorized by the XACML policy decision
+ * point using AuthzForce PDP engine.
  *
  * @author Marcus Portmann
  */
-public interface IPolicyDecisionPoint {
+public interface XacmlPolicyDecisionPointContextProvider {
 
   /**
-   * Authorize the method invocation using the policy decision point.
+   * Add additional context to the AuthzForce XACML authorization decision request used as input to
+   * AuthzForce PDP engine.
    *
    * @param authenticationObject the authentication object
    * @param methodInvocation the method invocation
-   * @param policyDecisionPointContextProviderClass the policy decision point context provider class
-   *     to use to add additional attributes to the decision request authorized by the policy
-   *     decision point
-   * @return <b>true</b> if the policy decision point authorization was successful or <b>false</b>
+   * @param decisionRequestBuilder the AuthzForce XACML authorization decision request builder
    */
-  boolean authorize(
+  void populateDecisionRequest(
       Object authenticationObject,
       MethodInvocation methodInvocation,
-      Class<? extends IPolicyDecisionPointContextProvider> policyDecisionPointContextProviderClass);
+      DecisionRequestBuilder<?> decisionRequestBuilder);
 }

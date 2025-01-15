@@ -43,13 +43,16 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.authorization.AuthorizationManagers;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -79,6 +82,7 @@ import org.springframework.web.filter.CorsFilter;
  * @author Marcus Portmann
  */
 @Configuration
+@EnableMethodSecurity
 @EnableWebSecurity
 @ConditionalOnWebApplication(type = Type.ANY)
 @ConfigurationProperties(prefix = "inception.resource-server", ignoreUnknownFields = false)
@@ -103,19 +107,32 @@ public class ResourceServerConfiguration implements InitializingBean {
   /** The JWT configuration. */
   private JwtConfiguration jwtConfiguration;
 
-  /** The configuration for the policy decision point. */
-  private PolicyDecisionPointConfiguration policyDecisionPoint;
-
   @Autowired private ResourceLoader resourceLoader;
+
+  /** The configuration for the XACML policy decision point. */
+  private XacmlPolicyDecisionPointConfiguration xacmlPolicyDecisionPoint;
 
   /** Constructs a new <b>ResourceServerConfiguration</b>. */
   public ResourceServerConfiguration() {}
 
+  /**
+   * Returns the method security expression handler.
+   *
+   * @param applicationContext the Spring application context
+   * @return the method security expression handler
+   */
+  @Bean
+  static MethodSecurityExpressionHandler methodSecurityExpressionHandler(
+      ApplicationContext applicationContext) {
+    return new PolicyDecisionPointMethodSecurityExpressionHandler(applicationContext);
+  }
+
   @Override
   public void afterPropertiesSet() throws Exception {
     try {
-      if ((policyDecisionPoint != null) && (policyDecisionPoint.isRuleDebuggingEnabled())) {
-        log.info("Enabling rule debugging for the policy decision point");
+      if ((xacmlPolicyDecisionPoint != null)
+          && (xacmlPolicyDecisionPoint.isRuleDebuggingEnabled())) {
+        log.info("Enabling rule debugging for the XACML policy decision point");
 
         ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
 
@@ -141,7 +158,7 @@ public class ResourceServerConfiguration implements InitializingBean {
         }
       }
     } catch (Throwable e) {
-      log.error("Failed to enable rule debugging for the policy decision point", e);
+      log.error("Failed to enable rule debugging for the XACML policy decision point", e);
     }
   }
 
@@ -196,12 +213,12 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Returns the configuration for the policy decision point.
+   * Returns the configuration for the XACML policy decision point.
    *
-   * @return the configuration for the policy decision point
+   * @return the configuration for the XACML policy decision point
    */
-  public PolicyDecisionPointConfiguration getPolicyDecisionPoint() {
-    return policyDecisionPoint;
+  public XacmlPolicyDecisionPointConfiguration getXacmlPolicyDecisionPoint() {
+    return xacmlPolicyDecisionPoint;
   }
 
   /**
@@ -217,6 +234,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     // Define reusable authorization manager for internal network access
     AuthorizationManager<RequestAuthorizationContext> internalNetworkAccess =
         AuthorizationManagers.anyOf(
+            hasIpAddress("100.0.0.0/8"),
             hasIpAddress("127.0.0.0/8"),
             hasIpAddress("0:0:0:0:0:0:0:1"),
             hasIpAddress("::1"),
@@ -227,7 +245,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     httpSecurity.authorizeHttpRequests(
         authorizeRequests -> {
           /*
-           * Check if the digital.inception.security.controller.ISecurityApiController class exists
+           * Check if the za.co.discovery.inception.security.controller.ISecurityApiController class exists
            * on the classpath, and if so, enable non-authenticated internal network access to the
            * /api/security/policies and /api/security/revoked-tokens Security API endpoints.
            */
@@ -338,12 +356,13 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Set the configuration for the policy decision point.
+   * Set the configuration for the XACML policy decision point.
    *
-   * @param policyDecisionPoint the configuration for the policy decision point
+   * @param xacmlPolicyDecisionPoint the configuration for the XACML policy decision point
    */
-  public void setPolicyDecisionPoint(PolicyDecisionPointConfiguration policyDecisionPoint) {
-    this.policyDecisionPoint = policyDecisionPoint;
+  public void setXacmlPolicyDecisionPoint(
+      XacmlPolicyDecisionPointConfiguration xacmlPolicyDecisionPoint) {
+    this.xacmlPolicyDecisionPoint = xacmlPolicyDecisionPoint;
   }
 
   private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
@@ -890,15 +909,18 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * The <b>PolicyDecisionPointConfiguration</b> class holds the configuration for the policy
+   * The <b>XacmlPolicyDecisionPointConfiguration</b> class holds the configuration for the policy
    * decision point.
    *
    * @author Marcus Portmann
    */
-  public static class PolicyDecisionPointConfiguration {
+  public static class XacmlPolicyDecisionPointConfiguration {
 
     /** The classpath policies configuration for the policy decision point. */
     private ClasspathPoliciesConfiguration classpathPolicies;
+
+    /** Is the XACML policy decision point enabled? * */
+    private boolean enabled;
 
     /** The external policies configuration for the policy decision point. */
     private ExternalPoliciesConfiguration externalPolicies;
@@ -906,8 +928,8 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** Is debugging of the rules applied by the policy decision point enabled. */
     private boolean ruleDebuggingEnabled;
 
-    /** Constructs a new <b>PolicyDecisionPointConfiguration</b>. */
-    public PolicyDecisionPointConfiguration() {}
+    /** Constructs a new <b>XacmlPolicyDecisionPointConfiguration</b>. */
+    public XacmlPolicyDecisionPointConfiguration() {}
 
     /**
      * Returns the classpath policies configuration for the policy decision point.
@@ -928,6 +950,15 @@ public class ResourceServerConfiguration implements InitializingBean {
     }
 
     /**
+     * Is the XACML policy decision point is enabled?
+     *
+     * @return <b>true</b> if the XACML policy decision point is enabled or <b>false</b> otherwise
+     */
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    /**
      * Returns whether debugging of the rules applied by the policy decision point is enabled.
      *
      * @return <b>true</b> if debugging of the rules applied by the policy decision point is enabled
@@ -944,6 +975,16 @@ public class ResourceServerConfiguration implements InitializingBean {
      */
     public void setClasspathPolicies(ClasspathPoliciesConfiguration classpathPolicies) {
       this.classpathPolicies = classpathPolicies;
+    }
+
+    /**
+     * Set whether the XML policy decision point is enabled.
+     *
+     * @param enabled <b>true</b> if the XACML policy decision point is enabled or <b>false</b>
+     *     otherwise
+     */
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
     }
 
     /**

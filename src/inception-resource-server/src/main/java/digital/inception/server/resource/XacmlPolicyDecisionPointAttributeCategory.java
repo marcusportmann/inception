@@ -17,12 +17,12 @@
 package digital.inception.server.resource;
 
 /**
- * The <b>PolicyDecisionPointAttributeCategory</b> enumeration defines the custom XACML Attribute
- * Category identifiers for the policy decision point.
+ * The <b>XacmlPolicyDecisionPointAttributeCategory</b> enumeration defines the custom XACML
+ * Attribute Category identifiers for the XACML policy decision point.
  *
  * @author Marcus Portmann
  */
-public enum PolicyDecisionPointAttributeCategory {
+public enum XacmlPolicyDecisionPointAttributeCategory {
   /** urn:inception:xacml:attribute-category:jwt-claims */
   JWT_CLAIMS("urn:inception:xacml:attribute-category:jwt-claims"),
 
@@ -39,11 +39,11 @@ public enum PolicyDecisionPointAttributeCategory {
   private final String value;
 
   /**
-   * Constructs a new <b>PolicyDecisionPointAttributeCategory</b>
+   * Constructs a new <b>XacmlPolicyDecisionPointAttributeCategory</b>
    *
    * @param value the XACML identifier for this category
    */
-  PolicyDecisionPointAttributeCategory(String value) {
+  XacmlPolicyDecisionPointAttributeCategory(String value) {
     this.value = value;
   }
 

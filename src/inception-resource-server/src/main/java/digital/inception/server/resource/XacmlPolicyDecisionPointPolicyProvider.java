@@ -22,15 +22,15 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractPolicyProvider;
 
 /**
- * The <b>PolicyDecisionPointPolicyProvider</b> class holds the configuration information for the
- * custom AuthZForce dynamic policy provider implementation, which provides the XACML-based policy
- * sets and policies that will be applied by the policy decision point.
+ * The <b>XacmlPolicyDecisionPointPolicyProvider</b> class holds the configuration information for
+ * the custom AuthZForce dynamic policy provider implementation, which provides the XACML-based
+ * policy sets and policies that will be applied by the policy decision point.
  *
  * @author Marcus Portmann
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PolicyDecisionPointPolicyProvider")
-public class PolicyDecisionPointPolicyProvider extends AbstractPolicyProvider {
+@XmlType(name = "XacmlPolicyDecisionPointPolicyProvider")
+public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvider {
 
   /** Should policy sets and policies be loaded from the classpath under pdp/policies? */
   private Boolean classpathPoliciesEnabled;
@@ -44,11 +44,11 @@ public class PolicyDecisionPointPolicyProvider extends AbstractPolicyProvider {
   /** The reload period in seconds for external policies. */
   private int externalPoliciesReloadPeriod;
 
-  /** Constructs a new <b>PolicyDecisionPointPolicyProvider</b>. */
-  public PolicyDecisionPointPolicyProvider() {}
+  /** Constructs a new <b>XacmlPolicyDecisionPointPolicyProvider</b>. */
+  public XacmlPolicyDecisionPointPolicyProvider() {}
 
   /**
-   * Constructs a new <b>PolicyDecisionPointPolicyProvider</b>.
+   * Constructs a new <b>XacmlPolicyDecisionPointPolicyProvider</b>.
    *
    * @param classpathPoliciesEnabled should policy sets and policies be loaded from the classpath
    *     under pdp/policies
@@ -58,7 +58,7 @@ public class PolicyDecisionPointPolicyProvider extends AbstractPolicyProvider {
    *     policies
    * @param externalPoliciesReloadPeriod the reload period in seconds for external policies
    */
-  public PolicyDecisionPointPolicyProvider(
+  public XacmlPolicyDecisionPointPolicyProvider(
       boolean classpathPoliciesEnabled,
       boolean externalPoliciesEnabled,
       String externalPoliciesEndpoint,

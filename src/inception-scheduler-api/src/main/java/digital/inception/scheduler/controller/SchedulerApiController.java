@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler.controller;
 
-import digital.inception.api.ApiUtil;
+import digital.inception.core.api.ApiUtil;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
