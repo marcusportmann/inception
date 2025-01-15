@@ -72,8 +72,8 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
     }
 
     // Check if security is enabled for the Inception Framework
-    try {
-      if (!inDebugMode) {
+    if (!this.inDebugMode) {
+      try {
         if (StringUtils.hasText(
             applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
           this.isSecurityEnabled =
@@ -82,9 +82,8 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
                       .getEnvironment()
                       .getProperty("inception.api.security.enabled"));
         }
+      } catch (Throwable ignored) {
       }
-    } catch (Throwable ignored) {
-      this.isSecurityEnabled = !inDebugMode;
     }
 
     try {

@@ -76,8 +76,6 @@ public abstract class SecureApiController {
         }
       } catch (Throwable ignored) {
       }
-    } else {
-      this.isSecurityEnabled = false;
     }
   }
 
