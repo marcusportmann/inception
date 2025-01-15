@@ -60,8 +60,7 @@ import digital.inception.security.model.GroupNotFoundException;
 import digital.inception.security.model.GroupRole;
 import digital.inception.security.model.GroupRoleNotFoundException;
 import digital.inception.security.model.Groups;
-import digital.inception.security.model.IUserDirectory;
-import digital.inception.security.model.InternalUserDirectory;
+import digital.inception.security.model.InternalUserDirectoryProvider;
 import digital.inception.security.model.InvalidAttributeException;
 import digital.inception.security.model.InvalidPolicyDataException;
 import digital.inception.security.model.InvalidSecurityCodeException;
@@ -95,6 +94,7 @@ import digital.inception.security.model.UserDirectories;
 import digital.inception.security.model.UserDirectory;
 import digital.inception.security.model.UserDirectoryCapabilities;
 import digital.inception.security.model.UserDirectoryNotFoundException;
+import digital.inception.security.model.UserDirectoryProvider;
 import digital.inception.security.model.UserDirectorySummaries;
 import digital.inception.security.model.UserDirectorySummary;
 import digital.inception.security.model.UserDirectoryType;
@@ -250,7 +250,7 @@ public class SecurityService implements ISecurityService {
   private RSAPublicKey jwtRsaPublicKey;
 
   /** The user directories. */
-  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private Map<UUID, UserDirectoryProvider> userDirectories = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <b>SecurityService</b>.
@@ -388,7 +388,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("memberName");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -416,7 +416,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("roleCode");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -485,7 +485,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -519,7 +519,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("newPassword");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -552,7 +552,7 @@ public class SecurityService implements ISecurityService {
       if (internalUserDirectoryIdOptional.isPresent()) {
         UUID internalUserDirectoryId = internalUserDirectoryIdOptional.get();
 
-        IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
+        UserDirectoryProvider internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
         if (internalUserDirectory == null) {
           throw new ServiceUnavailableException(
@@ -571,10 +571,10 @@ public class SecurityService implements ISecurityService {
          * Check the "external" user directories to see if one of them can authenticate this user.
          */
         for (UUID userDirectoryId : userDirectories.keySet()) {
-          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
           if (userDirectory != null) {
-            if (!(userDirectory instanceof InternalUserDirectory)) {
+            if (!(userDirectory instanceof InternalUserDirectoryProvider)) {
               if (userDirectory.isExistingUser(username)) {
                 userDirectory.authenticate(username, password);
 
@@ -623,7 +623,7 @@ public class SecurityService implements ISecurityService {
       if (internalUserDirectoryIdOptional.isPresent()) {
         UUID internalUserDirectoryId = internalUserDirectoryIdOptional.get();
 
-        IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
+        UserDirectoryProvider internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
         if (internalUserDirectory == null) {
           throw new ServiceUnavailableException(
@@ -642,10 +642,10 @@ public class SecurityService implements ISecurityService {
          * Check the "external" user directories to see if one of them can change the password for this user.
          */
         for (UUID userDirectoryId : userDirectories.keySet()) {
-          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
           if (userDirectory != null) {
-            if (!(userDirectory instanceof InternalUserDirectory)) {
+            if (!(userDirectory instanceof InternalUserDirectoryProvider)) {
               if (userDirectory.isExistingUser(username)) {
                 userDirectory.changePassword(username, password, newPassword);
 
@@ -695,7 +695,7 @@ public class SecurityService implements ISecurityService {
           ServiceUnavailableException {
     validateGroup(group);
 
-    IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
+    UserDirectoryProvider userDirectory = userDirectories.get(group.getUserDirectoryId());
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(group.getUserDirectoryId());
@@ -763,7 +763,7 @@ public class SecurityService implements ISecurityService {
           ServiceUnavailableException {
     validateUser(user);
 
-    IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
+    UserDirectoryProvider userDirectory = userDirectories.get(user.getUserDirectoryId());
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(user.getUserDirectoryId());
@@ -844,7 +844,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("groupName");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -917,7 +917,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -979,7 +979,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("attributes");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1130,7 +1130,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1162,7 +1162,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("groupName");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1178,7 +1178,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1201,7 +1201,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1217,7 +1217,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1246,7 +1246,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("pageSize");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1269,7 +1269,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1292,7 +1292,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("groupName");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1329,7 +1329,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("pageSize");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1397,7 +1397,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("groupName");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1420,7 +1420,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1452,7 +1452,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("groupName");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1818,7 +1818,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1944,7 +1944,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1971,10 +1971,10 @@ public class SecurityService implements ISecurityService {
          * Check the "external" user directories to see if the user is associated with one of them.
          */
         for (UUID userDirectoryId : userDirectories.keySet()) {
-          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
           if (userDirectory != null) {
-            if (!(userDirectory instanceof InternalUserDirectory)) {
+            if (!(userDirectory instanceof InternalUserDirectoryProvider)) {
               if (userDirectory.isExistingUser(username)) {
                 return Optional.of(userDirectoryId);
               }
@@ -2223,7 +2223,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2239,7 +2239,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2277,7 +2277,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("pageSize");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2337,7 +2337,7 @@ public class SecurityService implements ISecurityService {
         throw new UserNotFoundException(username);
       }
 
-      IUserDirectory userDirectory = userDirectories.get(userDirectoryIdOptional.get());
+      UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryIdOptional.get());
 
       User user = userDirectory.getUser(username);
 
@@ -2380,7 +2380,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2408,7 +2408,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2438,7 +2438,7 @@ public class SecurityService implements ISecurityService {
   @Override
   public void reloadUserDirectories() throws ServiceUnavailableException {
     try {
-      Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
+      Map<UUID, UserDirectoryProvider> reloadedUserDirectories = new ConcurrentHashMap<>();
 
       List<UserDirectoryType> userDirectoryTypes = getUserDirectoryTypes();
 
@@ -2468,23 +2468,23 @@ public class SecurityService implements ISecurityService {
           Class<?> clazz =
               Thread.currentThread()
                   .getContextClassLoader()
-                  .loadClass(userDirectoryType.getUserDirectoryClassName());
+                  .loadClass(userDirectoryType.getProviderClassName());
 
-          if (!IUserDirectory.class.isAssignableFrom(clazz)) {
+          if (!UserDirectoryProvider.class.isAssignableFrom(clazz)) {
             throw new ServiceUnavailableException(
                 "The user directory class ("
-                    + userDirectoryType.getUserDirectoryClassName()
+                    + userDirectoryType.getProviderClassName()
                     + ") does not implement the IUserDirectory interface");
           }
 
-          Class<? extends IUserDirectory> userDirectoryClass =
-              clazz.asSubclass(IUserDirectory.class);
+          Class<? extends UserDirectoryProvider> userDirectoryProviderClass =
+              clazz.asSubclass(UserDirectoryProvider.class);
 
-          Constructor<? extends IUserDirectory> userDirectoryClassConstructor;
+          Constructor<? extends UserDirectoryProvider> userDirectoryProviderClassConstructor;
 
           try {
-            userDirectoryClassConstructor =
-                userDirectoryClass.getConstructor(
+            userDirectoryProviderClassConstructor =
+                userDirectoryProviderClass.getConstructor(
                     UUID.class,
                     List.class,
                     GroupRepository.class,
@@ -2492,22 +2492,24 @@ public class SecurityService implements ISecurityService {
                     RoleRepository.class);
           } catch (NoSuchMethodException e) {
             throw new ServiceUnavailableException(
-                "The user directory class ("
-                    + userDirectoryType.getUserDirectoryClassName()
+                "The user directory provider class ("
+                    + userDirectoryType.getProviderClassName()
                     + ") does not provide a valid constructor (long, Map<String,String>)");
           }
 
-          IUserDirectory userDirectoryInstance =
-              userDirectoryClassConstructor.newInstance(
+          UserDirectoryProvider userDirectoryProviderInstance =
+              userDirectoryProviderClassConstructor.newInstance(
                   userDirectory.getId(),
                   userDirectory.getParameters(),
                   groupRepository,
                   userRepository,
                   roleRepository);
 
-          applicationContext.getAutowireCapableBeanFactory().autowireBean(userDirectoryInstance);
+          applicationContext
+              .getAutowireCapableBeanFactory()
+              .autowireBean(userDirectoryProviderInstance);
 
-          reloadedUserDirectories.put(userDirectory.getId(), userDirectoryInstance);
+          reloadedUserDirectories.put(userDirectory.getId(), userDirectoryProviderInstance);
         } catch (Throwable e) {
           throw new ServiceUnavailableException(
               "Failed to initialize the user directory ("
@@ -2549,7 +2551,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("memberName");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2577,7 +2579,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("roleCode");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2642,7 +2644,7 @@ public class SecurityService implements ISecurityService {
       throw new InvalidArgumentException("username");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2685,7 +2687,7 @@ public class SecurityService implements ISecurityService {
 
       for (PasswordReset passwordReset : passwordResets) {
         if (passwordReset.getSecurityCodeHash().equals(securityCodeHash)) {
-          IUserDirectory userDirectory = userDirectories.get(userDirectoryIdOptional.get());
+          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryIdOptional.get());
 
           userDirectory.resetPassword(username, newPassword);
 
@@ -2747,7 +2749,7 @@ public class SecurityService implements ISecurityService {
           ServiceUnavailableException {
     validateGroup(group);
 
-    IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
+    UserDirectoryProvider userDirectory = userDirectories.get(group.getUserDirectoryId());
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(group.getUserDirectoryId());
@@ -2802,7 +2804,7 @@ public class SecurityService implements ISecurityService {
           ServiceUnavailableException {
     validateUser(user);
 
-    IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
+    UserDirectoryProvider userDirectory = userDirectories.get(user.getUserDirectoryId());
 
     if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(user.getUserDirectoryId());

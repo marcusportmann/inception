@@ -21,12 +21,12 @@ import digital.inception.core.sorting.SortDirection;
 import java.util.List;
 
 /**
- * The <b>IUserDirectoryProvider</b> interface defines the functionality provided by a user
- * directory, which manages users and groups.
+ * The <b>UserDirectoryProvider</b> interface defines the functionality provided by a user
+ * directory provider, which manages users and groups.
  *
  * @author Marcus Portmann
  */
-public interface IUserDirectory {
+public interface UserDirectoryProvider {
 
   /**
    * Add the group member to the group.

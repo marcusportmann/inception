@@ -51,12 +51,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>LDAPUserDirectory</b> class provides the LDAP user directory implementation.
+ * The <b>LDAPUserDirectoryProvider</b> class provides the LDAP user directory provider implementation.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "Duplicates", "SpringJavaAutowiredMembersInspection"})
-public class LDAPUserDirectory extends UserDirectoryBase {
+public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
   /** The default maximum number of filtered groups. */
   private static final int DEFAULT_MAX_FILTERED_GROUPS = 100;
@@ -71,7 +71,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   private static final String[] EMPTY_ATTRIBUTE_LIST = new String[0];
 
   /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(LDAPUserDirectory.class);
+  private static final Logger log = LoggerFactory.getLogger(LDAPUserDirectoryProvider.class);
 
   private final LdapName baseDN;
 
@@ -137,7 +137,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   private String groupDescriptionAttribute;
 
   /**
-   * Constructs a new <b>LDAPUserDirectory</b>.
+   * Constructs a new <b>LDAPUserDirectoryProvider</b>.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory
@@ -146,7 +146,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @param roleRepository the Role Repository
    * @throws ServiceUnavailableException if the LDAP user directory could not be initialized
    */
-  public LDAPUserDirectory(
+  public LDAPUserDirectoryProvider(
       UUID userDirectoryId,
       List<UserDirectoryParameter> parameters,
       GroupRepository groupRepository,

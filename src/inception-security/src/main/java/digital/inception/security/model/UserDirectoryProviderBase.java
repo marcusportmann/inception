@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>UserDirectoryBase</b> class provides the base class from which all user directory classes
- * should be derived.
+ * The <b>UserDirectoryProviderBase</b> class provides the base class from which all user directory
+ * provider classes should be derived.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract class UserDirectoryBase implements IUserDirectory {
+public abstract class UserDirectoryProviderBase implements UserDirectoryProvider {
 
   /** The Group Repository. */
   private final GroupRepository groupRepository;
@@ -55,7 +55,7 @@ public abstract class UserDirectoryBase implements IUserDirectory {
    * @param userRepository the User Repository
    * @param roleRepository the Role Repository
    */
-  public UserDirectoryBase(
+  public UserDirectoryProviderBase(
       UUID userDirectoryId,
       List<UserDirectoryParameter> parameters,
       GroupRepository groupRepository,

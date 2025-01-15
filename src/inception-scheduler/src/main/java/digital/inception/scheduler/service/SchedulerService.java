@@ -21,7 +21,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.scheduler.model.DuplicateJobException;
-import digital.inception.scheduler.model.IJob;
+import digital.inception.scheduler.model.JobImplementation;
 import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobExecutionContext;
 import digital.inception.scheduler.model.JobExecutionFailedException;
@@ -170,21 +170,21 @@ public class SchedulerService implements ISchedulerService {
     }
 
     // Instantiate and initialize the job
-    IJob jobImplementation;
+    JobImplementation jobImplementation;
 
     try {
       // Create a new instance of the job
       Object jobObject = jobClass.getConstructor().newInstance();
 
       // Check if the job is a valid job
-      if (!(jobObject instanceof IJob)) {
+      if (!(jobObject instanceof JobImplementation)) {
         throw new RuntimeException(
             "The job class ("
                 + job.getJobClass()
-                + ") does not implement the digital.inception.scheduler.model.IJob interface");
+                + ") does not implement the digital.inception.scheduler.model.JobImplementation interface");
       }
 
-      jobImplementation = (IJob) jobObject;
+      jobImplementation = (JobImplementation) jobObject;
 
       // Perform dependency injection for the job implementation
       applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);

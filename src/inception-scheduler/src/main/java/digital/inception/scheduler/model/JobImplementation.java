@@ -17,11 +17,11 @@
 package digital.inception.scheduler.model;
 
 /**
- * The <b>IJob</b> interface defines the functionality that must be provided by all jobs.
+ * The <b>JobImplementation</b> interface defines the functionality that must be provided by all jobs.
  *
  * @author Marcus Portmann
  */
-public interface IJob {
+public interface JobImplementation {
 
   /**
    * Execute the job.

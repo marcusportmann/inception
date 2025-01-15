@@ -41,7 +41,7 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the user directory type">
         <constraints nullable="false"/>
       </column>
-      <column name="user_directory_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that implements the user directory type">
+      <column name="provider_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that implements the provider for the user directory type">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -378,12 +378,12 @@
     <insert tableName="security_user_directory_types">
       <column name="code" value="InternalUserDirectory"/>
       <column name="name" value="Internal User Directory"/>
-      <column name="user_directory_class" value="digital.inception.security.model.InternalUserDirectory"/>
+      <column name="provider_class" value="digital.inception.security.model.InternalUserDirectoryProvider"/>
     </insert>
     <insert tableName="security_user_directory_types">
       <column name="code" value="LDAPUserDirectory"/>
       <column name="name" value="LDAP User Directory"/>
-      <column name="user_directory_class" value="digital.inception.security.model.LDAPUserDirectory"/>
+      <column name="provider_class" value="digital.inception.security.model.LDAPUserDirectoryProvider"/>
     </insert>
 
     <insert tableName="security_user_directories" dbms="!oracle">

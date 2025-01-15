@@ -43,12 +43,12 @@ import java.util.Objects;
  */
 @Schema(description = "A user directory type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "name", "userDirectoryClassName"})
+@JsonPropertyOrder({"code", "name", "providerClassName"})
 @XmlRootElement(name = "UserDirectoryType", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectoryType",
     namespace = "https://inception.digital/security",
-    propOrder = {"code", "name", "userDirectoryClassName"})
+    propOrder = {"code", "name", "providerClassName"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "security_user_directory_types")
@@ -80,20 +80,23 @@ public class UserDirectoryType implements java.io.Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The Java class that implements the user directory type. */
-  @JsonIgnore @Transient private transient Class userDirectoryClass;
+  /** The Java class that implements the provider for the user directory type. */
+  @JsonIgnore @Transient private transient Class providerClass;
 
-  /** The fully qualified name of the Java class that implements the user directory type. */
+  /**
+   * The fully qualified name of the Java class that implements the provider for the user directory
+   * type.
+   */
   @Schema(
       description =
-          "The fully qualified name of the Java class that implements the user directory type",
+          "The fully qualified name of the Java class that implements the provider for the user directory type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "UserDirectoryClassName", required = true)
+  @XmlElement(name = "ProviderClassName", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "user_directory_class", length = 1000, nullable = false)
-  private String userDirectoryClassName;
+  @Column(name = "provider_class", length = 1000, nullable = false)
+  private String providerClassName;
 
   /** Constructs a new <b>UserDirectoryType</b>. */
   public UserDirectoryType() {}
@@ -103,13 +106,13 @@ public class UserDirectoryType implements java.io.Serializable {
    *
    * @param code the code for the user directory type
    * @param name the name of the user directory type
-   * @param userDirectoryClassName the fully qualified name of the Java class that implements the
-   *     user directory type
+   * @param providerClassName the fully qualified name of the Java class that implements the
+   *     provider for the user directory type
    */
-  UserDirectoryType(String code, String name, String userDirectoryClassName) {
+  UserDirectoryType(String code, String name, String providerClassName) {
     this.code = code;
     this.name = name;
-    this.userDirectoryClassName = userDirectoryClassName;
+    this.providerClassName = providerClassName;
   }
 
   /**
@@ -156,12 +159,14 @@ public class UserDirectoryType implements java.io.Serializable {
   }
 
   /**
-   * Returns the fully qualified name of the Java class that implements the user directory type.
+   * Returns the fully qualified name of the Java class that implements the provider for the user
+   * directory type.
    *
-   * @return the fully qualified name of the Java class that implements the user directory type
+   * @return the fully qualified name of the Java class that implements the provider for the user
+   *     directory type
    */
-  public String getUserDirectoryClassName() {
-    return userDirectoryClassName;
+  public String getProviderClassName() {
+    return providerClassName;
   }
 
   /**

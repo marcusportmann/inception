@@ -16,7 +16,7 @@
 
 package digital.inception.demo.job;
 
-import digital.inception.scheduler.model.IJob;
+import digital.inception.scheduler.model.JobImplementation;
 import digital.inception.scheduler.model.JobExecutionContext;
 import digital.inception.scheduler.model.JobExecutionFailedException;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-public class DemoJob implements IJob {
+public class DemoJob implements JobImplementation {
 
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(DemoJob.class);

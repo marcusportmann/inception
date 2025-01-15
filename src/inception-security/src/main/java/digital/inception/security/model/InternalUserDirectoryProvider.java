@@ -43,11 +43,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalUserDirectory</b> class provides the internal user directory implementation.
+ * The <b>InternalUserDirectoryProvider</b> class provides the internal user directory provider
+ * implementation.
  *
  * @author Marcus Portmann
  */
-public class InternalUserDirectory extends UserDirectoryBase {
+public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
   /** The default maximum number of filtered groups. */
   private static final int DEFAULT_MAX_FILTERED_GROUPS = 100;
@@ -93,7 +94,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
   private final int passwordHistoryMonths;
 
   /**
-   * Constructs a new <b>InternalUserDirectory</b>.
+   * Constructs a new <b>InternalUserDirectoryProvider</b>.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory
@@ -102,7 +103,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * @param roleRepository the Role Repository
    * @throws ServiceUnavailableException if the internal user directory could not be initialized
    */
-  public InternalUserDirectory(
+  public InternalUserDirectoryProvider(
       UUID userDirectoryId,
       List<UserDirectoryParameter> parameters,
       GroupRepository groupRepository,

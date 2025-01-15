@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "SpringJavaAutowiredMembersInspection"})
-public class TestJob implements IJob {
+public class TestJob implements JobImplementation {
 
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(TestJob.class);

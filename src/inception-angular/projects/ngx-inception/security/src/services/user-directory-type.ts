@@ -32,21 +32,22 @@ export class UserDirectoryType {
   name: string;
 
   /**
-   * The fully qualified name of the Java class that implements the user directory type.
+   * The fully qualified name of the Java class that implements the provider for the user directory
+   * type.
    */
-  userDirectoryClassName: string;
+  providerClassName: string;
 
   /**
    * Constructs a new UserDirectoryParameter.
    *
-   * @param code                   The code for the user directory type.
-   * @param name                   The name of the user directory type.
-   * @param userDirectoryClassName The fully qualified name of the Java class that implements the
-   *                               user directory type.
+   * @param code              The code for the user directory type.
+   * @param name              The name of the user directory type.
+   * @param providerClassName The fully qualified name of the Java class that implements the
+   *                          provider for the user directory type.
    */
-  constructor(code: string, name: string, userDirectoryClassName: string) {
+  constructor(code: string, name: string, providerClassName: string) {
     this.code = code;
     this.name = name;
-    this.userDirectoryClassName = userDirectoryClassName;
+    this.providerClassName = providerClassName;
   }
 }
