@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.server.resource;
+package digital.inception.server.resource.xacmlpdp;
 
 /**
  * The <b>XacmlPolicyDecisionPointAttributeCategory</b> enumeration defines the custom XACML

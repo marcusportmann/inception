@@ -16,9 +16,9 @@
 
 package digital.inception.demo.controller;
 
-import digital.inception.server.resource.XacmlPolicyDecisionPointAttributeCategory;
-import digital.inception.server.resource.XacmlPolicyDecisionPointContextProvider;
-import digital.inception.server.resource.XacmlUtil;
+import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPointAttributeCategory;
+import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPointContextProvider;
+import digital.inception.server.resource.xacmlpdp.XacmlUtil;
 import org.aopalliance.intercept.MethodInvocation;
 import org.ow2.authzforce.core.pdp.api.DecisionRequestBuilder;
 import org.slf4j.Logger;

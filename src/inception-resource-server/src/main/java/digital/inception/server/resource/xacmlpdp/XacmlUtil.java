@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.server.resource;
+package digital.inception.server.resource.xacmlpdp;
 
 import com.google.common.collect.ImmutableList;
 import java.time.LocalDate;

@@ -18,9 +18,9 @@ package digital.inception.server.resource.test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import digital.inception.server.resource.XacmlPolicyDecisionPoint;
-import digital.inception.server.resource.XacmlPolicyDecisionPointAttributeCategory;
-import digital.inception.server.resource.XacmlUtil;
+import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPoint;
+import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPointAttributeCategory;
+import digital.inception.server.resource.xacmlpdp.XacmlUtil;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

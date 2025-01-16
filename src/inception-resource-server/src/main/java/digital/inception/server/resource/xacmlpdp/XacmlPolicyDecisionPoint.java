@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package digital.inception.server.resource;
+package digital.inception.server.resource.xacmlpdp;
 
+import digital.inception.server.resource.PolicyDecisionPoint;
+import digital.inception.server.resource.PolicyDecisionPointException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.math.BigInteger;

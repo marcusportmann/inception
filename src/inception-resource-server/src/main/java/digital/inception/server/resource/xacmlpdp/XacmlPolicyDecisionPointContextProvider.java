@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.server.resource;
+package digital.inception.server.resource.xacmlpdp;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.ow2.authzforce.core.pdp.api.DecisionRequestBuilder;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.server.resource;
+package digital.inception.server.resource.xacmlpdp;
 
 import java.util.List;
 import org.aopalliance.intercept.MethodInvocation;

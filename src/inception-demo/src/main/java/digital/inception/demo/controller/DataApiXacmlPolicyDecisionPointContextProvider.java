@@ -22,9 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import digital.inception.demo.model.Data;
-import digital.inception.server.resource.XacmlPolicyDecisionPointAttributeCategory;
-import digital.inception.server.resource.XacmlPolicyDecisionPointContextProvider;
-import digital.inception.server.resource.XacmlUtil;
+import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPointAttributeCategory;
+import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPointContextProvider;
+import digital.inception.server.resource.xacmlpdp.XacmlUtil;
 
 /**
  * The <b>DataApiXacmlPolicyDecisionPointContextProvider</b> class.

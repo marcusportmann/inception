@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package digital.inception.server.resource;
+package digital.inception.server.resource.xacmlpdp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import digital.inception.server.resource.PolicyDecisionPointException;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
