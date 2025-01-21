@@ -123,7 +123,8 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
             log.debug(message);
           }
 
-          return false;
+          // NOTE: We want to execute the authorization but not enforce it in debug mode
+          return inDebugMode;
         }
       }
     }

@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -85,6 +86,9 @@ public final class ISO8601Util {
 
   private static final ThreadLocal<DateTimeFormatter> localTimeFormatter =
       ThreadLocal.withInitial(() -> DateTimeFormatter.ISO_TIME);
+
+  private static final ThreadLocal<DateTimeFormatter> offsetTimeFormatter =
+      ThreadLocal.withInitial(() -> DateTimeFormatter.ISO_OFFSET_TIME);
 
   /** Private constructor to prevent instantiation. */
   private ISO8601Util() {}
@@ -173,6 +177,17 @@ public final class ISO8601Util {
    */
   public static String fromOffsetDateTime(OffsetDateTime offsetDateTime) {
     return offsetDateTime.format(localDateTimeFormatter.get());
+  }
+
+  /**
+   * Transform the <b>OffsetTime</b> instance into an ISO 8601 format string.
+   *
+   * @param offsetTime the <b>OffsetTime</b> instance to transform into an ISO 8601 format
+   *     string
+   * @return the ISO 8601 format string for the <b>OffsetTime</b> instance
+   */
+  public static String fromOffsetTime(OffsetTime offsetTime) {
+    return offsetTime.format(offsetTimeFormatter.get());
   }
 
   /**
@@ -401,6 +416,16 @@ public final class ISO8601Util {
           .atZone(ZoneId.systemDefault())
           .toOffsetDateTime();
     }
+  }
+
+  /**
+   * Transform an ISO 8601 format string into a <b>OffsetTime</b> instance.
+   *
+   * @param iso8601string the ISO 8601 format string to transform
+   * @return the <b>OffsetTime</b> instance for the ISO 8601 format string
+   */
+  public static OffsetTime toOffsetTime(String iso8601string) {
+    return OffsetTime.parse(iso8601string, offsetTimeFormatter.get());
   }
 
   /**

@@ -67,23 +67,18 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
             Boolean.parseBoolean(
                 applicationContext.getEnvironment().getProperty("inception.debug.enabled"));
       }
-    } catch (Throwable e) {
-      this.inDebugMode = false;
+    } catch (Throwable ignored) {
     }
 
     // Check if security is enabled for the Inception Framework
-    if (!this.inDebugMode) {
-      try {
-        if (StringUtils.hasText(
-            applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
-          this.isSecurityEnabled =
-              Boolean.parseBoolean(
-                  applicationContext
-                      .getEnvironment()
-                      .getProperty("inception.api.security.enabled"));
-        }
-      } catch (Throwable ignored) {
+    try {
+      if (StringUtils.hasText(
+          applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
+        this.isSecurityEnabled =
+            Boolean.parseBoolean(
+                applicationContext.getEnvironment().getProperty("inception.api.security.enabled"));
       }
+    } catch (Throwable ignored) {
     }
 
     try {

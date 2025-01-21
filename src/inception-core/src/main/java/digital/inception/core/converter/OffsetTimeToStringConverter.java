@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-package digital.inception.json;
+package digital.inception.core.converter;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import digital.inception.core.util.ISO8601Util;
-import java.io.IOException;
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 /**
- * The <b>InstantSerializer</b> class implements the Jackson serializer for the <b>Instant</b> type.
+ * The <b>OffsetTimeToStringConverter</b> class implements the Spring converter that converts a
+ * <b>OffsetDateTime</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
-public class InstantSerializer extends JsonSerializer<Instant> {
+@SuppressWarnings("unused")
+@Component
+public final class OffsetTimeToStringConverter implements Converter<OffsetDateTime, String> {
 
-  /** Constructs a new <b>InstantSerializer</b>. */
-  public InstantSerializer() {}
+  /** Constructs a new <b>OffsetTimeToStringConverter</b>. */
+  public OffsetTimeToStringConverter() {}
 
   @Override
-  public void serialize(
-      Instant instant, JsonGenerator jsonGenerator, SerializerProvider serializers)
-      throws IOException {
-    jsonGenerator.writeString(ISO8601Util.fromInstant(instant));
+  public String convert(OffsetDateTime source) {
+    return ISO8601Util.fromOffsetDateTime(source);
   }
 }

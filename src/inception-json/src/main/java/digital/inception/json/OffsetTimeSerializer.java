@@ -21,23 +21,23 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import digital.inception.core.util.ISO8601Util;
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 
 /**
- * The <b>OffsetDateTimeSerializer</b> class implements the Jackson serializer for the <b>
- * OffsetDateTime</b> type.
+ * The <b>OffsetTimeSerializer</b> class implements the Jackson serializer for the <b>
+ * OffsetTime</b> type.
  *
  * @author Marcus Portmann
  */
-public class OffsetDateTimeSerializer extends JsonSerializer<OffsetDateTime> {
+public class OffsetTimeSerializer extends JsonSerializer<OffsetTime> {
 
-  /** Constructs a new <b>OffsetDateTimeSerializer</b>. */
-  public OffsetDateTimeSerializer() {}
+  /** Constructs a new <b>OffsetTimeSerializer</b>. */
+  public OffsetTimeSerializer() {}
 
   @Override
   public void serialize(
-      OffsetDateTime offsetDateTime, JsonGenerator jsonGenerator, SerializerProvider serializers)
+      OffsetTime offsetDateTime, JsonGenerator jsonGenerator, SerializerProvider serializers)
       throws IOException {
-    jsonGenerator.writeString(ISO8601Util.fromOffsetDateTime(offsetDateTime));
+    jsonGenerator.writeString(ISO8601Util.fromOffsetTime(offsetDateTime));
   }
 }

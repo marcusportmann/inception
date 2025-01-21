@@ -555,108 +555,243 @@
     <!--    |____/|_____|_|  |_|\___/  |____/_/   \_\_/_/   \_\    -->
     <insert tableName="demo_data">
       <column name="id" value="1"/>
+      <column name="boolean_value" value="true"/>
+      <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
       <column name="integer_value" value="1000001"/>
       <column name="string_value" value="Demo Value 1"/>
-      <column name="date_value" value="now()"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="2"/>
-      <column name="integer_value" value="2000002"/>
-      <column name="string_value" value="Demo Value 2"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000002"/>
+      <column name="string_value" value="Demo Value 2"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="3"/>
-      <column name="integer_value" value="3000003"/>
-      <column name="string_value" value="Demo Value 3"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000003"/>
+      <column name="string_value" value="Demo Value 3"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="4"/>
-      <column name="integer_value" value="4000004"/>
-      <column name="string_value" value="Demo Value 4"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000004"/>
+      <column name="string_value" value="Demo Value 4"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="5"/>
-      <column name="integer_value" value="5000005"/>
-      <column name="string_value" value="Demo Value 5"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000005"/>
+      <column name="string_value" value="Demo Value 5"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="6"/>
-      <column name="integer_value" value="6000006"/>
-      <column name="string_value" value="Demo Value 6"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000006"/>
+      <column name="string_value" value="Demo Value 6"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="7"/>
-      <column name="integer_value" value="7000007"/>
-      <column name="string_value" value="Demo Value 7"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000007"/>
+      <column name="string_value" value="Demo Value 7"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="8"/>
-      <column name="integer_value" value="8000000"/>
-      <column name="string_value" value="Demo Value 8"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000008"/>
+      <column name="string_value" value="Demo Value 8"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="9"/>
-      <column name="integer_value" value="9000009"/>
-      <column name="string_value" value="Demo Value 9"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000009"/>
+      <column name="string_value" value="Demo Value 9"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="10"/>
+      <column name="boolean_value" value="true"/>
+      <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
       <column name="integer_value" value="1000010"/>
       <column name="string_value" value="Demo Value 10"/>
-      <column name="date_value" valueComputed="${now}"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="11"/>
-      <column name="integer_value" value="1100011"/>
-      <column name="string_value" value="Demo Value 11"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000011"/>
+      <column name="string_value" value="Demo Value 11"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="12"/>
-      <column name="integer_value" value="1200012"/>
-      <column name="string_value" value="Demo Value 12"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000012"/>
+      <column name="string_value" value="Demo Value 12"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="13"/>
-      <column name="integer_value" value="1300013"/>
-      <column name="string_value" value="Demo Value 13"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000013"/>
+      <column name="string_value" value="Demo Value 13"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="14"/>
-      <column name="integer_value" value="1400014"/>
-      <column name="string_value" value="Demo Value 14"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000014"/>
+      <column name="string_value" value="Demo Value 14"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
     <insert tableName="demo_data">
       <column name="id" value="15"/>
-      <column name="integer_value" value="1500015"/>
-      <column name="string_value" value="Demo Value 15"/>
+      <column name="boolean_value" value="true"/>
       <column name="date_value" valueComputed="${now}"/>
+      <column name="decimal_value" value="111.111"/>
+      <column name="double_value" value="222.222"/>
+      <column name="float_value" value="333.333"/>
+      <column name="integer_value" value="1000015"/>
+      <column name="string_value" value="Demo Value 15"/>
+      <column name="time_value" value="14:30:00"/>
+      <column name="time_with_time_zone_value" value="18:30:00+02:00"/>
       <column name="timestamp_value" valueComputed="${now}"/>
+      <column name="timestamp_with_time_zone_value" valueComputed="${now}"/>
+      <column name="country" value="ZA"/>
+      <column name="language" value="EN"/>
     </insert>
 
 
@@ -1574,6 +1709,7 @@
       <column name="name" value="Parameter 1"/>
       <column name="value" value="Value 1"/>
     </insert>
+
 
     <!--    ____  _____ __  __  ___    ____    _  _____  _         -->
     <!--    |  _ \| ____|  \/  |/ _ \  |  _ \  / \|_   _|/ \       -->

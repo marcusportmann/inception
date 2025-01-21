@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -50,6 +51,8 @@ public class DateTimeModule extends SimpleModule {
     addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
     addSerializer(OffsetDateTime.class, new OffsetDateTimeSerializer());
     addDeserializer(OffsetDateTime.class, new OffsetDateTimeDeserializer());
+    addSerializer(OffsetTime.class, new OffsetTimeSerializer());
+    addDeserializer(OffsetTime.class, new OffsetTimeDeserializer());
     addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer());
     addDeserializer(ZonedDateTime.class, new ZonedDateTimeDeserializer());
   }

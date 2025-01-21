@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPoint;
 import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPointAttributeCategory;
 import digital.inception.server.resource.xacmlpdp.XacmlUtil;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +47,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>XACMLTest</b> class.
+ * The <b>XACMLPDPTest</b> class.
  *
  * @author Marcus Portmann
  */
@@ -60,7 +61,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
       DirtiesContextTestExecutionListener.class,
       TransactionalTestExecutionListener.class
     })
-public class XACMLTest {
+public class XACMLPDPTest {
 
   /** The policy decision point. */
   private static XacmlPolicyDecisionPoint xacmlPolicyDecisionPoint;
@@ -69,7 +70,11 @@ public class XACMLTest {
   public static void init(ApplicationContext applicationContext) {
     xacmlPolicyDecisionPoint =
         new XacmlPolicyDecisionPoint(
-            applicationContext, true, false, "http://localhost:8080/api/security/policies", 43200);
+            applicationContext,
+            true,
+            false,
+            "http://localhost:8080/api/security/policies",
+            43200);
   }
 
   @Test

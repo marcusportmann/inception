@@ -16,6 +16,11 @@
 
 package digital.inception.demo.controller;
 
+import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,11 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import reactor.core.publisher.Flux;
-import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.Data;
-import digital.inception.demo.model.ReactiveData;
 
 /**
  * The <b>IDataApiController</b> interface.
@@ -56,8 +56,6 @@ public interface IDataApiController {
       value = "/all-data",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  // @PreAuthorize("hasAccess('GetAllData') or isSecurityDisabled() or hasRole('Administrator')")
-  @PreAuthorize("isSecurityDisabled() or hasRole('Administrator')")
   List<Data> getAllData() throws ServiceUnavailableException;
 
   /**
@@ -97,29 +95,29 @@ public interface IDataApiController {
   @Operation(summary = "Process the data", description = "Process the data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The data was processed successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
+          @ApiResponse(responseCode = "204", description = "The data was processed successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/process",
@@ -129,10 +127,10 @@ public interface IDataApiController {
   @PreAuthorize("authorize()")
   void process(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
-              description = "The data to process",
-              required = true)
-          @RequestBody
-          Data data)
+          description = "The data to process",
+          required = true)
+      @RequestBody
+      Data data)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -145,29 +143,29 @@ public interface IDataApiController {
   @Operation(summary = "Validate the data", description = "Validate the data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The data was validated successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
+          @ApiResponse(responseCode = "204", description = "The data was validated successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/validate",
@@ -176,9 +174,9 @@ public interface IDataApiController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void validate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
-              description = "The data to validate",
-              required = true)
-          @RequestBody
-          Data data)
+          description = "The data to validate",
+          required = true)
+      @RequestBody
+      Data data)
       throws InvalidArgumentException, ServiceUnavailableException;
 }

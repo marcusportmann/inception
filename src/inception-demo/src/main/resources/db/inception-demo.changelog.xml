@@ -22,10 +22,17 @@
       <column name="id" type="bigint" remarks="The ID for the data">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="boolean_value" type="boolean" remarks="The boolean value for the data"/>
+      <column name="date_value" type="date" remarks="The date value for the data"/>
+      <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the data"/>
+      <column name="double_value" type="double" remarks="The double value for the data"/>
+      <column name="float_value" type="float" remarks="The float value for the data"/>
       <column name="integer_value" type="int" remarks="The integer value for the data"/>
       <column name="string_value" type="nvarchar(2000)" remarks="The string value for the data"/>
-      <column name="date_value" type="date" remarks="The date value for the data"/>
-      <column name="timestamp_value" type="timestamp with time zone" remarks="The timestamp value for the data"/>
+      <column name="time_value" type="time" remarks="The time value for the data"/>
+      <column name="time_with_time_zone_value" type="time with time zone" remarks="The time with time zone value for the data"/>
+      <column name="timestamp_value" type="timestamp" remarks="The timestamp value for the data"/>
+      <column name="timestamp_with_time_zone_value" type="timestamp with time zone" remarks="The timestamp with time zone value for the data"/>
       <column name="country" type="nvarchar(2)" remarks="The ISO 3166-1 country code value for the data"/>
       <column name="language" type="nvarchar(2)" remarks="The ISO 639-1 language code value for the data"/>
     </createTable>

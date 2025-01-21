@@ -24,7 +24,9 @@ import digital.inception.core.validation.constraint.NoScriptOrSQLInjection;
 import digital.inception.core.validation.constraint.ValidISOCountryCode;
 import digital.inception.core.validation.constraint.ValidISOLanguageCode;
 import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.core.xml.LocalTimeAdapter;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
+import digital.inception.core.xml.OffsetTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,8 +43,12 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Objects;
 
 /**
@@ -54,10 +60,17 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
-  "stringValue",
-  "integerValue",
+  "booleanValue",
   "dateValue",
+  "decimalValue",
+  "doubleValue",
+  "floatValue",
+  "integerValue",
+  "stringValue",
+  "timeValue",
+  "timeWithTimeZoneValue",
   "timestampValue",
+  "timestampWithTimeZoneValue",
   "country",
   "language"
 })
@@ -67,10 +80,17 @@ import java.util.Objects;
     namespace = "https://inception.digital/demo",
     propOrder = {
       "id",
-      "stringValue",
-      "integerValue",
+      "booleanValue",
       "dateValue",
+      "decimalValue",
+      "doubleValue",
+      "floatValue",
+      "integerValue",
+      "stringValue",
+      "timeValue",
+      "timeWithTimeZoneValue",
       "timestampValue",
+      "timestampWithTimeZoneValue",
       "country",
       "language"
     })
@@ -83,30 +103,52 @@ public class Data implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
+  /** The boolean value for the data. */
+  @Schema(description = "The boolean value for the data")
+  @JsonProperty
+  @XmlElement(name = "BooleanValue")
+  @Column(name = "boolean_value")
+  private boolean booleanValue;
+
   /** The ISO 3166-1 country code value for the data. */
-  @Schema(
-      description = "The ISO 3166-1 country code value for the data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  @Schema(description = "The ISO 3166-1 country code value for the data")
+  @JsonProperty
   @XmlElement(name = "Country")
-  @NotNull
   @ValidISOCountryCode
   @Size(min = 2, max = 2)
   @Column(name = "country")
   private String country;
 
   /** The date value for the data. */
-  @Schema(
-      description = "The ISO 8601 format date value for the data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  @Schema(description = "The ISO 8601 format date value for the data")
+  @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue", required = true)
+  @XmlElement(name = "DateValue")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @NotNull
   @Column(name = "date_value")
   private LocalDate dateValue;
+
+  /** The decimal value for the data. */
+  @Schema(description = "The decimal value for the data")
+  @JsonProperty
+  @XmlElement(name = "DecimalValue")
+  @Column(name = "decimal_value")
+  private BigDecimal decimalValue;
+
+  /** The double value for the data. */
+  @Schema(description = "The double value for the data")
+  @JsonProperty
+  @XmlElement(name = "DoubleValue")
+  @Column(name = "double_value")
+  private Double doubleValue;
+
+  /** The float value for the data. */
+  @Schema(description = "The float value for the data")
+  @JsonProperty
+  @XmlElement(name = "FloatValue")
+  @Column(name = "float_value")
+  private Float floatValue;
 
   /** The ID for the data. */
   @Schema(description = "The ID for the data", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -118,80 +160,67 @@ public class Data implements Serializable {
   private long id;
 
   /** The integer value for the data. */
-  @Schema(
-      description = "The integer value for the data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "IntegerValue", required = true)
-  @NotNull
+  @Schema(description = "The integer value for the data")
+  @JsonProperty
+  @XmlElement(name = "IntegerValue")
   @Column(name = "integer_value")
   private Integer integerValue;
 
   /** The ISO 639-1 language code value for the data. */
-  @Schema(
-      description = "The ISO 639-1 language code value for the data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  @Schema(description = "The ISO 639-1 language code value for the data")
+  @JsonProperty
   @XmlElement(name = "Language")
-  @NotNull
   @ValidISOLanguageCode
   @Size(min = 2, max = 2)
   @Column(name = "language")
   private String language;
 
   /** The string value for the data. */
-  @Schema(
-      description = "The string value for the data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  @Schema(description = "The string value for the data")
+  @JsonProperty
   @XmlElement(name = "StringValue")
-  @NotNull
   @Size(min = 1, max = 2000)
   @Column(name = "string_value")
   private String stringValue;
 
+  /** The time value for the data. */
+  @Schema(description = "The time value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimeValue")
+  @XmlJavaTypeAdapter(LocalTimeAdapter.class)
+  @XmlSchemaType(name = "time")
+  @Column(name = "time_value")
+  private LocalTime timeValue;
+
+  /** The time with time zone value for the data. */
+  @Schema(description = "The time with time zone value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimeWithTimeZoneValue")
+  @XmlJavaTypeAdapter(OffsetTimeAdapter.class)
+  @XmlSchemaType(name = "time")
+  @Column(name = "time_with_time_zone_value")
+  private OffsetTime timeWithTimeZoneValue;
+
   /** The timestamp value for the data. */
-  @Schema(
-      description = "The timestamp value for the data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TimestampValue", required = true)
+  @Schema(description = "The timestamp value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimestampValue")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "timestamp_value")
+  private LocalDateTime timestampValue;
+
+  /** The timestamp with time zone value for the data. */
+  @Schema(description = "The timestamp with time zone value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimestampWithTimeZoneValue")
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column(name = "timestamp_value")
-  private OffsetDateTime timestampValue;
+  @Column(name = "timestamp_with_time_zone_value")
+  private OffsetDateTime timestampWithTimeZoneValue;
 
   /** Constructs a new <b>Data</b>. */
   public Data() {}
-
-  /**
-   * Constructs a new <b>Data</b>.
-   *
-   * @param id the ID for the data
-   * @param integerValue the integer value for the data
-   * @param stringValue the string value for the data
-   * @param dateValue the date value for the data
-   * @param timestampValue the timestamp value for the data
-   * @param country the ISO 3166-1 country code value for the data
-   * @param language the ISO 639-1 language code value for the data
-   */
-  public Data(
-      long id,
-      Integer integerValue,
-      String stringValue,
-      LocalDate dateValue,
-      OffsetDateTime timestampValue,
-      String country,
-      String language) {
-    this.id = id;
-    this.integerValue = integerValue;
-    this.stringValue = stringValue;
-    this.dateValue = dateValue;
-    this.timestampValue = timestampValue;
-    this.country = country;
-    this.language = language;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -219,6 +248,15 @@ public class Data implements Serializable {
   }
 
   /**
+   * Returns the boolean value for the data.
+   *
+   * @return the boolean value for the data
+   */
+  public boolean getBooleanValue() {
+    return booleanValue;
+  }
+
+  /**
    * Returns the ISO 3166-1 country code value for the data.
    *
    * @return the ISO 3166-1 country code value for the data
@@ -234,6 +272,33 @@ public class Data implements Serializable {
    */
   public LocalDate getDateValue() {
     return dateValue;
+  }
+
+  /**
+   * Returns the decimal value for the data.
+   *
+   * @return the decimal value for the data
+   */
+  public BigDecimal getDecimalValue() {
+    return decimalValue;
+  }
+
+  /**
+   * Returns the double value for the data.
+   *
+   * @return the double value for the data
+   */
+  public Double getDoubleValue() {
+    return doubleValue;
+  }
+
+  /**
+   * Returns the float value for the data.
+   *
+   * @return the float value for the data
+   */
+  public Float getFloatValue() {
+    return floatValue;
   }
 
   /**
@@ -273,12 +338,48 @@ public class Data implements Serializable {
   }
 
   /**
+   * Returns the time value for the data.
+   *
+   * @return the time value for the data
+   */
+  public LocalTime getTimeValue() {
+    return timeValue;
+  }
+
+  /**
+   * Returns the time with time zone value for the data.
+   *
+   * @return the time with time zone value for the data
+   */
+  public OffsetTime getTimeWithTimeZoneValue() {
+    return timeWithTimeZoneValue;
+  }
+
+  /**
    * Returns the timestamp value for the data.
    *
    * @return the timestamp value for the data
    */
-  public OffsetDateTime getTimestampValue() {
+  public LocalDateTime getTimestampValue() {
     return timestampValue;
+  }
+
+  /**
+   * Returns the timestamp with time zone value for the data.
+   *
+   * @return the timestamp with time zone value for the data
+   */
+  public OffsetDateTime getTimestampWithTimeZoneValue() {
+    return timestampWithTimeZoneValue;
+  }
+
+  /**
+   * Set the boolean value for the data.
+   *
+   * @param booleanValue the boolean value for the data
+   */
+  public void setBooleanValue(boolean booleanValue) {
+    this.booleanValue = booleanValue;
   }
 
   /**
@@ -297,6 +398,33 @@ public class Data implements Serializable {
    */
   public void setDateValue(LocalDate dateValue) {
     this.dateValue = dateValue;
+  }
+
+  /**
+   * Set the decimal value for the data.
+   *
+   * @param decimalValue the decimal value for the data
+   */
+  public void setDecimalValue(BigDecimal decimalValue) {
+    this.decimalValue = decimalValue;
+  }
+
+  /**
+   * Set the double value for the data.
+   *
+   * @param doubleValue the double value for the data
+   */
+  public void setDoubleValue(Double doubleValue) {
+    this.doubleValue = doubleValue;
+  }
+
+  /**
+   * Set the float value for the data.
+   *
+   * @param floatValue the float value for the data
+   */
+  public void setFloatValue(Float floatValue) {
+    this.floatValue = floatValue;
   }
 
   /**
@@ -336,12 +464,39 @@ public class Data implements Serializable {
   }
 
   /**
+   * Set the time value for the data.
+   *
+   * @param timeValue the time value for the data
+   */
+  public void setTimeValue(LocalTime timeValue) {
+    this.timeValue = timeValue;
+  }
+
+  /**
+   * Set the time with time zone value for the data.
+   *
+   * @param timeWithTimeZoneValue the time with time zone value for the data
+   */
+  public void setTimeWithTimeZoneValue(OffsetTime timeWithTimeZoneValue) {
+    this.timeWithTimeZoneValue = timeWithTimeZoneValue;
+  }
+
+  /**
    * Set the timestamp value for the data.
    *
    * @param timestampValue the timestamp value for the data
    */
-  public void setTimestampValue(OffsetDateTime timestampValue) {
+  public void setTimestampValue(LocalDateTime timestampValue) {
     this.timestampValue = timestampValue;
+  }
+
+  /**
+   * Set the timestamp with time zone value for the data.
+   *
+   * @param timestampWithTimeZoneValue the timestamp with time zone value for the data
+   */
+  public void setTimestampWithTimeZoneValue(OffsetDateTime timestampWithTimeZoneValue) {
+    this.timestampWithTimeZoneValue = timestampWithTimeZoneValue;
   }
 
   /**
@@ -353,14 +508,32 @@ public class Data implements Serializable {
   public String toString() {
     return "Data {id=\""
         + id
+        + "\", booleanValue=\""
+        + booleanValue
+        + "\", dateValue=\""
+        + dateValue
+        + "\", decimalValue=\""
+        + decimalValue
+        + "\", doubleValue=\""
+        + doubleValue
+        + "\", floatValue=\""
+        + floatValue
         + "\", integerValue=\""
         + integerValue
         + "\", stringValue=\""
         + stringValue
-        + "\", dateValue=\""
-        + dateValue
+        + "\", timeValue=\""
+        + timeValue
+        + "\", timeWithTimeZoneValue=\""
+        + timeWithTimeZoneValue
         + "\", timestampValue=\""
         + timestampValue
+        + "\", timestampWithTimeZoneValue=\""
+        + timestampWithTimeZoneValue
+        + "\", country=\""
+        + country
+        + "\", language=\""
+        + language
         + "\"}";
   }
 }

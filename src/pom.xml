@@ -123,6 +123,7 @@
     <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
     <mssql-jdbc.version>12.8.1.jre11</mssql-jdbc.version>
     <narayana.version>7.1.0.Final</narayana.version>
+    <ognl.version>3.4.5</ognl.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
     <opentelemetry-sdk.version>1.45.0</opentelemetry-sdk.version>
     <oracle-r2dbc.version>1.2.0</oracle-r2dbc.version>
@@ -262,6 +263,11 @@
         <groupId>net.logstash.logback</groupId>
         <artifactId>logstash-logback-encoder</artifactId>
         <version>${logstash-logback-encoder.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ognl</groupId>
+        <artifactId>ognl</artifactId>
+        <version>${ognl.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.avro</groupId>
@@ -657,6 +663,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-web</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-ws</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -717,6 +728,7 @@
     <module>inception-sms-api</module>
     <module>inception-sms-ws</module>
     <module>inception-test</module>
+    <module>inception-web</module>
     <module>inception-ws</module>
 
     <module>inception-service-parent</module>

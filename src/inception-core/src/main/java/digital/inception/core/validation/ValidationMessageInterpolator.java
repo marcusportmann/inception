@@ -54,7 +54,7 @@ public class ValidationMessageInterpolator extends AbstractMessageInterpolator {
     if (InterpolationTerm.isElExpression(term)) {
       if (log.isWarnEnabled()) {
         log.warn(
-            "The message contains an EL expression, which is not supported by the Inception message interpolator ("
+            "The message contains an EL expression, which is not supported by the message interpolator ("
                 + term
                 + ")");
       }

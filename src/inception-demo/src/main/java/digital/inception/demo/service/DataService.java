@@ -28,6 +28,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
@@ -81,9 +82,12 @@ public class DataService implements IDataService {
     try {
       Data newData = new Data();
       newData.setId(666);
-      newData.setStringValue("New String Value");
+      newData.setBooleanValue(true);
       newData.setDateValue(LocalDate.now());
-      newData.setTimestampValue(OffsetDateTime.now());
+      newData.setIntegerValue(777);
+      newData.setStringValue("New String Value");
+      newData.setTimestampValue(LocalDateTime.now());
+      newData.setTimestampWithTimeZoneValue(OffsetDateTime.now());
 
       entityManager.persist(newData);
     } catch (Throwable e) {

@@ -357,7 +357,7 @@ public class PartyServiceTest {
     PhysicalAddress correspondenceAddress =
         new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressRole.WORK);
 
-    correspondenceAddress.setLine1("1 Discovery Place");
+    correspondenceAddress.setLine1("1 Galaxy Place");
     correspondenceAddress.setLine2("Sandhurst");
     correspondenceAddress.setCity("Sandton");
     correspondenceAddress.setRegion("ZA-GP");
@@ -964,12 +964,12 @@ public class PartyServiceTest {
 
     Employment employment = new Employment();
     employment.setId(UuidCreator.getTimeOrderedEpoch());
-    employment.setEmployerName("Discovery");
+    employment.setEmployerName("Galaxy Software");
     employment.setEmployerPhoneNumber("+27 11 324 5000");
-    employment.setEmployerEmailAddress("contactus@discovery.co.za");
+    employment.setEmployerEmailAddress("contactus@galaxy.co.za");
     employment.setEmployerContactPerson("Joe Bloggs");
     employment.setEmployerAddressLine1("3rd Floor Grove");
-    employment.setEmployerAddressLine2("1 Discovery Place");
+    employment.setEmployerAddressLine2("1 Galaxy Place");
     employment.setEmployerAddressLine3("Line 3");
     employment.setEmployerAddressLine4("Line 4");
     employment.setEmployerAddressSuburb("Sandhurst");
@@ -2719,7 +2719,7 @@ public class PartyServiceTest {
             PhysicalAddressRole.MAIN,
             List.of(PhysicalAddressPurpose.CORRESPONDENCE));
     mainAddress.setStreetNumber("1");
-    mainAddress.setStreetName("Discovery Place");
+    mainAddress.setStreetName("Galaxy Place");
     mainAddress.setSuburb("Sandhurst");
     mainAddress.setCity("Sandton");
     mainAddress.setRegion("ZA-GP");
@@ -3143,7 +3143,7 @@ public class PartyServiceTest {
             PhysicalAddressRole.MAIN,
             List.of(PhysicalAddressPurpose.CORRESPONDENCE));
     mainAddress.setStreetNumber("1");
-    mainAddress.setStreetName("Discovery Place");
+    mainAddress.setStreetName("Galaxy Place");
     mainAddress.setSuburb("Sandhurst");
     mainAddress.setCity("Sandton");
     mainAddress.setRegion("ZA-GP");
@@ -3262,7 +3262,7 @@ public class PartyServiceTest {
     PhysicalAddress streetAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressRole.WORK);
     streetAddress.setStreetNumber("1");
-    streetAddress.setStreetName("Discovery Place");
+    streetAddress.setStreetName("Galaxy Place");
     streetAddress.setSuburb("Sandhurst");
     streetAddress.setCity("Sandton");
     streetAddress.setRegion("ZA-GP");

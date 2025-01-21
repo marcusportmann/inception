@@ -73,7 +73,7 @@ import org.springframework.web.client.RestTemplate;
 import org.xml.sax.InputSource;
 
 /**
- * The <b>XacmlPolicyDecisionPointDynamicPolicyProvider</b> class provides a custom AuthZForce
+ * The <b>XacmlPolicyDecisionPointDynamicPolicyProvider</b> class provides a custom AuthzForce
  * dynamic policy provider implementation, which provides the XACML-based policy sets and policies
  * that will be applied by the XACML policy decision point.
  *
@@ -83,8 +83,7 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
     implements CloseablePolicyProvider<TopLevelPolicyElementEvaluator> {
 
   /* Logger */
-  private static final Logger log =
-      LoggerFactory.getLogger(XacmlPolicyDecisionPointDynamicPolicyProvider.class);
+  private static final Logger log = LoggerFactory.getLogger(XacmlPolicyDecisionPointDynamicPolicyProvider.class);
 
   /** Should policy sets and policies be loaded from the classpath under pdp/policies? */
   private final Boolean classpathPoliciesEnabled;
@@ -487,7 +486,10 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
       extends CloseablePolicyProvider.Factory<XacmlPolicyDecisionPointPolicyProvider> {
 
     /** Constructs a new <b>Factory</b>. */
-    public Factory() {}
+    public Factory() {
+      int xxx = 0;
+      xxx++;
+    }
 
     @Override
     public CloseablePolicyProvider<?> getInstance(

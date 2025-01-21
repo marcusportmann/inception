@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * The <b>LocalDateDeserializer</b> class implements the Jackson serializer for the <b>
- * LocalDate</b> type.
+ * The <b>LocalDateSerializer</b> class implements the Jackson serializer for the <b> LocalDate</b>
+ * type.
  *
  * @author Marcus Portmann
  */

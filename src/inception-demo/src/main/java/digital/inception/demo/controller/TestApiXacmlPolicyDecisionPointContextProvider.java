@@ -47,10 +47,10 @@ public class TestApiXacmlPolicyDecisionPointContextProvider
       Object authenticationObject,
       MethodInvocation methodInvocation,
       DecisionRequestBuilder<?> decisionRequestBuilder) {
-    if (methodInvocation.getThis() instanceof ITestApiController) {
+    if (methodInvocation.getThis() instanceof TestApiController) {
       if (authenticationObject instanceof Authentication authentication) {
         log.info(
-            "Adding request attributes for the XACML policy decision point authorization for user ("
+            "Adding request attributes for the XACML policy decision point authorization for the user ("
                 + authentication.getName()
                 + ") on class ("
                 + methodInvocation.getMethod().getDeclaringClass().getName()

@@ -33,12 +33,12 @@
             DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="false"/>
         </Apply>
         <!-- CONDITION 2: The user must have a "pathVariable" path variable with the value "XXX" -->
-        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-subset">
-          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">XXX</AttributeValue>
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">XXX</AttributeValue>
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+            <AttributeDesignator AttributeId="pathVariable" Category="urn:inception:xacml:attribute-category:path-variables"
+              DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"/>
           </Apply>
-          <AttributeDesignator AttributeId="pathVariable" Category="urn:inception:xacml:attribute-category:path-variables"
-            DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="false"/>
         </Apply>
       </Apply>
     </Condition>
@@ -63,14 +63,77 @@
       </AnyOf>
     </Target>
     <Condition>
-      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-subset">
-        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
-          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">ANONYMOUS</AttributeValue>
+      <!-- All of the nested conditions must be valid -->
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+        <!-- CONDITION 1: The user must have the "ANONYMOUS" role -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-at-least-one-member-of">
+          <Description>The user must have the "ANONYMOUS" role</Description>
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">ANONYMOUS</AttributeValue>
+          </Apply>
+          <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+            Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+            DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="false"/>
         </Apply>
-        <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role" Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
-          DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"/>
+        <!-- CONDITION 2: The value of the "booleanValue" attribute on the Data request body object must be "true" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+          <Description>The value of the "booleanValue" attribute on the request body object must be "true"</Description>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+          <Apply FunctionId="urn:inception:xacml:function:get-request-body-object-boolean-attribute-value">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">booleanValue</AttributeValue>
+          </Apply>
+        </Apply>
+        <!-- CONDITION 3: The value of the "dateValue" attribute on the Data request body object must be "1976-03-07" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:date-equal">
+          <Description>The value of the "dateValue" attribute on the request body object must be "1976-03-07"</Description>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#date">1976-03-07</AttributeValue>
+          <Apply FunctionId="urn:inception:xacml:function:get-request-body-object-date-attribute-value">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">dateValue</AttributeValue>
+          </Apply>
+        </Apply>
+        <!-- CONDITION 4: The value of the "timestampValue" attribute on the Data request body object must be "2016-07-17T23:56:19.123" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:dateTime-equal">
+          <Description>The value of the "timestampValue" attribute on the request body object must be "2016-07-17T23:56:19.123"</Description>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#dateTime">2016-07-17T23:56:19.123+02:00</AttributeValue>
+          <Apply FunctionId="urn:inception:xacml:function:get-request-body-object-date-time-attribute-value">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">timestampValue</AttributeValue>
+          </Apply>
+        </Apply>
+        <!-- CONDITION 5: The value of the "timestampWithTimeZoneValue" attribute on the Data request body object must be "2019-02-28T00:14:27.505+02:00" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:dateTime-equal">
+          <Description>The value of the "timestampWithTimeZoneValue" attribute on the request body object must be "2019-02-28T00:14:27.505+02:00"</Description>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#dateTime">2019-02-28T00:14:27.505+02:00</AttributeValue>
+          <Apply FunctionId="urn:inception:xacml:function:get-request-body-object-date-time-attribute-value">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">timestampWithTimeZoneValue</AttributeValue>
+          </Apply>
+        </Apply>
+        <!-- CONDITION 6: The value of the "doubleValue" attribute on the Data request body object must be "222.222" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-equal">
+          <Description>The value of the "doubleValue" attribute on the request body object must be "222.222"</Description>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">222.222</AttributeValue>
+          <Apply FunctionId="urn:inception:xacml:function:get-request-body-object-double-attribute-value">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">doubleValue</AttributeValue>
+          </Apply>
+        </Apply>
+        <!-- CONDITION 7: The value of the "integerValue" attribute on the Data request body object must be "444" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-equal">
+          <Description>The value of the "integerValue" attribute on the request body object must be "444"</Description>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">444</AttributeValue>
+          <Apply FunctionId="urn:inception:xacml:function:get-request-body-object-integer-attribute-value">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">integerValue</AttributeValue>
+          </Apply>
+        </Apply>
+        <!-- CONDITION 8: The value of the "stringValue" attribute on the Data request body object must be "This is a valid string value" -->
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+          <Description>The value of the "stringValue" attribute on the request body object must be "This is a valid string value"</Description>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">This is a valid string value</AttributeValue>
+          <Apply FunctionId="urn:inception:xacml:function:get-request-body-object-string-attribute-value">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">stringValue</AttributeValue>
+          </Apply>
+        </Apply>
       </Apply>
     </Condition>
   </Rule>
   <Rule Effect="Deny" RuleId="deny-rule"/>
 </Policy>
+

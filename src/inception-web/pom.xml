@@ -3,8 +3,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>inception-resource-server</artifactId>
-  <name>inception-resource-server</name>
+  <artifactId>inception-web</artifactId>
+  <name>inception-web</name>
 
   <parent>
     <groupId>digital.inception</groupId>
@@ -18,31 +18,11 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-web</artifactId>
-    </dependency>
 
     <!-- Dependencies -->
     <dependency>
-      <groupId>ognl</groupId>
-      <artifactId>ognl</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.authzforce</groupId>
-      <artifactId>authzforce-ce-core-pdp-engine</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-oauth2-resource-server</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-oauth2-jose</artifactId>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
     </dependency>
 
     <!-- Provided Dependencies -->
@@ -51,19 +31,6 @@
       <artifactId>jakarta.servlet-api</artifactId>
       <scope>provided</scope>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-autoconfigure</artifactId>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
-
-    <!-- Test Dependencies -->
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-test</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -90,7 +57,13 @@
             <id>enforce</id>
             <configuration>
               <rules>
-                <dependencyConvergence/>
+                <dependencyConvergence>
+                  <!--
+                  <excludes>
+                    <exclude>org.apache.commons:commons-text:[1,2)</exclude>
+                  </excludes>
+                  -->
+                </dependencyConvergence>
               </rules>
             </configuration>
             <goals>

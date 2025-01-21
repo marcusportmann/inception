@@ -16,9 +16,12 @@
 
 package digital.inception.server.resource.xacmlpdp;
 
+import digital.inception.core.util.AnnotationUtil;
 import digital.inception.server.resource.PolicyDecisionPoint;
 import digital.inception.server.resource.PolicyDecisionPointException;
-import java.lang.reflect.Method;
+import digital.inception.web.RequestBodyObjectContext;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.lang.reflect.Parameter;
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
@@ -55,23 +58,52 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * The <b>XacmlPolicyDecisionPoint</b> class provides an implementation of a policy decision point
- * that leverages the AuthZForce PDP engine to apply decisions based on XACML-based policy sets and
+ * that leverages the AuthzForce PDP engine to apply decisions based on XACML-based policy sets and
  * policies, which are loaded from the classpath and optionally from a RESTful endpoint.
  *
  * @author Marcus Portmann
  */
-@Service
 @ConditionalOnProperty(
     value = "inception.resource-server.xacml-policy-decision-point.enabled",
     havingValue = "true")
+@Component
 public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
+
+  /**
+   * The name of the Micrometer metric that captures the number of deny decisions for the XACML
+   * policy decision point.
+   */
+  private static final String METRIC_NAME_XACML_POLICY_DECISION_POINT_DENY =
+      "inception.resource-server.xacml-policy-decision-point.deny";
+
+  /**
+   * The name of the Micrometer metric that captures the number of errors for the XACML policy
+   * decision point.
+   */
+  private static final String METRIC_NAME_XACML_POLICY_DECISION_POINT_ERROR =
+      "inception.resource-server.xacml-policy-decision-point.error";
+
+  /**
+   * The name of the Micrometer metric that captures the number of permit decisions for the XACML
+   * policy decision point.
+   */
+  private static final String METRIC_NAME_XACML_POLICY_DECISION_POINT_PERMIT =
+      "inception.resource-server.xacml-policy-decision-point.permit";
+
+  /**
+   * The name of the Micrometer metric that captures the time taken by the XAML policy decision
+   * endpoint to execute authorization decisions.
+   */
+  private static final String METRIC_NAME_XACML_POLICY_DECISION_POINT_TIME =
+      "inception.resource-server.xacml-policy-decision-point.time";
 
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(XacmlPolicyDecisionPoint.class);
@@ -99,7 +131,10 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
   @Value("${inception.debug.enabled:#{false}}")
   private boolean inDebugMode;
 
-  /** The AuthZForce PDP Engine. */
+  /** The Micrometer registry. */
+  private MeterRegistry meterRegistry;
+
+  /** The AuthzForce PDP Engine. */
   private PdpEngine pdpEngine;
 
   /**
@@ -135,6 +170,11 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
     this.externalPoliciesReloadPeriod = externalPoliciesReloadPeriod;
 
     try {
+      this.meterRegistry = this.applicationContext.getBean(MeterRegistry.class);
+    } catch (Throwable ignored) {
+    }
+
+    try {
       this.policyDecisionPointContextProviders =
           applicationContext.getBeansOfType(XacmlPolicyDecisionPointContextProvider.class);
 
@@ -154,6 +194,16 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
 
   @Override
   public boolean authorize(Object authenticationObject, MethodInvocation methodInvocation) {
+    Timer.Sample sample = null;
+    if (meterRegistry != null) {
+      sample = Timer.start(meterRegistry);
+    }
+
+    // Default decision
+    String decision = "DENY";
+
+    List<String> resourceIds = new ArrayList<>();
+
     try {
       // Create the decision request
       DecisionRequestBuilder<?> decisionRequestBuilder = getPdpEngine().newRequestBuilder(-1, -1);
@@ -225,8 +275,6 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
        * Build the resource IDs from a combination of the class-level and method-level path mapping
        * URIs on the RequestMapping annotations.
        */
-      List<String> resourceIds = new ArrayList<>();
-
       for (String classPathMappingUri : classPathMappingUris) {
         for (String methodPathMappingUri : methodPathMappingUris) {
           resourceIds.add(classPathMappingUri + methodPathMappingUri);
@@ -251,34 +299,30 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
       for (int i = 0; i < methodInvocation.getMethod().getParameters().length; i++) {
         Parameter methodParameter = methodInvocation.getMethod().getParameters()[i];
 
-        if (methodParameter.getAnnotations().length == 0) {
-          Method interfaceMethod = findMethodInInterface(methodInvocation.getMethod());
-
-          if (interfaceMethod != null) {
-            methodParameter = interfaceMethod.getParameters()[i];
-          }
-        }
-
-        String methodRequestParameterName = methodParameter.getName();
-        Object methodRequestParameterValue = methodInvocation.getArguments()[i];
-
-        PathVariable pathVariable = methodParameter.getAnnotation(PathVariable.class);
-        RequestParam requestParam = methodParameter.getAnnotation(RequestParam.class);
+        String methodParameterName = methodParameter.getName();
+        Object methodParameterValue = methodInvocation.getArguments()[i];
 
         String policyDecisionPointAttributeCategoryName;
 
-        if (pathVariable != null) {
+        if (AnnotationUtil.isMethodParameterAnnotatedWithAnnotation(
+            methodInvocation, methodParameter, PathVariable.class)) {
           policyDecisionPointAttributeCategoryName =
               XacmlPolicyDecisionPointAttributeCategory.PATH_VARIABLES.value();
-        } else if (requestParam != null) {
+        } else if (AnnotationUtil.isMethodParameterAnnotatedWithAnnotation(
+            methodInvocation, methodParameter, RequestParam.class)) {
           policyDecisionPointAttributeCategoryName =
               XacmlPolicyDecisionPointAttributeCategory.REQUEST_PARAMETERS.value();
         } else {
           policyDecisionPointAttributeCategoryName = null;
+
+          if (AnnotationUtil.isMethodParameterAnnotatedWithAnnotation(
+              methodInvocation, methodParameter, RequestBody.class)) {
+            RequestBodyObjectContext.setRequestBodyObject(methodParameterValue);
+          }
         }
 
         if (policyDecisionPointAttributeCategoryName != null) {
-          if (methodRequestParameterValue instanceof Map<?, ?> nestedParameterMap) {
+          if (methodParameterValue instanceof Map<?, ?> nestedParameterMap) {
             nestedParameterMap.forEach(
                 (nestedRequestParameterName, nestedRequestParameterValue) -> {
                   if (XacmlUtil.isValidAttributeValue(nestedRequestParameterValue)) {
@@ -290,12 +334,12 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
                   }
                 });
           } else {
-            if (XacmlUtil.isValidAttributeValue(methodRequestParameterValue)) {
+            if (XacmlUtil.isValidAttributeValue(methodParameterValue)) {
               XacmlUtil.addAttributeToRequest(
                   decisionRequestBuilder,
                   policyDecisionPointAttributeCategoryName,
-                  methodRequestParameterName,
-                  XacmlUtil.getAttributeValues(methodRequestParameterValue));
+                  methodParameterName,
+                  XacmlUtil.getAttributeValues(methodParameterValue));
             }
           }
         }
@@ -322,6 +366,8 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
       DecisionResult decisionResult = evaluate(decisionRequest);
 
       if (decisionResult.getDecision() == DecisionType.PERMIT) {
+        decision = "PERMIT";
+
         if (inDebugMode) {
           if (authenticationObject instanceof Authentication authentication) {
             log.info(
@@ -344,6 +390,10 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
                     + XacmlUtil.policiesToString(decisionResult.getApplicablePolicies())
                     + ")");
           }
+        }
+
+        if (meterRegistry != null) {
+          meterRegistry.counter(METRIC_NAME_XACML_POLICY_DECISION_POINT_PERMIT).increment();
         }
 
         return true;
@@ -372,11 +422,23 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
           }
         }
 
+        if (meterRegistry != null) {
+          meterRegistry.counter(METRIC_NAME_XACML_POLICY_DECISION_POINT_DENY).increment();
+        }
+
         return false;
       }
     } catch (AccessDeniedException e) {
+      if (meterRegistry != null) {
+        meterRegistry.counter(METRIC_NAME_XACML_POLICY_DECISION_POINT_DENY).increment();
+      }
+
       throw e;
     } catch (Throwable e) {
+      if (meterRegistry != null) {
+        meterRegistry.counter(METRIC_NAME_XACML_POLICY_DECISION_POINT_ERROR).increment();
+      }
+
       log.error(
           "Policy decision point authorization failed for class ("
               + methodInvocation.getMethod().getDeclaringClass().getName()
@@ -386,6 +448,17 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
           e);
 
       return false;
+    } finally {
+      if (!resourceIds.isEmpty()) {
+        if (sample != null) {
+          sample.stop(
+              Timer.builder(METRIC_NAME_XACML_POLICY_DECISION_POINT_TIME)
+                  .tags("uri", resourceIds.getFirst(), "decision", decision)
+                  .register(meterRegistry));
+        }
+      }
+
+      RequestBodyObjectContext.clear();
     }
   }
 
@@ -406,9 +479,9 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
   }
 
   /**
-   * Returns the AuthZForce PDP Engine.
+   * Returns the AuthzForce PDP Engine.
    *
-   * @return the AuthZForce PDP Engine
+   * @return the AuthzForce PDP Engine
    */
   public PdpEngine getPdpEngine() {
     if (pdpEngine == null) {
@@ -418,27 +491,12 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
     return pdpEngine;
   }
 
-  private Method findMethodInInterface(Method invokedMethod) {
-    Class<?>[] interfaces = invokedMethod.getDeclaringClass().getInterfaces();
-
-    for (Class<?> iface : interfaces) {
-      try {
-        // Attempt to find the method in the interface
-        return iface.getMethod(invokedMethod.getName(), invokedMethod.getParameterTypes());
-      } catch (NoSuchMethodException e) {
-        // Method not found in this interface, continue searching
-      }
-    }
-
-    return null; // Method not found in any interface
-  }
-
-  /** Initialize the AuthZForce PDP engine */
+  /** Initialize the AuthzForce PDP engine */
   private void initPdpEngine() {
-    // Initialize the AuthZForce PDP engine
+    // Initialize the AuthzForce PDP engine
     try {
       List<String> attributeDataTypes = null;
-      List<String> functions = null;
+      List<String> functions = new ArrayList<>();
       List<String> combiningAlgorithms = null;
       List<AbstractAttributeProvider> attributeProviders = null;
       List<AbstractPolicyProvider> policyProviders = new ArrayList<>();
@@ -449,16 +507,16 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
       List<InOutProcChain> ioProcChains = null;
       String version = null; // 8.1?
 
-      Boolean standardDataTypesEnabled = null;
-      Boolean standardFunctionsEnabled = null;
-      Boolean standardCombiningAlgorithmsEnabled = null;
-      Boolean standardAttributeProvidersEnabled = null;
-      Boolean xPathEnabled = null;
-      Boolean strictAttributeIssuerMatch = null;
-      BigInteger maxIntegerValue = null;
+      Boolean standardDataTypesEnabled = true;
+      Boolean standardFunctionsEnabled = true;
+      Boolean standardCombiningAlgorithmsEnabled = true;
+      Boolean standardAttributeProvidersEnabled = true;
+      Boolean xPathEnabled = false;
+      Boolean strictAttributeIssuerMatch = false;
+      BigInteger maxIntegerValue = null; // new BigInteger("2147483647")
       BigInteger maxVariableRefDepth = null;
       BigInteger maxPolicyRefDepth = null;
-      BigInteger clientRequestErrorVerbosityLevel = null;
+      BigInteger clientRequestErrorVerbosityLevel = new BigInteger("0");
 
       /*
        * Policy providers consist of three related classes. The first is the JAXB configuration
@@ -468,6 +526,10 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
        * PolicyDecisionPointDynamicPolicyProvider. The third is the nested static factory class
        * used to create instances of the policy provider, e.g.
        * PolicyDecisionPointDynamicPolicyProvider$Factory.
+       *
+       * NOTE: The policy provider factory is also added to the
+       * META/services/org.ow2.authzforce.core.pdp.api.PdpExtension file, which defines the
+       * extensions for the AuthzForce PDP.
        */
       policyProviders.add(
           new XacmlPolicyDecisionPointPolicyProvider(
@@ -475,6 +537,30 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
               externalPoliciesEnabled,
               externalPoliciesEndpoint,
               externalPoliciesReloadPeriod));
+
+      /*
+       * To add a custom function, we add the function ID here and the name of the function class to
+       * the META/services/org.ow2.authzforce.core.pdp.api.PdpExtension file, which defines the
+       * extensions for the AuthzForce PDP.
+       */
+      functions.add(
+          XacmlGetRequestBodyObjectAttributeValueFunctions
+              .XacmlGetRequestBodyBooleanAttributeValueFunction.ID);
+      functions.add(
+          XacmlGetRequestBodyObjectAttributeValueFunctions
+              .XacmlGetRequestBodyDateAttributeValueFunction.ID);
+      functions.add(
+          XacmlGetRequestBodyObjectAttributeValueFunctions
+              .XacmlGetRequestBodyDateTimeAttributeValueFunction.ID);
+      functions.add(
+          XacmlGetRequestBodyObjectAttributeValueFunctions
+              .XacmlGetRequestBodyDoubleAttributeValueFunction.ID);
+      functions.add(
+          XacmlGetRequestBodyObjectAttributeValueFunctions
+              .XacmlGetRequestBodyIntegerAttributeValueFunction.ID);
+      functions.add(
+          XacmlGetRequestBodyObjectAttributeValueFunctions
+              .XacmlGetRequestBodyStringAttributeValueFunction.ID);
 
       Pdp pdp =
           new Pdp(
@@ -507,7 +593,7 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
       pdpEngine = new BasePdpEngine(pdpEngineConfiguration);
 
     } catch (Throwable e) {
-      throw new PolicyDecisionPointException("Failed to initialize the AuthZForce PDP Engine", e);
+      throw new PolicyDecisionPointException("Failed to initialize the AuthzForce PDP Engine", e);
     }
   }
 }

@@ -245,7 +245,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     httpSecurity.authorizeHttpRequests(
         authorizeRequests -> {
           /*
-           * Check if the za.co.discovery.inception.security.controller.ISecurityApiController class exists
+           * Check if the digital.inception.security.controller.ISecurityApiController class exists
            * on the classpath, and if so, enable non-authenticated internal network access to the
            * /api/security/policies and /api/security/revoked-tokens Security API endpoints.
            */
@@ -263,7 +263,7 @@ public class ResourceServerConfiguration implements InitializingBean {
           // Enable non-authenticated access to API endpoints if API security is disabled, or we are
           // running in debug mode, otherwise require authenticated access using a JWT bearer token.
           if ((!apiSecurityEnabled) || inDebugMode) {
-            authorizeRequests.requestMatchers(antMatcher("/api/**")).permitAll();
+            authorizeRequests.requestMatchers(antMatcher("/api/**")).anonymous();
           } else {
             authorizeRequests.requestMatchers(antMatcher("/api/**")).authenticated();
           }

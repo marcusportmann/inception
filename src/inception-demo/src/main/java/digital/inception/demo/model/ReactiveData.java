@@ -24,7 +24,9 @@ import digital.inception.core.validation.constraint.NoScriptOrSQLInjection;
 import digital.inception.core.validation.constraint.ValidISOCountryCode;
 import digital.inception.core.validation.constraint.ValidISOLanguageCode;
 import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.core.xml.LocalTimeAdapter;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
+import digital.inception.core.xml.OffsetTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -37,8 +39,12 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -52,26 +58,40 @@ import org.springframework.data.relational.core.mapping.Table;
 @Schema(description = "ReactiveData")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "id",
-  "stringValue",
-  "integerValue",
-  "dateValue",
-  "timestampValue",
-  "country",
-  "language"
+    "id",
+    "booleanValue",
+    "dateValue",
+    "decimalValue",
+    "doubleValue",
+    "floatValue",
+    "integerValue",
+    "stringValue",
+    "timeValue",
+    "timeWithTimeZoneValue",
+    "timestampValue",
+    "timestampWithTimeZoneValue",
+    "country",
+    "language"
 })
 @XmlRootElement(name = "ReactiveData", namespace = "https://inception.digital/demo")
 @XmlType(
     name = "ReactiveData",
     namespace = "https://inception.digital/demo",
     propOrder = {
-      "id",
-      "stringValue",
-      "integerValue",
-      "dateValue",
-      "timestampValue",
-      "country",
-      "language"
+        "id",
+        "booleanValue",
+        "dateValue",
+        "decimalValue",
+        "doubleValue",
+        "floatValue",
+        "integerValue",
+        "stringValue",
+        "timeValue",
+        "timeWithTimeZoneValue",
+        "timestampValue",
+        "timestampWithTimeZoneValue",
+        "country",
+        "language"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @NoScriptOrSQLInjection
@@ -81,33 +101,55 @@ public class ReactiveData implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-1 country code value for the reactive data. */
-  @Schema(
-      description = "The ISO 3166-1 country code value for the reactive data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  /** The boolean value for the data. */
+  @Schema(description = "The boolean value for the data")
+  @JsonProperty
+  @XmlElement(name = "BooleanValue")
+  @Column("boolean_value")
+  private boolean booleanValue;
+
+  /** The ISO 3166-1 country code value for the data. */
+  @Schema(description = "The ISO 3166-1 country code value for the data")
+  @JsonProperty
   @XmlElement(name = "Country")
-  @NotNull
   @ValidISOCountryCode
   @Size(min = 2, max = 2)
   @Column("country")
   private String country;
 
-  /** The date value for the reactive data. */
-  @Schema(
-      description = "The ISO 8601 format date value for the reactive data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  /** The date value for the data. */
+  @Schema(description = "The ISO 8601 format date value for the data")
+  @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue", required = true)
+  @XmlElement(name = "DateValue")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @NotNull
   @Column("date_value")
   private LocalDate dateValue;
 
-  /** The ID for the reactive data. */
-  @Schema(description = "The ID for the reactive data", requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The decimal value for the data. */
+  @Schema(description = "The decimal value for the data")
+  @JsonProperty
+  @XmlElement(name = "DecimalValue")
+  @Column("decimal_value")
+  private BigDecimal decimalValue;
+
+  /** The double value for the data. */
+  @Schema(description = "The double value for the data")
+  @JsonProperty
+  @XmlElement(name = "DoubleValue")
+  @Column("double_value")
+  private Double doubleValue;
+
+  /** The float value for the data. */
+  @Schema(description = "The float value for the data")
+  @JsonProperty
+  @XmlElement(name = "FloatValue")
+  @Column("float_value")
+  private Float floatValue;
+
+  /** The ID for the data. */
+  @Schema(description = "The ID for the data", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -115,81 +157,68 @@ public class ReactiveData implements Serializable {
   @Column("id")
   private long id;
 
-  /** The integer value for the reactive data. */
-  @Schema(
-      description = "The integer value for the reactive data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "IntegerValue", required = true)
-  @NotNull
+  /** The integer value for the data. */
+  @Schema(description = "The integer value for the data")
+  @JsonProperty
+  @XmlElement(name = "IntegerValue")
   @Column("integer_value")
   private Integer integerValue;
 
-  /** The ISO 639-1 language code value for the reactive data. */
-  @Schema(
-      description = "The ISO 639-1 language code value for the reactive data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  /** The ISO 639-1 language code value for the data. */
+  @Schema(description = "The ISO 639-1 language code value for the data")
+  @JsonProperty
   @XmlElement(name = "Language")
-  @NotNull
   @ValidISOLanguageCode
   @Size(min = 2, max = 2)
   @Column("language")
   private String language;
 
-  /** The string value for the reactive data. */
-  @Schema(
-      description = "The string value for the reactive data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+  /** The string value for the data. */
+  @Schema(description = "The string value for the data")
+  @JsonProperty
   @XmlElement(name = "StringValue")
-  @NotNull
   @Size(min = 1, max = 2000)
   @Column("string_value")
   private String stringValue;
 
-  /** The timestamp value for the reactive data. */
-  @Schema(
-      description = "The timestamp value for the reactive data",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TimestampValue", required = true)
+  /** The time value for the data. */
+  @Schema(description = "The time value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimeValue")
+  @XmlJavaTypeAdapter(LocalTimeAdapter.class)
+  @XmlSchemaType(name = "time")
+  @Column("time_value")
+  private LocalTime timeValue;
+
+  /** The time with time zone value for the data. */
+  @Schema(description = "The time with time zone value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimeWithTimeZoneValue")
+  @XmlJavaTypeAdapter(OffsetTimeAdapter.class)
+  @XmlSchemaType(name = "time")
+  @Column("time_with_time_zone_value")
+  private OffsetTime timeWithTimeZoneValue;
+
+  /** The timestamp value for the data. */
+  @Schema(description = "The timestamp value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimestampValue")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column("timestamp_value")
+  private LocalDateTime timestampValue;
+
+  /** The timestamp with time zone value for the data. */
+  @Schema(description = "The timestamp with time zone value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimestampWithTimeZoneValue")
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column("timestamp_value")
-  private OffsetDateTime timestampValue;
+  @Column("timestamp_with_time_zone_value")
+  private OffsetDateTime timestampWithTimeZoneValue;
 
   /** Constructs a new <b>ReactiveData</b>. */
   public ReactiveData() {}
-
-  /**
-   * Constructs a new <b>ReactiveData</b>.
-   *
-   * @param id the ID for the reactive data
-   * @param integerValue the integer value for the reactive data
-   * @param stringValue the string value for the reactive data
-   * @param dateValue the date value for the reactive data
-   * @param timestampValue the timestamp value for the reactive data
-   * @param country the ISO 3166-1 country code value for the reactive data
-   * @param language the ISO 639-1 language code value for the reactive data
-   */
-  public ReactiveData(
-      long id,
-      Integer integerValue,
-      String stringValue,
-      LocalDate dateValue,
-      OffsetDateTime timestampValue,
-      String country,
-      String language) {
-    this.id = id;
-    this.integerValue = integerValue;
-    this.stringValue = stringValue;
-    this.dateValue = dateValue;
-    this.timestampValue = timestampValue;
-    this.country = country;
-    this.language = language;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -217,148 +246,292 @@ public class ReactiveData implements Serializable {
   }
 
   /**
-   * Returns the ISO 3166-1 country code value for the reactive data.
+   * Returns the boolean value for the data.
    *
-   * @return the ISO 3166-1 country code value for the reactive data
+   * @return the boolean value for the data
+   */
+  public boolean getBooleanValue() {
+    return booleanValue;
+  }
+
+  /**
+   * Returns the ISO 3166-1 country code value for the data.
+   *
+   * @return the ISO 3166-1 country code value for the data
    */
   public String getCountry() {
     return country;
   }
 
   /**
-   * Returns the date value for the reactive data.
+   * Returns the date value for the data.
    *
-   * @return the date value for the reactive data
+   * @return the date value for the data
    */
   public LocalDate getDateValue() {
     return dateValue;
   }
 
   /**
-   * Returns the ID for the reactive data.
+   * Returns the decimal value for the data.
    *
-   * @return the ID for the reactive data
+   * @return the decimal value for the data
+   */
+  public BigDecimal getDecimalValue() {
+    return decimalValue;
+  }
+
+  /**
+   * Returns the double value for the data.
+   *
+   * @return the double value for the data
+   */
+  public Double getDoubleValue() {
+    return doubleValue;
+  }
+
+  /**
+   * Returns the float value for the data.
+   *
+   * @return the float value for the data
+   */
+  public Float getFloatValue() {
+    return floatValue;
+  }
+
+  /**
+   * Returns the ID for the data.
+   *
+   * @return the ID for the data
    */
   public long getId() {
     return id;
   }
 
   /**
-   * Returns the integer value for the reactive data.
+   * Returns the integer value for the data.
    *
-   * @return the integer value for the reactive data
+   * @return the integer value for the data
    */
   public Integer getIntegerValue() {
     return integerValue;
   }
 
   /**
-   * Returns the ISO 639-1 language code value for the reactive data.
+   * Returns the ISO 639-1 language code value for the data.
    *
-   * @return the ISO 639-1 language code value for the reactive data
+   * @return the ISO 639-1 language code value for the data
    */
   public String getLanguage() {
     return language;
   }
 
   /**
-   * Returns the string value for the reactive data.
+   * Returns the string value for the data.
    *
-   * @return the string value for the reactive data
+   * @return the string value for the data
    */
   public String getStringValue() {
     return stringValue;
   }
 
   /**
-   * Returns the timestamp value for the reactive data.
+   * Returns the time value for the data.
    *
-   * @return the timestamp value for the reactive data
+   * @return the time value for the data
    */
-  public OffsetDateTime getTimestampValue() {
+  public LocalTime getTimeValue() {
+    return timeValue;
+  }
+
+  /**
+   * Returns the time with time zone value for the data.
+   *
+   * @return the time with time zone value for the data
+   */
+  public OffsetTime getTimeWithTimeZoneValue() {
+    return timeWithTimeZoneValue;
+  }
+
+  /**
+   * Returns the timestamp value for the data.
+   *
+   * @return the timestamp value for the data
+   */
+  public LocalDateTime getTimestampValue() {
     return timestampValue;
   }
 
   /**
-   * Set the ISO 3166-1 country code value for the reactive data.
+   * Returns the timestamp with time zone value for the data.
    *
-   * @param country the ISO 3166-1 country code value for the reactive data
+   * @return the timestamp with time zone value for the data
+   */
+  public OffsetDateTime getTimestampWithTimeZoneValue() {
+    return timestampWithTimeZoneValue;
+  }
+
+  /**
+   * Set the boolean value for the data.
+   *
+   * @param booleanValue the boolean value for the data
+   */
+  public void setBooleanValue(boolean booleanValue) {
+    this.booleanValue = booleanValue;
+  }
+
+  /**
+   * Set the ISO 3166-1 country code value for the data.
+   *
+   * @param country the ISO 3166-1 country code value for the data
    */
   public void setCountry(String country) {
     this.country = country;
   }
 
   /**
-   * Set the date value for the reactive data.
+   * Set the date value for the data.
    *
-   * @param dateValue the date value for the reactive data
+   * @param dateValue the date value for the data
    */
   public void setDateValue(LocalDate dateValue) {
     this.dateValue = dateValue;
   }
 
   /**
-   * Set the ID for the reactive data.
+   * Set the decimal value for the data.
    *
-   * @param id the ID for the reactive data.
+   * @param decimalValue the decimal value for the data
+   */
+  public void setDecimalValue(BigDecimal decimalValue) {
+    this.decimalValue = decimalValue;
+  }
+
+  /**
+   * Set the double value for the data.
+   *
+   * @param doubleValue the double value for the data
+   */
+  public void setDoubleValue(Double doubleValue) {
+    this.doubleValue = doubleValue;
+  }
+
+  /**
+   * Set the float value for the data.
+   *
+   * @param floatValue the float value for the data
+   */
+  public void setFloatValue(Float floatValue) {
+    this.floatValue = floatValue;
+  }
+
+  /**
+   * Set the ID for the data.
+   *
+   * @param id the ID for the data.
    */
   public void setId(@NotNull long id) {
     this.id = id;
   }
 
   /**
-   * Set the integer value for the reactive data.
+   * Set the integer value for the data.
    *
-   * @param integerValue the integer value for the reactive data
+   * @param integerValue the integer value for the data
    */
   public void setIntegerValue(Integer integerValue) {
     this.integerValue = integerValue;
   }
 
   /**
-   * Set the ISO 639-1 language code value for the reactive data.
+   * Set the ISO 639-1 language code value for the data.
    *
-   * @param language the ISO 639-1 language code value for the reactive data
+   * @param language the ISO 639-1 language code value for the data
    */
   public void setLanguage(@NotNull @Size(min = 2, max = 2) String language) {
     this.language = language;
   }
 
   /**
-   * Set the string value for the reactive data.
+   * Set the string value for the data.
    *
-   * @param stringValue the string value for the reactive data
+   * @param stringValue the string value for the data
    */
   public void setStringValue(String stringValue) {
     this.stringValue = stringValue;
   }
 
   /**
-   * Set the timestamp value for the reactive data.
+   * Set the time value for the data.
    *
-   * @param timestampValue the timestamp value for the reactive data
+   * @param timeValue the time value for the data
    */
-  public void setTimestampValue(OffsetDateTime timestampValue) {
+  public void setTimeValue(LocalTime timeValue) {
+    this.timeValue = timeValue;
+  }
+
+  /**
+   * Set the time with time zone value for the data.
+   *
+   * @param timeWithTimeZoneValue the time with time zone value for the data
+   */
+  public void setTimeWithTimeZoneValue(OffsetTime timeWithTimeZoneValue) {
+    this.timeWithTimeZoneValue = timeWithTimeZoneValue;
+  }
+
+  /**
+   * Set the timestamp value for the data.
+   *
+   * @param timestampValue the timestamp value for the data
+   */
+  public void setTimestampValue(LocalDateTime timestampValue) {
     this.timestampValue = timestampValue;
   }
 
   /**
-   * Returns a string representation of the reactive data.
+   * Set the timestamp with time zone value for the data.
    *
-   * @return a string representation of the reactive data
+   * @param timestampWithTimeZoneValue the timestamp with time zone value for the data
+   */
+  public void setTimestampWithTimeZoneValue(OffsetDateTime timestampWithTimeZoneValue) {
+    this.timestampWithTimeZoneValue = timestampWithTimeZoneValue;
+  }
+
+  /**
+   * Returns a string representation of the data.
+   *
+   * @return a string representation of the data
    */
   @Override
   public String toString() {
     return "ReactiveData {id=\""
         + id
+        + "\", booleanValue=\""
+        + booleanValue
+        + "\", dateValue=\""
+        + dateValue
+        + "\", decimalValue=\""
+        + decimalValue
+        + "\", doubleValue=\""
+        + doubleValue
+        + "\", floatValue=\""
+        + floatValue
         + "\", integerValue=\""
         + integerValue
         + "\", stringValue=\""
         + stringValue
-        + "\", dateValue=\""
-        + dateValue
+        + "\", timeValue=\""
+        + timeValue
+        + "\", timeWithTimeZoneValue=\""
+        + timeWithTimeZoneValue
         + "\", timestampValue=\""
         + timestampValue
+        + "\", timestampWithTimeZoneValue=\""
+        + timestampWithTimeZoneValue
+        + "\", country=\""
+        + country
+        + "\", language=\""
+        + language
         + "\"}";
   }
 }

@@ -23,7 +23,7 @@ import org.ow2.authzforce.xmlns.pdp.ext.AbstractPolicyProvider;
 
 /**
  * The <b>XacmlPolicyDecisionPointPolicyProvider</b> class holds the configuration information for
- * the custom AuthZForce dynamic policy provider implementation, which provides the XACML-based
+ * the custom AuthzForce dynamic policy provider implementation, which provides the XACML-based
  * policy sets and policies that will be applied by the policy decision point.
  *
  * @author Marcus Portmann
