@@ -245,12 +245,12 @@ public class ResourceServerConfiguration implements InitializingBean {
     httpSecurity.authorizeHttpRequests(
         authorizeRequests -> {
           /*
-           * Check if the digital.inception.security.controller.ISecurityApiController class exists
+           * Check if the digital.inception.security.controller.SecurityApiController class exists
            * on the classpath, and if so, enable non-authenticated internal network access to the
            * /api/security/policies and /api/security/revoked-tokens Security API endpoints.
            */
           try {
-            Class.forName("digital.inception.security.controller.ISecurityApiController");
+            Class.forName("digital.inception.security.controller.SecurityApiController");
 
             authorizeRequests
                 .requestMatchers(
@@ -263,11 +263,8 @@ public class ResourceServerConfiguration implements InitializingBean {
           /*
            * Enable non-authenticated access to the OAuth endpoints.
            */
-          try {
-            authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
-            authorizeRequests.requestMatchers(antMatcher("/api/**/oauth")).permitAll();
-          } catch (Throwable ignored) {
-          }
+          authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
+          authorizeRequests.requestMatchers(antMatcher("/api/**/oauth")).permitAll();
 
           // Enable non-authenticated access to API endpoints if API security is disabled, or we are
           // running in debug mode, otherwise require authenticated access using a JWT bearer token.
