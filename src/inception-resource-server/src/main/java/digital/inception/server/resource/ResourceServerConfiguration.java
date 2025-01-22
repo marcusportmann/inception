@@ -260,23 +260,21 @@ public class ResourceServerConfiguration implements InitializingBean {
           } catch (Throwable ignored) {
           }
 
+          /*
+           * Enable non-authenticated access to the OAuth endpoints.
+           */
+          try {
+            authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
+            authorizeRequests.requestMatchers(antMatcher("/api/**/oauth")).permitAll();
+          } catch (Throwable ignored) {
+          }
+
           // Enable non-authenticated access to API endpoints if API security is disabled, or we are
           // running in debug mode, otherwise require authenticated access using a JWT bearer token.
           if ((!apiSecurityEnabled) || inDebugMode) {
             authorizeRequests.requestMatchers(antMatcher("/api/**")).anonymous();
           } else {
             authorizeRequests.requestMatchers(antMatcher("/api/**")).authenticated();
-          }
-
-          /*
-           * Check if the digital.inception.server.authorization.oauth.OAuthController class exists
-           * on the classpath, and if so, enable non-authenticated access to the OAuth endpoints.
-           */
-          try {
-            Class.forName("digital.inception.server.authorization.oauth.OAuthController");
-
-            authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
-          } catch (Throwable ignored) {
           }
 
           // Static resources authorization rules
