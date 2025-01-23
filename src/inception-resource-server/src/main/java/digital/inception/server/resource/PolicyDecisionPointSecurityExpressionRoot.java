@@ -201,16 +201,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
    * @return <b>true</b> if security is disabled or <b>false</b> otherwise
    */
   public boolean isSecurityDisabled() {
-    return (!isSecurityEnabled);
-  }
-
-  /**
-   * Returns whether security is enabled.
-   *
-   * @return <b>true</b> if security is enabled or <b>false</b> otherwise
-   */
-  public boolean isSecurityEnabled() {
-    return isSecurityEnabled;
+    return (inDebugMode || (!isSecurityEnabled));
   }
 
   @Override

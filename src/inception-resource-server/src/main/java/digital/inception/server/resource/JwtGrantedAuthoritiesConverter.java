@@ -23,6 +23,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>JwtGrantedAuthoritiesConverter</b> class extracts the granted authorities from a JWT.
@@ -58,9 +59,11 @@ public class JwtGrantedAuthoritiesConverter
     Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
     // User Directory ID claim
-    grantedAuthorities.add(
-        new SimpleGrantedAuthority(
-            "USER_DIRECTORY_ID_ " + jwt.getClaimAsString(USER_DIRECTORY_ID_CLAIM)));
+    if (StringUtils.hasText(jwt.getClaimAsString(USER_DIRECTORY_ID_CLAIM))) {
+      grantedAuthorities.add(
+          new SimpleGrantedAuthority(
+              "USER_DIRECTORY_ID_ " + jwt.getClaimAsString(USER_DIRECTORY_ID_CLAIM)));
+    }
 
     // Function claims
     List<String> functionsClaim = jwt.getClaimAsStringList(FUNCTIONS_CLAIM);

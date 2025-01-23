@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -57,6 +59,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
@@ -269,7 +272,13 @@ public class ResourceServerConfiguration implements InitializingBean {
           // Enable non-authenticated access to API endpoints if API security is disabled, or we are
           // running in debug mode, otherwise require authenticated access using a JWT bearer token.
           if ((!apiSecurityEnabled) || inDebugMode) {
-            authorizeRequests.requestMatchers(antMatcher("/api/**")).anonymous();
+            authorizeRequests.requestMatchers(antMatcher("/api/**")).access(new AuthorizationManager<RequestAuthorizationContext>() {
+              @Override
+              public AuthorizationDecision check(Supplier<Authentication> authentication,
+                  RequestAuthorizationContext object) {
+                return new AuthorizationDecision(true);
+              }
+            });
           } else {
             authorizeRequests.requestMatchers(antMatcher("/api/**")).authenticated();
           }
