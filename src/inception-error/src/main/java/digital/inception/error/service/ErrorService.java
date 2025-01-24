@@ -16,186 +16,65 @@
 
 package digital.inception.error.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.error.model.ErrorReport;
 import digital.inception.error.model.ErrorReportNotFoundException;
 import digital.inception.error.model.ErrorReportSortBy;
 import digital.inception.error.model.ErrorReportSummaries;
 import digital.inception.error.model.ErrorReportSummary;
-import digital.inception.error.persistence.ErrorReportRepository;
-import digital.inception.error.persistence.ErrorReportSummaryRepository;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 /**
- * The <b>ErrorService</b> class provides the Error Service implementation.
+ * The <b>ErrorService</b> interface defines the functionality provided by an Error Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings({"unused"})
-public class ErrorService implements IErrorService {
-
-  /** The maximum number of filtered error report summaries. */
-  private static final int MAX_FILTERED_ERROR_REPORT_SUMMARIES = 100;
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(ErrorService.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /** The Error Report Repository. */
-  private final ErrorReportRepository errorReportRepository;
-
-  /** The Error Report Summary Repository. */
-  private final ErrorReportSummaryRepository errorReportSummaryRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /** Is debugging enabled for the Inception Framework? */
-  @Value("${inception.debug.enabled:#{false}}")
-  private boolean inDebugMode;
+public interface ErrorService {
 
   /**
-   * Constructs a new <b>ErrorService</b>.
+   * Create the new entry for the error report in the database.
    *
-   * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
-   * @param errorReportRepository the Error Report Repository
-   * @param errorReportSummaryRepository the Error Report Summary Repository
+   * @param errorReport the <b>ErrorReport</b> instance containing the information for the error
+   *     report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the error report could not be created
    */
-  public ErrorService(
-      ApplicationContext applicationContext,
-      Validator validator,
-      ErrorReportRepository errorReportRepository,
-      ErrorReportSummaryRepository errorReportSummaryRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
-    this.errorReportRepository = errorReportRepository;
-    this.errorReportSummaryRepository = errorReportSummaryRepository;
-  }
+  void createErrorReport(ErrorReport errorReport)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public void createErrorReport(ErrorReport errorReport)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (errorReport == null) {
-      throw new InvalidArgumentException("errorReport");
-    }
+  /**
+   * Retrieve the error report.
+   *
+   * @param errorReportId the ID for the error report
+   * @return the error report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ErrorReportNotFoundException if the error report could not be found
+   * @throws ServiceUnavailableException if the error report could not be retrieved
+   */
+  ErrorReport getErrorReport(UUID errorReportId)
+      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException;
 
-    // Truncate the detail if required
-    if ((errorReport.getDetail() != null)
-        && (errorReport.getDetail().length() > ErrorReport.MAX_DETAIL_SIZE)) {
-      errorReport.setDetail(
-          errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3) + "...");
-    }
-
-    Set<ConstraintViolation<ErrorReport>> constraintViolations = validator.validate(errorReport);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "errorReport", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    try {
-      String description = errorReport.getDescription();
-
-      if (description.length() > 2000) {
-        description = description.substring(0, 2000);
-      }
-
-      errorReport.setDescription(description);
-
-      String detail = StringUtils.hasText(errorReport.getDetail()) ? errorReport.getDetail() : "";
-
-      if (detail.length() > ErrorReport.MAX_DETAIL_SIZE) {
-        detail = detail.substring(0, ErrorReport.MAX_DETAIL_SIZE);
-      }
-
-      errorReport.setDetail(detail);
-
-      String who = errorReport.getWho();
-
-      if ((who != null) && (who.length() > 1000)) {
-        who = who.substring(0, 1000);
-      }
-
-      errorReport.setWho(who);
-
-      String feedback = errorReport.getFeedback();
-
-      if ((feedback != null) && (feedback.length() > 2000)) {
-        feedback = feedback.substring(0, 2000);
-      }
-
-      errorReport.setFeedback(feedback);
-
-      errorReportRepository.saveAndFlush(errorReport);
-
-      if (inDebugMode) {
-        ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
-
-        if (objectMapper != null) {
-          log.info(
-              "Error Report: "
-                  + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorReport));
-        }
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the error report (" + errorReport.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public ErrorReport getErrorReport(UUID errorReportId)
-      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException {
-    if (errorReportId == null) {
-      throw new InvalidArgumentException("errorReportId");
-    }
-
-    try {
-      Optional<ErrorReport> errorReportOptional = errorReportRepository.findById(errorReportId);
-
-      if (errorReportOptional.isPresent()) {
-        return errorReportOptional.get();
-      } else {
-        throw new ErrorReportNotFoundException(errorReportId);
-      }
-    } catch (ErrorReportNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the error report (" + errorReportId + ")", e);
-    }
-  }
-
-  @Override
-  public ErrorReportSummaries getErrorReportSummaries(
+  /**
+   * Retrieve the error report summaries.
+   *
+   * @param filter the filter to apply to the error report summaries
+   * @param fromDate the date to retrieve the error report summaries from
+   * @param toDate the date to retrieve the error report summaries to
+   * @param sortBy the method used to sort the error report summaries e.g. by who submitted
+   *     them
+   * @param sortDirection the sort direction to apply to the error report summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the error report summaries
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the error report summaries could not be retrieved
+   */
+  ErrorReportSummaries getErrorReportSummaries(
       String filter,
       LocalDate fromDate,
       LocalDate toDate,
@@ -203,143 +82,30 @@ public class ErrorService implements IErrorService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (fromDate == null) {
-      fromDate = LocalDate.now().minusMonths(1);
-    }
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if (toDate == null) {
-      toDate = LocalDate.now();
-    }
+  /**
+   * Retrieve the summary for the error report.
+   *
+   * @param errorReportId the ID for the error report
+   * @return the summary for the error report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ErrorReportNotFoundException if the error report could not be found
+   * @throws ServiceUnavailableException if the error report summary could not be retrieved
+   */
+  ErrorReportSummary getErrorReportSummary(UUID errorReportId)
+      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException;
 
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (sortBy == null) {
-      sortBy = ErrorReportSortBy.CREATED;
-    }
-
-    if (sortDirection == null) {
-      sortDirection = SortDirection.DESCENDING;
-    }
-
-    try {
-      PageRequest pageRequest;
-
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
-
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_ERROR_REPORT_SUMMARIES;
-      }
-
-      String sortProperty;
-      if (sortBy == ErrorReportSortBy.WHO) {
-        sortProperty = "who";
-      } else {
-        sortProperty = "created";
-      }
-
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_ERROR_REPORT_SUMMARIES),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              sortProperty);
-
-      final OffsetDateTime fromOffsetDateTime =
-          fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime();
-
-      final OffsetDateTime toOffsetDateTime =
-          toDate.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toOffsetDateTime();
-
-      Page<ErrorReportSummary> errorReportSummaryPage =
-          errorReportSummaryRepository.findAll(
-              (Specification<ErrorReportSummary>)
-                  (root, query, criteriaBuilder) -> {
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    predicates.add(
-                        criteriaBuilder.greaterThanOrEqualTo(
-                            root.get("created"), fromOffsetDateTime));
-
-                    predicates.add(criteriaBuilder.lessThan(root.get("created"), toOffsetDateTime));
-
-                    if (StringUtils.hasText(filter)) {
-                      predicates.add(
-                          criteriaBuilder.like(
-                              criteriaBuilder.lower(root.get("who")),
-                              "%" + filter.toLowerCase() + "%"));
-                    }
-
-                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                  },
-              pageRequest);
-
-      return new ErrorReportSummaries(
-          errorReportSummaryPage.toList(),
-          errorReportSummaryPage.getTotalElements(),
-          filter,
-          fromDate,
-          toDate,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered error report summaries", e);
-    }
-  }
-
-  @Override
-  public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException {
-    if (errorReportId == null) {
-      throw new InvalidArgumentException("errorReportId");
-    }
-
-    try {
-      Optional<ErrorReportSummary> errorReportSummaryOptional =
-          errorReportSummaryRepository.findById(errorReportId);
-
-      if (errorReportSummaryOptional.isPresent()) {
-        return errorReportSummaryOptional.get();
-      } else {
-        throw new ErrorReportNotFoundException(errorReportId);
-      }
-    } catch (ErrorReportNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the summary for the error report (" + errorReportId + ")", e);
-    }
-  }
-
-  @Override
-  public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (maximumNumberOfEntries < 0) {
-      throw new InvalidArgumentException("maximumNumberOfEntries");
-    }
-
-    try {
-      PageRequest pageRequest =
-          PageRequest.of(0, maximumNumberOfEntries, Sort.Direction.DESC, "created");
-
-      Page<ErrorReportSummary> errorReportSummaryPage =
-          errorReportSummaryRepository.findAll(pageRequest);
-
-      return errorReportSummaryPage.getContent();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the summaries for the most recent error reports", e);
-    }
-  }
+  /**
+   * Retrieve the summaries for the most recent error reports.
+   *
+   * @param maximumNumberOfEntries the maximum number of summaries for the most recent error reports
+   *     to retrieve
+   * @return the summaries for the most recent error reports
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the most recent error report summaries could not be
+   *     retrieved
+   */
+  List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

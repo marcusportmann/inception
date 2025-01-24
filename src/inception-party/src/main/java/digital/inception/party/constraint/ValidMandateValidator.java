@@ -19,8 +19,8 @@ package digital.inception.party.constraint;
 import digital.inception.party.model.Mandate;
 import digital.inception.party.model.MandateProperty;
 import digital.inception.party.model.MandatePropertyType;
-import digital.inception.party.service.IPartyReferenceService;
-import digital.inception.party.service.IPartyService;
+import digital.inception.party.service.PartyReferenceService;
+import digital.inception.party.service.PartyService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
@@ -41,10 +41,10 @@ import org.springframework.util.StringUtils;
 public class ValidMandateValidator implements ConstraintValidator<ValidMandate, Mandate> {
 
   /** The Party Reference Service. */
-  private final IPartyReferenceService partyReferenceService;
+  private final PartyReferenceService partyReferenceService;
 
   /** The Party Service. */
-  private final IPartyService partyService;
+  private final PartyService partyService;
 
   /**
    * Constructs a new <b>ValidMandateValidator</b>.
@@ -54,7 +54,7 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
    */
   @Autowired
   public ValidMandateValidator(
-      IPartyService partyService, IPartyReferenceService partyReferenceService) {
+      PartyService partyService, PartyReferenceService partyReferenceService) {
     this.partyService = partyService;
     this.partyReferenceService = partyReferenceService;
   }

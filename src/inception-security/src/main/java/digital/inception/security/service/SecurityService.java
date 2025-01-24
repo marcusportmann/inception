@@ -16,26 +16,9 @@
 
 package digital.inception.security.service;
 
-import com.github.f4b6a3.uuid.UuidCreator;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.crypto.RSASSASigner;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.JWTClaimsSet.Builder;
-import com.nimbusds.jwt.SignedJWT;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.util.PasswordUtil;
-import digital.inception.core.util.RandomStringGenerator;
-import digital.inception.core.util.ResourceException;
-import digital.inception.core.util.ResourceUtil;
-import digital.inception.core.xml.XmlSchemaClasspathInputSource;
-import digital.inception.mail.model.MailTemplate;
-import digital.inception.mail.model.MailTemplateContentType;
-import digital.inception.mail.service.IMailService;
 import digital.inception.security.model.AuthenticationFailedException;
 import digital.inception.security.model.DuplicateFunctionException;
 import digital.inception.security.model.DuplicateGroupException;
@@ -60,19 +43,15 @@ import digital.inception.security.model.GroupNotFoundException;
 import digital.inception.security.model.GroupRole;
 import digital.inception.security.model.GroupRoleNotFoundException;
 import digital.inception.security.model.Groups;
-import digital.inception.security.model.InternalUserDirectoryProvider;
 import digital.inception.security.model.InvalidAttributeException;
 import digital.inception.security.model.InvalidPolicyDataException;
 import digital.inception.security.model.InvalidSecurityCodeException;
 import digital.inception.security.model.PasswordChangeReason;
-import digital.inception.security.model.PasswordReset;
-import digital.inception.security.model.PasswordResetStatus;
 import digital.inception.security.model.Policy;
 import digital.inception.security.model.PolicyDataMismatchException;
 import digital.inception.security.model.PolicyNotFoundException;
 import digital.inception.security.model.PolicySortBy;
 import digital.inception.security.model.PolicySummaries;
-import digital.inception.security.model.PolicyType;
 import digital.inception.security.model.RevokedToken;
 import digital.inception.security.model.Role;
 import digital.inception.security.model.RoleNotFoundException;
@@ -81,20 +60,16 @@ import digital.inception.security.model.TenantNotFoundException;
 import digital.inception.security.model.TenantUserDirectoryNotFoundException;
 import digital.inception.security.model.Tenants;
 import digital.inception.security.model.Token;
-import digital.inception.security.model.TokenClaim;
 import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
 import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
-import digital.inception.security.model.TokenSummary;
-import digital.inception.security.model.TokenType;
 import digital.inception.security.model.User;
 import digital.inception.security.model.UserAttribute;
 import digital.inception.security.model.UserDirectories;
 import digital.inception.security.model.UserDirectory;
 import digital.inception.security.model.UserDirectoryCapabilities;
 import digital.inception.security.model.UserDirectoryNotFoundException;
-import digital.inception.security.model.UserDirectoryProvider;
 import digital.inception.security.model.UserDirectorySummaries;
 import digital.inception.security.model.UserDirectorySummary;
 import digital.inception.security.model.UserDirectoryType;
@@ -103,399 +78,139 @@ import digital.inception.security.model.UserLockedException;
 import digital.inception.security.model.UserNotFoundException;
 import digital.inception.security.model.UserSortBy;
 import digital.inception.security.model.Users;
-import digital.inception.security.persistence.FunctionRepository;
-import digital.inception.security.persistence.GroupRepository;
-import digital.inception.security.persistence.PasswordResetRepository;
-import digital.inception.security.persistence.RoleRepository;
-import digital.inception.security.persistence.TenantRepository;
-import digital.inception.security.persistence.TokenRepository;
-import digital.inception.security.persistence.TokenSummaryRepository;
-import digital.inception.security.persistence.UserDirectoryRepository;
-import digital.inception.security.persistence.UserDirectorySummaryRepository;
-import digital.inception.security.persistence.UserDirectoryTypeRepository;
-import digital.inception.security.persistence.UserRepository;
-import digital.inception.security.store.IPolicyStore;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.io.ByteArrayInputStream;
-import java.lang.reflect.Constructor;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
- * The <b>SecurityService</b> class provides the Security Service implementation.
+ * The <b>SecurityService</b> interface defines the functionality provided by a Security Service
+ * implementation, which manages the security related information for an application.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
-public class SecurityService implements ISecurityService {
+public interface SecurityService {
 
-  /** The maximum number of filtered tenants. */
-  private static final int MAX_FILTERED_TENANTS = 100;
+  /** The ID for the Administrators group. */
+  UUID ADMINISTRATORS_GROUP_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-  /** The maximum number of filtered tokens. */
-  private static final int MAX_FILTERED_TOKENS = 100;
+  /** The name of the Administrators group. */
+  String ADMINISTRATORS_GROUP_NAME = "Administrators";
 
-  /** The maximum number of filtered user directories. */
-  private static final int MAX_FILTERED_USER_DIRECTORIES = 100;
+  /** The code for the Administrator role. */
+  String ADMINISTRATOR_ROLE_CODE = "Administrator";
 
-  /** The code for the password reset mail template. */
-  private static final String PASSWORD_RESET_MAIL_TEMPLATE_ID =
-      "Inception.Security.PasswordResetMail";
+  /** The username for the Administrator user. */
+  String ADMINISTRATOR_USERNAME = "administrator";
 
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(SecurityService.class);
+  /** The ID for the default tenant. */
+  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+  /** The ID for the default internal user directory. */
+  UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-  /** The Function Repository. */
-  private final FunctionRepository functionRepository;
+  /** The code for the internal user directory type. */
+  String INTERNAL_USER_DIRECTORY_TYPE = "InternalUserDirectory";
 
-  /** The Group Repository. */
-  private final GroupRepository groupRepository;
+  /** The code for the LDAP user directory type. */
+  String LDAP_USER_DIRECTORY_TYPE = "LDAPUserDirectory";
 
-  /* The ID of the RSA key used to sign JWTs. */
-  private final String jwtRsaKeyId;
+  /** The code for the Password Resetter role. */
+  String PASSWORD_RESETTER_ROLE_CODE = "PasswordResetter";
 
-  /** The Mail Service. */
-  private final IMailService mailService;
-
-  /** The Password Reset Repository. */
-  private final PasswordResetRepository passwordResetRepository;
-
-  /** The Policy Data Store. */
-  private final IPolicyStore policyDataStore;
-
-  /** The Role Repository. */
-  private final RoleRepository roleRepository;
+  /** The code for the Tenant Administrator role. */
+  String TENANT_ADMINISTRATOR_ROLE_CODE = "TenantAdministrator";
 
   /**
-   * The random alphanumeric string generator that will be used to generate security codes for
-   * password resets.
-   */
-  private final RandomStringGenerator securityCodeGenerator =
-      new RandomStringGenerator(
-          20, new SecureRandom(), "1234567890ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx");
-
-  /** The Tenant Repository. */
-  private final TenantRepository tenantRepository;
-
-  /** The Token Repository. */
-  private final TokenRepository tokenRepository;
-
-  /** The Token Summary Repository. */
-  private final TokenSummaryRepository tokenSummaryRepository;
-
-  /** The User Directory Repository. */
-  private final UserDirectoryRepository userDirectoryRepository;
-
-  /** The User Directory Summary Repository. */
-  private final UserDirectorySummaryRepository userDirectorySummaryRepository;
-
-  /** The User Directory Type Repository. */
-  private final UserDirectoryTypeRepository userDirectoryTypeRepository;
-
-  /** The User Repository. */
-  private final UserRepository userRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /* The RSA private key used to sign JWTs. */
-  private RSAPrivateKey jwtRsaPrivateKey;
-
-  /* The RSA public key used to verify JWTs. */
-  private RSAPublicKey jwtRsaPublicKey;
-
-  /** The user directories. */
-  private Map<UUID, UserDirectoryProvider> userDirectories = new ConcurrentHashMap<>();
-
-  /**
-   * Constructs a new <b>SecurityService</b>.
+   * Add the group member to the group.
    *
-   * @param applicationContext the Spring application context
-   * @param resourceLoader the Spring resource loader
-   * @param validator the JSR-380 validator
-   * @param mailService the Mail Service
-   * @param policyDataStore the Policy Data Store
-   * @param functionRepository the Function Repository
-   * @param groupRepository the Group Repository
-   * @param passwordResetRepository the Password Reset Repository
-   * @param roleRepository the Role Repository
-   * @param tenantRepository the Tenant Repository
-   * @param tokenRepository the Token Repository
-   * @param tokenSummaryRepository the Token Summary Repository
-   * @param userDirectoryRepository the User Directory Repository
-   * @param userDirectorySummaryRepository the User Directory Summary Repository
-   * @param userDirectoryTypeRepository the User Directory Type Repository
-   * @param userRepository the User Repository
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param memberType the group member type
+   * @param memberName the group member name
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the group member could not be added to the group
    */
-  public SecurityService(
-      ApplicationContext applicationContext,
-      ResourceLoader resourceLoader,
-      Validator validator,
-      IMailService mailService,
-      IPolicyStore policyDataStore,
-      FunctionRepository functionRepository,
-      GroupRepository groupRepository,
-      PasswordResetRepository passwordResetRepository,
-      RoleRepository roleRepository,
-      TenantRepository tenantRepository,
-      TokenRepository tokenRepository,
-      TokenSummaryRepository tokenSummaryRepository,
-      UserDirectoryRepository userDirectoryRepository,
-      UserDirectorySummaryRepository userDirectorySummaryRepository,
-      UserDirectoryTypeRepository userDirectoryTypeRepository,
-      UserRepository userRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
-    this.mailService = mailService;
-    this.policyDataStore = policyDataStore;
-    this.functionRepository = functionRepository;
-    this.groupRepository = groupRepository;
-    this.passwordResetRepository = passwordResetRepository;
-    this.roleRepository = roleRepository;
-    this.tenantRepository = tenantRepository;
-    this.tokenRepository = tokenRepository;
-    this.tokenSummaryRepository = tokenSummaryRepository;
-    this.userDirectoryRepository = userDirectoryRepository;
-    this.userDirectorySummaryRepository = userDirectorySummaryRepository;
-    this.userDirectoryTypeRepository = userDirectoryTypeRepository;
-    this.userRepository = userRepository;
-
-    if (StringUtils.hasText(
-        applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-key-id"))) {
-      this.jwtRsaKeyId =
-          applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-key-id");
-    } else if (StringUtils.hasText(
-        applicationContext
-            .getEnvironment()
-            .getProperty("inception.authorization-server.jwt.rsa-key-id"))) {
-      this.jwtRsaKeyId =
-          applicationContext
-              .getEnvironment()
-              .getProperty("inception.authorization-server.jwt.rsa-key-id");
-    } else {
-      this.jwtRsaKeyId = "inception";
-    }
-
-    log.info("Using the JWT RSA key ID (" + jwtRsaKeyId + ") when issuing JWT tokens");
-
-    String jwtRsaPrivateKeyLocation =
-        applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-private-key");
-
-    if (!StringUtils.hasText(jwtRsaPrivateKeyLocation)) {
-      jwtRsaPrivateKeyLocation =
-          applicationContext
-              .getEnvironment()
-              .getProperty("inception.authorization-server.jwt.rsa-private-key");
-    }
-
-    if (StringUtils.hasText(jwtRsaPrivateKeyLocation)) {
-      try {
-        this.jwtRsaPrivateKey =
-            ResourceUtil.getRSAPrivateKeyResource(resourceLoader, jwtRsaPrivateKeyLocation);
-      } catch (ResourceException e) {
-        log.error(
-            "Failed to initialize the JWT RSA private key (" + jwtRsaPrivateKeyLocation + ")", e);
-      }
-    }
-
-    String jwtRsaPublicKeyLocation =
-        applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-public-key");
-
-    if (!StringUtils.hasText(jwtRsaPublicKeyLocation)) {
-      jwtRsaPublicKeyLocation =
-          applicationContext
-              .getEnvironment()
-              .getProperty("inception.authorization-server.jwt.rsa-public-key");
-    }
-
-    if (StringUtils.hasText(jwtRsaPublicKeyLocation)) {
-      try {
-        this.jwtRsaPublicKey =
-            ResourceUtil.getRSAPublicKeyResource(resourceLoader, jwtRsaPublicKeyLocation);
-      } catch (Throwable e) {
-        log.error(
-            "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyLocation + ")", e);
-      }
-    }
-  }
-
-  @Override
-  public void addMemberToGroup(
+  void addMemberToGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (memberType == null) {
-      throw new InvalidArgumentException("memberType");
-    }
-
-    if (!StringUtils.hasText(memberName)) {
-      throw new InvalidArgumentException("memberName");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.addMemberToGroup(groupName, memberType, memberName);
-  }
-
-  @Override
-  public void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
+  /**
+   * Add the role to the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws RoleNotFoundException if the role could not be found
+   * @throws ServiceUnavailableException if the role could not be added to the group
+   */
+  void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           RoleNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!StringUtils.hasText(roleCode)) {
-      throw new InvalidArgumentException("roleCode");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.addRoleToGroup(groupName, roleCode);
-  }
-
-  @Override
-  public void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
+  /**
+   * Add the user directory to the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @param userDirectoryId the ID for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be added to the tenant
+   */
+  void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException,
           TenantNotFoundException,
           UserDirectoryNotFoundException,
-          ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
+          ServiceUnavailableException;
 
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    try {
-      if (!tenantRepository.existsById(tenantId)) {
-        throw new TenantNotFoundException(tenantId);
-      }
-
-      if (!userDirectoryRepository.existsById(userDirectoryId)) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-
-      if (tenantRepository.userDirectoryToTenantMappingExists(tenantId, userDirectoryId) == 1) {
-        return;
-      }
-
-      tenantRepository.addUserDirectoryToTenant(tenantId, userDirectoryId);
-    } catch (TenantNotFoundException | UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to add the user directory ("
-              + userDirectoryId
-              + ") to the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void addUserToGroup(UUID userDirectoryId, String groupName, String username)
+  /**
+   * Add the user to the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param username the username for the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be added to the group
+   */
+  void addUserToGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.addUserToGroup(groupName, username);
-  }
-
-  @Override
-  public void adminChangePassword(
+  /**
+   * Administratively change the password for the user.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @param newPassword the new password
+   * @param expirePassword expire the user's password
+   * @param lockUser lock the user
+   * @param resetPasswordHistory reset the user's password history
+   * @param reason the reason for changing the password
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the password could not be administratively changed
+   */
+  void adminChangePassword(
       UUID userDirectoryId,
       String username,
       String newPassword,
@@ -506,803 +221,426 @@ public class SecurityService implements ISecurityService {
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!StringUtils.hasText(newPassword)) {
-      throw new InvalidArgumentException("newPassword");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.adminChangePassword(
-        username, newPassword, expirePassword, lockUser, resetPasswordHistory, reason);
-  }
-
-  @Override
-  public UUID authenticate(String username, String password)
+  /**
+   * Authenticate the user.
+   *
+   * @param username the username for the user
+   * @param password the password being used to authenticate
+   * @return the ID for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AuthenticationFailedException if the authentication failed
+   * @throws UserLockedException if the user is locked
+   * @throws ExpiredPasswordException if the password for the user has expired
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be authenticated
+   */
+  UUID authenticate(String username, String password)
       throws InvalidArgumentException,
           AuthenticationFailedException,
           UserLockedException,
           ExpiredPasswordException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(password)) {
-      throw new InvalidArgumentException("password");
-    }
-
-    try {
-      // First check if this is an internal user and if so determine the user directory ID
-      Optional<UUID> internalUserDirectoryIdOptional = getInternalUserDirectoryIdForUser(username);
-
-      if (internalUserDirectoryIdOptional.isPresent()) {
-        UUID internalUserDirectoryId = internalUserDirectoryIdOptional.get();
-
-        UserDirectoryProvider internalUserDirectory = userDirectories.get(internalUserDirectoryId);
-
-        if (internalUserDirectory == null) {
-          throw new ServiceUnavailableException(
-              "The user directory ID ("
-                  + internalUserDirectoryId
-                  + ") for the internal user ("
-                  + username
-                  + ") is invalid");
-        } else {
-          internalUserDirectory.authenticate(username, password);
-
-          return internalUserDirectoryId;
-        }
-      } else {
-        /*
-         * Check the "external" user directories to see if one of them can authenticate this user.
-         */
-        for (UUID userDirectoryId : userDirectories.keySet()) {
-          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-          if (userDirectory != null) {
-            if (!(userDirectory instanceof InternalUserDirectoryProvider)) {
-              if (userDirectory.isExistingUser(username)) {
-                userDirectory.authenticate(username, password);
-
-                return userDirectoryId;
-              }
-            }
-          }
-        }
-
-        throw new UserNotFoundException(username);
-      }
-    } catch (AuthenticationFailedException
-        | UserNotFoundException
-        | UserLockedException
-        | ExpiredPasswordException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to authenticate the user (" + username + ")", e);
-    }
-  }
-
-  @Override
-  public UUID changePassword(String username, String password, String newPassword)
+  /**
+   * Change the password for the user.
+   *
+   * @param username the username for the user
+   * @param password the password for the user that is used to authorise the operation
+   * @param newPassword the new password
+   * @return the ID for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AuthenticationFailedException if the authentication failed
+   * @throws UserLockedException if the user is locked
+   * @throws ExistingPasswordException if the user has previously used the new password
+   * @throws ServiceUnavailableException if the password could not be changed
+   */
+  UUID changePassword(String username, String password, String newPassword)
       throws InvalidArgumentException,
           AuthenticationFailedException,
           UserLockedException,
           ExistingPasswordException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(password)) {
-      throw new InvalidArgumentException("password");
-    }
+  /**
+   * Create the new function.
+   *
+   * @param function the function
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateFunctionException if the function already exists
+   * @throws ServiceUnavailableException if the function could not be created
+   */
+  void createFunction(Function function)
+      throws InvalidArgumentException, DuplicateFunctionException, ServiceUnavailableException;
 
-    if (!StringUtils.hasText(newPassword)) {
-      throw new InvalidArgumentException("newPassword");
-    }
-
-    try {
-      // First check if this is an internal user and if so determine the user directory ID
-      Optional<UUID> internalUserDirectoryIdOptional = getInternalUserDirectoryIdForUser(username);
-
-      if (internalUserDirectoryIdOptional.isPresent()) {
-        UUID internalUserDirectoryId = internalUserDirectoryIdOptional.get();
-
-        UserDirectoryProvider internalUserDirectory = userDirectories.get(internalUserDirectoryId);
-
-        if (internalUserDirectory == null) {
-          throw new ServiceUnavailableException(
-              "The user directory ID ("
-                  + internalUserDirectoryId
-                  + ") for the internal user ("
-                  + username
-                  + ") is invalid");
-        } else {
-          internalUserDirectory.changePassword(username, password, newPassword);
-
-          return internalUserDirectoryId;
-        }
-      } else {
-        /*
-         * Check the "external" user directories to see if one of them can change the password for this user.
-         */
-        for (UUID userDirectoryId : userDirectories.keySet()) {
-          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-          if (userDirectory != null) {
-            if (!(userDirectory instanceof InternalUserDirectoryProvider)) {
-              if (userDirectory.isExistingUser(username)) {
-                userDirectory.changePassword(username, password, newPassword);
-
-                return userDirectoryId;
-              }
-            }
-          }
-        }
-
-        throw new AuthenticationFailedException(
-            "Authentication failed while attempting to change the password for the user ("
-                + username
-                + ")");
-      }
-    } catch (AuthenticationFailedException | UserLockedException | ExistingPasswordException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to change the password for the user (" + username + ")", e);
-    }
-  }
-
-  @Override
-  public void createFunction(Function function)
-      throws InvalidArgumentException, DuplicateFunctionException, ServiceUnavailableException {
-    validateFunction(function);
-
-    try {
-      if (functionRepository.existsById(function.getCode())) {
-        throw new DuplicateFunctionException(function.getCode());
-      }
-
-      functionRepository.saveAndFlush(function);
-    } catch (DuplicateFunctionException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the function (" + function.getCode() + ")", e);
-    }
-  }
-
-  @Override
-  public void createGroup(Group group)
+  /**
+   * Create the new group.
+   *
+   * @param group the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws DuplicateGroupException if the group already exists
+   * @throws ServiceUnavailableException if the group could not be created
+   */
+  void createGroup(Group group)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           DuplicateGroupException,
-          ServiceUnavailableException {
-    validateGroup(group);
+          ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(group.getUserDirectoryId());
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(group.getUserDirectoryId());
-    }
-
-    userDirectory.createGroup(group);
-  }
-
-  @Override
-  public void createPolicy(Policy policy)
+  /**
+   * Create the new policy.
+   *
+   * @param policy the policy
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InvalidPolicyDataException the policy data is invalid
+   * @throws DuplicatePolicyException if the policy already exists
+   * @throws PolicyDataMismatchException if the policy attributes do not match the policy data
+   * @throws ServiceUnavailableException if the policy could not be created
+   */
+  void createPolicy(Policy policy)
       throws InvalidArgumentException,
           InvalidPolicyDataException,
           DuplicatePolicyException,
           PolicyDataMismatchException,
-          ServiceUnavailableException {
-    validatePolicy(policy);
+          ServiceUnavailableException;
 
-    policyDataStore.createPolicy(policy);
-  }
+  /**
+   * Create the new tenant.
+   *
+   * @param tenant the tenant
+   * @param createUserDirectory should a new internal user directory be created for the tenant
+   * @return an Optional containing the new internal user directory that was created for the tenant
+   *     or an empty Optional if no user directory was created
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateTenantException if the tenant already exists
+   * @throws ServiceUnavailableException if the tenant could not be created
+   */
+  Optional<UserDirectory> createTenant(Tenant tenant, boolean createUserDirectory)
+      throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException;
 
-  @Override
-  public Optional<UserDirectory> createTenant(Tenant tenant, boolean createUserDirectory)
-      throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException {
-    validateTenant(tenant);
-
-    UserDirectory userDirectory = null;
-
-    try {
-      if ((tenant.getId() != null) && tenantRepository.existsById(tenant.getId())) {
-        throw new DuplicateTenantException(tenant.getId());
-      }
-
-      if (tenantRepository.existsByNameIgnoreCase(tenant.getName())) {
-        throw new DuplicateTenantException(tenant.getName());
-      }
-
-      if (createUserDirectory) {
-        userDirectory = newInternalUserDirectoryForTenant(tenant);
-
-        tenant.linkUserDirectory(userDirectory);
-      }
-
-      tenantRepository.saveAndFlush(tenant);
-
-      try {
-        reloadUserDirectories();
-      } catch (Throwable e) {
-        log.error("Failed to reload the user directories", e);
-      }
-
-      return Optional.ofNullable(userDirectory);
-    } catch (DuplicateTenantException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the tenant (" + tenant.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public void createUser(User user, boolean expiredPassword, boolean userLocked)
+  /**
+   * Create the new user.
+   *
+   * @param user the user
+   * @param expiredPassword create the user with its password expired
+   * @param userLocked create the user locked
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws DuplicateUserException if the user already exists
+   * @throws ServiceUnavailableException if the user could not be created
+   */
+  void createUser(User user, boolean expiredPassword, boolean userLocked)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           DuplicateUserException,
-          ServiceUnavailableException {
-    validateUser(user);
+          ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(user.getUserDirectoryId());
+  /**
+   * Create the new user directory.
+   *
+   * @param userDirectory the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateUserDirectoryException if the user directory already exists
+   * @throws ServiceUnavailableException if the user directory could not be created
+   */
+  void createUserDirectory(UserDirectory userDirectory)
+      throws InvalidArgumentException, DuplicateUserDirectoryException, ServiceUnavailableException;
 
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(user.getUserDirectoryId());
-    }
+  /**
+   * Delete the function.
+   *
+   * @param functionCode the code for the function
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws FunctionNotFoundException if the function could not be found
+   * @throws ServiceUnavailableException if the function could not be created
+   */
+  void deleteFunction(String functionCode)
+      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException;
 
-    if (getUserDirectoryIdForUser(user.getUsername()).isPresent()) {
-      throw new DuplicateUserException(user.getUsername());
-    }
-
-    userDirectory.createUser(user, expiredPassword, userLocked);
-  }
-
-  @Override
-  public void createUserDirectory(UserDirectory userDirectory)
-      throws InvalidArgumentException,
-          DuplicateUserDirectoryException,
-          ServiceUnavailableException {
-    validateUserDirectory(userDirectory);
-
-    try {
-      if ((userDirectory.getId() != null)
-          && userDirectoryRepository.existsById(userDirectory.getId())) {
-        throw new DuplicateUserDirectoryException(userDirectory.getId());
-      }
-
-      if (userDirectoryRepository.existsByNameIgnoreCase(userDirectory.getName())) {
-        throw new DuplicateUserDirectoryException(userDirectory.getName());
-      }
-
-      userDirectoryRepository.saveAndFlush(userDirectory);
-
-      try {
-        reloadUserDirectories();
-      } catch (Throwable e) {
-        log.error("Failed to reload the user directories", e);
-      }
-    } catch (DuplicateUserDirectoryException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the user directory (" + userDirectory.getName() + ")", e);
-    }
-  }
-
-  @Override
-  public void deleteFunction(String functionCode)
-      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(functionCode)) {
-      throw new InvalidArgumentException("functionCode");
-    }
-
-    try {
-      if (!functionRepository.existsById(functionCode)) {
-        throw new FunctionNotFoundException(functionCode);
-      }
-
-      functionRepository.deleteById(functionCode);
-    } catch (FunctionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the function (" + functionCode + ")", e);
-    }
-  }
-
-  @Override
-  public void deleteGroup(UUID userDirectoryId, String groupName)
+  /**
+   * Delete the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ExistingGroupMembersException if the group has existing members
+   * @throws ServiceUnavailableException if the group could not be deleted
+   */
+  void deleteGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           ExistingGroupMembersException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
+  /**
+   * Delete the policy.
+   *
+   * @param policyId the ID for the policy
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PolicyNotFoundException if the policy could not be found
+   * @throws ServiceUnavailableException if the policy could not be deleted
+   */
+  void deletePolicy(String policyId)
+      throws InvalidArgumentException, PolicyNotFoundException, ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
+  /**
+   * Delete the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the tenant could not be deleted
+   */
+  void deleteTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
+  /**
+   * Delete the token.
+   *
+   * @param tokenId the ID for the token
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TokenNotFoundException if the token could not be found
+   * @throws ServiceUnavailableException if the token could not be deleted
+   */
+  void deleteToken(String tokenId)
+      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException;
 
-    userDirectory.deleteGroup(groupName);
-  }
-
-  @Override
-  public void deletePolicy(String policyId)
-      throws InvalidArgumentException, PolicyNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(policyId)) {
-      throw new InvalidArgumentException("policyId");
-    }
-
-    policyDataStore.deletePolicy(policyId);
-  }
-
-  @Override
-  public void deleteTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      if (!tenantRepository.existsById(tenantId)) {
-        throw new TenantNotFoundException(tenantId);
-      }
-
-      tenantRepository.deleteById(tenantId);
-    } catch (TenantNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delete the tenant (" + tenantId + ")", e);
-    }
-  }
-
-  @Override
-  public void deleteToken(String tokenId)
-      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(tokenId)) {
-      throw new InvalidArgumentException("tokenId");
-    }
-
-    try {
-      if (!tokenRepository.existsById(tokenId)) {
-        throw new TokenNotFoundException(tokenId);
-      }
-
-      tokenRepository.deleteById(tokenId);
-    } catch (TokenNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delete the token (" + tokenId + ")", e);
-    }
-  }
-
-  @Override
-  public void deleteUser(UUID userDirectoryId, String username)
+  /**
+   * Delete the user.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be deleted
+   */
+  void deleteUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.deleteUser(username);
-  }
-
-  @Override
-  public void deleteUserDirectory(UUID userDirectoryId)
+  /**
+   * Delete the user directory.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ExistingGroupsException if the user directory has existing groups
+   * @throws ExistingUsersException if the user directory has existing users
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be deleted
+   */
+  void deleteUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException,
           ExistingGroupsException,
           ExistingUsersException,
           UserDirectoryNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      if (!userDirectoryRepository.existsById(userDirectoryId)) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-
-      if (groupRepository.existsByUserDirectoryId(userDirectoryId)) {
-        throw new ExistingGroupsException(userDirectoryId);
-      }
-
-      if (userRepository.existsByUserDirectoryId(userDirectoryId)) {
-        throw new ExistingUsersException(userDirectoryId);
-      }
-
-      userDirectoryRepository.deleteById(userDirectoryId);
-
-      try {
-        reloadUserDirectories();
-      } catch (Throwable e) {
-        log.error("Failed to reload the user directories", e);
-      }
-    } catch (ExistingGroupsException | ExistingUsersException | UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the user directory (" + userDirectoryId + ")", e);
-    }
-  }
-
-  @Override
-  public List<User> findUsers(UUID userDirectoryId, List<UserAttribute> userAttributes)
+  /**
+   * Retrieve the users matching the user attribute criteria.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param userAttributes the user attribute criteria used to select the users
+   * @return the users whose attributes match the user attribute criteria
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws InvalidAttributeException if an attribute is invalid
+   * @throws ServiceUnavailableException if the users matching the user attribute criteria could not
+   *     be found
+   */
+  List<User> findUsers(UUID userDirectoryId, List<UserAttribute> userAttributes)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           InvalidAttributeException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (userAttributes == null) {
-      throw new InvalidArgumentException("attributes");
-    }
+  /**
+   * Generate a token.
+   *
+   * @param generateTokenRequest the request to generate the token
+   * @return the token
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the token could not be generated
+   */
+  Token generateToken(GenerateTokenRequest generateTokenRequest)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
+  /**
+   * Retrieve the function.
+   *
+   * @param functionCode the code for the function
+   * @return the function
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws FunctionNotFoundException if the function could not be found
+   * @throws ServiceUnavailableException if the function could not be retrieved
+   */
+  Function getFunction(String functionCode)
+      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException;
 
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.findUsers(userAttributes);
-  }
-
-  @Override
-  public Token generateToken(GenerateTokenRequest generateTokenRequest)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    validateGenerateTokenRequest(generateTokenRequest);
-
-    if (generateTokenRequest.getType() == TokenType.JWT) {
-
-      if (!StringUtils.hasText(jwtRsaKeyId)) {
-        throw new ServiceUnavailableException(
-            "Failed to generate the token ("
-                + generateTokenRequest.getName()
-                + ") with type ("
-                + generateTokenRequest.getType()
-                + "): No inception.security.jwt.rsa-key-id property specified");
-      }
-
-      if (jwtRsaPrivateKey == null) {
-        throw new ServiceUnavailableException(
-            "Failed to generate the token ("
-                + generateTokenRequest.getName()
-                + ") with type ("
-                + generateTokenRequest.getType()
-                + "): No inception.security.jwt.rsa-private-key property specified");
-      }
-
-      try {
-        String jwtId = UuidCreator.getTimeOrderedEpoch().toString().replace("-", "");
-
-        OffsetDateTime issuedAt = OffsetDateTime.now();
-
-        JWSSigner signer = new RSASSASigner(jwtRsaPrivateKey);
-
-        JWTClaimsSet.Builder jwtClaimsSetBuilder = new Builder();
-
-        jwtClaimsSetBuilder.issueTime(Date.from(issuedAt.toInstant()));
-
-        jwtClaimsSetBuilder.issuer(jwtRsaKeyId);
-
-        jwtClaimsSetBuilder.subject(generateTokenRequest.getName());
-
-        jwtClaimsSetBuilder.claim("jti", jwtId);
-
-        if (generateTokenRequest.getValidFromDate() != null) {
-          jwtClaimsSetBuilder.notBeforeTime(
-              Date.from(
-                  generateTokenRequest
-                      .getValidFromDate()
-                      .atStartOfDay(ZoneId.systemDefault())
-                      .toInstant()));
-        }
-
-        if (generateTokenRequest.getExpiryDate() != null) {
-          jwtClaimsSetBuilder.expirationTime(
-              Date.from(
-                  generateTokenRequest
-                      .getExpiryDate()
-                      .atStartOfDay(ZoneId.systemDefault())
-                      .toInstant()));
-        }
-
-        for (TokenClaim tokenClaim : generateTokenRequest.getClaims()) {
-          jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValues());
-        }
-
-        SignedJWT signedJWT =
-            new SignedJWT(
-                new JWSHeader.Builder(JWSAlgorithm.RS256).keyID(jwtRsaKeyId).build(),
-                jwtClaimsSetBuilder.build());
-
-        signedJWT.sign(signer);
-
-        Token token =
-            new Token(
-                jwtId,
-                generateTokenRequest.getType(),
-                generateTokenRequest.getName(),
-                generateTokenRequest.getDescription(),
-                issuedAt,
-                generateTokenRequest.getValidFromDate(),
-                generateTokenRequest.getExpiryDate(),
-                generateTokenRequest.getClaims(),
-                signedJWT.serialize());
-
-        return tokenRepository.saveAndFlush(token);
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to generate the token ("
-                + generateTokenRequest.getName()
-                + ") with type ("
-                + generateTokenRequest.getType()
-                + ")",
-            e);
-      }
-    } else {
-      throw new ServiceUnavailableException(
-          "Failed to generate the token ("
-              + generateTokenRequest.getName()
-              + ") with type ("
-              + generateTokenRequest.getType()
-              + "): Unsupported token type ("
-              + generateTokenRequest.getType()
-              + ")");
-    }
-  }
-
-  @Override
-  public Function getFunction(String functionCode)
-      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(functionCode)) {
-      throw new InvalidArgumentException("functionCode");
-    }
-
-    try {
-      Optional<Function> functionOptional = functionRepository.findById(functionCode);
-
-      if (functionOptional.isPresent()) {
-        return functionOptional.get();
-      } else {
-        throw new FunctionNotFoundException(functionCode);
-      }
-    } catch (FunctionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the function (" + functionCode + ")", e);
-    }
-  }
-
-  @Override
-  public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
+  /**
+   * Retrieve the function codes for the user.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @return the function codes for the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the function codes could not be retrieved for the user
+   */
+  List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+  /**
+   * Retrieve all the functions.
+   *
+   * @return the functions
+   * @throws ServiceUnavailableException if the functions could not be retrieved
+   */
+  List<Function> getFunctions() throws ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getFunctionCodesForUser(username);
-  }
-
-  @Override
-  public List<Function> getFunctions() throws ServiceUnavailableException {
-    try {
-      return functionRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the functions", e);
-    }
-  }
-
-  @Override
-  public Group getGroup(UUID userDirectoryId, String groupName)
+  /**
+   * Retrieve the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @return the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the group could not be retrieved
+   */
+  Group getGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
+  /**
+   * Retrieve all the group names.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the group names
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the group names could not be retrieved
+   */
+  List<String> getGroupNames(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroup(groupName);
-  }
-
-  @Override
-  public List<String> getGroupNames(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroupNames();
-  }
-
-  @Override
-  public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
+  /**
+   * Retrieve the names of the groups the user is a member of.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @return the names of the groups the user is a member of
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the names of the groups the user is a member of could
+   *     not be retrieved
+   */
+  List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+  /**
+   * Retrieve all the groups.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the groups
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the groups could not be retrieved
+   */
+  List<Group> getGroups(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroupNamesForUser(username);
-  }
-
-  @Override
-  public List<Group> getGroups(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroups();
-  }
-
-  @Override
-  public Groups getGroups(
+  /**
+   * Retrieve the groups.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param filter the filter to apply to the groups
+   * @param sortDirection the sort direction to apply to the groups
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the groups
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the groups could not be retrieved
+   */
+  Groups getGroups(
       UUID userDirectoryId,
       String filter,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroups(filter, sortDirection, pageIndex, pageSize);
-  }
-
-  @Override
-  public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
+  /**
+   * Retrieve the groups the user is a member of.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @return the groups the user is a member of
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the groups the user is a member of could not be
+   *     retrieved
+   */
+  List<Group> getGroupsForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroupsForUser(username);
-  }
-
-  @Override
-  public List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
+  /**
+   * Retrieve the group members for the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @return the group members for the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the group members could not be retrieved for the group
+   */
+  List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getMembersForGroup(groupName);
-  }
-
-  @Override
-  public GroupMembers getMembersForGroup(
+  /**
+   * Retrieve the group members for the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param filter the filter to apply to the group members
+   * @param sortDirection the sort direction to apply to the group members
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the group members for the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the group members could not be retrieved for the group
+   */
+  GroupMembers getMembersForGroup(
       UUID userDirectoryId,
       String groupName,
       String filter,
@@ -1312,1829 +650,758 @@ public class SecurityService implements ISecurityService {
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
+  /**
+   * Retrieve all the policies.
+   *
+   * @return the policies
+   * @throws ServiceUnavailableException if the policies could not be retrieved
+   */
+  List<Policy> getPolicies() throws ServiceUnavailableException;
 
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
+  /**
+   * Retrieve the policy.
+   *
+   * @param policyId the ID for the policy
+   * @return the policy
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PolicyNotFoundException if the policy could not be found
+   * @throws ServiceUnavailableException if the policy could not be retrieved
+   */
+  Policy getPolicy(String policyId)
+      throws InvalidArgumentException, PolicyNotFoundException, ServiceUnavailableException;
 
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
+  /**
+   * Retrieve the name of the policy.
+   *
+   * @param policyId the ID for the policy
+   * @return the name of the policy
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PolicyNotFoundException if the policy could not be found
+   * @throws ServiceUnavailableException if the name of the policy could not be retrieved
+   */
+  String getPolicyName(String policyId)
+      throws InvalidArgumentException, PolicyNotFoundException, ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getMembersForGroup(groupName, filter, sortDirection, pageIndex, pageSize);
-  }
-
-  @Override
-  public List<Policy> getPolicies() throws ServiceUnavailableException {
-    return policyDataStore.getPolicies();
-  }
-
-  @Override
-  public Policy getPolicy(String policyId)
-      throws InvalidArgumentException, PolicyNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(policyId)) {
-      throw new InvalidArgumentException("policyId");
-    }
-
-    return policyDataStore.getPolicy(policyId);
-  }
-
-  @Override
-  public String getPolicyName(String policyId)
-      throws InvalidArgumentException, PolicyNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(policyId)) {
-      throw new InvalidArgumentException("policyId");
-    }
-
-    return policyDataStore.getPolicyName(policyId);
-  }
-
-  @Override
-  public PolicySummaries getPolicySummaries(
+  /**
+   * Retrieve the summaries for the policies.
+   *
+   * @param filter the filter to apply to the policy summaries
+   * @param sortBy the method used to sort the policy summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the policy summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the policies
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the policy summaries could not be retrieved
+   */
+  PolicySummaries getPolicySummaries(
       String filter,
       PolicySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return policyDataStore.getPolicySummaries(filter, sortBy, sortDirection, pageIndex, pageSize);
-  }
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<RevokedToken> getRevokedTokens() throws ServiceUnavailableException {
-    try {
-      return tokenRepository.getRevokedTokens();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the revoked tokens", e);
-    }
-  }
+  /**
+   * Retrieve the revoked tokens.
+   *
+   * @return the revoked tokens
+   * @throws ServiceUnavailableException if the revoked tokens could not be retrieved
+   */
+  List<RevokedToken> getRevokedTokens() throws ServiceUnavailableException;
 
-  @Override
-  public List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
+  /**
+   * Retrieve the codes for the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @return the codes for the roles that have been assigned to the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the codes for the roles assigned to the group could not
+   *     be retrieved
+   */
+  List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getRoleCodesForGroup(groupName);
-  }
-
-  @Override
-  public List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
+  /**
+   * Retrieve the codes for the roles that have been assigned to the user.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @return the codes for the roles that have been assigned to the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the codes for the roles assigned to the user could not
+   *     be retrieved
+   */
+  List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+  /**
+   * Retrieve all the roles.
+   *
+   * @return the roles
+   * @throws ServiceUnavailableException if the roles could not be retrieved
+   */
+  List<Role> getRoles() throws ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getRoleCodesForUser(username);
-  }
-
-  @Override
-  public List<Role> getRoles() throws ServiceUnavailableException {
-    try {
-      return roleRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the roles", e);
-    }
-  }
-
-  @Override
-  public List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
+  /**
+   * Retrieve the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @return the roles that have been assigned to the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the codes for the roles assigned to the group could not
+   *     be retrieved
+   */
+  List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
+  /**
+   * Retrieve the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the tenant could not be retrieved
+   */
+  Tenant getTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
+  /**
+   * Retrieve the IDs for the tenants the user directory is associated with.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the IDs for the tenants the user directory is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the tenant IDs could not be retrieved for the user
+   *     directory
+   */
+  List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
+  /**
+   * Retrieve the name of the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the name of the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the name of the tenant could not be retrieved
+   */
+  String getTenantName(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
-    return userDirectory.getRolesForGroup(groupName);
-  }
+  /**
+   * Retrieve the tenants.
+   *
+   * @return the tenants
+   * @throws ServiceUnavailableException if the tenants could not be retrieved
+   */
+  List<Tenant> getTenants() throws ServiceUnavailableException;
 
-  @Override
-  public Tenant getTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      Optional<Tenant> tenantOptional = tenantRepository.findById(tenantId);
-
-      if (tenantOptional.isPresent()) {
-        return tenantOptional.get();
-      } else {
-        throw new TenantNotFoundException(tenantId);
-      }
-    } catch (TenantNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the tenant (" + tenantId + ")", e);
-    }
-  }
-
-  @Override
-  public List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    try {
-      if (!userDirectoryRepository.existsById(userDirectoryId)) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-
-      return userDirectoryRepository.getTenantIdsById(userDirectoryId);
-    } catch (UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the IDs for the tenants for the user directory ("
-              + userDirectoryId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public String getTenantName(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      Optional<String> nameOptional = tenantRepository.getNameById(tenantId);
-
-      if (nameOptional.isPresent()) {
-        return nameOptional.get();
-      } else {
-        throw new TenantNotFoundException(tenantId);
-      }
-    } catch (TenantNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the name of the tenant (" + tenantId + ")", e);
-    }
-  }
-
-  @Override
-  public List<Tenant> getTenants() throws ServiceUnavailableException {
-    try {
-      return tenantRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the tenants", e);
-    }
-  }
-
-  @Override
-  public Tenants getTenants(
+  /**
+   * Retrieve the tenants.
+   *
+   * @param filter the filter to apply to the tenants
+   * @param sortDirection the sort direction to apply to the tenants
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the tenants
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the tenants could not be retrieved
+   */
+  Tenants getTenants(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
+  /**
+   * Retrieve the tenants the user directory is associated with.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the tenants the user directory is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the tenants could not be retrieved for the user
+   *     directory
+   */
+  List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    if (pageIndex == null) {
-      pageIndex = 0;
-    }
+  /**
+   * Retrieve the token.
+   *
+   * @param tokenId the ID for the token
+   * @return the token
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TokenNotFoundException if the token could not be found
+   * @throws ServiceUnavailableException if the token could not be retrieved
+   */
+  Token getToken(String tokenId)
+      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException;
 
-    if (pageSize == null) {
-      pageSize = MAX_FILTERED_TENANTS;
-    }
+  /**
+   * Retrieve the name of the token.
+   *
+   * @param tokenId the ID for the token
+   * @return the name of the token
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TokenNotFoundException if the token could not be found
+   * @throws ServiceUnavailableException if the name of the token could not be retrieved
+   */
+  String getTokenName(String tokenId)
+      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException;
 
-    try {
-      PageRequest pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_TENANTS),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              "name");
-
-      Page<Tenant> tenantPage;
-
-      if (StringUtils.hasText(filter)) {
-        tenantPage =
-            tenantRepository.findAll(
-                (Specification<Tenant>)
-                    (root, query, criteriaBuilder) ->
-                        criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + filter.toLowerCase() + "%"),
-                pageRequest);
-      } else {
-        tenantPage = tenantRepository.findAll(pageRequest);
-      }
-
-      return new Tenants(
-          tenantPage.toList(),
-          tenantPage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      String message = "Failed to retrieve the tenants";
-
-      if (StringUtils.hasText(filter)) {
-        message += " matching the filter \"%s\"".formatted(filter);
-      }
-
-      message += " for the page " + pageIndex + " using the page size " + pageSize;
-
-      message += ": ";
-
-      message += e.getMessage();
-
-      throw new ServiceUnavailableException(message, e);
-    }
-  }
-
-  @Override
-  public List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    try {
-      if (!userDirectoryRepository.existsById(userDirectoryId)) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-
-      return tenantRepository.findAllByUserDirectoryId(userDirectoryId);
-    } catch (UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the tenants associated with the user directory ("
-              + userDirectoryId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public Token getToken(String tokenId)
-      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(tokenId)) {
-      throw new InvalidArgumentException("tokenId");
-    }
-
-    try {
-      Optional<Token> tokenOptional = tokenRepository.findById(tokenId);
-
-      if (tokenOptional.isPresent()) {
-        return tokenOptional.get();
-      } else {
-        throw new TokenNotFoundException(tokenId);
-      }
-    } catch (TokenNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the token (" + tokenId + ")", e);
-    }
-  }
-
-  @Override
-  public String getTokenName(String tokenId)
-      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(tokenId)) {
-      throw new InvalidArgumentException("tokenId");
-    }
-
-    try {
-      Optional<String> nameOptional = tokenRepository.getNameById(tokenId);
-
-      if (nameOptional.isPresent()) {
-        return nameOptional.get();
-      } else {
-        throw new TokenNotFoundException(tokenId);
-      }
-    } catch (TokenNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the name of the token (" + tokenId + ")", e);
-    }
-  }
-
-  @Override
-  public TokenSummaries getTokenSummaries(
+  /**
+   * Retrieve the summaries for the tokens.
+   *
+   * @param status the status filter to apply to the token summaries
+   * @param filter the filter to apply to the token summaries
+   * @param sortBy the method used to sort the token summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the token summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the tokens
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the token summaries could not be retrieved
+   */
+  TokenSummaries getTokenSummaries(
       TokenStatus status,
       String filter,
       TokenSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
+  /**
+   * Retrieve all the tokens.
+   *
+   * @return the tokens
+   * @throws ServiceUnavailableException if the tokens could not be retrieved
+   */
+  List<Token> getTokens() throws ServiceUnavailableException;
 
-    if (sortBy == null) {
-      sortBy = TokenSortBy.NAME;
-    }
-
-    if (sortDirection == null) {
-      sortDirection = SortDirection.DESCENDING;
-    }
-
-    try {
-      PageRequest pageRequest;
-
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
-
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_TOKENS;
-      }
-
-      String sortProperty;
-      if (sortBy == TokenSortBy.EXPIRES) {
-        sortProperty = "expires";
-      } else if (sortBy == TokenSortBy.ISSUED) {
-        sortProperty = "issued";
-      } else if (sortBy == TokenSortBy.REVOKED) {
-        sortProperty = "revoked";
-      } else if (sortBy == TokenSortBy.TYPE) {
-        sortProperty = "type";
-      } else {
-        sortProperty = "name";
-      }
-
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_TOKENS),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              sortProperty);
-
-      Page<TokenSummary> tokenSummaryPage =
-          tokenSummaryRepository.findAll(
-              (Specification<TokenSummary>)
-                  (root, query, criteriaBuilder) -> {
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    if (status != null) {
-                      if (status == TokenStatus.ACTIVE) {
-                        predicates.add(
-                            criteriaBuilder.or(
-                                criteriaBuilder.isNull(root.get("validFromDate")),
-                                criteriaBuilder.lessThanOrEqualTo(
-                                    root.get("validFromDate"), LocalDate.now())));
-                        predicates.add(
-                            criteriaBuilder.or(
-                                criteriaBuilder.isNull(root.get("expiryDate")),
-                                criteriaBuilder.greaterThan(
-                                    root.get("expiryDate"), LocalDate.now())));
-                      } else if (status == TokenStatus.EXPIRED) {
-                        predicates.add(
-                            criteriaBuilder.and(
-                                criteriaBuilder.isNotNull(root.get("expiryDate")),
-                                criteriaBuilder.lessThanOrEqualTo(
-                                    root.get("expiryDate"), LocalDate.now())));
-                      } else if (status == TokenStatus.PENDING) {
-                        predicates.add(
-                            criteriaBuilder.and(
-                                criteriaBuilder.isNotNull(root.get("validFromDate")),
-                                criteriaBuilder.greaterThan(
-                                    root.get("validFromDate"), LocalDate.now())));
-                      }
-
-                      if (status == TokenStatus.REVOKED) {
-                        predicates.add(criteriaBuilder.isNotNull(root.get("revocationDate")));
-                      } else {
-                        predicates.add(criteriaBuilder.isNull(root.get("revocationDate")));
-                      }
-                    }
-
-                    if (StringUtils.hasText(filter)) {
-                      predicates.add(
-                          criteriaBuilder.like(
-                              criteriaBuilder.lower(root.get("name")),
-                              "%" + filter.toLowerCase() + "%"));
-                    }
-
-                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                  },
-              pageRequest);
-
-      return new TokenSummaries(
-          tokenSummaryPage.toList(),
-          tokenSummaryPage.getTotalElements(),
-          status,
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered token summaries", e);
-    }
-  }
-
-  @Override
-  public List<Token> getTokens() throws ServiceUnavailableException {
-    try {
-      return tokenRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the tokens", e);
-    }
-  }
-
-  @Override
-  public User getUser(UUID userDirectoryId, String username)
+  /**
+   * Retrieve the user.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @return the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be retrieved
+   */
+  User getUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+  /**
+   * Retrieve the user directories.
+   *
+   * @return the user directories
+   * @throws ServiceUnavailableException if the user directories could not be retrieved
+   */
+  List<UserDirectory> getUserDirectories() throws ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getUser(username);
-  }
-
-  @Override
-  public List<UserDirectory> getUserDirectories() throws ServiceUnavailableException {
-    try {
-      return userDirectoryRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the user directories", e);
-    }
-  }
-
-  @Override
-  public UserDirectories getUserDirectories(
+  /**
+   * Retrieve the user directories.
+   *
+   * @param filter the filter to apply to the user directories
+   * @param sortDirection the sort direction to apply to the user directories
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the user directories
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the user directories could not be retrieved
+   */
+  UserDirectories getUserDirectories(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
+  /**
+   * Retrieve the user directories the tenant is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the user directories the tenant is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the user directories could not be retrieved for the
+   *     tenant
+   */
+  List<UserDirectory> getUserDirectoriesForTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
-    if (pageIndex == null) {
-      pageIndex = 0;
-    }
+  /**
+   * Retrieve the user directory.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be retrieved
+   */
+  UserDirectory getUserDirectory(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    if (pageSize == null) {
-      pageSize = MAX_FILTERED_USER_DIRECTORIES;
-    }
+  /**
+   * Retrieve the capabilities the user directory supports.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the capabilities the user directory supports
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory capabilities could not be retrieved
+   */
+  UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    try {
-      Page<UserDirectory> userDirectoryPage;
+  /**
+   * Retrieve the ID for the user directory that the user with the specified username is associated
+   * with.
+   *
+   * @param username the username for the user
+   * @return an Optional containing the ID for the user directory that the user with the specified
+   *     username is associated with or an empty Optional if the user cannot be found
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the user directory ID could not be retrieved for the
+   *     user
+   */
+  Optional<UUID> getUserDirectoryIdForUser(String username)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-      PageRequest pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              "name");
+  /**
+   * Retrieve the IDs for the user directories the tenant is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the IDs for the user directories the tenant is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the user directory IDs could not be retrieved for the
+   *     tenant
+   */
+  List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
-      if (StringUtils.hasText(filter)) {
-        userDirectoryPage =
-            userDirectoryRepository.findAll(
-                (Specification<UserDirectory>)
-                    (root, query, criteriaBuilder) ->
-                        criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + filter.toLowerCase() + "%"),
-                pageRequest);
-      } else {
-        userDirectoryPage = userDirectoryRepository.findAll(pageRequest);
-      }
+  /**
+   * Retrieve the IDs for the user directories the user is associated with. Every user is associated
+   * with a user directory, which is in turn associated with one or more tenants, which are in turn
+   * associated with one or more user directories. The user is therefore associated indirectly with
+   * all these user directories.
+   *
+   * @param username the username for the user
+   * @return the IDs for the user directories the user is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user directory IDs could not be retrieved for the
+   *     user
+   */
+  List<UUID> getUserDirectoryIdsForUser(String username)
+      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException;
 
-      return new UserDirectories(
-          userDirectoryPage.toList(),
-          userDirectoryPage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered user directories", e);
-    }
-  }
+  /**
+   * Retrieve the name of the user directory.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the name of the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the name of the user directory could not be retrieved
+   */
+  String getUserDirectoryName(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public List<UserDirectory> getUserDirectoriesForTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      if (!tenantRepository.existsById(tenantId)) {
-        throw new TenantNotFoundException(tenantId);
-      }
-
-      return userDirectoryRepository.findAllByTenantId(tenantId);
-    } catch (TenantNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the user directories associated with the tenant (" + tenantId + ")",
-          e);
-    }
-  }
-
-  @Override
-  public UserDirectory getUserDirectory(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    try {
-      Optional<UserDirectory> userDirectoryOptional =
-          userDirectoryRepository.findById(userDirectoryId);
-
-      if (userDirectoryOptional.isPresent()) {
-        return userDirectoryOptional.get();
-      } else {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-    } catch (UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the user directory (" + userDirectoryId + ")", e);
-    }
-  }
-
-  @Override
-  public UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getCapabilities();
-  }
-
-  @Override
-  public Optional<UUID> getUserDirectoryIdForUser(String username)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    try {
-      // First check if this is an internal user and if so determine the user directory ID
-      Optional<UUID> internalUserDirectoryIdOptional = getInternalUserDirectoryIdForUser(username);
-
-      if (internalUserDirectoryIdOptional.isPresent()) {
-        return internalUserDirectoryIdOptional;
-      } else {
-        /*
-         * Check the "external" user directories to see if the user is associated with one of them.
-         */
-        for (UUID userDirectoryId : userDirectories.keySet()) {
-          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-          if (userDirectory != null) {
-            if (!(userDirectory instanceof InternalUserDirectoryProvider)) {
-              if (userDirectory.isExistingUser(username)) {
-                return Optional.of(userDirectoryId);
-              }
-            }
-          }
-        }
-
-        return Optional.empty();
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the user directory ID for the user (" + username + ")", e);
-    }
-  }
-
-  @Override
-  public List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      if (!tenantRepository.existsById(tenantId)) {
-        throw new TenantNotFoundException(tenantId);
-      }
-
-      return tenantRepository.getUserDirectoryIdsById(tenantId);
-    } catch (TenantNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the IDs for the user directories associated with the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public List<UUID> getUserDirectoryIdsForUser(String username)
-      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    try {
-      List<UUID> userDirectoryIdsForUser = new ArrayList<>();
-
-      Optional<UUID> userDirectoryIdOptional = getUserDirectoryIdForUser(username);
-
-      if (userDirectoryIdOptional.isEmpty()) {
-        throw new UserNotFoundException(username);
-      }
-
-      /*
-       * Retrieve the list of IDs for the tenants the user is associated with as a result
-       * of their user directory being associated with these tenants.
-       */
-      List<UUID> tenantIds = getTenantIdsForUserDirectory(userDirectoryIdOptional.get());
-
-      /*
-       * Retrieve the list of IDs for the user directories the user is associated with as a result
-       * of being associated with one or more tenants.
-       */
-      for (var tenantId : tenantIds) {
-        // Retrieve the list of user directories associated with the tenant
-        var userDirectoryIdsForTenant = getUserDirectoryIdsForTenant(tenantId);
-
-        userDirectoryIdsForUser.addAll(userDirectoryIdsForTenant);
-      }
-
-      return userDirectoryIdsForUser;
-    } catch (UserNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the IDs for the user directories the user ("
-              + username
-              + ") is associated with",
-          e);
-    }
-  }
-
-  @Override
-  public String getUserDirectoryName(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    try {
-      Optional<String> nameOptional = userDirectoryRepository.getNameById(userDirectoryId);
-
-      if (nameOptional.isPresent()) {
-        return nameOptional.get();
-      } else {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-    } catch (UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the name of the user directory (" + userDirectoryId + ")", e);
-    }
-  }
-
-  @Override
-  public UserDirectorySummaries getUserDirectorySummaries(
+  /**
+   * Retrieve the summaries for the user directories.
+   *
+   * @param filter the filter to apply to the user directories
+   * @param sortDirection the sort direction to apply to the user directories
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the user directories
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the user directory summaries could not be retrieved
+   */
+  UserDirectorySummaries getUserDirectorySummaries(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
+  /**
+   * Retrieve the summaries for the user directories the tenant is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the summaries for the user directories the tenant is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the user directory summaries could not be retrieved for
+   *     the tenant
+   */
+  List<UserDirectorySummary> getUserDirectorySummariesForTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
-    if (pageIndex == null) {
-      pageIndex = 0;
-    }
-
-    if (pageSize == null) {
-      pageSize = MAX_FILTERED_USER_DIRECTORIES;
-    }
-
-    try {
-      Page<UserDirectorySummary> userDirectorySummaryPage;
-
-      PageRequest pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              "name");
-
-      if (StringUtils.hasText(filter)) {
-        userDirectorySummaryPage =
-            userDirectorySummaryRepository.findAll(
-                (Specification<UserDirectorySummary>)
-                    (root, query, criteriaBuilder) ->
-                        criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + filter.toLowerCase() + "%"),
-                pageRequest);
-      } else {
-        userDirectorySummaryPage = userDirectorySummaryRepository.findAll(pageRequest);
-      }
-
-      return new UserDirectorySummaries(
-          userDirectorySummaryPage.toList(),
-          userDirectorySummaryPage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered summaries for the user directories", e);
-    }
-  }
-
-  @Override
-  public List<UserDirectorySummary> getUserDirectorySummariesForTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      if (!tenantRepository.existsById(tenantId)) {
-        throw new TenantNotFoundException(tenantId);
-      }
-
-      return userDirectorySummaryRepository.findAllByTenantId(tenantId);
-    } catch (TenantNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the summaries for the user "
-              + "directories associated with the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
+  /**
+   * Retrieve the user directory type for the user directory.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the user directory type for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserDirectoryTypeNotFoundException if the user directory type could not be found
+   * @throws ServiceUnavailableException if the user directory type could not be retrieved for the
+   *     user directory
+   */
+  UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserDirectoryTypeNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      Optional<String> typeOptional =
-          userDirectoryRepository.getTypeForUserDirectoryById(userDirectoryId);
+  /**
+   * Retrieve the user directory types.
+   *
+   * @return the user directory types
+   * @throws ServiceUnavailableException if the user directory types could not be retrieved
+   */
+  List<UserDirectoryType> getUserDirectoryTypes() throws ServiceUnavailableException;
 
-      if (typeOptional.isEmpty()) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-
-      Optional<UserDirectoryType> userDirectoryTypeOptional =
-          userDirectoryTypeRepository.findById(typeOptional.get());
-
-      if (userDirectoryTypeOptional.isPresent()) {
-        return userDirectoryTypeOptional.get();
-      } else {
-        throw new UserDirectoryTypeNotFoundException(typeOptional.get());
-      }
-    } catch (UserDirectoryNotFoundException | UserDirectoryTypeNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the user directory type for the user directory ("
-              + userDirectoryId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public List<UserDirectoryType> getUserDirectoryTypes() throws ServiceUnavailableException {
-    try {
-      return userDirectoryTypeRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the user directory types", e);
-    }
-  }
-
-  @Override
-  public String getUserName(UUID userDirectoryId, String username)
+  /**
+   * Retrieve the name of the user.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @return the name of the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the name of the user could not be retrieved
+   */
+  String getUserName(UUID userDirectoryId, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+  /**
+   * Retrieve all the users.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @return the users
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the users could not be retrieved
+   */
+  List<User> getUsers(UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getUserName(username);
-  }
-
-  @Override
-  public List<User> getUsers(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getUsers();
-  }
-
-  @Override
-  public Users getUsers(
+  /**
+   * Retrieve the users.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param filter the filter to apply to the users
+   * @param sortBy the method used to sort the users e.g. by name
+   * @param sortDirection the sort direction to apply to the users
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the users
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the users could not be retrieved
+   */
+  Users getUsers(
       UUID userDirectoryId,
       String filter,
       UserSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    if (sortBy == null) {
-      sortBy = UserSortBy.NAME;
-    }
+  /**
+   * Initiate the password reset process for the user.
+   *
+   * @param username the username for the user
+   * @param resetPasswordUrl the reset password URL
+   * @param sendEmail should the password reset email be sent to the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the password reset could not be initiated
+   */
+  void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
+      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException;
 
-    if (sortDirection == null) {
-      sortDirection = SortDirection.ASCENDING;
-    }
-
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getUsers(filter, sortBy, sortDirection, pageIndex, pageSize);
-  }
-
-  /** Initialize the Security Service. */
-  @PostConstruct
-  public void init() {
-    try {
-      // Load the default password reset mail template
-      if (!mailService.mailTemplateExists(PASSWORD_RESET_MAIL_TEMPLATE_ID)) {
-        byte[] passwordResetMailTemplate =
-            ResourceUtil.getClasspathResource("digital/inception/security/PasswordReset.ftl");
-
-        MailTemplate mailTemplate =
-            new MailTemplate(
-                PASSWORD_RESET_MAIL_TEMPLATE_ID,
-                "Password Reset",
-                MailTemplateContentType.HTML,
-                passwordResetMailTemplate);
-
-        mailService.createMailTemplate(mailTemplate);
-      }
-
-      // Load the user directories
-      reloadUserDirectories();
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to initialize the Security Service", e);
-    }
-  }
-
-  @Override
-  public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
-      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
-    initiatePasswordReset(username, resetPasswordUrl, sendEmail, null);
-  }
-
-  @Override
-  public void initiatePasswordReset(
+  /**
+   * Initiate the password reset process for the user.
+   *
+   * @param username the username for the user
+   * @param resetPasswordUrl the reset password URL
+   * @param sendEmail should the password reset email be sent to the user
+   * @param securityCode the pre-generated security code to use
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the password reset could not be initiated
+   */
+  void initiatePasswordReset(
       String username, String resetPasswordUrl, boolean sendEmail, String securityCode)
-      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException;
 
-    if (!StringUtils.hasText(resetPasswordUrl)) {
-      throw new InvalidArgumentException("resetPasswordUrl");
-    }
+  /**
+   * Does the user with the specified username exist?
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param username the username for the user
+   * @return <b>true</b> if a user with specified username exists or <b>false</b> otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the check for the existing user failed
+   */
+  boolean isExistingUser(UUID userDirectoryId, String username)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 
-    try {
-      Optional<UUID> userDirectoryIdOptional = getUserDirectoryIdForUser(username);
-
-      if (userDirectoryIdOptional.isEmpty()) {
-        throw new UserNotFoundException(username);
-      }
-
-      UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryIdOptional.get());
-
-      User user = userDirectory.getUser(username);
-
-      if (StringUtils.hasText(user.getEmail())) {
-        if (!StringUtils.hasText(securityCode)) {
-          securityCode = securityCodeGenerator.nextString();
-        }
-
-        String securityCodeHash = PasswordUtil.createPasswordHash(securityCode);
-
-        PasswordReset passwordReset = new PasswordReset(username, securityCodeHash);
-
-        if (sendEmail) {
-          sendPasswordResetEmail(user, resetPasswordUrl, securityCode);
-        }
-
-        passwordResetRepository.saveAndFlush(passwordReset);
-      } else {
-        log.warn(
-            "Failed to send the password reset communication to the user ("
-                + username
-                + ") who does not have a valid email address");
-      }
-    } catch (UserNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to initiate the password reset process for the user (" + username + ")", e);
-    }
-  }
-
-  @Override
-  public boolean isExistingUser(UUID userDirectoryId, String username)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.isExistingUser(username);
-  }
-
-  @Override
-  public boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
+  /**
+   * Is the user in the group?
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param username the username for the user
+   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the check to confirm if the user is a member of the
+   *     group failed
+   */
+  boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
           GroupNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
+  /**
+   * Reinstate the token.
+   *
+   * @param tokenId the ID for the token
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TokenNotFoundException if the token could not be found
+   * @throws ServiceUnavailableException if the token could not be reinstated
+   */
+  void reinstateToken(String tokenId)
+      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException;
 
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+  /**
+   * Reload the user directories.
+   *
+   * @throws ServiceUnavailableException if the user directories could not be realoded
+   */
+  void reloadUserDirectories() throws ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.isUserInGroup(groupName, username);
-  }
-
-  @Override
-  public void reinstateToken(String tokenId)
-      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(tokenId)) {
-      throw new InvalidArgumentException("tokenId");
-    }
-
-    try {
-      if (tokenRepository.reinstateToken(tokenId) == 0) {
-        throw new TokenNotFoundException(tokenId);
-      }
-    } catch (TokenNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to reinstate the token (" + tokenId + ")", e);
-    }
-  }
-
-  @Override
-  public void reloadUserDirectories() throws ServiceUnavailableException {
-    try {
-      Map<UUID, UserDirectoryProvider> reloadedUserDirectories = new ConcurrentHashMap<>();
-
-      List<UserDirectoryType> userDirectoryTypes = getUserDirectoryTypes();
-
-      for (UserDirectory userDirectory : getUserDirectories()) {
-        UserDirectoryType userDirectoryType;
-
-        userDirectoryType =
-            userDirectoryTypes.stream()
-                .filter(
-                    possibleUserDirectoryType ->
-                        possibleUserDirectoryType.getCode().equals(userDirectory.getType()))
-                .findFirst()
-                .orElse(null);
-
-        if (userDirectoryType == null) {
-          log.error(
-              "Failed to load the user directory ("
-                  + userDirectory.getId()
-                  + "): The user directory type ("
-                  + userDirectory.getType()
-                  + ") was not loaded");
-
-          continue;
-        }
-
-        try {
-          Class<?> clazz =
-              Thread.currentThread()
-                  .getContextClassLoader()
-                  .loadClass(userDirectoryType.getProviderClassName());
-
-          if (!UserDirectoryProvider.class.isAssignableFrom(clazz)) {
-            throw new ServiceUnavailableException(
-                "The user directory class ("
-                    + userDirectoryType.getProviderClassName()
-                    + ") does not implement the IUserDirectory interface");
-          }
-
-          Class<? extends UserDirectoryProvider> userDirectoryProviderClass =
-              clazz.asSubclass(UserDirectoryProvider.class);
-
-          Constructor<? extends UserDirectoryProvider> userDirectoryProviderClassConstructor;
-
-          try {
-            userDirectoryProviderClassConstructor =
-                userDirectoryProviderClass.getConstructor(
-                    UUID.class,
-                    List.class,
-                    GroupRepository.class,
-                    UserRepository.class,
-                    RoleRepository.class);
-          } catch (NoSuchMethodException e) {
-            throw new ServiceUnavailableException(
-                "The user directory provider class ("
-                    + userDirectoryType.getProviderClassName()
-                    + ") does not provide a valid constructor (long, Map<String,String>)");
-          }
-
-          UserDirectoryProvider userDirectoryProviderInstance =
-              userDirectoryProviderClassConstructor.newInstance(
-                  userDirectory.getId(),
-                  userDirectory.getParameters(),
-                  groupRepository,
-                  userRepository,
-                  roleRepository);
-
-          applicationContext
-              .getAutowireCapableBeanFactory()
-              .autowireBean(userDirectoryProviderInstance);
-
-          reloadedUserDirectories.put(userDirectory.getId(), userDirectoryProviderInstance);
-        } catch (Throwable e) {
-          throw new ServiceUnavailableException(
-              "Failed to initialize the user directory ("
-                  + userDirectory.getId()
-                  + ")("
-                  + userDirectory.getName()
-                  + ")",
-              e);
-        }
-      }
-
-      this.userDirectories = reloadedUserDirectories;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to reload the user directories", e);
-    }
-  }
-
-  @Override
-  public void removeMemberFromGroup(
+  /**
+   * Remove the group member from the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param memberType the group member type
+   * @param memberName the group member name
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws GroupMemberNotFoundException if the group member could not be found
+   * @throws ServiceUnavailableException if the group member could not be removed from the group
+   */
+  void removeMemberFromGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           GroupMemberNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (memberType == null) {
-      throw new InvalidArgumentException("memberType");
-    }
-
-    if (!StringUtils.hasText(memberName)) {
-      throw new InvalidArgumentException("memberName");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.removeMemberFromGroup(groupName, memberType, memberName);
-  }
-
-  @Override
-  public void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
+  /**
+   * Remove the role from the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws GroupRoleNotFoundException if the group role could not be found
+   * @throws ServiceUnavailableException if the role could not be removed from the group
+   */
+  void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           GroupRoleNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!StringUtils.hasText(roleCode)) {
-      throw new InvalidArgumentException("roleCode");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.removeRoleFromGroup(groupName, roleCode);
-  }
-
-  @Override
-  public void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
+  /**
+   * Remove the user directory from the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @param userDirectoryId the ID for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws TenantUserDirectoryNotFoundException if the tenant user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be removed from the tenant
+   */
+  void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException,
           TenantNotFoundException,
           TenantUserDirectoryNotFoundException,
-          ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
+          ServiceUnavailableException;
 
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    try {
-      if (!tenantRepository.existsById(tenantId)) {
-        throw new TenantNotFoundException(tenantId);
-      }
-
-      if (tenantRepository.userDirectoryToTenantMappingExists(tenantId, userDirectoryId) == 0) {
-        throw new TenantUserDirectoryNotFoundException(tenantId, userDirectoryId);
-      }
-
-      tenantRepository.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
-    } catch (TenantNotFoundException | TenantUserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to add the user directory ("
-              + userDirectoryId
-              + ") to the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
+  /**
+   * Remove the user from the group.
+   *
+   * @param userDirectoryId the ID for the user directory
+   * @param groupName the name of the group
+   * @param username the username for the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be removed from the group
+   */
+  void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    userDirectory.removeUserFromGroup(groupName, username);
-  }
-
-  @Override
-  public void resetPassword(String username, String newPassword, String securityCode)
+  /**
+   * Reset the password for the user.
+   *
+   * @param username the username for the user
+   * @param newPassword the new password
+   * @param securityCode the security code
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InvalidSecurityCodeException if the security code is invalid
+   * @throws UserLockedException if the user is locked
+   * @throws ExistingPasswordException if the user has previously used the new password
+   * @throws ServiceUnavailableException if the password for the user could not be reset
+   */
+  void resetPassword(String username, String newPassword, String securityCode)
       throws InvalidArgumentException,
           InvalidSecurityCodeException,
           UserLockedException,
           ExistingPasswordException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
+          ServiceUnavailableException;
 
-    if (!StringUtils.hasText(newPassword)) {
-      throw new InvalidArgumentException("newPassword");
-    }
+  /**
+   * Revoke the token.
+   *
+   * @param tokenId the ID for the token
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TokenNotFoundException if the token could not be found
+   * @throws ServiceUnavailableException if the token could not be revoked
+   */
+  void revokeToken(String tokenId)
+      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException;
 
-    if (!StringUtils.hasText(securityCode)) {
-      throw new InvalidArgumentException("securityCode");
-    }
+  /**
+   * Update the function.
+   *
+   * @param function the function
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws FunctionNotFoundException if the function could not be found
+   * @throws ServiceUnavailableException if the function could not be updated
+   */
+  void updateFunction(Function function)
+      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException;
 
-    try {
-      Optional<UUID> userDirectoryIdOptional = getUserDirectoryIdForUser(username);
-
-      if (userDirectoryIdOptional.isEmpty()) {
-        throw new InvalidSecurityCodeException(username);
-      }
-
-      List<PasswordReset> passwordResets =
-          passwordResetRepository.findAllByUsernameAndStatus(
-              username, PasswordResetStatus.REQUESTED);
-
-      String securityCodeHash = PasswordUtil.createPasswordHash(securityCode);
-
-      for (PasswordReset passwordReset : passwordResets) {
-        if (passwordReset.getSecurityCodeHash().equals(securityCodeHash)) {
-          UserDirectoryProvider userDirectory = userDirectories.get(userDirectoryIdOptional.get());
-
-          userDirectory.resetPassword(username, newPassword);
-
-          return;
-        }
-      }
-
-      throw new InvalidSecurityCodeException(username);
-    } catch (UserLockedException | InvalidSecurityCodeException | ExistingPasswordException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to reset the password for the user (" + username + ")", e);
-    }
-  }
-
-  @Override
-  public void revokeToken(String tokenId)
-      throws InvalidArgumentException, TokenNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(tokenId)) {
-      throw new InvalidArgumentException("tokenId");
-    }
-
-    try {
-      if (tokenRepository.revokeToken(tokenId, LocalDate.now()) == 0) {
-        throw new TokenNotFoundException(tokenId);
-      }
-    } catch (TokenNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to revoke the token (" + tokenId + ")", e);
-    }
-  }
-
-  @Override
-  public void updateFunction(Function function)
-      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
-    validateFunction(function);
-
-    try {
-      if (!functionRepository.existsById(function.getCode())) {
-        throw new FunctionNotFoundException(function.getCode());
-      }
-
-      functionRepository.saveAndFlush(function);
-    } catch (FunctionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the function (" + function.getCode() + ")", e);
-    }
-  }
-
-  @Override
-  public void updateGroup(Group group)
+  /**
+   * Update the group.
+   *
+   * @param group the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the group could not be updated
+   */
+  void updateGroup(Group group)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           GroupNotFoundException,
-          ServiceUnavailableException {
-    validateGroup(group);
+          ServiceUnavailableException;
 
-    UserDirectoryProvider userDirectory = userDirectories.get(group.getUserDirectoryId());
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(group.getUserDirectoryId());
-    }
-
-    userDirectory.updateGroup(group);
-  }
-
-  @Override
-  public void updatePolicy(Policy policy)
+  /**
+   * Update the policy.
+   *
+   * @param policy the policy
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InvalidPolicyDataException the policy data is invalid
+   * @throws PolicyDataMismatchException if the policy attributes do not match the policy data
+   * @throws PolicyNotFoundException if the policy could not be found
+   * @throws ServiceUnavailableException if the policy could not be updated
+   */
+  void updatePolicy(Policy policy)
       throws InvalidArgumentException,
           InvalidPolicyDataException,
           PolicyDataMismatchException,
           PolicyNotFoundException,
-          ServiceUnavailableException {
-    validatePolicy(policy);
+          ServiceUnavailableException;
 
-    policyDataStore.updatePolicy(policy);
-  }
+  /**
+   * Update the tenant.
+   *
+   * @param tenant the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the tenant could not be updated
+   */
+  void updateTenant(Tenant tenant)
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void updateTenant(Tenant tenant)
-      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    validateTenant(tenant);
-
-    try {
-      Optional<Tenant> tenantOptional = tenantRepository.findById(tenant.getId());
-
-      if (tenantOptional.isPresent()) {
-        Tenant existingTenant = tenantOptional.get();
-
-        existingTenant.setName(tenant.getName());
-        existingTenant.setStatus(tenant.getStatus());
-
-        tenantRepository.saveAndFlush(existingTenant);
-      } else {
-        throw new TenantNotFoundException(tenant.getId());
-      }
-    } catch (TenantNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the tenant (" + tenant.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public void updateUser(User user, boolean expirePassword, boolean lockUser)
+  /**
+   * Update the user.
+   *
+   * @param user the user
+   * @param expirePassword expire the user's password as part of the update
+   * @param lockUser lock the user as part of the update
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be updated
+   */
+  void updateUser(User user, boolean expirePassword, boolean lockUser)
       throws InvalidArgumentException,
           UserDirectoryNotFoundException,
           UserNotFoundException,
-          ServiceUnavailableException {
-    validateUser(user);
-
-    UserDirectoryProvider userDirectory = userDirectories.get(user.getUserDirectoryId());
-
-    if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(user.getUserDirectoryId());
-    }
-
-    userDirectory.updateUser(user, expirePassword, lockUser);
-  }
-
-  @Override
-  public void updateUserDirectory(UserDirectory userDirectory)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    validateUserDirectory(userDirectory);
-
-    try {
-      if (!userDirectoryRepository.existsById(userDirectory.getId())) {
-        throw new UserDirectoryNotFoundException(userDirectory.getId());
-      }
-
-      userDirectoryRepository.saveAndFlush(userDirectory);
-
-      reloadUserDirectories();
-    } catch (UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the user directory (" + userDirectory.getName() + ")", e);
-    }
-  }
+          ServiceUnavailableException;
 
   /**
-   * Returns the ID for the internal user directory the internal user with the specified username is
-   * associated with.
+   * Update the user directory.
    *
-   * @param username the username for the internal user
-   * @return an Optional containing the ID for the internal user directory the internal user with
-   *     the specified username is associated with or an empty Optional if an internal user with the
-   *     specified username could not be found
-   * @throws ServiceUnavailableException if the internal user directory ID could not be retrieved
-   *     for the user
+   * @param userDirectory the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be updated
    */
-  private Optional<UUID> getInternalUserDirectoryIdForUser(String username)
-      throws ServiceUnavailableException {
-    try {
-      return userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the ID for the internal user directory for the internal user ("
-              + username
-              + ")",
-          e);
-    }
-  }
-
-  /**
-   * Checks whether the specified value is <b>null</b> or blank.
-   *
-   * @param value the value to check
-   * @return true if the value is <b>null</b> or blank
-   */
-  private boolean isNullOrEmpty(Object value) {
-    if (value == null) {
-      return true;
-    }
-
-    if (value instanceof String) {
-      return ((String) value).isEmpty();
-    }
-
-    return false;
-  }
-
-  private UserDirectory newInternalUserDirectoryForTenant(Tenant tenant)
-      throws ServiceUnavailableException {
-    UserDirectory userDirectory = new UserDirectory();
-
-    if (tenant.getId() != null) {
-      userDirectory.setId(tenant.getId());
-    }
-
-    userDirectory.setType("InternalUserDirectory");
-    userDirectory.setName(tenant.getName() + " Internal User Directory");
-
-    String buffer =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
-            + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"
-            + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
-            + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
-            + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
-            + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
-            + "</userDirectory>";
-
-    try {
-      userDirectory.setConfiguration(buffer);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to set the configuration for the user directory", e);
-    }
-
-    return userDirectory;
-  }
-
-  private void sendPasswordResetEmail(User user, String resetPasswordUrl, String securityCode)
-      throws ServiceUnavailableException {
-    try {
-      if (StringUtils.hasText(user.getEmail())) {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("preferredName", user.getPreferredName().toUpperCase());
-        parameters.put("securityCode", securityCode);
-        parameters.put(
-            "resetPasswordUrl",
-            resetPasswordUrl
-                + "?username="
-                + URLEncoder.encode(user.getUsername(), StandardCharsets.UTF_8)
-                + "&securityCode="
-                + URLEncoder.encode(securityCode, StandardCharsets.UTF_8));
-
-        mailService.sendMail(
-            Collections.singletonList(user.getEmail()),
-            "Password Reset",
-            "no-reply@inception.digital",
-            "Inception",
-            PASSWORD_RESET_MAIL_TEMPLATE_ID,
-            parameters);
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to send the password reset email", e);
-    }
-  }
-
-  private void validateFunction(Function function) throws InvalidArgumentException {
-    if (function == null) {
-      throw new InvalidArgumentException("function");
-    }
-
-    Set<ConstraintViolation<Function>> constraintViolations = validator.validate(function);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "function", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateGenerateTokenRequest(GenerateTokenRequest generateTokenRequest)
-      throws InvalidArgumentException {
-    if (generateTokenRequest == null) {
-      throw new InvalidArgumentException("generateTokenRequest");
-    }
-
-    Set<ConstraintViolation<GenerateTokenRequest>> constraintViolations =
-        validator.validate(generateTokenRequest);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "generateTokenRequest", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateGroup(Group group) throws InvalidArgumentException {
-    if (group == null) {
-      throw new InvalidArgumentException("group");
-    }
-
-    Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "group", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validatePolicy(Policy policy)
-      throws InvalidArgumentException,
-          InvalidPolicyDataException,
-          PolicyDataMismatchException,
-          ServiceUnavailableException {
-    if (policy == null) {
-      throw new InvalidArgumentException("policy");
-    }
-
-    Set<ConstraintViolation<Policy>> constraintViolations = validator.validate(policy);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "policy", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    if ((policy.getType() == PolicyType.XACML_POLICY_SET)
-        || (policy.getType() == PolicyType.XACML_POLICY)) {
-
-      try {
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-        schemaFactory.setResourceResolver(
-            (type, namespaceURI, publicId, systemId, baseURI) -> {
-              if (systemId.equals("http://www.w3.org/2001/xml.xsd")) {
-                return new XmlSchemaClasspathInputSource(
-                    namespaceURI, publicId, systemId, baseURI, "META-INF/xacml/xml.xsd");
-              }
-
-              throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");
-            });
-
-        Schema schema =
-            schemaFactory.newSchema(
-                new StreamSource[] {
-                  new StreamSource(
-                      new ByteArrayInputStream(
-                          ResourceUtil.getClasspathResource(
-                              "META-INF/xacml/xacml-core-v3-schema-wd-17.xsd")))
-                });
-
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
-        documentBuilderFactory.setSchema(schema);
-
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        documentBuilder.setErrorHandler(
-            new ErrorHandler() {
-              @Override
-              public void error(SAXParseException exception) throws SAXException {
-                throw new SAXException("Failed to process the XACML XML data", exception);
-              }
-
-              @Override
-              public void fatalError(SAXParseException exception) throws SAXException {
-                throw new SAXException("Failed to process the XACML XML data", exception);
-              }
-
-              @Override
-              public void warning(SAXParseException exception) throws SAXException {
-                throw new SAXException("Failed to process the XACML XML data", exception);
-              }
-            });
-
-        Document document =
-            documentBuilder.parse(
-                new InputSource(new ByteArrayInputStream(policy.getData().getBytes())));
-
-        Element documentElement = document.getDocumentElement();
-
-        String documentElementTagName = documentElement.getTagName();
-
-        if (documentElementTagName.equals("PolicySet")) {
-          if (policy.getType() != PolicyType.XACML_POLICY_SET) {
-            throw new PolicyDataMismatchException(
-                "The type for the policy and the XML document element ("
-                    + documentElementTagName
-                    + ") do not match");
-          }
-
-          String policySetId = documentElement.getAttribute("PolicySetId");
-          String version = documentElement.getAttribute("Version");
-
-          if (!policy.getId().equals(policySetId)) {
-            throw new PolicyDataMismatchException(
-                "The ID for the policy and the PolicySetId attribute on the PolicySet XML element do not match");
-          }
-
-          if (!policy.getVersion().equals(version)) {
-            throw new PolicyDataMismatchException(
-                "The version for the policy and the Version attribute on the PolicySet XML element do not match");
-          }
-        } else if (documentElementTagName.equals("Policy")) {
-          if (policy.getType() != PolicyType.XACML_POLICY) {
-            throw new PolicyDataMismatchException(
-                "The type for the policy and the XML document element ("
-                    + documentElementTagName
-                    + ") do not match");
-          }
-
-          String policyId = documentElement.getAttribute("PolicyId");
-          String version = documentElement.getAttribute("Version");
-
-          if (!policy.getId().equals(policyId)) {
-            throw new PolicyDataMismatchException(
-                "The ID for the policy and the PolicyId attribute on the Policy XML element do not match");
-          }
-
-          if (!policy.getVersion().equals(version)) {
-            throw new PolicyDataMismatchException(
-                "The version for the policy and the Version attribute on the Policy XML element do not match");
-          }
-        }
-      } catch (PolicyDataMismatchException e) {
-        throw e;
-      } catch (SAXException e) {
-        throw new InvalidPolicyDataException(e);
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException("Failed to validate the XACML XML data", e);
-      }
-    }
-  }
-
-  private void validateTenant(Tenant tenant) throws InvalidArgumentException {
-    if (tenant == null) {
-      throw new InvalidArgumentException("tenant");
-    }
-
-    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "tenant", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateUser(User user) throws InvalidArgumentException {
-    if (user == null) {
-      throw new InvalidArgumentException("user");
-    }
-
-    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "user", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateUserDirectory(UserDirectory userDirectory) throws InvalidArgumentException {
-    if (userDirectory == null) {
-      throw new InvalidArgumentException("userDirectory");
-    }
-
-    Set<ConstraintViolation<UserDirectory>> constraintViolations =
-        validator.validate(userDirectory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
+  void updateUserDirectory(UserDirectory userDirectory)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
 }

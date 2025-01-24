@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler.model;
 
-import digital.inception.scheduler.service.ISchedulerService;
+import digital.inception.scheduler.service.SchedulerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class TestJob implements JobImplementation {
   private static final Logger log = LoggerFactory.getLogger(TestJob.class);
 
   /* Scheduler Service */
-  @Autowired private ISchedulerService schedulerService;
+  @Autowired private SchedulerService schedulerService;
 
   /** Constructs a new <b>TestJob</b>. */
   public TestJob() {}

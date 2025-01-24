@@ -16,35 +16,15 @@
 
 package digital.inception.sms.controller;
 
-import digital.inception.api.SecureApiController;
-import digital.inception.sms.service.ISMSService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * The <b>SMSApi</b> class.
+ * The <b>SMSApiController</b> interface.
  *
  * @author Marcus Portmann
  */
-@RestController
-@CrossOrigin
-@SuppressWarnings({"unused", "WeakerAccess"})
-// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
-public class SMSApiController extends SecureApiController implements ISMSApiController {
-
-  /** The SMS Service. */
-  private final ISMSService smsService;
-
-  /**
-   * Constructs a new <b>SMSApiController</b>.
-   *
-   * @param applicationContext the Spring application context
-   * @param smsService the SMS Service
-   */
-  public SMSApiController(ApplicationContext applicationContext, ISMSService smsService) {
-    super(applicationContext);
-
-    this.smsService = smsService;
-  }
-}
+@Tag(name = "SMS")
+@RequestMapping(value = "/api/sms")
+// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+public interface SMSApiController {}

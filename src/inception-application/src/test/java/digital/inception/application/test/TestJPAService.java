@@ -16,128 +16,59 @@
 
 package digital.inception.application.test;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TestJPAService</b> class provides the Test JPA Service implementation.
+ * The <b>TestJPAService</b> interface defines the functionality provided by a Test JPA Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings("JpaQlInspection")
-public class TestJPAService implements ITestJPAService {
-
-  /** The Spring platform transaction manager. */
-  private final PlatformTransactionManager transactionManager;
-
-  /* Entity Manager */
-  @PersistenceContext(unitName = "applicationTest")
-  private EntityManager entityManager;
-
-  /**
-   * Constructs a new <b>TestJPAService</b>.
-   *
-   * @param platformTransactionManager the Spring platform transaction manager
-   */
-  public TestJPAService(PlatformTransactionManager platformTransactionManager) {
-    this.transactionManager = platformTransactionManager;
-  }
+public interface TestJPAService {
 
   /**
    * Create the new test data.
    *
    * @param testData the test data
    */
-  @Transactional
-  public void createTestData(TestData testData) throws TestJPAServiceException {
-    try {
-      if (!entityManager.contains(testData)) {
-        testData = entityManager.merge(testData);
-        entityManager.flush();
-        entityManager.detach(testData);
-      }
-    } catch (Throwable e) {
-      throw new TestJPAServiceException(
-          "Failed to create the test data (" + testData.getId() + ")", e);
-    }
-  }
+  void createTestData(TestData testData) throws TestJPAServiceException;
 
   /**
    * Create the new test data in a new transaction.
    *
    * @param testData the test data
    */
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void createTestDataInNewTransaction(TestData testData) throws TestJPAServiceException {
-    try {
-      if (!entityManager.contains(testData)) {
-        testData = entityManager.merge(testData);
-        entityManager.flush();
-        entityManager.detach(testData);
-      }
-    } catch (Throwable e) {
-      throw new TestJPAServiceException(
-          "Failed to create the test data (" + testData.getId() + ")", e);
-    }
-  }
+  void createTestDataInNewTransaction(TestData testData) throws TestJPAServiceException;
 
   /**
    * Create the new test data in a new transaction with a checked exception.
    *
    * @param testData the test data
    */
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void createTestDataInNewTransactionWithCheckedException(TestData testData)
-      throws TestJPAServiceException {
-    createTestData(testData);
-
-    throw new TestJPAServiceException("Failed with a checked exception in a new transaction");
-  }
+  void createTestDataInNewTransactionWithCheckedException(TestData testData)
+      throws TestJPAServiceException;
 
   /**
    * Create the new test data in a new transaction with a runtime exception.
    *
    * @param testData the test data
    */
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void createTestDataInNewTransactionWithRuntimeException(TestData testData)
-      throws TestJPAServiceException {
-    createTestData(testData);
-
-    throw new RuntimeException("Failed with a runtime exception in a new transaction");
-  }
+  void createTestDataInNewTransactionWithRuntimeException(TestData testData)
+      throws TestJPAServiceException;
 
   /**
    * Create the new test data with a checked exception.
    *
    * @param testData the test data
    */
-  @Transactional
-  public void createTestDataWithCheckedException(TestData testData) throws TestJPAServiceException {
-    createTestData(testData);
-
-    throw new TestJPAServiceException("Failed with a checked exception in an existing transaction");
-  }
+  void createTestDataWithCheckedException(TestData testData) throws TestJPAServiceException;
 
   /**
    * Create the new test data with a runtime exception.
    *
    * @param testData the test data
    */
-  @Transactional
-  public void createTestDataWithRuntimeException(TestData testData) throws TestJPAServiceException {
-    createTestData(testData);
-
-    throw new RuntimeException("Failed with a runtime exception in an existing transaction");
-  }
+  void createTestDataWithRuntimeException(TestData testData) throws TestJPAServiceException;
 
   /**
    * Retrieve the test data.
@@ -146,52 +77,13 @@ public class TestJPAService implements ITestJPAService {
    * @return an Optional containing the test data or an empty Optional if the test data cannot be
    *     found
    */
-  @Transactional
-  public Optional<TestData> getTestData(String id) throws TestJPAServiceException {
-    try {
-      String getTestDataSQL = "SELECT td FROM TestData td WHERE td.id = :id";
-
-      TypedQuery<TestData> query = entityManager.createQuery(getTestDataSQL, TestData.class);
-
-      query.setParameter("id", id);
-
-      List<TestData> testData = query.getResultList();
-
-      if (testData.size() == 0) {
-        return Optional.empty();
-      } else {
-        return Optional.of(testData.get(0));
-      }
-    } catch (Throwable e) {
-      throw new TestJPAServiceException("Failed to retrieve the test data (" + id + ")", e);
-    }
-  }
+  Optional<TestData> getTestData(String id) throws TestJPAServiceException;
 
   /**
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
-   * @return an Optional containing the test data or an empty Optional if the test data cannot be
-   *     found
+   * @return an Optional containing the test data or empty Optional if the test data cannot be found
    */
-  public Optional<TestData> getTestDataWithoutTransaction(String id)
-      throws TestJPAServiceException {
-    try {
-      String getTestDataSQL = "SELECT td FROM TestData td WHERE td.id = :id";
-
-      TypedQuery<TestData> query = entityManager.createQuery(getTestDataSQL, TestData.class);
-
-      query.setParameter("id", id);
-
-      List<TestData> testData = query.getResultList();
-
-      if (testData.size() == 0) {
-        return Optional.empty();
-      } else {
-        return Optional.of(testData.get(0));
-      }
-    } catch (Throwable e) {
-      throw new TestJPAServiceException("Failed to retrieve the test data (" + id + ")", e);
-    }
-  }
+  Optional<TestData> getTestDataWithoutTransaction(String id) throws TestJPAServiceException;
 }

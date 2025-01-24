@@ -16,90 +16,349 @@
 
 package digital.inception.scheduler.controller;
 
-import digital.inception.core.api.ApiUtil;
-import digital.inception.api.SecureApiController;
+import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.scheduler.model.DuplicateJobException;
 import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobNotFoundException;
-import digital.inception.scheduler.service.ISchedulerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>SchedulerApiController</b> class.
+ * The <b>SchedulerApiController</b> interface.
  *
  * @author Marcus Portmann
  */
-@RestController
-@CrossOrigin
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class SchedulerApiController extends SecureApiController implements ISchedulerApiController {
-
-  /** The Scheduler Service. */
-  private final ISchedulerService schedulerService;
+@Tag(name = "Scheduler")
+@RequestMapping(value = "/api/scheduler")
+// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+public interface SchedulerApiController {
 
   /**
-   * Constructs a new <b>SchedulerApiController</b>.
+   * Create the new job.
    *
-   * @param applicationContext the Spring application context
-   * @param schedulerService the Scheduler Service
+   * @param job the job to create
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateJobException if the job already exists
+   * @throws ServiceUnavailableException if the job could not be created
    */
-  public SchedulerApiController(
-      ApplicationContext applicationContext, ISchedulerService schedulerService) {
-    super(applicationContext);
+  @Operation(summary = "Create the job", description = "Create the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The job was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A job with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/jobs",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")
+  void createJob(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The job to create",
+              required = true)
+          @RequestBody
+          Job job)
+      throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException;
 
-    this.schedulerService = schedulerService;
-  }
+  /**
+   * Delete the job.
+   *
+   * @param jobId the ID for the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be deleted
+   */
+  @Operation(summary = "Delete the job", description = "Delete the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The job was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/jobs/{jobId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")
+  void deleteJob(
+      @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
+          String jobId)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void createJob(Job job)
-      throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException {
-    schedulerService.createJob(job);
-  }
+  /**
+   * Retrieve the job.
+   *
+   * @param jobId the ID for the job
+   * @return the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be retrieved
+   */
+  @Operation(summary = "Retrieve the job", description = "Retrieve the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/jobs/{jobId}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")
+  Job getJob(
+      @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
+          String jobId)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void deleteJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    schedulerService.deleteJob(jobId);
-  }
+  /**
+   * Retrieve the name of the job.
+   *
+   * @param jobId the ID for the job
+   * @return the name of the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the name of the job could not be retrieved
+   */
+  @Operation(summary = "Retrieve the name of the job", description = "Retrieve the name of the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(value = "/jobs/{jobId}/name", method = RequestMethod.GET, produces = "text/plain")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")
+  String getJobName(
+      @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
+          String jobId)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public Job getJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    return schedulerService.getJob(jobId);
-  }
+  /**
+   * Retrieve the jobs.
+   *
+   * @return the jobs
+   * @throws ServiceUnavailableException if the jobs could not be retrieved
+   */
+  @Operation(summary = "Retrieve the jobs", description = "Retrieve the jobs")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/jobs",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")
+  List<Job> getJobs() throws ServiceUnavailableException;
 
-  @Override
-  public String getJobName(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    return ApiUtil.quote(schedulerService.getJobName(jobId));
-  }
-
-  @Override
-  public List<Job> getJobs() throws ServiceUnavailableException {
-    return schedulerService.getJobs();
-  }
-
-  @Override
-  public void updateJob(String jobId, Job job)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    if (job == null) {
-      throw new InvalidArgumentException("job");
-    }
-
-    if (!jobId.equals(job.getId())) {
-      throw new InvalidArgumentException("job");
-    }
-
-    schedulerService.updateJob(job);
-  }
+  /**
+   * Update the job.
+   *
+   * @param jobId the ID for the job
+   * @param job the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be updated
+   */
+  @Operation(summary = "Update the job", description = "Update the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The job was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/jobs/{jobId}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Scheduler.SchedulerAdministration') or hasAccessToFunction('Scheduler.JobAdministration')")
+  void updateJob(
+      @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
+          String jobId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The job to update",
+              required = true)
+          @RequestBody
+          Job job)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 }

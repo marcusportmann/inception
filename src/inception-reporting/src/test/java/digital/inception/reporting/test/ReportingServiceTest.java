@@ -25,7 +25,7 @@ import digital.inception.core.util.ResourceUtil;
 import digital.inception.reporting.model.ReportDefinition;
 import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
-import digital.inception.reporting.service.IReportingService;
+import digital.inception.reporting.service.ReportingService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.nio.file.Files;
@@ -71,7 +71,7 @@ public class ReportingServiceTest {
   @Autowired private DataSource dataSource;
 
   /** The Reporting Service. */
-  @Autowired private IReportingService reportingService;
+  @Autowired private ReportingService reportingService;
 
   private static synchronized ReportDefinition getTestReportDefinitionDetails() {
     reportDefinitionCount++;

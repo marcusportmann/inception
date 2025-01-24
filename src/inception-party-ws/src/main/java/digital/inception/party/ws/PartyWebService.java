@@ -21,7 +21,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.party.model.*;
-import digital.inception.party.service.IPartyService;
+import digital.inception.party.service.PartyService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -46,14 +46,14 @@ import java.util.UUID;
 public class PartyWebService {
 
   /** The Party Service. */
-  private final IPartyService partyService;
+  private final PartyService partyService;
 
   /**
    * Constructs a new <b>PartyWebService</b>.
    *
    * @param partyService the Party Service
    */
-  public PartyWebService(IPartyService partyService) {
+  public PartyWebService(PartyService partyService) {
     this.partyService = partyService;
   }
 

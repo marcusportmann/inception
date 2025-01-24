@@ -71,7 +71,7 @@ import digital.inception.party.model.StatusTypeCategory;
 import digital.inception.party.model.TaxNumberType;
 import digital.inception.party.model.TimeToContact;
 import digital.inception.party.model.Title;
-import digital.inception.party.service.IPartyReferenceService;
+import digital.inception.party.service.PartyReferenceService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
@@ -107,13 +107,13 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public class PartyReferenceServiceTest {
 
   /** The Party Reference Service. */
-  @Autowired private IPartyReferenceService partyReferenceService;
+  @Autowired private PartyReferenceService partyReferenceService;
 
   /** Test the association property type reference functionality. */
   @Test
   public void associationPropertyTypeTest() throws Exception {
     List<AssociationPropertyType> retrievedAssociationPropertyTypes =
-        partyReferenceService.getAssociationPropertyTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getAssociationPropertyTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7,
@@ -122,7 +122,7 @@ public class PartyReferenceServiceTest {
 
     retrievedAssociationPropertyTypes =
         partyReferenceService.getAssociationPropertyTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7,
@@ -132,7 +132,7 @@ public class PartyReferenceServiceTest {
     retrievedAssociationPropertyTypes =
         partyReferenceService.getAssociationPropertyTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         1,
@@ -144,7 +144,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void associationTypeTest() throws Exception {
     List<AssociationType> retrievedAssociationTypes =
-        partyReferenceService.getAssociationTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getAssociationTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         22,
@@ -153,7 +153,7 @@ public class PartyReferenceServiceTest {
 
     retrievedAssociationTypes =
         partyReferenceService.getAssociationTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         22,
@@ -163,7 +163,7 @@ public class PartyReferenceServiceTest {
     retrievedAssociationTypes =
         partyReferenceService.getAssociationTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         21,
@@ -175,7 +175,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void attributeTypeCategoryTest() throws Exception {
     List<AttributeTypeCategory> retrievedAttributeTypeCategories =
-        partyReferenceService.getAttributeTypeCategories(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getAttributeTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -184,7 +184,7 @@ public class PartyReferenceServiceTest {
 
     retrievedAttributeTypeCategories =
         partyReferenceService.getAttributeTypeCategories(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -194,7 +194,7 @@ public class PartyReferenceServiceTest {
     retrievedAttributeTypeCategories =
         partyReferenceService.getAttributeTypeCategories(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -206,7 +206,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void attributeTypeTest() throws Exception {
     List<AttributeType> retrievedAttributeTypes =
-        partyReferenceService.getAttributeTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getAttributeTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         11,
@@ -215,7 +215,7 @@ public class PartyReferenceServiceTest {
 
     retrievedAttributeTypes =
         partyReferenceService.getAttributeTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         11,
@@ -225,7 +225,7 @@ public class PartyReferenceServiceTest {
     retrievedAttributeTypes =
         partyReferenceService.getAttributeTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -237,14 +237,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void consentTypeTest() throws Exception {
     List<ConsentType> retrievedConsentTypes =
-        partyReferenceService.getConsentTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getConsentTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedConsentTypes.size(), "The correct number of consent types was not retrieved");
 
     retrievedConsentTypes =
         partyReferenceService.getConsentTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedConsentTypes.size(), "The correct number of consent types was not retrieved");
@@ -252,7 +252,7 @@ public class PartyReferenceServiceTest {
     retrievedConsentTypes =
         partyReferenceService.getConsentTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         1, retrievedConsentTypes.size(), "The correct number of consent types was not retrieved");
@@ -262,7 +262,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void contactMechanismPurposesTest() throws Exception {
     List<ContactMechanismPurpose> retrievedContactMechanismPurposes =
-        partyReferenceService.getContactMechanismPurposes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getContactMechanismPurposes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -271,7 +271,7 @@ public class PartyReferenceServiceTest {
 
     retrievedContactMechanismPurposes =
         partyReferenceService.getContactMechanismPurposes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -281,7 +281,7 @@ public class PartyReferenceServiceTest {
     retrievedContactMechanismPurposes =
         partyReferenceService.getContactMechanismPurposes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -293,7 +293,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void contactMechanismRolesTest() throws Exception {
     List<ContactMechanismRole> retrievedContactMechanismRoles =
-        partyReferenceService.getContactMechanismRoles(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getContactMechanismRoles(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         26,
@@ -302,7 +302,7 @@ public class PartyReferenceServiceTest {
 
     retrievedContactMechanismRoles =
         partyReferenceService.getContactMechanismRoles(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         26,
@@ -312,7 +312,7 @@ public class PartyReferenceServiceTest {
     retrievedContactMechanismRoles =
         partyReferenceService.getContactMechanismRoles(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         25,
@@ -324,7 +324,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void contactMechanismTypeTest() throws Exception {
     List<ContactMechanismType> retrievedContactMechanismTypes =
-        partyReferenceService.getContactMechanismTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getContactMechanismTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -333,7 +333,7 @@ public class PartyReferenceServiceTest {
 
     retrievedContactMechanismTypes =
         partyReferenceService.getContactMechanismTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -343,7 +343,7 @@ public class PartyReferenceServiceTest {
     retrievedContactMechanismTypes =
         partyReferenceService.getContactMechanismTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         5,
@@ -355,7 +355,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void employmentStatusTest() throws Exception {
     List<EmploymentStatus> retrievedEmploymentStatuses =
-        partyReferenceService.getEmploymentStatuses(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getEmploymentStatuses(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -364,7 +364,7 @@ public class PartyReferenceServiceTest {
 
     retrievedEmploymentStatuses =
         partyReferenceService.getEmploymentStatuses(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -374,7 +374,7 @@ public class PartyReferenceServiceTest {
     retrievedEmploymentStatuses =
         partyReferenceService.getEmploymentStatuses(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -386,7 +386,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void employmentTypeTest() throws Exception {
     List<EmploymentType> retrievedEmploymentTypes =
-        partyReferenceService.getEmploymentTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getEmploymentTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -395,7 +395,7 @@ public class PartyReferenceServiceTest {
 
     retrievedEmploymentTypes =
         partyReferenceService.getEmploymentTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -405,7 +405,7 @@ public class PartyReferenceServiceTest {
     retrievedEmploymentTypes =
         partyReferenceService.getEmploymentTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         11,
@@ -417,7 +417,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void externalReferenceTypeTest() throws Exception {
     List<ExternalReferenceType> retrievedExternalReferenceTypes =
-        partyReferenceService.getExternalReferenceTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getExternalReferenceTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -426,7 +426,7 @@ public class PartyReferenceServiceTest {
 
     retrievedExternalReferenceTypes =
         partyReferenceService.getExternalReferenceTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -436,7 +436,7 @@ public class PartyReferenceServiceTest {
     retrievedExternalReferenceTypes =
         partyReferenceService.getExternalReferenceTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         1,
@@ -448,7 +448,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void fieldOfStudyTest() throws Exception {
     List<FieldOfStudy> retrievedFieldsOfStudy =
-        partyReferenceService.getFieldsOfStudy(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getFieldsOfStudy(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         192,
@@ -457,7 +457,7 @@ public class PartyReferenceServiceTest {
 
     retrievedFieldsOfStudy =
         partyReferenceService.getFieldsOfStudy(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         192,
@@ -467,7 +467,7 @@ public class PartyReferenceServiceTest {
     retrievedFieldsOfStudy =
         partyReferenceService.getFieldsOfStudy(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         191,
@@ -479,20 +479,20 @@ public class PartyReferenceServiceTest {
   @Test
   public void genderTest() throws Exception {
     List<Gender> retrievedGenders =
-        partyReferenceService.getGenders(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getGenders(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(6, retrievedGenders.size(), "The correct number of genders was not retrieved");
 
     retrievedGenders =
         partyReferenceService.getGenders(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(6, retrievedGenders.size(), "The correct number of genders was not retrieved");
 
     retrievedGenders =
         partyReferenceService.getGenders(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(5, retrievedGenders.size(), "The correct number of genders was not retrieved");
   }
@@ -501,7 +501,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void identificationTypeTest() throws Exception {
     List<IdentificationType> retrievedIdentificationTypes =
-        partyReferenceService.getIdentificationTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getIdentificationTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -510,7 +510,7 @@ public class PartyReferenceServiceTest {
 
     retrievedIdentificationTypes =
         partyReferenceService.getIdentificationTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -520,7 +520,7 @@ public class PartyReferenceServiceTest {
     retrievedIdentificationTypes =
         partyReferenceService.getIdentificationTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         11,
@@ -533,7 +533,7 @@ public class PartyReferenceServiceTest {
   public void industryClassificationCategoryTest() throws Exception {
     List<IndustryClassificationCategory> retrievedIndustryClassificationCategories =
         partyReferenceService.getIndustryClassificationCategories(
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         22,
@@ -542,7 +542,7 @@ public class PartyReferenceServiceTest {
 
     retrievedIndustryClassificationCategories =
         partyReferenceService.getIndustryClassificationCategories(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         22,
@@ -552,7 +552,7 @@ public class PartyReferenceServiceTest {
     retrievedIndustryClassificationCategories =
         partyReferenceService.getIndustryClassificationCategories(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         21,
@@ -565,7 +565,7 @@ public class PartyReferenceServiceTest {
   public void industryClassificationSystemTest() throws Exception {
     List<IndustryClassificationSystem> retrievedIndustryClassificationSystems =
         partyReferenceService.getIndustryClassificationSystems(
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -574,7 +574,7 @@ public class PartyReferenceServiceTest {
 
     retrievedIndustryClassificationSystems =
         partyReferenceService.getIndustryClassificationSystems(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -584,7 +584,7 @@ public class PartyReferenceServiceTest {
     retrievedIndustryClassificationSystems =
         partyReferenceService.getIndustryClassificationSystems(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         1,
@@ -596,7 +596,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void industryClassificationTest() throws Exception {
     List<IndustryClassification> retrievedIndustryClassifications =
-        partyReferenceService.getIndustryClassifications(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getIndustryClassifications(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         89,
@@ -605,7 +605,7 @@ public class PartyReferenceServiceTest {
 
     retrievedIndustryClassifications =
         partyReferenceService.getIndustryClassifications(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         89,
@@ -615,7 +615,7 @@ public class PartyReferenceServiceTest {
     retrievedIndustryClassifications =
         partyReferenceService.getIndustryClassifications(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         88,
@@ -627,7 +627,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void lockTypeCategoryTest() throws Exception {
     List<LockTypeCategory> retrievedLockTypeCategories =
-        partyReferenceService.getLockTypeCategories(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getLockTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -636,7 +636,7 @@ public class PartyReferenceServiceTest {
 
     retrievedLockTypeCategories =
         partyReferenceService.getLockTypeCategories(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -646,7 +646,7 @@ public class PartyReferenceServiceTest {
     retrievedLockTypeCategories =
         partyReferenceService.getLockTypeCategories(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -658,14 +658,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void lockTypeTest() throws Exception {
     List<LockType> retrievedLockTypes =
-        partyReferenceService.getLockTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getLockTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3, retrievedLockTypes.size(), "The correct number of lock types was not retrieved");
 
     retrievedLockTypes =
         partyReferenceService.getLockTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3, retrievedLockTypes.size(), "The correct number of lock types was not retrieved");
@@ -673,7 +673,7 @@ public class PartyReferenceServiceTest {
     retrievedLockTypes =
         partyReferenceService.getLockTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedLockTypes.size(), "The correct number of lock types was not retrieved");
@@ -683,7 +683,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void mandataryRoleTest() throws Exception {
     List<MandataryRole> retrievedMandataryRoles =
-        partyReferenceService.getMandataryRoles(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getMandataryRoles(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         13,
@@ -692,7 +692,7 @@ public class PartyReferenceServiceTest {
 
     retrievedMandataryRoles =
         partyReferenceService.getMandataryRoles(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         13,
@@ -702,7 +702,7 @@ public class PartyReferenceServiceTest {
     retrievedMandataryRoles =
         partyReferenceService.getMandataryRoles(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -714,7 +714,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void mandatePropertyTypeTest() throws Exception {
     List<MandatePropertyType> retrievedMandatePropertyTypes =
-        partyReferenceService.getMandatePropertyTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getMandatePropertyTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -723,7 +723,7 @@ public class PartyReferenceServiceTest {
 
     retrievedMandatePropertyTypes =
         partyReferenceService.getMandatePropertyTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -733,7 +733,7 @@ public class PartyReferenceServiceTest {
     retrievedMandatePropertyTypes =
         partyReferenceService.getMandatePropertyTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         0,
@@ -745,14 +745,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void mandateTypeTest() throws Exception {
     List<MandateType> retrievedMandateTypes =
-        partyReferenceService.getMandateTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getMandateTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         14, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
 
     retrievedMandateTypes =
         partyReferenceService.getMandateTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         14, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
@@ -760,7 +760,7 @@ public class PartyReferenceServiceTest {
     retrievedMandateTypes =
         partyReferenceService.getMandateTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         13, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
@@ -770,7 +770,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void maritalStatusTest() throws Exception {
     List<MaritalStatus> retrievedMaritalStatuses =
-        partyReferenceService.getMaritalStatuses(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getMaritalStatuses(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -779,7 +779,7 @@ public class PartyReferenceServiceTest {
 
     retrievedMaritalStatuses =
         partyReferenceService.getMaritalStatuses(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -789,7 +789,7 @@ public class PartyReferenceServiceTest {
     retrievedMaritalStatuses =
         partyReferenceService.getMaritalStatuses(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -801,14 +801,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void marriageTypeTest() throws Exception {
     List<MarriageType> retrievedMarriageTypes =
-        partyReferenceService.getMarriageTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getMarriageTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7, retrievedMarriageTypes.size(), "The correct number of marriage types was not retrieved");
 
     retrievedMarriageTypes =
         partyReferenceService.getMarriageTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7, retrievedMarriageTypes.size(), "The correct number of marriage types was not retrieved");
@@ -816,7 +816,7 @@ public class PartyReferenceServiceTest {
     retrievedMarriageTypes =
         partyReferenceService.getMarriageTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6, retrievedMarriageTypes.size(), "The correct number of marriage types was not retrieved");
@@ -826,7 +826,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void nextOfKinTypeTest() throws Exception {
     List<NextOfKinType> retrievedNextOfKinTypes =
-        partyReferenceService.getNextOfKinTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getNextOfKinTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         18,
@@ -835,7 +835,7 @@ public class PartyReferenceServiceTest {
 
     retrievedNextOfKinTypes =
         partyReferenceService.getNextOfKinTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         18,
@@ -845,7 +845,7 @@ public class PartyReferenceServiceTest {
     retrievedNextOfKinTypes =
         partyReferenceService.getNextOfKinTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         17,
@@ -857,14 +857,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void occupationTest() throws Exception {
     List<Occupation> retrievedOccupations =
-        partyReferenceService.getOccupations(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getOccupations(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         30, retrievedOccupations.size(), "The correct number of occupations was not retrieved");
 
     retrievedOccupations =
         partyReferenceService.getOccupations(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         30, retrievedOccupations.size(), "The correct number of occupations was not retrieved");
@@ -872,7 +872,7 @@ public class PartyReferenceServiceTest {
     retrievedOccupations =
         partyReferenceService.getOccupations(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         29, retrievedOccupations.size(), "The correct number of occupations was not retrieved");
@@ -882,7 +882,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void physicalAddressPurposeTest() throws Exception {
     List<PhysicalAddressPurpose> retrievedPhysicalAddressPurposes =
-        partyReferenceService.getPhysicalAddressPurposes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getPhysicalAddressPurposes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -891,7 +891,7 @@ public class PartyReferenceServiceTest {
 
     retrievedPhysicalAddressPurposes =
         partyReferenceService.getPhysicalAddressPurposes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -901,7 +901,7 @@ public class PartyReferenceServiceTest {
     retrievedPhysicalAddressPurposes =
         partyReferenceService.getPhysicalAddressPurposes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -913,7 +913,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void physicalAddressRoleTest() throws Exception {
     List<PhysicalAddressRole> retrievedPhysicalAddressRoles =
-        partyReferenceService.getPhysicalAddressRoles(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getPhysicalAddressRoles(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -922,7 +922,7 @@ public class PartyReferenceServiceTest {
 
     retrievedPhysicalAddressRoles =
         partyReferenceService.getPhysicalAddressRoles(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -932,7 +932,7 @@ public class PartyReferenceServiceTest {
     retrievedPhysicalAddressRoles =
         partyReferenceService.getPhysicalAddressRoles(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         11,
@@ -944,7 +944,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void physicalAddressTypeTest() throws Exception {
     List<PhysicalAddressType> retrievedPhysicalAddressTypes =
-        partyReferenceService.getPhysicalAddressTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getPhysicalAddressTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -953,7 +953,7 @@ public class PartyReferenceServiceTest {
 
     retrievedPhysicalAddressTypes =
         partyReferenceService.getPhysicalAddressTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -963,7 +963,7 @@ public class PartyReferenceServiceTest {
     retrievedPhysicalAddressTypes =
         partyReferenceService.getPhysicalAddressTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -975,7 +975,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void preferenceTypeCategoryTest() throws Exception {
     List<PreferenceTypeCategory> retrievedPreferenceTypeCategories =
-        partyReferenceService.getPreferenceTypeCategories(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getPreferenceTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -984,7 +984,7 @@ public class PartyReferenceServiceTest {
 
     retrievedPreferenceTypeCategories =
         partyReferenceService.getPreferenceTypeCategories(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -994,7 +994,7 @@ public class PartyReferenceServiceTest {
     retrievedPreferenceTypeCategories =
         partyReferenceService.getPreferenceTypeCategories(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         1,
@@ -1006,7 +1006,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void preferenceTypeTest() throws Exception {
     List<PreferenceType> retrievedPreferenceTypes =
-        partyReferenceService.getPreferenceTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getPreferenceTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -1015,7 +1015,7 @@ public class PartyReferenceServiceTest {
 
     retrievedPreferenceTypes =
         partyReferenceService.getPreferenceTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -1025,7 +1025,7 @@ public class PartyReferenceServiceTest {
     retrievedPreferenceTypes =
         partyReferenceService.getPreferenceTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -1037,7 +1037,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void qualificationTypeTest() throws Exception {
     List<QualificationType> retrievedQualificationTypes =
-        partyReferenceService.getQualificationTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getQualificationTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         15,
@@ -1046,7 +1046,7 @@ public class PartyReferenceServiceTest {
 
     retrievedQualificationTypes =
         partyReferenceService.getQualificationTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         15,
@@ -1056,7 +1056,7 @@ public class PartyReferenceServiceTest {
     retrievedQualificationTypes =
         partyReferenceService.getQualificationTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         14,
@@ -1068,20 +1068,20 @@ public class PartyReferenceServiceTest {
   @Test
   public void raceTest() throws Exception {
     List<Race> retrievedRaces =
-        partyReferenceService.getRaces(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getRaces(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(7, retrievedRaces.size(), "The correct number of races was not retrieved");
 
     retrievedRaces =
         partyReferenceService.getRaces(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(7, retrievedRaces.size(), "The correct number of races was not retrieved");
 
     retrievedRaces =
         partyReferenceService.getRaces(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(6, retrievedRaces.size(), "The correct number of races was not retrieved");
   }
@@ -1090,7 +1090,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void residencePermitTypeTest() throws Exception {
     List<ResidencePermitType> retrievedResidencePermitTypes =
-        partyReferenceService.getResidencePermitTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getResidencePermitTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         10,
@@ -1099,7 +1099,7 @@ public class PartyReferenceServiceTest {
 
     retrievedResidencePermitTypes =
         partyReferenceService.getResidencePermitTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         10,
@@ -1109,7 +1109,7 @@ public class PartyReferenceServiceTest {
     retrievedResidencePermitTypes =
         partyReferenceService.getResidencePermitTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -1121,7 +1121,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void residencyStatusTest() throws Exception {
     List<ResidencyStatus> retrievedResidencyStatuses =
-        partyReferenceService.getResidencyStatuses(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getResidencyStatuses(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -1130,7 +1130,7 @@ public class PartyReferenceServiceTest {
 
     retrievedResidencyStatuses =
         partyReferenceService.getResidencyStatuses(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -1140,7 +1140,7 @@ public class PartyReferenceServiceTest {
     retrievedResidencyStatuses =
         partyReferenceService.getResidencyStatuses(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         5,
@@ -1152,7 +1152,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void residentialTypeTest() throws Exception {
     List<ResidentialType> retrievedResidentialTypes =
-        partyReferenceService.getResidentialTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getResidentialTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -1161,7 +1161,7 @@ public class PartyReferenceServiceTest {
 
     retrievedResidentialTypes =
         partyReferenceService.getResidentialTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -1171,7 +1171,7 @@ public class PartyReferenceServiceTest {
     retrievedResidentialTypes =
         partyReferenceService.getResidentialTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7,
@@ -1183,14 +1183,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void rolePurposeTest() throws Exception {
     List<RolePurpose> retrievedRolePurposes =
-        partyReferenceService.getRolePurposes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getRolePurposes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
 
     retrievedRolePurposes =
         partyReferenceService.getRolePurposes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
@@ -1198,7 +1198,7 @@ public class PartyReferenceServiceTest {
     retrievedRolePurposes =
         partyReferenceService.getRolePurposes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         1, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
@@ -1272,14 +1272,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void roleTypeTest() throws Exception {
     List<RoleType> retrievedRoleTypes =
-        partyReferenceService.getRoleTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getRoleTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         39, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
 
     retrievedRoleTypes =
         partyReferenceService.getRoleTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         39, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
@@ -1287,7 +1287,7 @@ public class PartyReferenceServiceTest {
     retrievedRoleTypes =
         partyReferenceService.getRoleTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         35, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
@@ -1297,20 +1297,20 @@ public class PartyReferenceServiceTest {
   @Test
   public void segmentTest() throws Exception {
     List<Segment> retrievedSegments =
-        partyReferenceService.getSegments(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getSegments(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(10, retrievedSegments.size(), "The correct number of segments was not retrieved");
 
     retrievedSegments =
         partyReferenceService.getSegments(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(10, retrievedSegments.size(), "The correct number of segments was not retrieved");
 
     retrievedSegments =
         partyReferenceService.getSegments(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(8, retrievedSegments.size(), "The correct number of segments was not retrieved");
   }
@@ -1319,7 +1319,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void segmentationTypeTest() throws Exception {
     List<SegmentationType> retrievedSegmentationTypes =
-        partyReferenceService.getSegmentationTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getSegmentationTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -1328,7 +1328,7 @@ public class PartyReferenceServiceTest {
 
     retrievedSegmentationTypes =
         partyReferenceService.getSegmentationTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -1338,7 +1338,7 @@ public class PartyReferenceServiceTest {
     retrievedSegmentationTypes =
         partyReferenceService.getSegmentationTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -1350,14 +1350,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void skillTypeTest() throws Exception {
     List<SkillType> retrievedSkillTypes =
-        partyReferenceService.getSkillTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getSkillTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         42, retrievedSkillTypes.size(), "The correct number of skill types was not retrieved");
 
     retrievedSkillTypes =
         partyReferenceService.getSkillTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         42, retrievedSkillTypes.size(), "The correct number of skill types was not retrieved");
@@ -1365,7 +1365,7 @@ public class PartyReferenceServiceTest {
     retrievedSkillTypes =
         partyReferenceService.getSkillTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         41, retrievedSkillTypes.size(), "The correct number of skill types was not retrieved");
@@ -1375,7 +1375,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void sourceOfFundsTypeTest() throws Exception {
     List<SourceOfFundsType> retrievedSourceOfFundsTypes =
-        partyReferenceService.getSourceOfFundsTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getSourceOfFundsTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         42,
@@ -1384,7 +1384,7 @@ public class PartyReferenceServiceTest {
 
     retrievedSourceOfFundsTypes =
         partyReferenceService.getSourceOfFundsTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         42,
@@ -1394,7 +1394,7 @@ public class PartyReferenceServiceTest {
     retrievedSourceOfFundsTypes =
         partyReferenceService.getSourceOfFundsTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         41,
@@ -1406,7 +1406,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void sourceOfWealthTypeTest() throws Exception {
     List<SourceOfWealthType> retrievedSourceOfWealthTypes =
-        partyReferenceService.getSourceOfWealthTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getSourceOfWealthTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -1415,7 +1415,7 @@ public class PartyReferenceServiceTest {
 
     retrievedSourceOfWealthTypes =
         partyReferenceService.getSourceOfWealthTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -1425,7 +1425,7 @@ public class PartyReferenceServiceTest {
     retrievedSourceOfWealthTypes =
         partyReferenceService.getSourceOfWealthTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         11,
@@ -1437,7 +1437,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void statusTypeCategoryTest() throws Exception {
     List<StatusTypeCategory> retrievedStatusTypeCategories =
-        partyReferenceService.getStatusTypeCategories(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getStatusTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -1446,7 +1446,7 @@ public class PartyReferenceServiceTest {
 
     retrievedStatusTypeCategories =
         partyReferenceService.getStatusTypeCategories(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -1456,7 +1456,7 @@ public class PartyReferenceServiceTest {
     retrievedStatusTypeCategories =
         partyReferenceService.getStatusTypeCategories(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -1468,14 +1468,14 @@ public class PartyReferenceServiceTest {
   @Test
   public void statusTypeTest() throws Exception {
     List<StatusType> retrievedStatusTypes =
-        partyReferenceService.getStatusTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getStatusTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3, retrievedStatusTypes.size(), "The correct number of status types was not retrieved");
 
     retrievedStatusTypes =
         partyReferenceService.getStatusTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3, retrievedStatusTypes.size(), "The correct number of status types was not retrieved");
@@ -1483,7 +1483,7 @@ public class PartyReferenceServiceTest {
     retrievedStatusTypes =
         partyReferenceService.getStatusTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedStatusTypes.size(), "The correct number of status types was not retrieved");
@@ -1493,7 +1493,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void taxNumberTypeTest() throws Exception {
     List<TaxNumberType> retrievedTaxNumberTypes =
-        partyReferenceService.getTaxNumberTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getTaxNumberTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -1502,7 +1502,7 @@ public class PartyReferenceServiceTest {
 
     retrievedTaxNumberTypes =
         partyReferenceService.getTaxNumberTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -1512,7 +1512,7 @@ public class PartyReferenceServiceTest {
     retrievedTaxNumberTypes =
         partyReferenceService.getTaxNumberTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7,
@@ -1524,7 +1524,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void timeToContactTest() throws Exception {
     List<TimeToContact> retrievedTimesToContact =
-        partyReferenceService.getTimesToContact(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getTimesToContact(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -1533,7 +1533,7 @@ public class PartyReferenceServiceTest {
 
     retrievedTimesToContact =
         partyReferenceService.getTimesToContact(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -1543,7 +1543,7 @@ public class PartyReferenceServiceTest {
     retrievedTimesToContact =
         partyReferenceService.getTimesToContact(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         5,
@@ -1555,20 +1555,20 @@ public class PartyReferenceServiceTest {
   @Test
   public void titleTest() throws Exception {
     List<Title> retrievedTitles =
-        partyReferenceService.getTitles(IPartyReferenceService.DEFAULT_LOCALE_ID);
+        partyReferenceService.getTitles(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(13, retrievedTitles.size(), "The correct number of titles was not retrieved");
 
     retrievedTitles =
         partyReferenceService.getTitles(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(13, retrievedTitles.size(), "The correct number of titles was not retrieved");
 
     retrievedTitles =
         partyReferenceService.getTitles(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
+            PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(12, retrievedTitles.size(), "The correct number of titles was not retrieved");
   }
@@ -1578,117 +1578,117 @@ public class PartyReferenceServiceTest {
   public void validityTest() throws Exception {
     assertTrue(
         partyReferenceService.isValidAttributeType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "height"));
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "height"));
     assertTrue(
         partyReferenceService.isValidAttributeTypeCategory(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "anthropometric_measurements"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "anthropometric_measurements"));
     assertTrue(
         partyReferenceService.isValidConsentType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "marketing"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "marketing"));
     assertTrue(
         partyReferenceService.isValidContactMechanismPurpose(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "person", "email_address", "security"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "person", "email_address", "security"));
     assertTrue(
         partyReferenceService.isValidContactMechanismRole(
-            IPartyReferenceService.DEFAULT_TENANT_ID,
+            PartyReferenceService.DEFAULT_TENANT_ID,
             PartyType.PERSON.code(),
             ContactMechanismType.MOBILE_NUMBER,
             "personal_mobile_number"));
     assertTrue(
         partyReferenceService.isValidContactMechanismType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, ContactMechanismType.MOBILE_NUMBER));
+            PartyReferenceService.DEFAULT_TENANT_ID, ContactMechanismType.MOBILE_NUMBER));
     assertTrue(
         partyReferenceService.isValidEmploymentStatus(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "employed"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "employed"));
     assertTrue(
         partyReferenceService.isValidEmploymentType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "employed", "full_time"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "employed", "full_time"));
     assertTrue(
         partyReferenceService.isValidExternalReferenceType(
-            IPartyReferenceService.DEFAULT_TENANT_ID,
+            PartyReferenceService.DEFAULT_TENANT_ID,
             PartyType.PERSON.code(),
             "test_external_reference_type"));
     assertTrue(
-        partyReferenceService.isValidGender(IPartyReferenceService.DEFAULT_TENANT_ID, "female"));
+        partyReferenceService.isValidGender(PartyReferenceService.DEFAULT_TENANT_ID, "female"));
     assertTrue(
         partyReferenceService.isValidIdentificationType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "passport"));
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "passport"));
     assertTrue(
         partyReferenceService.isValidLockType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "person", "suspected_fraud"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "person", "suspected_fraud"));
     assertTrue(
         partyReferenceService.isValidLockTypeCategory(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "fraud"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "fraud"));
     assertTrue(
         partyReferenceService.isValidMaritalStatus(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "married"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "married"));
     assertTrue(
         partyReferenceService.isValidMarriageType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "married", "anc_with_accrual"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "married", "anc_with_accrual"));
     // referenceService.isValidMinorType("minor");
     assertTrue(
         partyReferenceService.isValidNextOfKinType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "mother"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "mother"));
     assertTrue(
         partyReferenceService.isValidOccupation(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "executive"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "executive"));
     assertTrue(
         partyReferenceService.isValidPhysicalAddressPurpose(
-            IPartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "billing"));
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "billing"));
     assertTrue(
         partyReferenceService.isValidPhysicalAddressRole(
-            IPartyReferenceService.DEFAULT_TENANT_ID,
+            PartyReferenceService.DEFAULT_TENANT_ID,
             PartyType.PERSON.code(),
             PhysicalAddressRole.RESIDENTIAL));
     assertTrue(
         partyReferenceService.isValidPhysicalAddressType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "complex"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "complex"));
     assertTrue(
         partyReferenceService.isValidPreferenceType(
-            IPartyReferenceService.DEFAULT_TENANT_ID,
+            PartyReferenceService.DEFAULT_TENANT_ID,
             PartyType.ORGANIZATION.code(),
             "correspondence_language"));
     assertTrue(
         partyReferenceService.isValidPreferenceTypeCategory(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "correspondence"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "correspondence"));
     assertTrue(
         partyReferenceService.isValidQualificationType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "doctoral_degree"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "doctoral_degree"));
     assertTrue(
-        partyReferenceService.isValidRace(IPartyReferenceService.DEFAULT_TENANT_ID, "white"));
+        partyReferenceService.isValidRace(PartyReferenceService.DEFAULT_TENANT_ID, "white"));
     assertTrue(
         partyReferenceService.isValidResidencePermitType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "za_general_work_visa"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "za_general_work_visa"));
     assertTrue(
         partyReferenceService.isValidResidencyStatus(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "permanent_resident"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "permanent_resident"));
     assertTrue(
         partyReferenceService.isValidResidentialType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "owner"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "owner"));
     assertTrue(
         partyReferenceService.isValidRolePurpose(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "test_role_purpose"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "test_role_purpose"));
     assertTrue(
         partyReferenceService.isValidRoleType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "test_person_role"));
+            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "test_person_role"));
     assertTrue(
         partyReferenceService.isValidSegment(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "test_person_segment"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "test_person_segment"));
     assertTrue(
         partyReferenceService.isValidSourceOfFundsType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "salary_wages"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "salary_wages"));
     assertTrue(
         partyReferenceService.isValidStatusType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "person", "fraud_investigation"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "person", "fraud_investigation"));
     assertTrue(
         partyReferenceService.isValidStatusTypeCategory(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "fraud"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "fraud"));
     assertTrue(
         partyReferenceService.isValidTaxNumberType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "person", "za_income_tax_number"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "person", "za_income_tax_number"));
     assertTrue(
         partyReferenceService.isValidTimeToContact(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "anytime"));
-    assertTrue(partyReferenceService.isValidTitle(IPartyReferenceService.DEFAULT_TENANT_ID, "mrs"));
+            PartyReferenceService.DEFAULT_TENANT_ID, "anytime"));
+    assertTrue(partyReferenceService.isValidTitle(PartyReferenceService.DEFAULT_TENANT_ID, "mrs"));
   }
 }

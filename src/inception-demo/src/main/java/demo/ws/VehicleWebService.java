@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package demo.ws;
+package digital.inception.demo.ws;
 
-import demo.model.Car;
-import demo.service.DuplicateCarException;
-import demo.service.IVehicleService;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.demo.model.Car;
+import digital.inception.demo.service.DuplicateCarException;
+import digital.inception.demo.service.VehicleService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -35,19 +35,19 @@ import jakarta.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "VehicleService",
     name = "IVehicleService",
-    targetNamespace = "https://demo")
+    targetNamespace = "https://inception.digital/demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class VehicleWebService {
 
-  private final IVehicleService vehicleService;
+  private final VehicleService vehicleService;
 
   /**
    * Constructs a new <b>VehicleWebService</b>.
    *
    * @param vehicleService the Vehicle Service
    */
-  public VehicleWebService(IVehicleService vehicleService) {
+  public VehicleWebService(VehicleService vehicleService) {
     this.vehicleService = vehicleService;
   }
 

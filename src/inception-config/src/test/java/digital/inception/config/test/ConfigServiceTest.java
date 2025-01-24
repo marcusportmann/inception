@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.config.model.Config;
 import digital.inception.config.model.ConfigSummary;
-import digital.inception.config.service.IConfigService;
+import digital.inception.config.service.ConfigService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
@@ -91,7 +91,7 @@ public class ConfigServiceTest {
   private static final String TEST_STRING_VALUE = "TestStringValue";
 
   /** The Config Service. */
-  @Autowired private IConfigService configService;
+  @Autowired private ConfigService configService;
 
   /** Test the <b>Binary</b> config. */
   @Test

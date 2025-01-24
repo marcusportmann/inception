@@ -22,7 +22,7 @@ import digital.inception.mail.model.DuplicateMailTemplateException;
 import digital.inception.mail.model.MailTemplate;
 import digital.inception.mail.model.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplateSummary;
-import digital.inception.mail.service.IMailService;
+import digital.inception.mail.service.MailService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -45,14 +45,14 @@ import java.util.List;
 public class MailWebService {
 
   /** The Mail Service. */
-  private final IMailService mailService;
+  private final MailService mailService;
 
   /**
    * Constructs a new <b>MailWebService</b>.
    *
    * @param mailService the Mail Service
    */
-  public MailWebService(IMailService mailService) {
+  public MailWebService(MailService mailService) {
     this.mailService = mailService;
   }
 

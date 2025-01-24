@@ -20,8 +20,8 @@ import digital.inception.security.model.AuthenticationFailedException;
 import digital.inception.security.model.ExpiredPasswordException;
 import digital.inception.security.model.UserLockedException;
 import digital.inception.security.model.UserNotFoundException;
-import digital.inception.security.service.ISecurityService;
-import digital.inception.server.authorization.token.ITokenService;
+import digital.inception.security.service.SecurityService;
+import digital.inception.server.authorization.token.TokenService;
 import digital.inception.server.authorization.token.InvalidOAuth2RefreshTokenException;
 import digital.inception.server.authorization.token.OAuth2AccessToken;
 import digital.inception.server.authorization.token.OAuth2RefreshToken;
@@ -59,10 +59,10 @@ public class OAuthController {
   private static final Logger log = LoggerFactory.getLogger(OAuthController.class);
 
   /* Security Service */
-  private final ISecurityService securityService;
+  private final SecurityService securityService;
 
   /* Token Service */
-  private final ITokenService tokenService;
+  private final TokenService tokenService;
 
   /* The bucket used to limit the issuing of tokens */
   private final Bucket tokensIssuedRateLimitBucket;
@@ -75,8 +75,8 @@ public class OAuthController {
    * @param tokensIssuedPerSecond the number of tokens that can be issued per second
    */
   public OAuthController(
-      ISecurityService securityService,
-      ITokenService tokenService,
+      SecurityService securityService,
+      TokenService tokenService,
       @Value("${inception.authorization-server.limits.tokens-issued-per-second:10}")
           int tokensIssuedPerSecond) {
     this.securityService = securityService;

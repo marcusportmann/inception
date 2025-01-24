@@ -16,17 +16,11 @@
 
 package digital.inception.audit.service;
 
-import org.springframework.stereotype.Service;
-
 /**
- * The <b>AuditService</b> class provides the Audit Service implementation.
+ * The <b>AuditService</b> interface defines the functionality provided by an Audit Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class AuditService implements IAuditService {
-
-  /** Constructs a new <b>AuditService</b>. */
-  public AuditService() {}
-}
+@SuppressWarnings("unused")
+public interface AuditService {}

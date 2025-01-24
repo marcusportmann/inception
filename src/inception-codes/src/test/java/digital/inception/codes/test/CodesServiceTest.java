@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.codes.model.Code;
 import digital.inception.codes.model.CodeCategory;
-import digital.inception.codes.service.ICodesService;
+import digital.inception.codes.service.CodesService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.OffsetDateTime;
@@ -64,7 +64,7 @@ public class CodesServiceTest {
   private static int codeCount;
 
   /** The Codes Service. */
-  @Autowired private ICodesService codesService;
+  @Autowired private CodesService codesService;
 
   private static synchronized CodeCategory getTestCodeCategoryDetails() {
     codeCategoryCount++;

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.sms.model.SMS;
 import digital.inception.sms.model.SMSStatus;
-import digital.inception.sms.service.ISMSService;
+import digital.inception.sms.service.SMSService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.Optional;
@@ -67,7 +67,7 @@ public class SMSServiceTest {
   private String smsPortalClientSecret;
 
   /** The SMS Service. */
-  @Autowired private ISMSService smsService;
+  @Autowired private SMSService smsService;
 
   private static synchronized SMS getTestSMSDetails() {
     SMS sms = new SMS();

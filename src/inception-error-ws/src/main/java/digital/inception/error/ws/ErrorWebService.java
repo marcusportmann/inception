@@ -24,7 +24,7 @@ import digital.inception.error.model.ErrorReport;
 import digital.inception.error.model.ErrorReportNotFoundException;
 import digital.inception.error.model.ErrorReportSortBy;
 import digital.inception.error.model.ErrorReportSummaries;
-import digital.inception.error.service.IErrorService;
+import digital.inception.error.service.ErrorService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -49,14 +49,14 @@ import java.util.UUID;
 public class ErrorWebService {
 
   /** The Error Service. */
-  private final IErrorService errorService;
+  private final ErrorService errorService;
 
   /**
    * Constructs a new <b>ErrorWebService</b>.
    *
    * @param errorService the Error Service
    */
-  public ErrorWebService(IErrorService errorService) {
+  public ErrorWebService(ErrorService errorService) {
     this.errorService = errorService;
   }
 

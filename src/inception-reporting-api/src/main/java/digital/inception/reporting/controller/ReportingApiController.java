@@ -16,183 +16,486 @@
 
 package digital.inception.reporting.controller;
 
-import digital.inception.core.api.ApiUtil;
-import digital.inception.api.SecureApiController;
+import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.reporting.model.DuplicateReportDefinitionException;
 import digital.inception.reporting.model.ReportDefinition;
 import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
-import digital.inception.reporting.model.ReportParameter;
-import digital.inception.reporting.service.IReportingService;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.sql.Connection;
-import java.util.HashMap;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ReportingApiController</b> class.
+ * The <b>ReportingApiController</b> interface.
  *
  * @author Marcus Portmann
  */
-@RestController
-@CrossOrigin
-@SuppressWarnings({"unused"})
-public class ReportingApiController extends SecureApiController implements IReportingApiController {
-
-  /** The data source used to provide connections to the application database. */
-  private final DataSource dataSource;
-
-  /** The Reporting Service. */
-  private final IReportingService reportingService;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
+@Tag(name = "Reporting")
+@RequestMapping(value = "/api/reporting")
+// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+public interface ReportingApiController {
 
   /**
-   * Constructs a new <b>ReportingApiController</b>.
+   * Create the new report definition.
    *
-   * @param applicationContext the Spring application context
-   * @param dataSource the data source used to provide connections to the application database
-   * @param reportingService the Reporting Service
-   * @param validator the JSR-380 validator
+   * @param reportDefinition the report definition to create
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateReportDefinitionException if the report definition already exists
+   * @throws ServiceUnavailableException if the report definition could not be created
    */
-  public ReportingApiController(
-      ApplicationContext applicationContext,
-      @Qualifier("applicationDataSource") DataSource dataSource,
-      IReportingService reportingService,
-      Validator validator) {
-    super(applicationContext);
-
-    this.dataSource = dataSource;
-    this.reportingService = reportingService;
-    this.validator = validator;
-  }
-
-  @Override
-  public void createReportDefinition(ReportDefinition reportDefinition)
+  @Operation(summary = "Create the report definition", description = "Create the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The report definition was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A report definition with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
+  void createReportDefinition(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The report definition to create",
+              required = true)
+          @RequestBody
+          ReportDefinition reportDefinition)
       throws InvalidArgumentException,
           DuplicateReportDefinitionException,
-          ServiceUnavailableException {
-    reportingService.createReportDefinition(reportDefinition);
-  }
+          ServiceUnavailableException;
 
-  @Override
-  public void deleteReportDefinition(String reportDefinitionId)
+  /**
+   * Delete the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be deleted
+   */
+  @Operation(summary = "Delete the report definition", description = "Delete the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The report definition was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
+  void deleteReportDefinition(
+      @Parameter(
+              name = "reportDefinitionId",
+              description = "The ID for the report definition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    reportingService.deleteReportDefinition(reportDefinitionId);
-  }
+          ServiceUnavailableException;
 
-  @Override
-  public ResponseEntity<byte[]> generateReport(GenerateReportRequest generateReportRequest)
+  /**
+   * Generate the PDF report.
+   *
+   * @param generateReportRequest the request to generate the PDF report
+   * @return the PDF report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the PDF report could not be generated
+   */
+  @Operation(summary = "Generate the PDF report", description = "Generate the PDF report")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The PDF report was generated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/generate-report",
+      method = RequestMethod.POST,
+      produces = "application/pdf")
+  ResponseEntity<byte[]> generateReport(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to generate a report",
+              required = true)
+          @RequestBody
+          GenerateReportRequest generateReportRequest)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (generateReportRequest == null) {
-      throw new InvalidArgumentException("generateReportRequest");
-    }
+          ServiceUnavailableException;
 
-    Set<ConstraintViolation<GenerateReportRequest>> constraintViolations =
-        validator.validate(generateReportRequest);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "generateReportRequest", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    Map<String, Object> parameters = new HashMap<>();
-
-    for (ReportParameter reportParameter : generateReportRequest.getReportParameters()) {
-      parameters.put(reportParameter.getName(), reportParameter.getValue());
-    }
-
-    ReportDefinitionSummary reportDefinitionSummary =
-        reportingService.getReportDefinitionSummary(generateReportRequest.getReportDefinitionId());
-
-    try (Connection connection = dataSource.getConnection()) {
-      byte[] reportPDF =
-          reportingService.createReportPDF(
-              generateReportRequest.getReportDefinitionId(), parameters, connection);
-
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.parseMediaType("application/pdf"));
-      headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-      headers.add("Pragma", "no-cache");
-      headers.add("Expires", "0");
-
-      String filename = reportDefinitionSummary.getName().replaceAll(" ", "") + ".pdf";
-      headers.setContentDispositionFormData(filename, filename);
-      headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-
-      return new ResponseEntity<>(reportPDF, headers, HttpStatus.OK);
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to generate the PDF report", e);
-    }
-  }
-
-  @Override
-  public ReportDefinition getReportDefinition(String reportDefinitionId)
+  /**
+   * Retrieve the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @return the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the report definition",
+      description = "Retrieve the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
+  ReportDefinition getReportDefinition(
+      @Parameter(
+              name = "reportDefinition",
+              description = "The ID for the report definition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    return reportingService.getReportDefinition(reportDefinitionId);
-  }
+          ServiceUnavailableException;
 
-  @Override
-  public String getReportDefinitionName(String reportDefinitionId)
+  /**
+   * Retrieve the name of the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @return the name of the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the name of the report definition could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the name of the report definition",
+      description = "Retrieve the name of the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}/name",
+      method = RequestMethod.GET,
+      produces = "text/plain")
+  @ResponseStatus(HttpStatus.OK)
+  String getReportDefinitionName(
+      @Parameter(
+              name = "reportDefinitionId",
+              description = "The ID for the report definition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    return ApiUtil.quote(reportingService.getReportDefinitionName(reportDefinitionId));
-  }
+          ServiceUnavailableException;
 
-  @Override
-  public List<ReportDefinitionSummary> getReportDefinitionSummaries()
-      throws ServiceUnavailableException {
-    return reportingService.getReportDefinitionSummaries();
-  }
+  /**
+   * Retrieve the report definition summaries.
+   *
+   * @return the report definition summaries
+   * @throws ServiceUnavailableException if the report definition summaries could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the report definition summaries",
+      description = "Retrieve the report definition summaries")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/report-definition-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
+  List<ReportDefinitionSummary> getReportDefinitionSummaries() throws ServiceUnavailableException;
 
-  @Override
-  public List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException {
-    return reportingService.getReportDefinitions();
-  }
+  /**
+   * Retrieve the report definitions.
+   *
+   * @return the report definitions
+   * @throws ServiceUnavailableException if the report definitions could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the report definitions",
+      description = "Retrieve the report definitions")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
+  List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException;
 
-  @Override
-  public void updateReportDefinition(String reportDefinitionId, ReportDefinition reportDefinition)
+  /**
+   * Update the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @param reportDefinition the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be updated
+   */
+  @Operation(summary = "Update the report definition", description = "Update the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The report definition was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Reporting.ReportingAdministration') or hasAccessToFunction('Reporting.ReportDefinitionAdministration')")
+  void updateReportDefinition(
+      @Parameter(
+              name = "reportDefinitionId",
+              description = "The ID for the report definition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The report definition to update",
+              required = true)
+          @RequestBody
+          ReportDefinition reportDefinition)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
-    if (reportDefinition == null) {
-      throw new InvalidArgumentException("reportDefinition");
-    }
-
-    if (!reportDefinitionId.equals(reportDefinition.getId())) {
-      throw new InvalidArgumentException("reportDefinition");
-    }
-
-    reportingService.updateReportDefinition(reportDefinition);
-  }
+          ServiceUnavailableException;
 }

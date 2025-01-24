@@ -42,7 +42,7 @@ public class BackgroundJobExecutor {
   private static final Logger log = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
   /** The Scheduler Service. */
-  private final ISchedulerService schedulerService;
+  private final SchedulerService schedulerService;
 
   /** The number of job execution threads to start initially. */
   @Value("${inception.scheduler.initial-job-execution-threads:#{1}}")
@@ -72,7 +72,7 @@ public class BackgroundJobExecutor {
    *
    * @param schedulerService the Scheduler Service
    */
-  public BackgroundJobExecutor(ISchedulerService schedulerService) {
+  public BackgroundJobExecutor(SchedulerService schedulerService) {
     this.schedulerService = schedulerService;
   }
 
@@ -174,7 +174,7 @@ public class BackgroundJobExecutor {
 
     private final Job job;
 
-    private final ISchedulerService schedulerService;
+    private final SchedulerService schedulerService;
 
     /**
      * Constructs a new <b>JobExecutorThread</b>.
@@ -182,7 +182,7 @@ public class BackgroundJobExecutor {
      * @param schedulerService the Scheduler Service
      * @param job the job
      */
-    public JobExecutor(ISchedulerService schedulerService, Job job) {
+    public JobExecutor(SchedulerService schedulerService, Job job) {
       this.schedulerService = schedulerService;
       this.job = job;
     }

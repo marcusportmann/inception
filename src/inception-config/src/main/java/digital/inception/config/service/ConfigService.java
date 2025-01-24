@@ -19,450 +19,248 @@ package digital.inception.config.service;
 import digital.inception.config.model.Config;
 import digital.inception.config.model.ConfigNotFoundException;
 import digital.inception.config.model.ConfigSummary;
-import digital.inception.config.persistence.ConfigRepository;
-import digital.inception.config.persistence.ConfigSummaryRepository;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 /**
- * The <b>ConfigService</b> class provides the Config Service implementation.
+ * The <b>ConfigService</b> interface defines the functionality provided by a Config Service
+ * implementation, which manages the config information for an application or service.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings("unused")
-public class ConfigService implements IConfigService {
-
-  /** The Config Repository. */
-  private final ConfigRepository configRepository;
-
-  /** The Config Summary Repository. */
-  private final ConfigSummaryRepository configSummaryRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
+public interface ConfigService {
 
   /**
-   * Constructs a new <b>ConfigService</b>.
+   * Delete the config with the specified ID.
    *
-   * @param validator the JSR-380 validator
-   * @param configRepository the Config Repository
-   * @param configSummaryRepository the Config Summary Repository
+   * @param id the ID for the config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the config could not be deleted
    */
-  public ConfigService(
-      Validator validator,
-      ConfigRepository configRepository,
-      ConfigSummaryRepository configSummaryRepository) {
-    this.validator = validator;
-    this.configRepository = configRepository;
-    this.configSummaryRepository = configSummaryRepository;
-  }
+  void deleteConfig(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void deleteConfig(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
+  /**
+   * Retrieve the binary config.
+   *
+   * @param id the ID for the config
+   * @return the binary config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the binary config value could not be retrieved
+   */
+  byte[] getBinary(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-    try {
-      if (!configRepository.existsByIdIgnoreCase(id)) {
-        throw new ConfigNotFoundException(id);
-      }
+  /**
+   * Retrieve the binary config.
+   *
+   * @param id the ID for the config
+   * @param defaultValue the default value to return if the config does not exist
+   * @return the binary config or the default value if the config does not exist
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the binary config value could not be retrieved
+   */
+  byte[] getBinary(String id, byte[] defaultValue)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-      configRepository.deleteByIdIgnoreCase(id);
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the config with the ID (" + id + ")", e);
-    }
-  }
+  /**
+   * Retrieve the <b>Boolean</b> config.
+   *
+   * @param id the ID for the config
+   * @return the <b>Boolean</b> config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the boolean config value could not be retrieved
+   */
+  boolean getBoolean(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public byte[] getBinary(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
+  /**
+   * Retrieve the <b>Boolean</b> config.
+   *
+   * @param id the ID for the config
+   * @param defaultValue the default value to return if the config does not exist
+   * @return the <b>Boolean</b> config or the default value if the config value does not exist
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the boolean config value could not be retrieved
+   */
+  boolean getBoolean(String id, boolean defaultValue)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+  /**
+   * Retrieve the config.
+   *
+   * @param id the ID for the config
+   * @return the config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the config could not be retrieved
+   */
+  Config getConfig(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-      if (valueOptional.isPresent()) {
-        return Base64.getDecoder().decode(valueOptional.get());
-      } else {
-        throw new ConfigNotFoundException(id);
-      }
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the binary config with the ID (" + id + ")", e);
-    }
-  }
+  /**
+   * Retrieve all the config summaries.
+   *
+   * @return the config summaries
+   * @throws ServiceUnavailableException if the config summaries could not be retrieved
+   */
+  List<ConfigSummary> getConfigSummaries() throws ServiceUnavailableException;
 
-  @Override
-  public byte[] getBinary(String id, byte[] defaultValue)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
+  /**
+   * Retrieve all the configs.
+   *
+   * @return the configs
+   * @throws ServiceUnavailableException if the configs could not be retrieved
+   */
+  List<Config> getConfigs() throws ServiceUnavailableException;
 
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+  /**
+   * Retrieve the <b>Double</b> config.
+   *
+   * @param id the ID for the config
+   * @return the <b>Double</b> config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the double config value could not be retrieved
+   */
+  Double getDouble(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-      return valueOptional.map(Base64.getDecoder()::decode).orElse(defaultValue);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the binary config with the ID (" + id + ")", e);
-    }
-  }
+  /**
+   * Retrieve the <b>Double</b> config.
+   *
+   * @param id the ID for the config
+   * @param defaultValue the default value to return if the config does not exist
+   * @return the <b>Double</b> config or the default value if the config entry does not exist
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the double config value could not be retrieved
+   */
+  double getDouble(String id, double defaultValue)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public boolean getBoolean(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
+  /**
+   * Retrieve the filtered config summaries.
+   *
+   * @param filter the filter to apply to the IDs for the config summaries
+   * @return the filtered config summaries
+   * @throws ServiceUnavailableException if the filtered config summaries could not be retrieved
+   */
+  List<ConfigSummary> getFilteredConfigSummaries(String filter) throws ServiceUnavailableException;
 
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+  /**
+   * Retrieve the filtered configs.
+   *
+   * @param filter the filter to apply to the IDs for the configs
+   * @return the filtered configs
+   * @throws ServiceUnavailableException if the filtered configs could not be retrieved
+   */
+  List<Config> getFilteredConfigs(String filter) throws ServiceUnavailableException;
 
-      if (valueOptional.isPresent()) {
-        return Boolean.parseBoolean(valueOptional.get());
-      } else {
-        throw new ConfigNotFoundException(id);
-      }
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Boolean config with the ID (" + id + ")", e);
-    }
-  }
+  /**
+   * Retrieve the <b>Integer</b> config.
+   *
+   * @param id the ID for the config
+   * @return the <b>Integer</b> config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the integer config value could not be retrieved
+   */
+  Integer getInteger(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public boolean getBoolean(String id, boolean defaultValue)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
+  /**
+   * Retrieve the <b>Integer</b> config.
+   *
+   * @param id the ID for the config
+   * @param defaultValue the default value to return if the config does not exist
+   * @return the <b>Integer</b> config or the default value if the config entry does not exist
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the integer config value could not be retrieved
+   */
+  int getInteger(String id, int defaultValue)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+  /**
+   * Retrieve the <b>Long</b> config.
+   *
+   * @param id the ID for the config
+   * @return the <b>Long</b> config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the long config value could not be retrieved
+   */
+  Long getLong(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-      return valueOptional.map(Boolean::parseBoolean).orElse(defaultValue);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Boolean config with the ID (" + id + ")", e);
-    }
-  }
+  /**
+   * Retrieve the <b>Long</b> config.
+   *
+   * @param id the ID for the config
+   * @param defaultValue the default value to return if the config does not exist
+   * @return the <b>Long</b> config or the default value if the config entry does not exist
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the long config value could not be retrieved
+   */
+  long getLong(String id, long defaultValue)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public Config getConfig(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
+  /**
+   * Retrieve the value for the <b>String</b> config.
+   *
+   * @param id the ID for the config
+   * @return the value for the <b>String</b> config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the string config value could not be retrieved
+   */
+  String getString(String id)
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
-    try {
-      Optional<Config> configOptional = configRepository.findByIdIgnoreCase(id);
+  /**
+   * Retrieve the value for the <b>String</b> config.
+   *
+   * @param id the ID for the config
+   * @param defaultValue the default value to return if the config does not exist
+   * @return the value for the <b>String</b> config or the default value if the config does not
+   *     exist
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the string config value could not be retrieved
+   */
+  String getString(String id, String defaultValue)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-      if (configOptional.isEmpty()) {
-        throw new ConfigNotFoundException(id);
-      } else {
-        return configOptional.get();
-      }
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the config with the ID (" + id + ")", e);
-    }
-  }
+  /**
+   * Check if a config with the specified ID exists.
+   *
+   * @param id the ID for the config
+   * @return <b>true</b> if the config with the specified ID exists or <b>false</b> otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the existing ID failed
+   */
+  boolean idExists(String id) throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<ConfigSummary> getConfigSummaries() throws ServiceUnavailableException {
-    try {
-      return configSummaryRepository.findAllByOrderByIdAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the config summaries", e);
-    }
-  }
+  /**
+   * Set the config.
+   *
+   * @param config the config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the config could not be set
+   */
+  void setConfig(Config config) throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<Config> getConfigs() throws ServiceUnavailableException {
-    try {
-      return configRepository.findAllByOrderByIdAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the configs", e);
-    }
-  }
-
-  @Override
-  public Double getDouble(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      if (valueOptional.isPresent()) {
-        return Double.parseDouble(valueOptional.get());
-      } else {
-        throw new ConfigNotFoundException(id);
-      }
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Double config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public double getDouble(String id, double defaultValue)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      return valueOptional.map(Double::parseDouble).orElse(defaultValue);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Double config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public List<ConfigSummary> getFilteredConfigSummaries(String filter)
-      throws ServiceUnavailableException {
-    try {
-      if (StringUtils.hasText(filter)) {
-        return configSummaryRepository.findByIdIgnoreCaseContaining(filter);
-      } else {
-        return configSummaryRepository.findAllByOrderByIdAsc();
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the config summaries matching the filter (" + filter + ")", e);
-    }
-  }
-
-  @Override
-  public List<Config> getFilteredConfigs(String filter) throws ServiceUnavailableException {
-    try {
-      if (StringUtils.hasText(filter)) {
-        return configRepository.findByIdIgnoreCaseContaining(filter);
-      } else {
-        return configRepository.findAllByOrderByIdAsc();
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the config matching the filter (" + filter + ")", e);
-    }
-  }
-
-  @Override
-  public Integer getInteger(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      if (valueOptional.isPresent()) {
-        return Integer.parseInt(valueOptional.get());
-      } else {
-        throw new ConfigNotFoundException(id);
-      }
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Integer config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public int getInteger(String id, int defaultValue)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      return valueOptional.map(Integer::parseInt).orElse(defaultValue);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Integer config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public Long getLong(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      if (valueOptional.isPresent()) {
-        return Long.parseLong(valueOptional.get());
-      } else {
-        throw new ConfigNotFoundException(id);
-      }
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Long config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public long getLong(String id, long defaultValue)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      return valueOptional.map(Long::parseLong).orElse(defaultValue);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the Long config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public String getString(String id)
-      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      if (valueOptional.isPresent()) {
-        return valueOptional.get();
-      } else {
-        throw new ConfigNotFoundException(id);
-      }
-    } catch (ConfigNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the String config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public String getString(String id, String defaultValue)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
-
-      return valueOptional.orElse(defaultValue);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the String config with the ID (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public boolean idExists(String id) throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    try {
-      return configRepository.existsByIdIgnoreCase(id);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to checked whether the config ID (" + id + ") exists", e);
-    }
-  }
-
-  @Override
-  public void setConfig(Config config)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (config == null) {
-      throw new InvalidArgumentException("config");
-    }
-
-    Set<ConstraintViolation<Config>> constraintViolations = validator.validate(config);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "config", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    try {
-      configRepository.saveAndFlush(config);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to set the config with the ID (" + config.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public void setConfig(String id, Object value, String description)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(id)) {
-      throw new InvalidArgumentException("id");
-    }
-
-    if (value == null) {
-      throw new InvalidArgumentException("value");
-    }
-
-    if (description == null) {
-      throw new InvalidArgumentException("description");
-    }
-
-    try {
-      String stringValue;
-
-      if (value instanceof String) {
-        stringValue = (String) value;
-      } else if (value instanceof byte[]) {
-        stringValue = Base64.getEncoder().encodeToString((byte[]) value);
-      } else {
-        stringValue = value.toString();
-      }
-
-      configRepository.save(new Config(id, stringValue, description));
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to set the config with the ID (" + id + ")", e);
-    }
-  }
+  /**
+   * Set the config.
+   *
+   * @param id the ID for the config
+   * @param value the value for the config
+   * @param description the description for the config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the config could not be set
+   */
+  void setConfig(String id, Object value, String description)
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

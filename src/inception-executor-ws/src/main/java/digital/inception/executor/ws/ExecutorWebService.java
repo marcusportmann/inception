@@ -31,7 +31,7 @@ import digital.inception.executor.model.TaskStatus;
 import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskType;
 import digital.inception.executor.model.TaskTypeNotFoundException;
-import digital.inception.executor.service.IExecutorService;
+import digital.inception.executor.service.ExecutorService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -55,14 +55,14 @@ import java.util.UUID;
 public class ExecutorWebService {
 
   /** The Executor Service. */
-  private final IExecutorService executorService;
+  private final ExecutorService executorService;
 
   /**
    * Constructs a new <b>ExecutorWebService</b>.
    *
    * @param executorService the Executor Service
    */
-  public ExecutorWebService(IExecutorService executorService) {
+  public ExecutorWebService(ExecutorService executorService) {
     this.executorService = executorService;
   }
 

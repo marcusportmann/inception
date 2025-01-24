@@ -23,7 +23,7 @@ import digital.inception.reporting.model.ReportDefinition;
 import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
 import digital.inception.reporting.model.ReportParameter;
-import digital.inception.reporting.service.IReportingService;
+import digital.inception.reporting.service.ReportingService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -55,7 +55,7 @@ public class ReportingWebService {
   private final DataSource dataSource;
 
   /** The Reporting Service. */
-  private final IReportingService reportingService;
+  private final ReportingService reportingService;
 
   /**
    * Constructs a new <b>ReportingWebService</b>.
@@ -65,7 +65,7 @@ public class ReportingWebService {
    */
   public ReportingWebService(
       @Qualifier("applicationDataSource") DataSource dataSource,
-      IReportingService reportingService) {
+      ReportingService reportingService) {
     this.dataSource = dataSource;
     this.reportingService = reportingService;
   }

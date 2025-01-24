@@ -14,235 +14,73 @@
  * limitations under the License.
  */
 
-package demo.service;
+package digital.inception.demo.service;
 
-import demo.model.Car;
-import demo.model.Cars;
-import demo.model.Vehicle;
-import demo.model.Vehicles;
-import demo.persistence.jpa.CarRepository;
-import demo.persistence.jpa.VehicleRepository;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.util.Set;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import digital.inception.demo.model.Car;
+import digital.inception.demo.model.Cars;
+import digital.inception.demo.model.Vehicle;
+import digital.inception.demo.model.Vehicles;
 
 /**
- * The <b>VehicleService</b> class provides the Vehicle Service implementation.
+ * The <b>VehicleService</b> interface defines the functionality that must be provided by a Vehicle
+ * Service implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class VehicleService implements IVehicleService {
-
-  /** The maximum number of filtered cars. */
-  private static final int MAX_FILTERED_CARS = 100;
-
-  /** The maximum number of filtered vehicles. */
-  private static final int MAX_FILTERED_VEHICLES = 100;
-
-  /** The Car Repository. */
-  private final CarRepository carRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /** The Vehicle Repository. */
-  private final VehicleRepository vehicleRepository;
-
-  /* Entity Manager */
-  @PersistenceContext(unitName = "application")
-  private EntityManager entityManager;
+@SuppressWarnings("unused")
+public interface VehicleService {
 
   /**
-   * Constructs a new <b>VehicleService</b>.
+   * Create the new car.
    *
-   * @param validator the JSR-380 validator
-   * @param carRepository the Car Repository
-   * @param vehicleRepository the Vehicle Repository
+   * @param car the car
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateCarException if the car already exists
+   * @throws ServiceUnavailableException if the car could not be created
    */
-  public VehicleService(
-      Validator validator, CarRepository carRepository, VehicleRepository vehicleRepository) {
-    this.validator = validator;
-    this.carRepository = carRepository;
-    this.vehicleRepository = vehicleRepository;
-  }
+  void createCar(Car car)
+      throws InvalidArgumentException, DuplicateCarException, ServiceUnavailableException;
 
-  @Override
-  @Transactional
-  public void createCar(Car car)
-      throws InvalidArgumentException, DuplicateCarException, ServiceUnavailableException {
-    if (car == null) {
-      throw new InvalidArgumentException("car");
-    }
+  /**
+   * Create the new vehicle.
+   *
+   * @param vehicle the vehicle
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateVehicleException if the vehicle already exists
+   * @throws ServiceUnavailableException if the vehicle could not be created
+   */
+  void createVehicle(Vehicle vehicle)
+      throws InvalidArgumentException, DuplicateVehicleException, ServiceUnavailableException;
 
-    Set<ConstraintViolation<Car>> constraintViolations = validator.validate(car);
+  /**
+   * Retrieve the cars.
+   *
+   * @param filter the filter to apply to the cars
+   * @param sortDirection the sort direction to apply to the cars
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the cars
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the cars could not be retrieved
+   */
+  Cars getCars(String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "car", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    try {
-      if (carRepository.existsById(car.getId())) {
-        throw new DuplicateCarException(car.getId());
-      }
-
-      carRepository.saveAndFlush(car);
-    } catch (DuplicateCarException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to create the car (" + car.getId() + ")", e);
-    }
-  }
-
-  @Override
-  @Transactional
-  public void createVehicle(Vehicle vehicle)
-      throws InvalidArgumentException, DuplicateVehicleException, ServiceUnavailableException {
-    if (vehicle == null) {
-      throw new InvalidArgumentException("vehicle");
-    }
-
-    Set<ConstraintViolation<Vehicle>> constraintViolations = validator.validate(vehicle);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "vehicle", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    try {
-      if (vehicleRepository.existsById(vehicle.getId())) {
-        throw new DuplicateVehicleException(vehicle.getId());
-      }
-
-      vehicleRepository.saveAndFlush(vehicle);
-    } catch (DuplicateVehicleException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the vehicle (" + vehicle.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public Cars getCars(
+  /**
+   * Retrieve the vehicles.
+   *
+   * @param filter the filter to apply to the vehicles
+   * @param sortDirection the sort direction to apply to the vehicles
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the vehicles
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the vehicles could not be retrieved
+   */
+  Vehicles getVehicles(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (pageIndex == null) {
-      pageIndex = 0;
-    }
-
-    if (pageSize == null) {
-      pageSize = MAX_FILTERED_CARS;
-    }
-
-    try {
-      PageRequest pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_CARS),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              "name");
-
-      Page<Car> carPage;
-
-      if (StringUtils.hasText(filter)) {
-        carPage =
-            carRepository.findAll(
-                (Specification<Car>)
-                    (root, query, criteriaBuilder) -> {
-                      return criteriaBuilder.like(
-                          criteriaBuilder.lower(root.get("name")),
-                          "%" + filter.toLowerCase() + "%");
-                    },
-                pageRequest);
-      } else {
-        carPage = carRepository.findAll(pageRequest);
-      }
-
-      return new Cars(
-          carPage.toList(), carPage.getTotalElements(), filter, sortDirection, pageIndex, pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered cars", e);
-    }
-  }
-
-  @Override
-  public Vehicles getVehicles(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (pageIndex == null) {
-      pageIndex = 0;
-    }
-
-    if (pageSize == null) {
-      pageSize = MAX_FILTERED_VEHICLES;
-    }
-
-    try {
-
-      PageRequest pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_VEHICLES),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              "name");
-
-      Page<Vehicle> vehiclePage;
-
-      if (StringUtils.hasText(filter)) {
-        vehiclePage =
-            vehicleRepository.findAll(
-                (Specification<Vehicle>)
-                    (root, query, criteriaBuilder) -> {
-                      return criteriaBuilder.like(
-                          criteriaBuilder.lower(root.get("name")),
-                          "%" + filter.toLowerCase() + "%");
-                    },
-                pageRequest);
-      } else {
-        vehiclePage = vehicleRepository.findAll(pageRequest);
-      }
-
-      return new Vehicles(
-          vehiclePage.toList(),
-          vehiclePage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered vehicles", e);
-    }
-  }
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

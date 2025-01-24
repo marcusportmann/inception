@@ -43,7 +43,7 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @Conditional(InternalPolicyStoreEnabledCondition.class)
-public class InternalPolicyStore implements IPolicyStore {
+public class InternalPolicyStore implements PolicyStore {
 
   /** The default maximum number of filtered policies. */
   private static final int DEFAULT_MAX_FILTERED_POLICIES = 100;

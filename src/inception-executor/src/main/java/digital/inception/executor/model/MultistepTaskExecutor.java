@@ -28,7 +28,7 @@ import java.util.List;
  * @param <TaskDataType> the task data type
  * @author Marcus Portmann
  */
-public abstract class MultistepTaskExecutor<TaskDataType> implements ITaskExecutor {
+public abstract class MultistepTaskExecutor<TaskDataType> implements TaskExecutor {
 
   private final ObjectMapper objectMapper;
 

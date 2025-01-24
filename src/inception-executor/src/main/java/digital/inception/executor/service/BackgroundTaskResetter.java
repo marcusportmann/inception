@@ -37,14 +37,14 @@ public class BackgroundTaskResetter {
   private static final Logger log = LoggerFactory.getLogger(BackgroundTaskResetter.class);
 
   /** The Executor Service. */
-  private final IExecutorService executorService;
+  private final ExecutorService executorService;
 
   /**
    * Constructs a new <b>BackgroundTaskResetter</b>.
    *
    * @param executorService the Executor Service
    */
-  public BackgroundTaskResetter(IExecutorService executorService) {
+  public BackgroundTaskResetter(ExecutorService executorService) {
     this.executorService = executorService;
   }
 

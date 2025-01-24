@@ -16,151 +16,61 @@
 
 package digital.inception.application.test;
 
-import digital.inception.test.DataSourceProxy;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TestTransactionalService</b> class provides the Test Transactional Service implementation.
+ * The <b>TestTransactionalService</b> interface defines the functionality provided by a Test
+ * Transactional Service implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-@Transactional
-@SuppressWarnings("unused")
-public class TestTransactionalService implements ITestTransactionalService {
-
-  /** The data source used to provide connections to the application database. */
-  private final DataSource dataSource;
-
-  /**
-   * Constructs a new <b>TestTransactionalService</b>.
-   *
-   * @param dataSource the data source used to provide connections to the application database
-   */
-  public TestTransactionalService(@Qualifier("applicationDataSource") DataSource dataSource) {
-    this.dataSource = dataSource;
-  }
+public interface TestTransactionalService {
 
   /**
    * Create the new test data.
    *
    * @param testData the test data
    */
-  public void createTestData(TestData testData) throws TestTransactionalServiceException {
-    String createTestDataSQL = "INSERT INTO test_data  (id, name, value) VALUES (?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(createTestDataSQL)) {
-      statement.setString(1, testData.getId());
-      statement.setString(2, testData.getName());
-      statement.setString(3, testData.getValue());
-
-      Set<Connection> connections = DataSourceProxy.getActiveDatabaseConnections().keySet();
-
-      Map<Connection, StackTraceElement[]> connectionMap =
-          DataSourceProxy.getActiveDatabaseConnections();
-
-      if (statement.executeUpdate() != 1) {
-        throw new RuntimeException(
-            "No rows were affected as a result of executing the SQL statement ("
-                + createTestDataSQL
-                + ")");
-      }
-    } catch (Throwable e) {
-      throw new TestTransactionalServiceException("Failed to create the test data", e);
-    }
-  }
+  void createTestData(TestData testData) throws TestTransactionalServiceException;
 
   /**
    * Create the new test data in a new transaction.
    *
    * @param testData the test data
    */
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void createTestDataInNewTransaction(TestData testData)
-      throws TestTransactionalServiceException {
-    String createTestDataSQL = "INSERT INTO test_data  (id, name, value) VALUES (?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(createTestDataSQL)) {
-      statement.setString(1, testData.getId());
-      statement.setString(2, testData.getName());
-      statement.setString(3, testData.getValue());
-
-      if (statement.executeUpdate() != 1) {
-        throw new RuntimeException(
-            "No rows were affected as a result of executing the SQL statement ("
-                + createTestDataSQL
-                + ")");
-      }
-    } catch (Throwable e) {
-      throw new TestTransactionalServiceException(
-          "Failed to create the test data in a new transaction", e);
-    }
-  }
+  void createTestDataInNewTransaction(TestData testData) throws TestTransactionalServiceException;
 
   /**
    * Create the new test data in a new transaction with a checked exception.
    *
    * @param testData the test data
    */
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void createTestDataInNewTransactionWithCheckedException(TestData testData)
-      throws TestTransactionalServiceException {
-    createTestData(testData);
-
-    throw new TestTransactionalServiceException(
-        "Failed with a checked exception in a new transaction");
-  }
+  void createTestDataInNewTransactionWithCheckedException(TestData testData)
+      throws TestTransactionalServiceException;
 
   /**
    * Create the new test data in a new transaction with a runtime exception.
    *
    * @param testData the test data
    */
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void createTestDataInNewTransactionWithRuntimeException(TestData testData)
-      throws TestTransactionalServiceException {
-    createTestData(testData);
-
-    throw new RuntimeException("Failed with a runtime exception in a new transaction");
-  }
+  void createTestDataInNewTransactionWithRuntimeException(TestData testData)
+      throws TestTransactionalServiceException;
 
   /**
    * Create the new test data with a checked exception.
    *
    * @param testData the test data
    */
-  public void createTestDataWithCheckedException(TestData testData)
-      throws TestTransactionalServiceException {
-    createTestData(testData);
-
-    throw new TestTransactionalServiceException(
-        "Failed with a checked exception in an existing transaction");
-  }
+  void createTestDataWithCheckedException(TestData testData)
+      throws TestTransactionalServiceException;
 
   /**
    * Create the new test data with a runtime exception.
    *
    * @param testData the test data
    */
-  public void createTestDataWithRuntimeException(TestData testData)
-      throws TestTransactionalServiceException {
-    createTestData(testData);
-
-    throw new RuntimeException("Failed with a runtime exception in an existing transaction");
-  }
+  void createTestDataWithRuntimeException(TestData testData)
+      throws TestTransactionalServiceException;
 
   /**
    * Retrieve the test data.
@@ -169,27 +79,5 @@ public class TestTransactionalService implements ITestTransactionalService {
    * @return an Optional containing the test data or an empty Optional if the test data cannot be
    *     found
    */
-  public Optional<TestData> getTestData(String id) throws TestTransactionalServiceException {
-    String getTestDataSQL = "SELECT id, name, value FROM test_data WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getTestDataSQL)) {
-      statement.setString(1, id);
-
-      try (ResultSet rs = statement.executeQuery()) {
-        if (rs.next()) {
-          return Optional.of(buildTestDataFromResultSet(rs));
-        } else {
-          return Optional.empty();
-        }
-      }
-    } catch (Throwable e) {
-      throw new TestTransactionalServiceException(
-          "Failed to create the test data in a new transaction", e);
-    }
-  }
-
-  private TestData buildTestDataFromResultSet(ResultSet rs) throws SQLException {
-    return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
-  }
+  Optional<TestData> getTestData(String id) throws TestTransactionalServiceException;
 }

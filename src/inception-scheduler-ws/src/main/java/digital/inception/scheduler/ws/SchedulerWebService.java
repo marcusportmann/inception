@@ -21,7 +21,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.scheduler.model.DuplicateJobException;
 import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobNotFoundException;
-import digital.inception.scheduler.service.ISchedulerService;
+import digital.inception.scheduler.service.SchedulerService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -44,14 +44,14 @@ import java.util.List;
 public class SchedulerWebService {
 
   /** The Scheduler Service. */
-  private final ISchedulerService schedulerService;
+  private final SchedulerService schedulerService;
 
   /**
    * Constructs a new <b>SchedulerWebService</b>.
    *
    * @param schedulerService the Scheduler Service
    */
-  public SchedulerWebService(ISchedulerService schedulerService) {
+  public SchedulerWebService(SchedulerService schedulerService) {
     this.schedulerService = schedulerService;
   }
 

@@ -21,8 +21,8 @@ import digital.inception.party.model.AssociationProperty;
 import digital.inception.party.model.AssociationPropertyType;
 import digital.inception.party.model.AssociationType;
 import digital.inception.party.model.PartyType;
-import digital.inception.party.service.IPartyReferenceService;
-import digital.inception.party.service.IPartyService;
+import digital.inception.party.service.PartyReferenceService;
+import digital.inception.party.service.PartyService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
@@ -44,10 +44,10 @@ public class ValidAssociationValidator
     implements ConstraintValidator<ValidAssociation, Association> {
 
   /** The Party Reference Service. */
-  private final IPartyReferenceService partyReferenceService;
+  private final PartyReferenceService partyReferenceService;
 
   /** The Party Service. */
-  private final IPartyService partyService;
+  private final PartyService partyService;
 
   /**
    * Constructs a new <b>ValidAssociationValidator</b>.
@@ -57,7 +57,7 @@ public class ValidAssociationValidator
    */
   @Autowired
   public ValidAssociationValidator(
-      IPartyService partyService, IPartyReferenceService partyReferenceService) {
+      PartyService partyService, PartyReferenceService partyReferenceService) {
     this.partyService = partyService;
     this.partyReferenceService = partyReferenceService;
   }

@@ -18,7 +18,7 @@ package digital.inception.executor.constraint;
 
 import digital.inception.executor.model.Task;
 import digital.inception.executor.model.TaskTypeNotFoundException;
-import digital.inception.executor.service.IExecutorService;
+import digital.inception.executor.service.ExecutorService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
@@ -41,7 +41,7 @@ import org.springframework.util.StringUtils;
 public class ValidTaskValidator implements ConstraintValidator<ValidTask, Task> {
 
   /** The Executor Service. */
-  private final IExecutorService executorService;
+  private final ExecutorService executorService;
 
   /**
    * Constructs a new <b>ValidTaskValidator</b>.
@@ -49,7 +49,7 @@ public class ValidTaskValidator implements ConstraintValidator<ValidTask, Task> 
    * @param executorService the Executor Service
    */
   @Autowired
-  public ValidTaskValidator(IExecutorService executorService) {
+  public ValidTaskValidator(ExecutorService executorService) {
     this.executorService = executorService;
   }
 

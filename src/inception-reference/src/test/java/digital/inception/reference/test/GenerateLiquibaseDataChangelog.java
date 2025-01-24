@@ -24,7 +24,7 @@ import digital.inception.reference.model.MeasurementSystem;
 import digital.inception.reference.model.MeasurementUnit;
 import digital.inception.reference.model.MeasurementUnitType;
 import digital.inception.reference.model.Region;
-import digital.inception.reference.service.IReferenceService;
+import digital.inception.reference.service.ReferenceService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -72,7 +72,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
   private final ApplicationContext applicationContext;
 
   /** The Reference Service. */
-  private final IReferenceService referenceService;
+  private final ReferenceService referenceService;
 
   /**
    * Constructs a new <b>GenerateLiquibaseDataChangelog</b>.
@@ -81,7 +81,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
    * @param referenceService the Reference Service
    */
   public GenerateLiquibaseDataChangelog(
-      ApplicationContext applicationContext, IReferenceService referenceService) {
+      ApplicationContext applicationContext, ReferenceService referenceService) {
     this.applicationContext = applicationContext;
     this.referenceService = referenceService;
   }

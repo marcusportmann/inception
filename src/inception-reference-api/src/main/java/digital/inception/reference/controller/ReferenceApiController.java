@@ -16,7 +16,7 @@
 
 package digital.inception.reference.controller;
 
-import digital.inception.api.SecureApiController;
+import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.reference.model.Country;
@@ -26,82 +26,440 @@ import digital.inception.reference.model.MeasurementUnit;
 import digital.inception.reference.model.MeasurementUnitType;
 import digital.inception.reference.model.Region;
 import digital.inception.reference.model.TimeZone;
-import digital.inception.reference.service.IReferenceService;
+import digital.inception.reference.service.ReferenceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ReferenceApiController</b> class.
+ * The <b>ReferenceApiController</b> interface.
  *
  * @author Marcus Portmann
  */
-@RestController
-@CrossOrigin
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class ReferenceApiController extends SecureApiController implements IReferenceApiController {
-
-  /** The Reference Service. */
-  private final IReferenceService referenceService;
+@Tag(name = "Reference")
+@RequestMapping(value = "/api/reference")
+// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+public interface ReferenceApiController {
 
   /**
-   * Constructs a new <b>ReferenceApiController</b>.
+   * Retrieve the country reference data for a specific locale.
    *
-   * @param applicationContext the Spring application context
-   * @param referenceService the Reference Service
+   * @param localeId the Unicode locale identifier for the locale to retrieve the country reference
+   *     data for
+   * @return the country reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the country reference data could not be retrieved
    */
-  public ReferenceApiController(
-      ApplicationContext applicationContext, IReferenceService referenceService) {
-    super(applicationContext);
+  @Operation(
+      summary = "Retrieve the country reference data for a specific locale",
+      description = "Retrieve the country reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/countries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  List<Country> getCountries(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the country reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = ReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    this.referenceService = referenceService;
-  }
+  /**
+   * Retrieve the language reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the language reference
+   *     data for
+   * @return the language reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the language reference data could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the language reference data for a specific locale",
+      description = "Retrieve the language reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/languages",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  List<Language> getLanguages(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the language reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = ReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<Country> getCountries(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getCountries(localeId);
-  }
+  /**
+   * Retrieve the measurement system reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement system
+   *     reference data for
+   * @return the measurement system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement system reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the measurement system reference data for a specific locale",
+      description = "Retrieve the measurement system reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/measurement-systems",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  List<MeasurementSystem> getMeasurementSystems(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the measurement system reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = ReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<Language> getLanguages(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getLanguages(localeId);
-  }
+  /**
+   * Retrieve the measurement unit type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
+   *     type reference data for
+   * @return the measurement unit type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit type reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the measurement unit type reference data for a specific locale",
+      description = "Retrieve the measurement unit type reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/measurement-unit-types",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  List<MeasurementUnitType> getMeasurementUnitTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the measurement unit type reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = ReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<MeasurementSystem> getMeasurementSystems(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getMeasurementSystems(localeId);
-  }
+  /**
+   * Retrieve the measurement unit reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
+   *     reference data
+   * @return the measurement unit reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the measurement unit reference data for a specific locale",
+      description = "Retrieve the measurement unit reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/measurement-units",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  List<MeasurementUnit> getMeasurementUnits(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the measurement unit reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = ReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<MeasurementUnitType> getMeasurementUnitTypes(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getMeasurementUnitTypes(localeId);
-  }
+  /**
+   * Retrieve the region reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
+   *     data for
+   * @param country the ISO 3166-1 alpha-2 code for the country to retrieve the regions for
+   * @return the region reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the region reference data could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the region reference data for a specific locale",
+      description = "Retrieve the region reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/regions",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  List<Region> getRegions(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the region reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = ReferenceService.DEFAULT_LOCALE_ID)
+          String localeId,
+      @Parameter(
+              name = "country",
+              description =
+                  "The ISO 3166-1 alpha-2 code for the country to retrieve the regions for",
+              example = "ZA")
+          @RequestParam(value = "country", required = false)
+          String country)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<MeasurementUnit> getMeasurementUnits(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getMeasurementUnits(localeId);
-  }
-
-  @Override
-  public List<Region> getRegions(String localeId, String country)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (StringUtils.hasText(country)) {
-      return referenceService.getRegions(localeId, country);
-    } else {
-      return referenceService.getRegions();
-    }
-  }
-
-  @Override
-  public List<TimeZone> getTimeZones(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getTimeZones(localeId);
-  }
+  /**
+   * Retrieve the time zone reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the time zone
+   *     reference data for
+   * @return the time zone reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the time zones reference data could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the time zone reference data for a specific locale",
+      description = "Retrieve the time zone reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/time-zones",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  List<TimeZone> getTimeZones(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the time zone reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = ReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

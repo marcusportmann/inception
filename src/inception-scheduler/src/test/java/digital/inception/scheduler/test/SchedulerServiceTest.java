@@ -23,7 +23,7 @@ import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.model.JobParameter;
 import digital.inception.scheduler.model.JobStatus;
-import digital.inception.scheduler.service.ISchedulerService;
+import digital.inception.scheduler.service.SchedulerService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
@@ -59,7 +59,7 @@ public class SchedulerServiceTest {
   private static int jobCount;
 
   /** The Scheduler Service. */
-  @Autowired private ISchedulerService schedulerService;
+  @Autowired private SchedulerService schedulerService;
 
   private static synchronized Job getTestJobDetails() {
     jobCount++;

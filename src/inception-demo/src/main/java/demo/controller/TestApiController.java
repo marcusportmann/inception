@@ -14,151 +14,203 @@
  * limitations under the License.
  */
 
-package demo.controller;
+package digital.inception.demo.controller;
 
-import demo.model.CarType;
-import demo.task.DemoTaskData;
-import digital.inception.api.SecureApiController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.OffsetDateTime;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.executor.service.IExecutorService;
-import java.time.OffsetDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
+import digital.inception.demo.model.CarType;
 
 /**
- * The <b>TestApiController</b> class.
+ * The <b>TestApiController</b> interface.
  *
  * @author Marcus Portmann
  */
-@RestController
-@CrossOrigin
-@SuppressWarnings({"unused"})
-public class TestApiController extends SecureApiController implements ITestApiController {
-
-  /* Logger */
-  private static final Logger log =
-      LoggerFactory.getLogger(TestApiController.class);
-
-  private final IExecutorService executorService;
-
-  private final WebClient.Builder webClientBuilder;
+@Tag(name = "Test")
+@RequestMapping(value = "/api/test")
+public interface TestApiController {
 
   /**
-   * Constructs a new <b>TestApiController</b>.
+   * Test an API call.
    *
-   * @param applicationContext the Spring application context
-   * @param webClientBuilder the web client builder
-   * @param executorService the Executor Service
+   * @throws ServiceUnavailableException if an error occurred
    */
-  public TestApiController(
-      ApplicationContext applicationContext,
-      WebClient.Builder webClientBuilder,
-      IExecutorService executorService) {
-    super(applicationContext);
-    this.webClientBuilder = webClientBuilder;
-    this.executorService = executorService;
-  }
+  @Operation(summary = "Test an API call", description = "Test an API call")
+  @RequestMapping(
+      value = "/test-api-call",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  void testApiCall() throws ServiceUnavailableException;
 
-  @Override
-  public void testApiCall() throws ServiceUnavailableException {
-    try {
-      WebClient webClient = webClientBuilder.build();
+  /**
+   * Test the exception handling.
+   *
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test the exception handling", description = "Test the exception handling")
+  @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
+  void testExceptionHandling() throws ServiceUnavailableException;
 
-      String enumValue =
-          webClient
-              .get()
-              .uri("http://localhost:8080/api/test/test-returning-enum")
-              .retrieve()
-              .bodyToMono(String.class)
-              .block();
+  /**
+   * Test the offset date time mapping.
+   *
+   * @param offsetDateTime the offset date time
+   * @return the offset date time
+   */
+  @Operation(
+      summary = "Test the offset date time serialization",
+      description = "Test the offset date time serialization")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+  @RequestMapping(
+      value = "/test-offset-date-time",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  OffsetDateTime testOffsetDateTime(
+      @Parameter(name = "offsetDateTime", description = "The offset date time", required = true)
+          @RequestParam("offsetDateTime")
+          OffsetDateTime offsetDateTime);
 
-      log.info("Retrieved the enum value: " + enumValue);
+  /**
+   * Test the Policy Decision Point authorization.
+   *
+   * @param pathVariable the path variable
+   * @param anotherPathVariable another path variable
+   * @param requestParameter the request parameter
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(
+      summary = "Test the policy decision point authorization",
+      description = "Test the policy decision point authorization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The policy decision point authorization was successful"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = {"/test-pdp-authorization/{pathVariable}/{anotherPathVariable}"},
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("authorize()")
+  void testPolicyDecisionPointAuthorization(
+      @Parameter(name = "pathVariable", description = "The path variable", required = true)
+          @PathVariable
+          String pathVariable,
+      @Parameter(
+              name = "anotherPathVariable",
+              description = "Another path variable",
+              required = true)
+          @PathVariable
+          String anotherPathVariable,
+      @Parameter(name = "requestParameter", description = "The request parameter", required = true)
+          @RequestParam
+          String requestParameter)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    } catch (Throwable e) {
-      log.error("Failed to invoke the API", e);
-    }
-  }
+  /**
+   * Test returning an enum.
+   *
+   * @return the car type enum value
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test returning an enum", description = "Test returning an enum")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/test-returning-enum",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  CarType testReturningEnum() throws ServiceUnavailableException;
 
-  @Override
-  public void testExceptionHandling() throws ServiceUnavailableException {
-    throw new ServiceUnavailableException(
-        "This is a longer description for the test exception number " + System.currentTimeMillis());
-  }
+  /**
+   * Test returning a string.
+   *
+   * @param throwException should an exception be thrown
+   * @return the string value
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test returning an string", description = "Test returning a string")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/test-returning-string",
+      method = RequestMethod.GET,
+      produces = "text/plain")
+  String testReturningString(
+      @Parameter(
+              name = "throwException",
+              description = "Throw an exception instead of returning a string",
+              required = true)
+          @RequestParam
+          Boolean throwException)
+      throws ServiceUnavailableException;
 
-  @Override
-  public OffsetDateTime testOffsetDateTime(OffsetDateTime offsetDateTime) {
-    System.out.println("offsetDateTime = " + offsetDateTime);
-
-    return offsetDateTime;
-  }
-
-  @Override
-  public void testPolicyDecisionPointAuthorization(
-      String pathVariable, String anotherPathVariable, String requestParameter)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(pathVariable)) {
-      throw new InvalidArgumentException("pathVariable");
-    }
-
-    if (!StringUtils.hasText(anotherPathVariable)) {
-      throw new InvalidArgumentException("anotherPathVariable");
-    }
-
-    log.info("pathVariable = " + pathVariable);
-    log.info("anotherPathVariable = " + anotherPathVariable);
-    log.info("requestParameter = " + requestParameter);
-
-    try {
-      StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-
-      if (stackTraceElements.length > 2) {}
-
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the API and request information using reflection", e);
-    }
-  }
-
-  @Override
-  public CarType testReturningEnum() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication != null) {
-      log.info("Processing secure API call for authenticated user: " + authentication.getName());
-    }
-
-    return CarType.PETROL;
-  }
-
-  @Override
-  public String testReturningString(Boolean throwException) throws ServiceUnavailableException {
-    if ((throwException != null) && (throwException)) {
-      throw new ServiceUnavailableException("This is a test exception");
-    } else {
-      return "This is a test string";
-    }
-  }
-
-  @Override
-  public void testTaskExecution(Boolean slowTask) throws ServiceUnavailableException {
-    try {
-      DemoTaskData demoTaskData = new DemoTaskData("This is a test message.");
-
-      if ((slowTask != null) && (slowTask)) {
-        demoTaskData.setSlowTask(true);
-      }
-
-      executorService.queueTask("demo_task", demoTaskData);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to execute the Demo Task");
-    }
-  }
+  /**
+   * Test task execution.
+   *
+   * @param slowTask test the execution of a slow task
+   * @throws ServiceUnavailableException if an error occurred
+   */
+  @Operation(summary = "Test task execution", description = "Test task execution")
+  @RequestMapping(
+      value = "/test-task-execution",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  void testTaskExecution(
+      @Parameter(name = "slowTask", description = "Test the execution of a slow task") @RequestParam
+          Boolean slowTask)
+      throws ServiceUnavailableException;
 }

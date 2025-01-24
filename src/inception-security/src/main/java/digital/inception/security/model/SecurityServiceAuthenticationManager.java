@@ -16,7 +16,7 @@
 
 package digital.inception.security.model;
 
-import digital.inception.security.service.ISecurityService;
+import digital.inception.security.service.SecurityService;
 import java.util.UUID;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 public class SecurityServiceAuthenticationManager implements AuthenticationManager {
 
   /** The Security Service. */
-  private final ISecurityService securityService;
+  private final SecurityService securityService;
 
   /** The User Details Service. */
   private final UserDetailsService userDetailsService;
@@ -52,7 +52,7 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
    * @param userDetailsService the User Details Service
    */
   public SecurityServiceAuthenticationManager(
-      ISecurityService securityService, UserDetailsService userDetailsService) {
+      SecurityService securityService, UserDetailsService userDetailsService) {
     this.securityService = securityService;
     this.userDetailsService = userDetailsService;
   }

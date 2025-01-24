@@ -16,7 +16,7 @@
 
 package digital.inception.sms.ws;
 
-import digital.inception.sms.service.ISMSService;
+import digital.inception.sms.service.SMSService;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 
@@ -34,14 +34,14 @@ import jakarta.jws.soap.SOAPBinding;
 public class SMSWebService {
 
   /** The SMS Service. */
-  private final ISMSService smsService;
+  private final SMSService smsService;
 
   /**
    * Constructs a new <b>SMSWebService</b>.
    *
    * @param smsService the SMS Service
    */
-  public SMSWebService(ISMSService smsService) {
+  public SMSWebService(SMSService smsService) {
     this.smsService = smsService;
   }
 }

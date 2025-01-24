@@ -16,7 +16,7 @@
 
 package digital.inception.executor.controller;
 
-import digital.inception.api.SecureApiController;
+import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -32,167 +32,1027 @@ import digital.inception.executor.model.TaskStatus;
 import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskType;
 import digital.inception.executor.model.TaskTypeNotFoundException;
-import digital.inception.executor.service.IExecutorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ExecutorApiController</b> class.
+ * The <b>ExecutorApiController</b> interface.
  *
  * @author Marcus Portmann
  */
-@RestController
-@CrossOrigin
-@SuppressWarnings({"unused"})
-public class ExecutorApiController extends SecureApiController implements IExecutorApiController {
-
-  /** The Executor Service. */
-  private final IExecutorService executorService;
+@Tag(name = "Executor")
+@RequestMapping(value = "/api/executor")
+// @el (isSecurityDisabled:
+// digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+public interface ExecutorApiController {
 
   /**
-   * Constructs a new <b>ExecutorApiController</b>.
+   * Cancel the batch.
    *
-   * @param applicationContext the Spring application context
-   * @param executorService the Executor Service
+   * @param batchId the ID for the batch
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws BatchTasksNotFoundException if no tasks could be found for the batch
+   * @throws ServiceUnavailableException if the batch could not be cancelled
    */
-  public ExecutorApiController(
-      ApplicationContext applicationContext, IExecutorService executorService) {
-    super(applicationContext);
+  @Operation(summary = "Cancel the batch", description = "Cancel the batch")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The batch was successfully cancelled"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "No tasks could be found for the batch",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/batches/{batchId}/cancel",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void cancelBatch(
+      @Parameter(name = "batchId", description = "The ID for the batch", required = true)
+          @PathVariable
+          String batchId)
+      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
-    this.executorService = executorService;
-  }
-
-  @Override
-  public void cancelBatch(String batchId)
-      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
-    executorService.cancelBatch(batchId);
-  }
-
-  @Override
-  public void cancelTask(UUID taskId)
+  /**
+   * Cancel the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be cancelled
+   */
+  @Operation(summary = "Cancel the task", description = "Cancel the task")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task was successfully cancelled"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The status of the task is invalid for the operation",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/tasks/{taskId}/cancel",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void cancelTask(
+      @Parameter(name = "taskId", description = "The ID for the task", required = true)
+          @PathVariable
+          UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
           InvalidTaskStatusException,
-          ServiceUnavailableException {
-    executorService.cancelTask(taskId);
-  }
+          ServiceUnavailableException;
 
-  @Override
-  public void createTaskType(TaskType taskType)
-      throws InvalidArgumentException, DuplicateTaskTypeException, ServiceUnavailableException {
-    executorService.createTaskType(taskType);
-  }
+  /**
+   * Create the task type.
+   *
+   * @param taskType the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateTaskTypeException if the task type already exists
+   * @throws ServiceUnavailableException if the task type could not be created
+   */
+  @Operation(summary = "Create the task type", description = "Create the task type")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task type was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A task type with the specified code already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-types",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
+  void createTaskType(
+      @RequestBody
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The task type to create",
+              required = true)
+          TaskType taskType)
+      throws InvalidArgumentException, DuplicateTaskTypeException, ServiceUnavailableException;
 
-  @Override
-  public void deleteTask(UUID taskId)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    executorService.deleteTask(taskId);
-  }
+  /**
+   * Delete the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task could not be deleted
+   */
+  @Operation(summary = "Delete the task", description = "Delete the task")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/tasks/{taskId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void deleteTask(
+      @Parameter(name = "taskId", description = "The ID for the task", required = true)
+          @PathVariable
+          UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void deleteTaskType(String taskTypeCode)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    executorService.deleteTaskType(taskTypeCode);
-  }
+  /**
+   * Delete the task type.
+   *
+   * @param taskTypeCode the code for the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be deleted
+   */
+  @Operation(summary = "Delete the task type", description = "Delete the task type")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task type was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task type could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-types/{taskTypeCode}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
+  void deleteTaskType(
+      @Parameter(name = "taskTypeCode", description = "The code for the task type", required = true)
+          @PathVariable
+          String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public Task getTask(UUID taskId)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    return executorService.getTask(taskId);
-  }
+  /**
+   * Retrieve the task
+   *
+   * @param taskId the ID for the task
+   * @return the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task could not be retrieved
+   */
+  @Operation(summary = "Retrieve the task", description = "Retrieve the task")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/tasks/{taskId}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  Task getTask(
+      @Parameter(name = "taskId", description = "The ID for the task", required = true)
+          @PathVariable
+          UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public List<TaskEvent> getTaskEventsForTask(UUID taskId)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    return executorService.getTaskEventsForTask(taskId);
-  }
+  /**
+   * Retrieve the task events for a task
+   *
+   * @param taskId the ID for the task
+   * @return the task events for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task events for the task could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the task events for a task",
+      description = "Retrieve the task events for a task")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/tasks/{taskId}/task-events",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  List<TaskEvent> getTaskEventsForTask(
+      @Parameter(name = "taskId", description = "The ID for the task", required = true)
+          @PathVariable
+          UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public TaskSummaries getTaskSummaries(
-      String taskTypeCode,
-      TaskStatus status,
-      String filter,
-      TaskSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return executorService.getTaskSummaries(
-        taskTypeCode, status, filter, sortBy, sortDirection, pageIndex, pageSize);
-  }
+  /**
+   * Retrieve the summaries for the tasks.
+   *
+   * @param type the task type code filter to apply to the task summaries
+   * @param status the status filter to apply to the task summaries
+   * @param filter the filter to apply to the task summaries
+   * @param sortBy the method used to sort the task summaries e.g. by type
+   * @param sortDirection the sort direction to apply to the task summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the tasks
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the tasks summaries could not be retrieved
+   */
+  @Operation(summary = "Retrieve the task summaries", description = "Retrieve the task summaries")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  TaskSummaries getTaskSummaries(
+      @Parameter(
+              name = "type",
+              description = "The task type code filter to apply to the task summaries")
+          @RequestParam(value = "type", required = false)
+          String type,
+      @Parameter(
+              name = "status",
+              description = "The status filter to apply to the task summaries")
+          @RequestParam(value = "status", required = false)
+          TaskStatus status,
+      @Parameter(
+              name = "filter",
+              description = "The filter to apply to the task summaries")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The method used to sort the task summaries e.g. by type")
+          @RequestParam(value = "sortBy", required = false)
+          TaskSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the task summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public TaskType getTaskType(String taskTypeCode)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    return executorService.getTaskType(taskTypeCode);
-  }
+  /**
+   * Retrieve the task type
+   *
+   * @param taskTypeCode the code for the task type
+   * @return the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be retrieved
+   */
+  @Operation(summary = "Retrieve the task type", description = "Retrieve the task type")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task type could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-types/{taskTypeCode}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
+  TaskType getTaskType(
+      @Parameter(name = "taskTypeCode", description = "The code for the task type", required = true)
+          @PathVariable
+          String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public String getTaskTypeName(String taskTypeCode)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    return executorService.getTaskTypeName(taskTypeCode);
-  }
+  /**
+   * Retrieve the name of the task type.
+   *
+   * @param taskTypeCode the code for the task type
+   * @return the name of the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the name of the task type could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the name of the task type",
+      description = "Retrieve the name of the task type")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task type could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-types/{taskTypeCode}/name",
+      method = RequestMethod.GET,
+      produces = "text/plain")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
+  String getTaskTypeName(
+      @Parameter(name = "taskTypeCode", description = "The code for the task type", required = true)
+          @PathVariable
+          String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public List<TaskType> getTaskTypes() throws ServiceUnavailableException {
-    return executorService.getTaskTypes();
-  }
+  /**
+   * Retrieve all the task types.
+   *
+   * @return the task types
+   * @throws ServiceUnavailableException if the task types could not be retrieved
+   */
+  @Operation(summary = "Retrieve all the task types", description = "Retrieve all the task types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-types",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
+  List<TaskType> getTaskTypes() throws ServiceUnavailableException;
 
-  @Override
-  public UUID queueTask(QueueTaskRequest queueTaskRequest)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    return executorService.queueTask(queueTaskRequest);
-  }
+  /**
+   * Queue a task for execution.
+   *
+   * @param queueTaskRequest the request to queue a task for execution
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  @Operation(summary = "Queue a task for execution", description = "Queue a task for execution")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task type could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/queue-task",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  UUID queueTask(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to queue a task for execution",
+              required = true)
+          @RequestBody
+          QueueTaskRequest queueTaskRequest)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void suspendBatch(String batchId)
-      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
-    executorService.suspendBatch(batchId);
-  }
+  /**
+   * Suspend the batch.
+   *
+   * @param batchId the ID for the batch
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws BatchTasksNotFoundException if no tasks could be found for the batch
+   * @throws ServiceUnavailableException if the batch could not be suspended
+   */
+  @Operation(summary = "Suspend the batch", description = "Suspend the batch")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The batch was successfully suspended"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "No tasks could be found for the batch",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/batches/{batchId}/suspend",
+      method = RequestMethod.PATCH,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void suspendBatch(
+      @Parameter(name = "batchId", description = "The ID for the batch", required = true)
+          @PathVariable
+          String batchId)
+      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void suspendTask(UUID taskId)
+  /**
+   * Suspend the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be suspended
+   */
+  @Operation(summary = "Suspend the task", description = "Suspend the task")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task was successfully suspended"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The status of the task is invalid for the operation",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/tasks/{taskId}/suspend",
+      method = RequestMethod.PATCH,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void suspendTask(
+      @Parameter(name = "taskId", description = "The ID for the task", required = true)
+          @PathVariable
+          UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
           InvalidTaskStatusException,
-          ServiceUnavailableException {
-    executorService.suspendTask(taskId);
-  }
+          ServiceUnavailableException;
 
-  @Override
-  public void unsuspendBatch(String batchId)
-      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
-    executorService.unsuspendBatch(batchId);
-  }
+  /**
+   * Unsuspend the batch.
+   *
+   * @param batchId the ID for the batch
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws BatchTasksNotFoundException if no tasks could be found for the batch
+   * @throws ServiceUnavailableException if the batch could not be unsuspended
+   */
+  @Operation(summary = "Unsuspend the batch", description = "Unsuspend the batch")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The batch was successfully unsuspended"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "No tasks could be found for the batch",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/batches/{batchId}/unsuspend",
+      method = RequestMethod.PATCH,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void unsuspendBatch(
+      @Parameter(name = "batchId", description = "The ID for the batch", required = true)
+          @PathVariable
+          String batchId)
+      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void unsuspendTask(UUID taskId)
+  /**
+   * Unsuspend the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be unsuspended
+   */
+  @Operation(summary = "Unsuspend the task", description = "Unsuspend the task")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task was successfully unsuspended"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The status of the task is invalid for the operation",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/tasks/{taskId}/unsuspend",
+      method = RequestMethod.PATCH,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void unsuspendTask(
+      @Parameter(name = "taskId", description = "The ID for the task", required = true)
+          @PathVariable
+          UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
           InvalidTaskStatusException,
-          ServiceUnavailableException {
-    executorService.unsuspendTask(taskId);
-  }
+          ServiceUnavailableException;
 
-  @Override
-  public void updateTaskType(String taskTypeCode, TaskType taskType)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(taskTypeCode)) {
-      throw new InvalidArgumentException("taskTypeCode");
-    }
-
-    if (taskType == null) {
-      throw new InvalidArgumentException("taskType");
-    }
-
-    if (!taskTypeCode.equals(taskType.getCode())) {
-      throw new InvalidArgumentException("taskType");
-    }
-
-    executorService.updateTaskType(taskType);
-  }
+  /**
+   * Update the task type.
+   *
+   * @param taskTypeCode the code for the task type
+   * @param taskType the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be updated
+   */
+  @Operation(summary = "Update the task type", description = "Update the task type")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task type was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task type could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/task-types/{taskTypeCode}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskTypeAdministration')")
+  void updateTaskType(
+      @Parameter(name = "taskTypeCode", description = "The code for the task type", required = true)
+          @PathVariable
+          String taskTypeCode,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The task type to update",
+              required = true)
+          @RequestBody
+          TaskType taskType)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 }

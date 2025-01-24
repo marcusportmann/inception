@@ -16,9 +16,9 @@
 
 package digital.inception.executor.constraint;
 
-import digital.inception.executor.model.ITaskExecutor;
+import digital.inception.executor.model.TaskExecutor;
 import digital.inception.executor.model.TaskType;
-import digital.inception.executor.service.IExecutorService;
+import digital.inception.executor.service.ExecutorService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
@@ -41,7 +41,7 @@ import org.springframework.util.StringUtils;
 public class ValidTaskTypeValidator implements ConstraintValidator<ValidTaskType, TaskType> {
 
   /** The Executor Service. */
-  private final IExecutorService executorService;
+  private final ExecutorService executorService;
 
   /**
    * Constructs a new <b>ValidTaskTypeValidator</b>.
@@ -49,7 +49,7 @@ public class ValidTaskTypeValidator implements ConstraintValidator<ValidTaskType
    * @param executorService the Executor Service
    */
   @Autowired
-  public ValidTaskTypeValidator(IExecutorService executorService) {
+  public ValidTaskTypeValidator(ExecutorService executorService) {
     this.executorService = executorService;
   }
 
@@ -78,7 +78,7 @@ public class ValidTaskTypeValidator implements ConstraintValidator<ValidTaskType
                     .getContextClassLoader()
                     .loadClass(taskType.getExecutorClass());
 
-            if (!ITaskExecutor.class.isAssignableFrom(taskExecutorClass)) {
+            if (!TaskExecutor.class.isAssignableFrom(taskExecutorClass)) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("executorClass", taskType.getExecutorClass())
                   .buildConstraintViolationWithTemplate(

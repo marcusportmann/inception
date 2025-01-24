@@ -14,139 +14,70 @@
  * limitations under the License.
  */
 
-package demo.service;
+package digital.inception.demo.service;
 
-import demo.model.Data;
-import demo.model.ReactiveData;
-import demo.persistence.r2dbc.ReactiveDataRepository;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import digital.inception.demo.model.Data;
+import digital.inception.demo.model.ReactiveData;
 import java.util.List;
-import java.util.Set;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
 /**
- * The <b>DemoService</b> class provides the Demo Service implementation.
+ * The <b>DataService</b> interface defines the functionality that must be provided by a Data
+ * Service implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class DataService implements IDataService {
-
-  /** The Reactive Data Repository. */
-  private final ReactiveDataRepository reactiveDataRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /* Entity Manager */
-  @PersistenceContext(unitName = "application")
-  private EntityManager entityManager;
+@SuppressWarnings("unused")
+public interface DataService {
 
   /**
-   * Constructs a new <b>DemoService</b>.
+   * Create the data.
    *
-   * @param validator the JSR-380 validator
-   * @param reactiveDataRepository the Reactive Data Repository
+   * @param data the data
+   * @throws ServiceUnavailableException if the data could not be created
    */
-  public DataService(Validator validator, ReactiveDataRepository reactiveDataRepository) {
-    this.validator = validator;
-    this.reactiveDataRepository = reactiveDataRepository;
-  }
+  void createData(Data data) throws ServiceUnavailableException;
 
-  @Override
-  @Transactional
-  public void createData(Data data) throws ServiceUnavailableException {
-    try {
-      entityManager.persist(data);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to add the data", e);
-    }
-  }
+  /**
+   * Create the sample data.
+   *
+   * @throws ServiceUnavailableException if the sample data could not be created
+   */
+  void createSampleData() throws ServiceUnavailableException;
 
-  @Override
-  @Transactional
-  public void createSampleData() throws ServiceUnavailableException {
-    try {
-      Data newData = new Data();
-      newData.setId(666);
-      newData.setBooleanValue(true);
-      newData.setDateValue(LocalDate.now());
-      newData.setIntegerValue(777);
-      newData.setStringValue("New String Value");
-      newData.setTimestampValue(LocalDateTime.now());
-      newData.setTimestampWithTimeZoneValue(OffsetDateTime.now());
+  /**
+   * Returns the data.
+   *
+   * @return the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
+   */
+  List<Data> getAllData() throws ServiceUnavailableException;
 
-      entityManager.persist(newData);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to add the data", e);
-    }
-  }
+  /**
+   * Returns all the reactive data.
+   *
+   * @return the reactive data
+   * @throws ServiceUnavailableException if the reactive data could not be retrieved
+   */
+  Flux<ReactiveData> getAllReactiveData() throws ServiceUnavailableException;
 
-  @Override
-  @Transactional
-  public List<Data> getAllData() throws ServiceUnavailableException {
-    try {
-      TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
+  /**
+   * Returns the data.
+   *
+   * @param id the ID for the data
+   * @return the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
+   */
+  Data getData(long id) throws ServiceUnavailableException;
 
-      return query.getResultList();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the data", e);
-    }
-  }
-
-  @Override
-  public Flux<ReactiveData> getAllReactiveData() throws ServiceUnavailableException {
-    return reactiveDataRepository.findAll();
-  }
-
-  @Override
-  @Transactional
-  public Data getData(long id) throws ServiceUnavailableException {
-    try {
-      TypedQuery<Data> query =
-          entityManager.createQuery("SELECT d FROM Data d WHERE d.id=:id", Data.class);
-
-      query.setParameter("id", id);
-
-      List<Data> list = query.getResultList();
-
-      if (!list.isEmpty()) {
-        return list.getFirst();
-      } else {
-        return null;
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the data (" + id + ")", e);
-    }
-  }
-
-  @Override
-  public void validateData(Data data) throws InvalidArgumentException, ServiceUnavailableException {
-    try {
-      Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
-
-      if (!constraintViolations.isEmpty()) {
-        throw new InvalidArgumentException(
-            "data", ValidationError.toValidationErrors(constraintViolations));
-      }
-
-    } catch (InvalidArgumentException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to validate the data", e);
-    }
-  }
+  /**
+   * Validate the data.
+   *
+   * @param data the data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the data could not be validated
+   */
+  void validateData(Data data) throws InvalidArgumentException, ServiceUnavailableException;
 }

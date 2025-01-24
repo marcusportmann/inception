@@ -59,7 +59,7 @@ public class TestTransactionalServiceTest {
 
   @Autowired private PlatformTransactionManager platformTransactionManager;
 
-  @Autowired private ITestTransactionalService testTransactionalService;
+  @Autowired private TestTransactionalService testTransactionalService;
 
   private static synchronized TestData getTestData() {
     testDataCount++;

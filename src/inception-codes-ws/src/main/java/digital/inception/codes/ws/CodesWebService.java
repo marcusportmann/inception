@@ -23,7 +23,7 @@ import digital.inception.codes.model.CodeCategorySummary;
 import digital.inception.codes.model.CodeNotFoundException;
 import digital.inception.codes.model.DuplicateCodeCategoryException;
 import digital.inception.codes.model.DuplicateCodeException;
-import digital.inception.codes.service.ICodesService;
+import digital.inception.codes.service.CodesService;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import jakarta.jws.WebMethod;
@@ -50,14 +50,14 @@ import org.springframework.util.StringUtils;
 public class CodesWebService {
 
   /** The Codes Service. */
-  private final ICodesService codesService;
+  private final CodesService codesService;
 
   /**
    * Constructs a new <b>CodesWebService</b>.
    *
    * @param codesService the Codes Service
    */
-  public CodesWebService(ICodesService codesService) {
+  public CodesWebService(CodesService codesService) {
     this.codesService = codesService;
   }
 

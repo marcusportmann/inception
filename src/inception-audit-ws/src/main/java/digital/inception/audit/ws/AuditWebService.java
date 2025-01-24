@@ -16,7 +16,7 @@
 
 package digital.inception.audit.ws;
 
-import digital.inception.audit.service.IAuditService;
+import digital.inception.audit.service.AuditService;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 
@@ -34,14 +34,14 @@ import jakarta.jws.soap.SOAPBinding;
 public class AuditWebService {
 
   /** The Audit Service. */
-  private final IAuditService auditService;
+  private final AuditService auditService;
 
   /**
    * Constructs a new <b>AuditWebService</b>.
    *
    * @param auditService the Audit Service
    */
-  public AuditWebService(IAuditService auditService) {
+  public AuditWebService(AuditService auditService) {
     this.auditService = auditService;
   }
 }

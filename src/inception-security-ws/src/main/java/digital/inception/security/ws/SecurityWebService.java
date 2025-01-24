@@ -73,7 +73,7 @@ import digital.inception.security.model.UserLockedException;
 import digital.inception.security.model.UserNotFoundException;
 import digital.inception.security.model.UserSortBy;
 import digital.inception.security.model.Users;
-import digital.inception.security.service.ISecurityService;
+import digital.inception.security.service.SecurityService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -102,7 +102,7 @@ import org.springframework.util.StringUtils;
 public class SecurityWebService {
 
   /** The Security Service. */
-  private final ISecurityService securityService;
+  private final SecurityService securityService;
 
   /** The JSR-380 validator. */
   private final Validator validator;
@@ -113,7 +113,7 @@ public class SecurityWebService {
    * @param securityService the Security Service
    * @param validator the JSR-380 validator
    */
-  public SecurityWebService(ISecurityService securityService, Validator validator) {
+  public SecurityWebService(SecurityService securityService, Validator validator) {
     this.securityService = securityService;
     this.validator = validator;
   }

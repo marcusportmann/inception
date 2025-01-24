@@ -52,7 +52,7 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
 
   private static final AttributeKey<String> THREAD_NAME = AttributeKey.stringKey("thread.name");
 
-  private static final Logger logger =
+  private static final Logger log =
       Logger.getLogger(RateLimitedRuleBasedSampler.class.getName());
 
   private final boolean enableRuleLogging;
@@ -88,7 +88,7 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
         Objects.requireNonNull(fallbackSampler, "fallback sampler must not be null");
     this.rules = List.copyOf(Objects.requireNonNull(rules, "rules must not be null"));
 
-    logger.info(
+    log.info(
         String.format(
             "Initialized the RateLimitedRuleBasedSampler with enableRuleLogging=%b, spansPerSecondLimit=%d, fallbackSampler=%s, rules=%s",
             enableRuleLogging, spansPerSecondLimit, fallbackSampler, rules));
@@ -131,8 +131,8 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
           && attributeValue != null
           && rule.getPattern().matcher(attributeValue).find()) {
 
-        if (enableRuleLogging || logger.isLoggable(Level.FINE)) {
-          logger.log(enableRuleLogging ? Level.INFO :Level.FINE,
+        if (enableRuleLogging || log.isLoggable(Level.FINE)) {
+          log.log(enableRuleLogging ? Level.INFO :Level.FINE,
               "Rule with span kind ("
                   + rule.getSpanKind()
                   + "), attribute ("
@@ -151,8 +151,8 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
         }
 
         if (!rateLimiter.tryAcquire()) {
-          if (enableRuleLogging || logger.isLoggable(Level.FINE)) {
-            logger.log(enableRuleLogging ? Level.INFO :Level.FINE,
+          if (enableRuleLogging || log.isLoggable(Level.FINE)) {
+            log.log(enableRuleLogging ? Level.INFO :Level.FINE,
                 "Spans per second rate limit ("
                     + spansPerSecondLimit
                     + ") exceeded when processing span with trace ID ("
@@ -174,8 +174,8 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
       }
     }
 
-    if (enableRuleLogging || logger.isLoggable(Level.FINE)) {
-      logger.log(enableRuleLogging ? Level.INFO :Level.FINE,
+    if (enableRuleLogging || log.isLoggable(Level.FINE)) {
+      log.log(enableRuleLogging ? Level.INFO :Level.FINE,
           "No rules match the span with trace ID ("
               + traceId
               + "), kind ("

@@ -19,7 +19,7 @@ package digital.inception.party.ws;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.party.model.*;
-import digital.inception.party.service.IPartyReferenceService;
+import digital.inception.party.service.PartyReferenceService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -43,14 +43,14 @@ import java.util.UUID;
 public class PartyReferenceWebService {
 
   /** The Party Reference Service. */
-  private final IPartyReferenceService partyReferenceService;
+  private final PartyReferenceService partyReferenceService;
 
   /**
    * Constructs a new <b>PartyReferenceWebService</b>.
    *
    * @param partyReferenceService the Party Reference Service
    */
-  public PartyReferenceWebService(IPartyReferenceService partyReferenceService) {
+  public PartyReferenceWebService(PartyReferenceService partyReferenceService) {
     this.partyReferenceService = partyReferenceService;
   }
 

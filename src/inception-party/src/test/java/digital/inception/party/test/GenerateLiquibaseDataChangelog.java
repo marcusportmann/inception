@@ -58,7 +58,7 @@ import digital.inception.party.model.StatusTypeCategory;
 import digital.inception.party.model.TaxNumberType;
 import digital.inception.party.model.TimeToContact;
 import digital.inception.party.model.Title;
-import digital.inception.party.service.IPartyReferenceService;
+import digital.inception.party.service.PartyReferenceService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -107,7 +107,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
   private final ApplicationContext applicationContext;
 
   /** The Party Reference Service. */
-  private final IPartyReferenceService partyReferenceService;
+  private final PartyReferenceService partyReferenceService;
 
   /**
    * Constructs a new <b>GenerateLiquibaseDataChangelog</b>.
@@ -116,7 +116,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
    * @param partyReferenceService the Party Reference Service
    */
   public GenerateLiquibaseDataChangelog(
-      ApplicationContext applicationContext, IPartyReferenceService partyReferenceService) {
+      ApplicationContext applicationContext, PartyReferenceService partyReferenceService) {
     this.applicationContext = applicationContext;
     this.partyReferenceService = partyReferenceService;
   }

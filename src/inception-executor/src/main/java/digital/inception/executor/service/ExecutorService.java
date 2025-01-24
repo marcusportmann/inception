@@ -16,22 +16,17 @@
 
 package digital.inception.executor.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.util.ServiceUtil;
 import digital.inception.executor.model.ArchivedTask;
 import digital.inception.executor.model.ArchivedTaskNotFoundException;
 import digital.inception.executor.model.BatchTasksNotFoundException;
 import digital.inception.executor.model.DuplicateTaskTypeException;
-import digital.inception.executor.model.ITaskExecutor;
 import digital.inception.executor.model.InvalidTaskStatusException;
 import digital.inception.executor.model.QueueTaskRequest;
 import digital.inception.executor.model.Task;
 import digital.inception.executor.model.TaskEvent;
-import digital.inception.executor.model.TaskEventType;
 import digital.inception.executor.model.TaskExecutionDelayedException;
 import digital.inception.executor.model.TaskExecutionFailedException;
 import digital.inception.executor.model.TaskExecutionResult;
@@ -40,632 +35,231 @@ import digital.inception.executor.model.TaskNotFoundException;
 import digital.inception.executor.model.TaskSortBy;
 import digital.inception.executor.model.TaskStatus;
 import digital.inception.executor.model.TaskSummaries;
-import digital.inception.executor.model.TaskSummary;
 import digital.inception.executor.model.TaskType;
 import digital.inception.executor.model.TaskTypeNotFoundException;
-import digital.inception.executor.persistence.ArchivedTaskRepository;
-import digital.inception.executor.persistence.TaskEventRepository;
-import digital.inception.executor.persistence.TaskRepository;
-import digital.inception.executor.persistence.TaskSummaryRepository;
-import digital.inception.executor.persistence.TaskTypeRepository;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
- * The <b>ExecutorService</b> class provides the Executor Service implementation.
- *
- * <p>NOTE: The completeTask method, queueTask methods, requeueTask method, and unsuspendTask method
- * are explicitly not annotated with the @Transactional annotation to prevent a race condition
- * between committing the transaction to persist a task in the database and triggering the
- * asynchronous processing of the task in a separate thread. If the transaction is not committed,
- * the task will not be retrieved by the getNextTaskQueuedForExecution method invoked by the
- * BackgroundTaskExecutor.
+ * The <b>ExecutorService</b> interface defines the functionality provided by an Executor Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-@SuppressWarnings({"unused"})
-public class ExecutorService implements IExecutorService {
-
-  /** The maximum number of filtered tasks. */
-  private static final int MAX_FILTERED_TASKS = 100;
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(ExecutorService.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /** The Archived Task Repository. */
-  private final ArchivedTaskRepository archivedTaskRepository;
-
-  /* The name of the Executor Service instance. */
-  private final String instanceName = ServiceUtil.getServiceInstanceName("ExecutorService");
-
-  /** The Task Event Repository. */
-  private final TaskEventRepository taskEventRepository;
-
-  private final ConcurrentHashMap<String, ITaskExecutor> taskExecutors = new ConcurrentHashMap<>();
-
-  /** The Task Repository. */
-  private final TaskRepository taskRepository;
-
-  /** The Task Summary Repository. */
-  private final TaskSummaryRepository taskSummaryRepository;
-
-  /** The Task Type Repository. */
-  private final TaskTypeRepository taskTypeRepository;
-
-  private final ReadWriteLock taskTypesLock = new ReentrantReadWriteLock();
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /* Entity Manager */
-  @PersistenceContext(unitName = "executor")
-  private EntityManager entityManager;
-
-  /*
-   * The number of days historical tasks will be retained before they are archived or deleted.
-   */
-  @Value("${inception.executor.historical-task-retention-days:60}")
-  private int historicalTaskRetentionDays;
-
-  /** Is debugging enabled for the Inception Framework? */
-  @Value("${inception.debug.enabled:#{false}}")
-  private boolean inDebugMode;
-
-  /*
-   * The maximum number of times the execution of a task will be attempted.
-   */
-  @Value("${inception.executor.maximum-task-execution-attempts:144}")
-  private int maximumTaskExecutionAttempts;
-
-  /*
-   * The delay in milliseconds between successive attempts to execute a task.
-   */
-  @Value("${inception.executor.task-execution-retry-delay:60000}")
-  private long taskExecutionRetryDelay;
-
-  /*
-   * The amount of time in milliseconds after which a locked and executing task will be considered
-   * "hung" and will be reset.
-   */
-  @Value("${inception.executor.task-execution-timeout:43200000}")
-  private long taskExecutionTimeout;
-
-  private volatile ConcurrentHashMap<String, TaskType> taskTypes;
+public interface ExecutorService {
 
   /**
-   * Constructs a new <b>ExecutorService</b>.
+   * Archive and delete the historical tasks.
    *
-   * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
-   * @param archivedTaskRepository the Archived Task Repository
-   * @param taskEventRepository the Task Event Repository
-   * @param taskRepository the Task Repository
-   * @param taskSummaryRepository the Task Summary Repository
-   * @param taskTypeRepository the Task Type Repository
+   * @throws ServiceUnavailableException if the historical tasks could not be archived and deleted
    */
-  public ExecutorService(
-      ApplicationContext applicationContext,
-      Validator validator,
-      ArchivedTaskRepository archivedTaskRepository,
-      TaskEventRepository taskEventRepository,
-      TaskRepository taskRepository,
-      TaskSummaryRepository taskSummaryRepository,
-      TaskTypeRepository taskTypeRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
-    this.archivedTaskRepository = archivedTaskRepository;
-    this.taskEventRepository = taskEventRepository;
-    this.taskRepository = taskRepository;
-    this.taskSummaryRepository = taskSummaryRepository;
-    this.taskTypeRepository = taskTypeRepository;
-  }
+  void archiveAndDeleteHistoricalTasks() throws ServiceUnavailableException;
 
-  @Override
-  @Transactional
-  public void archiveAndDeleteHistoricalTasks() throws ServiceUnavailableException {
-    try {
-      OffsetDateTime executedBefore = OffsetDateTime.now().minusDays(historicalTaskRetentionDays);
+  /**
+   * Cancel the batch.
+   *
+   * @param batchId the ID for the batch
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws BatchTasksNotFoundException if no tasks could be found for the batch
+   * @throws ServiceUnavailableException if the batch could not be cancelled
+   */
+  void cancelBatch(String batchId)
+      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
-      // Keep looping while we still have historical tasks to archive or delete
-      while (true) {
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "queued");
-
-        Page<Task> tasks = taskRepository.findTasksToArchiveAndDelete(executedBefore, pageable);
-
-        // We have no more tasks to process
-        if (tasks.isEmpty()) {
-          return;
-        }
-
-        tasks.forEach(
-            (task -> {
-              TaskType taskType;
-              try {
-                taskType = getTaskType(task.getType());
-              } catch (Throwable e) {
-                log.error(
-                    "Failed to retrieve the task type ("
-                        + task.getType()
-                        + ") for the task ("
-                        + task.getId()
-                        + "). The task will be DELETED");
-                taskType = null;
-              }
-
-              if (taskType != null) {
-                if (((task.getStatus() == TaskStatus.COMPLETED) && (taskType.getArchiveCompleted()))
-                    || ((task.getStatus() == TaskStatus.FAILED) && (taskType.getArchiveFailed()))) {
-                  if (log.isDebugEnabled()) {
-                    log.debug(
-                        "Archiving the task ("
-                            + task.getId()
-                            + ") with type ("
-                            + task.getType()
-                            + ") and status ("
-                            + task.getStatus()
-                            + ")");
-                  }
-
-                  archiveTask(task);
-                }
-
-                if (log.isDebugEnabled()) {
-                  log.debug(
-                      "Deleting the task ("
-                          + task.getId()
-                          + ") with type ("
-                          + task.getType()
-                          + ") and status ("
-                          + task.getStatus()
-                          + ")");
-                }
-
-                taskRepository.deleteById(task.getId());
-              } else {
-                if (log.isDebugEnabled()) {
-                  log.debug(
-                      "Deleting the task ("
-                          + task.getId()
-                          + ") with type ("
-                          + task.getType()
-                          + ") and status ("
-                          + task.getStatus()
-                          + ")");
-                }
-
-                taskRepository.deleteById(task.getId());
-              }
-            }));
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to archive and delete the historical tasks", e);
-    }
-  }
-
-  @Override
-  public void cancelBatch(String batchId)
-      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(batchId)) {
-      throw new InvalidArgumentException("batchId");
-    }
-
-    try {
-      if (taskRepository.countByBatchId(batchId) == 0) {
-        throw new BatchTasksNotFoundException(batchId);
-      }
-
-      taskRepository.cancelBatch(batchId);
-    } catch (BatchTasksNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to cancel the batch (" + batchId + ")", e);
-    }
-  }
-
-  @Override
-  public void cancelTask(UUID taskId)
+  /**
+   * Cancel the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be cancelled
+   */
+  void cancelTask(UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
           InvalidTaskStatusException,
-          ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      if (!taskRepository.existsById(taskId)) {
-        throw new TaskNotFoundException(taskId);
-      }
+  /**
+   * Complete the task.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param task the task
+   * @param taskExecutionResult the result of executing the task, including the next step for a
+   *     multistep task and whether the task data should be updated
+   * @param executionTime the time taken to complete the current task step for a multistep task or
+   *     the task for a single step task in milliseconds
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the task could not be completed
+   */
+  void completeTask(Task task, TaskExecutionResult taskExecutionResult, long executionTime)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-      if (taskRepository.cancelTask(taskId) == 0) {
-        throw new InvalidTaskStatusException(taskId);
-      }
-    } catch (TaskNotFoundException | InvalidTaskStatusException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to cancel the task (" + taskId + ")", e);
-    }
-  }
+  /**
+   * Create the new task type.
+   *
+   * @param taskType the <b>TaskType</b> instance containing the information for the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateTaskTypeException if the task type already exists
+   * @throws ServiceUnavailableException if the task type could not be created
+   */
+  void createTaskType(TaskType taskType)
+      throws InvalidArgumentException, DuplicateTaskTypeException, ServiceUnavailableException;
 
-  @Override
-  public void completeTask(Task task, TaskExecutionResult taskExecutionResult, long executionTime)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (task == null) {
-      throw new InvalidArgumentException("task");
-    }
+  /**
+   * Delay the task.
+   *
+   * @param task the task
+   * @param delay the delay for the task in milliseconds
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the task could not be delayed
+   */
+  void delayTask(Task task, long delay)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if (taskExecutionResult == null) {
-      throw new InvalidArgumentException("taskExecutionResult");
-    }
+  /**
+   * Delete the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task could not be deleted
+   */
+  void deleteTask(UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-    try {
-      TaskType taskType = getTaskType(task.getType());
+  /**
+   * Delete the task type.
+   *
+   * @param taskTypeCode the code for the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be deleted
+   */
+  void deleteTaskType(String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-      // If we need to move to the next task step for a multistep task
-      if (taskExecutionResult.getNextTaskStep() != null) {
-        OffsetDateTime nextExecution =
-            (taskExecutionResult.getNextTaskStepDelay() != null)
-                ? OffsetDateTime.now()
-                    .plus(taskExecutionResult.getNextTaskStepDelay(), ChronoUnit.MILLIS)
-                : OffsetDateTime.now();
-
-        // If we have to update the task data after executing the previous task step
-        if (StringUtils.hasText(taskExecutionResult.getUpdatedTaskData())) {
-          taskRepository.advanceTaskToStep(
-              task.getId(),
-              taskExecutionResult.getNextTaskStep().getCode(),
-              taskExecutionResult.getUpdatedTaskData(),
-              nextExecution,
-              executionTime);
-
-          task.setData(taskExecutionResult.getUpdatedTaskData());
-        } else {
-          taskRepository.advanceTaskToStep(
-              task.getId(),
-              taskExecutionResult.getNextTaskStep().getCode(),
-              nextExecution,
-              executionTime);
-        }
-
-        createTaskEvent(TaskEventType.STEP_COMPLETED, taskType, task);
-
-        applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
-      }
-      // Complete the single step task, or the last step of a multistep task
-      else {
-        if (StringUtils.hasText(taskExecutionResult.getUpdatedTaskData())) {
-          taskRepository.completeTask(
-              task.getId(),
-              OffsetDateTime.now(),
-              taskExecutionResult.getUpdatedTaskData(),
-              executionTime);
-
-          task.setData(taskExecutionResult.getUpdatedTaskData());
-        } else {
-          taskRepository.completeTask(task.getId(), OffsetDateTime.now(), executionTime);
-        }
-
-        createTaskEvent(TaskEventType.TASK_COMPLETED, taskType, task);
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to complete the task", e);
-    }
-  }
-
-  @Override
-  public void createTaskType(TaskType taskType)
-      throws InvalidArgumentException, DuplicateTaskTypeException, ServiceUnavailableException {
-    validateTaskType(taskType);
-
-    try {
-      taskTypesLock.writeLock().lock();
-
-      try {
-        if (taskTypeRepository.existsById(taskType.getCode())) {
-          throw new DuplicateTaskTypeException(taskType.getCode());
-        }
-
-        taskTypeRepository.saveAndFlush(taskType);
-
-        taskTypes = null;
-      } catch (DuplicateTaskTypeException e) {
-        throw e;
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to create the task type (" + taskType.getCode() + ")", e);
-      }
-    } finally {
-      taskTypesLock.writeLock().unlock();
-    }
-  }
-
-  @Override
-  public void delayTask(Task task, long delay)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (task == null) {
-      throw new InvalidArgumentException("task");
-    }
-
-    try {
-      taskRepository.delayTask(task.getId(), OffsetDateTime.now().plus(delay, ChronoUnit.MILLIS));
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delay the task", e);
-    }
-  }
-
-  @Override
-  public void deleteTask(UUID taskId)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
-
-    try {
-      if (!taskRepository.existsById(taskId)) {
-        throw new TaskNotFoundException(taskId);
-      }
-
-      taskRepository.deleteById(taskId);
-    } catch (TaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delete the task (" + taskId + ")", e);
-    }
-  }
-
-  @Override
-  public void deleteTaskType(String taskTypeCode)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(taskTypeCode)) {
-      throw new InvalidArgumentException("taskTypeCode");
-    }
-
-    try {
-      taskTypesLock.writeLock().lock();
-
-      try {
-        if (!taskTypeRepository.existsById(taskTypeCode)) {
-          throw new TaskTypeNotFoundException(taskTypeCode);
-        }
-
-        taskTypeRepository.deleteById(taskTypeCode);
-
-        taskTypes = null;
-      } catch (TaskTypeNotFoundException e) {
-        throw e;
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to delete the task type (" + taskTypeCode + ")", e);
-      }
-    } finally {
-      taskTypesLock.writeLock().unlock();
-    }
-  }
-
-  @Override
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public TaskExecutionResult executeTask(Task task)
+  /**
+   * Execute the task.
+   *
+   * @param task the task
+   * @return the result of executing the task, including the next step for a multistep task and
+   *     whether the task data should be updated
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskExecutionFailedException if the task execution failed and cannot be retried
+   * @throws TaskExecutionRetryableException if the task execution failed because of temporary error
+   *     and can be retried
+   * @throws TaskExecutionDelayedException if the task execution should be delayed
+   */
+  TaskExecutionResult executeTask(Task task)
       throws InvalidArgumentException,
           TaskExecutionFailedException,
           TaskExecutionRetryableException,
-          TaskExecutionDelayedException {
-    validateTask(task);
+          TaskExecutionDelayedException;
 
-    try {
-      TaskType taskType = getTaskType(task.getType());
+  /**
+   * Fail the task.
+   *
+   * @param task the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the task could not be failed
+   */
+  void failTask(Task task) throws InvalidArgumentException, ServiceUnavailableException;
 
-      ITaskExecutor taskExecutor = getTaskExecutorForTaskType(taskType);
+  /**
+   * Retrieve the archived task.
+   *
+   * @param archivedTaskId the ID for the archived task
+   * @return the archived task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ArchivedTaskNotFoundException if the archived task could not be found
+   * @throws ServiceUnavailableException if the archived task could not be retrieved
+   */
+  ArchivedTask getArchivedTask(UUID archivedTaskId)
+      throws InvalidArgumentException, ArchivedTaskNotFoundException, ServiceUnavailableException;
 
-      return taskExecutor.executeTask(task);
-    } catch (TaskExecutionFailedException e) {
-      if (e.getOriginalMessage() != null) {
-        task.setFailure(e.getOriginalMessage());
-      }
-      throw e;
-    } catch (TaskExecutionRetryableException | TaskExecutionDelayedException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new TaskExecutionFailedException(task.getId(), e);
-    }
-  }
+  /**
+   * Retrieve the next task that is queued for execution.
+   *
+   * <p>The task will be locked to prevent duplicate processing.
+   *
+   * @return an Optional containing the next task that is queued for execution or an empty Optional
+   *     if no tasks are currently queued for execution
+   * @throws ServiceUnavailableException if the next task queued for execution could not be
+   *     retrieved
+   */
+  Optional<Task> getNextTaskQueuedForExecution() throws ServiceUnavailableException;
 
-  @Override
-  public void failTask(Task task) throws InvalidArgumentException, ServiceUnavailableException {
-    if (task == null) {
-      throw new InvalidArgumentException("task");
-    }
+  /**
+   * Retrieve the task.
+   *
+   * @param taskId the ID for the task
+   * @return the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task could not be retrieved
+   */
+  Task getTask(UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-    try {
-      TaskType taskType = getTaskType(task.getType());
+  /**
+   * Retrieve the task with the specified external reference.
+   *
+   * @param externalReference the external reference for the task
+   * @return the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task could not be retrieved
+   */
+  Task getTaskByExternalReference(String externalReference)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-      taskRepository.failTask(task.getId(), OffsetDateTime.now(), task.getFailure());
+  /**
+   * Retrieve the task events for the task.
+   *
+   * @param taskId the ID for the task
+   * @return the task events for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task events for the task could not be retrieved
+   */
+  List<TaskEvent> getTaskEventsForTask(UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-      createTaskEvent(TaskEventType.TASK_FAILED, taskType, task);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to fail the task", e);
-    }
-  }
+  /**
+   * Retrieve the status of the task.
+   *
+   * @param taskId the ID for the task
+   * @return the status of the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the status of the task could not be retrieved
+   */
+  TaskStatus getTaskStatus(UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public ArchivedTask getArchivedTask(UUID archivedTaskId)
-      throws InvalidArgumentException, ArchivedTaskNotFoundException, ServiceUnavailableException {
-    if (archivedTaskId == null) {
-      throw new InvalidArgumentException("archivedTaskId");
-    }
-
-    try {
-      Optional<ArchivedTask> archivedTaskOptional = archivedTaskRepository.findById(archivedTaskId);
-
-      if (archivedTaskOptional.isPresent()) {
-        return archivedTaskOptional.get();
-      } else {
-        throw new ArchivedTaskNotFoundException(archivedTaskId);
-      }
-    } catch (ArchivedTaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the archived task (" + archivedTaskId + ")", e);
-    }
-  }
-
-  @Override
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Optional<Task> getNextTaskQueuedForExecution() throws ServiceUnavailableException {
-    try {
-      // Handle the situation where different time precisions are used in the database
-      OffsetDateTime now = OffsetDateTime.now().plusSeconds(1);
-
-      PageRequest pageRequest = PageRequest.of(0, 1);
-
-      List<Task> tasks = taskRepository.findTasksQueuedForExecutionForWrite(now, pageRequest);
-
-      if (!tasks.isEmpty()) {
-        Task task = tasks.getFirst();
-
-        OffsetDateTime locked = OffsetDateTime.now();
-
-        taskRepository.lockTaskForExecution(task.getId(), instanceName, locked);
-
-        entityManager.detach(task);
-
-        task.setStatus(TaskStatus.EXECUTING);
-        task.setLocked(locked);
-        task.setLockName(instanceName);
-        task.incrementExecutionAttempts();
-
-        return Optional.of(task);
-      } else {
-        return Optional.empty();
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the next task that has been queued for execution", e);
-    }
-  }
-
-  @Override
-  public Task getTask(UUID taskId)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
-
-    try {
-      Optional<Task> taskOptional = taskRepository.findById(taskId);
-
-      if (taskOptional.isPresent()) {
-        return taskOptional.get();
-      } else {
-        throw new TaskNotFoundException(taskId);
-      }
-    } catch (TaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the task (" + taskId + ")", e);
-    }
-  }
-
-  @Override
-  public Task getTaskByExternalReference(String externalReference)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    if (externalReference == null) {
-      throw new InvalidArgumentException("externalReference");
-    }
-
-    try {
-      Optional<Task> taskOptional = taskRepository.findByExternalReference(externalReference);
-
-      if (taskOptional.isPresent()) {
-        return taskOptional.get();
-      } else {
-        throw new TaskNotFoundException(externalReference);
-      }
-    } catch (TaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the task with the external reference (" + externalReference + ")", e);
-    }
-  }
-
-  @Override
-  public List<TaskEvent> getTaskEventsForTask(UUID taskId)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
-
-    try {
-      if (!taskRepository.existsById(taskId)) {
-        throw new TaskNotFoundException(taskId);
-      }
-
-      return taskEventRepository.findByTaskIdOrderByTimestampAsc(taskId);
-    } catch (TaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the task events for the task (" + taskId + ")", e);
-    }
-  }
-
-  @Override
-  public TaskStatus getTaskStatus(UUID taskId)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
-
-    try {
-      Optional<TaskStatus> taskStatusOptional = taskRepository.getTaskStatus(taskId);
-
-      if (taskStatusOptional.isPresent()) {
-        return taskStatusOptional.get();
-      } else {
-        throw new TaskNotFoundException(taskId);
-      }
-    } catch (TaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the status of the task (" + taskId + ")", e);
-    }
-  }
-
-  @Override
-  public TaskSummaries getTaskSummaries(
+  /**
+   * Retrieve the summaries for the tasks.
+   *
+   * @param type the task type code filter to apply to the task summaries
+   * @param status the status filter to apply to the task summaries
+   * @param filter the filter to apply to the task summaries
+   * @param sortBy the method used to sort the task summaries e.g. by type
+   * @param sortDirection the sort direction to apply to the task summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the tasks
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the task summaries could not be retrieved
+   */
+  TaskSummaries getTaskSummaries(
       String type,
       TaskStatus status,
       String filter,
@@ -673,663 +267,287 @@ public class ExecutorService implements IExecutorService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
+  /**
+   * Retrieve the task type.
+   *
+   * @param taskTypeCode the code for the task type
+   * @return the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be retrieved
+   */
+  TaskType getTaskType(String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-    if (sortBy == null) {
-      sortBy = TaskSortBy.QUEUED;
-    }
+  /**
+   * Retrieve the name of the task type.
+   *
+   * @param taskTypeCode the code for the task type
+   * @return the name of the task type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the name of the task type could not be retrieved
+   */
+  String getTaskTypeName(String taskTypeCode)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-    if (sortDirection == null) {
-      sortDirection = SortDirection.DESCENDING;
-    }
+  /**
+   * Retrieve all the task types.
+   *
+   * @return the task types
+   * @throws ServiceUnavailableException if the task types could not be retrieved
+   */
+  List<TaskType> getTaskTypes() throws ServiceUnavailableException;
 
-    try {
-      PageRequest pageRequest;
+  /**
+   * Returns whether a task with the specified task type is currently queued or executing.
+   *
+   * @param taskTypeCode the code for the task type
+   * @return <b>true</b> if a task with the specified task type is currently queued or executing
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if existence of a task with the specified task type that is
+   *     currently queued or executing could not be verified
+   */
+  boolean isTaskWithTaskTypeQueuedOrExecuting(String taskTypeCode)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
+  /**
+   * Queue a task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param queueTaskRequest the request to queue a task for execution
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(QueueTaskRequest queueTaskRequest)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_TASKS;
-      }
-
-      String sortProperty;
-
-      if (sortBy == TaskSortBy.TYPE) {
-        sortProperty = "type";
-      } else {
-        sortProperty = "queued";
-      }
-
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_TASKS),
-              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
-              sortProperty);
-
-      Page<TaskSummary> taskSummaryPage =
-          taskSummaryRepository.findAll(
-              (Specification<TaskSummary>)
-                  (root, query, criteriaBuilder) -> {
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    if (StringUtils.hasText(type)) {
-                      predicates.add(criteriaBuilder.equal(root.get("type"), type));
-                    }
-
-                    if (status != null) {
-                      predicates.add(criteriaBuilder.equal(root.get("status"), status));
-                    }
-
-                    if (StringUtils.hasText(filter)) {
-                      predicates.add(
-                          criteriaBuilder.or(
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("batchId")),
-                                  "%" + filter.toLowerCase() + "%"),
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("externalReference")),
-                                  "%" + filter.toLowerCase() + "%")));
-                    }
-
-                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                  },
-              pageRequest);
-
-      return new TaskSummaries(
-          taskSummaryPage.toList(),
-          taskSummaryPage.getTotalElements(),
-          type,
-          status,
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered task summaries", e);
-    }
-  }
-
-  @Override
-  public TaskType getTaskType(String taskTypeCode)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(taskTypeCode)) {
-      throw new InvalidArgumentException("taskTypeCode");
-    }
-
-    try {
-      taskTypesLock.readLock().lock();
-
-      try {
-        // Synchronized the initialisation of the task type cache
-        if (taskTypes == null) {
-          synchronized (this) {
-            if (taskTypes == null) {
-              List<TaskType> taskTypes = getTaskTypes();
-
-              this.taskTypes = new ConcurrentHashMap<>();
-
-              for (TaskType taskType : taskTypes) {
-                this.taskTypes.put(taskType.getCode(), taskType);
-              }
-            }
-          }
-        }
-
-        TaskType taskType = taskTypes.get(taskTypeCode);
-
-        if (taskType != null) {
-          return taskType;
-        } else {
-          throw new TaskTypeNotFoundException(taskTypeCode);
-        }
-      } catch (TaskTypeNotFoundException e) {
-        throw e;
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to retrieve the task type (" + taskTypeCode + ")", e);
-      }
-    } finally {
-      taskTypesLock.readLock().unlock();
-    }
-  }
-
-  @Override
-  public String getTaskTypeName(String taskTypeCode)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    try {
-      return getTaskType(taskTypeCode).getName();
-    } catch (InvalidArgumentException | TaskTypeNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the name of the task type (" + taskTypeCode + ")", e);
-    }
-  }
-
-  @Override
-  public List<TaskType> getTaskTypes() throws ServiceUnavailableException {
-    try {
-      return taskTypeRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the task types", e);
-    }
-  }
-
-  /** Initialize the Executor Service. */
-  @PostConstruct
-  public void init() {
-    log.info("Initializing the Executor Service (" + instanceName + ")");
-  }
-
-  @Override
-  public boolean isTaskWithTaskTypeQueuedOrExecuting(String taskTypeCode)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(taskTypeCode)) {
-      throw new InvalidArgumentException("taskTypeCode");
-    }
-
-    try {
-      return taskRepository.countTasksWithTaskTypeQueuedOrExecuting(taskTypeCode) > 0;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to check whether a task with the task type ("
-              + taskTypeCode
-              + ") is queued or executing",
-          e);
-    }
-  }
-
-  @Override
-  public UUID queueTask(QueueTaskRequest queueTaskRequest)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    validateQueueTaskRequest(queueTaskRequest);
-
-    try {
-      TaskType taskType = getTaskType(queueTaskRequest.getType());
-
-      ITaskExecutor taskExecutor = getTaskExecutorForTaskType(taskType);
-
-      String initialTaskStep = taskExecutor.getInitialTaskStep();
-
-      Task task;
-
-      if (initialTaskStep == null) {
-        task = new Task(queueTaskRequest.getType(), queueTaskRequest.getData());
-
-      } else {
-        task = new Task(queueTaskRequest.getType(), initialTaskStep, queueTaskRequest.getData());
-      }
-
-      if ((queueTaskRequest.getSuspended() != null) && queueTaskRequest.getSuspended()) {
-        task.setStatus(TaskStatus.SUSPENDED);
-      }
-
-      if (StringUtils.hasText(queueTaskRequest.getBatchId())) {
-        task.setBatchId(queueTaskRequest.getBatchId());
-      }
-
-      if (StringUtils.hasText(queueTaskRequest.getExternalReference())) {
-        task.setExternalReference(queueTaskRequest.getExternalReference());
-      }
-
-      taskRepository.saveAndFlush(task);
-
-      applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
-
-      return task.getId();
-    } catch (TaskTypeNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to queue the task with type (" + queueTaskRequest.getType() + ") for execution",
-          e);
-    }
-  }
-
-  @Override
-  public UUID queueTask(
+  /**
+   * Queue a task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param type the code for the task type
+   * @param batchId the ID for the task batch
+   * @param externalReference the external reference for the task
+   * @param suspended the flag indicating that the task must be suspended
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(
       String type, String batchId, String externalReference, boolean suspended, Object dataObject)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(type)) {
-      throw new InvalidArgumentException("type");
-    }
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-    if (dataObject == null) {
-      throw new InvalidArgumentException("dataObject");
-    }
+  /**
+   * Queue a task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param type the code for the task type
+   * @param batchId the ID for the task batch
+   * @param externalReference the external reference for the task
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(String type, String batchId, String externalReference, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-    try {
-      ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
+  /**
+   * Queue a task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param type the code for the task type
+   * @param batchId the ID for the task batch
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(String type, String batchId, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-      String taskData = objectMapper.writeValueAsString(dataObject);
+  /**
+   * Queue a task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param type the code for the task type
+   * @param dataObject the task data object that will be serialized to JSON
+   * @return the ID for the task that has been queued for execution
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task could not be queued for execution
+   */
+  UUID queueTask(String type, Object dataObject)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
-      QueueTaskRequest queueTaskRequest =
-          new QueueTaskRequest(type, batchId, externalReference, taskData, suspended);
+  /**
+   * Requeue the task for execution.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param task the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task could not be re-queued for execution
+   */
+  void requeueTask(Task task)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-      return queueTask(queueTaskRequest);
-    } catch (InvalidArgumentException | TaskTypeNotFoundException | ServiceUnavailableException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to queue the task with type (" + type + ") for execution", e);
-    }
-  }
+  /**
+   * Reset "hung" tasks, which have been locked and executing longer than a global or
+   * task-type-specific timeout.
+   *
+   * @throws ServiceUnavailableException if the hung tasks could not be reset
+   */
+  void resetHungTasks() throws ServiceUnavailableException;
 
-  @Override
-  public UUID queueTask(String type, String batchId, String externalReference, Object dataObject)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    return queueTask(type, batchId, externalReference, false, dataObject);
-  }
+  /**
+   * Reset the task locks.
+   *
+   * @param status the current status of the tasks that have been locked
+   * @param newStatus the new status for the tasks that have been unlocked
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the task locks could not be reset
+   */
+  void resetTaskLocks(TaskStatus status, TaskStatus newStatus)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public UUID queueTask(String type, String batchId, Object dataObject)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    return queueTask(type, batchId, null, false, dataObject);
-  }
+  /**
+   * Set the number of days historical tasks will be retained before they are archived or deleted.
+   *
+   * @param historicalTaskRetentionDays the number of days historical tasks will be retained before
+   *     they are archived or deleted
+   */
+  void setHistoricalTaskRetentionDays(int historicalTaskRetentionDays);
 
-  @Override
-  public UUID queueTask(String type, Object dataObject)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    return queueTask(type, null, null, false, dataObject);
-  }
+  /**
+   * Suspend the batch.
+   *
+   * @param batchId the ID for the batch
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws BatchTasksNotFoundException if no tasks could be found for the batch
+   * @throws ServiceUnavailableException if the batch could not be suspended
+   */
+  void suspendBatch(String batchId)
+      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public void requeueTask(Task task)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    if (task == null) {
-      throw new InvalidArgumentException("task");
-    }
-
-    try {
-      if (!taskRepository.existsById(task.getId())) {
-        throw new TaskNotFoundException(task.getId());
-      }
-
-      TaskType taskType = getTaskType(task.getType());
-
-      // Determine the maximum execution attempts for the task
-      int maximumTaskExecutionAttempts =
-          (taskType.getMaximumExecutionAttempts() != null)
-              ? taskType.getMaximumExecutionAttempts()
-              : this.maximumTaskExecutionAttempts;
-
-      if (task.getExecutionAttempts() >= maximumTaskExecutionAttempts) {
-        log.warn(
-            "The task ("
-                + task.getId()
-                + ") has exceeded the maximum number of execution attempts ("
-                + maximumTaskExecutionAttempts
-                + ") and will be marked as \"Failed\"");
-
-        taskRepository.unlockTask(task.getId(), TaskStatus.FAILED);
-      } else {
-        // Determine the retry delay
-        long taskExecutionRetryDelay =
-            (taskType.getRetryDelay() != null)
-                ? taskType.getRetryDelay()
-                : this.taskExecutionRetryDelay;
-
-        OffsetDateTime nextExecution =
-            OffsetDateTime.now().plus(taskExecutionRetryDelay, ChronoUnit.MILLIS);
-
-        taskRepository.requeueTask(task.getId(), nextExecution);
-
-        applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
-      }
-    } catch (TaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to requeue the task (" + task.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public void resetHungTasks() throws ServiceUnavailableException {
-    try {
-      // Apply the task-type-specific task timeouts
-      for (TaskType taskType : getTaskTypes()) {
-        if (taskType.getExecutionTimeout() != null) {
-          OffsetDateTime lockedBefore =
-              OffsetDateTime.now().minus(taskType.getExecutionTimeout(), ChronoUnit.MILLIS);
-
-          if (inDebugMode) {
-            log.info(
-                "Resetting the hung tasks of type ("
-                    + taskType.getCode()
-                    + ") that were locked for execution before "
-                    + lockedBefore);
-          }
-
-          int numberOfResetHungTasks =
-              taskRepository.resetHungTasks(taskType.getCode(), lockedBefore);
-
-          if (numberOfResetHungTasks > 0) {
-            log.warn(
-                "Reset "
-                    + numberOfResetHungTasks
-                    + " hung tasks of type ("
-                    + taskType.getCode()
-                    + ") that were locked for execution before "
-                    + lockedBefore);
-          }
-        }
-      }
-
-      // Apply the global task timeout
-      OffsetDateTime lockedBefore =
-          OffsetDateTime.now().minus(taskExecutionTimeout, ChronoUnit.MILLIS);
-
-      if (inDebugMode) {
-        log.info("Resetting the hung tasks that were locked for execution before " + lockedBefore);
-      }
-
-      int numberOfResetHungTasks = taskRepository.resetHungTasks(lockedBefore);
-
-      if (numberOfResetHungTasks > 0) {
-        log.warn(
-            "Reset "
-                + numberOfResetHungTasks
-                + " hung tasks that were locked for execution before "
-                + lockedBefore);
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to reset the hung tasks", e);
-    }
-  }
-
-  @Override
-  public void resetTaskLocks(TaskStatus status, TaskStatus newStatus)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (status == null) {
-      throw new InvalidArgumentException("status");
-    }
-
-    if (newStatus == null) {
-      throw new InvalidArgumentException("newStatus");
-    }
-
-    try {
-      taskRepository.resetTaskLocks(status, newStatus, instanceName);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to reset the locks for the tasks with status ("
-              + status
-              + ") that have been locked using the lock name ("
-              + instanceName
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void setHistoricalTaskRetentionDays(int historicalTaskRetentionDays) {
-    this.historicalTaskRetentionDays = historicalTaskRetentionDays;
-  }
-
-  @Override
-  public void suspendBatch(String batchId)
-      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(batchId)) {
-      throw new InvalidArgumentException("batchId");
-    }
-
-    try {
-      if (taskRepository.countByBatchId(batchId) == 0) {
-        throw new BatchTasksNotFoundException(batchId);
-      }
-
-      taskRepository.suspendBatch(batchId);
-    } catch (BatchTasksNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to suspend the batch (" + batchId + ")", e);
-    }
-  }
-
-  @Override
-  public void suspendTask(UUID taskId)
+  /**
+   * Suspend the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be suspended
+   */
+  void suspendTask(UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
           InvalidTaskStatusException,
-          ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      if (!taskRepository.existsById(taskId)) {
-        throw new TaskNotFoundException(taskId);
-      }
+  /**
+   * Returns whether the task type exists.
+   *
+   * @param taskTypeCode the code for the task type
+   * @return <b>true</b> if the task type exists or <b>false</b> otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if existence of the task type could not be verified
+   */
+  boolean taskTypeExists(String taskTypeCode)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-      if (taskRepository.suspendTask(taskId) == 0) {
-        throw new InvalidTaskStatusException(taskId);
-      }
-    } catch (TaskNotFoundException | InvalidTaskStatusException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to suspend the task (" + taskId + ")", e);
-    }
-  }
+  /**
+   * Unlock a locked task.
+   *
+   * @param taskId the ID for the task
+   * @param status the new status for the unlocked task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws ServiceUnavailableException if the task could not be unlocked
+   */
+  void unlockTask(UUID taskId, TaskStatus status)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
-  @Override
-  public boolean taskTypeExists(String taskTypeCode)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    try {
-      getTaskType(taskTypeCode);
+  /**
+   * Unsuspend the batch.
+   *
+   * @param batchId the ID for the batch
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws BatchTasksNotFoundException if no tasks could be found for the batch
+   * @throws ServiceUnavailableException if the batch could not be unsuspended
+   */
+  void unsuspendBatch(String batchId)
+      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
 
-      return true;
-    } catch (TaskTypeNotFoundException e) {
-      return false;
-    }
-  }
-
-  @Override
-  public void unlockTask(UUID taskId, TaskStatus status)
-      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
-
-    try {
-      if (!taskRepository.existsById(taskId)) {
-        throw new TaskNotFoundException(taskId);
-      }
-
-      taskRepository.unlockTask(taskId, status);
-    } catch (TaskNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to unlock and set the status for the task (" + taskId + ") to (" + status + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void unsuspendBatch(String batchId)
-      throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(batchId)) {
-      throw new InvalidArgumentException("batchId");
-    }
-
-    try {
-      if (taskRepository.countByBatchId(batchId) == 0) {
-        throw new BatchTasksNotFoundException(batchId);
-      }
-
-      taskRepository.unsuspendBatch(batchId, OffsetDateTime.now());
-    } catch (BatchTasksNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to unsuspend the batch (" + batchId + ")", e);
-    }
-  }
-
-  @Override
-  public void unsuspendTask(UUID taskId)
+  /**
+   * Unsuspend the task.
+   *
+   * <p>NOTE: The implementation of this method is explicitly not annotated with the @Transactional
+   * annotation to prevent a race condition between committing the transaction to persist a task in
+   * the database and triggering the asynchronous processing of the task in a separate thread. If
+   * the transaction is not committed, the task will not be retrieved by the
+   * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be unsuspended
+   */
+  void unsuspendTask(UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
           InvalidTaskStatusException,
-          ServiceUnavailableException {
-    if (taskId == null) {
-      throw new InvalidArgumentException("taskId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      if (!taskRepository.existsById(taskId)) {
-        throw new TaskNotFoundException(taskId);
-      }
-
-      if (taskRepository.unsuspendTask(taskId, OffsetDateTime.now()) == 0) {
-        throw new InvalidTaskStatusException(taskId);
-      }
-
-      applicationContext.getBean(IBackgroundTaskExecutor.class).executeTasks();
-    } catch (TaskNotFoundException | InvalidTaskStatusException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to unsuspend the task (" + taskId + ")", e);
-    }
-  }
-
-  @Override
-  public void updateTaskType(TaskType taskType)
-      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    validateTaskType(taskType);
-
-    try {
-      taskTypesLock.writeLock().lock();
-
-      try {
-        Optional<TaskType> taskTypeOptional = taskTypeRepository.findById(taskType.getCode());
-
-        if (taskTypeOptional.isEmpty()) {
-          throw new TaskTypeNotFoundException(taskType.getCode());
-        }
-
-        taskTypeRepository.saveAndFlush(taskType);
-
-        taskTypes = null;
-      } catch (TaskTypeNotFoundException e) {
-        throw e;
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to update the task type (" + taskType.getCode() + ")", e);
-      }
-    } finally {
-      taskTypesLock.writeLock().unlock();
-    }
-  }
-
-  private void archiveTask(Task task) {
-    ArchivedTask archivedTask =
-        new ArchivedTask(
-            task.getId(),
-            task.getBatchId(),
-            task.getType(),
-            task.getStep(),
-            task.getStatus(),
-            task.getQueued(),
-            task.getExecuted(),
-            task.getExecutionTime(),
-            task.getExternalReference(),
-            task.getData());
-
-    archivedTaskRepository.saveAndFlush(archivedTask);
-  }
-
-  private void createTaskEvent(TaskEventType taskEventType, TaskType taskType, Task task) {
-    if (taskType.isEventTypeEnabledWithTaskData(taskEventType)) {
-      taskEventRepository.saveAndFlush(new TaskEvent(taskEventType, task, true));
-    } else if (taskType.isEventTypeEnabled(taskEventType)) {
-      taskEventRepository.saveAndFlush(new TaskEvent(taskEventType, task, false));
-    }
-  }
-
-  private ITaskExecutor getTaskExecutorForTaskType(TaskType taskType) {
-    try {
-      if (taskExecutors.containsKey(taskType.getExecutorClass())) {
-        return taskExecutors.get(taskType.getExecutorClass());
-      }
-
-      Class<?> taskExecutorClass =
-          Thread.currentThread().getContextClassLoader().loadClass(taskType.getExecutorClass());
-
-      Object taskExecutorObject =
-          applicationContext.getAutowireCapableBeanFactory().createBean(taskExecutorClass);
-
-      // Check if the task executor object is a valid task executor
-      if (taskExecutorObject instanceof ITaskExecutor taskExecutor) {
-        taskExecutors.put(taskType.getExecutorClass(), taskExecutor);
-        return taskExecutor;
-      } else {
-        throw new RuntimeException(
-            "The task executor class ("
-                + taskType.getClass()
-                + ") for the task type ("
-                + taskType.getCode()
-                + ") does not implement the digital.inception.executor.model.ITaskExecutor interface");
-      }
-    } catch (Throwable e) {
-      throw new RuntimeException(
-          "Failed to instantiate and initialize the task executor ("
-              + taskType.getExecutorClass()
-              + ") for the task type ("
-              + taskType.getCode()
-              + ")",
-          e);
-    }
-  }
-
-  private void validateQueueTaskRequest(QueueTaskRequest queueTaskRequest)
-      throws InvalidArgumentException {
-    if (queueTaskRequest == null) {
-      throw new InvalidArgumentException("queueTaskRequest");
-    }
-
-    Set<ConstraintViolation<QueueTaskRequest>> constraintViolations =
-        validator.validate(queueTaskRequest);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "queueTaskRequest", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateTask(Task task) throws InvalidArgumentException {
-    if (task == null) {
-      throw new InvalidArgumentException("task");
-    }
-
-    Set<ConstraintViolation<Task>> constraintViolations = validator.validate(task);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "task", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateTaskType(TaskType taskType) throws InvalidArgumentException {
-    if (taskType == null) {
-      throw new InvalidArgumentException("taskType");
-    }
-
-    Set<ConstraintViolation<TaskType>> constraintViolations = validator.validate(taskType);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "taskType", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
+  /**
+   * Update the task type.
+   *
+   * @param taskType the <b>TaskType</b> instance containing the updated information for the task
+   *     type
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskTypeNotFoundException if the task type could not be found
+   * @throws ServiceUnavailableException if the task type could not be updated
+   */
+  void updateTaskType(TaskType taskType)
+      throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 }

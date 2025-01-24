@@ -39,14 +39,14 @@ public class BackgroundSMSSender {
   private static final Logger log = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
   /* SMS Service */
-  private final ISMSService smsService;
+  private final SMSService smsService;
 
   /**
    * Constructs a new <b>BackgroundSMSSender</b>.
    *
    * @param smsService the SMS Service
    */
-  public BackgroundSMSSender(ISMSService smsService) {
+  public BackgroundSMSSender(SMSService smsService) {
     this.smsService = smsService;
   }
 

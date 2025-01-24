@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-package demo;
+package digital.inception.demo.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import demo.model.Car;
-import demo.model.Cars;
-import demo.model.Vehicle;
-import demo.model.VehicleType;
-import demo.model.Vehicles;
-import demo.service.IVehicleService;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.demo.DemoConfiguration;
+import digital.inception.demo.model.Car;
+import digital.inception.demo.model.Cars;
+import digital.inception.demo.model.Vehicle;
+import digital.inception.demo.model.VehicleType;
+import digital.inception.demo.model.Vehicles;
+import digital.inception.demo.service.VehicleService;
+import digital.inception.test.InceptionExtension;
+import digital.inception.test.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -41,8 +44,11 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@SpringBootTest(classes = DemoApplication.class, webEnvironment = WebEnvironment.NONE)
 @ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
+@ContextConfiguration(
+    classes = {TestConfiguration.class, DemoConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,
@@ -52,7 +58,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public class VehicleServiceTest {
 
   /** The Vehicle Service. */
-  @Autowired private IVehicleService vehicleService;
+  @Autowired private VehicleService vehicleService;
 
   /** Test the vehicle functionality. */
   @Test

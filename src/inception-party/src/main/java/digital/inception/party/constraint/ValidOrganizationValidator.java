@@ -37,8 +37,8 @@ import digital.inception.party.model.SegmentAllocation;
 import digital.inception.party.model.Status;
 import digital.inception.party.model.TaxNumber;
 import digital.inception.party.model.ValueType;
-import digital.inception.party.service.IPartyReferenceService;
-import digital.inception.reference.service.IReferenceService;
+import digital.inception.party.service.PartyReferenceService;
+import digital.inception.reference.service.ReferenceService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
@@ -67,7 +67,7 @@ public class ValidOrganizationValidator extends PartyValidator
    */
   @Autowired
   public ValidOrganizationValidator(
-      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+      PartyReferenceService partyReferenceService, ReferenceService referenceService) {
     super(partyReferenceService, referenceService);
   }
 

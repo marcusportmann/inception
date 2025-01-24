@@ -27,7 +27,7 @@ import digital.inception.reference.model.MeasurementUnit;
 import digital.inception.reference.model.MeasurementUnitType;
 import digital.inception.reference.model.Region;
 import digital.inception.reference.model.TimeZone;
-import digital.inception.reference.service.IReferenceService;
+import digital.inception.reference.service.ReferenceService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
@@ -64,13 +64,13 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public class ReferenceServiceTest {
 
   /** The Reference Service. */
-  @Autowired private IReferenceService referenceService;
+  @Autowired private ReferenceService referenceService;
 
   /** Test the country reference functionality. */
   @Test
   public void countryTest() throws Exception {
     List<Country> retrievedCountries =
-        referenceService.getCountries(IReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getCountries(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         246, retrievedCountries.size(), "The correct number of countries was not retrieved");
@@ -86,7 +86,7 @@ public class ReferenceServiceTest {
       assertEquals(
           "AF", retrievedCountry.getCode(), "The correct code was not retrieved for the country");
       assertEquals(
-          IReferenceService.DEFAULT_LOCALE_ID,
+          ReferenceService.DEFAULT_LOCALE_ID,
           retrievedCountry.getLocaleId(),
           "The correct locale was not retrieved for the country");
       assertEquals(
@@ -188,7 +188,7 @@ public class ReferenceServiceTest {
   public void languageTest() throws Exception {
 
     List<Language> retrievedLanguages =
-        referenceService.getLanguages(IReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getLanguages(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         93, retrievedLanguages.size(), "The correct number of languages was not retrieved");
@@ -203,7 +203,7 @@ public class ReferenceServiceTest {
   @Test
   public void measurementSystemsTest() throws Exception {
     List<MeasurementSystem> retrievedMeasurementSystems =
-        referenceService.getMeasurementSystems(IReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getMeasurementSystems(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -222,7 +222,7 @@ public class ReferenceServiceTest {
   @Test
   public void measurementUnitTypesTest() throws Exception {
     List<MeasurementUnitType> retrievedMeasurementUnitTypes =
-        referenceService.getMeasurementUnitTypes(IReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getMeasurementUnitTypes(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -241,7 +241,7 @@ public class ReferenceServiceTest {
   @Test
   public void measurementUnitsTest() throws Exception {
     List<MeasurementUnit> retrievedMeasurementUnits =
-        referenceService.getMeasurementUnits(IReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getMeasurementUnits(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -260,7 +260,7 @@ public class ReferenceServiceTest {
   @Test
   public void regionTest() throws Exception {
     List<Region> retrievedRegions =
-        referenceService.getRegions(IReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getRegions(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(9, retrievedRegions.size(), "The correct number of regions was not retrieved");
 
@@ -268,11 +268,11 @@ public class ReferenceServiceTest {
 
     assertEquals(18, retrievedRegions.size(), "The correct number of regions was not retrieved");
 
-    retrievedRegions = referenceService.getRegions(IReferenceService.DEFAULT_LOCALE_ID, "ZA");
+    retrievedRegions = referenceService.getRegions(ReferenceService.DEFAULT_LOCALE_ID, "ZA");
 
     assertEquals(9, retrievedRegions.size(), "The correct number of regions was not retrieved");
 
-    retrievedRegions = referenceService.getRegions(IReferenceService.DEFAULT_LOCALE_ID, "GB");
+    retrievedRegions = referenceService.getRegions(ReferenceService.DEFAULT_LOCALE_ID, "GB");
 
     assertEquals(0, retrievedRegions.size(), "The correct number of regions was not retrieved");
   }
@@ -281,7 +281,7 @@ public class ReferenceServiceTest {
   @Test
   public void timeZoneTest() throws Exception {
     List<TimeZone> retrievedTimeZones =
-        referenceService.getTimeZones(IReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getTimeZones(ReferenceService.DEFAULT_LOCALE_ID);
 
     if (retrievedTimeZones.size() <= 0) {
       fail("Failed to retrieve the time zones");

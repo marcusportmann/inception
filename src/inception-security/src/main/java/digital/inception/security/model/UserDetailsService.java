@@ -16,7 +16,7 @@
 
 package digital.inception.security.model;
 
-import digital.inception.security.service.ISecurityService;
+import digital.inception.security.service.SecurityService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,14 +36,14 @@ public class UserDetailsService
     implements org.springframework.security.core.userdetails.UserDetailsService {
 
   /* Security Service */
-  private final ISecurityService securityService;
+  private final SecurityService securityService;
 
   /**
    * Constructs a new <b>UserDetailsService</b>.
    *
    * @param securityService the Security Service
    */
-  public UserDetailsService(ISecurityService securityService) {
+  public UserDetailsService(SecurityService securityService) {
     this.securityService = securityService;
   }
 

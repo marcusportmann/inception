@@ -18,410 +18,198 @@ package digital.inception.reporting.service;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.reporting.model.DuplicateReportDefinitionException;
 import digital.inception.reporting.model.ReportDefinition;
 import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
-import digital.inception.reporting.persistence.ReportDefinitionRepository;
-import digital.inception.reporting.persistence.ReportDefinitionSummaryRepository;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.io.ByteArrayInputStream;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import javax.sql.DataSource;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 
 /**
- * The <b>ReportingService</b> class provides the Reporting Service implementation.
+ * The <b>ReportingService</b> interface defines the functionality provided by a Reporting Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
-@Service
 @SuppressWarnings("unused")
-public class ReportingService implements IReportingService {
+public interface ReportingService {
 
-  /** The data source used to provide connections to the application database. */
-  private final DataSource dataSource;
-
-  /** The Report Definition Repository. */
-  private final ReportDefinitionRepository reportDefinitionRepository;
-
-  /** The Report Definition Summary Repository. */
-  private final ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /* The real path to the folder where the local Jasper reports are stored. */
-  private String localReportFolderPath;
+  /** The username used to identify operations performed by the system. */
+  String SYSTEM_USERNAME = "SYSTEM";
 
   /**
-   * Constructs a new <b>ReportingService</b>.
+   * Create the new report definition.
    *
-   * @param validator the JSR-380 validator
-   * @param dataSource the data source used to provide connections to the application database
-   * @param reportDefinitionRepository the Report Definition Repository
-   * @param reportDefinitionSummaryRepository the Report Definition Summary Repository
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information for the
+   *     new report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateReportDefinitionException if the report definition already exists
+   * @throws ServiceUnavailableException if the report definition could not be created
    */
-  public ReportingService(
-      Validator validator,
-      @Qualifier("applicationDataSource") DataSource dataSource,
-      ReportDefinitionRepository reportDefinitionRepository,
-      ReportDefinitionSummaryRepository reportDefinitionSummaryRepository) {
-    this.validator = validator;
-    this.dataSource = dataSource;
-    this.reportDefinitionRepository = reportDefinitionRepository;
-    this.reportDefinitionSummaryRepository = reportDefinitionSummaryRepository;
-  }
-
-  @Override
-  public void createReportDefinition(ReportDefinition reportDefinition)
+  void createReportDefinition(ReportDefinition reportDefinition)
       throws InvalidArgumentException,
           DuplicateReportDefinitionException,
-          ServiceUnavailableException {
-    validateReportDefinition(reportDefinition);
+          ServiceUnavailableException;
 
-    try {
-      if (reportDefinitionRepository.existsById(reportDefinition.getId())) {
-        throw new DuplicateReportDefinitionException(reportDefinition.getId());
-      }
-
-      reportDefinitionRepository.saveAndFlush(reportDefinition);
-    } catch (DuplicateReportDefinitionException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the report definition (" + reportDefinition.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
+  /**
+   * Create the PDF for the report using a connection retrieved from the application data source.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @param parameters the parameters for the report
+   * @return the PDF data for the report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be created
+   */
+  byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
+          ServiceUnavailableException;
 
-    if (parameters == null) {
-      throw new InvalidArgumentException("parameters");
-    }
-
-    try (Connection connection = dataSource.getConnection()) {
-      return createReportPDF(reportDefinitionId, parameters, connection);
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the PDF for the report using the report definition ("
-              + reportDefinitionId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public byte[] createReportPDF(
+  /**
+   * Create the PDF for the report.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @param parameters the parameters for the report
+   * @param connection the database connection used to retrieve the report data
+   * @return the PDF data for the report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the PDF for the report could not be created
+   */
+  byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Connection connection)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
+          ServiceUnavailableException;
 
-    if (parameters == null) {
-      throw new InvalidArgumentException("parameters");
-    }
-
-    if (connection == null) {
-      throw new InvalidArgumentException("connection");
-    }
-
-    try {
-      Optional<ReportDefinition> reportDefinitionOptional =
-          reportDefinitionRepository.findById(reportDefinitionId);
-
-      if (reportDefinitionOptional.isEmpty()) {
-        throw new ReportDefinitionNotFoundException(reportDefinitionId);
-      }
-
-      Map<String, Object> localParameters = new HashMap<>();
-
-      if (!StringUtils.hasText(getLocalReportFolderPath())) {
-        localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
-      }
-
-      for (String name : parameters.keySet()) {
-        localParameters.put(name, parameters.get(name));
-      }
-
-      JasperPrint jasperPrint =
-          JasperFillManager.fillReport(
-              new ByteArrayInputStream(reportDefinitionOptional.get().getTemplate()),
-              localParameters,
-              connection);
-
-      return JasperExportManager.exportReportToPdf(jasperPrint);
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the PDF for the report using the report definition ("
-              + reportDefinitionId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public byte[] createReportPDF(
+  /**
+   * Create the PDF for the report.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @param parameters the parameters for the report
+   * @param document the XML document containing the report data
+   * @return the PDF data for the report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the PDF for the report could not be created
+   */
+  byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Document document)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
+          ServiceUnavailableException;
 
-    if (parameters == null) {
-      throw new InvalidArgumentException("parameters");
-    }
-
-    if (document == null) {
-      throw new InvalidArgumentException("document");
-    }
-
-    try {
-      ReportDefinition reportDefinition = getReportDefinition(reportDefinitionId);
-
-      Map<String, Object> localParameters = new HashMap<>();
-
-      localParameters.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, document);
-      localParameters.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, "yyyy-MM-dd");
-      localParameters.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, "#,##0.##");
-      localParameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
-      localParameters.put(JRParameter.REPORT_LOCALE, Locale.US);
-
-      if (!StringUtils.hasText(getLocalReportFolderPath())) {
-        localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
-      }
-
-      for (String name : parameters.keySet()) {
-        localParameters.put(name, parameters.get(name));
-      }
-
-      JasperPrint jasperPrint =
-          JasperFillManager.fillReport(
-              new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters);
-
-      return JasperExportManager.exportReportToPdf(jasperPrint);
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the PDF for the report using the report definintion ("
-              + reportDefinitionId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void deleteReportDefinition(String reportDefinitionId)
+  /**
+   * Delete the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be deleted
+   */
+  void deleteReportDefinition(String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      if (!reportDefinitionRepository.existsById(reportDefinitionId)) {
-        throw new ReportDefinitionNotFoundException(reportDefinitionId);
-      }
+  /**
+   * Returns the real path to the folder where the local Jasper reports are stored.
+   *
+   * @return the real path to the folder where the local Jasper reports are stored
+   */
+  String getLocalReportFolderPath();
 
-      reportDefinitionRepository.deleteById(reportDefinitionId);
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the report definition (" + reportDefinitionId + ")", e);
-    }
-  }
-
-  @Override
-  public String getLocalReportFolderPath() {
-    return localReportFolderPath;
-  }
-
-  @Override
-  public ReportDefinition getReportDefinition(String reportDefinitionId)
+  /**
+   * Retrieve the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @return the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be retrieved
+   */
+  ReportDefinition getReportDefinition(String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      Optional<ReportDefinition> reportDefinitionOptional =
-          reportDefinitionRepository.findById(reportDefinitionId);
-
-      if (reportDefinitionOptional.isPresent()) {
-        return reportDefinitionOptional.get();
-      } else {
-        throw new ReportDefinitionNotFoundException(reportDefinitionId);
-      }
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the report definition (" + reportDefinitionId + ")", e);
-    }
-  }
-
-  @Override
-  public String getReportDefinitionName(String reportDefinitionId)
+  /**
+   * Retrieve the name of the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @return the name of the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the name of the report definition could not be retrieved
+   */
+  String getReportDefinitionName(String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      Optional<String> nameOptional = reportDefinitionRepository.getNameById(reportDefinitionId);
+  /**
+   * Returns the summaries for all the report definitions.
+   *
+   * @return the summaries for all the report definitions
+   * @throws ServiceUnavailableException if the report definition summaries could not be retrieved
+   */
+  List<ReportDefinitionSummary> getReportDefinitionSummaries() throws ServiceUnavailableException;
 
-      if (nameOptional.isPresent()) {
-        return nameOptional.get();
-      }
-
-      throw new ReportDefinitionNotFoundException(reportDefinitionId);
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the name of the report definition (" + reportDefinitionId + ")", e);
-    }
-  }
-
-  @Override
-  public List<ReportDefinitionSummary> getReportDefinitionSummaries()
-      throws ServiceUnavailableException {
-    try {
-      return reportDefinitionSummaryRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the summaries for the report definitions", e);
-    }
-  }
-
-  @Override
-  public ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
+  /**
+   * Retrieve the summary for the report definition.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @return the summary for the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition summary could not be retrieved
+   */
+  ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
+          ServiceUnavailableException;
 
-    try {
-      Optional<ReportDefinitionSummary> reportDefinitionSummaryOptional =
-          reportDefinitionSummaryRepository.findById(reportDefinitionId);
+  /**
+   * Returns all the report definitions.
+   *
+   * @return the report definitions
+   * @throws ServiceUnavailableException if the report definitions could not be retrieved
+   */
+  List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException;
 
-      if (reportDefinitionSummaryOptional.isPresent()) {
-        return reportDefinitionSummaryOptional.get();
-      } else {
-        throw new ReportDefinitionNotFoundException(reportDefinitionId);
-      }
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the summary for the report definition (" + reportDefinitionId + ")",
-          e);
-    }
-  }
+  /**
+   * Check whether the report definition exists.
+   *
+   * @param reportDefinitionId the ID for the report definition
+   * @return <b>true</b> if the report definition exists or <b>false</b> otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the existing report definition failed
+   */
+  boolean reportDefinitionExists(String reportDefinitionId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
-  @Override
-  public List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException {
-    try {
-      return reportDefinitionRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the report definitions", e);
-    }
-  }
+  /**
+   * Set the real path to the folder where the local Jasper reports are stored.
+   *
+   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
+   *     stored
+   */
+  void setLocalReportFolderPath(String localReportFolderPath);
 
-  @Override
-  public boolean reportDefinitionExists(String reportDefinitionId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
-    try {
-      return reportDefinitionRepository.existsById(reportDefinitionId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to check whether the report definition (" + reportDefinitionId + ") exists", e);
-    }
-  }
-
-  @Override
-  public void setLocalReportFolderPath(String localReportFolderPath) {
-    this.localReportFolderPath = localReportFolderPath;
-  }
-
-  @Override
-  public void updateReportDefinition(ReportDefinition reportDefinition)
+  /**
+   * Update the report definition.
+   *
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated information
+   *     for the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be updated
+   */
+  void updateReportDefinition(ReportDefinition reportDefinition)
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
-          ServiceUnavailableException {
-    validateReportDefinition(reportDefinition);
-
-    try {
-      if (!reportDefinitionRepository.existsById(reportDefinition.getId())) {
-        throw new ReportDefinitionNotFoundException(reportDefinition.getId());
-      }
-
-      reportDefinitionRepository.saveAndFlush(reportDefinition);
-    } catch (ReportDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the report definition (" + reportDefinition.getId() + ")", e);
-    }
-  }
-
-  private void validateReportDefinition(ReportDefinition reportDefinition)
-      throws InvalidArgumentException {
-    if (reportDefinition == null) {
-      throw new InvalidArgumentException("reportDefinition");
-    }
-
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
-        validator.validate(reportDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
+          ServiceUnavailableException;
 }

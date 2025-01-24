@@ -58,7 +58,7 @@ public class TestJPAServiceTest {
 
   @Autowired private PlatformTransactionManager platformTransactionManager;
 
-  @Autowired private ITestJPAService testJPAService;
+  @Autowired private TestJPAService testJPAService;
 
   private static synchronized TestData getTestData() {
     testDataCount++;

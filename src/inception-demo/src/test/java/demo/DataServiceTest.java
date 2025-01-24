@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package demo;
+package digital.inception.demo.test;
 
-import demo.service.IDataService;
-import org.junit.jupiter.api.Disabled;
+import digital.inception.demo.DemoConfiguration;
+import digital.inception.demo.service.DataService;
+import digital.inception.test.InceptionExtension;
+import digital.inception.test.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -31,14 +31,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  *
  * @author Marcus Portmann
  */
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = {TestConfiguration.class, DemoConfiguration.class})
-@Disabled
+@ExtendWith(InceptionExtension.class)
+@ContextConfiguration(classes = {TestConfiguration.class, DemoConfiguration.class})
 public class DataServiceTest {
 
   /** The Data Service. */
-  @Autowired private IDataService dataService;
+  @Autowired private DataService dataService;
 
   /** Test the reactive data functionality. */
   @Test

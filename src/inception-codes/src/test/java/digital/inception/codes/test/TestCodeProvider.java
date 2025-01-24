@@ -22,7 +22,7 @@ import digital.inception.codes.model.CodeCategoryNotFoundException;
 import digital.inception.codes.model.CodeNotFoundException;
 import digital.inception.codes.model.CodeProviderConfig;
 import digital.inception.codes.model.CodeProviderException;
-import digital.inception.codes.model.ICodeProvider;
+import digital.inception.codes.model.CodeProvider;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TestCodeProvider implements ICodeProvider {
+public class TestCodeProvider implements CodeProvider {
 
   private final CodeCategory codeCategory;
 

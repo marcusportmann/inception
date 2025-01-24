@@ -21,16 +21,16 @@ import digital.inception.core.util.ResourceUtil;
 import digital.inception.executor.model.TaskEventType;
 import digital.inception.executor.model.TaskPriority;
 import digital.inception.executor.model.TaskType;
-import digital.inception.executor.service.IExecutorService;
+import digital.inception.executor.service.ExecutorService;
 import digital.inception.reporting.model.ReportDefinition;
-import digital.inception.reporting.service.IReportingService;
+import digital.inception.reporting.service.ReportingService;
 import digital.inception.security.model.GenerateTokenRequest;
 import digital.inception.security.model.Policy;
 import digital.inception.security.model.PolicyType;
 import digital.inception.security.model.Token;
 import digital.inception.security.model.TokenClaim;
 import digital.inception.security.model.TokenType;
-import digital.inception.security.service.ISecurityService;
+import digital.inception.security.service.SecurityService;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -57,13 +57,13 @@ public class DemoApplication extends Application {
   private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 
   /** The Executor Service. */
-  private final IExecutorService executorService;
+  private final ExecutorService executorService;
 
   /** The Reporting Service. */
-  private final IReportingService reportingService;
+  private final ReportingService reportingService;
 
   /** The Security Service. */
-  private final ISecurityService securityService;
+  private final SecurityService securityService;
 
   /**
    * Constructs a new <b>DemoApplication</b>.
@@ -75,9 +75,9 @@ public class DemoApplication extends Application {
    */
   public DemoApplication(
       ApplicationContext applicationContext,
-      IExecutorService executorService,
-      IReportingService reportingService,
-      ISecurityService securityService) {
+      ExecutorService executorService,
+      ReportingService reportingService,
+      SecurityService securityService) {
     super(applicationContext);
 
     this.executorService = executorService;

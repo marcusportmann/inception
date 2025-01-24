@@ -36,14 +36,14 @@ public class BackgroundTaskArchiver {
   private static final Logger log = LoggerFactory.getLogger(BackgroundTaskArchiver.class);
 
   /** The Executor Service. */
-  private final IExecutorService executorService;
+  private final ExecutorService executorService;
 
   /**
    * Constructs a new <b>BackgroundTaskArchiver</b>.
    *
    * @param executorService the Executor Service
    */
-  public BackgroundTaskArchiver(IExecutorService executorService) {
+  public BackgroundTaskArchiver(ExecutorService executorService) {
     this.executorService = executorService;
   }
 

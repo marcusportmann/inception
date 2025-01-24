@@ -25,7 +25,7 @@ import digital.inception.error.model.ErrorReport;
 import digital.inception.error.model.ErrorReportSortBy;
 import digital.inception.error.model.ErrorReportSummaries;
 import digital.inception.error.model.ErrorReportSummary;
-import digital.inception.error.service.IErrorService;
+import digital.inception.error.service.ErrorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
@@ -63,7 +63,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public class ErrorServiceTest {
 
   /** The Error Service. */
-  @Autowired private IErrorService errorService;
+  @Autowired private ErrorService errorService;
 
   private static synchronized ErrorReport getTestErrorReport() {
     return new ErrorReport(

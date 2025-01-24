@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package demo.ws;
+package digital.inception.demo.ws;
 
-import demo.model.Data;
-import demo.service.IDataService;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ISO8601Util;
+import digital.inception.demo.model.Data;
+import digital.inception.demo.service.DataService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -41,19 +41,19 @@ import java.util.List;
 @WebService(
     serviceName = "DataService",
     name = "IDataService",
-    targetNamespace = "https://demo")
+    targetNamespace = "https://inception.digital/demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class DataWebService {
 
-  private final IDataService dataService;
+  private final DataService dataService;
 
   /**
    * Constructs a new <b>DataWebService</b>.
    *
    * @param dataService the Data Service
    */
-  public DataWebService(IDataService dataService) {
+  public DataWebService(DataService dataService) {
     this.dataService = dataService;
   }
 

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @param <TaskDataType> the task data type
  * @author Marcus Portmann
  */
-public abstract class SimpleTaskExecutor<TaskDataType> implements ITaskExecutor {
+public abstract class SimpleTaskExecutor<TaskDataType> implements TaskExecutor {
 
   private final ObjectMapper objectMapper;
 

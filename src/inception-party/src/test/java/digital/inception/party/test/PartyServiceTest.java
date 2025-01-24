@@ -81,7 +81,7 @@ import digital.inception.party.model.SourceOfWealth;
 import digital.inception.party.model.Status;
 import digital.inception.party.model.TaxNumber;
 import digital.inception.party.model.ValueType;
-import digital.inception.party.service.IPartyService;
+import digital.inception.party.service.PartyService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import jakarta.validation.ConstraintViolation;
@@ -128,7 +128,7 @@ public class PartyServiceTest {
   @Autowired private ObjectMapper objectMapper;
 
   /** The Party Service. */
-  @Autowired private IPartyService partyService;
+  @Autowired private PartyService partyService;
 
   private static synchronized Organization getTestBasicOrganizationDetails() {
     com.devskiller.jfairy.producer.person.DefaultPersonProvider xxx;
@@ -139,7 +139,7 @@ public class PartyServiceTest {
 
     Company generatedCompany = generatedPerson.getCompany();
 
-    return new Organization(IPartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
+    return new Organization(PartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
   }
 
   private static synchronized Person getTestBasicPersonDetails() {
@@ -149,7 +149,7 @@ public class PartyServiceTest {
         fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
 
     return new Person(
-        IPartyService.DEFAULT_TENANT_ID,
+        PartyService.DEFAULT_TENANT_ID,
         generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
   }
 
@@ -166,7 +166,7 @@ public class PartyServiceTest {
     if (hasMiddleName) {
       person =
           new Person(
-              IPartyService.DEFAULT_TENANT_ID,
+              PartyService.DEFAULT_TENANT_ID,
               generatedPerson.getFirstName()
                   + " "
                   + generatedPerson.getMiddleName()
@@ -175,7 +175,7 @@ public class PartyServiceTest {
     } else {
       person =
           new Person(
-              IPartyService.DEFAULT_TENANT_ID,
+              PartyService.DEFAULT_TENANT_ID,
               generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
     }
 
@@ -386,7 +386,7 @@ public class PartyServiceTest {
     if (hasMiddleName) {
       person =
           new Person(
-              IPartyService.DEFAULT_TENANT_ID,
+              PartyService.DEFAULT_TENANT_ID,
               generatedPerson.getFirstName()
                   + " "
                   + generatedPerson.getMiddleName()
@@ -395,7 +395,7 @@ public class PartyServiceTest {
     } else {
       person =
           new Person(
-              IPartyService.DEFAULT_TENANT_ID,
+              PartyService.DEFAULT_TENANT_ID,
               generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
     }
 
@@ -466,7 +466,7 @@ public class PartyServiceTest {
     Company generatedCompany = generatedPerson.getCompany();
 
     Organization organization =
-        new Organization(IPartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
+        new Organization(PartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
 
     organization.setIdentificationType("za_company_registration_certificate");
     organization.setIdentificationNumber("2006/123456/23");
@@ -499,7 +499,7 @@ public class PartyServiceTest {
     partyCount++;
 
     return new Party(
-        IPartyService.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
+        PartyService.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
   }
 
   /** Test the association functionality. */
@@ -507,15 +507,15 @@ public class PartyServiceTest {
   public void associationTest() throws Exception {
     Person firstPerson = getTestCompletePersonDetails(true);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, firstPerson);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, firstPerson);
 
     Person secondPerson = getTestCompletePersonDetails(true);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, secondPerson);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, secondPerson);
 
     Association association =
         new Association(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "test_association_type",
             firstPerson.getId(),
             secondPerson.getId(),
@@ -562,11 +562,11 @@ public class PartyServiceTest {
 
     assertTrue(stringAssociationProperty.hasValue(ValueType.STRING));
 
-    partyService.createAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+    partyService.createAssociation(PartyService.DEFAULT_TENANT_ID, association);
 
     AssociationsForParty associationsForParty =
         partyService.getAssociationsForParty(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             firstPerson.getId(),
             AssociationSortBy.TYPE,
             SortDirection.ASCENDING,
@@ -581,7 +581,7 @@ public class PartyServiceTest {
     compareAssociations(association, associationsForParty.getAssociations().getFirst());
 
     Association retrievedAssociation =
-        partyService.getAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+        partyService.getAssociation(PartyService.DEFAULT_TENANT_ID, association.getId());
 
     assertEquals(
         6,
@@ -596,21 +596,21 @@ public class PartyServiceTest {
     association.removePropertyWithType("test_date_property");
     assertFalse(association.hasPropertyWithType("test_date_property"));
 
-    partyService.updateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+    partyService.updateAssociation(PartyService.DEFAULT_TENANT_ID, association);
 
     retrievedAssociation =
-        partyService.getAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+        partyService.getAssociation(PartyService.DEFAULT_TENANT_ID, association.getId());
 
     assertEquals(
         4,
         retrievedAssociation.getProperties().size(),
         "The incorrect number of association properties was retrieved");
 
-    partyService.deleteAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+    partyService.deleteAssociation(PartyService.DEFAULT_TENANT_ID, association.getId());
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, firstPerson.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, firstPerson.getId());
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, secondPerson.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, secondPerson.getId());
   }
 
   /** Test the attribute functionality. */
@@ -628,10 +628,10 @@ public class PartyServiceTest {
 
     person.addAttribute(new Attribute("test_attribute_type", "test_attribute_value"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -643,31 +643,31 @@ public class PartyServiceTest {
 
     person.removeAttributeWithType("test_attribute_type");
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setAttributes(List.of(new Attribute("test_attribute_type", "test_attribute_value")));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization attributes
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addAttribute(new Attribute("test_attribute_type", "test_attribute_value"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -679,24 +679,24 @@ public class PartyServiceTest {
 
     organization.removeAttributeWithType("test_attribute_type");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setAttributes(
         List.of(new Attribute("test_attribute_type", "test_attribute_value")));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the person functionality. */
@@ -715,7 +715,7 @@ public class PartyServiceTest {
 
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
   }
 
   /** Test the consent functionality. */
@@ -725,10 +725,10 @@ public class PartyServiceTest {
 
     person.addConsent(new Consent("marketing"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -740,21 +740,21 @@ public class PartyServiceTest {
 
     person.removeConsentWithType("marketing");
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setConsents(List.of(new Consent("marketing", LocalDate.of(2015, 10, 1))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the contact mechanism purpose validation functionality. */
@@ -770,7 +770,7 @@ public class PartyServiceTest {
             "invalid_purpose"));
 
     Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -787,7 +787,7 @@ public class PartyServiceTest {
             "invalid_purpose"));
 
     Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         1,
@@ -808,10 +808,10 @@ public class PartyServiceTest {
             "giveName@test.com",
             "marketing"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -828,9 +828,9 @@ public class PartyServiceTest {
 
     person.removeContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS);
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -842,13 +842,13 @@ public class PartyServiceTest {
                 "giveName@test.com",
                 "marketing")));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization contactMechanisms
     Organization organization = getTestBasicOrganizationDetails();
@@ -860,10 +860,10 @@ public class PartyServiceTest {
             "test@test.com",
             "marketing"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -881,10 +881,10 @@ public class PartyServiceTest {
 
     organization.removeContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS);
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -896,14 +896,14 @@ public class PartyServiceTest {
                 "test@test.com",
                 "marketing")));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the education functionality. */
@@ -924,10 +924,10 @@ public class PartyServiceTest {
 
     person.addEducation(education);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -939,22 +939,22 @@ public class PartyServiceTest {
 
     person.removeEducationWithId(education.getId());
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setEducations(
         List.of(new Education("Northcliff High School", "national_senior_certificate", 1993)));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the employment functionality. */
@@ -984,10 +984,10 @@ public class PartyServiceTest {
 
     person.addEmployment(employment);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -999,21 +999,21 @@ public class PartyServiceTest {
 
     person.removeEmploymentWithId(employment.getId());
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setEmployments(List.of(new Employment("Absa", LocalDate.of(2020, 5, 1))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the external reference functionality. */
@@ -1026,10 +1026,10 @@ public class PartyServiceTest {
     person.addExternalReference(
         new ExternalReference("test_external_reference_type", "Test External Reference"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -1044,9 +1044,9 @@ public class PartyServiceTest {
 
     assertFalse(person.hasExternalReferenceWithType("legacy_customer_code"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -1055,13 +1055,13 @@ public class PartyServiceTest {
             new ExternalReference(
                 "test_external_reference_type", "Another Test External Reference")));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization identifications
     Organization organization = getTestBasicOrganizationDetails();
@@ -1070,10 +1070,10 @@ public class PartyServiceTest {
     organization.addExternalReference(
         new ExternalReference("test_external_reference_type", "Test External Reference"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1088,10 +1088,10 @@ public class PartyServiceTest {
 
     assertFalse(organization.hasExternalReferenceWithType("legacy_customer_code"));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1100,14 +1100,14 @@ public class PartyServiceTest {
             new ExternalReference(
                 "test_external_reference_type", "Another Test External Reference")));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the foreign person functionality. */
@@ -1115,11 +1115,11 @@ public class PartyServiceTest {
   public void foreignPersonTest() throws Exception {
     Person foreignPerson = getTestForeignPersonDetails();
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, foreignPerson);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, foreignPerson);
 
     Persons filteredPersons =
         partyService.getPersons(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "",
             PersonSortBy.NAME,
             SortDirection.ASCENDING,
@@ -1146,7 +1146,7 @@ public class PartyServiceTest {
 
     assertTrue(foreignPerson.hasResidencePermitWithType("za_critical_skills_visa"));
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, foreignPerson.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, foreignPerson.getId());
   }
 
   /** Test the identification functionality. */
@@ -1158,10 +1158,10 @@ public class PartyServiceTest {
     person.addIdentification(
         new Identification("za_id", "ZA", LocalDate.of(2003, 4, 13), "8904085800089"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -1173,22 +1173,22 @@ public class PartyServiceTest {
 
     person.removeIdentificationWithType("za_id");
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setIdentifications(
         List.of(new Identification("za_id", "ZA", LocalDate.of(2018, 7, 16), "8904085800089")));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization identifications
     Organization organization = getTestBasicOrganizationDetails();
@@ -1200,10 +1200,10 @@ public class PartyServiceTest {
             LocalDate.of(2006, 4, 2),
             "2006/123456/23"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1218,10 +1218,10 @@ public class PartyServiceTest {
 
     organization.removeIdentificationWithType("za_company_registration_certificate");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1233,14 +1233,14 @@ public class PartyServiceTest {
                 LocalDate.of(2016, 7, 21),
                 "2016/654321/21")));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the invalid association property functionality. */
@@ -1252,7 +1252,7 @@ public class PartyServiceTest {
 
     Association association =
         new Association(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "test_association_type",
             firstPerson.getId(),
             secondPerson.getId());
@@ -1270,7 +1270,7 @@ public class PartyServiceTest {
     association.addProperty(new AssociationProperty("test_string_property"));
 
     Set<ConstraintViolation<Association>> constraintViolations =
-        partyService.validateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+        partyService.validateAssociation(PartyService.DEFAULT_TENANT_ID, association);
 
     assertEquals(
         6,
@@ -1287,7 +1287,7 @@ public class PartyServiceTest {
         new AssociationProperty("test_string_property", "Invalid String Value!"));
 
     constraintViolations =
-        partyService.validateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+        partyService.validateAssociation(PartyService.DEFAULT_TENANT_ID, association);
 
     assertEquals(
         2,
@@ -1309,7 +1309,7 @@ public class PartyServiceTest {
     person.addAttribute(new Attribute("test_string_attribute"));
 
     Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         6,
@@ -1324,7 +1324,7 @@ public class PartyServiceTest {
     person.addAttribute(new Attribute("test_string_attribute", "Invalid String Value!"));
 
     personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         2,
@@ -1342,7 +1342,7 @@ public class PartyServiceTest {
     organization.addAttribute(new Attribute("test_string_attribute"));
 
     Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         6,
@@ -1357,7 +1357,7 @@ public class PartyServiceTest {
     organization.addAttribute(new Attribute("test_string_attribute", "Invalid String Value!"));
 
     organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         2,
@@ -1376,7 +1376,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         5,
@@ -1412,7 +1412,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         15,
@@ -1434,7 +1434,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         6,
@@ -1470,7 +1470,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         16,
@@ -1503,7 +1503,7 @@ public class PartyServiceTest {
             "!invalid_twitter_id"));
 
     Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         4,
@@ -1526,7 +1526,7 @@ public class PartyServiceTest {
             "invalid_purpose"));
 
     Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         3,
@@ -1551,7 +1551,7 @@ public class PartyServiceTest {
             "invalid_field_of_study"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         7,
@@ -1585,7 +1585,7 @@ public class PartyServiceTest {
             "invalid_occupation"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         17,
@@ -1602,7 +1602,7 @@ public class PartyServiceTest {
         new ExternalReference("legacy_customer_code", "Invalid Legacy Customer Code"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -1623,7 +1623,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         3,
@@ -1658,7 +1658,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         15,
@@ -1679,7 +1679,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         3,
@@ -1715,7 +1715,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         17,
@@ -1734,7 +1734,7 @@ public class PartyServiceTest {
     person.addLanguageProficiency(languageProficiency);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         5,
@@ -1746,7 +1746,7 @@ public class PartyServiceTest {
   @Test
   public void invalidMandatePropertyTest() throws Exception {
     Mandate mandate =
-        new Mandate(IPartyService.DEFAULT_TENANT_ID, "test_mandate_type", RequiredMandataries.ALL);
+        new Mandate(PartyService.DEFAULT_TENANT_ID, "test_mandate_type", RequiredMandataries.ALL);
 
     // Test null properties
     mandate.addProperty(new MandateProperty("test_boolean_property"));
@@ -1757,7 +1757,7 @@ public class PartyServiceTest {
     mandate.addProperty(new MandateProperty("test_string_property"));
 
     Set<ConstraintViolation<Mandate>> constraintViolations =
-        partyService.validateMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+        partyService.validateMandate(PartyService.DEFAULT_TENANT_ID, mandate);
 
     assertEquals(
         6,
@@ -1771,7 +1771,7 @@ public class PartyServiceTest {
 
     mandate.addProperty(new MandateProperty("test_string_property", "Invalid String Value!"));
 
-    constraintViolations = partyService.validateMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+    constraintViolations = partyService.validateMandate(PartyService.DEFAULT_TENANT_ID, mandate);
 
     assertEquals(
         2,
@@ -1805,7 +1805,7 @@ public class PartyServiceTest {
             "Invalid Address Postal Code$"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         18,
@@ -1822,7 +1822,7 @@ public class PartyServiceTest {
     organization.addAttribute(new Attribute("invalid_attribute", "Invalid Attribute"));
 
     Set<ConstraintViolation<Organization>> constraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         2,
@@ -1840,7 +1840,7 @@ public class PartyServiceTest {
             "invalid_external_reference_type", "invalid_external_reference_value"));
 
     Set<ConstraintViolation<Organization>> constraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         1,
@@ -1857,7 +1857,7 @@ public class PartyServiceTest {
     organization.setIdentificationCountryOfIssue("XX");
 
     Set<ConstraintViolation<Organization>> constraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         2,
@@ -1871,7 +1871,7 @@ public class PartyServiceTest {
     organization.setIdentificationCountryOfIssue("ZA");
 
     constraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         1,
@@ -1888,7 +1888,7 @@ public class PartyServiceTest {
         new IndustryAllocation("invalid_system_code", "invalid_industry_code"));
 
     Set<ConstraintViolation<Organization>> constraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         1,
@@ -1904,7 +1904,7 @@ public class PartyServiceTest {
     organization.addSegmentAllocation(new SegmentAllocation("invalid_segment_allocation"));
 
     Set<ConstraintViolation<Organization>> constraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         1,
@@ -1917,31 +1917,31 @@ public class PartyServiceTest {
   public void invalidPartyTypesForAssociationTest() throws Exception {
     Organization firstOrganization = getTestBasicOrganizationDetails();
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, firstOrganization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, firstOrganization);
 
     Organization secondOrganization = getTestBasicOrganizationDetails();
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, secondOrganization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, secondOrganization);
 
     Association association =
         new Association(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "parent_child",
             firstOrganization.getId(),
             secondOrganization.getId(),
             LocalDate.now());
 
     Set<ConstraintViolation<Association>> constraintViolations =
-        partyService.validateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+        partyService.validateAssociation(PartyService.DEFAULT_TENANT_ID, association);
 
     assertEquals(
         2,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the association");
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, firstOrganization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, firstOrganization.getId());
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, secondOrganization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, secondOrganization.getId());
   }
 
   /** Test the invalid person attribute functionality. */
@@ -1954,7 +1954,7 @@ public class PartyServiceTest {
     person.addAttribute(new Attribute("weight", 80, MeasurementUnit.CUSTOMARY_FOOT));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         4,
@@ -1970,7 +1970,7 @@ public class PartyServiceTest {
     person.addConsent(new Consent("invalid_consent"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -1988,7 +1988,7 @@ public class PartyServiceTest {
             "invalid_external_reference_type", "invalid_external_reference_value"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2005,7 +2005,7 @@ public class PartyServiceTest {
     person.setIdentificationCountryOfIssue("XX");
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         2,
@@ -2018,7 +2018,7 @@ public class PartyServiceTest {
     person.setIdentificationNumber("XXX");
     person.setIdentificationCountryOfIssue("ZA");
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2034,7 +2034,7 @@ public class PartyServiceTest {
     person.addSegmentAllocation(new SegmentAllocation("invalid_segment_allocation"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2050,7 +2050,7 @@ public class PartyServiceTest {
     person.addSkill(new Skill("invalid_skill", SkillProficiencyLevel.EXPERT));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2066,7 +2066,7 @@ public class PartyServiceTest {
     person.addSourceOfFunds(new SourceOfFunds("invalid_source_of_funds"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2082,7 +2082,7 @@ public class PartyServiceTest {
     person.addSourceOfWealth(new SourceOfWealth("invalid_source_of_wealth"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2098,7 +2098,7 @@ public class PartyServiceTest {
     person.setTimeZone("invalid_time_zone");
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2124,7 +2124,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2146,7 +2146,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         3,
@@ -2162,7 +2162,7 @@ public class PartyServiceTest {
     person.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
 
     Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         1,
@@ -2174,7 +2174,7 @@ public class PartyServiceTest {
     organization.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
 
     Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         1,
@@ -2195,7 +2195,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         5,
@@ -2230,7 +2230,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         16,
@@ -2251,7 +2251,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         4,
@@ -2287,7 +2287,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         18,
@@ -2308,7 +2308,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(invalidAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         3,
@@ -2344,7 +2344,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         17,
@@ -2365,10 +2365,10 @@ public class PartyServiceTest {
             LanguageProficiencyLevel.INTERMEDIATE,
             LanguageProficiencyLevel.ELEMENTARY));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2382,9 +2382,9 @@ public class PartyServiceTest {
 
     assertFalse(person.hasLanguageProficiencyWithLanguage("EN"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2397,13 +2397,13 @@ public class PartyServiceTest {
                 LanguageProficiencyLevel.INTERMEDIATE,
                 LanguageProficiencyLevel.ELEMENTARY)));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the lock functionality. */
@@ -2414,10 +2414,10 @@ public class PartyServiceTest {
 
     person.addLock(new Lock("suspected_fraud"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2431,31 +2431,31 @@ public class PartyServiceTest {
 
     assertFalse(person.hasLockWithType("suspected_fraud"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setLocks(List.of(new Lock("suspected_fraud", LocalDate.of(2015, 10, 1))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization locks
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addLock(new Lock("suspected_fraud"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -2467,23 +2467,23 @@ public class PartyServiceTest {
 
     organization.removeLockWithType("suspected_fraud");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setLocks(List.of(new Lock("suspected_fraud", LocalDate.of(2016, 5, 1))));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the mandate functionality. */
@@ -2491,19 +2491,19 @@ public class PartyServiceTest {
   public void mandateTest() throws Exception {
     Person firstPerson = getTestCompletePersonDetails(true);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, firstPerson);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, firstPerson);
 
     Person secondPerson = getTestCompletePersonDetails(true);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, secondPerson);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, secondPerson);
 
     Person thirdPerson = getTestCompletePersonDetails(false);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, thirdPerson);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, thirdPerson);
 
     Mandate mandate =
         new Mandate(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "test_mandate_type",
             RequiredMandataries.ALL,
             LocalDate.of(2016, 7, 16),
@@ -2525,11 +2525,11 @@ public class PartyServiceTest {
         "String Value", mandate.getPropertyWithType("test_string_property").get().getStringValue());
     assertTrue(mandate.hasPropertyWithType("test_string_property"));
 
-    partyService.createMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+    partyService.createMandate(PartyService.DEFAULT_TENANT_ID, mandate);
 
     MandatesForParty mandatesForParty =
         partyService.getMandatesForParty(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             firstPerson.getId(),
             MandateSortBy.TYPE,
             SortDirection.ASCENDING,
@@ -2542,7 +2542,7 @@ public class PartyServiceTest {
     compareMandates(mandate, mandatesForParty.getMandates().getFirst());
 
     Mandate retrievedMandate =
-        partyService.getMandate(IPartyService.DEFAULT_TENANT_ID, mandate.getId());
+        partyService.getMandate(PartyService.DEFAULT_TENANT_ID, mandate.getId());
 
     assertEquals(
         6,
@@ -2557,22 +2557,22 @@ public class PartyServiceTest {
     mandate.removePropertyWithType("test_date_property");
     assertFalse(mandate.hasPropertyWithType("test_date_property"));
 
-    partyService.updateMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+    partyService.updateMandate(PartyService.DEFAULT_TENANT_ID, mandate);
 
-    retrievedMandate = partyService.getMandate(IPartyService.DEFAULT_TENANT_ID, mandate.getId());
+    retrievedMandate = partyService.getMandate(PartyService.DEFAULT_TENANT_ID, mandate.getId());
 
     assertEquals(
         4,
         retrievedMandate.getProperties().size(),
         "The incorrect number of mandate properties was retrieved");
 
-    partyService.deleteMandate(IPartyService.DEFAULT_TENANT_ID, mandate.getId());
+    partyService.deleteMandate(PartyService.DEFAULT_TENANT_ID, mandate.getId());
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, firstPerson.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, firstPerson.getId());
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, secondPerson.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, secondPerson.getId());
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, thirdPerson.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, thirdPerson.getId());
   }
 
   /** Test the next of kin functionality. */
@@ -2600,10 +2600,10 @@ public class PartyServiceTest {
 
     person.addNextOfKin(nextOfKin);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2617,21 +2617,21 @@ public class PartyServiceTest {
 
     person.removeNextOfKinWithId(nextOfKin.getId());
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setNextOfKin(List.of(new NextOfKin("brother", "Fred Bloggs")));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the organization functionality. */
@@ -2644,11 +2644,11 @@ public class PartyServiceTest {
     organization.setCountryOfTaxResidence("ZA");
     organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organizations filteredOrganizations =
         partyService.getOrganizations(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "",
             OrganizationSortBy.NAME,
             SortDirection.ASCENDING,
@@ -2664,7 +2664,7 @@ public class PartyServiceTest {
 
     Snapshots snapshots =
         partyService.getSnapshots(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             EntityType.ORGANIZATION,
             organization.getId(),
             null,
@@ -2756,11 +2756,11 @@ public class PartyServiceTest {
 
     organization.addRole(new Role("supplier"));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     filteredOrganizations =
         partyService.getOrganizations(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "",
             OrganizationSortBy.NAME,
             SortDirection.ASCENDING,
@@ -2776,7 +2776,7 @@ public class PartyServiceTest {
 
     Parties filteredParties =
         partyService.getParties(
-            IPartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
+            PartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
@@ -2784,11 +2784,11 @@ public class PartyServiceTest {
         "The correct number of filtered parties was not retrieved");
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the party inheritance functionality. */
@@ -2796,24 +2796,24 @@ public class PartyServiceTest {
   public void partyInheritanceTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Person person = getTestCompletePersonDetails(false);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Parties filteredParties =
         partyService.getParties(
-            IPartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
+            PartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         2,
         filteredParties.getParties().size(),
         "The correct number of filtered parties was not retrieved");
 
-    partyService.deleteParty(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deleteParty(PartyService.DEFAULT_TENANT_ID, person.getId());
 
-    partyService.deleteParty(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteParty(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the pattern validation functionality. */
@@ -2839,7 +2839,7 @@ public class PartyServiceTest {
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789!"));
 
     Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         4,
@@ -2855,7 +2855,7 @@ public class PartyServiceTest {
     organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789!"));
 
     Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         2,
@@ -2870,11 +2870,11 @@ public class PartyServiceTest {
 
     person.setCountryOfCitizenship("ZA");
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Persons filteredPersons =
         partyService.getPersons(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "",
             PersonSortBy.NAME,
             SortDirection.ASCENDING,
@@ -2893,15 +2893,15 @@ public class PartyServiceTest {
         partyService.getTenantIdForParty(person.getId()).get(),
         "The tenant ID for the person is incorrect");
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     person = getTestCompletePersonDetails(true);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     filteredPersons =
         partyService.getPersons(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "",
             PersonSortBy.NAME,
             SortDirection.ASCENDING,
@@ -2917,7 +2917,7 @@ public class PartyServiceTest {
 
     Snapshots snapshots =
         partyService.getSnapshots(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             EntityType.PERSON,
             person.getId(),
             null,
@@ -3022,11 +3022,11 @@ public class PartyServiceTest {
 
     assertFalse(person.hasTaxNumberWithType("za_income_tax_number"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     filteredPersons =
         partyService.getPersons(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "",
             PersonSortBy.NAME,
             SortDirection.ASCENDING,
@@ -3042,7 +3042,7 @@ public class PartyServiceTest {
 
     filteredPersons =
         partyService.getPersons(
-            IPartyService.DEFAULT_TENANT_ID,
+            PartyService.DEFAULT_TENANT_ID,
             "Updated",
             PersonSortBy.NAME,
             SortDirection.ASCENDING,
@@ -3057,20 +3057,20 @@ public class PartyServiceTest {
     comparePersons(person, filteredPersons.getPersons().getFirst());
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     Parties filteredParties =
         partyService.getParties(
-            IPartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
+            PartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
         filteredParties.getParties().size(),
         "The correct number of filtered parties was not retrieved");
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the physical address functionality. */
@@ -3099,10 +3099,10 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(residentialAddress);
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3118,21 +3118,21 @@ public class PartyServiceTest {
 
     assertFalse(person.hasPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setPhysicalAddresses(List.of(residentialAddress));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization physical addresses
     Organization organization = getTestBasicOrganizationDetails();
@@ -3152,10 +3152,10 @@ public class PartyServiceTest {
 
     organization.addPhysicalAddress(mainAddress);
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3169,23 +3169,23 @@ public class PartyServiceTest {
 
     organization.removePhysicalAddressWithRole(PhysicalAddressRole.MAIN);
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setPhysicalAddresses(List.of(mainAddress));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the party physical address types functionality. */
@@ -3282,21 +3282,21 @@ public class PartyServiceTest {
     person.addPhysicalAddress(unstructuredAddress);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         0,
         constraintViolations.size(),
         "The correct number of constraint violations was not found");
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deleteParty(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deleteParty(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the preference functionality. */
@@ -3307,10 +3307,10 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("test_preference", "test_preference_value"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3324,31 +3324,31 @@ public class PartyServiceTest {
 
     assertFalse(person.hasPreferenceWithType("test_preference"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setPreferences(List.of(new Preference("test_preference", "test_preference_value")));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization preferences
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addPreference(new Preference("test_preference", "test_preference_value"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3360,24 +3360,24 @@ public class PartyServiceTest {
 
     organization.removePreferenceWithType("test_preference");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setPreferences(
         List.of(new Preference("test_preference", "test_preference_value")));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the role functionality. */
@@ -3388,10 +3388,10 @@ public class PartyServiceTest {
 
     person.addRole(new Role("employee"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3405,31 +3405,31 @@ public class PartyServiceTest {
 
     assertFalse(person.hasRoleWithType("employee"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setRoles(List.of(new Role("employee", LocalDate.of(2015, 10, 1))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization roles
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addRole(new Role("employer"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3441,23 +3441,23 @@ public class PartyServiceTest {
 
     organization.removeRoleWithType("employer");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setRoles(List.of(new Role("employer", LocalDate.of(2016, 5, 1))));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the role type attribute type constraint functionality. */
@@ -3468,7 +3468,7 @@ public class PartyServiceTest {
     person.addRole(new Role("test_person_role"));
 
     Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         55,
@@ -3482,7 +3482,7 @@ public class PartyServiceTest {
     organization.addRole(new Role("test_organization_role"));
 
     Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         14,
@@ -3498,10 +3498,10 @@ public class PartyServiceTest {
 
     person.addSegmentAllocation(new SegmentAllocation("test_person_segment"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3515,9 +3515,9 @@ public class PartyServiceTest {
 
     assertFalse(person.hasSegmentAllocationWithSegment("test_person_segment"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3526,23 +3526,23 @@ public class PartyServiceTest {
             new SegmentAllocation(
                 "test_person_segment", LocalDate.of(2012, 5, 17), LocalDate.of(2019, 9, 23))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization segments
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addSegmentAllocation(new SegmentAllocation("test_organization_segment"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3557,10 +3557,10 @@ public class PartyServiceTest {
 
     organization.removeSegmentAllocationWithSegment("test_organization_segment");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3571,14 +3571,14 @@ public class PartyServiceTest {
                 LocalDate.of(2012, 5, 17),
                 LocalDate.of(2019, 9, 23))));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the sourceOfFunds functionality. */
@@ -3589,10 +3589,10 @@ public class PartyServiceTest {
     person.addSourceOfFunds(new SourceOfFunds("salary_wages"));
     person.addSourceOfFunds(new SourceOfFunds("other", "Ill-gotten gains"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3606,21 +3606,21 @@ public class PartyServiceTest {
 
     assertFalse(person.hasSourceOfFundsWithType("salary_wages"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setSourcesOfFunds(List.of(new SourceOfFunds("salary_wages", LocalDate.of(2015, 10, 1))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the sourceOfWealth functionality. */
@@ -3631,10 +3631,10 @@ public class PartyServiceTest {
     person.addSourceOfWealth(new SourceOfWealth("savings"));
     person.addSourceOfWealth(new SourceOfWealth("other", "Ill-gotten gains"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3648,21 +3648,21 @@ public class PartyServiceTest {
 
     assertFalse(person.hasSourceOfWealthWithType("savings"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setSourcesOfWealth(List.of(new SourceOfWealth("savings", LocalDate.of(2015, 10, 1))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the status functionality. */
@@ -3673,10 +3673,10 @@ public class PartyServiceTest {
 
     person.addStatus(new Status("fraud_investigation"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3690,31 +3690,31 @@ public class PartyServiceTest {
 
     assertFalse(person.hasStatusWithType("fraud_investigation"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setStatuses(List.of(new Status("fraud_investigation", LocalDate.of(2015, 10, 1))));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization statuses
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addStatus(new Status("fraud_investigation"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3726,23 +3726,23 @@ public class PartyServiceTest {
 
     organization.removeStatusWithType("fraud_investigation");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setStatuses(List.of(new Status("fraud_investigation", LocalDate.of(2016, 5, 1))));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the tax number functionality. */
@@ -3753,10 +3753,10 @@ public class PartyServiceTest {
 
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789"));
 
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
     Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3770,31 +3770,31 @@ public class PartyServiceTest {
 
     assertFalse(person.hasTaxNumberWithType("za_income_tax_number"));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
     person.setTaxNumbers(List.of(new TaxNumber("za_income_tax_number", "ZA", "0987654321")));
 
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    partyService.updatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deletePerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     // Organization tax numbers
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789"));
 
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.createOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     Organization retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3806,23 +3806,23 @@ public class PartyServiceTest {
 
     organization.removeTaxNumberWithType("za_income_tax_number");
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
     organization.setTaxNumbers(List.of(new TaxNumber("za_income_tax_number", "ZA", "9987654321")));
 
-    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+    partyService.updateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     retrievedOrganization =
-        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+        partyService.getOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteOrganization(PartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the organization validation functionality. */
@@ -3831,7 +3831,7 @@ public class PartyServiceTest {
     Organization organization = getTestOrganizationDetails();
 
     Set<ConstraintViolation<Organization>> constraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+        partyService.validateOrganization(PartyService.DEFAULT_TENANT_ID, organization);
 
     if (!constraintViolations.isEmpty()) {
       fail("Failed to successfully validate the organization");
@@ -3844,7 +3844,7 @@ public class PartyServiceTest {
     Party party = getTestPartyDetails();
 
     Set<ConstraintViolation<Party>> constraintViolations =
-        partyService.validateParty(IPartyService.DEFAULT_TENANT_ID, party);
+        partyService.validateParty(PartyService.DEFAULT_TENANT_ID, party);
 
     if (!constraintViolations.isEmpty()) {
       fail("Failed to successfully validate the party");
@@ -3857,7 +3857,7 @@ public class PartyServiceTest {
     Person person = getTestCompletePersonDetails(true);
 
     Set<ConstraintViolation<Person>> constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+        partyService.validatePerson(PartyService.DEFAULT_TENANT_ID, person);
 
     if (!constraintViolations.isEmpty()) {
       fail("Failed to successfully validate the person");

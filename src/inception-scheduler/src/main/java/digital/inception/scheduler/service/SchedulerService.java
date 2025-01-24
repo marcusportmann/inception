@@ -18,524 +18,189 @@ package digital.inception.scheduler.service;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
-import digital.inception.core.util.ServiceUtil;
 import digital.inception.scheduler.model.DuplicateJobException;
-import digital.inception.scheduler.model.JobImplementation;
 import digital.inception.scheduler.model.Job;
-import digital.inception.scheduler.model.JobExecutionContext;
 import digital.inception.scheduler.model.JobExecutionFailedException;
 import digital.inception.scheduler.model.JobNotFoundException;
-import digital.inception.scheduler.model.JobParameter;
 import digital.inception.scheduler.model.JobStatus;
-import digital.inception.scheduler.model.Predictor;
-import digital.inception.scheduler.persistence.JobRepository;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
- * The <b>SchedulerService</b> class provides the Scheduler Service implementation.
+ * The <b>SchedulerService</b> interface defines the functionality provided by a Scheduler Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
-@Service
-public class SchedulerService implements ISchedulerService {
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(SchedulerService.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
-
-  /* The name of the Scheduler Service instance. */
-  private final String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
-
-  /** The Job Repository. */
-  private final JobRepository jobRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /* Entity Manager */
-  @PersistenceContext(unitName = "scheduler")
-  private EntityManager entityManager;
-
-  /*
-   * The delay in milliseconds between successive attempts to execute a job.
-   */
-  @Value("${inception.scheduler.job-execution-retry-delay:60000}")
-  private int jobExecutionRetryDelay;
-
-  /*
-   * The maximum number of times the execution of a job will be attempted.
-   */
-  @Value("${inception.scheduler.maximum-job-execution-attempts:144}")
-  private int maximumJobExecutionAttempts;
+@SuppressWarnings("unused")
+public interface SchedulerService {
 
   /**
-   * Constructs a new <b>SchedulerService</b>.
+   * Create the new job.
    *
-   * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
-   * @param jobRepository the Job Repository
+   * @param job the <b>Job</b> instance containing the information for the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateJobException if the job already exists
+   * @throws ServiceUnavailableException if the job could not be created
    */
-  public SchedulerService(
-      ApplicationContext applicationContext, Validator validator, JobRepository jobRepository) {
-    this.validator = validator;
-    this.applicationContext = applicationContext;
-    this.jobRepository = jobRepository;
-  }
-
-  @Override
-  public void createJob(Job job)
-      throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException {
-    validateJob(job);
-
-    try {
-      if (jobRepository.existsById(job.getId())) {
-        throw new DuplicateJobException(job.getId());
-      }
-
-      job.setExecutionAttempts(0);
-
-      jobRepository.saveAndFlush(job);
-    } catch (DuplicateJobException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to create the job (" + job.getName() + ")", e);
-    }
-  }
-
-  @Override
-  public void deleteJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    try {
-      if (!jobRepository.existsById(jobId)) {
-        throw new JobNotFoundException(jobId);
-      }
-
-      jobRepository.deleteById(jobId);
-    } catch (JobNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delete the job (" + jobId + ")", e);
-    }
-  }
-
-  @Override
-  public void executeJob(Job job)
-      throws InvalidArgumentException, JobExecutionFailedException, ServiceUnavailableException {
-    validateJob(job);
-
-    Class<?> jobClass;
-
-    // Load the job class.
-    try {
-      jobClass = Thread.currentThread().getContextClassLoader().loadClass(job.getJobClass());
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to execute the job ("
-              + job.getName()
-              + ") with ID ("
-              + job.getId()
-              + "): Failed to load the job class ("
-              + job.getJobClass()
-              + ")",
-          e);
-    }
-
-    // Instantiate and initialize the job
-    JobImplementation jobImplementation;
-
-    try {
-      // Create a new instance of the job
-      Object jobObject = jobClass.getConstructor().newInstance();
-
-      // Check if the job is a valid job
-      if (!(jobObject instanceof JobImplementation)) {
-        throw new RuntimeException(
-            "The job class ("
-                + job.getJobClass()
-                + ") does not implement the digital.inception.scheduler.model.JobImplementation interface");
-      }
-
-      jobImplementation = (JobImplementation) jobObject;
-
-      // Perform dependency injection for the job implementation
-      applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to execute the job ("
-              + job.getName()
-              + ") with ID ("
-              + job.getId()
-              + "): Failed to instantiate and initialize the job",
-          e);
-    }
-
-    // Execute the job
-    try {
-      // Retrieve the parameters for the job
-      Map<String, String> parameters = new HashMap<>();
-
-      for (JobParameter jobParameter : job.getParameters()) {
-        parameters.put(jobParameter.getName(), jobParameter.getValue());
-      }
-
-      // Initialize the job execution context
-      JobExecutionContext context =
-          new JobExecutionContext(job.getId(), job.getNextExecution(), parameters);
-
-      // Execute the job
-      jobImplementation.execute(context);
-    } catch (JobExecutionFailedException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to execute the job (" + job.getName() + ") with ID (" + job.getId() + ")", e);
-    }
-  }
-
-  @Override
-  public Job getJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    try {
-      Optional<Job> jobOptional = jobRepository.findById(jobId);
-
-      if (jobOptional.isPresent()) {
-        return jobOptional.get();
-      } else {
-        throw new JobNotFoundException(jobId);
-      }
-    } catch (JobNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the job (" + jobId + ")", e);
-    }
-  }
-
-  @Override
-  public String getJobName(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    try {
-      Optional<String> nameOptional = jobRepository.getNameById(jobId);
-
-      if (nameOptional.isPresent()) {
-        return nameOptional.get();
-      }
-
-      throw new JobNotFoundException(jobId);
-    } catch (JobNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the name of the job (" + jobId + ")", e);
-    }
-  }
-
-  @Override
-  public List<Job> getJobs(String filter) throws ServiceUnavailableException {
-    try {
-      Sort sort = Sort.by(Sort.Order.asc("name"));
-
-      if (StringUtils.hasText(filter)) {
-        return jobRepository.findAll(
-            (Specification<Job>)
-                (root, query, criteriaBuilder) -> {
-                  return criteriaBuilder.like(
-                      criteriaBuilder.lower(root.get("name")), "%" + filter.toLowerCase() + "%");
-                },
-            sort);
-      } else {
-        return jobRepository.findAll(sort);
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the jobs matching the filter (" + filter + ")", e);
-    }
-  }
-
-  @Override
-  public List<Job> getJobs() throws ServiceUnavailableException {
-    try {
-      return jobRepository.findAllByOrderByNameAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the jobs", e);
-    }
-  }
-
-  @Override
-  public int getMaximumJobExecutionAttempts() {
-    return maximumJobExecutionAttempts;
-  }
-
-  @Override
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Optional<Job> getNextJobScheduledForExecution() throws ServiceUnavailableException {
-    try {
-      OffsetDateTime lastExecutedBefore = OffsetDateTime.now();
-
-      lastExecutedBefore = lastExecutedBefore.minus(jobExecutionRetryDelay, ChronoUnit.MILLIS);
-
-      PageRequest pageRequest = PageRequest.of(0, 1);
-
-      List<Job> jobs =
-          jobRepository.findJobsScheduledForExecutionForWrite(
-              lastExecutedBefore, OffsetDateTime.now(), pageRequest);
-
-      if (!jobs.isEmpty()) {
-        Job job = jobs.getFirst();
-
-        OffsetDateTime when = OffsetDateTime.now();
-
-        jobRepository.lockJobForExecution(job.getId(), instanceName, when);
-
-        entityManager.detach(job);
-
-        job.setStatus(JobStatus.EXECUTING);
-        job.setLockName(instanceName);
-        job.incrementExecutionAttempts();
-        job.setLastExecuted(when);
-
-        return Optional.of(job);
-      } else {
-        return Optional.empty();
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the next job that has been scheduled for execution", e);
-    }
-  }
-
-  @Override
-  public List<Job> getUnscheduledJobs() throws ServiceUnavailableException {
-    try {
-      return jobRepository.findUnscheduledJobs();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the unscheduled jobs", e);
-    }
-  }
-
-  /** Initialize the Scheduler Service. */
-  @PostConstruct
-  public void init() {
-    log.info("Initializing the Scheduler Service (" + instanceName + ")");
-  }
-
-  @Override
-  public void rescheduleJob(String jobId, String schedulingPattern)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    if (!StringUtils.hasText(schedulingPattern)) {
-      throw new InvalidArgumentException("schedulingPattern");
-    }
-
-    try {
-      Predictor predictor = new Predictor(schedulingPattern, System.currentTimeMillis());
-
-      jobRepository.scheduleJob(jobId, predictor.nextMatchingOffsetDateTime());
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to reschedule the job (" + jobId + ") for execution", e);
-    }
-  }
-
-  @Override
-  public void resetJobLocks(JobStatus status, JobStatus newStatus)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (status == null) {
-      throw new InvalidArgumentException("status");
-    }
-
-    if (newStatus == null) {
-      throw new InvalidArgumentException("newStatus");
-    }
-
-    try {
-      jobRepository.resetJobLocks(status, newStatus, instanceName);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to reset the locks for the jobs with status ("
-              + status
-              + ") that have been locked using the lock name ("
-              + instanceName
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public boolean scheduleNextUnscheduledJobForExecution() throws ServiceUnavailableException {
-    try {
-      PageRequest pageRequest = PageRequest.of(0, 1);
-
-      List<Job> jobs = jobRepository.findUnscheduledJobsForWrite(pageRequest);
-
-      if (!jobs.isEmpty()) {
-        Job job = jobs.getFirst();
-
-        OffsetDateTime nextExecution = null;
-
-        try {
-          Predictor predictor =
-              new Predictor(job.getSchedulingPattern(), System.currentTimeMillis());
-
-          nextExecution = predictor.nextMatchingOffsetDateTime();
-        } catch (Throwable e) {
-          log.error(
-              "The next execution date could not be determined for the unscheduled job ("
-                  + job.getId()
-                  + ") with the scheduling pattern ("
-                  + job.getSchedulingPattern()
-                  + "): The job will be marked as FAILED",
-              e);
-        }
-
-        if (nextExecution == null) {
-          jobRepository.setJobStatus(job.getId(), JobStatus.FAILED);
-        } else {
-          log.info(
-              "Scheduling the unscheduled job ("
-                  + job.getId()
-                  + ") for execution at ("
-                  + nextExecution
-                  + ")");
-
-          jobRepository.scheduleJob(job.getId(), nextExecution);
-        }
-
-        return true;
-      } else {
-        return false;
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to schedule the next unscheduled job", e);
-    }
-  }
-
-  @Override
-  public void setJobStatus(String jobId, JobStatus status)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    try {
-      if (!jobRepository.existsById(jobId)) {
-        throw new JobNotFoundException(jobId);
-      }
-
-      jobRepository.setJobStatus(jobId, status);
-    } catch (JobNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to set the status (" + status + ") for the job (" + jobId + ")", e);
-    }
-  }
-
-  @Override
-  public void unlockJob(String jobId, JobStatus status)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    try {
-      if (!jobRepository.existsById(jobId)) {
-        throw new JobNotFoundException(jobId);
-      }
-
-      jobRepository.unlockJob(jobId, status);
-    } catch (JobNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to unlock and set the status for the job (" + jobId + ") to (" + status + ")", e);
-    }
-  }
-
-  @Override
-  public void updateJob(Job job)
-      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    validateJob(job);
-
-    try {
-      Optional<Job> jobOptional = jobRepository.findById(job.getId());
-
-      if (jobOptional.isEmpty()) {
-        throw new JobNotFoundException(job.getId());
-      }
-
-      Job existingJob = jobOptional.get();
-
-      existingJob.setEnabled(job.isEnabled());
-      existingJob.setJobClass(job.getJobClass());
-      existingJob.setName(job.getName());
-      existingJob.setParameters(job.getParameters());
-      existingJob.setSchedulingPattern(job.getSchedulingPattern());
-      existingJob.setStatus(job.getStatus());
-
-      if (!job.isEnabled()) {
-        job.setStatus(JobStatus.UNSCHEDULED);
-        job.setNextExecution(null);
-      }
-
-      jobRepository.saveAndFlush(job);
-    } catch (JobNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to update the job (" + job.getId() + ")", e);
-    }
-  }
-
-  private void validateJob(Job job) throws InvalidArgumentException {
-    if (job == null) {
-      throw new InvalidArgumentException("job");
-    }
-
-    Set<ConstraintViolation<Job>> constraintViolations = validator.validate(job);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "job", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
+  void createJob(Job job)
+      throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException;
+
+  /**
+   * Delete the job
+   *
+   * @param jobId the ID for the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be deleted
+   */
+  void deleteJob(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Execute the job.
+   *
+   * @param job the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobExecutionFailedException if the job execution failed
+   * @throws ServiceUnavailableException if the job could not be executed
+   */
+  void executeJob(Job job)
+      throws InvalidArgumentException, JobExecutionFailedException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the job.
+   *
+   * @param jobId the ID for the job
+   * @return the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be retrieved
+   */
+  Job getJob(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the name of the job.
+   *
+   * @param jobId the ID for the job
+   * @return the name of the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the name of the job could not be retrieved
+   */
+  String getJobName(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   * @return the filtered jobs
+   * @throws ServiceUnavailableException if the filtered jobs could not be retrieved
+   */
+  List<Job> getJobs(String filter) throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the jobs.
+   *
+   * @return the jobs
+   * @throws ServiceUnavailableException if the jobs could not be retrieved
+   */
+  List<Job> getJobs() throws ServiceUnavailableException;
+
+  /**
+   * Returns the maximum number of times the execution of a job will be attempted.
+   *
+   * @return the maximum number of times the execution of a job will be attempted
+   */
+  int getMaximumJobExecutionAttempts();
+
+  /**
+   * Retrieve the next job that is scheduled for execution.
+   *
+   * <p>The job will be locked to prevent duplicate processing.
+   *
+   * @return an Optional containing the next job that is scheduled for execution or an empty
+   *     Optional if no jobs are currently scheduled for execution
+   * @throws ServiceUnavailableException if the next job scheduled for execution could not be
+   *     retrieved
+   */
+  Optional<Job> getNextJobScheduledForExecution() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the unscheduled jobs.
+   *
+   * @return the unscheduled jobs
+   * @throws ServiceUnavailableException if the unscheduled jobs could not be retrieved
+   */
+  List<Job> getUnscheduledJobs() throws ServiceUnavailableException;
+
+  /**
+   * Reschedule the job for execution.
+   *
+   * @param jobId the ID for the job
+   * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
+   *     next execution time
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be rescheduled for execution
+   */
+  void rescheduleJob(String jobId, String schedulingPattern)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Reset the job locks.
+   *
+   * @param status the current status of the jobs that have been locked
+   * @param newStatus the new status for the jobs that have been unlocked
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the job locks could not be reset
+   */
+  void resetJobLocks(JobStatus status, JobStatus newStatus)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Schedule the next unscheduled job for execution.
+   *
+   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the next unscheduled job could not be scheduled for
+   *     execution
+   */
+  boolean scheduleNextUnscheduledJobForExecution() throws ServiceUnavailableException;
+
+  /**
+   * Set the status for the job.
+   *
+   * @param jobId the ID for the job
+   * @param status the new status for the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the status could not be set for the job
+   */
+  void setJobStatus(String jobId, JobStatus status)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Unlock a locked job.
+   *
+   * @param jobId the ID for the job
+   * @param status the new status for the unlocked job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be unlocked
+   */
+  void unlockJob(String jobId, JobStatus status)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Update the job.
+   *
+   * @param job the <b>Job</b> instance containing the updated information for the job
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws JobNotFoundException if the job could not be found
+   * @throws ServiceUnavailableException if the job could not be updated
+   */
+  void updateJob(Job job)
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 }

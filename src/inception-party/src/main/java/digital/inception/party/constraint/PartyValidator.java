@@ -20,8 +20,8 @@ import digital.inception.party.model.Attribute;
 import digital.inception.party.model.PhysicalAddress;
 import digital.inception.party.model.PhysicalAddressType;
 import digital.inception.party.model.Preference;
-import digital.inception.party.service.IPartyReferenceService;
-import digital.inception.reference.service.IReferenceService;
+import digital.inception.party.service.PartyReferenceService;
+import digital.inception.reference.service.ReferenceService;
 import jakarta.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
@@ -67,10 +67,10 @@ public abstract class PartyValidator {
           + "]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{4,20}$";
 
   /** The Party Reference Service. */
-  private final IPartyReferenceService partyReferenceService;
+  private final PartyReferenceService partyReferenceService;
 
   /** The Reference Service. */
-  private final IReferenceService referenceService;
+  private final ReferenceService referenceService;
 
   /**
    * Constructs a new <b>ValidPersonValidator</b>.
@@ -79,7 +79,7 @@ public abstract class PartyValidator {
    * @param referenceService the Reference Service
    */
   public PartyValidator(
-      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+      PartyReferenceService partyReferenceService, ReferenceService referenceService) {
     this.partyReferenceService = partyReferenceService;
     this.referenceService = referenceService;
   }
@@ -89,7 +89,7 @@ public abstract class PartyValidator {
    *
    * @return the Party Reference Service
    */
-  public IPartyReferenceService getPartyReferenceService() {
+  public PartyReferenceService getPartyReferenceService() {
     return partyReferenceService;
   }
 
@@ -98,7 +98,7 @@ public abstract class PartyValidator {
    *
    * @return the Reference Service
    */
-  public IReferenceService getReferenceService() {
+  public ReferenceService getReferenceService() {
     return referenceService;
   }
 

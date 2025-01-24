@@ -45,8 +45,8 @@ import digital.inception.party.model.SourceOfWealth;
 import digital.inception.party.model.Status;
 import digital.inception.party.model.TaxNumber;
 import digital.inception.party.model.ValueType;
-import digital.inception.party.service.IPartyReferenceService;
-import digital.inception.reference.service.IReferenceService;
+import digital.inception.party.service.PartyReferenceService;
+import digital.inception.reference.service.ReferenceService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
@@ -80,7 +80,7 @@ public class ValidPersonValidator extends PartyValidator
    */
   @Autowired
   public ValidPersonValidator(
-      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+      PartyReferenceService partyReferenceService, ReferenceService referenceService) {
     super(partyReferenceService, referenceService);
   }
 

@@ -25,7 +25,7 @@ import digital.inception.reference.model.MeasurementUnit;
 import digital.inception.reference.model.MeasurementUnitType;
 import digital.inception.reference.model.Region;
 import digital.inception.reference.model.TimeZone;
-import digital.inception.reference.service.IReferenceService;
+import digital.inception.reference.service.ReferenceService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -49,14 +49,14 @@ import org.springframework.util.StringUtils;
 public class ReferenceWebService {
 
   /** The Reference Service. */
-  private final IReferenceService referenceService;
+  private final ReferenceService referenceService;
 
   /**
    * Constructs a new <b>ReferenceWebService</b>.
    *
    * @param referenceService the Reference Service
    */
-  public ReferenceWebService(IReferenceService referenceService) {
+  public ReferenceWebService(ReferenceService referenceService) {
     this.referenceService = referenceService;
   }
 

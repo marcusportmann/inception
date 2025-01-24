@@ -79,8 +79,8 @@ import digital.inception.security.model.UserNotFoundException;
 import digital.inception.security.model.UserSortBy;
 import digital.inception.security.model.UserStatus;
 import digital.inception.security.model.Users;
-import digital.inception.security.service.ISecurityService;
 import digital.inception.security.service.SecurityService;
+import digital.inception.security.service.SecurityServiceImpl;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.security.SecureRandom;
@@ -135,7 +135,8 @@ public class SecurityServiceTest {
   private static int userDirectoryCount;
 
   /** The Security Service. */
-  @Autowired ISecurityService securityService;
+  @Autowired
+  SecurityService securityService;
 
   @Autowired
   @Qualifier("applicationDataSource")
@@ -230,7 +231,7 @@ public class SecurityServiceTest {
     UserDirectory userDirectory = new UserDirectory();
 
     userDirectory.setId(UuidCreator.getTimeOrderedEpoch());
-    userDirectory.setType(SecurityService.INTERNAL_USER_DIRECTORY_TYPE);
+    userDirectory.setType(SecurityServiceImpl.INTERNAL_USER_DIRECTORY_TYPE);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 
     String buffer =
@@ -538,7 +539,7 @@ public class SecurityServiceTest {
         () -> {
           Tenant tenant = getTestTenantDetails();
 
-          securityService.deleteGroup(SecurityService.DEFAULT_USER_DIRECTORY_ID, "INVALID");
+          securityService.deleteGroup(SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, "INVALID");
         });
   }
 
@@ -808,16 +809,16 @@ public class SecurityServiceTest {
   /** Test the functionality to retrieve the function codes for the user. */
   @Test
   public void getFunctionCodesForUserTest() throws Exception {
-    User user = getTestUserDetails(SecurityService.DEFAULT_USER_DIRECTORY_ID);
+    User user = getTestUserDetails(SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID);
 
     securityService.createUser(user, false, false);
 
     securityService.addUserToGroup(
-        SecurityService.DEFAULT_USER_DIRECTORY_ID, "Administrators", user.getUsername());
+        SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, "Administrators", user.getUsername());
 
     List<String> groupNamesForUser =
         securityService.getGroupNamesForUser(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID, user.getUsername());
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, user.getUsername());
 
     assertEquals(
         1,
@@ -828,7 +829,7 @@ public class SecurityServiceTest {
 
     List<String> functionCodesForUser =
         securityService.getFunctionCodesForUser(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID, user.getUsername());
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, user.getUsername());
 
     assertEquals(
         0,
@@ -1168,7 +1169,7 @@ public class SecurityServiceTest {
     boolean foundInternalUserDirectoryType = false;
 
     for (UserDirectoryType userDirectoryType : userDirectoryTypes) {
-      if (userDirectoryType.getCode().equals(SecurityService.INTERNAL_USER_DIRECTORY_TYPE)) {
+      if (userDirectoryType.getCode().equals(SecurityServiceImpl.INTERNAL_USER_DIRECTORY_TYPE)) {
         foundInternalUserDirectoryType = true;
 
         break;
@@ -1178,14 +1179,14 @@ public class SecurityServiceTest {
     if (!foundInternalUserDirectoryType) {
       fail(
           "Failed to find the internal user directory type ("
-              + SecurityService.INTERNAL_USER_DIRECTORY_TYPE
+              + SecurityServiceImpl.INTERNAL_USER_DIRECTORY_TYPE
               + ") in the list of user directory types");
     }
 
     boolean foundLdapUserDirectoryType = false;
 
     for (UserDirectoryType userDirectoryType : userDirectoryTypes) {
-      if (userDirectoryType.getCode().equals(SecurityService.LDAP_USER_DIRECTORY_TYPE)) {
+      if (userDirectoryType.getCode().equals(SecurityServiceImpl.LDAP_USER_DIRECTORY_TYPE)) {
         foundLdapUserDirectoryType = true;
 
         break;
@@ -1195,7 +1196,7 @@ public class SecurityServiceTest {
     if (!foundLdapUserDirectoryType) {
       fail(
           "Failed to find the internal user directory type ("
-              + SecurityService.LDAP_USER_DIRECTORY_TYPE
+              + SecurityServiceImpl.LDAP_USER_DIRECTORY_TYPE
               + ") in the list of user directory types");
     }
   }
@@ -1209,37 +1210,37 @@ public class SecurityServiceTest {
 
     List<String> retrievedRoleCodes =
         securityService.getRoleCodesForUser(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID, SecurityService.ADMINISTRATOR_USERNAME);
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, SecurityServiceImpl.ADMINISTRATOR_USERNAME);
 
     assertEquals(
         1, retrievedRoleCodes.size(), "The correct number of role codes was not retrieved");
 
     assertEquals(
-        SecurityService.ADMINISTRATOR_ROLE_CODE,
+        SecurityServiceImpl.ADMINISTRATOR_ROLE_CODE,
         retrievedRoleCodes.get(0),
         "The expected role code was not retrieved");
 
     List<GroupRole> retrievedGroupRoles =
         securityService.getRolesForGroup(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID, SecurityService.ADMINISTRATORS_GROUP_NAME);
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, SecurityServiceImpl.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(
         1, retrievedGroupRoles.size(), "The correct number of group roles was not retrieved");
 
     assertEquals(
-        SecurityService.ADMINISTRATOR_ROLE_CODE,
+        SecurityServiceImpl.ADMINISTRATOR_ROLE_CODE,
         retrievedGroupRoles.get(0).getRoleCode(),
         "The expected role code was not retrieved");
 
     retrievedRoleCodes =
         securityService.getRoleCodesForGroup(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID, SecurityService.ADMINISTRATORS_GROUP_NAME);
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, SecurityServiceImpl.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(
         1, retrievedRoleCodes.size(), "The correct number of role codes was not retrieved");
 
     assertEquals(
-        SecurityService.ADMINISTRATOR_ROLE_CODE,
+        SecurityServiceImpl.ADMINISTRATOR_ROLE_CODE,
         retrievedRoleCodes.get(0),
         "The expected role code was not retrieved");
 
@@ -1258,7 +1259,7 @@ public class SecurityServiceTest {
     securityService.createGroup(group);
 
     securityService.addRoleToGroup(
-        userDirectory.getId(), group.getName(), SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE);
+        userDirectory.getId(), group.getName(), SecurityServiceImpl.TENANT_ADMINISTRATOR_ROLE_CODE);
 
     retrievedGroupRoles = securityService.getRolesForGroup(userDirectory.getId(), group.getName());
 
@@ -1266,7 +1267,7 @@ public class SecurityServiceTest {
         1, retrievedGroupRoles.size(), "The correct number of group roles was not retrieved");
 
     assertEquals(
-        SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE,
+        SecurityServiceImpl.TENANT_ADMINISTRATOR_ROLE_CODE,
         retrievedGroupRoles.get(0).getRoleCode(),
         "The expected role code was not retrieved");
 
@@ -1277,12 +1278,12 @@ public class SecurityServiceTest {
         1, retrievedRoleCodes.size(), "The correct number of role codes was not retrieved");
 
     assertEquals(
-        SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE,
+        SecurityServiceImpl.TENANT_ADMINISTRATOR_ROLE_CODE,
         retrievedRoleCodes.get(0),
         "The expected role code was not retrieved");
 
     securityService.removeRoleFromGroup(
-        userDirectory.getId(), group.getName(), SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE);
+        userDirectory.getId(), group.getName(), SecurityServiceImpl.TENANT_ADMINISTRATOR_ROLE_CODE);
 
     retrievedGroupRoles = securityService.getRolesForGroup(userDirectory.getId(), group.getName());
 

@@ -19,7 +19,7 @@ package digital.inception.config.ws;
 import digital.inception.config.model.Config;
 import digital.inception.config.model.ConfigNotFoundException;
 import digital.inception.config.model.ConfigSummary;
-import digital.inception.config.service.IConfigService;
+import digital.inception.config.service.ConfigService;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import jakarta.jws.WebMethod;
@@ -44,14 +44,14 @@ import java.util.List;
 public class ConfigWebService {
 
   /** The Config Service. */
-  private final IConfigService configService;
+  private final ConfigService configService;
 
   /**
    * Constructs a new <b>ConfigWebService</b>.
    *
    * @param configService the Config Service
    */
-  public ConfigWebService(IConfigService configService) {
+  public ConfigWebService(ConfigService configService) {
     this.configService = configService;
   }
 

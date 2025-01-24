@@ -37,10 +37,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Conditional(InternalDocumentStoreEnabledCondition.class)
 @SuppressWarnings("unused")
-public class InternalDocumentStore implements IDocumentStore {
+public class InternalDocumentStore implements DocumentStore {
 
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(InternalDocumentStore.class);
+  private static final Logger log = LoggerFactory.getLogger(InternalDocumentStore.class);
 
   /** The Document Repository. */
   private final DocumentRepository documentRepository;

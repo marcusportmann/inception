@@ -77,7 +77,7 @@ import org.springframework.util.StringUtils;
 @Service
 @Conditional(InternalPartyStoreEnabledCondition.class)
 @SuppressWarnings("unused")
-public class InternalPartyStore implements IPartyStore {
+public class InternalPartyStore implements PartyStore {
 
   /** The Association Repository. */
   private final AssociationRepository associationRepository;

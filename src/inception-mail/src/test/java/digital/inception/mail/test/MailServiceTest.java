@@ -26,7 +26,7 @@ import digital.inception.mail.model.MailTemplate;
 import digital.inception.mail.model.MailTemplateContentType;
 import digital.inception.mail.model.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplateSummary;
-import digital.inception.mail.service.IMailService;
+import digital.inception.mail.service.MailService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.Collections;
@@ -65,7 +65,7 @@ public class MailServiceTest {
   private static int mailTemplateCount;
 
   /** The Mail Service. */
-  @Autowired private IMailService mailService;
+  @Autowired private MailService mailService;
 
   private static synchronized MailTemplate getTestMailTemplateDetails() {
     mailTemplateCount++;

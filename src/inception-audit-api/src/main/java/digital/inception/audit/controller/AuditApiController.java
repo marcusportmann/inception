@@ -16,34 +16,15 @@
 
 package digital.inception.audit.controller;
 
-import digital.inception.api.SecureApiController;
-import digital.inception.audit.service.IAuditService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * The <b>AuditApiController</b> class.
+ * The <b>AuditApiController</b> interface.
  *
  * @author Marcus Portmann
  */
-@RestController
-@CrossOrigin
-@SuppressWarnings({"unused"})
-public class AuditApiController extends SecureApiController implements IAuditApiController {
-
-  /** The Audit Service. */
-  private final IAuditService auditService;
-
-  /**
-   * Constructs a new <b>AuditApiController</b>.
-   *
-   * @param applicationContext the Spring application context
-   * @param auditService the Audit Service
-   */
-  public AuditApiController(ApplicationContext applicationContext, IAuditService auditService) {
-    super(applicationContext);
-
-    this.auditService = auditService;
-  }
-}
+@Tag(name = "Audit")
+@RequestMapping(value = "/api/audit")
+// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+public interface AuditApiController {}

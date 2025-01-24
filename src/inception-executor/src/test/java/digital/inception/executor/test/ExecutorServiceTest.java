@@ -40,7 +40,7 @@ import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskSummary;
 import digital.inception.executor.model.TaskType;
 import digital.inception.executor.model.TaskTypeNotFoundException;
-import digital.inception.executor.service.IExecutorService;
+import digital.inception.executor.service.ExecutorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.OffsetDateTime;
@@ -83,7 +83,7 @@ public class ExecutorServiceTest {
   private static final Logger log = LoggerFactory.getLogger(ExecutorServiceTest.class);
 
   /** The Executor Service. */
-  @Autowired private IExecutorService executorService;
+  @Autowired private ExecutorService executorService;
 
   /** The Jackson ObjectMapper. */
   @Autowired private ObjectMapper objectMapper;
