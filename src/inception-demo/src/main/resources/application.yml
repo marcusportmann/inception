@@ -125,6 +125,9 @@ inception:
     maximum-processing-attempts: 1000
 
   resource-server:
+    additional-static-resource-uri-patterns:
+      - "/another-static-resource-prefix/*"
+
     # NOTE: If you change the content security policy directives below, update the default list
     #       of content security policy directives specified via
     #       ResourceServerConfiguration.DEFAULT_CONTENT_SECURITY_POLICY_DIRECTIVES
