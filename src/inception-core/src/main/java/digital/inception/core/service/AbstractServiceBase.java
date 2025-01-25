@@ -166,11 +166,11 @@ public abstract class AbstractServiceBase {
    * validator.
    *
    * @param <T> the type of the argument to validate
-   * @param argument the argument to validate
    * @param argumentName the name of the argument (for error messages)
+   * @param argument the argument to validate
    * @throws InvalidArgumentException if the argument is null or validation errors occur
    */
-  protected <T> void validateArgument(T argument, String argumentName)
+  protected <T> void validateArgument(String argumentName, T argument)
       throws InvalidArgumentException {
     if (argument == null) {
       throw new InvalidArgumentException(argumentName);

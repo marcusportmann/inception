@@ -43,6 +43,9 @@ public abstract class AbstractApiControllerBase {
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
+  /** Is debugging enabled for the Inception Framework? */
+  private final boolean inDebugMode;
+
   /**
    * The Jackson Object Mapper, which provides functionality for reading and writing JSON, either to
    * and from basic POJOs (Plain Old Java Objects), or to and from a general-purpose JSON Tree Model
@@ -52,9 +55,6 @@ public abstract class AbstractApiControllerBase {
 
   /** The JSR-380 validator. */
   private final Validator validator;
-
-  /** Is debugging enabled for the Inception Framework? */
-  private final boolean inDebugMode;
 
   /**
    * Constructs a <b>AbstractApiControllerBase</b>.
@@ -123,15 +123,6 @@ public abstract class AbstractApiControllerBase {
   }
 
   /**
-   * Returns whether debugging is enabled for the Inception Framework.
-   *
-   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b> otherwise
-   */
-  protected boolean inDebugMode() {
-    return inDebugMode;
-  }
-
-  /**
    * Returns the Spring application context.
    *
    * @return the Spring application context
@@ -163,15 +154,24 @@ public abstract class AbstractApiControllerBase {
   }
 
   /**
+   * Returns whether debugging is enabled for the Inception Framework.
+   *
+   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b> otherwise
+   */
+  protected boolean inDebugMode() {
+    return inDebugMode;
+  }
+
+  /**
    * Validates the provided argument of any type with the specified name using the JSR-380
    * validator.
    *
    * @param <T> the type of the argument to validate
-   * @param argument the argument to validate
    * @param argumentName the name of the argument (for error messages)
+   * @param argument the argument to validate
    * @throws InvalidArgumentException if the argument is null or validation errors occur
    */
-  protected <T> void validateArgument(T argument, String argumentName)
+  protected <T> void validateArgument(String argumentName, T argument)
       throws InvalidArgumentException {
     if (argument == null) {
       throw new InvalidArgumentException(argumentName);
