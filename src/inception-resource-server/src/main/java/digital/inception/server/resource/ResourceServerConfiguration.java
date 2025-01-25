@@ -26,11 +26,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPublicKey;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -71,6 +73,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
@@ -92,12 +96,28 @@ import org.springframework.web.filter.CorsFilter;
 @EnableConfigurationProperties
 public class ResourceServerConfiguration implements InitializingBean {
 
+  /** The default security policy directives for the content security policy. */
+  private static final List<String> DEFAULT_CONTENT_SECURITY_POLICY_DIRECTIVES =
+      List.of(
+          "default-src 'self';",
+          "img-src 'self' data:;",
+          "frame-ancestors 'none';",
+          "script-src 'self' 'unsafe-inline';",
+          "style-src 'self' 'unsafe-inline';",
+          "font-src 'self' data:;");
+
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(ResourceServerConfiguration.class);
+
+  /** The additional static resource URI patterns. */
+  private List<String> additionalStaticResourceUriPatterns;
 
   /** Is API security enabled for the Inception Framework? */
   @Value("${inception.api.security.enabled:#{true}}")
   private boolean apiSecurityEnabled;
+
+  /** The security policy directives for the content security policy. */
+  private List<String> contentSecurityPolicyDirectives;
 
   /** The CORS allowed origin pattern. */
   @Value("${inception.api.security.cors-allowed-origin-pattern:#{null}}")
@@ -207,6 +227,24 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
+   * Returns the additional static resource URI patterns.
+   *
+   * @return the additional static resource URI patterns
+   */
+  public List<String> getAdditionalStaticResourceUriPatterns() {
+    return additionalStaticResourceUriPatterns;
+  }
+
+  /**
+   * Returns the security policy directives for the content security policy.
+   *
+   * @return the security policy directives for the content security policy
+   */
+  public List<String> getContentSecurityPolicyDirectives() {
+    return contentSecurityPolicyDirectives;
+  }
+
+  /**
    * Returns the JWT configuration.
    *
    * @return the JWT configuration
@@ -272,13 +310,17 @@ public class ResourceServerConfiguration implements InitializingBean {
           // Enable non-authenticated access to API endpoints if API security is disabled, or we are
           // running in debug mode, otherwise require authenticated access using a JWT bearer token.
           if ((!apiSecurityEnabled) || inDebugMode) {
-            authorizeRequests.requestMatchers(antMatcher("/api/**")).access(new AuthorizationManager<RequestAuthorizationContext>() {
-              @Override
-              public AuthorizationDecision check(Supplier<Authentication> authentication,
-                  RequestAuthorizationContext object) {
-                return new AuthorizationDecision(true);
-              }
-            });
+            authorizeRequests
+                .requestMatchers(antMatcher("/api/**"))
+                .access(
+                    new AuthorizationManager<RequestAuthorizationContext>() {
+                      @Override
+                      public AuthorizationDecision check(
+                          Supplier<Authentication> authentication,
+                          RequestAuthorizationContext object) {
+                        return new AuthorizationDecision(true);
+                      }
+                    });
           } else {
             authorizeRequests.requestMatchers(antMatcher("/api/**")).authenticated();
           }
@@ -286,9 +328,9 @@ public class ResourceServerConfiguration implements InitializingBean {
           // Static resources authorization rules
           authorizeRequests
               .requestMatchers(
-                  antMatcher("/"),
-                  antMatcher("/**/*.{js,css,html,png,jpg,svg,ico}"),
-                  antMatcher("/webjars/**"))
+                  getStaticResourcesUriPatterns().stream()
+                      .map(AntPathRequestMatcher::antMatcher)
+                      .toArray(RequestMatcher[]::new))
               .permitAll();
 
           // Enable non-authenticated internal network access to the actuator endpoints
@@ -309,6 +351,17 @@ public class ResourceServerConfiguration implements InitializingBean {
           authorizeRequests.anyRequest().denyAll();
         });
 
+    List<String> activeContentSecurityPolicyDirectives =
+        ((contentSecurityPolicyDirectives == null) || contentSecurityPolicyDirectives.isEmpty())
+            ? DEFAULT_CONTENT_SECURITY_POLICY_DIRECTIVES
+            : contentSecurityPolicyDirectives;
+
+    log.info(
+        "Using the content security policy directives: [{}]",
+        activeContentSecurityPolicyDirectives.stream()
+            .map(directive -> "\"" + directive + "\"") // Enquote each directive
+            .collect(Collectors.joining(", ")));
+
     // Configure security headers
     httpSecurity.headers(
         headers ->
@@ -316,12 +369,7 @@ public class ResourceServerConfiguration implements InitializingBean {
                 .contentSecurityPolicy(
                     csp ->
                         csp.policyDirectives(
-                            "default-src 'self'; "
-                                + "img-src 'self' data:; "
-                                + "frame-ancestors 'none'; "
-                                + "script-src 'self' 'unsafe-inline'; "
-                                + "style-src 'self' 'unsafe-inline'; "
-                                + "font-src 'self' data:;"))
+                            String.join(" ", activeContentSecurityPolicyDirectives)))
                 .httpStrictTransportSecurity(
                     hsts -> hsts.includeSubDomains(true).maxAgeInSeconds(31536000))
                 .referrerPolicy(referrerPolicy -> referrerPolicy.policy(ReferrerPolicy.NO_REFERRER))
@@ -348,6 +396,26 @@ public class ResourceServerConfiguration implements InitializingBean {
         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
     return httpSecurity.build();
+  }
+
+  /**
+   * Set the additional static resource URI patterns.
+   *
+   * @param additionalStaticResourceUriPatterns the additional static resource URI patterns
+   */
+  public void setAdditionalStaticResourceUriPatterns(
+      List<String> additionalStaticResourceUriPatterns) {
+    this.additionalStaticResourceUriPatterns = additionalStaticResourceUriPatterns;
+  }
+
+  /**
+   * Set the security policy directives for the content security policy.
+   *
+   * @param contentSecurityPolicyDirectives the security policy directives for the content security
+   *     policy
+   */
+  public void setContentSecurityPolicyDirectives(List<String> contentSecurityPolicyDirectives) {
+    this.contentSecurityPolicyDirectives = contentSecurityPolicyDirectives;
   }
 
   /**
@@ -494,6 +562,20 @@ public class ResourceServerConfiguration implements InitializingBean {
 
   private Converter<Jwt, Collection<GrantedAuthority>> getJwtGrantedAuthoritiesConverter() {
     return new JwtGrantedAuthoritiesConverter();
+  }
+
+  private List<String> getStaticResourcesUriPatterns() {
+    List<String> defaultStaticResourcesUriPatterns =
+        List.of("/", "/**/*.{js,css,html,png,jpg,svg,ico}", "/webjars/**");
+
+    // Combine the default static resources URI patterns with additional patterns (if present)
+    List<String> staticResourcesUriPatterns = new ArrayList<>(defaultStaticResourcesUriPatterns);
+    if (additionalStaticResourceUriPatterns != null
+        && !additionalStaticResourceUriPatterns.isEmpty()) {
+      staticResourcesUriPatterns.addAll(additionalStaticResourceUriPatterns);
+    }
+
+    return staticResourcesUriPatterns;
   }
 
   /**

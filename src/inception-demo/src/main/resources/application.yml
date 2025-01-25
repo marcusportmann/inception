@@ -125,6 +125,17 @@ inception:
     maximum-processing-attempts: 1000
 
   resource-server:
+    # NOTE: If you change the content security policy directives below, update the default list
+    #       of content security policy directives specified via
+    #       ResourceServerConfiguration.DEFAULT_CONTENT_SECURITY_POLICY_DIRECTIVES
+    content-security-policy-directives:
+      - "default-src 'self';"
+      - "img-src 'self' data:;"
+      - "frame-ancestors 'none';"
+      - "script-src 'self' 'unsafe-inline';"
+      - "style-src 'self' 'unsafe-inline';"
+      - "font-src 'self' data:;"
+
     jwt:
       keys:
         - id: demo
