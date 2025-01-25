@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.jdbc.DataSourceConfiguration;
 import digital.inception.core.jdbc.DataSourceUtil;
 import digital.inception.jpa.JpaUtil;
-import digital.inception.json.DateTimeModule;
+import digital.inception.json.InceptionDateTimeModule;
 import digital.inception.r2dbc.ConnectionFactoryConfiguration;
 import digital.inception.r2dbc.ConnectionFactoryUtil;
 import io.r2dbc.spi.ConnectionFactory;
@@ -365,7 +365,7 @@ public class TestConfiguration {
      * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
      * it does not handle timezones correctly for LocalDateTime, OffsetDateTime or Instant objects.
      */
-    jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
+    jackson2ObjectMapperBuilder.modulesToInstall(new InceptionDateTimeModule());
 
     return jackson2ObjectMapperBuilder;
   }

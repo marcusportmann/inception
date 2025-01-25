@@ -19,7 +19,7 @@ package digital.inception.application;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import digital.inception.json.DateTimeModule;
+import digital.inception.json.InceptionDateTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -65,7 +65,7 @@ public class ApplicationJacksonConfiguration {
      * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
      * it does not handle timezones correctly for LocalDateTime, OffsetDateTime or Instant objects.
      */
-    jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
+    jackson2ObjectMapperBuilder.modulesToInstall(new InceptionDateTimeModule());
 
     return jackson2ObjectMapperBuilder;
   }

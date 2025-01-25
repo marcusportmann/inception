@@ -19,7 +19,7 @@ package digital.inception.security.persistence;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import digital.inception.json.DateTimeModule;
+import digital.inception.json.InceptionDateTimeModule;
 import digital.inception.security.model.TokenClaim;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -41,7 +41,7 @@ public class TokenClaimListConverter implements AttributeConverter<List<TokenCla
   static {
     objectMapper = new ObjectMapper();
     objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-    objectMapper.registerModule(new DateTimeModule());
+    objectMapper.registerModule(new InceptionDateTimeModule());
   }
 
   /** Constructs a new <b>TokenClaimListConverter</b>. */

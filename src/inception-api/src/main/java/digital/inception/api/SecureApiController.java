@@ -33,42 +33,29 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class SecureApiController {
+public abstract class SecureApiController extends AbstractApiControllerBase {
 
   /** The code for the Administrator role. */
   private static final String ADMINISTRATOR_ROLE_CODE = "Administrator";
 
-  /** Is debugging enabled for the Inception Framework? */
-  private boolean inDebugMode;
-
   /** Is API security enabled for the Inception Framework? */
-  private boolean isSecurityEnabled;
+  private final boolean isSecurityEnabled;
 
   /**
    * Constructs a new <b>SecureApiController</b>.
    *
    * @param applicationContext the Spring application context
    */
-  public SecureApiController(ApplicationContext applicationContext) {
-
-    // Check if debugging is enabled for the Inception Framework
-    try {
-      if (StringUtils.hasText(
-          applicationContext.getEnvironment().getProperty("inception.debug.enabled"))) {
-        this.inDebugMode =
-            Boolean.parseBoolean(
-                applicationContext.getEnvironment().getProperty("inception.debug.enabled"));
-      }
-    } catch (Throwable e) {
-      this.inDebugMode = false;
-    }
+  protected SecureApiController(ApplicationContext applicationContext) {
+    super(applicationContext);
 
     // Check if security is enabled for the Inception Framework
-    if (!this.inDebugMode) {
+    boolean isSecurityEnabled = false;
+    if (!inDebugMode()) {
       try {
         if (StringUtils.hasText(
             applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
-          this.isSecurityEnabled =
+          isSecurityEnabled =
               Boolean.parseBoolean(
                   applicationContext
                       .getEnvironment()
@@ -77,34 +64,7 @@ public abstract class SecureApiController {
       } catch (Throwable ignored) {
       }
     }
-  }
-
-  /**
-   * Returns whether debugging is enabled for the Inception Framework.
-   *
-   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b>
-   *     otherwise
-   */
-  public boolean inDebugMode() {
-    return inDebugMode;
-  }
-
-  /**
-   * Returns whether API security is disabled.
-   *
-   * @return <b>true</b> if API security is disabled or <b>false</b> otherwise
-   */
-  public boolean isSecurityDisabled() {
-    return !isSecurityEnabled;
-  }
-
-  /**
-   * Returns whether API security is enabled.
-   *
-   * @return <b>true</b> if API security is enabled or <b>false</b> otherwise
-   */
-  public boolean isSecurityEnabled() {
-    return isSecurityEnabled;
+    this.isSecurityEnabled = isSecurityEnabled;
   }
 
   /**
@@ -284,5 +244,23 @@ public abstract class SecureApiController {
    */
   protected boolean hasRole(String roleName) {
     return hasAuthority("ROLE_" + roleName);
+  }
+
+  /**
+   * Returns whether API security is disabled.
+   *
+   * @return <b>true</b> if API security is disabled or <b>false</b> otherwise
+   */
+  protected boolean isSecurityDisabled() {
+    return !isSecurityEnabled;
+  }
+
+  /**
+   * Returns whether API security is enabled.
+   *
+   * @return <b>true</b> if API security is enabled or <b>false</b> otherwise
+   */
+  protected boolean isSecurityEnabled() {
+    return isSecurityEnabled;
   }
 }
