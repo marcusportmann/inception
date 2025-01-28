@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.mongodb;
+package digital.inception.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +28,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 /**
- * The <b>MongoDBConfiguration</b> class provides the Spring configuration for the MongoDB module.
+ * The <b>MongoConfiguration</b> class provides the Spring configuration for the Mongo module.
  *
  * <p>This module customizes the default automatic initialization performed by the
  * spring-boot-starter-data-mongodb Spring Boot starter.
@@ -46,75 +42,74 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
  * @author Marcus Portmann
  */
 @Configuration
-public class MongoDBConfiguration {
+public class MongoConfiguration {
 
-  /** Constructs a new <b>MongoDBConfiguration</b>. */
-  public MongoDBConfiguration() {}
+  /** Constructs a new <b>MongoConfiguration</b>. */
+  public MongoConfiguration() {}
 
   /**
-   * Returns the default GridFsTemplate that leverages the default MongoDB database factory.
+   * Returns the default GridFsTemplate that leverages the default mongo database factory.
    *
-   * @param defaultMongoDatabaseFactory the default MongoDB database factory
-   * @param defaultMongoTemplate the default MongoDB template
-   * @return the default GridFsTemplate that leverages the default MongoDB database factory
+   * @param defaultMongoDatabaseFactory the default mongo database factory
+   * @param defaultMongoTemplate the default mongo template
+   * @return the default GridFsTemplate that leverages the default mongo database factory
    */
   @Bean("defaultGridFsTemplate")
   @Primary
-  @Conditional(DefaultMongoDBDatabaseFactoryCondition.class)
+  @Conditional(DefaultMongoDatabaseFactoryCondition.class)
   public GridFsTemplate defaultGridFsTemplate(
-      @Qualifier("defaultMongoDatabaseFactory") MongoDatabaseFactory defaultMongoDatabaseFactory,
+      @Qualifier("defaultMongoDatabaseFactory")
+          org.springframework.data.mongodb.MongoDatabaseFactory defaultMongoDatabaseFactory,
       @Qualifier("defaultMongoTemplate") MongoTemplate defaultMongoTemplate) {
     return new GridFsTemplate(defaultMongoDatabaseFactory, defaultMongoTemplate.getConverter());
   }
 
   /**
-   * Returns the default MongoConverter that leverages the default MongoDB database factory.
+   * Returns the default MongoConverter that leverages the default mongo database factory.
    *
-   * @param defaultMongoDatabaseFactory the default MongoDB database factory
+   * @param defaultMongoDatabaseFactory the default mongo database factory
    * @param mongoCustomConversions the MongoCustomConversions
-   * @return the default MongoConverter that leverages the default MongoDB database factory
+   * @return the default MongoConverter that leverages the default mongo database factory
    */
   @Bean("defaultMongoConverter")
   @Primary
-  @Conditional(DefaultMongoDBDatabaseFactoryCondition.class)
+  @Conditional(DefaultMongoDatabaseFactoryCondition.class)
   public MongoConverter defaultMongoConverter(
-      @Qualifier("defaultMongoDatabaseFactory") MongoDatabaseFactory defaultMongoDatabaseFactory,
+      @Qualifier("defaultMongoDatabaseFactory")
+          org.springframework.data.mongodb.MongoDatabaseFactory defaultMongoDatabaseFactory,
       MongoCustomConversions mongoCustomConversions) {
-    MappingMongoConverter converter =
-        new MappingMongoConverter(
-            new DefaultDbRefResolver(defaultMongoDatabaseFactory), new MongoMappingContext());
-    converter.setCustomConversions(mongoCustomConversions);
-    converter.afterPropertiesSet();
-    return converter;
+    return MongoUtil.createMongoConverter(defaultMongoDatabaseFactory, mongoCustomConversions);
   }
 
   /**
-   * Returns the default MongoDB database factory initialized from the spring.data.mongodb
+   * Returns the default mongo database factory initialized from the spring.data.mongodb
    * configuration if it is available.
    *
    * @param applicationContext the Spring application context
-   * @return the default MongoDB database factory initialized from the spring.data.mongodb
+   * @return the default mongo database factory initialized from the spring.data.mongodb
    *     configuration if it is available
    */
   @Bean("defaultMongoDatabaseFactory")
   @Primary
-  @Conditional(DefaultMongoDBDatabaseFactoryCondition.class)
-  public MongoDatabaseFactory defaultMongoDatabaseFactory(ApplicationContext applicationContext) {
-    return new MongoDBDatabaseFactory(applicationContext);
+  @Conditional(DefaultMongoDatabaseFactoryCondition.class)
+  public org.springframework.data.mongodb.MongoDatabaseFactory defaultMongoDatabaseFactory(
+      ApplicationContext applicationContext) {
+    return new DefaultMongoDatabaseFactory(applicationContext);
   }
 
   /**
-   * Returns the default MonoTemplate that leverages the default MongoDB database factory.
+   * Returns the default MonoTemplate that leverages the default mongo database factory.
    *
-   * @param defaultMongoDatabaseFactory the default MongoDB database factory
-   * @param defaultMongoConverter the default MongoDB converter
-   * @return the default MonoTemplate that leverages the default MongoDB database factory
+   * @param defaultMongoDatabaseFactory the default mongo database factory
+   * @param defaultMongoConverter the default mongo converter
+   * @return the default MonoTemplate that leverages the default mongo database factory
    */
   @Bean("defaultMongoTemplate")
   @Primary
-  @Conditional(DefaultMongoDBDatabaseFactoryCondition.class)
+  @Conditional(DefaultMongoDatabaseFactoryCondition.class)
   public MongoTemplate defaultMongoTemplate(
-      @Qualifier("defaultMongoDatabaseFactory") MongoDatabaseFactory defaultMongoDatabaseFactory,
+      @Qualifier("defaultMongoDatabaseFactory")
+          org.springframework.data.mongodb.MongoDatabaseFactory defaultMongoDatabaseFactory,
       @Qualifier("defaultMongoConverter") MongoConverter defaultMongoConverter) {
     return new MongoTemplate(defaultMongoDatabaseFactory, defaultMongoConverter);
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.mongodb.test;
+package digital.inception.mongo.test;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.mongodb.test;
+package digital.inception.mongo.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,7 +28,7 @@ import de.flapdoodle.reverse.StateID;
 import de.flapdoodle.reverse.TransitionWalker;
 import de.flapdoodle.reverse.Transitions;
 import de.flapdoodle.reverse.transitions.Start;
-import digital.inception.mongodb.MongoDBConfiguration;
+import digital.inception.mongo.MongoConfiguration;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -45,7 +45,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
  * @author Marcus Portmann
  */
 @SpringBootTest(
-    classes = {MongoDBConfiguration.class},
+    classes = {MongoConfiguration.class},
     properties = "spring.data.mongodb.uri=mongodb://localhost:49017/test")
 @Disabled
 public class EmbeddedMongoTemplateTest {
@@ -73,7 +73,7 @@ public class EmbeddedMongoTemplateTest {
             .net(Start.to(Net.class).initializedWith(Net.defaults().withPort(49017)))
             .build();
 
-    Transitions transitions = mongod.transitions(Version.V8_0_3);
+    Transitions transitions = mongod.transitions(Version.V6_0_18);
 
     embeddedMongodProcessRunningState =
         transitions.walker().initState(StateID.of(RunningMongodProcess.class));

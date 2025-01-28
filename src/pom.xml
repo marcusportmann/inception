@@ -538,7 +538,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-mongodb</artifactId>
+        <artifactId>inception-mongo</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -704,7 +704,7 @@
     <module>inception-mail</module>
     <module>inception-mail-api</module>
     <module>inception-mail-ws</module>
-    <module>inception-mongodb</module>
+    <module>inception-mongo</module>
     <module>inception-opentelemetry</module>
 <!--    <module>inception-operations</module>-->
     <module>inception-party</module>

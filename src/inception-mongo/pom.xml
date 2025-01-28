@@ -3,7 +3,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>inception-mongodb</artifactId>
+  <artifactId>inception-mongo</artifactId>
   <name>inception-mongodb</name>
 
   <parent>

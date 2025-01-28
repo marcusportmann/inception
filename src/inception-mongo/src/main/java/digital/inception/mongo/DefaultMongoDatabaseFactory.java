@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.mongodb;
+package digital.inception.mongo;
 
 import com.mongodb.ClientSessionOptions;
 import com.mongodb.ConnectionString;
@@ -41,22 +41,22 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.SessionAwareMethodInterceptor;
 import org.springframework.data.mongodb.core.MongoExceptionTranslator;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>MongoDBDatabaseFactory-</b> class.
+ * The <b>DefaultMongoDatabaseFactory</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "NullableProblems"})
-public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableBean {
+public class DefaultMongoDatabaseFactory
+    implements org.springframework.data.mongodb.MongoDatabaseFactory, DisposableBean {
 
   /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(MongoDBDatabaseFactory.class);
+  private static final Logger log = LoggerFactory.getLogger(DefaultMongoDatabaseFactory.class);
 
   private final String databaseName;
 
@@ -68,13 +68,13 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
   private WriteConcern writeConcern;
 
   /**
-   * Constructs a new <b>MongoDBDatabaseFactory</b>.
+   * Constructs a new <b>DefaultMongoDatabaseFactory</b>.
    *
    * @param applicationContext the Spring application context
    * @param uri the MongoDB URI
    * @param databaseName the MongoDB database name
    */
-  public MongoDBDatabaseFactory(
+  public DefaultMongoDatabaseFactory(
       ApplicationContext applicationContext, String uri, String databaseName) {
     if (!StringUtils.hasText(uri)) {
       throw new BeanInitializationException(
@@ -92,12 +92,12 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
   }
 
   /**
-   * Constructs a new <b>MongoDBDatabaseFactory</b>.
+   * Constructs a new <b>DefaultMongoDatabaseFactory</b>.
    *
    * @param applicationContext the Spring application context
    * @param databaseName the MongoDB database name
    */
-  public MongoDBDatabaseFactory(ApplicationContext applicationContext, String databaseName) {
+  public DefaultMongoDatabaseFactory(ApplicationContext applicationContext, String databaseName) {
     Environment environment = applicationContext.getEnvironment();
 
     // Ensure that we have a MongoDB URI specified via spring.data.mongodb.uri
@@ -123,11 +123,11 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
   }
 
   /**
-   * Constructs a new <b>MongoDBDatabaseFactory</b>.
+   * Constructs a new <b>DefaultMongoDatabaseFactory</b>.
    *
    * @param applicationContext the Spring application context
    */
-  public MongoDBDatabaseFactory(ApplicationContext applicationContext) {
+  public DefaultMongoDatabaseFactory(ApplicationContext applicationContext) {
     Environment environment = applicationContext.getEnvironment();
 
     // Ensure that we have a MongoDB URI specified via spring.data.mongodb.uri
@@ -204,7 +204,7 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
   }
 
   @Override
-  public MongoDatabaseFactory withSession(ClientSession session) {
+  public org.springframework.data.mongodb.MongoDatabaseFactory withSession(ClientSession session) {
     return new ClientSessionBoundMongoDbFactory(session, this);
   }
 
@@ -249,16 +249,18 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
   }
 
   /**
-   * {@link ClientSession} bound {@link MongoDatabaseFactory} decorating the database with a {@link
-   * SessionAwareMethodInterceptor}.
+   * {@link ClientSession} bound {@link org.springframework.data.mongodb.MongoDatabaseFactory}
+   * decorating the database with a {@link SessionAwareMethodInterceptor}.
    */
-  static final class ClientSessionBoundMongoDbFactory implements MongoDatabaseFactory {
+  static final class ClientSessionBoundMongoDbFactory
+      implements org.springframework.data.mongodb.MongoDatabaseFactory {
 
-    private final MongoDatabaseFactory delegate;
+    private final org.springframework.data.mongodb.MongoDatabaseFactory delegate;
 
     private final ClientSession session;
 
-    public ClientSessionBoundMongoDbFactory(ClientSession session, MongoDatabaseFactory delegate) {
+    public ClientSessionBoundMongoDbFactory(
+        ClientSession session, org.springframework.data.mongodb.MongoDatabaseFactory delegate) {
       this.session = session;
       this.delegate = delegate;
     }
@@ -276,7 +278,7 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
       return ObjectUtils.nullSafeEquals(this.delegate, that.delegate);
     }
 
-    public MongoDatabaseFactory getDelegate() {
+    public org.springframework.data.mongodb.MongoDatabaseFactory getDelegate() {
       return this.delegate;
     }
 
@@ -325,7 +327,8 @@ public class MongoDBDatabaseFactory implements MongoDatabaseFactory, DisposableB
     }
 
     @Override
-    public MongoDatabaseFactory withSession(ClientSession session) {
+    public org.springframework.data.mongodb.MongoDatabaseFactory withSession(
+        ClientSession session) {
       return delegate.withSession(session);
     }
 

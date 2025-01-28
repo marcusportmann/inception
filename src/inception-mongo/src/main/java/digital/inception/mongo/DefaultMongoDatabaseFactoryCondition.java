@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.mongodb;
+package digital.inception.mongo;
 
 import com.mongodb.ConnectionString;
 import org.springframework.context.annotation.Condition;
@@ -24,16 +24,16 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>DefaultMongoDBDatabaseFactoryCondition</b> class implements the condition that must be
- * matched to enable the default MongoDBDatabaseFactory, which is that MongoDB configuration is
+ * The <b>DefaultMongoDatabaseFactoryCondition</b> class implements the condition that must be
+ * matched to enable the default MongoDatabaseFactory, which is that the MongoDB configuration is
  * specified under spring.data.mongodb.
  *
  * @author Marcus Portmann
  */
-public class DefaultMongoDBDatabaseFactoryCondition implements Condition {
+public class DefaultMongoDatabaseFactoryCondition implements Condition {
 
-  /** Constructs a new <b>DefaultMongoDBDatabaseFactoryCondition</b>. */
-  public DefaultMongoDBDatabaseFactoryCondition() {}
+  /** Constructs a new <b>DefaultMongoDatabaseFactoryCondition</b>. */
+  public DefaultMongoDatabaseFactoryCondition() {}
 
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
