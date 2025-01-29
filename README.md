@@ -1,5 +1,41 @@
 # Inception Framework
 
+The Inception Framework offers a robust and comprehensive solution for building modern,
+full-stack web applications, combining a powerful Spring Boot backend with an intuitive
+Angular frontend. By following best practices in contemporary web development, the
+Inception Framework streamlines the process of developing scalable, maintainable, and
+secure applications. This framework is designed to support the creation of dynamic,
+enterprise-grade solutions, with an emphasis on flexibility and extensibility.
+
+The Inception Framework integrates the backend components (built using Spring Boot) and
+the frontend components (built using Angular) seamlessly, providing a unified development
+experience. Developers can focus on both server-side logic and client-side functionality
+in a cohesive environment, making it easier to build applications from the ground up.
+
+One of the key strengths of the Inception Framework is its modular design. The framework
+is organized into a set of discrete, reusable modules, which developers can incorporate
+into their applications as needed. This modular approach allows developers to customize
+their application’s features without overcomplicating the codebase. Modules provide
+functionality, which includes config management, codes management, error reporting,
+reliable execution of complex asynchronous tasks, email correspondence with templating,
+reference data, state of the art party management, and a multi-tenant role-based security
+model.
+
+All of the framework’s functionality can be exposed via both RESTful APIs and SOAP-based
+web services. This dual exposure ensures that applications built on the Inception Framework
+can easily integrate with other systems, whether they require lightweight, modern API calls
+or more traditional enterprise-level web services.
+
+To simplify and standardize database version control and schema management, Liquibase is
+integrated into the framework. This enables developers to manage database changes in a
+consistent, reproducible manner, ensuring that the database schema evolves alongside
+application code, and that all changes are properly tracked and versioned.
+
+The Inception Framework is built with scalability in mind, providing tools that allow
+applications to grow seamlessly as user demands increase. The modularity and extensibility
+of the framework ensure that developers can keep applications maintainable, even as they
+evolve with new features and requirements.
+
 ## Overview
 The Inception Framework enables the rapid development of applications with a Java
 back-end and Angular front-end.
