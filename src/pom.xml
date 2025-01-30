@@ -696,7 +696,7 @@
     <module>inception-executor</module>
     <module>inception-executor-api</module>
     <module>inception-executor-ws</module>
-<!--    <module>inception-flowable</module>-->
+    <module>inception-flowable</module>
     <module>inception-jpa</module>
     <module>inception-jta</module>
     <module>inception-json</module>
@@ -706,7 +706,7 @@
     <module>inception-mail-ws</module>
     <module>inception-mongo</module>
     <module>inception-opentelemetry</module>
-    <!-- <module>inception-operations</module> -->
+     <module>inception-operations</module>
     <module>inception-party</module>
     <module>inception-party-api</module>
     <module>inception-party-ws</module>

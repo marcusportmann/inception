@@ -42,7 +42,7 @@ import reactor.core.publisher.Flux;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Data")
+@Tag(name = "Data API")
 @RequestMapping(value = "/api/data")
 public interface DataApiController {
 

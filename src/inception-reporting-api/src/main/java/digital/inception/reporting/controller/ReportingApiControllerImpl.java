@@ -16,8 +16,8 @@
 
 package digital.inception.reporting.controller;
 
-import digital.inception.core.api.ApiUtil;
 import digital.inception.api.SecureApiController;
+import digital.inception.core.api.ApiUtil;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -28,7 +28,6 @@ import digital.inception.reporting.model.ReportDefinitionSummary;
 import digital.inception.reporting.model.ReportParameter;
 import digital.inception.reporting.service.ReportingService;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
@@ -53,8 +52,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused"})
-public class ReportingApiControllerImpl extends SecureApiController implements
-    ReportingApiController {
+public class ReportingApiControllerImpl extends SecureApiController
+    implements ReportingApiController {
 
   /** The data source used to provide connections to the application database. */
   private final DataSource dataSource;
@@ -62,27 +61,21 @@ public class ReportingApiControllerImpl extends SecureApiController implements
   /** The Reporting Service. */
   private final ReportingService reportingService;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <b>ReportingApiControllerImpl</b>.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service
-   * @param validator the JSR-380 validator
    */
   public ReportingApiControllerImpl(
       ApplicationContext applicationContext,
       @Qualifier("applicationDataSource") DataSource dataSource,
-      ReportingService reportingService,
-      Validator validator) {
+      ReportingService reportingService) {
     super(applicationContext);
 
     this.dataSource = dataSource;
     this.reportingService = reportingService;
-    this.validator = validator;
   }
 
   @Override
@@ -111,7 +104,7 @@ public class ReportingApiControllerImpl extends SecureApiController implements
     }
 
     Set<ConstraintViolation<GenerateReportRequest>> constraintViolations =
-        validator.validate(generateReportRequest);
+        getValidator().validate(generateReportRequest);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(

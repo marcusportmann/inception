@@ -17,9 +17,9 @@
 package digital.inception.error.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.error.model.ErrorReport;
 import digital.inception.error.model.ErrorReportNotFoundException;
@@ -29,19 +29,13 @@ import digital.inception.error.model.ErrorReportSummary;
 import digital.inception.error.persistence.ErrorReportRepository;
 import digital.inception.error.persistence.ErrorReportSummaryRepository;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,16 +51,10 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings({"unused"})
-public class ErrorServiceImpl implements ErrorService {
+public class ErrorServiceImpl extends AbstractServiceBase implements ErrorService {
 
   /** The maximum number of filtered error report summaries. */
   private static final int MAX_FILTERED_ERROR_REPORT_SUMMARIES = 100;
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(ErrorServiceImpl.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
 
   /** The Error Report Repository. */
   private final ErrorReportRepository errorReportRepository;
@@ -74,28 +62,19 @@ public class ErrorServiceImpl implements ErrorService {
   /** The Error Report Summary Repository. */
   private final ErrorReportSummaryRepository errorReportSummaryRepository;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
-  /** Is debugging enabled for the Inception Framework? */
-  @Value("${inception.debug.enabled:#{false}}")
-  private boolean inDebugMode;
-
   /**
    * Constructs a new <b>ErrorServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param errorReportRepository the Error Report Repository
    * @param errorReportSummaryRepository the Error Report Summary Repository
    */
   public ErrorServiceImpl(
       ApplicationContext applicationContext,
-      Validator validator,
       ErrorReportRepository errorReportRepository,
       ErrorReportSummaryRepository errorReportSummaryRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+    super(applicationContext);
+
     this.errorReportRepository = errorReportRepository;
     this.errorReportSummaryRepository = errorReportSummaryRepository;
   }
@@ -103,10 +82,6 @@ public class ErrorServiceImpl implements ErrorService {
   @Override
   public void createErrorReport(ErrorReport errorReport)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (errorReport == null) {
-      throw new InvalidArgumentException("errorReport");
-    }
-
     // Truncate the detail if required
     if ((errorReport.getDetail() != null)
         && (errorReport.getDetail().length() > ErrorReport.MAX_DETAIL_SIZE)) {
@@ -114,12 +89,7 @@ public class ErrorServiceImpl implements ErrorService {
           errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3) + "...");
     }
 
-    Set<ConstraintViolation<ErrorReport>> constraintViolations = validator.validate(errorReport);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "errorReport", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("errorReport", errorReport);
 
     try {
       String description = errorReport.getDescription();
@@ -156,8 +126,8 @@ public class ErrorServiceImpl implements ErrorService {
 
       errorReportRepository.saveAndFlush(errorReport);
 
-      if (inDebugMode) {
-        ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
+      if (inDebugMode()) {
+        ObjectMapper objectMapper = getApplicationContext().getBean(ObjectMapper.class);
 
         if (objectMapper != null) {
           log.info(

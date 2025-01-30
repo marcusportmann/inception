@@ -71,7 +71,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Party")
+@Tag(name = "Party API")
 @RequestMapping(value = "/api/party")
 // @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public interface PartyApiController {

@@ -23,6 +23,7 @@ import digital.inception.mail.model.MailTemplate;
 import digital.inception.mail.model.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplateSummary;
 import digital.inception.mail.service.MailService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -30,6 +31,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>MailWebService</b> class.
@@ -42,7 +44,7 @@ import java.util.List;
     targetNamespace = "https://inception.digital/mail")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class MailWebService {
+public class MailWebService extends AbstractWebServiceBase {
 
   /** The Mail Service. */
   private final MailService mailService;
@@ -50,9 +52,12 @@ public class MailWebService {
   /**
    * Constructs a new <b>MailWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param mailService the Mail Service
    */
-  public MailWebService(MailService mailService) {
+  public MailWebService(ApplicationContext applicationContext, MailService mailService) {
+    super(applicationContext);
+
     this.mailService = mailService;
   }
 

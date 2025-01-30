@@ -49,7 +49,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Codes")
+@Tag(name = "Codes API")
 @RequestMapping(value = "/api/codes")
 // @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface CodesApiController {

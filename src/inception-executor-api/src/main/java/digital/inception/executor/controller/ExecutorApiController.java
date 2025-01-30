@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Executor")
+@Tag(name = "Executor API")
 @RequestMapping(value = "/api/executor")
 // @el (isSecurityDisabled:
 // digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)

@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Error")
+@Tag(name = "Error API")
 @RequestMapping(value = "/api/error")
 // @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface ErrorApiController {

@@ -26,6 +26,7 @@ import digital.inception.codes.model.DuplicateCodeException;
 import digital.inception.codes.service.CodesService;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -34,6 +35,7 @@ import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.Date;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
@@ -47,7 +49,7 @@ import org.springframework.util.StringUtils;
     targetNamespace = "https://inception.digital/codes")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class CodesWebService {
+public class CodesWebService extends AbstractWebServiceBase {
 
   /** The Codes Service. */
   private final CodesService codesService;
@@ -55,9 +57,12 @@ public class CodesWebService {
   /**
    * Constructs a new <b>CodesWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param codesService the Codes Service
    */
-  public CodesWebService(CodesService codesService) {
+  public CodesWebService(ApplicationContext applicationContext, CodesService codesService) {
+    super(applicationContext);
+
     this.codesService = codesService;
   }
 

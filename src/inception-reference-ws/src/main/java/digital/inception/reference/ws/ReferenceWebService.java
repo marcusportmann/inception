@@ -26,6 +26,7 @@ import digital.inception.reference.model.MeasurementUnitType;
 import digital.inception.reference.model.Region;
 import digital.inception.reference.model.TimeZone;
 import digital.inception.reference.service.ReferenceService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -33,6 +34,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
@@ -46,7 +48,7 @@ import org.springframework.util.StringUtils;
     targetNamespace = "https://inception.digital/reference")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class ReferenceWebService {
+public class ReferenceWebService extends AbstractWebServiceBase {
 
   /** The Reference Service. */
   private final ReferenceService referenceService;
@@ -54,9 +56,13 @@ public class ReferenceWebService {
   /**
    * Constructs a new <b>ReferenceWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param referenceService the Reference Service
    */
-  public ReferenceWebService(ReferenceService referenceService) {
+  public ReferenceWebService(
+      ApplicationContext applicationContext, ReferenceService referenceService) {
+    super(applicationContext);
+
     this.referenceService = referenceService;
   }
 

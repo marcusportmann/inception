@@ -16,17 +16,15 @@
 
 package digital.inception.reporting.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.reporting.model.DuplicateReportDefinitionException;
 import digital.inception.reporting.model.ReportDefinition;
 import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
 import digital.inception.reporting.persistence.ReportDefinitionRepository;
 import digital.inception.reporting.persistence.ReportDefinitionSummaryRepository;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -34,7 +32,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -42,6 +39,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
@@ -53,7 +51,7 @@ import org.w3c.dom.Document;
  */
 @Service
 @SuppressWarnings("unused")
-public class ReportingServiceImpl implements ReportingService {
+public class ReportingServiceImpl extends AbstractServiceBase implements ReportingService {
 
   /** The data source used to provide connections to the application database. */
   private final DataSource dataSource;
@@ -64,26 +62,24 @@ public class ReportingServiceImpl implements ReportingService {
   /** The Report Definition Summary Repository. */
   private final ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
   /* The real path to the folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
 
   /**
    * Constructs a new <b>ReportingServiceImpl</b>.
    *
-   * @param validator the JSR-380 validator
+   * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database
    * @param reportDefinitionRepository the Report Definition Repository
    * @param reportDefinitionSummaryRepository the Report Definition Summary Repository
    */
   public ReportingServiceImpl(
-      Validator validator,
+      ApplicationContext applicationContext,
       @Qualifier("applicationDataSource") DataSource dataSource,
       ReportDefinitionRepository reportDefinitionRepository,
       ReportDefinitionSummaryRepository reportDefinitionSummaryRepository) {
-    this.validator = validator;
+    super(applicationContext);
+
     this.dataSource = dataSource;
     this.reportDefinitionRepository = reportDefinitionRepository;
     this.reportDefinitionSummaryRepository = reportDefinitionSummaryRepository;
@@ -94,7 +90,7 @@ public class ReportingServiceImpl implements ReportingService {
       throws InvalidArgumentException,
           DuplicateReportDefinitionException,
           ServiceUnavailableException {
-    validateReportDefinition(reportDefinition);
+    validateArgument("reportDefinition", reportDefinition);
 
     try {
       if (reportDefinitionRepository.existsById(reportDefinition.getId())) {
@@ -394,7 +390,7 @@ public class ReportingServiceImpl implements ReportingService {
       throws InvalidArgumentException,
           ReportDefinitionNotFoundException,
           ServiceUnavailableException {
-    validateReportDefinition(reportDefinition);
+    validateArgument("reportDefinition", reportDefinition);
 
     try {
       if (!reportDefinitionRepository.existsById(reportDefinition.getId())) {
@@ -407,21 +403,6 @@ public class ReportingServiceImpl implements ReportingService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to update the report definition (" + reportDefinition.getId() + ")", e);
-    }
-  }
-
-  private void validateReportDefinition(ReportDefinition reportDefinition)
-      throws InvalidArgumentException {
-    if (reportDefinition == null) {
-      throw new InvalidArgumentException("reportDefinition");
-    }
-
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
-        validator.validate(reportDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

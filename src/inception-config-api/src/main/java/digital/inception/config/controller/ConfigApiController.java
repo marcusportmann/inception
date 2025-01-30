@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Config")
+@Tag(name = "Config API")
 @RequestMapping(value = "/api/config")
 // @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface ConfigApiController {

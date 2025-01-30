@@ -21,11 +21,13 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.demo.model.Car;
 import digital.inception.demo.service.DuplicateCarException;
 import digital.inception.demo.service.VehicleService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>VehicleWebService</b> class.
@@ -38,16 +40,19 @@ import jakarta.xml.bind.annotation.XmlElement;
     targetNamespace = "https://inception.digital/demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class VehicleWebService {
+public class VehicleWebService extends AbstractWebServiceBase {
 
   private final VehicleService vehicleService;
 
   /**
    * Constructs a new <b>VehicleWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param vehicleService the Vehicle Service
    */
-  public VehicleWebService(VehicleService vehicleService) {
+  public VehicleWebService(ApplicationContext applicationContext, VehicleService vehicleService) {
+    super(applicationContext);
+
     this.vehicleService = vehicleService;
   }
 

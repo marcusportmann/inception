@@ -17,6 +17,7 @@
 package digital.inception.reference.service;
 
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.reference.model.Country;
@@ -48,10 +49,7 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-public class ReferenceServiceImpl implements ReferenceService {
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+public class ReferenceServiceImpl extends AbstractServiceBase implements ReferenceService {
 
   /** The Country Repository. */
   private final CountryRepository countryRepository;
@@ -90,7 +88,8 @@ public class ReferenceServiceImpl implements ReferenceService {
       MeasurementUnitRepository measurementUnitRepository,
       MeasurementUnitTypeRepository measurementUnitTypeRepository,
       RegionRepository regionRepository) {
-    this.applicationContext = applicationContext;
+    super(applicationContext);
+
     this.countryRepository = countryRepository;
     this.languageRepository = languageRepository;
     this.measurementSystemRepository = measurementSystemRepository;
@@ -438,6 +437,6 @@ public class ReferenceServiceImpl implements ReferenceService {
    * @return the internal reference to the Reference Service to enable caching.
    */
   private ReferenceService getReferenceService() {
-    return applicationContext.getBean(ReferenceService.class);
+    return getApplicationContext().getBean(ReferenceService.class);
   }
 }

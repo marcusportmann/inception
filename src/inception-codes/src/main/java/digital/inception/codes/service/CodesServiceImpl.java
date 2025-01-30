@@ -22,22 +22,20 @@ import digital.inception.codes.model.CodeCategoryNotFoundException;
 import digital.inception.codes.model.CodeCategorySummary;
 import digital.inception.codes.model.CodeId;
 import digital.inception.codes.model.CodeNotFoundException;
+import digital.inception.codes.model.CodeProvider;
 import digital.inception.codes.model.CodeProviderConfig;
 import digital.inception.codes.model.DuplicateCodeCategoryException;
 import digital.inception.codes.model.DuplicateCodeException;
-import digital.inception.codes.model.CodeProvider;
 import digital.inception.codes.persistence.CodeCategoryRepository;
 import digital.inception.codes.persistence.CodeCategorySummaryRepository;
 import digital.inception.codes.persistence.CodeRepository;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import jakarta.annotation.PostConstruct;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.time.OffsetDateTime;
@@ -46,11 +44,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -65,19 +60,13 @@ import org.xml.sax.InputSource;
  */
 @Service
 @SuppressWarnings("unused")
-public class CodesServiceImpl implements CodesService {
+public class CodesServiceImpl extends AbstractServiceBase implements CodesService {
 
   /**
    * The path to the code provider configuration files (META-INF/code-providers.xml) on the
    * classpath.
    */
   private static final String CODE_PROVIDERS_CONFIGURATION_PATH = "META-INF/code-providers.xml";
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(CodesServiceImpl.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
 
   /** The Code Category Repository. */
   private final CodeCategoryRepository codeCategoryRepository;
@@ -87,9 +76,6 @@ public class CodesServiceImpl implements CodesService {
 
   /** The Code Repository. */
   private final CodeRepository codeRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
 
   /**
    * The configuration information for the code providers read from the code provider configuration
@@ -104,19 +90,17 @@ public class CodesServiceImpl implements CodesService {
    * Constructs a new <b>CodesServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param codeCategoryRepository the Code Category Repository
    * @param codeCategorySummaryRepository the Code Category Summary Repository
    * @param codeRepository the Code Repository
    */
   public CodesServiceImpl(
       ApplicationContext applicationContext,
-      Validator validator,
       CodeCategoryRepository codeCategoryRepository,
       CodeCategorySummaryRepository codeCategorySummaryRepository,
       CodeRepository codeRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+    super(applicationContext);
+
     this.codeCategoryRepository = codeCategoryRepository;
     this.codeCategorySummaryRepository = codeCategorySummaryRepository;
     this.codeRepository = codeRepository;
@@ -167,7 +151,7 @@ public class CodesServiceImpl implements CodesService {
           DuplicateCodeException,
           CodeCategoryNotFoundException,
           ServiceUnavailableException {
-    validateCode(code);
+    validateArgument("code", code);
 
     try {
       if (codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
@@ -195,7 +179,7 @@ public class CodesServiceImpl implements CodesService {
   @Override
   public void createCodeCategory(CodeCategory codeCategory)
       throws InvalidArgumentException, DuplicateCodeCategoryException, ServiceUnavailableException {
-    validateCodeCategory(codeCategory);
+    validateArgument("codeCategory", codeCategory);
 
     try {
       if (codeCategoryRepository.existsById(codeCategory.getId())) {
@@ -625,7 +609,7 @@ public class CodesServiceImpl implements CodesService {
   @Override
   public void updateCode(Code code)
       throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
-    validateCode(code);
+    validateArgument("code", code);
 
     try {
       if (!codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
@@ -649,7 +633,7 @@ public class CodesServiceImpl implements CodesService {
   @Override
   public void updateCodeCategory(CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
-    validateCodeCategory(codeCategory);
+    validateArgument("codeCategory", codeCategory);
 
     try {
       if (!codeCategoryRepository.existsById(codeCategory.getId())) {
@@ -722,7 +706,7 @@ public class CodesServiceImpl implements CodesService {
           CodeProvider codeProvider = (CodeProvider) constructor.newInstance(codeProviderConfig);
 
           // Perform dependency injection on the code provider
-          applicationContext.getAutowireCapableBeanFactory().autowireBean(codeProvider);
+          getApplicationContext().getAutowireCapableBeanFactory().autowireBean(codeProvider);
 
           codeProviders.add(codeProvider);
         } else {
@@ -804,32 +788,6 @@ public class CodesServiceImpl implements CodesService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to read the code provider configuration files", e);
-    }
-  }
-
-  private void validateCode(Code code) throws InvalidArgumentException {
-    if (code == null) {
-      throw new InvalidArgumentException("code");
-    }
-
-    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "code", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateCodeCategory(CodeCategory codeCategory) throws InvalidArgumentException {
-    if (codeCategory == null) {
-      throw new InvalidArgumentException("codeCategory");
-    }
-
-    Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "codeCategory", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

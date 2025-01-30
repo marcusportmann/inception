@@ -60,9 +60,6 @@ public class TokenServiceImpl implements TokenService {
   /** The refresh token validity in seconds. */
   public static final int REFRESH_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
 
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
-
   /* Security Service */
   private final SecurityService securityService;
 

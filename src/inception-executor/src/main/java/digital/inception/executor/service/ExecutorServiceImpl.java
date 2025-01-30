@@ -17,16 +17,15 @@
 package digital.inception.executor.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.executor.model.ArchivedTask;
 import digital.inception.executor.model.ArchivedTaskNotFoundException;
 import digital.inception.executor.model.BatchTasksNotFoundException;
 import digital.inception.executor.model.DuplicateTaskTypeException;
-import digital.inception.executor.model.TaskExecutor;
 import digital.inception.executor.model.InvalidTaskStatusException;
 import digital.inception.executor.model.QueueTaskRequest;
 import digital.inception.executor.model.Task;
@@ -36,6 +35,7 @@ import digital.inception.executor.model.TaskExecutionDelayedException;
 import digital.inception.executor.model.TaskExecutionFailedException;
 import digital.inception.executor.model.TaskExecutionResult;
 import digital.inception.executor.model.TaskExecutionRetryableException;
+import digital.inception.executor.model.TaskExecutor;
 import digital.inception.executor.model.TaskNotFoundException;
 import digital.inception.executor.model.TaskSortBy;
 import digital.inception.executor.model.TaskStatus;
@@ -52,20 +52,15 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -92,16 +87,10 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings({"unused"})
-public class ExecutorServiceImpl implements ExecutorService {
+public class ExecutorServiceImpl extends AbstractServiceBase implements ExecutorService {
 
   /** The maximum number of filtered tasks. */
   private static final int MAX_FILTERED_TASKS = 100;
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(ExecutorServiceImpl.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
 
   /** The Archived Task Repository. */
   private final ArchivedTaskRepository archivedTaskRepository;
@@ -124,9 +113,6 @@ public class ExecutorServiceImpl implements ExecutorService {
   private final TaskTypeRepository taskTypeRepository;
 
   private final ReadWriteLock taskTypesLock = new ReentrantReadWriteLock();
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
 
   /* Entity Manager */
   @PersistenceContext(unitName = "executor")
@@ -167,7 +153,6 @@ public class ExecutorServiceImpl implements ExecutorService {
    * Constructs a new <b>ExecutorServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param archivedTaskRepository the Archived Task Repository
    * @param taskEventRepository the Task Event Repository
    * @param taskRepository the Task Repository
@@ -176,14 +161,13 @@ public class ExecutorServiceImpl implements ExecutorService {
    */
   public ExecutorServiceImpl(
       ApplicationContext applicationContext,
-      Validator validator,
       ArchivedTaskRepository archivedTaskRepository,
       TaskEventRepository taskEventRepository,
       TaskRepository taskRepository,
       TaskSummaryRepository taskSummaryRepository,
       TaskTypeRepository taskTypeRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+    super(applicationContext);
+
     this.archivedTaskRepository = archivedTaskRepository;
     this.taskEventRepository = taskEventRepository;
     this.taskRepository = taskRepository;
@@ -360,7 +344,7 @@ public class ExecutorServiceImpl implements ExecutorService {
 
         createTaskEvent(TaskEventType.STEP_COMPLETED, taskType, task);
 
-        applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
+        getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
       }
       // Complete the single step task, or the last step of a multistep task
       else {
@@ -386,7 +370,7 @@ public class ExecutorServiceImpl implements ExecutorService {
   @Override
   public void createTaskType(TaskType taskType)
       throws InvalidArgumentException, DuplicateTaskTypeException, ServiceUnavailableException {
-    validateTaskType(taskType);
+    validateArgument("taskType", taskType);
 
     try {
       taskTypesLock.writeLock().lock();
@@ -480,7 +464,7 @@ public class ExecutorServiceImpl implements ExecutorService {
           TaskExecutionFailedException,
           TaskExecutionRetryableException,
           TaskExecutionDelayedException {
-    validateTask(task);
+    validateArgument("task", task);
 
     try {
       TaskType taskType = getTaskType(task.getType());
@@ -853,7 +837,7 @@ public class ExecutorServiceImpl implements ExecutorService {
   @Override
   public UUID queueTask(QueueTaskRequest queueTaskRequest)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    validateQueueTaskRequest(queueTaskRequest);
+    validateArgument("queueTaskRequest", queueTaskRequest);
 
     try {
       TaskType taskType = getTaskType(queueTaskRequest.getType());
@@ -885,7 +869,7 @@ public class ExecutorServiceImpl implements ExecutorService {
 
       taskRepository.saveAndFlush(task);
 
-      applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
+      getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
 
       return task.getId();
     } catch (TaskTypeNotFoundException e) {
@@ -910,7 +894,7 @@ public class ExecutorServiceImpl implements ExecutorService {
     }
 
     try {
-      ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
+      ObjectMapper objectMapper = getApplicationContext().getBean(ObjectMapper.class);
 
       String taskData = objectMapper.writeValueAsString(dataObject);
 
@@ -985,7 +969,7 @@ public class ExecutorServiceImpl implements ExecutorService {
 
         taskRepository.requeueTask(task.getId(), nextExecution);
 
-        applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
+        getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
       }
     } catch (TaskNotFoundException e) {
       throw e;
@@ -1195,7 +1179,7 @@ public class ExecutorServiceImpl implements ExecutorService {
         throw new InvalidTaskStatusException(taskId);
       }
 
-      applicationContext.getBean(BackgroundTaskExecutor.class).executeTasks();
+      getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
     } catch (TaskNotFoundException | InvalidTaskStatusException e) {
       throw e;
     } catch (Throwable e) {
@@ -1206,7 +1190,7 @@ public class ExecutorServiceImpl implements ExecutorService {
   @Override
   public void updateTaskType(TaskType taskType)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
-    validateTaskType(taskType);
+    validateArgument("taskType", taskType);
 
     try {
       taskTypesLock.writeLock().lock();
@@ -1267,7 +1251,7 @@ public class ExecutorServiceImpl implements ExecutorService {
           Thread.currentThread().getContextClassLoader().loadClass(taskType.getExecutorClass());
 
       Object taskExecutorObject =
-          applicationContext.getAutowireCapableBeanFactory().createBean(taskExecutorClass);
+          getApplicationContext().getAutowireCapableBeanFactory().createBean(taskExecutorClass);
 
       // Check if the task executor object is a valid task executor
       if (taskExecutorObject instanceof TaskExecutor taskExecutor) {
@@ -1289,47 +1273,6 @@ public class ExecutorServiceImpl implements ExecutorService {
               + taskType.getCode()
               + ")",
           e);
-    }
-  }
-
-  private void validateQueueTaskRequest(QueueTaskRequest queueTaskRequest)
-      throws InvalidArgumentException {
-    if (queueTaskRequest == null) {
-      throw new InvalidArgumentException("queueTaskRequest");
-    }
-
-    Set<ConstraintViolation<QueueTaskRequest>> constraintViolations =
-        validator.validate(queueTaskRequest);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "queueTaskRequest", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateTask(Task task) throws InvalidArgumentException {
-    if (task == null) {
-      throw new InvalidArgumentException("task");
-    }
-
-    Set<ConstraintViolation<Task>> constraintViolations = validator.validate(task);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "task", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateTaskType(TaskType taskType) throws InvalidArgumentException {
-    if (taskType == null) {
-      throw new InvalidArgumentException("taskType");
-    }
-
-    Set<ConstraintViolation<TaskType>> constraintViolations = validator.validate(taskType);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "taskType", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

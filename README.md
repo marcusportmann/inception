@@ -37,8 +37,6 @@ of the framework ensure that developers can keep applications maintainable, even
 evolve with new features and requirements.
 
 ## Overview
-The Inception Framework enables the rapid development of applications with a Java
-back-end and Angular front-end.
 
 ## Quickstart for MacOS
 

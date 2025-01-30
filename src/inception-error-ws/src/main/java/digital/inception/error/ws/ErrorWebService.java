@@ -25,6 +25,7 @@ import digital.inception.error.model.ErrorReportNotFoundException;
 import digital.inception.error.model.ErrorReportSortBy;
 import digital.inception.error.model.ErrorReportSummaries;
 import digital.inception.error.service.ErrorService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -34,6 +35,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>ErrorWebService</b> class.
@@ -46,7 +48,7 @@ import java.util.UUID;
     targetNamespace = "https://inception.digital/error")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class ErrorWebService {
+public class ErrorWebService extends AbstractWebServiceBase {
 
   /** The Error Service. */
   private final ErrorService errorService;
@@ -54,9 +56,12 @@ public class ErrorWebService {
   /**
    * Constructs a new <b>ErrorWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param errorService the Error Service
    */
-  public ErrorWebService(ErrorService errorService) {
+  public ErrorWebService(ApplicationContext applicationContext, ErrorService errorService) {
+    super(applicationContext);
+
     this.errorService = errorService;
   }
 
@@ -97,8 +102,7 @@ public class ErrorWebService {
    * @param filter the filter to apply to the error report summaries
    * @param fromDate the date to retrieve the error report summaries from
    * @param toDate the date to retrieve the error report summaries to
-   * @param sortBy the method used to sort the error report summaries e.g. by who submitted
-   *     them
+   * @param sortBy the method used to sort the error report summaries e.g. by who submitted them
    * @param sortDirection the sort direction to apply to the error report summaries
    * @param pageIndex the page index
    * @param pageSize the page size

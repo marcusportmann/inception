@@ -22,6 +22,7 @@ import digital.inception.config.model.ConfigSummary;
 import digital.inception.config.service.ConfigService;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -29,6 +30,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>ConfigWebService</b> class.
@@ -41,7 +43,7 @@ import java.util.List;
     targetNamespace = "https://inception.digital/config")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class ConfigWebService {
+public class ConfigWebService extends AbstractWebServiceBase {
 
   /** The Config Service. */
   private final ConfigService configService;
@@ -49,9 +51,12 @@ public class ConfigWebService {
   /**
    * Constructs a new <b>ConfigWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param configService the Config Service
    */
-  public ConfigWebService(ConfigService configService) {
+  public ConfigWebService(ApplicationContext applicationContext, ConfigService configService) {
+    super(applicationContext);
+
     this.configService = configService;
   }
 

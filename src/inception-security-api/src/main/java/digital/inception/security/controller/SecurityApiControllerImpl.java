@@ -16,11 +16,10 @@
 
 package digital.inception.security.controller;
 
-import digital.inception.core.api.ApiUtil;
 import digital.inception.api.SecureApiController;
+import digital.inception.core.api.ApiUtil;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.security.model.AuthenticationFailedException;
 import digital.inception.security.model.DuplicateGroupException;
@@ -79,12 +78,9 @@ import digital.inception.security.model.UserSortBy;
 import digital.inception.security.model.Users;
 import digital.inception.security.service.SecurityService;
 import digital.inception.security.service.SecurityServiceImpl;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,8 +103,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class SecurityApiControllerImpl extends SecureApiController implements
-    SecurityApiController {
+public class SecurityApiControllerImpl extends SecureApiController
+    implements SecurityApiController {
 
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(SecurityApiControllerImpl.class);
@@ -116,23 +112,16 @@ public class SecurityApiControllerImpl extends SecureApiController implements
   /** The Security Service. */
   private final SecurityService securityService;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <b>SecurityApiControllerImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param securityService the Security Service
    */
   public SecurityApiControllerImpl(
-      ApplicationContext applicationContext,
-      Validator validator,
-      SecurityService securityService) {
+      ApplicationContext applicationContext, SecurityService securityService) {
     super(applicationContext);
 
-    this.validator = validator;
     this.securityService = securityService;
   }
 
@@ -168,12 +157,7 @@ public class SecurityApiControllerImpl extends SecureApiController implements
       throw new InvalidArgumentException("groupMember");
     }
 
-    Set<ConstraintViolation<GroupMember>> constraintViolations = validator.validate(groupMember);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "groupMember", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("groupMember", groupMember);
 
     securityService.addMemberToGroup(
         userDirectoryId, groupName, groupMember.getMemberType(), groupMember.getMemberName());
@@ -211,12 +195,7 @@ public class SecurityApiControllerImpl extends SecureApiController implements
       throw new InvalidArgumentException("groupRole");
     }
 
-    Set<ConstraintViolation<GroupRole>> constraintViolations = validator.validate(groupRole);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "groupRole", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("groupRole", groupRole);
 
     if (groupRole.getRoleCode().equalsIgnoreCase(SecurityServiceImpl.ADMINISTRATOR_ROLE_CODE)
         && (!hasRole(SecurityServiceImpl.ADMINISTRATOR_ROLE_CODE))) {
@@ -253,13 +232,7 @@ public class SecurityApiControllerImpl extends SecureApiController implements
       throw new InvalidArgumentException("tenantUserDirectory");
     }
 
-    Set<ConstraintViolation<TenantUserDirectory>> constraintViolations =
-        validator.validate(tenantUserDirectory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "tenantUserDirectory", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("tenantUserDirectory", tenantUserDirectory);
 
     if (!tenantUserDirectory.getTenantId().equals(tenantId)) {
       throw new InvalidArgumentException("tenantId");
@@ -296,13 +269,7 @@ public class SecurityApiControllerImpl extends SecureApiController implements
       throw new InvalidArgumentException("passwordChange");
     }
 
-    Set<ConstraintViolation<PasswordChange>> constraintViolations =
-        validator.validate(passwordChange);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "passwordChange", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("passwordChange", passwordChange);
 
     securityService.adminChangePassword(
         userDirectoryId,
@@ -337,13 +304,7 @@ public class SecurityApiControllerImpl extends SecureApiController implements
       throw new InvalidArgumentException("passwordChange");
     }
 
-    Set<ConstraintViolation<PasswordChange>> constraintViolations =
-        validator.validate(passwordChange);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "passwordChange", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("passwordChange", passwordChange);
 
     if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE) {
       if (isSecurityDisabled()
@@ -805,6 +766,7 @@ public class SecurityApiControllerImpl extends SecureApiController implements
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+    //noinspection StatementWithEmptyBody
     if (hasRole("Administrator")) {
       // Administrators always have access to retrieve a user's details
     } else if (isSecurityDisabled()
@@ -815,7 +777,8 @@ public class SecurityApiControllerImpl extends SecureApiController implements
         throw new AccessDeniedException(
             "Access denied to the user directory (" + userDirectoryId + ")");
       }
-    } else if ((authentication != null) && (authentication.getName().equalsIgnoreCase(username))) {
+    } else //noinspection StatementWithEmptyBody
+    if ((authentication != null) && (authentication.getName().equalsIgnoreCase(username))) {
       // Users can retrieve their own details
     } else {
       throw new AccessDeniedException("Access denied to the user (" + username + ")");
@@ -1138,6 +1101,7 @@ public class SecurityApiControllerImpl extends SecureApiController implements
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (isSecurityEnabled()) {
+      //noinspection StatementWithEmptyBody
       if (hasRole("Administrator")) {
         // Administrators always have access to retrieve a user's details
       } else if (hasAccessToFunction("Security.TenantAdministration")
@@ -1146,8 +1110,8 @@ public class SecurityApiControllerImpl extends SecureApiController implements
           throw new AccessDeniedException(
               "Access denied to the user directory (" + userDirectoryId + ")");
         }
-      } else if ((authentication != null)
-          && (authentication.getName().equalsIgnoreCase(username))) {
+      } else //noinspection StatementWithEmptyBody
+      if ((authentication != null) && (authentication.getName().equalsIgnoreCase(username))) {
         // Users can retrieve their own details
       } else {
         throw new AccessDeniedException("Access denied to the user (" + username + ")");

@@ -16,6 +16,7 @@
 
 package digital.inception.party.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.party.model.AssociationPropertyType;
@@ -142,10 +143,8 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-public class PartyReferenceServiceImpl implements PartyReferenceService {
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+public class PartyReferenceServiceImpl extends AbstractServiceBase
+    implements PartyReferenceService {
 
   /** The Association Property Type Repository. */
   private final AssociationPropertyTypeRepository associationPropertyTypeRepository;
@@ -412,7 +411,8 @@ public class PartyReferenceServiceImpl implements PartyReferenceService {
       TaxNumberTypeRepository taxNumberTypeRepository,
       TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository) {
-    this.applicationContext = applicationContext;
+    super(applicationContext);
+
     this.associationPropertyTypeRepository = associationPropertyTypeRepository;
     this.associationTypeRepository = associationTypeRepository;
     this.attributeTypeCategoryRepository = attributeTypeCategoryRepository;
@@ -3397,6 +3397,6 @@ public class PartyReferenceServiceImpl implements PartyReferenceService {
    * @return the internal reference to the Party Reference Service to enable caching.
    */
   private PartyReferenceService getPartyReferenceService() {
-    return applicationContext.getBean(PartyReferenceService.class);
+    return getApplicationContext().getBean(PartyReferenceService.class);
   }
 }

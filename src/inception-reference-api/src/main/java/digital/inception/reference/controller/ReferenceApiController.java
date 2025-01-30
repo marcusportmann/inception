@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Reference")
+@Tag(name = "Reference API")
 @RequestMapping(value = "/api/reference")
 // @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface ReferenceApiController {

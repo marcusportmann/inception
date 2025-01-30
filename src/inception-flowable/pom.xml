@@ -64,17 +64,10 @@
       <artifactId>flowable-idm-engine</artifactId>
     </dependency>
 
-
-
-
-
-
     <!-- Test Dependencies -->
-    CONVERT TO SPRING BOOT TEST
     <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-test</artifactId>
-      <scope>test</scope>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
     </dependency>
   </dependencies>
 

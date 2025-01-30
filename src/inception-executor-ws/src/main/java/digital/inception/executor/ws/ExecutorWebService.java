@@ -32,6 +32,7 @@ import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskType;
 import digital.inception.executor.model.TaskTypeNotFoundException;
 import digital.inception.executor.service.ExecutorService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -40,6 +41,7 @@ import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>ExecutorWebService</b> class.
@@ -52,7 +54,7 @@ import java.util.UUID;
     targetNamespace = "https://inception.digital/executor")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class ExecutorWebService {
+public class ExecutorWebService extends AbstractWebServiceBase {
 
   /** The Executor Service. */
   private final ExecutorService executorService;
@@ -60,9 +62,13 @@ public class ExecutorWebService {
   /**
    * Constructs a new <b>ExecutorWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param executorService the Executor Service
    */
-  public ExecutorWebService(ExecutorService executorService) {
+  public ExecutorWebService(
+      ApplicationContext applicationContext, ExecutorService executorService) {
+    super(applicationContext);
+
     this.executorService = executorService;
   }
 

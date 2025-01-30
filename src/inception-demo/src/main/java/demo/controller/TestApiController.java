@@ -42,7 +42,7 @@ import digital.inception.demo.model.CarType;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Test")
+@Tag(name = "Test API")
 @RequestMapping(value = "/api/test")
 public interface TestApiController {
 

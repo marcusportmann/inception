@@ -17,8 +17,10 @@
 package digital.inception.audit.ws;
 
 import digital.inception.audit.service.AuditService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>AuditWebService</b> class.
@@ -31,7 +33,7 @@ import jakarta.jws.soap.SOAPBinding;
     targetNamespace = "https://inception.digital/audit")
 @SOAPBinding
 @SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
-public class AuditWebService {
+public class AuditWebService extends AbstractWebServiceBase {
 
   /** The Audit Service. */
   private final AuditService auditService;
@@ -39,9 +41,12 @@ public class AuditWebService {
   /**
    * Constructs a new <b>AuditWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param auditService the Audit Service
    */
-  public AuditWebService(AuditService auditService) {
+  public AuditWebService(ApplicationContext applicationContext, AuditService auditService) {
+    super(applicationContext);
+
     this.auditService = auditService;
   }
 }

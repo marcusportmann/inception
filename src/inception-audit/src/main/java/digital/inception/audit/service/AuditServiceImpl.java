@@ -16,6 +16,8 @@
 
 package digital.inception.audit.service;
 
+import digital.inception.core.service.AbstractServiceBase;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,8 +27,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AuditServiceImpl implements AuditService {
+public class AuditServiceImpl extends AbstractServiceBase implements AuditService {
 
-  /** Constructs a new <b>AuditServiceImpl</b>. */
-  public AuditServiceImpl() {}
+  /**
+   * Constructs a new <b>AuditServiceImpl</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public AuditServiceImpl(ApplicationContext applicationContext) {
+    super(applicationContext);
+  }
 }

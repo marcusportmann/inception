@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Reporting")
+@Tag(name = "Reporting API")
 @RequestMapping(value = "/api/reporting")
 // @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface ReportingApiController {

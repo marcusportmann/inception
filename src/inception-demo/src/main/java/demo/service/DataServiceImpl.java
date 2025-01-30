@@ -16,22 +16,20 @@
 
 package digital.inception.demo.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.demo.model.Data;
 import digital.inception.demo.model.ReactiveData;
 import digital.inception.demo.persistence.r2dbc.ReactiveDataRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Set;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -43,13 +41,10 @@ import reactor.core.publisher.Flux;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class DataServiceImpl implements DataService {
+public class DataServiceImpl extends AbstractServiceBase implements DataService {
 
   /** The Reactive Data Repository. */
   private final ReactiveDataRepository reactiveDataRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
 
   /* Entity Manager */
   @PersistenceContext(unitName = "application")
@@ -58,11 +53,13 @@ public class DataServiceImpl implements DataService {
   /**
    * Constructs a new <b>DataServiceImpl</b>.
    *
-   * @param validator the JSR-380 validator
+   * @param applicationContext the Spring application context
    * @param reactiveDataRepository the Reactive Data Repository
    */
-  public DataServiceImpl(Validator validator, ReactiveDataRepository reactiveDataRepository) {
-    this.validator = validator;
+  public DataServiceImpl(
+      ApplicationContext applicationContext, ReactiveDataRepository reactiveDataRepository) {
+    super(applicationContext);
+
     this.reactiveDataRepository = reactiveDataRepository;
   }
 
@@ -136,13 +133,7 @@ public class DataServiceImpl implements DataService {
   @Override
   public void validateData(Data data) throws InvalidArgumentException, ServiceUnavailableException {
     try {
-      Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
-
-      if (!constraintViolations.isEmpty()) {
-        throw new InvalidArgumentException(
-            "data", ValidationError.toValidationErrors(constraintViolations));
-      }
-
+      validateArgument("data", data);
     } catch (InvalidArgumentException e) {
       throw e;
     } catch (Throwable e) {

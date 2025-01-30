@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "SMS")
+@Tag(name = "SMS API")
 @RequestMapping(value = "/api/sms")
 // @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface SMSApiController {}

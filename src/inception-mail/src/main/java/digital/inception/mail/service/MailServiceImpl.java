@@ -16,9 +16,9 @@
 
 package digital.inception.mail.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.mail.model.DuplicateMailTemplateException;
 import digital.inception.mail.model.MailTemplate;
 import digital.inception.mail.model.MailTemplateContentType;
@@ -35,8 +35,6 @@ import freemarker.template.Template;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -46,9 +44,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -66,13 +61,7 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings({"unused"})
-public class MailServiceImpl implements MailService {
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+public class MailServiceImpl extends AbstractServiceBase implements MailService {
 
   /** The Apache FreeMarker configuration., */
   private final Configuration freeMarkerConfiguration;
@@ -83,9 +72,6 @@ public class MailServiceImpl implements MailService {
   /** The Mail Template Summary Repository. */
   private final MailTemplateSummaryRepository mailTemplateSummaryRepository;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
   /** The Java mail sender. */
   private JavaMailSender javaMailSender;
 
@@ -93,17 +79,15 @@ public class MailServiceImpl implements MailService {
    * Constructs a new <b>MailServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param mailTemplateRepository the Mail Template Repository
    * @param mailTemplateSummaryRepository the Mail Template Summary Repository
    */
   public MailServiceImpl(
       ApplicationContext applicationContext,
-      Validator validator,
       MailTemplateRepository mailTemplateRepository,
       MailTemplateSummaryRepository mailTemplateSummaryRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+    super(applicationContext);
+
     this.mailTemplateRepository = mailTemplateRepository;
     this.mailTemplateSummaryRepository = mailTemplateSummaryRepository;
 
@@ -129,7 +113,7 @@ public class MailServiceImpl implements MailService {
   @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
   public MailTemplate createMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException {
-    validateMailTemplate(mailTemplate);
+    validateArgument("mailTemplate", mailTemplate);
 
     try {
       if (mailTemplateRepository.existsById(mailTemplate.getId())) {
@@ -295,7 +279,7 @@ public class MailServiceImpl implements MailService {
   @PostConstruct
   public void init() {
     try {
-      javaMailSender = applicationContext.getBean(JavaMailSender.class);
+      javaMailSender = getApplicationContext().getBean(JavaMailSender.class);
     } catch (NoSuchBeanDefinitionException ignored) {
       log.warn("No JavaMailSender implementation found");
     }
@@ -414,7 +398,7 @@ public class MailServiceImpl implements MailService {
   @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
   public MailTemplate updateMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
-    validateMailTemplate(mailTemplate);
+    validateArgument("mailTemplate", mailTemplate);
 
     try {
       if (!mailTemplateRepository.existsById(mailTemplate.getId())) {
@@ -436,19 +420,6 @@ public class MailServiceImpl implements MailService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to update the mail template (" + mailTemplate.getId() + ")", e);
-    }
-  }
-
-  private void validateMailTemplate(MailTemplate mailTemplate) throws InvalidArgumentException {
-    if (mailTemplate == null) {
-      throw new InvalidArgumentException("mailTemplate");
-    }
-
-    Set<ConstraintViolation<MailTemplate>> constraintViolations = validator.validate(mailTemplate);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mailTemplate", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 

@@ -21,15 +21,13 @@ import digital.inception.config.model.ConfigNotFoundException;
 import digital.inception.config.model.ConfigSummary;
 import digital.inception.config.persistence.ConfigRepository;
 import digital.inception.config.persistence.ConfigSummaryRepository;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -40,7 +38,7 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings("unused")
-public class ConfigServiceImpl implements ConfigService {
+public class ConfigServiceImpl extends AbstractServiceBase implements ConfigService {
 
   /** The Config Repository. */
   private final ConfigRepository configRepository;
@@ -48,21 +46,19 @@ public class ConfigServiceImpl implements ConfigService {
   /** The Config Summary Repository. */
   private final ConfigSummaryRepository configSummaryRepository;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <b>ConfigServiceImpl</b>.
    *
-   * @param validator the JSR-380 validator
+   * @param applicationContext the Spring application context
    * @param configRepository the Config Repository
    * @param configSummaryRepository the Config Summary Repository
    */
   public ConfigServiceImpl(
-      Validator validator,
+      ApplicationContext applicationContext,
       ConfigRepository configRepository,
       ConfigSummaryRepository configSummaryRepository) {
-    this.validator = validator;
+    super(applicationContext);
+
     this.configRepository = configRepository;
     this.configSummaryRepository = configSummaryRepository;
   }
@@ -415,16 +411,7 @@ public class ConfigServiceImpl implements ConfigService {
   @Override
   public void setConfig(Config config)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (config == null) {
-      throw new InvalidArgumentException("config");
-    }
-
-    Set<ConstraintViolation<Config>> constraintViolations = validator.validate(config);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "config", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("config", config);
 
     try {
       configRepository.saveAndFlush(config);

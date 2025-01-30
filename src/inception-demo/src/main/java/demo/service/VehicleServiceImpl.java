@@ -16,9 +16,9 @@
 
 package digital.inception.demo.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.demo.model.Car;
 import digital.inception.demo.model.Cars;
@@ -28,9 +28,7 @@ import digital.inception.demo.persistence.jpa.CarRepository;
 import digital.inception.demo.persistence.jpa.VehicleRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import java.util.Set;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -46,7 +44,7 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class VehicleServiceImpl implements VehicleService {
+public class VehicleServiceImpl extends AbstractServiceBase implements VehicleService {
 
   /** The maximum number of filtered cars. */
   private static final int MAX_FILTERED_CARS = 100;
@@ -56,9 +54,6 @@ public class VehicleServiceImpl implements VehicleService {
 
   /** The Car Repository. */
   private final CarRepository carRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
 
   /** The Vehicle Repository. */
   private final VehicleRepository vehicleRepository;
@@ -70,13 +65,16 @@ public class VehicleServiceImpl implements VehicleService {
   /**
    * Constructs a new <b>VehicleServiceImpl</b>.
    *
-   * @param validator the JSR-380 validator
+   * @param applicationContext the Spring application context
    * @param carRepository the Car Repository
    * @param vehicleRepository the Vehicle Repository
    */
   public VehicleServiceImpl(
-      Validator validator, CarRepository carRepository, VehicleRepository vehicleRepository) {
-    this.validator = validator;
+      ApplicationContext applicationContext,
+      CarRepository carRepository,
+      VehicleRepository vehicleRepository) {
+    super(applicationContext);
+
     this.carRepository = carRepository;
     this.vehicleRepository = vehicleRepository;
   }
@@ -85,16 +83,7 @@ public class VehicleServiceImpl implements VehicleService {
   @Transactional
   public void createCar(Car car)
       throws InvalidArgumentException, DuplicateCarException, ServiceUnavailableException {
-    if (car == null) {
-      throw new InvalidArgumentException("car");
-    }
-
-    Set<ConstraintViolation<Car>> constraintViolations = validator.validate(car);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "car", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("car", car);
 
     try {
       if (carRepository.existsById(car.getId())) {
@@ -113,16 +102,7 @@ public class VehicleServiceImpl implements VehicleService {
   @Transactional
   public void createVehicle(Vehicle vehicle)
       throws InvalidArgumentException, DuplicateVehicleException, ServiceUnavailableException {
-    if (vehicle == null) {
-      throw new InvalidArgumentException("vehicle");
-    }
-
-    Set<ConstraintViolation<Vehicle>> constraintViolations = validator.validate(vehicle);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "vehicle", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("vehicle", vehicle);
 
     try {
       if (vehicleRepository.existsById(vehicle.getId())) {

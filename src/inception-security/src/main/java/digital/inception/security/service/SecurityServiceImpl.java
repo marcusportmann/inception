@@ -24,9 +24,9 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.jwt.SignedJWT;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.core.util.RandomStringGenerator;
@@ -117,7 +117,6 @@ import digital.inception.security.persistence.UserRepository;
 import digital.inception.security.store.PolicyStore;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Constructor;
@@ -136,7 +135,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.XMLConstants;
@@ -145,8 +143,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
@@ -169,7 +165,7 @@ import org.xml.sax.SAXParseException;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
-public class SecurityServiceImpl implements SecurityService {
+public class SecurityServiceImpl extends AbstractServiceBase implements SecurityService {
 
   /** The maximum number of filtered tenants. */
   private static final int MAX_FILTERED_TENANTS = 100;
@@ -183,12 +179,6 @@ public class SecurityServiceImpl implements SecurityService {
   /** The code for the password reset mail template. */
   private static final String PASSWORD_RESET_MAIL_TEMPLATE_ID =
       "Inception.Security.PasswordResetMail";
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(SecurityServiceImpl.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
 
   /** The Function Repository. */
   private final FunctionRepository functionRepository;
@@ -240,9 +230,6 @@ public class SecurityServiceImpl implements SecurityService {
   /** The User Repository. */
   private final UserRepository userRepository;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
   /* The RSA private key used to sign JWTs. */
   private RSAPrivateKey jwtRsaPrivateKey;
 
@@ -257,7 +244,6 @@ public class SecurityServiceImpl implements SecurityService {
    *
    * @param applicationContext the Spring application context
    * @param resourceLoader the Spring resource loader
-   * @param validator the JSR-380 validator
    * @param mailService the Mail Service
    * @param policyDataStore the Policy Data Store
    * @param functionRepository the Function Repository
@@ -289,8 +275,8 @@ public class SecurityServiceImpl implements SecurityService {
       UserDirectorySummaryRepository userDirectorySummaryRepository,
       UserDirectoryTypeRepository userDirectoryTypeRepository,
       UserRepository userRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+    super(applicationContext);
+
     this.mailService = mailService;
     this.policyDataStore = policyDataStore;
     this.functionRepository = functionRepository;
@@ -671,7 +657,7 @@ public class SecurityServiceImpl implements SecurityService {
   @Override
   public void createFunction(Function function)
       throws InvalidArgumentException, DuplicateFunctionException, ServiceUnavailableException {
-    validateFunction(function);
+    validateArgument("function", function);
 
     try {
       if (functionRepository.existsById(function.getCode())) {
@@ -693,7 +679,7 @@ public class SecurityServiceImpl implements SecurityService {
           UserDirectoryNotFoundException,
           DuplicateGroupException,
           ServiceUnavailableException {
-    validateGroup(group);
+    validateArgument("group", group);
 
     UserDirectoryProvider userDirectory = userDirectories.get(group.getUserDirectoryId());
 
@@ -719,7 +705,7 @@ public class SecurityServiceImpl implements SecurityService {
   @Override
   public Optional<UserDirectory> createTenant(Tenant tenant, boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException {
-    validateTenant(tenant);
+    validateArgument("tenant", tenant);
 
     UserDirectory userDirectory = null;
 
@@ -761,7 +747,7 @@ public class SecurityServiceImpl implements SecurityService {
           UserDirectoryNotFoundException,
           DuplicateUserException,
           ServiceUnavailableException {
-    validateUser(user);
+    validateArgument("user", user);
 
     UserDirectoryProvider userDirectory = userDirectories.get(user.getUserDirectoryId());
 
@@ -781,7 +767,7 @@ public class SecurityServiceImpl implements SecurityService {
       throws InvalidArgumentException,
           DuplicateUserDirectoryException,
           ServiceUnavailableException {
-    validateUserDirectory(userDirectory);
+    validateArgument("userDirectory", userDirectory);
 
     try {
       if ((userDirectory.getId() != null)
@@ -991,7 +977,7 @@ public class SecurityServiceImpl implements SecurityService {
   @Override
   public Token generateToken(GenerateTokenRequest generateTokenRequest)
       throws InvalidArgumentException, ServiceUnavailableException {
-    validateGenerateTokenRequest(generateTokenRequest);
+    validateArgument("generateTokenRequest", generateTokenRequest);
 
     if (generateTokenRequest.getType() == TokenType.JWT) {
 
@@ -2505,7 +2491,7 @@ public class SecurityServiceImpl implements SecurityService {
                   userRepository,
                   roleRepository);
 
-          applicationContext
+          getApplicationContext()
               .getAutowireCapableBeanFactory()
               .autowireBean(userDirectoryProviderInstance);
 
@@ -2725,7 +2711,7 @@ public class SecurityServiceImpl implements SecurityService {
   @Override
   public void updateFunction(Function function)
       throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
-    validateFunction(function);
+    validateArgument("function", function);
 
     try {
       if (!functionRepository.existsById(function.getCode())) {
@@ -2747,7 +2733,7 @@ public class SecurityServiceImpl implements SecurityService {
           UserDirectoryNotFoundException,
           GroupNotFoundException,
           ServiceUnavailableException {
-    validateGroup(group);
+    validateArgument("group", group);
 
     UserDirectoryProvider userDirectory = userDirectories.get(group.getUserDirectoryId());
 
@@ -2773,7 +2759,7 @@ public class SecurityServiceImpl implements SecurityService {
   @Override
   public void updateTenant(Tenant tenant)
       throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
-    validateTenant(tenant);
+    validateArgument("tenant", tenant);
 
     try {
       Optional<Tenant> tenantOptional = tenantRepository.findById(tenant.getId());
@@ -2802,7 +2788,7 @@ public class SecurityServiceImpl implements SecurityService {
           UserDirectoryNotFoundException,
           UserNotFoundException,
           ServiceUnavailableException {
-    validateUser(user);
+    validateArgument("user", user);
 
     UserDirectoryProvider userDirectory = userDirectories.get(user.getUserDirectoryId());
 
@@ -2816,7 +2802,7 @@ public class SecurityServiceImpl implements SecurityService {
   @Override
   public void updateUserDirectory(UserDirectory userDirectory)
       throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
-    validateUserDirectory(userDirectory);
+    validateArgument("userDirectory", userDirectory);
 
     try {
       if (!userDirectoryRepository.existsById(userDirectory.getId())) {
@@ -2934,62 +2920,12 @@ public class SecurityServiceImpl implements SecurityService {
     }
   }
 
-  private void validateFunction(Function function) throws InvalidArgumentException {
-    if (function == null) {
-      throw new InvalidArgumentException("function");
-    }
-
-    Set<ConstraintViolation<Function>> constraintViolations = validator.validate(function);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "function", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateGenerateTokenRequest(GenerateTokenRequest generateTokenRequest)
-      throws InvalidArgumentException {
-    if (generateTokenRequest == null) {
-      throw new InvalidArgumentException("generateTokenRequest");
-    }
-
-    Set<ConstraintViolation<GenerateTokenRequest>> constraintViolations =
-        validator.validate(generateTokenRequest);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "generateTokenRequest", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateGroup(Group group) throws InvalidArgumentException {
-    if (group == null) {
-      throw new InvalidArgumentException("group");
-    }
-
-    Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "group", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
   private void validatePolicy(Policy policy)
       throws InvalidArgumentException,
           InvalidPolicyDataException,
           PolicyDataMismatchException,
           ServiceUnavailableException {
-    if (policy == null) {
-      throw new InvalidArgumentException("policy");
-    }
-
-    Set<ConstraintViolation<Policy>> constraintViolations = validator.validate(policy);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "policy", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("policy", policy);
 
     if ((policy.getType() == PolicyType.XACML_POLICY_SET)
         || (policy.getType() == PolicyType.XACML_POLICY)) {
@@ -3095,46 +3031,6 @@ public class SecurityServiceImpl implements SecurityService {
       } catch (Throwable e) {
         throw new ServiceUnavailableException("Failed to validate the XACML XML data", e);
       }
-    }
-  }
-
-  private void validateTenant(Tenant tenant) throws InvalidArgumentException {
-    if (tenant == null) {
-      throw new InvalidArgumentException("tenant");
-    }
-
-    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "tenant", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateUser(User user) throws InvalidArgumentException {
-    if (user == null) {
-      throw new InvalidArgumentException("user");
-    }
-
-    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "user", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateUserDirectory(UserDirectory userDirectory) throws InvalidArgumentException {
-    if (userDirectory == null) {
-      throw new InvalidArgumentException("userDirectory");
-    }
-
-    Set<ConstraintViolation<UserDirectory>> constraintViolations =
-        validator.validate(userDirectory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

@@ -74,18 +74,19 @@ import digital.inception.security.model.UserNotFoundException;
 import digital.inception.security.model.UserSortBy;
 import digital.inception.security.model.Users;
 import digital.inception.security.service.SecurityService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
@@ -99,23 +100,21 @@ import org.springframework.util.StringUtils;
     targetNamespace = "https://inception.digital/security")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class SecurityWebService {
+public class SecurityWebService extends AbstractWebServiceBase {
 
   /** The Security Service. */
   private final SecurityService securityService;
 
-  /** The JSR-380 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <b>SecurityWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param securityService the Security Service
-   * @param validator the JSR-380 validator
    */
-  public SecurityWebService(SecurityService securityService, Validator validator) {
+  public SecurityWebService(ApplicationContext applicationContext, SecurityService securityService) {
+    super(applicationContext);
+
     this.securityService = securityService;
-    this.validator = validator;
   }
 
   /**

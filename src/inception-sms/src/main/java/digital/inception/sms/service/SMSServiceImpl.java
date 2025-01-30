@@ -17,9 +17,9 @@
 package digital.inception.sms.service;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
@@ -29,8 +29,6 @@ import digital.inception.sms.model.SMSStatus;
 import digital.inception.sms.persistence.SMSRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.io.StringReader;
 import java.net.http.HttpClient;
 import java.text.SimpleDateFormat;
@@ -39,12 +37,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -64,28 +59,19 @@ import org.xml.sax.InputSource;
  */
 @Service
 @SuppressWarnings("unused")
-public class SMSServiceImpl implements SMSService {
+public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
 
   /** The maximum SMS length. */
   private static final int MAXIMUM_SMS_LENGTH = 160;
 
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(SMSServiceImpl.class);
-
   /** The SMS Portal provider. */
   private final String PROVIDER_SMS_PORTAL = "sms-portal";
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
 
   /* The name of the SMS Service instance. */
   private final String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
 
   /** The SMS Repository. */
   private final SMSRepository smsRepository;
-
-  /** The JSR-303 validator. */
-  private final Validator validator;
 
   /** The web client builder. */
   private final WebClient.Builder webClientBuilder;
@@ -125,24 +111,22 @@ public class SMSServiceImpl implements SMSService {
    * Constructs a new <b>SMSServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-303 validator
    * @param webClientBuilder the web client builder
    * @param smsRepository the SMS persistence
    */
   public SMSServiceImpl(
       ApplicationContext applicationContext,
-      Validator validator,
       WebClient.Builder webClientBuilder,
       SMSRepository smsRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+    super(applicationContext);
+
     this.webClientBuilder = webClientBuilder;
     this.smsRepository = smsRepository;
   }
 
   @Override
   public void createSMS(SMS sms) throws InvalidArgumentException, ServiceUnavailableException {
-    validateSMS(sms);
+    validateArgument("sms", sms);
 
     try {
       if (sms.getId() == null) {
@@ -313,7 +297,7 @@ public class SMSServiceImpl implements SMSService {
 
       createSMS(sms);
 
-      applicationContext.getBean(BackgroundSMSSender.class).sendSMSs();
+      getApplicationContext().getBean(BackgroundSMSSender.class).sendSMSs();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to queue the SMS for the mobile number (" + mobileNumber + ") for sending", e);
@@ -645,19 +629,6 @@ public class SMSServiceImpl implements SMSService {
       return apiResultElement;
     } catch (Throwable e) {
       throw new RuntimeException("Failed to parse the API result XML", e);
-    }
-  }
-
-  private void validateSMS(SMS sms) throws InvalidArgumentException {
-    if (sms == null) {
-      throw new InvalidArgumentException("sms");
-    }
-
-    Set<ConstraintViolation<SMS>> constraintViolations = validator.validate(sms);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "sms", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

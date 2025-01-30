@@ -17,8 +17,10 @@
 package digital.inception.sms.ws;
 
 import digital.inception.sms.service.SMSService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>SMSWebService</b> class.
@@ -31,7 +33,7 @@ import jakarta.jws.soap.SOAPBinding;
     targetNamespace = "https://inception.digital/sms")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class SMSWebService {
+public class SMSWebService extends AbstractWebServiceBase {
 
   /** The SMS Service. */
   private final SMSService smsService;
@@ -39,9 +41,12 @@ public class SMSWebService {
   /**
    * Constructs a new <b>SMSWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param smsService the SMS Service
    */
-  public SMSWebService(SMSService smsService) {
+  public SMSWebService(ApplicationContext applicationContext, SMSService smsService) {
+    super(applicationContext);
+
     this.smsService = smsService;
   }
 }

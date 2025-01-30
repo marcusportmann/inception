@@ -22,6 +22,7 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.party.model.*;
 import digital.inception.party.service.PartyService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -31,6 +32,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>PartyWebService</b> class.
@@ -43,7 +45,7 @@ import java.util.UUID;
     targetNamespace = "https://inception.digital/party")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class PartyWebService {
+public class PartyWebService extends AbstractWebServiceBase {
 
   /** The Party Service. */
   private final PartyService partyService;
@@ -51,9 +53,12 @@ public class PartyWebService {
   /**
    * Constructs a new <b>PartyWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param partyService the Party Service
    */
-  public PartyWebService(PartyService partyService) {
+  public PartyWebService(ApplicationContext applicationContext, PartyService partyService) {
+    super(applicationContext);
+
     this.partyService = partyService;
   }
 

@@ -24,6 +24,7 @@ import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
 import digital.inception.reporting.model.ReportParameter;
 import digital.inception.reporting.service.ReportingService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
@@ -49,7 +51,7 @@ import org.springframework.util.StringUtils;
     targetNamespace = "https://inception.digital/reporting")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class ReportingWebService {
+public class ReportingWebService extends AbstractWebServiceBase {
 
   /** The data source used to provide connections to the application database. */
   private final DataSource dataSource;
@@ -60,12 +62,16 @@ public class ReportingWebService {
   /**
    * Constructs a new <b>ReportingWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service
    */
   public ReportingWebService(
+      ApplicationContext applicationContext,
       @Qualifier("applicationDataSource") DataSource dataSource,
       ReportingService reportingService) {
+    super(applicationContext);
+
     this.dataSource = dataSource;
     this.reportingService = reportingService;
   }

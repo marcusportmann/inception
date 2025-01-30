@@ -21,6 +21,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.demo.model.Data;
 import digital.inception.demo.service.DataService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -32,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>DataWebService</b> class.
@@ -44,16 +46,19 @@ import java.util.List;
     targetNamespace = "https://inception.digital/demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class DataWebService {
+public class DataWebService extends AbstractWebServiceBase {
 
   private final DataService dataService;
 
   /**
    * Constructs a new <b>DataWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param dataService the Data Service
    */
-  public DataWebService(DataService dataService) {
+  public DataWebService(ApplicationContext applicationContext, DataService dataService) {
+    super(applicationContext);
+
     this.dataService = dataService;
   }
 

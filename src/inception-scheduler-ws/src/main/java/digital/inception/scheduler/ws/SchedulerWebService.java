@@ -22,6 +22,7 @@ import digital.inception.scheduler.model.DuplicateJobException;
 import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.service.SchedulerService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -29,6 +30,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>SchedulerWebService</b> class.
@@ -41,7 +43,7 @@ import java.util.List;
     targetNamespace = "https://inception.digital/scheduler")
 @SOAPBinding
 @SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
-public class SchedulerWebService {
+public class SchedulerWebService extends AbstractWebServiceBase {
 
   /** The Scheduler Service. */
   private final SchedulerService schedulerService;
@@ -49,9 +51,13 @@ public class SchedulerWebService {
   /**
    * Constructs a new <b>SchedulerWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param schedulerService the Scheduler Service
    */
-  public SchedulerWebService(SchedulerService schedulerService) {
+  public SchedulerWebService(
+      ApplicationContext applicationContext, SchedulerService schedulerService) {
+    super(applicationContext);
+
     this.schedulerService = schedulerService;
   }
 

@@ -16,6 +16,7 @@
 
 package digital.inception.party.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -49,7 +50,6 @@ import digital.inception.party.model.Persons;
 import digital.inception.party.model.Snapshots;
 import digital.inception.party.store.PartyStore;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
@@ -69,16 +69,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
-public class PartyServiceImpl implements PartyService {
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+public class PartyServiceImpl extends AbstractServiceBase implements PartyService {
 
   /** The party store. */
   private final PartyStore partyStore;
-
-  /** The JSR-303 validator. */
-  private final Validator validator;
 
   /** The maximum number of associations that will be returned by the data store. */
   @Value("${inception.party.max-associations:#{100}}")
@@ -108,13 +102,11 @@ public class PartyServiceImpl implements PartyService {
    * Constructs a new <b>PartyServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-303 validator
    * @param partyStore the Party Store
    */
-  public PartyServiceImpl(
-      ApplicationContext applicationContext, Validator validator, PartyStore partyStore) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+  public PartyServiceImpl(ApplicationContext applicationContext, PartyStore partyStore) {
+    super(applicationContext);
+
     this.partyStore = partyStore;
   }
 
@@ -757,7 +749,7 @@ public class PartyServiceImpl implements PartyService {
   public Set<ConstraintViolation<Association>> validateAssociation(
       UUID tenantId, Association association) throws ServiceUnavailableException {
     try {
-      return validator.validate(association);
+      return getValidator().validate(association);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the association", e);
     }
@@ -767,7 +759,7 @@ public class PartyServiceImpl implements PartyService {
   public Set<ConstraintViolation<Mandate>> validateMandate(UUID tenantId, Mandate mandate)
       throws ServiceUnavailableException {
     try {
-      return validator.validate(mandate);
+      return getValidator().validate(mandate);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the mandate", e);
     }
@@ -777,7 +769,7 @@ public class PartyServiceImpl implements PartyService {
   public Set<ConstraintViolation<Organization>> validateOrganization(
       UUID tenantId, Organization organization) throws ServiceUnavailableException {
     try {
-      return validator.validate(organization);
+      return getValidator().validate(organization);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the organization", e);
     }
@@ -787,7 +779,7 @@ public class PartyServiceImpl implements PartyService {
   public Set<ConstraintViolation<Party>> validateParty(UUID tenantId, Party party)
       throws ServiceUnavailableException {
     try {
-      return validator.validate(party);
+      return getValidator().validate(party);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the party", e);
     }
@@ -797,7 +789,7 @@ public class PartyServiceImpl implements PartyService {
   public Set<ConstraintViolation<Person>> validatePerson(UUID tenantId, Person person)
       throws ServiceUnavailableException {
     try {
-      return validator.validate(person);
+      return getValidator().validate(person);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the person", e);
     }
@@ -809,6 +801,6 @@ public class PartyServiceImpl implements PartyService {
    * @return the internal reference to the Party Service to enable caching.
    */
   private PartyService getPartyService() {
-    return applicationContext.getBean(PartyService.class);
+    return getApplicationContext().getBean(PartyService.class);
   }
 }

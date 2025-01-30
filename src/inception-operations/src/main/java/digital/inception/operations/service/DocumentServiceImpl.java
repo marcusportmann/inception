@@ -56,13 +56,7 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-public class DocumentServiceImpl implements DocumentService {
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(WorkflowServiceImpl.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+public class DocumentServiceImpl extends AbstractServiceBase implements DocumentService {
 
   /** The Document Store. */
   private final DocumentStore documentStore;
@@ -70,14 +64,11 @@ public class DocumentServiceImpl implements DocumentService {
   /** The Document Definition Repository. */
   private final DocumentDefinitionRepository documentDefinitionRepository;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
 
   /**
    * Constructs a new <b>DocumentServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param documentStore the Document Store
    * @param documentDefinitionRepository the Document Definition Repository
    */
@@ -86,8 +77,8 @@ public class DocumentServiceImpl implements DocumentService {
       Validator validator,
       DocumentStore documentStore,
       DocumentDefinitionRepository documentDefinitionRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+    super(applicationContext);
+
     this.documentStore = documentStore;
     this.documentDefinitionRepository = documentDefinitionRepository;
   }

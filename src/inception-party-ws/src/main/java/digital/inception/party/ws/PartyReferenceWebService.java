@@ -20,6 +20,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.party.model.*;
 import digital.inception.party.service.PartyReferenceService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -28,6 +29,7 @@ import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The <b>PartyReferenceWebService</b> class.
@@ -40,7 +42,7 @@ import java.util.UUID;
     targetNamespace = "https://inception.digital/party")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class PartyReferenceWebService {
+public class PartyReferenceWebService extends AbstractWebServiceBase {
 
   /** The Party Reference Service. */
   private final PartyReferenceService partyReferenceService;
@@ -48,9 +50,13 @@ public class PartyReferenceWebService {
   /**
    * Constructs a new <b>PartyReferenceWebService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param partyReferenceService the Party Reference Service
    */
-  public PartyReferenceWebService(PartyReferenceService partyReferenceService) {
+  public PartyReferenceWebService(
+      ApplicationContext applicationContext, PartyReferenceService partyReferenceService) {
+    super(applicationContext);
+
     this.partyReferenceService = partyReferenceService;
   }
 

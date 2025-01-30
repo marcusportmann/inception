@@ -16,15 +16,15 @@
 
 package digital.inception.scheduler.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.scheduler.model.DuplicateJobException;
-import digital.inception.scheduler.model.JobImplementation;
 import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobExecutionContext;
 import digital.inception.scheduler.model.JobExecutionFailedException;
+import digital.inception.scheduler.model.JobImplementation;
 import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.model.JobParameter;
 import digital.inception.scheduler.model.JobStatus;
@@ -33,17 +33,12 @@ import digital.inception.scheduler.persistence.JobRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -60,22 +55,13 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-public class SchedulerServiceImpl implements SchedulerService {
-
-  /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(SchedulerServiceImpl.class);
-
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+public class SchedulerServiceImpl extends AbstractServiceBase implements SchedulerService {
 
   /* The name of the Scheduler Service instance. */
   private final String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
   /** The Job Repository. */
   private final JobRepository jobRepository;
-
-  /** The JSR-380 validator. */
-  private final Validator validator;
 
   /* Entity Manager */
   @PersistenceContext(unitName = "scheduler")
@@ -97,20 +83,18 @@ public class SchedulerServiceImpl implements SchedulerService {
    * Constructs a new <b>SchedulerServiceImpl</b>.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param jobRepository the Job Repository
    */
-  public SchedulerServiceImpl(
-      ApplicationContext applicationContext, Validator validator, JobRepository jobRepository) {
-    this.validator = validator;
-    this.applicationContext = applicationContext;
+  public SchedulerServiceImpl(ApplicationContext applicationContext, JobRepository jobRepository) {
+    super(applicationContext);
+
     this.jobRepository = jobRepository;
   }
 
   @Override
   public void createJob(Job job)
       throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException {
-    validateJob(job);
+    validateArgument("job", job);
 
     try {
       if (jobRepository.existsById(job.getId())) {
@@ -150,7 +134,7 @@ public class SchedulerServiceImpl implements SchedulerService {
   @Override
   public void executeJob(Job job)
       throws InvalidArgumentException, JobExecutionFailedException, ServiceUnavailableException {
-    validateJob(job);
+    validateArgument("job", job);
 
     Class<?> jobClass;
 
@@ -187,7 +171,7 @@ public class SchedulerServiceImpl implements SchedulerService {
       jobImplementation = (JobImplementation) jobObject;
 
       // Perform dependency injection for the job implementation
-      applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);
+      getApplicationContext().getAutowireCapableBeanFactory().autowireBean(jobImplementation);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to execute the job ("
@@ -495,7 +479,7 @@ public class SchedulerServiceImpl implements SchedulerService {
   @Override
   public void updateJob(Job job)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
-    validateJob(job);
+    validateArgument("job", job);
 
     try {
       Optional<Job> jobOptional = jobRepository.findById(job.getId());
@@ -523,19 +507,6 @@ public class SchedulerServiceImpl implements SchedulerService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to update the job (" + job.getId() + ")", e);
-    }
-  }
-
-  private void validateJob(Job job) throws InvalidArgumentException {
-    if (job == null) {
-      throw new InvalidArgumentException("job");
-    }
-
-    Set<ConstraintViolation<Job>> constraintViolations = validator.validate(job);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "job", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }
