@@ -103,6 +103,10 @@ public class EmbeddedMongoTemplateTest {
 
     TestDocument savedDocument = defaultMongoTemplate.save(originalDocument);
 
+    org.bson.Document document =
+        defaultMongoTemplate.findById(
+            savedDocument.getId(), org.bson.Document.class, "test_document");
+
     TestDocument retrievedDocument =
         defaultMongoTemplate.findById(savedDocument.getId(), TestDocument.class);
 

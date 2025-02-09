@@ -16,7 +16,9 @@
 
 package digital.inception.server.authorization;
 
+import digital.inception.core.CoreConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * The <b>AuthorizationServerConfiguration</b> class provides the Spring configuration for the
@@ -25,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Marcus Portmann
  */
 @Configuration
+@Import(CoreConfiguration.class)
 public class AuthorizationServerConfiguration {
 
   /** Constructs a new <b>AuthorizationServerConfiguration</b>. */

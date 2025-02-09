@@ -16,6 +16,7 @@
 
 package digital.inception.mongo;
 
+import digital.inception.core.CoreConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -42,6 +43,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
  * @author Marcus Portmann
  */
 @Configuration
+@Import(CoreConfiguration.class)
 public class MongoConfiguration {
 
   /** Constructs a new <b>MongoConfiguration</b>. */
@@ -126,17 +128,31 @@ public class MongoConfiguration {
    */
   @Bean
   public MongoCustomConversions mongoCustomConversions(ApplicationContext applicationContext) {
-    List<Converter<?, ?>> converters = new ArrayList<>();
+    List<Object> converters = new ArrayList<>();
 
     // Find all beans annotated with @WritingConverter
     Map<String, Object> writingConverters =
         applicationContext.getBeansWithAnnotation(WritingConverter.class);
-    writingConverters.values().forEach(bean -> converters.add((Converter<?, ?>) bean));
+    converters.addAll(writingConverters.values());
 
     // Find all beans annotated with @ReadingConverter
     Map<String, Object> readingConverters =
         applicationContext.getBeansWithAnnotation(ReadingConverter.class);
-    readingConverters.values().forEach(bean -> converters.add((Converter<?, ?>) bean));
+    converters.addAll(readingConverters.values());
+
+    /*
+     * Add the converter that converts Enum values to String values using the Jackson approach,
+     * which uses the @JsonValue annotation on a method on the custom Enum class. If this is not
+     * possible, the standard approach of using the name() method on the Enum class is used.
+     */
+    converters.add(new MongoEnumToStringConverter());
+
+    /*
+     * Add the converter that converts String values to Enum values using the Jackson approach,
+     * which uses the @JsonCreator annotation on a method on the custom Enum class. If this is not
+     * possible, the standard approach of using the valueOf() method on the Enum class is used.
+     */
+    converters.add(new MongoStringToEnumConverterFactory());
 
     return new MongoCustomConversions(converters);
   }

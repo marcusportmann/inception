@@ -19,6 +19,7 @@ package digital.inception.test;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import digital.inception.core.CoreConfiguration;
 import digital.inception.core.jdbc.DataSourceConfiguration;
 import digital.inception.core.jdbc.DataSourceUtil;
 import digital.inception.jpa.JpaUtil;
@@ -54,6 +55,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
@@ -79,6 +81,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  * @author Marcus Portmann
  */
 @Configuration
+@Import(CoreConfiguration.class)
 @EnableAsync
 @EnableConfigurationProperties
 @EnableScheduling
