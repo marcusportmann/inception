@@ -25,10 +25,12 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 import javax.sql.DataSource;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.FatalBeanException;
@@ -78,7 +80,13 @@ public final class JpaUtil {
 
       entityManagerFactoryBean.setJtaDataSource(dataSource);
 
-      entityManagerFactoryBean.setPackagesToScan(packagesToScan);
+      // Merge the provided packages with the additional package.
+      String[] additionalPackagesToScan = {"digital.inception.jpa"};
+      String[] mergedPackagesToScan =
+          Stream.concat(Arrays.stream(packagesToScan), Stream.of(additionalPackagesToScan))
+              .toArray(String[]::new);
+
+      entityManagerFactoryBean.setPackagesToScan(mergedPackagesToScan);
 
       // TODO: Detect the JPA vendor and create the correct adapter -- MARCUS
       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
