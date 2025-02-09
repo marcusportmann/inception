@@ -17,6 +17,7 @@
 package digital.inception.mongo;
 
 import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.core.convert.DbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
@@ -43,13 +44,15 @@ public class MongoUtil {
    */
   public static MongoConverter createMongoConverter(
       MongoDatabaseFactory mongoDatabaseFactory, MongoCustomConversions mongoCustomConversions) {
+    DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDatabaseFactory);
+
     MongoMappingContext mappingContext = new MongoMappingContext();
     mappingContext.setSimpleTypeHolder(mongoCustomConversions.getSimpleTypeHolder());
     mappingContext.afterPropertiesSet();
 
-    MappingMongoConverter converter =
-        new MappingMongoConverter(new DefaultDbRefResolver(mongoDatabaseFactory), mappingContext);
+    MappingMongoConverter converter = new MappingMongoConverter(dbRefResolver, mappingContext);
     converter.setCustomConversions(mongoCustomConversions);
+    converter.setCodecRegistryProvider(mongoDatabaseFactory);
     converter.afterPropertiesSet();
     return converter;
   }
