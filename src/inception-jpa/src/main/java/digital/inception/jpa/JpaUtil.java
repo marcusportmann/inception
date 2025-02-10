@@ -81,6 +81,8 @@ public final class JpaUtil {
       entityManagerFactoryBean.setJtaDataSource(dataSource);
 
       // Merge the provided packages with the additional package.
+      // NOTE: The package below is required to enable the AttributeConverters for the common
+      //       enumerations under the digital.inception.core sub-packages.
       String[] additionalPackagesToScan = {"digital.inception.jpa"};
       String[] mergedPackagesToScan =
           Stream.concat(Arrays.stream(packagesToScan), Stream.of(additionalPackagesToScan))
