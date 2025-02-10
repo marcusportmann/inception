@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.0</version>
+    <version>3.4.2</version>
   </parent>
 
   <repositories>
@@ -109,7 +109,7 @@
     <de.flapdoodle.embed.mongo.version>4.18.1</de.flapdoodle.embed.mongo.version>
     <easymock.version>5.5.0</easymock.version>
     <flowable.version>7.1.0</flowable.version>
-    <freemarker.version>2.3.33</freemarker.version>
+    <freemarker.version>2.3.34</freemarker.version>
     <greenmail.version>2.1.2</greenmail.version>
     <groovy.version>4.0.24</groovy.version>
     <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
@@ -125,15 +125,15 @@
     <narayana.version>7.1.0.Final</narayana.version>
     <ognl.version>3.4.5</ognl.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
-    <opentelemetry-sdk.version>1.45.0</opentelemetry-sdk.version>
+    <opentelemetry-sdk.version>1.46.0</opentelemetry-sdk.version>
     <oracle-r2dbc.version>1.2.0</oracle-r2dbc.version>
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.4</postgresql.version>
     <r2dbc-h2.version>1.0.0.RELEASE</r2dbc-h2.version>
-    <spring-shell-starter.version>3.3.3</spring-shell-starter.version>
-    <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
+    <spring-shell-starter.version>3.4.0</spring-shell-starter.version>
+    <springdoc-openapi.version>2.8.4</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
-    <swagger.version>2.2.26</swagger.version>
+    <swagger.version>2.2.27</swagger.version>
     <uuid-creator.version>6.0.0</uuid-creator.version>
     <wss4j-ws-security-common.version>3.0.4</wss4j-ws-security-common.version>
 
@@ -735,7 +735,7 @@
     
     <module>inception-demo</module>
 
-     <module>inception-demo-client</module>
+    <!-- <module>inception-demo-client</module> -->
   </modules>
 
   <build>
@@ -800,10 +800,6 @@
         <configuration>
           <compilerArgs>
             <arg>-proc:full</arg>
-<!--            <arg>-Werror</arg>-->
-<!--            <arg>-XprintProcessorInfo</arg>-->
-<!--            <arg>-XprintRounds</arg>-->
-<!--            <arg>-verbose</arg>-->
           </compilerArgs>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -826,7 +822,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.10/byte-buddy-agent-1.15.10.jar</argLine>
+          <!-- <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.10/byte-buddy-agent-1.15.10.jar</argLine> -->
           <forkCount>1</forkCount>
           <reuseForks>true</reuseForks>
           <parallel>classes</parallel>

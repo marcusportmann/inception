@@ -20,10 +20,11 @@ spring:
       enabled: true
 
 springdoc:
-  writer-with-order-by-keys: true
   api-docs:
     groups:
       enabled: true
+    version: openapi_3_0
+  writer-with-order-by-keys: true
 
 server:
   port: 8080

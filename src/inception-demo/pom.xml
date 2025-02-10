@@ -23,6 +23,12 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-api</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-api-client</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-application</artifactId>

@@ -100,7 +100,8 @@
                     <exclude>org.checkerframework:checker-qual:[3,4)</exclude>
                     <exclude>org.ow2.asm:asm:[9,10)</exclude>
                   </excludes>
-                </dependencyConvergence>              </rules>
+                </dependencyConvergence>
+              </rules>
             </configuration>
             <goals>
               <goal>enforce</goal>
@@ -108,6 +109,7 @@
           </execution>
         </executions>
       </plugin>
+
       <!-- Generate the Demo API and Reference API client libraries -->
       <plugin>
         <groupId>org.openapitools</groupId>
@@ -120,11 +122,14 @@
             </goals>
             <configuration>
               <inputSpec>${project.basedir}/src/main/resources/META-INF/swagger/DemoAPI.json</inputSpec>
-              <output>${project.build.directory}/generated-sources/swagger/demo</output>
+              <apiPackage>digital.inception.demo.api.client</apiPackage>
+              <invokerPackage>digital.inception.demo.api.client</invokerPackage>
+              <modelPackage>digital.inception.demo.api.client.model</modelPackage>
+
               <configOptions>
                 <groupId>digital.inception</groupId>
                 <artifactId>inception-demo-api-client</artifactId>
-                <artifactVersion>1.0.0-SNAPSHOT</artifactVersion>
+                <artifactVersion>1.0.0</artifactVersion>
                 <artifactDescription>Inception Demo API Client</artifactDescription>
 
                 <dateLibrary>java8</dateLibrary>
@@ -143,10 +148,6 @@
               <generateModelDocumentation>true</generateModelDocumentation>
               <generatorName>java</generatorName>
               <library>webclient</library>
-
-              <apiPackage>digital.inception.demo.api</apiPackage>
-              <invokerPackage>digital.inception.demo.api</invokerPackage>
-              <modelPackage>digital.inception.demo.api</modelPackage>
             </configuration>
           </execution>
           <execution>
@@ -156,11 +157,14 @@
             </goals>
             <configuration>
               <inputSpec>${project.basedir}/src/main/resources/META-INF/swagger/ReferenceAPI.json</inputSpec>
-              <output>${project.build.directory}/generated-sources/swagger/reference</output>
+              <apiPackage>digital.inception.reference.api.client</apiPackage>
+              <invokerPackage>digital.inception.reference.api.client</invokerPackage>
+              <modelPackage>digital.inception.reference.api.client.model</modelPackage>
+
               <configOptions>
                 <groupId>digital.inception</groupId>
                 <artifactId>inception-reference-api-client</artifactId>
-                <artifactVersion>1.0.0-SNAPSHOT</artifactVersion>
+                <artifactVersion>1.0.0</artifactVersion>
                 <artifactDescription>Inception Reference API Client</artifactDescription>
 
                 <dateLibrary>java8</dateLibrary>
@@ -179,20 +183,24 @@
               <generateModelDocumentation>true</generateModelDocumentation>
               <generatorName>java</generatorName>
               <library>webclient</library>
-
-              <apiPackage>digital.inception.reference.api</apiPackage>
-              <invokerPackage>digital.inception.reference.api</invokerPackage>
-              <modelPackage>digital.inception.reference.api</modelPackage>
             </configuration>
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
 
 </project>
-

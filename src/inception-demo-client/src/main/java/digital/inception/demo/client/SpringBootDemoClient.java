@@ -20,7 +20,7 @@ import digital.inception.codes.CodeCategory;
 import digital.inception.codes.CodesService;
 import digital.inception.codes.ICodesService;
 import digital.inception.core.util.CryptoUtil;
-import digital.inception.demo.api.TestApi;
+import digital.inception.demo.api.client.*;
 import digital.inception.ws.security.WebServiceClientSecurityHelper;
 import jakarta.annotation.PostConstruct;
 import java.security.KeyStore;
