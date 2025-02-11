@@ -44,42 +44,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-codegen-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-codes-service-sources</id>
-            <phase>generate-sources</phase>
-            <configuration>
-              <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
-              <wsdlOptions>
-                <wsdlOption>
-                  <wsdl>${basedir}/src/main/resources/META-INF/wsdl/CodesService.wsdl</wsdl>
-                  <bindingFiles>
-                    <bindingFile>${basedir}/src/main/resources/META-INF/wsdl/inception-bindings.xjb</bindingFile>
-                  </bindingFiles>
-                  <extraargs>
-                    <extraarg>-xjc-Xxew</extraarg>
-                    <extraarg>-xjc-Xxew:instantiate lazy</extraarg>
-                    <extraarg>-xjc-Xxew:plural</extraarg>
-                  </extraargs>
-                </wsdlOption>
-              </wsdlOptions>
-            </configuration>
-            <goals>
-              <goal>wsdl2java</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.github.jaxb-xew-plugin</groupId>
-            <artifactId>jaxb-xew-plugin</artifactId>
-            <version>${jaxb-xew-plugin.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
@@ -122,9 +86,9 @@
             </goals>
             <configuration>
               <inputSpec>${project.basedir}/src/main/resources/META-INF/swagger/DemoAPI.json</inputSpec>
-              <apiPackage>digital.inception.demo.api.client</apiPackage>
-              <invokerPackage>digital.inception.demo.api.client</invokerPackage>
-              <modelPackage>digital.inception.demo.api.client.model</modelPackage>
+              <apiPackage>demo.api.client</apiPackage>
+              <invokerPackage>demo.api.client</invokerPackage>
+              <modelPackage>demo.api.client.model</modelPackage>
 
               <configOptions>
                 <groupId>digital.inception</groupId>
@@ -202,5 +166,55 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>generate-ws-clients</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-codegen-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-codes-service-sources</id>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <sourceRoot>${basedir}/src/main/java</sourceRoot>
+                  <wsdlOptions>
+                    <wsdlOption>
+                      <wsdl>${basedir}/src/main/resources/META-INF/wsdl/CodesService.wsdl</wsdl>
+                      <bindingFiles>
+                        <bindingFile>${basedir}/src/main/resources/META-INF/wsdl/inception-bindings.xjb</bindingFile>
+                      </bindingFiles>
+                      <extraargs>
+                        <extraarg>-xjc-Xxew</extraarg>
+                        <extraarg>-xjc-Xxew:instantiate lazy</extraarg>
+                        <extraarg>-xjc-Xxew:plural</extraarg>
+                      </extraargs>
+                      <packagenames>
+                        <packagename>http://inception.digital/core=digital.inception.core.ws.client</packagename>
+                        <packagename>http://inception.digital/codes=digital.inception.codes.ws.client</packagename>
+                      </packagenames>
+                    </wsdlOption>
+                  </wsdlOptions>
+                </configuration>
+                <goals>
+                  <goal>wsdl2java</goal>
+                </goals>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>com.github.jaxb-xew-plugin</groupId>
+                <artifactId>jaxb-xew-plugin</artifactId>
+                <version>${jaxb-xew-plugin.version}</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

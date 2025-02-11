@@ -538,7 +538,7 @@
       <column name="id" value="DemoJob"/>
       <column name="name" value="Demo Job"/>
       <column name="scheduling_pattern" value="* * * * *"/>
-      <column name="job_class" value="digital.inception.demo.job.DemoJob"/>
+      <column name="job_class" value="demo.job.DemoJob"/>
       <column name="enabled" value="true"/>
       <column name="status" value="unscheduled"/>
     </insert>
@@ -1700,7 +1700,7 @@
       <column name="id" value="DemoJob"/>
       <column name="name" value="Demo Job"/>
       <column name="scheduling_pattern" value="* * * * *"/>
-      <column name="job_class" value="digital.inception.demo.job.DemoJob"/>
+      <column name="job_class" value="demo.job.DemoJob"/>
       <column name="enabled" type="boolean" value="1"/>
       <column name="status" value="unscheduled"/>
     </insert>

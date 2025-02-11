@@ -235,8 +235,7 @@ public final class JpaUtil {
 
       if (enableJpaRepositories != null) {
         for (String basePackage : enableJpaRepositories.basePackages()) {
-          if ((!basePackage.startsWith("digital.inception"))
-              || (basePackage.startsWith("digital.inception.demo"))) {
+          if (!basePackage.startsWith("digital.inception")) {
             // Replace any existing packages to scan with the higher level package
             packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
 

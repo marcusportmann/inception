@@ -1,14 +1,17 @@
 <jaxb:bindings version="3.0"
-  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-  jaxb:extensionBindingPrefixes="xjc">
+    xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+    jaxb:extensionBindingPrefixes="xjc">
+
     <jaxb:globalBindings generateElementProperty="false">
       <xjc:serializable uid="1000000"/>
-      <!-- All xs:dataTime fields are implemented as java.time.OffsetDateTime instances -->
-      <jaxb:javaType name="java.time.OffsetDateTime" xmlType="xs:dateTime"
-                    parseMethod="digital.inception.core.xml.OffsetDateTimeAdapter.toOffsetDateTime"
-                    printMethod="digital.inception.core.xml.OffsetDateTimeAdapter.toISO8601"/>
-    </jaxb:globalBindings>
-</jaxb:bindings>
 
+      <!-- Use the xjc:javaType extension instead of jaxb:javaType for adapter-based customizations -->
+      <xjc:javaType
+          name="java.time.OffsetDateTime"
+          xmlType="xs:dateTime"
+          adapter="digital.inception.core.xml.OffsetDateTimeAdapter"/>
+    </jaxb:globalBindings>
+
+</jaxb:bindings>
