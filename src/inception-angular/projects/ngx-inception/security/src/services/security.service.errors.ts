@@ -29,7 +29,7 @@ export class AuthenticationFailedError extends Error {
   /**
    * Constructs a new AuthenticationFailedError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_authentication_failed_error:Authentication failed.`, cause);
@@ -48,7 +48,7 @@ export class DuplicateGroupError extends Error {
   /**
    * Constructs a new DuplicateGroupError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -69,7 +69,7 @@ export class DuplicatePolicyError extends Error {
   /**
    * Constructs a new DuplicatePolicyError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -90,7 +90,7 @@ export class DuplicateTenantError extends Error {
   /**
    * Constructs a new DuplicateTenantError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -111,7 +111,7 @@ export class DuplicateUserDirectoryError extends Error {
   /**
    * Constructs a new DuplicateUserDirectoryError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -132,7 +132,7 @@ export class DuplicateUserError extends Error {
   /**
    * Constructs a new DuplicateUserError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -153,7 +153,7 @@ export class ExistingGroupMembersError extends Error {
   /**
    * Constructs a new ExistingGroupMembersError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_group_members_error:The group has existing members.`,
@@ -173,7 +173,7 @@ export class ExistingGroupsError extends Error {
   /**
    * Constructs a new ExistingGroupsError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_groups_error:The user directory has existing groups.`,
@@ -193,7 +193,7 @@ export class ExistingPasswordError extends Error {
   /**
    * Constructs a new ExistingPasswordError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -214,7 +214,7 @@ export class ExistingUsersError extends Error {
   /**
    * Constructs a new ExistingUsersError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_users_error:The user directory has existing users.`,
@@ -234,7 +234,7 @@ export class GroupMemberNotFoundError extends Error {
   /**
    * Constructs a new GroupMemberNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_group_member_not_found_error:The group member could not be found.`,
@@ -254,7 +254,7 @@ export class GroupNotFoundError extends Error {
   /**
    * Constructs a new GroupNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_group_not_found_error:The group could not be found.`, cause);
@@ -273,7 +273,7 @@ export class GroupRoleNotFoundError extends Error {
   /**
    * Constructs a new GroupRoleNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_group_role_not_found_error:The group role could not be found.`,
@@ -293,7 +293,7 @@ export class InvalidPolicyDataError extends Error {
   /**
    * Constructs a new InvalidPolicyDataError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_invalid_policy_data_error:The policy data is invalid.`, cause);
@@ -312,7 +312,7 @@ export class InvalidSecurityCodeError extends Error {
   /**
    * Constructs a new InvalidSecurityCodeError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_invalid_security_code_error:The security code is invalid.`, cause);
@@ -331,7 +331,7 @@ export class PolicyDataMismatchError extends Error {
   /**
    * Constructs a new PolicyDataMismatchError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -352,7 +352,7 @@ export class PolicyNotFoundError extends Error {
   /**
    * Constructs a new PolicyNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_policy_not_found_error:The policy could not be found.`, cause);
@@ -371,7 +371,7 @@ export class RoleNotFoundError extends Error {
   /**
    * Constructs a new RoleNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_role_not_found_error:The role could not be found.`, cause);
@@ -389,7 +389,7 @@ export class SessionError extends Error {
    * Constructs a new SessionError.
    *
    * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param cause   The cause of the error.
    */
   constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(message, cause);
@@ -408,7 +408,7 @@ export class TenantNotFoundError extends Error {
   /**
    * Constructs a new TenantNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_tenant_not_found_error:The tenant could not be found.`, cause);
@@ -428,7 +428,7 @@ export class TenantUserDirectoryNotFoundError extends Error {
   /**
    * Constructs a new TenantUserDirectoryNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -449,7 +449,7 @@ export class TokenNotFoundError extends Error {
   /**
    * Constructs a new TokenNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_token_not_found_error:The token could not be found.`, cause);
@@ -468,7 +468,7 @@ export class UserDirectoryNotFoundError extends Error {
   /**
    * Constructs a new UserDirectoryNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -489,7 +489,7 @@ export class UserLockedError extends Error {
   /**
    * Constructs a new UserLockedError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -510,7 +510,7 @@ export class UserNotFoundError extends Error {
   /**
    * Constructs a new UserNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_user_not_found_error:The user could not be found.`, cause);

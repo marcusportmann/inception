@@ -69,20 +69,20 @@ public class Parties implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the parties. */
-  @Schema(description = "The optional filter that was applied to the parties")
+  /** The filter that was applied to the parties. */
+  @Schema(description = "The filter that was applied to the parties")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /** The optional page index. */
-  @Schema(description = "The optional page index")
+  /** The page index. */
+  @Schema(description = "The page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
-  @Schema(description = "The optional page size")
+  /** The page size. */
+  @Schema(description = "The page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
@@ -94,14 +94,14 @@ public class Parties implements Serializable {
   @XmlElement(name = "Party", required = true)
   private List<Party> parties;
 
-  /** The optional method used to sort the parties e.g. by name. */
-  @Schema(description = "The optional method used to sort the parties e.g. by name")
+  /** The method used to sort the parties e.g. by name. */
+  @Schema(description = "The method used to sort the parties e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private PartySortBy sortBy;
 
-  /** The optional sort direction that was applied to the parties. */
-  @Schema(description = "The optional sort direction that was applied to the parties")
+  /** The sort direction that was applied to the parties. */
+  @Schema(description = "The sort direction that was applied to the parties")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -129,11 +129,11 @@ public class Parties implements Serializable {
    * @param tenantId the ID for the tenant the parties are associated with
    * @param parties the parties
    * @param total the total number of parties
-   * @param filter the optional filter that was applied to the parties
-   * @param sortBy the optional method used to sort the parties e.g. by name
-   * @param sortDirection the optional sort direction that was applied to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter that was applied to the parties
+   * @param sortBy the method used to sort the parties e.g. by name
+   * @param sortDirection the sort direction that was applied to the parties
+   * @param pageIndex the page index
+   * @param pageSize the page size
    */
   public Parties(
       UUID tenantId,
@@ -155,27 +155,27 @@ public class Parties implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the parties.
+   * Returns the filter that was applied to the parties.
    *
-   * @return the optional filter that was applied to the parties
+   * @return the filter that was applied to the parties
    */
   public String getFilter() {
     return filter;
   }
 
   /**
-   * Returns the optional page index.
+   * Returns the page index.
    *
-   * @return the optional page index
+   * @return the page index
    */
   public Integer getPageIndex() {
     return pageIndex;
   }
 
   /**
-   * Returns the optional page size.
+   * Returns the page size.
    *
-   * @return the optional page size
+   * @return the page size
    */
   public Integer getPageSize() {
     return pageSize;
@@ -191,18 +191,18 @@ public class Parties implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the parties e.g. by name.
+   * Returns the method used to sort the parties e.g. by name.
    *
-   * @return the optional method used to sort the parties
+   * @return the method used to sort the parties
    */
   public PartySortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the parties.
+   * Returns the sort direction that was applied to the parties.
    *
-   * @return the optional sort direction that was applied to the parties
+   * @return the sort direction that was applied to the parties
    */
   public SortDirection getSortDirection() {
     return sortDirection;

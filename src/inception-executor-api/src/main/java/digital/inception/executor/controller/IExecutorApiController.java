@@ -467,13 +467,13 @@ public interface IExecutorApiController {
   /**
    * Retrieve the summaries for the tasks.
    *
-   * @param type the optional task type code filter to apply to the task summaries
-   * @param status the optional status filter to apply to the task summaries
-   * @param filter the optional filter to apply to the task summaries
-   * @param sortBy the optional method used to sort the task summaries e.g. by type
-   * @param sortDirection the optional sort direction to apply to the task summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param type the task type code filter to apply to the task summaries
+   * @param status the status filter to apply to the task summaries
+   * @param filter the filter to apply to the task summaries
+   * @param sortBy the method used to sort the task summaries e.g. by type
+   * @param sortDirection the sort direction to apply to the task summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the tasks
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the tasks summaries could not be retrieved
@@ -515,33 +515,33 @@ public interface IExecutorApiController {
   TaskSummaries getTaskSummaries(
       @Parameter(
               name = "type",
-              description = "The optional task type code filter to apply to the task summaries")
+              description = "The task type code filter to apply to the task summaries")
           @RequestParam(value = "type", required = false)
           String type,
       @Parameter(
               name = "status",
-              description = "The optional status filter to apply to the task summaries")
+              description = "The status filter to apply to the task summaries")
           @RequestParam(value = "status", required = false)
           TaskStatus status,
       @Parameter(
               name = "filter",
-              description = "The optional filter to apply to the task summaries")
+              description = "The filter to apply to the task summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the task summaries e.g. by type")
+              description = "The method used to sort the task summaries e.g. by type")
           @RequestParam(value = "sortBy", required = false)
           TaskSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the task summaries")
+              description = "The sort direction to apply to the task summaries")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;

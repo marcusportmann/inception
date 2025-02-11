@@ -37,7 +37,7 @@ public class InvalidRequestErrorResponse extends ErrorResponse {
   /**
    * Constructs a new <b>InvalidRequestErrorResponse</b>.
    *
-   * @param errorDescription the optional human-readable ASCII text description of the error
+   * @param errorDescription the human-readable ASCII text description of the error
    */
   public InvalidRequestErrorResponse(String errorDescription) {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE, errorDescription);

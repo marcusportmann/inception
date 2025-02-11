@@ -69,8 +69,8 @@ public class TokenSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the token summaries. */
-  @Schema(description = "The optional filter that was applied to the token summaries")
+  /** The filter that was applied to the token summaries. */
+  @Schema(description = "The filter that was applied to the token summaries")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -87,20 +87,20 @@ public class TokenSummaries implements Serializable {
   @XmlElement(name = "PageSize", required = true)
   private int pageSize;
 
-  /** The optional method used to sort the token summaries e.g. by name. */
-  @Schema(description = "The optional method used to sort the token summaries e.g. by name")
+  /** The method used to sort the token summaries e.g. by name. */
+  @Schema(description = "The method used to sort the token summaries e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private TokenSortBy sortBy;
 
-  /** The optional sort direction that was applied to the token summaries. */
-  @Schema(description = "The optional sort direction that was applied to the token summaries")
+  /** The sort direction that was applied to the token summaries. */
+  @Schema(description = "The sort direction that was applied to the token summaries")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The optional status filter that was applied to the token summaries. */
-  @Schema(description = "The optional status filter that was applied to the token summaries")
+  /** The status filter that was applied to the token summaries. */
+  @Schema(description = "The status filter that was applied to the token summaries")
   @JsonProperty
   @XmlElement(name = "Status")
   private TokenStatus status;
@@ -128,8 +128,8 @@ public class TokenSummaries implements Serializable {
    *
    * @param tokenSummaries the token summaries
    * @param total the total number of token summaries
-   * @param status the optional status filter that was applied to the token summaries
-   * @param filter the optional filter that was applied to the token summaries
+   * @param status the status filter that was applied to the token summaries
+   * @param filter the filter that was applied to the token summaries
    * @param sortBy the method used to sort the token summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the token summaries
    * @param pageIndex the page index
@@ -155,9 +155,9 @@ public class TokenSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the token summaries.
+   * Returns the filter that was applied to the token summaries.
    *
-   * @return the optional filter that was applied to the token summaries
+   * @return the filter that was applied to the token summaries
    */
   public String getFilter() {
     return filter;
@@ -182,9 +182,9 @@ public class TokenSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the token summaries e.g. by name.
+   * Returns the method used to sort the token summaries e.g. by name.
    *
-   * @return the optional method used to sort the token summaries
+   * @return the method used to sort the token summaries
    */
   public TokenSortBy getSortBy() {
     return sortBy;
@@ -200,9 +200,9 @@ public class TokenSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional status filter that was applied to the token summaries.
+   * Returns the status filter that was applied to the token summaries.
    *
-   * @return the optional status filter that was applied to the token summaries
+   * @return the status filter that was applied to the token summaries
    */
   public TokenStatus getStatus() {
     return status;

@@ -58,10 +58,10 @@ public interface IVehicleService {
   /**
    * Retrieve the cars.
    *
-   * @param filter the optional filter to apply to the cars
-   * @param sortDirection the optional sort direction to apply to the cars
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the cars
+   * @param sortDirection the sort direction to apply to the cars
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the cars
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the cars could not be retrieved
@@ -72,10 +72,10 @@ public interface IVehicleService {
   /**
    * Retrieve the vehicles.
    *
-   * @param filter the optional filter to apply to the vehicles
-   * @param sortDirection the optional sort direction to apply to the vehicles
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the vehicles
+   * @param sortDirection the sort direction to apply to the vehicles
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the vehicles
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the vehicles could not be retrieved

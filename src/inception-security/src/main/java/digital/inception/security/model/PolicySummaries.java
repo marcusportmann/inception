@@ -67,8 +67,8 @@ public class PolicySummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the policy summaries. */
-  @Schema(description = "The optional filter that was applied to the policy summaries")
+  /** The filter that was applied to the policy summaries. */
+  @Schema(description = "The filter that was applied to the policy summaries")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -92,14 +92,14 @@ public class PolicySummaries implements Serializable {
   @XmlElement(name = "PolicySummary", required = true)
   private List<PolicySummary> policySummaries;
 
-  /** The optional method used to sort the policy summaries e.g. by name. */
-  @Schema(description = "The optional method used to sort the policy summaries e.g. by name")
+  /** The method used to sort the policy summaries e.g. by name. */
+  @Schema(description = "The method used to sort the policy summaries e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private PolicySortBy sortBy;
 
-  /** The optional sort direction that was applied to the policy summaries. */
-  @Schema(description = "The optional sort direction that was applied to the policy summaries")
+  /** The sort direction that was applied to the policy summaries. */
+  @Schema(description = "The sort direction that was applied to the policy summaries")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -120,7 +120,7 @@ public class PolicySummaries implements Serializable {
    *
    * @param policySummaries the policy summaries
    * @param total the total number of policy summaries
-   * @param filter the optional filter that was applied to the policy summaries
+   * @param filter the filter that was applied to the policy summaries
    * @param sortBy the method used to sort the policy summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the policy summaries
    * @param pageIndex the page index
@@ -144,9 +144,9 @@ public class PolicySummaries implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the policy summaries.
+   * Returns the filter that was applied to the policy summaries.
    *
-   * @return the optional filter that was applied to the policy summaries
+   * @return the filter that was applied to the policy summaries
    */
   public String getFilter() {
     return filter;
@@ -180,9 +180,9 @@ public class PolicySummaries implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the policy summaries e.g. by name.
+   * Returns the method used to sort the policy summaries e.g. by name.
    *
-   * @return the optional method used to sort the policy summaries
+   * @return the method used to sort the policy summaries
    */
   public PolicySortBy getSortBy() {
     return sortBy;

@@ -111,8 +111,8 @@ public class Region implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "name", length = 50, nullable = false)
+  @Size(min = 1, max = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The sort index for the region. */

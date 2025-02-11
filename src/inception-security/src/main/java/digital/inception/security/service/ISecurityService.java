@@ -573,10 +573,10 @@ public interface ISecurityService {
    * Retrieve the groups.
    *
    * @param userDirectoryId the ID for the user directory
-   * @param filter the optional filter to apply to the groups
-   * @param sortDirection the optional sort direction to apply to the groups
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the groups
+   * @param sortDirection the sort direction to apply to the groups
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the groups
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -630,10 +630,10 @@ public interface ISecurityService {
    *
    * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
-   * @param filter the optional filter to apply to the group members
-   * @param sortDirection the optional sort direction to apply to the group members
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the group members
+   * @param sortDirection the sort direction to apply to the group members
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the group members for the group
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -687,11 +687,11 @@ public interface ISecurityService {
   /**
    * Retrieve the summaries for the policies.
    *
-   * @param filter the optional filter to apply to the policy summaries
-   * @param sortBy the optional method used to sort the policy summaries e.g. by name
-   * @param sortDirection the optional sort direction to apply to the policy summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the policy summaries
+   * @param sortBy the method used to sort the policy summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the policy summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the policies
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the policy summaries could not be retrieved
@@ -822,10 +822,10 @@ public interface ISecurityService {
   /**
    * Retrieve the tenants.
    *
-   * @param filter the optional filter to apply to the tenants
-   * @param sortDirection the optional sort direction to apply to the tenants
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the tenants
+   * @param sortDirection the sort direction to apply to the tenants
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the tenants
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the tenants could not be retrieved
@@ -874,12 +874,12 @@ public interface ISecurityService {
   /**
    * Retrieve the summaries for the tokens.
    *
-   * @param status the optional status filter to apply to the token summaries
-   * @param filter the optional filter to apply to the token summaries
-   * @param sortBy the optional method used to sort the token summaries e.g. by name
-   * @param sortDirection the optional sort direction to apply to the token summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param status the status filter to apply to the token summaries
+   * @param filter the filter to apply to the token summaries
+   * @param sortBy the method used to sort the token summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the token summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the tokens
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the token summaries could not be retrieved
@@ -929,10 +929,10 @@ public interface ISecurityService {
   /**
    * Retrieve the user directories.
    *
-   * @param filter the optional filter to apply to the user directories
-   * @param sortDirection the optional sort direction to apply to the user directories
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the user directories
+   * @param sortDirection the sort direction to apply to the user directories
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the user directories
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the user directories could not be retrieved
@@ -1036,10 +1036,10 @@ public interface ISecurityService {
   /**
    * Retrieve the summaries for the user directories.
    *
-   * @param filter the optional filter to apply to the user directories
-   * @param sortDirection the optional sort direction to apply to the user directories
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the user directories
+   * @param sortDirection the sort direction to apply to the user directories
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the user directories
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the user directory summaries could not be retrieved
@@ -1119,11 +1119,11 @@ public interface ISecurityService {
    * Retrieve the users.
    *
    * @param userDirectoryId the ID for the user directory
-   * @param filter the optional filter to apply to the users
-   * @param sortBy the optional method used to sort the users e.g. by name
-   * @param sortDirection the optional sort direction to apply to the users
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the users
+   * @param sortBy the method used to sort the users e.g. by name
+   * @param sortDirection the sort direction to apply to the users
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the users
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found

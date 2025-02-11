@@ -63,16 +63,16 @@ export class ErrorReportSummaryDataSource implements DataSource<ErrorReportSumma
   /**
    * Load the error report summaries.
    *
-   * @param filter        The optional filter to apply to the error report summaries.
+   * @param filter        The filter to apply to the error report summaries.
    * @param fromDate      ISO 8601 format date value for the date to retrieve the error report
    *                      summaries from.
    * @param toDate        ISO 8601 format date value for the date to retrieve the error report
    *                      summaries to.
-   * @param sortBy        The optional method used to sort the error report summaries e.g. by who
-   *                      submitted them.
-   * @param sortDirection The optional sort direction to apply to the error report summaries.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param sortBy        The method used to sort the error report summaries e.g. by who submitted
+   *                      them.
+   * @param sortDirection The sort direction to apply to the error report summaries.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The error report summaries.
    */

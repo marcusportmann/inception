@@ -57,7 +57,7 @@ public class OAuth2RefreshToken
    * Build a new <b>OAuth2RefreshToken</b>.
    *
    * @param username the username for the user the token is being issued for
-   * @param scopes the optional scope(s) associated to the token
+   * @param scopes the scope(s) associated to the token
    * @param validFor the number of seconds the token should be valid for
    * @param rsaKeyId the ID of the RSA key used to sign the token
    * @param rsaPrivateKey the RSA private key used to sign the token

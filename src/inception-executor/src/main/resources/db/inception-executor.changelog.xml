@@ -40,22 +40,22 @@
       <column name="archive_failed" type="boolean" defaultValueBoolean="false" remarks="Archive failed tasks of this type">
         <constraints nullable="false"/>
       </column>
-      <column name="event_types" type="nvarchar(1000)" remarks="The optional list of comma-delimited codes for the event types that should be tracked for tasks of this type"/>
-      <column name="event_types_with_task_data" type="nvarchar(1000)" remarks="The optional list of comma-delimited codes for the event types that should be tracked for tasks of this type with task data"/>
-      <column name="maximum_execution_attempts" type="integer" remarks="The optional maximum execution attempts for tasks of this type"/>
-      <column name="execution_timeout" type="integer" remarks="The optional amount of time in milliseconds after which a locked and executing task of this type will be considered hung and will be reset"/>
-      <column name="retry_delay" type="integer" remarks="The optional retry delay for tasks of this type"/>
+      <column name="event_types" type="nvarchar(1000)" remarks="The list of comma-delimited codes for the event types that should be tracked for tasks of this type"/>
+      <column name="event_types_with_task_data" type="nvarchar(1000)" remarks="The list of comma-delimited codes for the event types that should be tracked for tasks of this type with task data"/>
+      <column name="maximum_execution_attempts" type="integer" remarks="The maximum execution attempts for tasks of this type"/>
+      <column name="execution_timeout" type="integer" remarks="The amount of time in milliseconds after which a locked and executing task of this type will be considered hung and will be reset"/>
+      <column name="retry_delay" type="integer" remarks="The retry delay for tasks of this type"/>
     </createTable>
 
     <createTable tableName="executor_tasks" remarks="Tasks">
       <column name="id" type="uuid" remarks="The ID for the task">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="batch_id" type="nvarchar(50)" remarks="The optional ID for the task batch"/>
+      <column name="batch_id" type="nvarchar(50)" remarks="The ID for the task batch"/>
       <column name="type" type="nvarchar(50)" remarks="The code for the task type">
         <constraints nullable="false"/>
       </column>
-      <column name="step" type="nvarchar(50)" remarks="The optional code for the current task step for a multistep task"/>
+      <column name="step" type="nvarchar(50)" remarks="The code for the current task step for a multistep task"/>
       <column name="status" type="nvarchar(50)" remarks="The code for the task status">
         <constraints nullable="false"/>
       </column>
@@ -66,7 +66,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="executed" type="timestamp with time zone" remarks="The date and time the task was executed"/>
-      <column name="external_reference" type="nvarchar(50)" remarks="The optional external reference for the task"/>
+      <column name="external_reference" type="nvarchar(50)" remarks="The external reference for the task"/>
       <column name="data" type="clob" remarks="The task data">
         <constraints nullable="false"/>
       </column>
@@ -139,7 +139,7 @@
       <column name="task_type" type="nvarchar(50)" remarks="The code for the task type">
         <constraints nullable="false"/>
       </column>
-      <column name="task_step" type="nvarchar(50)" remarks="The optional code for the task step for a multistep task"/>
+      <column name="task_step" type="nvarchar(50)" remarks="The code for the task step for a multistep task"/>
       <column name="task_data" type="clob" remarks="The task data"/>
     </createTable>
     <addForeignKeyConstraint constraintName="executor_task_events_task_id_fk"
@@ -155,11 +155,11 @@
       <column name="id" type="uuid" remarks="The ID for the task">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="batch_id" type="nvarchar(50)" remarks="The optional ID for the task batch"/>
+      <column name="batch_id" type="nvarchar(50)" remarks="The ID for the task batch"/>
       <column name="type" type="nvarchar(50)" remarks="The code for the task type">
         <constraints nullable="false"/>
       </column>
-      <column name="step" type="nvarchar(50)" remarks="The optional code for the current task step for a multistep task"/>
+      <column name="step" type="nvarchar(50)" remarks="The code for the current task step for a multistep task"/>
       <column name="status" type="nvarchar(50)" remarks="The code for the task status">
         <constraints nullable="false"/>
       </column>
@@ -170,7 +170,7 @@
       <column name="execution_time" type="bigint" defaultValueNumeric="0" remarks="The time taken to execute the task in milliseconds">
         <constraints nullable="false"/>
       </column>
-      <column name="external_reference" type="nvarchar(50)" remarks="The optional external reference for the task"/>
+      <column name="external_reference" type="nvarchar(50)" remarks="The external reference for the task"/>
       <column name="data" type="clob" remarks="The task data">
         <constraints nullable="false"/>
       </column>

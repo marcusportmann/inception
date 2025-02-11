@@ -25,7 +25,7 @@ import {Group} from './group';
 export class Groups {
 
   /**
-   * The optional filter that was applied to the groups.
+   * The filter that was applied to the groups.
    */
   filter: string | null = null;
 
@@ -68,7 +68,7 @@ export class Groups {
    * @param sortDirection   The sort direction that was applied to the groups.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.
-   * @param filter          The optional filter that was applied to the groups.
+   * @param filter          The filter that was applied to the groups.
    */
   constructor(userDirectoryId: string, groups: Group[], total: number, sortDirection: SortDirection,
               pageIndex: number, pageSize: number, filter?: string,) {

@@ -22,7 +22,7 @@
 export class CodeCategory {
 
   /**
-   * The optional code data for the code category.
+   * The code data for the code category.
    */
   data: string | null = null;
 
@@ -46,7 +46,7 @@ export class CodeCategory {
    *
    * @param id           The ID for the code category.
    * @param name         The name of the code category.
-   * @param data         The optional code data for the code category.
+   * @param data         The code data for the code category.
    * @param lastModified The date and time the code category was last modified.
    */
   constructor(id: string, name: string, data?: string, lastModified?: Date) {

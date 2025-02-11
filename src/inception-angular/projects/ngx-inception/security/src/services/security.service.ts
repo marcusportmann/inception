@@ -431,10 +431,10 @@ export class SecurityService {
    * Retrieve the groups.
    *
    * @param userDirectoryId The ID for the user directory.
-   * @param filter          The optional filter to apply to the groups.
-   * @param sortDirection   The optional sort direction to apply to the groups.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param filter          The filter to apply to the groups.
+   * @param sortDirection   The sort direction to apply to the groups.
+   * @param pageIndex       The page index.
+   * @param pageSize        The page size.
    *
    * @return The groups.
    */
@@ -471,10 +471,10 @@ export class SecurityService {
    *
    * @param userDirectoryId The ID for the user directory.
    * @param groupName       The name of the group.
-   * @param filter          The optional filter to apply to the group members.
-   * @param sortDirection   The optional sort direction to apply to the group members.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param filter          The filter to apply to the group members.
+   * @param sortDirection   The sort direction to apply to the group members.
+   * @param pageIndex       The page index.
+   * @param pageSize        The page size.
    *
    * @return The members for the group.
    */
@@ -550,11 +550,11 @@ export class SecurityService {
   /**
    * Retrieve the policy summaries.
    *
-   * @param filter        The optional filter to apply to the policy summaries.
-   * @param sortBy        The optional method used to sort the policy summaries e.g. by name.
-   * @param sortDirection The optional sort direction to apply to the policy summaries.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param filter        The filter to apply to the policy summaries.
+   * @param sortBy        The method used to sort the policy summaries e.g. by name.
+   * @param sortDirection The sort direction to apply to the policy summaries.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The policy summaries.
    */
@@ -667,10 +667,10 @@ export class SecurityService {
   /**
    * Retrieve the tenants.
    *
-   * @param filter        The optional filter to apply to the tenants.
-   * @param sortDirection The optional sort direction to apply to the tenants.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param filter        The filter to apply to the tenants.
+   * @param sortDirection The sort direction to apply to the tenants.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The tenants.
    */
@@ -746,12 +746,12 @@ export class SecurityService {
   /**
    * Retrieve the token summaries.
    *
-   * @param status        The optional status filter to apply to the token summaries.
-   * @param filter        The optional filter to apply to the token summaries.
-   * @param sortBy        The optional method used to sort the token summaries e.g. by name.
-   * @param sortDirection The optional sort direction to apply to the token summaries.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param status        The status filter to apply to the token summaries.
+   * @param filter        The filter to apply to the token summaries.
+   * @param sortBy        The method used to sort the token summaries e.g. by name.
+   * @param sortDirection The sort direction to apply to the token summaries.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The token summaries.
    */
@@ -855,10 +855,10 @@ export class SecurityService {
   /**
    * Retrieve the user directory summaries.
    *
-   * @param filter        The optional filter to apply to the user directory summaries.
-   * @param sortDirection The optional sort direction to apply to the user directory summaries.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param filter        The filter to apply to the user directory summaries.
+   * @param sortDirection The sort direction to apply to the user directory summaries.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The user directory summaries.
    */
@@ -952,11 +952,11 @@ export class SecurityService {
    * Retrieve the users.
    *
    * @param userDirectoryId The ID for the user directory.
-   * @param filter          The optional filter to apply to the users.
-   * @param sortBy          The optional method used to sort the users e.g. by name.
-   * @param sortDirection   The optional sort direction to apply to the users.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param filter          The filter to apply to the users.
+   * @param sortBy          The method used to sort the users e.g. by name.
+   * @param sortDirection   The sort direction to apply to the users.
+   * @param pageIndex       The page index.
+   * @param pageSize        The page size.
    *
    * @return The users.
    */

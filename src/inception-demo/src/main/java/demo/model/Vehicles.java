@@ -50,8 +50,8 @@ public class Vehicles implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the vehicles. */
-  @Schema(description = "The optional filter that was applied to the vehicles")
+  /** The filter that was applied to the vehicles. */
+  @Schema(description = "The filter that was applied to the vehicles")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -97,7 +97,7 @@ public class Vehicles implements Serializable {
    *
    * @param vehicles the vehicles
    * @param total the total number of vehicles
-   * @param filter the optional filter that was applied to the vehicles
+   * @param filter the filter that was applied to the vehicles
    * @param sortDirection the sort direction that was applied to the vehicles
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -118,9 +118,9 @@ public class Vehicles implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the vehicles.
+   * Returns the filter that was applied to the vehicles.
    *
-   * @return the optional filter that was applied to the vehicles
+   * @return the filter that was applied to the vehicles
    */
   public String getFilter() {
     return filter;

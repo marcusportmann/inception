@@ -120,7 +120,7 @@ public class Language implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", length = 50, nullable = false)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The short name for the language. */

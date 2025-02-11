@@ -84,8 +84,8 @@ public class ErrorReportSummaries implements Serializable {
   @XmlElement(name = "ErrorReportSummary", required = true)
   private List<ErrorReportSummary> errorReportSummaries;
 
-  /** The optional filter that was applied to the error report summaries. */
-  @Schema(description = "The optional filter that was applied to the error report summaries")
+  /** The filter that was applied to the error report summaries. */
+  @Schema(description = "The filter that was applied to the error report summaries")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -158,7 +158,7 @@ public class ErrorReportSummaries implements Serializable {
    *
    * @param errorReportSummaries the error report summaries
    * @param total the total number of error report summaries
-   * @param filter the optional filter that was applied to the error report summaries
+   * @param filter the filter that was applied to the error report summaries
    * @param fromDate the date to retrieve the error report summaries from
    * @param toDate the date to retrieve the error report summaries to
    * @param sortBy the method used to sort the error report summaries e.g. by who submitted them
@@ -197,9 +197,9 @@ public class ErrorReportSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the error report summaries.
+   * Returns the filter that was applied to the error report summaries.
    *
-   * @return the optional filter that was applied to the error report summaries
+   * @return the filter that was applied to the error report summaries
    */
   public String getFilter() {
     return filter;

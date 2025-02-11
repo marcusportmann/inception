@@ -144,15 +144,15 @@ public class ErrorReport implements Serializable {
   @Column(name = "detail")
   private String detail;
 
-  /** The optional ID for the device the error report originated from. */
-  @Schema(description = "The optional ID for the device the error report originated from")
+  /** The ID for the device the error report originated from. */
+  @Schema(description = "The ID for the device the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
   @Column(name = "device_id")
   private UUID deviceId;
 
-  /** The optional feedback provided by the user for the error. */
-  @Schema(description = "The optional feedback provided by the user for the error")
+  /** The feedback provided by the user for the error. */
+  @Schema(description = "The feedback provided by the user for the error")
   @JsonProperty
   @XmlElement(name = "Feedback")
   @Size(max = 2000)
@@ -168,8 +168,8 @@ public class ErrorReport implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The optional username for the user associated with the error report. */
-  @Schema(description = "The optional username for the user associated with the error report")
+  /** The username for the user associated with the error report. */
+  @Schema(description = "The username for the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 100)
@@ -213,10 +213,10 @@ public class ErrorReport implements Serializable {
    * @param description the description of the error
    * @param detail the error detail
    * @param created the date and time the error report was created
-   * @param who the optional username for the user associated with the error report
-   * @param deviceId the optional ID for the device the error report originated from
-   * @param feedback the optional feedback provided by the user for the error
-   * @param data the optional base-64 encoded data associated with the error report
+   * @param who the username for the user associated with the error report
+   * @param deviceId the ID for the device the error report originated from
+   * @param feedback the feedback provided by the user for the error
+   * @param data the base-64 encoded data associated with the error report
    */
   public ErrorReport(
       UUID id,
@@ -294,9 +294,9 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Returns the optional base-64 encoded data associated with the error report.
+   * Returns the base-64 encoded data associated with the error report.
    *
-   * @return the optional base-64 encoded data associated with the error report
+   * @return the base-64 encoded data associated with the error report
    */
   public String getData() {
     return data;
@@ -321,18 +321,18 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Returns the optional ID for the device the error report originated from.
+   * Returns the ID for the device the error report originated from.
    *
-   * @return the optional ID for the device the error report originated from
+   * @return the ID for the device the error report originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Returns the optional feedback provided by the user for the error.
+   * Returns the feedback provided by the user for the error.
    *
-   * @return the optional feedback provided by the user for the error
+   * @return the feedback provided by the user for the error
    */
   public String getFeedback() {
     return feedback;

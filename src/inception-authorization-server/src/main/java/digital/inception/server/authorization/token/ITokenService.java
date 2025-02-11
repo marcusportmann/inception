@@ -31,7 +31,7 @@ public interface ITokenService {
    * Issue an OAuth2 access token for the specified user.
    *
    * @param username the username for the user
-   * @param scopes the optional scope(s) for the access token
+   * @param scopes the scope(s) for the access token
    * @return the OAuth2 access token
    * @throws ServiceUnavailableException if the OAuth2 access token could not be issued for the user
    */
@@ -42,7 +42,7 @@ public interface ITokenService {
    * Issue an OAuth2 refresh token for the specified user.
    *
    * @param username the username for the user
-   * @param scopes the optional scope(s) for the refresh token
+   * @param scopes the scope(s) for the refresh token
    * @return the OAuth2 refresh token
    * @throws ServiceUnavailableException if the OAuth2 refresh token could not be issued for the
    *     user

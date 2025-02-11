@@ -61,8 +61,8 @@ public class CodeCategory implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional code data for the code category. */
-  @Schema(description = "The optional code data for the code category")
+  /** The code data for the code category. */
+  @Schema(description = "The code data for the code category")
   @JsonProperty
   @XmlElement(name = "Data")
   @Column(name = "data")
@@ -117,7 +117,7 @@ public class CodeCategory implements Serializable {
    *
    * @param id the ID for the code category
    * @param name the name of the code category
-   * @param data the optional code data for the code category
+   * @param data the code data for the code category
    */
   public CodeCategory(String id, String name, String data) {
     this.id = id;
@@ -151,9 +151,9 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Returns the optional code data for the code category.
+   * Returns the code data for the code category.
    *
-   * @return the optional code data for the code category
+   * @return the code data for the code category
    */
   public String getData() {
     return data;

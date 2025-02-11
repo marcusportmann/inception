@@ -502,16 +502,6 @@
       <column name="description" value="Mail Template Administration"/>
     </insert>
     <insert tableName="security_functions">
-      <column name="code" value="Process.ProcessDefinitionAdministration"/>
-      <column name="name" value="Process Definition Administration"/>
-      <column name="description" value="Process Definition Administration"/>
-    </insert>
-    <insert tableName="security_functions">
-      <column name="code" value="Process.ViewProcess"/>
-      <column name="name" value="View Process"/>
-      <column name="description" value="View Process"/>
-    </insert>
-    <insert tableName="security_functions">
       <column name="code" value="Reporting.ReportingAdministration"/>
       <column name="name" value="Reporting Administration"/>
       <column name="description" value="Reporting Administration"/>

@@ -44,6 +44,9 @@
     <createIndex indexName="party_attribute_type_categories_locale_id_ix" tableName="party_attribute_type_categories">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_attribute_type_categories_tenant_id_ix" tableName="party_attribute_type_categories">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_attribute_types" remarks="Attribute Types">
       <column name="category" type="nvarchar(50)" remarks="The code for the attribute type category the attribute type is associated with">
@@ -81,6 +84,9 @@
     <createIndex indexName="party_attribute_types_locale_id_ix" tableName="party_attribute_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_attribute_types_tenant_id_ix" tableName="party_attribute_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_consent_types" remarks="Consent Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the consent type">
@@ -100,6 +106,9 @@
     </createTable>
     <createIndex indexName="party_consent_types_locale_id_ix" tableName="party_consent_types">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_consent_types_tenant_id_ix" tableName="party_consent_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_contact_mechanism_purposes" remarks="Contact Mechanism Purposes">
@@ -127,6 +136,9 @@
     <createIndex indexName="party_contact_mechanism_purposes_locale_id_ix" tableName="party_contact_mechanism_purposes">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_contact_mechanism_purposes_tenant_id_ix" tableName="party_contact_mechanism_purposes">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_contact_mechanism_types" remarks="Contact Mechanism Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the contact mechanism type">
@@ -150,6 +162,9 @@
     </createTable>
     <createIndex indexName="party_contact_mechanism_types_locale_id_ix" tableName="party_contact_mechanism_types">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_contact_mechanism_types_tenant_id_ix" tableName="party_contact_mechanism_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_contact_mechanism_roles" remarks="Contact Mechanism Role">
@@ -188,6 +203,9 @@
       <column name="locale_id"/>
       <column name="code"/>
     </createIndex>
+    <createIndex indexName="party_contact_mechanism_roles_tenant_id_ix" tableName="party_contact_mechanism_roles">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_employment_statuses" remarks="Employment Statuses">
       <column name="code" type="nvarchar(50)" remarks="The code for the employment status">
@@ -207,6 +225,9 @@
     </createTable>
     <createIndex indexName="party_employment_statuses_locale_id_ix" tableName="party_employment_statuses">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_employment_statuses_tenant_id_ix" tableName="party_employment_statuses">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_employment_types" remarks="Employment Types">
@@ -237,6 +258,9 @@
     <createIndex indexName="party_employment_types_locale_id_ix" tableName="party_employment_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_employment_types_tenant_id_ix" tableName="party_employment_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_external_reference_types" remarks="External Reference Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the external reference type">
@@ -261,6 +285,9 @@
     <createIndex indexName="party_external_reference_types_locale_id_ix" tableName="party_external_reference_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_external_reference_types_tenant_id_ix" tableName="party_external_reference_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_fields_of_study" remarks="Fields Of Study">
       <column name="code" type="nvarchar(50)" remarks="The code for the field of study">
@@ -280,6 +307,9 @@
     </createTable>
     <createIndex indexName="party_fields_of_study_locale_id_ix" tableName="party_fields_of_study">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_fields_of_study_tenant_id_ix" tableName="party_fields_of_study">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_genders" remarks="Genders">
@@ -301,6 +331,9 @@
     <createIndex indexName="party_genders_locale_id_ix" tableName="party_genders">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_genders_tenant_id_ix" tableName="party_genders">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_identification_types" remarks="Identification Document Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the identification type">
@@ -317,7 +350,7 @@
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the identification type">
         <constraints nullable="false"/>
       </column>
-      <column name="country_of_issue" type="nchar(2)" remarks="The optional ISO 3166-1 alpha-2 code for the country of issue for the identification type"/>
+      <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the identification type"/>
       <column name="party_types" type="nvarchar(510)" remarks="The comma-delimited list of codes for the party types the identification type is associated with">
         <constraints nullable="false"/>
       </column>
@@ -328,6 +361,9 @@
     </createIndex>
     <createIndex indexName="party_identification_types_country_of_issue_ix" tableName="party_identification_types">
       <column name="country_of_issue"/>
+    </createIndex>
+    <createIndex indexName="party_identification_types_tenant_id_ix" tableName="party_identification_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_industry_classification_systems" remarks="Industry Classification Systems">
@@ -348,6 +384,9 @@
     </createTable>
     <createIndex indexName="party_industry_classification_systems_locale_id_ix" tableName="party_industry_classification_systems">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_industry_classification_systems_tenant_id_ix" tableName="party_industry_classification_systems">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_industry_classification_categories" remarks="Industry Classification Categories">
@@ -377,6 +416,9 @@
     </createIndex>
     <createIndex indexName="party_industry_classification_categories_system_ix" tableName="party_industry_classification_categories">
       <column name="system"/>
+    </createIndex>
+    <createIndex indexName="party_industry_classification_categories_tenant_id_ix" tableName="party_industry_classification_categories">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_industry_classifications" remarks="Industry Classifications">
@@ -411,6 +453,9 @@
     <createIndex indexName="party_industry_classifications_system_ix" tableName="party_industry_classifications">
       <column name="system"/>
     </createIndex>
+    <createIndex indexName="party_industry_classifications_tenant_id_ix" tableName="party_industry_classifications">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_lock_type_categories" remarks="Lock Type Categories">
       <column name="code" type="nvarchar(50)" remarks="The code for the lock type category">
@@ -430,6 +475,9 @@
     </createTable>
     <createIndex indexName="party_lock_type_categories_locale_id_ix" tableName="party_lock_type_categories">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_lock_type_categories_tenant_id_ix" tableName="party_lock_type_categories">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_lock_types" remarks="Lock Types">
@@ -463,6 +511,9 @@
     <createIndex indexName="party_lock_types_locale_id_ix" tableName="party_lock_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_lock_types_tenant_id_ix" tableName="party_lock_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_marital_statuses" remarks="Marital Statuses">
       <column name="code" type="nvarchar(50)" remarks="The code for the marital status">
@@ -482,6 +533,9 @@
     </createTable>
     <createIndex indexName="party_marital_statuses_locale_id_ix" tableName="party_marital_statuses">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_marital_statuses_tenant_id_ix" tableName="party_marital_statuses">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_marriage_types" remarks="Marriage Types">
@@ -512,6 +566,9 @@
     <createIndex indexName="party_marriage_types_locale_id_ix" tableName="party_marriage_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_marriage_types_tenant_id_ix" tableName="party_marriage_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_minor_types" remarks="Minor Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the minor type">
@@ -531,6 +588,9 @@
     </createTable>
     <createIndex indexName="party_minor_types_locale_id_ix" tableName="party_minor_types">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_minor_types_tenant_id_ix" tableName="party_minor_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_next_of_kin_types" remarks="Next of Kin Types">
@@ -552,6 +612,9 @@
     <createIndex indexName="party_next_of_kin_types_locale_id_ix" tableName="party_next_of_kin_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_next_of_kin_types_tenant_id_ix" tableName="party_next_of_kin_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_occupations" remarks="Occupations">
       <column name="code" type="nvarchar(50)" remarks="The code for the occupation">
@@ -572,6 +635,9 @@
     <createIndex indexName="party_occupations_locale_id_ix" tableName="party_occupations">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_occupations_tenant_id_ix" tableName="party_occupations">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_physical_address_types" remarks="Physical Address Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the physical address type">
@@ -591,6 +657,9 @@
     </createTable>
     <createIndex indexName="party_physical_address_types_locale_id_ix" tableName="party_physical_address_types">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_physical_address_types_tenant_id_ix" tableName="party_physical_address_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_physical_address_purposes" remarks="Physical Address Purposes">
@@ -615,6 +684,9 @@
     <createIndex indexName="party_physical_address_purposes_locale_id_ix" tableName="party_physical_address_purposes">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_physical_address_purposes_tenant_id_ix" tableName="party_physical_address_purposes">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_physical_address_roles" remarks="Physical Address Roles">
       <column name="code" type="nvarchar(50)" remarks="The code for the physical address role">
@@ -638,6 +710,9 @@
     <createIndex indexName="party_physical_address_roles_locale_id_ix" tableName="party_physical_address_roles">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_physical_address_roles_tenant_id_ix" tableName="party_physical_address_roles">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_preference_type_categories" remarks="Preference Type Categories">
       <column name="code" type="nvarchar(50)" remarks="The code for the preference type category">
@@ -660,6 +735,9 @@
     </createTable>
     <createIndex indexName="party_preference_type_categories_locale_id_ix" tableName="party_preference_type_categories">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_preference_type_categories_tenant_id_ix" tableName="party_preference_type_categories">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_preference_types" remarks="Preference Types">
@@ -694,6 +772,9 @@
     <createIndex indexName="party_preference_types_locale_id_ix" tableName="party_preference_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_preference_types_tenant_id_ix" tableName="party_preference_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_qualification_types" remarks="Qualification Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the qualification type">
@@ -718,6 +799,9 @@
     <createIndex indexName="party_qualification_types_locale_id_ix" tableName="party_qualification_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_qualification_types_tenant_id_ix" tableName="party_qualification_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_races" remarks="Races">
       <column name="code" type="nvarchar(50)" remarks="The code for the race">
@@ -737,6 +821,9 @@
     </createTable>
     <createIndex indexName="party_races_locale_id_ix" tableName="party_races">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_races_tenant_id_ix" tableName="party_races">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_residence_permit_types" remarks="Residence Permit Types">
@@ -765,6 +852,9 @@
     <createIndex indexName="party_residence_permit_types_country_of_issue_ix" tableName="party_residence_permit_types">
       <column name="country_of_issue"/>
     </createIndex>
+    <createIndex indexName="party_residence_permit_types_tenant_id_ix" tableName="party_residence_permit_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_residency_statuses" remarks="Residency Statuses">
       <column name="code" type="nvarchar(50)" remarks="The code for the residency status">
@@ -784,6 +874,9 @@
     </createTable>
     <createIndex indexName="party_residency_statuses_locale_id_ix" tableName="party_residency_statuses">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_residency_statuses_tenant_id_ix" tableName="party_residency_statuses">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_residential_types" remarks="Residential Types">
@@ -805,6 +898,9 @@
     <createIndex indexName="party_residential_types_locale_id_ix" tableName="party_residential_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_residential_types_tenant_id_ix" tableName="party_residential_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_role_purposes" remarks="Role Purposes">
       <column name="code" type="nvarchar(50)" remarks="The code for the role purpose">
@@ -824,6 +920,9 @@
     </createTable>
     <createIndex indexName="party_role_purposes_locale_id_ix" tableName="party_role_purposes">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_role_purposes_tenant_id_ix" tableName="party_role_purposes">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_role_types" remarks="Role Types">
@@ -847,6 +946,9 @@
     </createTable>
     <createIndex indexName="party_role_types_locale_id_ix" tableName="party_role_types">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_role_types_tenant_id_ix" tableName="party_role_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_role_type_attribute_type_constraints" remarks="Role Type Attribute Type Constraints">
@@ -905,7 +1007,10 @@
     </createTable>
     <createIndex indexName="party_segmentation_types_locale_id_ix" tableName="party_segmentation_types">
       <column name="locale_id"/>
-    </createIndex>    
+    </createIndex>
+    <createIndex indexName="party_segmentation_types_tenant_id_ix" tableName="party_segmentation_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_segments" remarks="Segments">
       <column name="type" type="nvarchar(50)" remarks="The code for the segmentation type for the segment">
@@ -938,6 +1043,9 @@
     <createIndex indexName="party_segments_locale_id_ix" tableName="party_segments">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_segments_tenant_id_ix" tableName="party_segments">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_skill_types" remarks="Skill Types">
       <column name="parent" type="nvarchar(50)" remarks="The code for the parent skill type"/>
@@ -964,7 +1072,10 @@
     </createIndex>
     <createIndex indexName="party_skill_types_locale_id_ix" tableName="party_skill_types">
       <column name="locale_id"/>
-    </createIndex>    
+    </createIndex>
+    <createIndex indexName="party_skill_types_tenant_id_ix" tableName="party_skill_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_source_of_funds_types" remarks="Source Of Funds Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the source of funds type">
@@ -985,6 +1096,9 @@
     <createIndex indexName="party_source_of_funds_types_locale_id_ix" tableName="party_source_of_funds_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_source_of_funds_types_tenant_id_ix" tableName="party_source_of_funds_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_source_of_wealth_types" remarks="Source Of Wealth Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the source of wealth type">
@@ -1004,6 +1118,9 @@
     </createTable>
     <createIndex indexName="party_source_of_wealth_types_locale_id_ix" tableName="party_source_of_wealth_types">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_source_of_wealth_types_tenant_id_ix" tableName="party_source_of_wealth_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_status_type_categories" remarks="Status Type Categories">
@@ -1027,6 +1144,9 @@
     </createTable>
     <createIndex indexName="party_status_type_categories_locale_id_ix" tableName="party_status_type_categories">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_status_type_categories_tenant_id_ix" tableName="party_status_type_categories">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_status_types" remarks="Status Types">
@@ -1060,6 +1180,9 @@
     <createIndex indexName="party_status_types_locale_id_ix" tableName="party_status_types">
       <column name="locale_id"/>
     </createIndex>
+    <createIndex indexName="party_status_types_tenant_id_ix" tableName="party_status_types">
+      <column name="tenant_id"/>
+    </createIndex>
 
     <createTable tableName="party_tax_number_types" remarks="Tax Number Types">
       <column name="code" type="nvarchar(50)" remarks="The code for the tax number type">
@@ -1084,11 +1207,14 @@
       </column>
       <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a number for the tax number type"/>
     </createTable>
+    <createIndex indexName="party_tax_number_types_country_of_issue_ix" tableName="party_tax_number_types">
+      <column name="country_of_issue"/>
+    </createIndex>
     <createIndex indexName="party_tax_number_types_locale_id_ix" tableName="party_tax_number_types">
       <column name="locale_id"/>
     </createIndex>
-    <createIndex indexName="party_tax_number_types_country_of_issue_ix" tableName="party_tax_number_types">
-      <column name="country_of_issue"/>
+    <createIndex indexName="party_tax_number_types_tenant_id_ix" tableName="party_tax_number_types">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_times_to_contact" remarks="Times To Contact">
@@ -1109,6 +1235,9 @@
     </createTable>
     <createIndex indexName="party_times_to_contact_locale_id_ix" tableName="party_times_to_contact">
       <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="party_times_to_contact_tenant_id_ix" tableName="party_times_to_contact">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable tableName="party_titles" remarks="Titles">
@@ -1136,7 +1265,9 @@
     <createIndex indexName="party_titles_locale_id_ix" tableName="party_titles">
       <column name="locale_id"/>
     </createIndex>
-
+    <createIndex indexName="party_titles_tenant_id_ix" tableName="party_titles">
+      <column name="tenant_id"/>
+    </createIndex>
 
 
 

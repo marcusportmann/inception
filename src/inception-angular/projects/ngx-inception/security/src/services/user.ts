@@ -24,12 +24,12 @@ import {UserStatus} from './user-status';
 export class User {
 
   /**
-   * The optional email address for the user.
+   * The email address for the user.
    */
   email: string | null = null;
 
   /**
-   * The optional mobile number for the user.
+   * The mobile number for the user.
    */
   mobileNumber: string | null = null;
 
@@ -54,12 +54,12 @@ export class User {
   passwordExpiry: Date | null = null;
 
   /**
-   * The optional phone number for the user.
+   * The phone number for the user.
    */
   phoneNumber: string | null = null;
 
   /**
-   * The optional preferred name for the user.
+   * The preferred name for the user.
    */
   preferredName: string | null = null;
 
@@ -84,10 +84,10 @@ export class User {
    * @param userDirectoryId   The ID for the user directory the user is associated with.
    * @param username          The username for the user.
    * @param name              The name of the user.
-   * @param preferredName     The optional preferred name for the user.
-   * @param mobileNumber      The optional mobile number for the user.
-   * @param phoneNumber       The optional phone number for the user.
-   * @param email             The optional email address for the user.
+   * @param preferredName     The preferred name for the user.
+   * @param mobileNumber      The mobile number for the user.
+   * @param phoneNumber       The phone number for the user.
+   * @param email             The email address for the user.
    * @param status            The status for the user.*
    * @param password          The password or password hash for the user.
    * @param passwordAttempts  The number of failed authentication attempts as a result of an

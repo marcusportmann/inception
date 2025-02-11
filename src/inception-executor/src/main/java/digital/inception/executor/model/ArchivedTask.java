@@ -87,8 +87,8 @@ public class ArchivedTask implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional ID for the task batch. */
-  @Schema(description = "The optional ID for the task batch")
+  /** The ID for the task batch. */
+  @Schema(description = "The ID for the task batch")
   @JsonProperty
   @XmlElement(name = "BatchId")
   @Size(min = 1, max = 50)
@@ -125,8 +125,8 @@ public class ArchivedTask implements Serializable {
   @Column(name = "execution_time", nullable = false)
   private long executionTime;
 
-  /** The optional external reference for the task. */
-  @Schema(description = "The optional external reference for the task")
+  /** The external reference for the task. */
+  @Schema(description = "The external reference for the task")
   @JsonProperty
   @XmlElement(name = "ExternalReference")
   @Size(min = 1, max = 50)
@@ -193,14 +193,14 @@ public class ArchivedTask implements Serializable {
    * Constructs a new <b>ArchivedTask</b>.
    *
    * @param id the ID for the task
-   * @param batchId the optional ID for the task batch
+   * @param batchId the ID for the task batch
    * @param type the code for the task type
    * @param step the code for the last task step for a multistep task
    * @param status the status of the task
    * @param queued the date and time the task was queued for execution
    * @param executed the date and time the task was executed
    * @param executionTime the time taken to execute the task in milliseconds
-   * @param externalReference the optional external reference for the task
+   * @param externalReference the external reference for the task
    * @param data the task data
    */
   public ArchivedTask(
@@ -252,9 +252,9 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Returns the optional ID for the task batch.
+   * Returns the ID for the task batch.
    *
-   * @return the optional ID for the task batch
+   * @return the ID for the task batch
    */
   public String getBatchId() {
     return batchId;
@@ -288,9 +288,9 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Returns the optional external reference for the task.
+   * Returns the external reference for the task.
    *
-   * @return the optional external reference for the task
+   * @return the external reference for the task
    */
   public String getExternalReference() {
     return externalReference;
@@ -361,9 +361,9 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the optional ID for the task batch.
+   * Set the ID for the task batch.
    *
-   * @param batchId the optional ID for the task batch
+   * @param batchId the ID for the task batch
    */
   public void setBatchId(String batchId) {
     this.batchId = batchId;
@@ -397,9 +397,9 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the optional external reference for the task.
+   * Set the external reference for the task.
    *
-   * @param externalReference the optional external reference for the task
+   * @param externalReference the external reference for the task
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;

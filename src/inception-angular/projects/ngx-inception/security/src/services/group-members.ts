@@ -25,7 +25,7 @@ import {GroupMember} from './group-member';
 export class GroupMembers {
 
   /**
-   * The optional filter that was applied to the group members.
+   * The filter that was applied to the group members.
    */
   filter: string | null = null;
 
@@ -74,7 +74,7 @@ export class GroupMembers {
    * @param sortDirection   The sort direction that was applied to the group members.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.
-   * @param filter          The optional filter that was applied to the group members.
+   * @param filter          The filter that was applied to the group members.
    */
   constructor(userDirectoryId: string, groupName: string, groupMembers: GroupMember[],
               total: number,

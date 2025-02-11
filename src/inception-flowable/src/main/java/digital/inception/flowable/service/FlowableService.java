@@ -130,9 +130,9 @@
 //  //        throw new ProcessDefinitionNotFoundException(processDefinitionId);
 //  //      }
 //  //
-//  //      List<ProcessDefinition> processsDefinitions = processDefinitionQuery.list();
+//  //      List<ProcessDefinition> processDefinitions = processDefinitionQuery.list();
 //  //
-//  //      for (ProcessDefinition processDefinition : processsDefinitions) {
+//  //      for (ProcessDefinition processDefinition : processDefinitions) {
 //  //
 //  // processEngine.getRepositoryService().deleteDeployment(processDefinition.getDeploymentId());
 //  //      }

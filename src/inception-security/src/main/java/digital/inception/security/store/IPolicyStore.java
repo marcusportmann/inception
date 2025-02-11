@@ -83,11 +83,11 @@ public interface IPolicyStore {
   /**
    * Retrieve the summaries for the policies.
    *
-   * @param filter the optional filter to apply to the policy summaries
-   * @param sortBy the optional method used to sort the policy summaries e.g. by name
-   * @param sortDirection the optional sort direction to apply to the policy summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the policy summaries
+   * @param sortBy the method used to sort the policy summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the policy summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the policies
    * @throws ServiceUnavailableException if the policy summaries could not be retrieved
    */

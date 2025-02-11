@@ -30,7 +30,7 @@ export class DuplicateReportDefinitionError extends Error {
   /**
    * Constructs a new DuplicateReportDefinitionError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
@@ -52,7 +52,7 @@ export class ReportDefinitionNotFoundError extends Error {
   /**
    * Constructs a new ReportDefinitionNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(

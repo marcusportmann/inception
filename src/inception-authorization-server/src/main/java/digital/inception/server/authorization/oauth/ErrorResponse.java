@@ -35,7 +35,7 @@ public abstract class ErrorResponse extends Response {
   /** The single ASCII error code. */
   private final String error;
 
-  /** The optional human-readable ASCII text description of the error. */
+  /** The human-readable ASCII text description of the error. */
   private final String errorDescription;
 
   /**
@@ -56,7 +56,7 @@ public abstract class ErrorResponse extends Response {
    *
    * @param status the HTTP status that should be returned for the OAuth2 error response
    * @param error the single ASCII error code
-   * @param errorDescription the optional human-readable ASCII text description of the error
+   * @param errorDescription the human-readable ASCII text description of the error
    */
   public ErrorResponse(HttpStatus status, String error, String errorDescription) {
     super(status);
@@ -104,9 +104,9 @@ public abstract class ErrorResponse extends Response {
   }
 
   /**
-   * Returns the optional human-readable ASCII text description of the error.
+   * Returns the human-readable ASCII text description of the error.
    *
-   * @return the optional human-readable ASCII text description of the error
+   * @return the human-readable ASCII text description of the error
    */
   public String getErrorDescription() {
     return errorDescription;

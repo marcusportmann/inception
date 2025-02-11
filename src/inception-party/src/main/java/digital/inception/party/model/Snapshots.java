@@ -93,8 +93,8 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "EntityType", required = true)
   private EntityType entityType;
 
-  /** The optional date to retrieve the snapshots from. */
-  @Schema(description = "The optional ISO 8601 format date to retrieve the snapshots from")
+  /** The date to retrieve the snapshots from. */
+  @Schema(description = "The ISO 8601 format date to retrieve the snapshots from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "From")
@@ -102,14 +102,14 @@ public class Snapshots implements Serializable {
   @XmlSchemaType(name = "date")
   private LocalDate from;
 
-  /** The optional page index. */
-  @Schema(description = "The optional page index")
+  /** The page index. */
+  @Schema(description = "The page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
-  @Schema(description = "The optional page size")
+  /** The page size. */
+  @Schema(description = "The page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
@@ -121,8 +121,8 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "Snapshot", required = true)
   private List<Snapshot> snapshots;
 
-  /** The optional sort direction that was applied to the snapshots. */
-  @Schema(description = "The optional sort direction that was applied to the snapshots")
+  /** The sort direction that was applied to the snapshots. */
+  @Schema(description = "The sort direction that was applied to the snapshots")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -135,8 +135,8 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "TenantId", required = true)
   private UUID tenantId;
 
-  /** The optional date to retrieve the snapshots to. */
-  @Schema(description = "The optional ISO 8601 format date to retrieve the snapshots to")
+  /** The date to retrieve the snapshots to. */
+  @Schema(description = "The ISO 8601 format date to retrieve the snapshots to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "To")
@@ -163,11 +163,11 @@ public class Snapshots implements Serializable {
    * @param total the total number of snapshots
    * @param entityType the type of entity
    * @param entityId the ID for the entity
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction that was applied to the snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param from the date to retrieve the snapshots from
+   * @param to the date to retrieve the snapshots to
+   * @param sortDirection the sort direction that was applied to the snapshots
+   * @param pageIndex the page index
+   * @param pageSize the page size
    */
   public Snapshots(
       UUID tenantId,
@@ -211,27 +211,27 @@ public class Snapshots implements Serializable {
   }
 
   /**
-   * Returns the optional date to retrieve the snapshots from.
+   * Returns the date to retrieve the snapshots from.
    *
-   * @return the optional date to retrieve the snapshots from
+   * @return the date to retrieve the snapshots from
    */
   public LocalDate getFrom() {
     return from;
   }
 
   /**
-   * Returns the optional page index.
+   * Returns the page index.
    *
-   * @return the optional page index
+   * @return the page index
    */
   public Integer getPageIndex() {
     return pageIndex;
   }
 
   /**
-   * Returns the optional page size.
+   * Returns the page size.
    *
-   * @return the optional page size
+   * @return the page size
    */
   public Integer getPageSize() {
     return pageSize;
@@ -247,9 +247,9 @@ public class Snapshots implements Serializable {
   }
 
   /**
-   * Returns the optional sort direction that was applied to the snapshots.
+   * Returns the sort direction that was applied to the snapshots.
    *
-   * @return the optional sort direction that was applied to the snapshots
+   * @return the sort direction that was applied to the snapshots
    */
   public SortDirection getSortDirection() {
     return sortDirection;
@@ -265,9 +265,9 @@ public class Snapshots implements Serializable {
   }
 
   /**
-   * Returns the optional date to retrieve the snapshots to.
+   * Returns the date to retrieve the snapshots to.
    *
-   * @return the optional date to retrieve the snapshots to
+   * @return the date to retrieve the snapshots to
    */
   public LocalDate getTo() {
     return to;

@@ -31,7 +31,7 @@ export class InvalidArgumentError extends Error {
   /**
    * Constructs a new InvalidArgumentError.
    *
-   * @param cause   The optional cause of the error.
+   * @param cause   The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@core_invalid_argument_error:An invalid argument error occurred.`, cause);

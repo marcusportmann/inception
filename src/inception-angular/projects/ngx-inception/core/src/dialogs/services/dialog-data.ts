@@ -22,7 +22,7 @@
 export interface DialogData {
 
   /**
-   * The optional button text.
+   * The button text.
    */
   buttonText?: string;
   /**

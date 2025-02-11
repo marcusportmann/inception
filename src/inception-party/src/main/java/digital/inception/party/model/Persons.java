@@ -69,20 +69,20 @@ public class Persons implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the persons. */
-  @Schema(description = "The optional filter that was applied to the persons")
+  /** The filter that was applied to the persons. */
+  @Schema(description = "The filter that was applied to the persons")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /** The optional page index. */
-  @Schema(description = "The optional page index")
+  /** The page index. */
+  @Schema(description = "The page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
-  @Schema(description = "The optional page size")
+  /** The page size. */
+  @Schema(description = "The page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
@@ -94,14 +94,14 @@ public class Persons implements Serializable {
   @XmlElement(name = "Person", required = true)
   private List<Person> persons;
 
-  /** The optional method used to sort the persons e.g. by name. */
-  @Schema(description = "The optional method used to sort the persons e.g. by name")
+  /** The method used to sort the persons e.g. by name. */
+  @Schema(description = "The method used to sort the persons e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private PersonSortBy sortBy;
 
-  /** The optional sort direction that was applied to the persons. */
-  @Schema(description = "The optional sort direction that was applied to the persons")
+  /** The sort direction that was applied to the persons. */
+  @Schema(description = "The sort direction that was applied to the persons")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -129,11 +129,11 @@ public class Persons implements Serializable {
    * @param tenantId the ID for the tenant the persons are associated with
    * @param persons the persons
    * @param total the total number of persons
-   * @param filter the optional filter that was applied to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by name
-   * @param sortDirection the optional sort direction that was applied to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter that was applied to the persons
+   * @param sortBy the method used to sort the persons e.g. by name
+   * @param sortDirection the sort direction that was applied to the persons
+   * @param pageIndex the page index
+   * @param pageSize the page size
    */
   public Persons(
       UUID tenantId,
@@ -155,27 +155,27 @@ public class Persons implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the persons.
+   * Returns the filter that was applied to the persons.
    *
-   * @return the optional filter that was applied to the persons
+   * @return the filter that was applied to the persons
    */
   public String getFilter() {
     return filter;
   }
 
   /**
-   * Returns the optional page index.
+   * Returns the page index.
    *
-   * @return the optional page index
+   * @return the page index
    */
   public Integer getPageIndex() {
     return pageIndex;
   }
 
   /**
-   * Returns the optional page size.
+   * Returns the page size.
    *
-   * @return the optional page size
+   * @return the page size
    */
   public Integer getPageSize() {
     return pageSize;
@@ -191,18 +191,18 @@ public class Persons implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the persons e.g. by name.
+   * Returns the method used to sort the persons e.g. by name.
    *
-   * @return the optional method used to sort the persons
+   * @return the method used to sort the persons
    */
   public PersonSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the persons.
+   * Returns the sort direction that was applied to the persons.
    *
-   * @return the optional sort direction that was applied to the persons
+   * @return the sort direction that was applied to the persons
    */
   public SortDirection getSortDirection() {
     return sortDirection;

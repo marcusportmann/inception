@@ -248,13 +248,13 @@ public interface IExecutorService {
   /**
    * Retrieve the summaries for the tasks.
    *
-   * @param type the optional task type code filter to apply to the task summaries
-   * @param status the optional status filter to apply to the task summaries
-   * @param filter the optional filter to apply to the task summaries
-   * @param sortBy the optional method used to sort the task summaries e.g. by type
-   * @param sortDirection the optional sort direction to apply to the task summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param type the task type code filter to apply to the task summaries
+   * @param status the status filter to apply to the task summaries
+   * @param filter the filter to apply to the task summaries
+   * @param sortBy the method used to sort the task summaries e.g. by type
+   * @param sortDirection the sort direction to apply to the task summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the tasks
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the task summaries could not be retrieved
@@ -341,9 +341,9 @@ public interface IExecutorService {
    * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
    *
    * @param type the code for the task type
-   * @param batchId the optional ID for the task batch
-   * @param externalReference the optional external reference for the task
-   * @param suspended the optional flag indicating that the task must be suspended
+   * @param batchId the ID for the task batch
+   * @param externalReference the external reference for the task
+   * @param suspended the flag indicating that the task must be suspended
    * @param dataObject the task data object that will be serialized to JSON
    * @return the ID for the task that has been queued for execution
    * @throws InvalidArgumentException if an argument is invalid
@@ -364,8 +364,8 @@ public interface IExecutorService {
    * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
    *
    * @param type the code for the task type
-   * @param batchId the optional ID for the task batch
-   * @param externalReference the optional external reference for the task
+   * @param batchId the ID for the task batch
+   * @param externalReference the external reference for the task
    * @param dataObject the task data object that will be serialized to JSON
    * @return the ID for the task that has been queued for execution
    * @throws InvalidArgumentException if an argument is invalid
@@ -385,7 +385,7 @@ public interface IExecutorService {
    * getNextTaskQueuedForExecution method invoked by the BackgroundTaskExecutor.
    *
    * @param type the code for the task type
-   * @param batchId the optional ID for the task batch
+   * @param batchId the ID for the task batch
    * @param dataObject the task data object that will be serialized to JSON
    * @return the ID for the task that has been queued for execution
    * @throws InvalidArgumentException if an argument is invalid

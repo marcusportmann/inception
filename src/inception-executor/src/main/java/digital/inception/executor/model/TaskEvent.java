@@ -87,8 +87,8 @@ public class TaskEvent implements Serializable {
   @Column(name = "task_id", nullable = false)
   private UUID taskId;
 
-  /** The optional code for the task step for a multistep task. */
-  @Schema(description = "The optional code for the task step for a multistep task")
+  /** The code for the task step for a multistep task. */
+  @Schema(description = "The code for the task step for a multistep task")
   @JsonProperty
   @XmlElement(name = "TaskStep")
   @Size(min = 1, max = 50)
@@ -235,9 +235,9 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Returns the optional code for the task step for a multistep task.
+   * Returns the code for the task step for a multistep task.
    *
-   * @return the optional code for the task step for a multistep task
+   * @return the code for the task step for a multistep task
    */
   public String getTaskStep() {
     return taskStep;
@@ -308,9 +308,9 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the optional code for the task step for a multistep task.
+   * Set the code for the task step for a multistep task.
    *
-   * @param taskStep the optional code for the task step for a multistep task
+   * @param taskStep the code for the task step for a multistep task
    */
   public void setTaskStep(String taskStep) {
     this.taskStep = taskStep;

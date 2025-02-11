@@ -29,7 +29,7 @@ export class DuplicateMailTemplateError extends Error {
   /**
    * Constructs a new DuplicateMailTemplateError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@mail_duplicate_mail_template_error:The mail template already exists.`,
@@ -49,7 +49,7 @@ export class MailTemplateNotFoundError extends Error {
   /**
    * Constructs a new MailTemplateNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@mail_mail_template_not_found_error:The mail template could not be found.`,

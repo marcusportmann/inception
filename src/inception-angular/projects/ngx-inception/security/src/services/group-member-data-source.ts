@@ -64,10 +64,10 @@ export class GroupMemberDataSource implements DataSource<GroupMember> {
    *
    * @param userDirectoryId The ID for the user directory the group is associated with.
    * @param groupName       The name of the group.
-   * @param filter          The optional filter to apply to the group members.
-   * @param sortDirection   The optional sort direction to apply to the group members.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param filter          The filter to apply to the group members.
+   * @param sortDirection   The sort direction to apply to the group members.
+   * @param pageIndex       The page index.
+   * @param pageSize        The page size.
    *
    * @return The group members.
    */

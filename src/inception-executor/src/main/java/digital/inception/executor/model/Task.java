@@ -98,8 +98,8 @@ public class Task implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional ID for the task batch. */
-  @Schema(description = "The optional ID for the task batch")
+  /** The ID for the task batch. */
+  @Schema(description = "The ID for the task batch")
   @JsonProperty
   @XmlElement(name = "BatchId")
   @Size(min = 1, max = 50)
@@ -141,8 +141,8 @@ public class Task implements Serializable {
   @Column(name = "execution_time", nullable = false)
   private long executionTime;
 
-  /** The optional external reference for the task. */
-  @Schema(description = "The optional external reference for the task")
+  /** The external reference for the task. */
+  @Schema(description = "The external reference for the task")
   @JsonProperty
   @XmlElement(name = "ExternalReference")
   @Size(min = 1, max = 50)
@@ -218,8 +218,8 @@ public class Task implements Serializable {
   @Column(name = "status", length = 50, nullable = false)
   private TaskStatus status;
 
-  /** The optional code for the current task step for a multistep task. */
-  @Schema(description = "The optional code for the current task step for a multistep task")
+  /** The code for the current task step for a multistep task. */
+  @Schema(description = "The code for the current task step for a multistep task")
   @JsonProperty
   @XmlElement(name = "Step")
   @Size(min = 1, max = 50)
@@ -258,7 +258,7 @@ public class Task implements Serializable {
    * Constructs a new <b>Task</b>.
    *
    * @param type the code for the task type
-   * @param step the optional code for the current task step for a multistep task
+   * @param step the code for the current task step for a multistep task
    * @param data the task data
    */
   public Task(String type, String step, String data) {
@@ -298,9 +298,9 @@ public class Task implements Serializable {
   }
 
   /**
-   * Returns the optional ID for the task batch.
+   * Returns the ID for the task batch.
    *
-   * @return the optional ID for the task batch
+   * @return the ID for the task batch
    */
   public String getBatchId() {
     return batchId;
@@ -343,9 +343,9 @@ public class Task implements Serializable {
   }
 
   /**
-   * Returns the optional external reference for the task.
+   * Returns the external reference for the task.
    *
-   * @return the optional external reference for the task
+   * @return the external reference for the task
    */
   public String getExternalReference() {
     return externalReference;
@@ -424,9 +424,9 @@ public class Task implements Serializable {
   }
 
   /**
-   * Returns the optional code for the current task step for a multistep task.
+   * Returns the code for the current task step for a multistep task.
    *
-   * @return the optional code for the current task step for a multistep task
+   * @return the code for the current task step for a multistep task
    */
   public String getStep() {
     return step;
@@ -461,9 +461,9 @@ public class Task implements Serializable {
   }
 
   /**
-   * Set the optional ID for the task batch.
+   * Set the ID for the task batch.
    *
-   * @param batchId the optional ID for the task batch
+   * @param batchId the ID for the task batch
    */
   public void setBatchId(String batchId) {
     this.batchId = batchId;
@@ -506,9 +506,9 @@ public class Task implements Serializable {
   }
 
   /**
-   * Set the optional external reference for the task.
+   * Set the external reference for the task.
    *
-   * @param externalReference the optional external reference for the task
+   * @param externalReference the external reference for the task
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;
@@ -591,9 +591,9 @@ public class Task implements Serializable {
   }
 
   /**
-   * Set the optional code for the current task step for a multistep task.
+   * Set the code for the current task step for a multistep task.
    *
-   * @param step the optional code for the current task step for a multistep task
+   * @param step the code for the current task step for a multistep task
    */
   public void setStep(String step) {
     this.step = step;

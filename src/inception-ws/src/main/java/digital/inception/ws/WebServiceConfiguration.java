@@ -81,15 +81,15 @@ public class WebServiceConfiguration {
   @Value("${inception.ws.security.x509-certificate-token-profile.key-store-type:#{null}}")
   private String wssX509CertificateTokenProfileKeyStoreType;
 
-  /** The optional Web Services Security X.509 Certificate Token Profile trust store password. */
+  /** The Web Services Security X.509 Certificate Token Profile trust store password. */
   @Value("${inception.ws.security.x509-certificate-token-profile.trust-store-password:#{null}}")
   private String wssX509CertificateTokenProfileTrustStorePassword;
 
-  /** The optional Web Services Security X.509 Certificate Token Profile trust store path. */
+  /** The Web Services Security X.509 Certificate Token Profile trust store path. */
   @Value("${inception.ws.security.x509-certificate-token-profile.trust-store:#{null}}")
   private String wssX509CertificateTokenProfileTrustStorePath;
 
-  /** The optional Web Services Security X.509 Certificate Token Profile trust store type. */
+  /** The Web Services Security X.509 Certificate Token Profile trust store type. */
   @Value("${inception.ws.security.x509-certificate-token-profile.trust-store-type:#{null}}")
   private String wssX509CertificateTokenProfileTrustStoreType;
 

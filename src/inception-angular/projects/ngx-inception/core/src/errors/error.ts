@@ -26,7 +26,7 @@ import {ProblemDetails} from './problem-details';
 export class Error {
 
   /**
-   * The optional cause of the error.
+   * The cause of the error.
    */
   cause: ProblemDetails | HttpErrorResponse | HttpError | null = null;
 
@@ -44,7 +44,7 @@ export class Error {
    * Constructs a new Error.
    *
    * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param cause   The cause of the error.
    */
   constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError | null) {
 

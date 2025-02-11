@@ -46,7 +46,7 @@ public class InvalidClientErrorResponse extends ErrorResponse {
    *
    * @param status the HTTP status that should be returned for the OAuth2 invalid client error
    *     response
-   * @param errorDescription the optional human-readable ASCII text description of the error
+   * @param errorDescription the human-readable ASCII text description of the error
    */
   public InvalidClientErrorResponse(HttpStatus status, String errorDescription) {
     super(status, ERROR_CODE, errorDescription);

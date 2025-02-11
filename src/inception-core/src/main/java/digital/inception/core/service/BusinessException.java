@@ -39,7 +39,7 @@ public class BusinessException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional error code identifying the business error. */
+  /** The error code identifying the business error. */
   private final String code;
 
   /**
@@ -89,9 +89,9 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Returns the optional error code identifying the business error.
+   * Returns the error code identifying the business error.
    *
-   * @return the optional error code identifying the business error
+   * @return the error code identifying the business error
    */
   public String getCode() {
     return code;

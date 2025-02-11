@@ -32,7 +32,7 @@ export class ErrorReportSummaries {
   errorReportSummaries: ErrorReportSummary[];
 
   /**
-   * The optional filter that was applied to the error report summaries.
+   * The filter that was applied to the error report summaries.
    */
   filter: string | null = null;
 
@@ -85,7 +85,7 @@ export class ErrorReportSummaries {
    * @param sortDirection        The sort direction that was applied to the error report summaries.
    * @param pageIndex            The page index.
    * @param pageSize             The page size.
-   * @param filter               The optional filter that was applied to the error report
+   * @param filter               The filter that was applied to the error report
    *                             summaries.
    */
   constructor(errorReportSummaries: ErrorReportSummary[], total: number, fromDate: string,

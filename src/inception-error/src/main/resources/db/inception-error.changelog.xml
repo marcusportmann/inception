@@ -37,10 +37,10 @@
       <column name="created" type="timestamp with time zone" remarks="The date and time the error report was created">
         <constraints nullable="false"/>
       </column>
-      <column name="who" type="nvarchar(100)" remarks="The optional username for the user associated with the error report"/>
-      <column name="device_id" type="uuid" remarks="The optional ID for the device the error report originated from"/>
-      <column name="feedback" type="nvarchar(2000)" remarks="The optional feedback provided by the user for the error"/>
-      <column name="data" type="clob" remarks="The optional base-64 encoded data associated with the error report"/>
+      <column name="who" type="nvarchar(100)" remarks="The username for the user associated with the error report"/>
+      <column name="device_id" type="uuid" remarks="The ID for the device the error report originated from"/>
+      <column name="feedback" type="nvarchar(2000)" remarks="The feedback provided by the user for the error"/>
+      <column name="data" type="clob" remarks="The base-64 encoded data associated with the error report"/>
     </createTable>
     <createIndex indexName="error_error_reports_application_id_ix"
       tableName="error_error_reports">

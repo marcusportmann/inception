@@ -51,8 +51,8 @@ public class UserDirectories implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the user directories. */
-  @Schema(description = "The optional filter that was applied to the user directories")
+  /** The filter that was applied to the user directories. */
+  @Schema(description = "The filter that was applied to the user directories")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -100,7 +100,7 @@ public class UserDirectories implements Serializable {
    *
    * @param userDirectories the user directories
    * @param total the total number of user directories
-   * @param filter the optional filter that was applied to the user directories
+   * @param filter the filter that was applied to the user directories
    * @param sortDirection the sort direction that was applied to the user directories
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -121,9 +121,9 @@ public class UserDirectories implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the user directories.
+   * Returns the filter that was applied to the user directories.
    *
-   * @return the optional filter that was applied to the user directories
+   * @return the filter that was applied to the user directories
    */
   public String getFilter() {
     return filter;

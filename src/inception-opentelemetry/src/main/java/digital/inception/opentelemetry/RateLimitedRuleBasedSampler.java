@@ -124,25 +124,6 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
       Attributes attributes,
       List<LinkData> parentLinks) {
 
-    if (!rateLimiter.tryAcquire()) {
-      if (logger.isLoggable(Level.FINE)) {
-        logger.fine(
-            "Spans per second rate limit ("
-                + spansPerSecondLimit
-                + ") exceeded when processing span with trace ID ("
-                + traceId
-                + "), kind ("
-                + spanKind.name()
-                + "), name ("
-                + name
-                + ") and attributes ("
-                + getAttributesAsString(attributes)
-                + ")");
-      }
-
-      return SamplingResult.drop();
-    }
-
     // Evaluate sampling rules
     for (SamplingRule rule : rules) {
       String attributeValue = getAttributeValue(rule.getAttributeKey(), attributes);
@@ -151,7 +132,7 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
           && rule.getPattern().matcher(attributeValue).find()) {
 
         if (enableRuleLogging || logger.isLoggable(Level.FINE)) {
-          logger.info(
+          logger.log(enableRuleLogging ? Level.INFO :Level.FINE,
               "Rule with span kind ("
                   + rule.getSpanKind()
                   + "), attribute ("
@@ -169,13 +150,32 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
                   + ")");
         }
 
+        if (!rateLimiter.tryAcquire()) {
+          if (enableRuleLogging || logger.isLoggable(Level.FINE)) {
+            logger.log(enableRuleLogging ? Level.INFO :Level.FINE,
+                "Spans per second rate limit ("
+                    + spansPerSecondLimit
+                    + ") exceeded when processing span with trace ID ("
+                    + traceId
+                    + "), kind ("
+                    + spanKind.name()
+                    + "), name ("
+                    + name
+                    + ") and attributes ("
+                    + getAttributesAsString(attributes)
+                    + ")");
+          }
+
+          return SamplingResult.drop();
+        }
+
         return rule.getDelegate()
             .shouldSample(parentContext, traceId, name, spanKind, attributes, parentLinks);
       }
     }
 
     if (enableRuleLogging || logger.isLoggable(Level.FINE)) {
-      logger.info(
+      logger.log(enableRuleLogging ? Level.INFO :Level.FINE,
           "No rules match the span with trace ID ("
               + traceId
               + "), kind ("

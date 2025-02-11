@@ -29,7 +29,7 @@ export class ErrorReportNotFoundError extends Error {
   /**
    * Constructs a new ErrorReportNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@error_error_report_not_found_error:The error report could not be found.`,

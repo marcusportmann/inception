@@ -32,7 +32,7 @@ export class ServiceUnavailableError extends Error {
    * Constructs a new ServiceUnavailableError.
    *
    * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param cause   The cause of the error.
    */
   constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     //$localize`:@@core_service_unavailable_error:An error has occurred and your request could not

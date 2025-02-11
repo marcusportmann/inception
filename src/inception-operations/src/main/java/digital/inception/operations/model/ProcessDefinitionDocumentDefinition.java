@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.time.TimeUnit;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +32,7 @@ import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -49,14 +51,26 @@ import java.util.Objects;
  */
 @Schema(description = "An association of a document definition with a process definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"documentDefinitionId", "required"})
+@JsonPropertyOrder({
+  "documentDefinitionId",
+  "required",
+  "unique",
+  "validityPeriodUnit",
+  "validityPeriodAmount"
+})
 @XmlRootElement(
     name = "ProcessDefinitionDocumentDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "ProcessDefinitionDocumentDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"documentDefinitionId", "required"})
+    propOrder = {
+      "documentDefinitionId",
+      "required",
+      "unique",
+      "validityPeriodUnit",
+      "validityPeriodAmount"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_process_definition_document_definitions")
@@ -72,8 +86,9 @@ public class ProcessDefinitionDocumentDefinition implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DocumentDefinitionId", required = true)
   @NotNull
+  @Size(min = 1, max = 50)
   @Id
-  @Column(name = "document_definition_id", length = 100, nullable = false)
+  @Column(name = "document_definition_id", length = 50, nullable = false)
   private String documentDefinitionId;
 
   /** The process definition the process definition document definition is associated with. */
@@ -90,17 +105,57 @@ public class ProcessDefinitionDocumentDefinition implements Serializable {
 
   /**
    * Is a document with the document definition ID required for a process with the process
-   * definition ID and version?
+   * definition ID and process definition version?
    */
   @Schema(
       description =
-          "Is a document with the document definition ID required for a process with the process definition ID and version",
+          "Is a document with the document definition ID required for a process with the process definition ID and process definition version",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Required", required = true)
   @NotNull
   @Column(name = "required", nullable = false)
   private boolean required;
+
+  /**
+   * Is a process with the process definition ID and process definition version limited to a single
+   * document with the document definition ID?
+   */
+  @Schema(
+      description =
+          "Is a process with the process definition ID and process definition version limited to a single document with the document definition ID",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Unique", required = true)
+  @NotNull
+  @Column(name = "unique", nullable = false)
+  private boolean unique;
+
+  /**
+   * The validity period from a document's issue date during which the document, with the document
+   * definition ID, can be associated with a process with the process definition ID and process
+   * definition version.
+   */
+  @Schema(
+      description =
+          "The validity period from a document's issue date during which the document, with the document definition ID, can be associated with a process with the process definition ID and process definition version")
+  @JsonProperty
+  @XmlElement(name = "ValidityPeriodAmount")
+  @Column(name = "validity_period_amount")
+  private Integer validityPeriodAmount;
+
+  /**
+   * The unit of measurement of time for the validity period from a document's issue date during
+   * which the document, with the document definition ID, can be associated with a process with the
+   * process definition ID and process definition version.
+   */
+  @Schema(
+      description =
+          "The unit of measurement of time for the validity period from a document's issue date during which the document, with the document definition ID, can be associated with a process with the process definition ID and process definition version")
+  @JsonProperty
+  @XmlElement(name = "ValidityPeriodUnit")
+  @Column(name = "validity_period_unit")
+  private TimeUnit validityPeriodUnit;
 
   /** Constructs a new <b>ProcessDefinitionDocumentDefinition</b>. */
   public ProcessDefinitionDocumentDefinition() {}
@@ -167,14 +222,51 @@ public class ProcessDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
+   * Returns the validity period from a document's issue date during which the document, with the
+   * document definition ID, can be associated with a process with the process definition ID and
+   * process definition version.
+   *
+   * @return the validity period from a document's issue date during which the document, with the
+   *     document definition ID, can be associated with a process with the process definition ID and
+   *     process definition version
+   */
+  public Integer getValidityPeriodAmount() {
+    return validityPeriodAmount;
+  }
+
+  /**
+   * Returns the unit of measurement of time for the validity period from a document's issue date
+   * during which the document, with the document definition ID, can be associated with a process
+   * with the process definition ID and process definition version.
+   *
+   * @return the unit of measurement of time for the validity period from a document's issue date
+   *     during which the document, with the document definition ID, can be associated with a
+   *     process with the process definition ID and process definition version
+   */
+  public TimeUnit getValidityPeriodUnit() {
+    return validityPeriodUnit;
+  }
+
+  /**
    * Returns whether a document with the document definition ID is required for a process with the
    * process definition ID and version.
    *
    * @return <b>true</b> if a document with the document definition ID is required for a process
    *     with the process definition ID and version or <b>false</b> otherwise
    */
-  public boolean getRequired() {
+  public boolean isRequired() {
     return required;
+  }
+
+  /**
+   * Returns whether a process with the process definition ID and process definition version is
+   * limited to a single document with the document definition ID.
+   *
+   * @return <b>true</b> if a process with the process definition ID and process definition version
+   *     is limited to a single document with the document definition ID or <b>false</b> otherwise
+   */
+  public boolean isUnique() {
+    return unique;
   }
 
   /**
@@ -206,5 +298,43 @@ public class ProcessDefinitionDocumentDefinition implements Serializable {
    */
   public void setRequired(boolean required) {
     this.required = required;
+  }
+
+  /**
+   * Set whether a process with the process definition ID and process definition version is limited
+   * to a single document with the document definition ID.
+   *
+   * @param unique <b>true</b> if a process with the process definition ID and process definition
+   *     version is limited to a single document with the document definition ID or <b>false</b>
+   *     otherwise
+   */
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
+
+  /**
+   * Set the validity period from a document's issue date during which the document, with the
+   * document definition ID, can be associated with a process with the process definition ID and
+   * process definition version.
+   *
+   * @param validityPeriodAmount the validity period from a document's issue date during which the
+   *     document, with the document definition ID, can be associated with a process with the
+   *     process definition ID and process definition version
+   */
+  public void setValidityPeriodAmount(Integer validityPeriodAmount) {
+    this.validityPeriodAmount = validityPeriodAmount;
+  }
+
+  /**
+   * Set the unit of measurement of time for the validity period from a document's issue date during
+   * which the document, with the document definition ID, can be associated with a process with the
+   * process definition ID and process definition version.
+   *
+   * @param validityPeriodUnit the unit of measurement of time for the validity period from a
+   *     document's issue date during which the document, with the document definition ID, can be
+   *     associated with a process with the process definition ID and process definition version
+   */
+  public void setValidityPeriodUnit(TimeUnit validityPeriodUnit) {
+    this.validityPeriodUnit = validityPeriodUnit;
   }
 }

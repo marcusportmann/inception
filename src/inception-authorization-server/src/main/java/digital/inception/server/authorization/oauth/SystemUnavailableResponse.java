@@ -41,13 +41,13 @@ public class SystemUnavailableResponse extends Response {
   /** The date and time the error occurred. */
   private final OffsetDateTime timestamp;
 
-  /** The optional detail. */
+  /** The detail. */
   private String detail;
 
-  /** The optional fully qualified name of the exception associated with the error. */
+  /** The fully qualified name of the exception associated with the error. */
   private String exception;
 
-  /** The optional stack trace associated with the error. */
+  /** The stack trace associated with the error. */
   private String stackTrace;
 
   /** The URI for the HTTP request that resulted in the error. */

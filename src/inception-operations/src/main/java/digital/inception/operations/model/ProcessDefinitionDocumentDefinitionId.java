@@ -31,11 +31,11 @@ public class ProcessDefinitionDocumentDefinitionId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The process definition the process definition document definition is associated with. */
-  private ProcessDefinition processDefinition;
-
   /** The ID for the document definition. */
   private String documentDefinitionId;
+
+  /** The process definition the process definition document definition is associated with. */
+  private ProcessDefinition processDefinition;
 
   /** Constructs a new <b>ProcessDefinitionDocumentDefinitionId</b>. */
   public ProcessDefinitionDocumentDefinitionId() {}

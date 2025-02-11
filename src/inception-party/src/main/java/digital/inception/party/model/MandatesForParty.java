@@ -77,14 +77,14 @@ public class MandatesForParty implements Serializable {
   @XmlElement(name = "Mandate", required = true)
   private List<Mandate> mandates;
 
-  /** The optional page index. */
-  @Schema(description = "The optional page index")
+  /** The page index. */
+  @Schema(description = "The page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
-  @Schema(description = "The optional page size")
+  /** The page size. */
+  @Schema(description = "The page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
@@ -97,14 +97,14 @@ public class MandatesForParty implements Serializable {
   @XmlElement(name = "PartyId", required = true)
   private UUID partyId;
 
-  /** The optional method used to sort the mandates e.g. by name. */
-  @Schema(description = "The optional method used to sort the mandates e.g. by name")
+  /** The method used to sort the mandates e.g. by name. */
+  @Schema(description = "The method used to sort the mandates e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private MandateSortBy sortBy;
 
-  /** The optional sort direction that was applied to the mandates. */
-  @Schema(description = "The optional sort direction that was applied to the mandates")
+  /** The sort direction that was applied to the mandates. */
+  @Schema(description = "The sort direction that was applied to the mandates")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -133,10 +133,10 @@ public class MandatesForParty implements Serializable {
    * @param partyId the ID for the party the mandates are associated with
    * @param mandates the mandates
    * @param total the total number of mandates
-   * @param sortBy the optional method used to sort the mandates e.g. by name
-   * @param sortDirection the optional sort direction that was applied to the mandates
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortBy the method used to sort the mandates e.g. by name
+   * @param sortDirection the sort direction that was applied to the mandates
+   * @param pageIndex the page index
+   * @param pageSize the page size
    */
   public MandatesForParty(
       UUID tenantId,
@@ -167,18 +167,18 @@ public class MandatesForParty implements Serializable {
   }
 
   /**
-   * Returns the optional page index.
+   * Returns the page index.
    *
-   * @return the optional page index
+   * @return the page index
    */
   public Integer getPageIndex() {
     return pageIndex;
   }
 
   /**
-   * Returns the optional page size.
+   * Returns the page size.
    *
-   * @return the optional page size
+   * @return the page size
    */
   public Integer getPageSize() {
     return pageSize;
@@ -194,18 +194,18 @@ public class MandatesForParty implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the mandates e.g. by name.
+   * Returns the method used to sort the mandates e.g. by name.
    *
-   * @return the optional method used to sort the mandates
+   * @return the method used to sort the mandates
    */
   public MandateSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the mandates.
+   * Returns the sort direction that was applied to the mandates.
    *
-   * @return the optional sort direction that was applied to the mandates
+   * @return the sort direction that was applied to the mandates
    */
   public SortDirection getSortDirection() {
     return sortDirection;

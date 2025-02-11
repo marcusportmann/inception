@@ -24,52 +24,52 @@ import {NavigationBadge} from './navigation-badge';
 export class NavigationItem {
 
   /**
-   * The optional authorities that are used to restrict access to the navigation item.
+   * The authorities that are used to restrict access to the navigation item.
    */
   authorities: string[];
 
   /**
-   * The optional navigation badge associated with the navigation item.
+   * The navigation badge associated with the navigation item.
    */
   badge?: NavigationBadge;
 
   /**
-   * The optional child navigation items.
+   * The child navigation items.
    */
   children: NavigationItem[];
 
   /**
-   * The optional class associated with the navigation item.
+   * The class associated with the navigation item.
    */
   cssClass?: string;
 
   /**
-   * The optional divider indicator.
+   * The divider indicator.
    */
   divider = false;
 
   /**
-   * The optional icon associated with the navigation item.
+   * The icon associated with the navigation item.
    */
   icon: string;
 
   /**
-   * The optional name of navigation item.
+   * The name of navigation item.
    */
   name: string;
 
   /**
-   * The optional title indicator.
+   * The title indicator.
    */
   title = false;
 
   /**
-   * The optional url associated with the navigation item.
+   * The url associated with the navigation item.
    */
   url: string;
 
   /**
-   * The optional variant to apply to the navigation item.
+   * The variant to apply to the navigation item.
    */
   variant?: string;
 
@@ -79,14 +79,14 @@ export class NavigationItem {
    * @param icon        The icon associated with the navigation item.
    * @param name        The name of navigation item.
    * @param url         The url associated with the navigation item.
-   * @param authorities The optional authorities that are used to restrict access to the navigation
+   * @param authorities The authorities that are used to restrict access to the navigation
    *   item.
-   * @param children    The optional child navigation items.
-   * @param cssClass    The optional CSS class to apply to the navigation item.
-   * @param variant     The optional variant to apply to the navigation item.
-   * @param badge       The optional navigation badge associated with the navigation item.
-   * @param divider     The optional divider indicator.
-   * @param title       The optional title indicator.
+   * @param children    The child navigation items.
+   * @param cssClass    The CSS class to apply to the navigation item.
+   * @param variant     The variant to apply to the navigation item.
+   * @param badge       The navigation badge associated with the navigation item.
+   * @param divider     The divider indicator.
+   * @param title       The title indicator.
    */
   constructor(icon: string, name: string, url: string, authorities?: string[],
               children?: NavigationItem[],

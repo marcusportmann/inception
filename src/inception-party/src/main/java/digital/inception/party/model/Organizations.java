@@ -70,8 +70,8 @@ public class Organizations implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the organizations. */
-  @Schema(description = "The optional filter that was applied to the organizations")
+  /** The filter that was applied to the organizations. */
+  @Schema(description = "The filter that was applied to the organizations")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -83,26 +83,26 @@ public class Organizations implements Serializable {
   @XmlElement(name = "Organization", required = true)
   private List<Organization> organizations;
 
-  /** The optional page index. */
-  @Schema(description = "The optional page index")
+  /** The page index. */
+  @Schema(description = "The page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
-  @Schema(description = "The optional page size")
+  /** The page size. */
+  @Schema(description = "The page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /** The optional method used to sort the organizations e.g. by name. */
-  @Schema(description = "The optional method used to sort the organizations e.g. by name")
+  /** The method used to sort the organizations e.g. by name. */
+  @Schema(description = "The method used to sort the organizations e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private OrganizationSortBy sortBy;
 
-  /** The optional sort direction that was applied to the organizations. */
-  @Schema(description = "The optional sort direction that was applied to the organizations")
+  /** The sort direction that was applied to the organizations. */
+  @Schema(description = "The sort direction that was applied to the organizations")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -132,11 +132,11 @@ public class Organizations implements Serializable {
    * @param tenantId the ID for the tenant the organizations are associated with
    * @param organizations the organizations
    * @param total the total number of organizations
-   * @param filter the optional filter that was applied to the organizations
-   * @param sortBy the optional method used to sort the organizations e.g. by name
-   * @param sortDirection the optional sort direction that was applied to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter that was applied to the organizations
+   * @param sortBy the method used to sort the organizations e.g. by name
+   * @param sortDirection the sort direction that was applied to the organizations
+   * @param pageIndex the page index
+   * @param pageSize the page size
    */
   public Organizations(
       UUID tenantId,
@@ -158,9 +158,9 @@ public class Organizations implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the organizations.
+   * Returns the filter that was applied to the organizations.
    *
-   * @return the optional filter that was applied to the organizations
+   * @return the filter that was applied to the organizations
    */
   public String getFilter() {
     return filter;
@@ -176,36 +176,36 @@ public class Organizations implements Serializable {
   }
 
   /**
-   * Returns the optional page index.
+   * Returns the page index.
    *
-   * @return the optional page index
+   * @return the page index
    */
   public Integer getPageIndex() {
     return pageIndex;
   }
 
   /**
-   * Returns the optional page size.
+   * Returns the page size.
    *
-   * @return the optional page size
+   * @return the page size
    */
   public Integer getPageSize() {
     return pageSize;
   }
 
   /**
-   * Returns the optional method used to sort the organizations e.g. by name.
+   * Returns the method used to sort the organizations e.g. by name.
    *
-   * @return the optional method used to sort the organizations
+   * @return the method used to sort the organizations
    */
   public OrganizationSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the organizations.
+   * Returns the sort direction that was applied to the organizations.
    *
-   * @return the optional sort direction that was applied to the organizations
+   * @return the sort direction that was applied to the organizations
    */
   public SortDirection getSortDirection() {
     return sortDirection;

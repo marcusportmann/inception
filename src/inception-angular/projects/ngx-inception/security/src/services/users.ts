@@ -26,7 +26,7 @@ import {UserSortBy} from './user-sort-by';
 export class Users {
 
   /**
-   * The optional filter that was applied to the users.
+   * The filter that was applied to the users.
    */
   filter: string | null = null;
 
@@ -75,7 +75,7 @@ export class Users {
    * @param sortDirection   The sort direction that was applied to the users.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.
-   * @param filter          The optional filter that was applied to the users.
+   * @param filter          The filter that was applied to the users.
    */
   constructor(userDirectoryId: string, users: User[], total: number, sortBy: UserSortBy,
               sortDirection: SortDirection, pageIndex: number, pageSize: number, filter?: string) {

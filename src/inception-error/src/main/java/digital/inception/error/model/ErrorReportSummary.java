@@ -120,8 +120,8 @@ public class ErrorReportSummary implements Serializable {
   @Column(name = "description", length = 2000, nullable = false)
   private String description;
 
-  /** The optional ID for the device the error report originated from. */
-  @Schema(description = "The optional ID for the device the error report originated from")
+  /** The ID for the device the error report originated from. */
+  @Schema(description = "The ID for the device the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
   @Size(max = 50)
@@ -137,8 +137,8 @@ public class ErrorReportSummary implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The optional username for the user associated with the error report. */
-  @Schema(description = "The optional username for the user associated with the error report")
+  /** The username for the user associated with the error report. */
+  @Schema(description = "The username for the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 100)
@@ -156,8 +156,8 @@ public class ErrorReportSummary implements Serializable {
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
    * @param created the date and time the error report was created
-   * @param who the optional username for the user associated with the error report
-   * @param deviceId the optional ID for the device the error report originated from
+   * @param who the username for the user associated with the error report
+   * @param deviceId the ID for the device the error report originated from
    */
   public ErrorReportSummary(
       UUID id,
@@ -238,9 +238,9 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Returns the optional ID for the device the error report originated from.
+   * Returns the ID for the device the error report originated from.
    *
-   * @return the optional ID for the device the error report originated from
+   * @return the ID for the device the error report originated from
    */
   public UUID getDeviceId() {
     return deviceId;

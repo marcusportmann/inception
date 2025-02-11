@@ -50,8 +50,8 @@ public class Tenants implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the tenants. */
-  @Schema(description = "The optional filter that was applied to the tenants")
+  /** The filter that was applied to the tenants. */
+  @Schema(description = "The filter that was applied to the tenants")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -97,7 +97,7 @@ public class Tenants implements Serializable {
    *
    * @param tenants the tenants
    * @param total the total number of tenants
-   * @param filter the optional filter that was applied to the tenants
+   * @param filter the filter that was applied to the tenants
    * @param sortDirection the sort direction that was applied to the tenants
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -118,9 +118,9 @@ public class Tenants implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the tenants.
+   * Returns the filter that was applied to the tenants.
    *
-   * @return the optional filter that was applied to the tenants
+   * @return the filter that was applied to the tenants
    */
   public String getFilter() {
     return filter;

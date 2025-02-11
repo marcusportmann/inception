@@ -37,7 +37,7 @@ export class ErrorReport {
   created: Date;
 
   /**
-   * The optional base-64 encoded data associated with the error report.
+   * The base-64 encoded data associated with the error report.
    */
   data: string | null = null;
 
@@ -52,13 +52,13 @@ export class ErrorReport {
   detail: string;
 
   /**
-   * The optional ID for the device the error report originated
+   * The ID for the device the error report originated
    * from.
    */
   deviceId: string | null = null;
 
   /**
-   * The optional feedback provided by the user for the error.
+   * The feedback provided by the user for the error.
    */
   feedback: string | null = null;
 
@@ -68,7 +68,7 @@ export class ErrorReport {
   id: string;
 
   /**
-   * The optional username for the user associated with the error report.
+   * The username for the user associated with the error report.
    */
   who: string | null = null;
 
@@ -81,9 +81,9 @@ export class ErrorReport {
    * @param description        The description of the error.
    * @param detail             The error detail.
    * @param created            The date and time the error report was created.
-   * @param who                The optional username for the user associated with the error report.
-   * @param feedback           The optional feedback provided by the user for the error.
-   * @param data               The optional base-64 encoded data associated with the error report.
+   * @param who                The username for the user associated with the error report.
+   * @param feedback           The feedback provided by the user for the error.
+   * @param data               The base-64 encoded data associated with the error report.
    */
   constructor(id: string, applicationId: string, applicationVersion: string, description: string,
               detail: string, created: Date, who?: string, feedback?: string, data?: string) {

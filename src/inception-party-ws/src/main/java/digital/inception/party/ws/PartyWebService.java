@@ -242,10 +242,10 @@ public class PartyWebService {
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party
-   * @param sortBy the optional method used to sort the associations e.g. by type
-   * @param sortDirection the optional sort direction to apply to the associations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortBy the method used to sort the associations e.g. by type
+   * @param sortDirection the sort direction to apply to the associations
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the associations for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
@@ -289,10 +289,10 @@ public class PartyWebService {
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party
-   * @param sortBy the optional method used to sort the mandates e.g. by type
-   * @param sortDirection the optional sort direction to apply to the mandates
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortBy the method used to sort the mandates e.g. by type
+   * @param sortDirection the sort direction to apply to the mandates
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the mandates for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
@@ -337,11 +337,11 @@ public class PartyWebService {
    * Retrieve the organizations.
    *
    * @param tenantId the ID for the tenant
-   * @param filter the optional filter to apply to the organizations
-   * @param sortBy the optional method used to sort the organizations e.g. by name
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the organizations
+   * @param sortBy the method used to sort the organizations e.g. by name
+   * @param sortDirection the sort direction to apply to the organizations
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the organizations
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the organizations could not be retrieved
@@ -364,11 +364,11 @@ public class PartyWebService {
    * Retrieve the parties.
    *
    * @param tenantId the ID for the tenant
-   * @param filter the optional filter to apply to the parties
-   * @param sortBy the optional method used to sort the parties e.g. by name
-   * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the parties
+   * @param sortBy the method used to sort the parties e.g. by name
+   * @param sortDirection the sort direction to apply to the parties
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the parties
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the parties could not be retrieved
@@ -428,11 +428,11 @@ public class PartyWebService {
    * Retrieve the persons.
    *
    * @param tenantId the ID for the tenant
-   * @param filter the optional filter to apply to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by name
-   * @param sortDirection the optional sort direction to apply to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the persons
+   * @param sortBy the method used to sort the persons e.g. by name
+   * @param sortDirection the sort direction to apply to the persons
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the persons
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the persons could not be retrieved
@@ -456,11 +456,11 @@ public class PartyWebService {
    * @param tenantId the ID for the tenant
    * @param entityType the type of entity
    * @param entityId the ID for the entity
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param from the date to retrieve the snapshots from
+   * @param to the date to retrieve the snapshots to
+   * @param sortDirection the sort direction to apply to the snapshots
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the snapshots
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the snapshots for the entity could not be retrieved

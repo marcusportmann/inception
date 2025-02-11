@@ -29,7 +29,7 @@ export class DuplicateJobError extends Error {
   /**
    * Constructs a new DuplicateJobError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@scheduler_duplicate_job_error:The job already exists.`, cause);
@@ -48,7 +48,7 @@ export class JobNotFoundError extends Error {
   /**
    * Constructs a new JobNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@scheduler_job_not_found_error:The job could not be found.`, cause);

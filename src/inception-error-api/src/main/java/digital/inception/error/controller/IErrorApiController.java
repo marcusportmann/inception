@@ -163,16 +163,16 @@ public interface IErrorApiController {
   /**
    * Retrieve the error report summaries.
    *
-   * @param filter the optional filter to apply to the error report summaries
+   * @param filter the filter to apply to the error report summaries
    * @param fromDate the ISO 8601 format date value for the date to retrieve the error report
    *     summaries from
    * @param toDate the ISO 8601 format date value for the date to retrieve the error report
    *     summaries from
-   * @param sortBy the optional method used to sort the error report summaries e.g. by who submitted
+   * @param sortBy the method used to sort the error report summaries e.g. by who submitted
    *     them
-   * @param sortDirection the optional sort direction to apply to the error report summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortDirection the sort direction to apply to the error report summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the error report summaries
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the error report summaries could not be retrieved
@@ -216,7 +216,7 @@ public interface IErrorApiController {
   ErrorReportSummaries getErrorReportSummaries(
       @Parameter(
               name = "filter",
-              description = "The optional filter to apply to the error report summaries")
+              description = "The filter to apply to the error report summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
@@ -236,18 +236,18 @@ public interface IErrorApiController {
       @Parameter(
               name = "sortBy",
               description =
-                  "The optional method used to sort the error report summaries e.g. by who submitted them")
+                  "The method used to sort the error report summaries e.g. by who submitted them")
           @RequestParam(value = "sortBy", required = false)
           ErrorReportSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the error report summaries")
+              description = "The sort direction to apply to the error report summaries")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;

@@ -26,7 +26,7 @@ import {UserDirectorySummary} from './user-directory-summary';
 export class UserDirectorySummaries {
 
   /**
-   * The optional filter that was applied to the user directory summaries.
+   * The filter that was applied to the user directory summaries.
    */
   filter: string | null = null;
 
@@ -60,8 +60,7 @@ export class UserDirectorySummaries {
    *
    * @param userDirectorySummaries The user directory summaries.
    * @param total                  The total number of user directory summaries.
-   * @param filter                 The optional filter that was applied to the user directory
-   *                               summaries.
+   * @param filter                 The filter that was applied to the user directory summaries.
    * @param sortDirection          The sort direction that was applied to the user directory
    *                               summaries.
    * @param pageIndex              The page index.

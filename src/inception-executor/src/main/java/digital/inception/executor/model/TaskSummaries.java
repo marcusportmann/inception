@@ -72,8 +72,8 @@ public class TaskSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the task summaries. */
-  @Schema(description = "The optional filter that was applied to the task summaries")
+  /** The filter that was applied to the task summaries. */
+  @Schema(description = "The filter that was applied to the task summaries")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -90,20 +90,20 @@ public class TaskSummaries implements Serializable {
   @XmlElement(name = "PageSize", required = true)
   private int pageSize;
 
-  /** The optional method used to sort the task summaries e.g. by name. */
-  @Schema(description = "The optional method used to sort the task summaries e.g. by name")
+  /** The method used to sort the task summaries e.g. by name. */
+  @Schema(description = "The method used to sort the task summaries e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private TaskSortBy sortBy;
 
-  /** The optional sort direction that was applied to the task summaries. */
-  @Schema(description = "The optional sort direction that was applied to the task summaries")
+  /** The sort direction that was applied to the task summaries. */
+  @Schema(description = "The sort direction that was applied to the task summaries")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The optional status filter that was applied to the task summaries. */
-  @Schema(description = "The optional status filter that was applied to the task summaries")
+  /** The status filter that was applied to the task summaries. */
+  @Schema(description = "The status filter that was applied to the task summaries")
   @JsonProperty
   @XmlElement(name = "Status")
   private TaskStatus status;
@@ -123,8 +123,8 @@ public class TaskSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The optional task type code filter that was applied to the task summaries. */
-  @Schema(description = "The optional task type code filter that was applied to the task summaries")
+  /** The task type code filter that was applied to the task summaries. */
+  @Schema(description = "The task type code filter that was applied to the task summaries")
   @JsonProperty
   @XmlElement(name = "Type")
   @Size(min = 1, max = 50)
@@ -138,9 +138,9 @@ public class TaskSummaries implements Serializable {
    *
    * @param taskSummaries the task summaries
    * @param total the total number of task summaries
-   * @param type the optional task type code filter that was applied to the task summaries
-   * @param status the optional status filter that was applied to the task summaries
-   * @param filter the optional filter that was applied to the task summaries
+   * @param type the task type code filter that was applied to the task summaries
+   * @param status the status filter that was applied to the task summaries
+   * @param filter the filter that was applied to the task summaries
    * @param sortBy the method used to sort the task summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the task summaries
    * @param pageIndex the page index
@@ -167,9 +167,9 @@ public class TaskSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the task summaries.
+   * Returns the filter that was applied to the task summaries.
    *
-   * @return the optional filter that was applied to the task summaries
+   * @return the filter that was applied to the task summaries
    */
   public String getFilter() {
     return filter;
@@ -194,9 +194,9 @@ public class TaskSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the task summaries e.g. by name.
+   * Returns the method used to sort the task summaries e.g. by name.
    *
-   * @return the optional method used to sort the task summaries
+   * @return the method used to sort the task summaries
    */
   public TaskSortBy getSortBy() {
     return sortBy;
@@ -212,9 +212,9 @@ public class TaskSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional status filter that was applied to the task summaries.
+   * Returns the status filter that was applied to the task summaries.
    *
-   * @return the optional status filter that was applied to the task summaries
+   * @return the status filter that was applied to the task summaries
    */
   public TaskStatus getStatus() {
     return status;
@@ -239,9 +239,9 @@ public class TaskSummaries implements Serializable {
   }
 
   /**
-   * Returns the optional task type code filter that was applied to the task summaries.
+   * Returns the task type code filter that was applied to the task summaries.
    *
-   * @return the optional task type code filter that was applied to the task summaries
+   * @return the task type code filter that was applied to the task summaries
    */
   public String getType() {
     return type;

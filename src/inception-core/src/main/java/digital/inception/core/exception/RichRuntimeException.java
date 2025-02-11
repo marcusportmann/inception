@@ -37,7 +37,7 @@ public class RichRuntimeException extends RuntimeException {
   /** The date and time the exception occurred. */
   private final OffsetDateTime when;
 
-  /** The optional error code. */
+  /** The error code. */
   private String code;
 
   /** Constructs a new <b>RichRuntimeException</b> with <b>null</b> as its message. */
@@ -108,9 +108,9 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Returns the optional error code or NONE if no error code was specified.
+   * Returns the error code or NONE if no error code was specified.
    *
-   * @return the optional error code or NONE if no error code was specified
+   * @return the error code or NONE if no error code was specified
    */
   public String getCode() {
     return (code == null) ? NO_ERROR_CODE : code;

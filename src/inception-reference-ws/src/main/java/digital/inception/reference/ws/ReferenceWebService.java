@@ -153,7 +153,7 @@ public class ReferenceWebService {
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
    *     data for
-   * @param country the optional ISO 3166-1 alpha-2 code for the country to retrieve the regions for
+   * @param country the ISO 3166-1 alpha-2 code for the country to retrieve the regions for
    * @return the region reference data
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the region reference data could not be retrieved

@@ -69,8 +69,8 @@ public class Users implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the users. */
-  @Schema(description = "The optional filter that was applied to the users")
+  /** The filter that was applied to the users. */
+  @Schema(description = "The filter that was applied to the users")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -87,14 +87,14 @@ public class Users implements Serializable {
   @XmlElement(name = "PageSize", required = true)
   private int pageSize;
 
-  /** The optional method used to sort the users e.g. by name. */
-  @Schema(description = "The optional method used to sort the users e.g. by name")
+  /** The method used to sort the users e.g. by name. */
+  @Schema(description = "The method used to sort the users e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private UserSortBy sortBy;
 
-  /** The optional sort direction that was applied to the users. */
-  @Schema(description = "The optional sort direction that was applied to the users")
+  /** The sort direction that was applied to the users. */
+  @Schema(description = "The sort direction that was applied to the users")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -129,7 +129,7 @@ public class Users implements Serializable {
    * @param userDirectoryId the ID for the user directory the users are associated with
    * @param users the users
    * @param total the total number of users
-   * @param filter the optional filter that was applied to the users
+   * @param filter the filter that was applied to the users
    * @param sortBy the method used to sort the users e.g. by name
    * @param sortDirection the sort direction that was applied to the users
    * @param pageIndex the page index
@@ -155,9 +155,9 @@ public class Users implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the users.
+   * Returns the filter that was applied to the users.
    *
-   * @return the optional filter that was applied to the users
+   * @return the filter that was applied to the users
    */
   public String getFilter() {
     return filter;
@@ -182,9 +182,9 @@ public class Users implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the users e.g. by name.
+   * Returns the method used to sort the users e.g. by name.
    *
-   * @return the optional method used to sort the users
+   * @return the method used to sort the users
    */
   public UserSortBy getSortBy() {
     return sortBy;

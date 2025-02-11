@@ -35,7 +35,7 @@ export class AccessDeniedError extends Error {
   statusText: string;
 
   /**
-   * The optional URL for the HTTP request that resulted in the error.
+   * The URL for the HTTP request that resulted in the error.
    */
   url?: string;
 

@@ -101,8 +101,8 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
    * @param functionCodes the function codes for the user the token is being issued for
    * @param tenantIds the IDs for the tenants that the user the token is being issued for is
    *     associated with
-   * @param scopes the optional scope(s) associated to the token
-   * @param issuer the optional issuer of the token, which can be <b>null</b>
+   * @param scopes the scope(s) associated to the token
+   * @param issuer the issuer of the token, which can be <b>null</b>
    * @param validFor the number of seconds the token should be valid for
    * @param rsaKeyId the ID of the RSA key used to sign the token
    * @param rsaPrivateKey the RSA private key used to sign the token

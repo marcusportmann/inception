@@ -714,10 +714,10 @@ public interface IPartyApiController {
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party
-   * @param sortBy the optional method used to sort the associations e.g. by type
-   * @param sortDirection the optional sort direction to apply to the associations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortBy the method used to sort the associations e.g. by type
+   * @param sortDirection the sort direction to apply to the associations
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the associations for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
@@ -781,18 +781,18 @@ public interface IPartyApiController {
           UUID partyId,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the associations e.g. by type")
+              description = "The method used to sort the associations e.g. by type")
           @RequestParam(value = "sortBy", required = false)
           AssociationSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the associations")
+              description = "The sort direction to apply to the associations")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
@@ -868,10 +868,10 @@ public interface IPartyApiController {
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party
-   * @param sortBy the optional method used to sort the mandates e.g. by type
-   * @param sortDirection the optional sort direction to apply to the mandates
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortBy the method used to sort the mandates e.g. by type
+   * @param sortDirection the sort direction to apply to the mandates
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the mandates for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
@@ -935,18 +935,18 @@ public interface IPartyApiController {
           UUID partyId,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the mandates e.g. by type")
+              description = "The method used to sort the mandates e.g. by type")
           @RequestParam(value = "sortBy", required = false)
           MandateSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the mandates")
+              description = "The sort direction to apply to the mandates")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
@@ -1024,11 +1024,11 @@ public interface IPartyApiController {
    * Retrieve the organizations.
    *
    * @param tenantId the ID for the tenant
-   * @param filter the optional filter to apply to the organizations
-   * @param sortBy the optional method used to sort the organizations e.g. by name
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the organizations
+   * @param sortBy the method used to sort the organizations e.g. by name
+   * @param sortDirection the sort direction to apply to the organizations
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the organizations
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the organizations could not be retrieved
@@ -1077,23 +1077,23 @@ public interface IPartyApiController {
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
+      @Parameter(name = "filter", description = "The filter to apply to the organizations")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the organizations e.g. by name")
+              description = "The method used to sort the organizations e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           OrganizationSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the organizations")
+              description = "The sort direction to apply to the organizations")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -1102,11 +1102,11 @@ public interface IPartyApiController {
    * Retrieve the parties.
    *
    * @param tenantId the ID for the tenant
-   * @param filter the optional filter to apply to the parties
-   * @param sortBy the optional method used to sort the parties e.g. by name
-   * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the parties
+   * @param sortBy the method used to sort the parties e.g. by name
+   * @param sortDirection the sort direction to apply to the parties
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the parties
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the parties could not be retrieved
@@ -1155,23 +1155,23 @@ public interface IPartyApiController {
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(name = "filter", description = "The optional filter to apply to the parties")
+      @Parameter(name = "filter", description = "The filter to apply to the parties")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the parties e.g. by name")
+              description = "The method used to sort the parties e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           PartySortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the parties")
+              description = "The sort direction to apply to the parties")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -1312,11 +1312,11 @@ public interface IPartyApiController {
    * Retrieve the persons.
    *
    * @param tenantId the ID for the tenant
-   * @param filter the optional filter to apply to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by name
-   * @param sortDirection the optional sort direction to apply to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the persons
+   * @param sortBy the method used to sort the persons e.g. by name
+   * @param sortDirection the sort direction to apply to the persons
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the persons
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the persons could not be retrieved
@@ -1365,23 +1365,23 @@ public interface IPartyApiController {
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(name = "filter", description = "The optional filter to apply to the persons")
+      @Parameter(name = "filter", description = "The filter to apply to the persons")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the persons e.g. by name")
+              description = "The method used to sort the persons e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           PersonSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the persons")
+              description = "The sort direction to apply to the persons")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -1392,11 +1392,11 @@ public interface IPartyApiController {
    * @param tenantId the ID for the tenant
    * @param entityType the type of entity
    * @param entityId the ID for the entity
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param from the date to retrieve the snapshots from
+   * @param to the date to retrieve the snapshots to
+   * @param sortDirection the sort direction to apply to the snapshots
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the snapshots
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the snapshots for the entity could not be retrieved
@@ -1451,21 +1451,21 @@ public interface IPartyApiController {
       @Parameter(name = "entityId", description = "The ID for the entity", required = true)
           @RequestParam
           UUID entityId,
-      @Parameter(name = "from", description = "The optional date to retrieve the snapshots from")
+      @Parameter(name = "from", description = "The date to retrieve the snapshots from")
           @RequestParam(value = "from", required = false)
           LocalDate from,
-      @Parameter(name = "to", description = "The optional date to retrieve the snapshots to")
+      @Parameter(name = "to", description = "The date to retrieve the snapshots to")
           @RequestParam(value = "to", required = false)
           LocalDate to,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the snapshots")
+              description = "The sort direction to apply to the snapshots")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;

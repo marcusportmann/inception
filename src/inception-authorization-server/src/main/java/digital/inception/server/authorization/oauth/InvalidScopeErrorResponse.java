@@ -37,7 +37,7 @@ public class InvalidScopeErrorResponse extends ErrorResponse {
   /**
    * Constructs a new <b>InvalidScopeErrorResponse</b>.
    *
-   * @param errorDescription the optional human-readable ASCII text description of the error
+   * @param errorDescription the human-readable ASCII text description of the error
    */
   public InvalidScopeErrorResponse(String errorDescription) {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE, errorDescription);

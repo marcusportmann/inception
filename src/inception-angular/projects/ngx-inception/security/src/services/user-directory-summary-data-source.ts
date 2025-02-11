@@ -62,10 +62,10 @@ export class UserDirectorySummaryDataSource implements DataSource<UserDirectoryS
   /**
    * Load the user directory summaries.
    *
-   * @param filter        The optional filter to apply to the user directory summaries.
-   * @param sortDirection The optional sort direction to apply to the user directory summaries.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param filter        The filter to apply to the user directory summaries.
+   * @param sortDirection The sort direction to apply to the user directory summaries.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The user directory summaries.
    */

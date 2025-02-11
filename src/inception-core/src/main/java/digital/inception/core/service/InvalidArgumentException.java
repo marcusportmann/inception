@@ -94,9 +94,9 @@ public class InvalidArgumentException extends ServiceException {
   }
 
   /**
-   * Returns the optional validation errors associated with the invalid argument.
+   * Returns the validation errors associated with the invalid argument.
    *
-   * @return the optional validation errors associated with the invalid argument
+   * @return the validation errors associated with the invalid argument
    */
   public List<ValidationError> getValidationErrors() {
     return invalidArgumentError.getValidationErrors();

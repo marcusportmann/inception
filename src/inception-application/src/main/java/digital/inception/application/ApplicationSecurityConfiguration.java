@@ -45,7 +45,7 @@ import reactor.netty.http.client.HttpClient;
 @SuppressWarnings("unused")
 public class ApplicationSecurityConfiguration implements WebClientCustomizer {
 
-  /** The optional persistent application JWT. */
+  /** The persistent application JWT. */
   @Value("${inception.application.security.jwt:#{null}}")
   private String jwt;
 
@@ -69,15 +69,15 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   @Value("${inception.application.security.key-store-type:#{null}}")
   private String keyStoreType;
 
-  /** The optional application trust store password. */
+  /** The application trust store password. */
   @Value("${inception.application.security.trust-store-password:#{null}}")
   private String trustStorePassword;
 
-  /** The optional application trust store path. */
+  /** The application trust store path. */
   @Value("${inception.application.security.trust-store:#{null}}")
   private String trustStorePath;
 
-  /** The optional application trust store type. */
+  /** The application trust store type. */
   @Value("${inception.application.security.trust-store-type:#{null}}")
   private String trustStoreType;
 

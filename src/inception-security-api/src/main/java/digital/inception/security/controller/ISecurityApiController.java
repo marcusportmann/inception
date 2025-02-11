@@ -1496,10 +1496,10 @@ public interface ISecurityApiController {
    * Retrieve the groups.
    *
    * @param userDirectoryId the ID for the user directory
-   * @param filter the optional filter to apply to the groups
-   * @param sortDirection the optional sort direction to apply to the groups
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the groups
+   * @param sortDirection the sort direction to apply to the groups
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the groups
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -1553,18 +1553,18 @@ public interface ISecurityApiController {
               required = true)
           @PathVariable
           UUID userDirectoryId,
-      @Parameter(name = "filter", description = "The optional filter to apply to the groups")
+      @Parameter(name = "filter", description = "The filter to apply to the groups")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the groups")
+              description = "The sort direction to apply to the groups")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;
@@ -1574,10 +1574,10 @@ public interface ISecurityApiController {
    *
    * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
-   * @param filter the optional filter to apply to the group members
-   * @param sortDirection the optional sort direction to apply to the group members
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the group members
+   * @param sortDirection the sort direction to apply to the group members
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the group members for the group
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -1635,18 +1635,18 @@ public interface ISecurityApiController {
       @Parameter(name = "groupName", description = "The name of the group", required = true)
           @PathVariable
           String groupName,
-      @Parameter(name = "filter", description = "The optional filter to apply to the group members")
+      @Parameter(name = "filter", description = "The filter to apply to the group members")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the group members")
+              description = "The sort direction to apply to the group members")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException,
@@ -1797,11 +1797,11 @@ public interface ISecurityApiController {
   /**
    * Retrieve the summaries for the policies.
    *
-   * @param filter the optional filter to apply to the policy summaries
-   * @param sortBy the optional method used to sort the policy summaries e.g. by name
-   * @param sortDirection the optional sort direction to apply to the policy summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the policy summaries
+   * @param sortBy the method used to sort the policy summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the policy summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the policies
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the policy summaries could not be retrieved
@@ -1845,23 +1845,23 @@ public interface ISecurityApiController {
   PolicySummaries getPolicySummaries(
       @Parameter(
               name = "filter",
-              description = "The optional filter to apply to the policy summaries")
+              description = "The filter to apply to the policy summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the policy summaries e.g. by name")
+              description = "The method used to sort the policy summaries e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           PolicySortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the policy summaries")
+              description = "The sort direction to apply to the policy summaries")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -2186,10 +2186,10 @@ public interface ISecurityApiController {
   /**
    * Retrieve the tenants.
    *
-   * @param filter the optional filter to apply to the tenants
-   * @param sortDirection the optional sort direction to apply to the tenants
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the tenants
+   * @param sortDirection the sort direction to apply to the tenants
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the tenants
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the tenants could not be retrieved
@@ -2229,18 +2229,18 @@ public interface ISecurityApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TenantAdministration')")
   Tenants getTenants(
-      @Parameter(name = "filter", description = "The optional filter to apply to the tenants")
+      @Parameter(name = "filter", description = "The filter to apply to the tenants")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the tenants")
+              description = "The sort direction to apply to the tenants")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -2422,12 +2422,12 @@ public interface ISecurityApiController {
   /**
    * Retrieve the summaries for the tokens.
    *
-   * @param status the optional status filter to apply to the token summaries
-   * @param filter the optional filter to apply to the token summaries
-   * @param sortBy the optional method used to sort the token summaries e.g. by name
-   * @param sortDirection the optional sort direction to apply to the token summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param status the status filter to apply to the token summaries
+   * @param filter the filter to apply to the token summaries
+   * @param sortBy the method used to sort the token summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the token summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the tokens
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the token summaries could not be retrieved
@@ -2469,28 +2469,28 @@ public interface ISecurityApiController {
   TokenSummaries getTokenSummaries(
       @Parameter(
               name = "status",
-              description = "The optional status filter to apply to the token summaries")
+              description = "The status filter to apply to the token summaries")
           @RequestParam(value = "status", required = false)
           TokenStatus status,
       @Parameter(
               name = "filter",
-              description = "The optional filter to apply to the token summaries")
+              description = "The filter to apply to the token summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the token summaries e.g. by name")
+              description = "The method used to sort the token summaries e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           TokenSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the token summaries")
+              description = "The sort direction to apply to the token summaries")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -2598,10 +2598,10 @@ public interface ISecurityApiController {
   /**
    * Retrieve the user directories.
    *
-   * @param filter the optional filter to apply to the user directories
-   * @param sortDirection the optional sort direction to apply to the user directories
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the user directories
+   * @param sortDirection the sort direction to apply to the user directories
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the user directories
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the user directories could not be retrieved
@@ -2645,18 +2645,18 @@ public interface ISecurityApiController {
   UserDirectories getUserDirectories(
       @Parameter(
               name = "filter",
-              description = "The optional filter to apply to the user directories")
+              description = "The filter to apply to the user directories")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the user directories")
+              description = "The sort direction to apply to the user directories")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -2904,10 +2904,10 @@ public interface ISecurityApiController {
   /**
    * Retrieve the summaries for the user directories.
    *
-   * @param filter the optional filter to apply to the user directory summaries
-   * @param sortDirection the optional sort direction to apply to the user directory summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the user directory summaries
+   * @param sortDirection the sort direction to apply to the user directory summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the summaries for the user directories
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the user directory summaries could not be retrieved
@@ -2951,18 +2951,18 @@ public interface ISecurityApiController {
   UserDirectorySummaries getUserDirectorySummaries(
       @Parameter(
               name = "filter",
-              description = "The optional filter to apply to the user directories")
+              description = "The filter to apply to the user directories")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the user directories")
+              description = "The sort direction to apply to the user directories")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -3202,11 +3202,11 @@ public interface ISecurityApiController {
    * Retrieve the users.
    *
    * @param userDirectoryId the ID for the user directory
-   * @param filter the optional filter to apply to the users
-   * @param sortBy the optional method used to sort the users e.g. by name.
-   * @param sortDirection the optional sort direction to apply to the users
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the users
+   * @param sortBy the method used to sort the users e.g. by name.
+   * @param sortDirection the sort direction to apply to the users
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the users
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -3260,23 +3260,23 @@ public interface ISecurityApiController {
               required = true)
           @PathVariable
           UUID userDirectoryId,
-      @Parameter(name = "filter", description = "The optional filter to apply to the users")
+      @Parameter(name = "filter", description = "The filter to apply to the users")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The optional method used to sort the users e.g. by name")
+              description = "The method used to sort the users e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           UserSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The optional sort direction to apply to the users")
+              description = "The sort direction to apply to the users")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException;

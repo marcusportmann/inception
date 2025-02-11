@@ -130,8 +130,8 @@ public class TaskType implements Serializable {
   @Column(name = "enabled", nullable = false)
   private boolean enabled;
 
-  /** The optional event types that should be tracked for tasks of this type. */
-  @Schema(description = "The optional event types that should be tracked for tasks of this type")
+  /** The event types that should be tracked for tasks of this type. */
+  @Schema(description = "The event types that should be tracked for tasks of this type")
   @JsonProperty
   @XmlElementWrapper(name = "EventTypes")
   @XmlElement(name = "EventType")
@@ -139,10 +139,10 @@ public class TaskType implements Serializable {
   @Convert(converter = TaskEventTypeListConverter.class)
   private List<TaskEventType> eventTypes;
 
-  /** The optional event types that should be tracked for tasks of this type. */
+  /** The event types that should be tracked for tasks of this type. */
   @Schema(
       description =
-          "The optional event types that should be tracked for tasks of this type with task data")
+          "The event types that should be tracked for tasks of this type with task data")
   @JsonProperty
   @XmlElementWrapper(name = "EventTypesWithTaskData")
   @XmlElement(name = "EventTypeWithTaskData")
@@ -151,12 +151,12 @@ public class TaskType implements Serializable {
   private List<TaskEventType> eventTypesWithTaskData;
 
   /**
-   * The optional amount of time in milliseconds after which a locked and executing task of this
+   * The amount of time in milliseconds after which a locked and executing task of this
    * type will be considered hung and will be reset.
    */
   @Schema(
       description =
-          "The optional amount of time in milliseconds after which a locked and executing task of this type will be considered hung and will be reset")
+          "The amount of time in milliseconds after which a locked and executing task of this type will be considered hung and will be reset")
   @JsonProperty
   @XmlElement(name = "ExecutionTimeout")
   @Column(name = "execution_timeout")
@@ -173,8 +173,8 @@ public class TaskType implements Serializable {
   @Column(name = "executor_class", length = 1000, nullable = false)
   private String executorClass;
 
-  /** The optional maximum execution attempts for tasks of this type. */
-  @Schema(description = "The optional maximum execution attempts for tasks of this type")
+  /** The maximum execution attempts for tasks of this type. */
+  @Schema(description = "The maximum execution attempts for tasks of this type")
   @JsonProperty
   @XmlElement(name = "MaximumExecutionAttempts")
   @Column(name = "maximum_execution_attempts")
@@ -199,8 +199,8 @@ public class TaskType implements Serializable {
   @Column(name = "priority", length = 50, nullable = false)
   private TaskPriority priority;
 
-  /** The optional retry delay for tasks of this type. */
-  @Schema(description = "The optional retry delay for tasks of this type")
+  /** The retry delay for tasks of this type. */
+  @Schema(description = "The retry delay for tasks of this type")
   @JsonProperty
   @XmlElement(name = "RetryDelay")
   @Column(name = "retry_delay")
@@ -491,10 +491,10 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Returns the optional amount of time in milliseconds after which a locked and executing task of
+   * Returns the amount of time in milliseconds after which a locked and executing task of
    * this type will be considered hung and will be reset.
    *
-   * @return the optional amount of time in milliseconds after which a locked and executing task of
+   * @return the amount of time in milliseconds after which a locked and executing task of
    *     this type will be considered hung and will be reset
    */
   public Integer getExecutionTimeout() {
@@ -511,9 +511,9 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Returns the optional maximum execution attempts for tasks of this type.
+   * Returns the maximum execution attempts for tasks of this type.
    *
-   * @return the optional maximum execution attempts for tasks of this type
+   * @return the maximum execution attempts for tasks of this type
    */
   public Integer getMaximumExecutionAttempts() {
     return maximumExecutionAttempts;
@@ -538,9 +538,9 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Returns the optional retry delay for tasks of this type.
+   * Returns the retry delay for tasks of this type.
    *
-   * @return the optional retry delay for tasks of this type
+   * @return the retry delay for tasks of this type
    */
   public Integer getRetryDelay() {
     return retryDelay;
@@ -643,10 +643,10 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the optional amount of time in milliseconds after which a locked and executing task of this
+   * Set the amount of time in milliseconds after which a locked and executing task of this
    * type will be considered hung and will be reset.
    *
-   * @param executionTimeout the optional amount of time in milliseconds after which a locked and
+   * @param executionTimeout the amount of time in milliseconds after which a locked and
    *     executing task of this type will be considered hung and will be reset
    */
   public void setExecutionTimeout(Integer executionTimeout) {
@@ -664,9 +664,9 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the optional maximum execution attempts for tasks of this type.
+   * Set the maximum execution attempts for tasks of this type.
    *
-   * @param maximumExecutionAttempts the optional maximum execution attempts for tasks of this type
+   * @param maximumExecutionAttempts the maximum execution attempts for tasks of this type
    */
   public void setMaximumExecutionAttempts(Integer maximumExecutionAttempts) {
     this.maximumExecutionAttempts = maximumExecutionAttempts;
@@ -691,9 +691,9 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the optional retry delay for tasks of this type.
+   * Set the retry delay for tasks of this type.
    *
-   * @param retryDelay the optional retry delay for tasks of this type
+   * @param retryDelay the retry delay for tasks of this type
    */
   public void setRetryDelay(Integer retryDelay) {
     this.retryDelay = retryDelay;

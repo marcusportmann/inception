@@ -63,10 +63,10 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
   /**
    * Load the policy summaries.
    *
-   * @param filter        The optional filter to apply to the policy summaries.
-   * @param sortDirection The optional sort direction to apply to the policy summaries.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param filter        The filter to apply to the policy summaries.
+   * @param sortDirection The sort direction to apply to the policy summaries.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The policy summaries.
    */

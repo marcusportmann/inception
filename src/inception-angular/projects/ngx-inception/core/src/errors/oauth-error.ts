@@ -27,7 +27,7 @@ export interface OAuthError {
   error: string;
 
   /**
-   * The optional error description.
+   * The error description.
    */
   error_description?: string;
 

@@ -2757,7 +2757,7 @@ public interface IPartyReferenceApiController {
       @Parameter(
               name = "roleType",
               description =
-                  "The optional code for the role type to retrieve the role type attribute type constraint for")
+                  "The code for the role type to retrieve the role type attribute type constraint for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -2810,7 +2810,7 @@ public interface IPartyReferenceApiController {
       @Parameter(
               name = "roleType",
               description =
-                  "The optional code for the role type to retrieve the role type preference type constraint for")
+                  "The code for the role type to retrieve the role type preference type constraint for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
       throws InvalidArgumentException, ServiceUnavailableException;

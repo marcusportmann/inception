@@ -77,14 +77,14 @@ public class AssociationsForParty implements Serializable {
   @XmlElement(name = "Association", required = true)
   private List<Association> associations;
 
-  /** The optional page index. */
-  @Schema(description = "The optional page index")
+  /** The page index. */
+  @Schema(description = "The page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
-  @Schema(description = "The optional page size")
+  /** The page size. */
+  @Schema(description = "The page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
@@ -97,14 +97,14 @@ public class AssociationsForParty implements Serializable {
   @XmlElement(name = "PartyId", required = true)
   private UUID partyId;
 
-  /** The optional method used to sort the associations e.g. by name. */
-  @Schema(description = "The optional method used to sort the associations e.g. by name")
+  /** The method used to sort the associations e.g. by name. */
+  @Schema(description = "The method used to sort the associations e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private AssociationSortBy sortBy;
 
-  /** The optional sort direction that was applied to the associations. */
-  @Schema(description = "The optional sort direction that was applied to the associations")
+  /** The sort direction that was applied to the associations. */
+  @Schema(description = "The sort direction that was applied to the associations")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
@@ -135,10 +135,10 @@ public class AssociationsForParty implements Serializable {
    * @param partyId the ID for the party the associations are associated with
    * @param associations the associations
    * @param total the total number of associations
-   * @param sortBy the optional method used to sort the associations e.g. by name
-   * @param sortDirection the optional sort direction that was applied to the associations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortBy the method used to sort the associations e.g. by name
+   * @param sortDirection the sort direction that was applied to the associations
+   * @param pageIndex the page index
+   * @param pageSize the page size
    */
   public AssociationsForParty(
       UUID tenantId,
@@ -169,18 +169,18 @@ public class AssociationsForParty implements Serializable {
   }
 
   /**
-   * Returns the optional page index.
+   * Returns the page index.
    *
-   * @return the optional page index
+   * @return the page index
    */
   public Integer getPageIndex() {
     return pageIndex;
   }
 
   /**
-   * Returns the optional page size.
+   * Returns the page size.
    *
-   * @return the optional page size
+   * @return the page size
    */
   public Integer getPageSize() {
     return pageSize;
@@ -196,18 +196,18 @@ public class AssociationsForParty implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the associations e.g. by name.
+   * Returns the method used to sort the associations e.g. by name.
    *
-   * @return the optional method used to sort the associations
+   * @return the method used to sort the associations
    */
   public AssociationSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the associations.
+   * Returns the sort direction that was applied to the associations.
    *
-   * @return the optional sort direction that was applied to the associations
+   * @return the sort direction that was applied to the associations
    */
   public SortDirection getSortDirection() {
     return sortDirection;

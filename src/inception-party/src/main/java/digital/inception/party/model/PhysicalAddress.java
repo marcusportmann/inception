@@ -227,18 +227,18 @@ public class PhysicalAddress implements Serializable {
   @Schema(description = "The farm description for the physical address")
   @JsonProperty
   @XmlElement(name = "FarmDescription")
-  @Size(max = 50)
+  @Size(max = 100)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.FarmDescription.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
-  @Column(name = "farm_description", length = 50)
+  @Column(name = "farm_description", length = 100)
   private String farmDescription;
 
   /** The farm name for the physical address. */
   @Schema(description = "The farm name for the physical address")
   @JsonProperty
   @XmlElement(name = "FarmName")
-  @Size(max = 50)
+  @Size(max = 100)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.FarmName.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
@@ -254,7 +254,7 @@ public class PhysicalAddress implements Serializable {
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.FarmNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
-  @Column(name = "farm_number", length = 100)
+  @Column(name = "farm_number", length = 50)
   private String farmNumber;
 
   /** The ID for the physical address. */

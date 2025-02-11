@@ -29,7 +29,7 @@ export class ConfigNotFoundError extends Error {
   /**
    * Constructs a new ConfigNotFoundError.
    *
-   * @param cause The optional cause of the error.
+   * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@config_config_not_found_error:The config could not be found.`, cause);

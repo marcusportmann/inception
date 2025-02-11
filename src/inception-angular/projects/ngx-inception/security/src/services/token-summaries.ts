@@ -27,7 +27,7 @@ import {TokenSummary} from './token-summary';
 export class TokenSummaries {
 
   /**
-   * The optional filter that was applied to the token summaries.
+   * The filter that was applied to the token summaries.
    */
   filter: string | null = null;
 
@@ -47,7 +47,7 @@ export class TokenSummaries {
   sortBy: TokenSortBy;
 
   /**
-   * The optional status filter that was applied to the token summaries.
+   * The status filter that was applied to the token summaries.
    */
   status: TokenStatus | null = null;
 
@@ -75,8 +75,8 @@ export class TokenSummaries {
    * @param sortDirection  The sort direction that was applied to the token summaries.
    * @param pageIndex      The page index.
    * @param pageSize       The page size.
-   * @param status         The optional status filter that was applied to the token summaries.
-   * @param filter         The optional filter that was applied to the token summaries.
+   * @param status         The status filter that was applied to the token summaries.
+   * @param filter         The filter that was applied to the token summaries.
    */
   constructor(tokenSummaries: TokenSummary[], total: number, sortBy: TokenSortBy,
               sortDirection: SortDirection, pageIndex: number, pageSize: number, status?: TokenStatus, filter?: string) {

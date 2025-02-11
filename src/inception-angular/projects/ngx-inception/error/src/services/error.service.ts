@@ -67,16 +67,16 @@ export class ErrorService {
   /**
    * Retrieve the error report summaries.
    *
-   * @param filter        The optional filter to apply to the error report summaries.
+   * @param filter        The filter to apply to the error report summaries.
    * @param fromDate      ISO 8601 format date value for the date to retrieve the error report
    *                      summaries from.
    * @param toDate        ISO 8601 format date value for the date to retrieve the error report
    *                      summaries to.
-   * @param sortBy        The optional method used to sort the error report summaries e.g. by who
+   * @param sortBy        The method used to sort the error report summaries e.g. by who
    *                      submitted them.
-   * @param sortDirection The optional sort direction to apply to the error report summaries.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param sortDirection The sort direction to apply to the error report summaries.
+   * @param pageIndex     The page index.
+   * @param pageSize      The page size.
    *
    * @return The users.
    */
@@ -127,8 +127,8 @@ export class ErrorService {
    * Send the error report for the error.
    *
    * @param error    The error.
-   * @param email    The optional email address of the user submitting the error report.
-   * @param feedback The optional feedback from the user submitting the error report.
+   * @param email    The email address of the user submitting the error report.
+   * @param feedback The feedback from the user submitting the error report.
    */
   sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {
     const errorReport: ErrorReport = new ErrorReport(uuid(), this.config.applicationId,

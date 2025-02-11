@@ -62,14 +62,14 @@ public interface IErrorService {
   /**
    * Retrieve the error report summaries.
    *
-   * @param filter the optional filter to apply to the error report summaries
+   * @param filter the filter to apply to the error report summaries
    * @param fromDate the date to retrieve the error report summaries from
    * @param toDate the date to retrieve the error report summaries to
-   * @param sortBy the optional method used to sort the error report summaries e.g. by who submitted
+   * @param sortBy the method used to sort the error report summaries e.g. by who submitted
    *     them
-   * @param sortDirection the optional sort direction to apply to the error report summaries
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param sortDirection the sort direction to apply to the error report summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the error report summaries
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the error report summaries could not be retrieved

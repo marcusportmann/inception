@@ -25,7 +25,7 @@ import {Tenant} from './tenant';
 export class Tenants {
 
   /**
-   * The optional filter that was applied to the tenants.
+   * The filter that was applied to the tenants.
    */
   filter: string | null = null;
 
@@ -62,7 +62,7 @@ export class Tenants {
    * @param sortDirection The sort direction that was applied to the tenants.
    * @param pageIndex     The page index.
    * @param pageSize      The page size.
-   * @param filter        The optional filter that was applied to the tenants.
+   * @param filter        The filter that was applied to the tenants.
    */
   constructor(tenants: Tenant[], total: number, sortDirection: SortDirection, pageIndex: number,
               pageSize: number, filter?: string) {

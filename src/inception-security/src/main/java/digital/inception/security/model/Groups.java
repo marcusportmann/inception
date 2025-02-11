@@ -67,8 +67,8 @@ public class Groups implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the groups. */
-  @Schema(description = "The optional filter that was applied to the groups")
+  /** The filter that was applied to the groups. */
+  @Schema(description = "The filter that was applied to the groups")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -123,7 +123,7 @@ public class Groups implements Serializable {
    * @param userDirectoryId the ID for the user directory the groups are associated with
    * @param groups the groups
    * @param total the total number of groups
-   * @param filter the optional filter that was applied to the groups
+   * @param filter the filter that was applied to the groups
    * @param sortDirection the sort direction that was applied to the groups
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -146,9 +146,9 @@ public class Groups implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the groups.
+   * Returns the filter that was applied to the groups.
    *
-   * @return the optional filter that was applied to the groups
+   * @return the filter that was applied to the groups
    */
   public String getFilter() {
     return filter;

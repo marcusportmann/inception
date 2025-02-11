@@ -234,10 +234,10 @@ public interface UserDirectoryProvider {
   /**
    * Retrieve the groups.
    *
-   * @param filter the optional filter to apply to the groups
-   * @param sortDirection the optional sort direction to apply to the groups
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the groups
+   * @param sortDirection the sort direction to apply to the groups
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the groups
    * @throws ServiceUnavailableException if the groups could not be retrieved
    */
@@ -271,10 +271,10 @@ public interface UserDirectoryProvider {
    * Retrieve the group members for the group.
    *
    * @param groupName the name of the group
-   * @param filter the optional filter to apply to the group members
-   * @param sortDirection the optional sort direction to apply to the group members
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the group members
+   * @param sortDirection the sort direction to apply to the group members
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the group members for the group
    * @throws GroupNotFoundException if the group could not be found
    * @throws ServiceUnavailableException if the group members could not be retrieved for the group
@@ -354,11 +354,11 @@ public interface UserDirectoryProvider {
   /**
    * Retrieve the users.
    *
-   * @param filter the optional filter to apply to the users
-   * @param sortBy the optional method used to sort the users e.g. by name
-   * @param sortDirection the optional sort direction to apply to the users
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param filter the filter to apply to the users
+   * @param sortBy the method used to sort the users e.g. by name
+   * @param sortDirection the sort direction to apply to the users
+   * @param pageIndex the page index
+   * @param pageSize the page size
    * @return the users
    * @throws ServiceUnavailableException if the users could not be retrieved
    */

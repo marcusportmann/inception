@@ -46,7 +46,7 @@ public class InvalidArgumentError extends ServiceError implements Serializable {
   @XmlElement(name = "Parameter", required = true)
   private String parameter;
 
-  /** The optional validation errors associated with the invalid argument error. */
+  /** The validation errors associated with the invalid argument error. */
   @XmlElementWrapper(name = "ValidationErrors", required = true)
   @XmlElement(name = "ValidationError")
   private List<ValidationError> validationErrors;
@@ -78,9 +78,9 @@ public class InvalidArgumentError extends ServiceError implements Serializable {
   }
 
   /**
-   * Returns the optional validation errors associated with the invalid argument error.
+   * Returns the validation errors associated with the invalid argument error.
    *
-   * @return the optional validation errors associated with the invalid argument error
+   * @return the validation errors associated with the invalid argument error
    */
   public List<ValidationError> getValidationErrors() {
     return validationErrors;

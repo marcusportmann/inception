@@ -26,7 +26,7 @@ import {PolicySummary} from './policy-summary';
 export class PolicySummaries {
 
   /**
-   * The optional filter that was applied to the policy summaries.
+   * The filter that was applied to the policy summaries.
    */
   filter: string | null = null;
 
@@ -69,7 +69,7 @@ export class PolicySummaries {
    * @param sortDirection   The sort direction that was applied to the policy summaries.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.
-   * @param filter          The optional filter that was applied to the policy summaries.
+   * @param filter          The filter that was applied to the policy summaries.
    */
   constructor(policySummaries: PolicySummary[], total: number, sortBy: PolicySortBy,
               sortDirection: SortDirection, pageIndex: number, pageSize: number, filter?: string) {
