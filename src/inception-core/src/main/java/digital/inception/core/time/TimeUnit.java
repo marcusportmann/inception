@@ -118,7 +118,11 @@ public enum TimeUnit {
     return description;
   }
 
-  /** Returns the <b>java.util.concurrent.TimeUnit</b> enumeration value for the time unit. */
+  /**
+   * Returns the <b>java.util.concurrent.TimeUnit</b> enumeration value for the time unit.
+   *
+   * @return the <b>java.util.concurrent.TimeUnit</b> enumeration value for the time unit
+   */
   public java.util.concurrent.TimeUnit getTimeUnit() {
     return switch (this) {
       case NANOSECONDS -> java.util.concurrent.TimeUnit.NANOSECONDS;

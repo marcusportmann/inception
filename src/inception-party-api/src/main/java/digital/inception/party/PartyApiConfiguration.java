@@ -16,7 +16,7 @@
 
 package digital.inception.party;
 
-import digital.inception.party.controller.Version;
+import digital.inception.Version;
 import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;

@@ -25,8 +25,6 @@ import digital.inception.core.util.ISO8601Util;
 import demo.model.Data;
 import digital.inception.server.resource.xacmlpdp.XacmlPolicyDecisionPoint;
 import digital.inception.server.resource.xacmlpdp.XacmlUtil;
-import digital.inception.test.InceptionExtension;
-import digital.inception.test.TestConfiguration;
 import digital.inception.web.RequestBodyObjectContext;
 import java.math.BigDecimal;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.DecisionType;
@@ -55,10 +53,10 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * @author Marcus Portmann
  */
 @ExtendWith(SpringExtension.class)
-@ExtendWith(InceptionExtension.class)
-@ContextConfiguration(
-    classes = {TestConfiguration.class, DemoConfiguration.class},
-    initializers = {ConfigDataApplicationContextInitializer.class})
+//@ExtendWith(InceptionExtension.class)
+//@ContextConfiguration(
+//    classes = {TestConfiguration.class, DemoConfiguration.class},
+//    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,

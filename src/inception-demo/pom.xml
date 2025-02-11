@@ -192,10 +192,18 @@
 
     <!-- Test Dependencies -->
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!--
+    <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-test</artifactId>
       <scope>test</scope>
     </dependency>
+    -->
   </dependencies>
 
   <build>

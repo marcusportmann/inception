@@ -17,12 +17,12 @@
 package demo;
 
 import demo.service.IDataService;
-import digital.inception.test.InceptionExtension;
-import digital.inception.test.TestConfiguration;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -31,9 +31,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  *
  * @author Marcus Portmann
  */
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ExtendWith(SpringExtension.class)
-@ExtendWith(InceptionExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class, DemoConfiguration.class})
+//@ContextConfiguration(classes = {TestConfiguration.class, DemoConfiguration.class})
 @Disabled
 public class DataServiceTest {
 

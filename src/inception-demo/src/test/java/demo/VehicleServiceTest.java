@@ -18,21 +18,18 @@ package demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import digital.inception.core.sorting.SortDirection;
 import demo.model.Car;
 import demo.model.Cars;
 import demo.model.Vehicle;
 import demo.model.VehicleType;
 import demo.model.Vehicles;
 import demo.service.IVehicleService;
-import digital.inception.test.InceptionExtension;
-import digital.inception.test.TestConfiguration;
-import org.junit.jupiter.api.Disabled;
+import digital.inception.core.sorting.SortDirection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -44,18 +41,14 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
+@SpringBootTest(classes = DemoApplication.class, webEnvironment = WebEnvironment.NONE)
 @ExtendWith(SpringExtension.class)
-@ExtendWith(InceptionExtension.class)
-@ContextConfiguration(
-    classes = {DemoConfiguration.class, TestConfiguration.class},
-    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,
       DirtiesContextTestExecutionListener.class,
       TransactionalTestExecutionListener.class
     })
-@Disabled
 public class VehicleServiceTest {
 
   /** The Vehicle Service. */

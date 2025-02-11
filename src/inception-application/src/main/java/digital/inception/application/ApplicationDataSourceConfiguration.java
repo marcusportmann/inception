@@ -48,7 +48,7 @@ import org.springframework.util.StringUtils;
   "inception.application.data-source.class-name",
   "inception.application.data-source.url"
 })
-// @SuppressWarnings({"unused", "LombokGetterMayBeUsed"})
+// @SuppressWarnings({"unused"})
 public class ApplicationDataSourceConfiguration {
 
   /* Logger */
