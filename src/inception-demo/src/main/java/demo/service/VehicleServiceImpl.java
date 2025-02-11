@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.service;
+package demo.service;
 
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.demo.model.Car;
-import digital.inception.demo.model.Cars;
-import digital.inception.demo.model.Vehicle;
-import digital.inception.demo.model.Vehicles;
-import digital.inception.demo.persistence.jpa.CarRepository;
-import digital.inception.demo.persistence.jpa.VehicleRepository;
+import demo.model.Car;
+import demo.model.Cars;
+import demo.model.Vehicle;
+import demo.model.Vehicles;
+import demo.persistence.jpa.CarRepository;
+import demo.persistence.jpa.VehicleRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.context.ApplicationContext;

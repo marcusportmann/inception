@@ -34,7 +34,7 @@ public class InternalDocumentStoreEnabledCondition implements Condition {
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
     String documentStoreType =
-        context.getEnvironment().getProperty("shared-business.operations.document-store-type");
+        context.getEnvironment().getProperty("inception.operations.document-store-type");
 
     return (documentStoreType == null) || "internal".equals(documentStoreType);
   }

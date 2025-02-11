@@ -18,7 +18,6 @@ package digital.inception.security.ws;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.security.model.AuthenticationFailedException;
 import digital.inception.security.model.DuplicateGroupException;
@@ -80,11 +79,9 @@ import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
-import jakarta.validation.ConstraintViolation;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
@@ -111,7 +108,8 @@ public class SecurityWebService extends AbstractWebServiceBase {
    * @param applicationContext the Spring application context
    * @param securityService the Security Service
    */
-  public SecurityWebService(ApplicationContext applicationContext, SecurityService securityService) {
+  public SecurityWebService(
+      ApplicationContext applicationContext, SecurityService securityService) {
     super(applicationContext);
 
     this.securityService = securityService;
@@ -218,13 +216,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
       throw new InvalidArgumentException("passwordChange");
     }
 
-    Set<ConstraintViolation<PasswordChange>> constraintViolations =
-        validator.validate(passwordChange);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "passwordChange", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("passwordChange", passwordChange);
 
     securityService.adminChangePassword(
         userDirectoryId,
@@ -271,13 +263,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
       throw new InvalidArgumentException("passwordChange");
     }
 
-    Set<ConstraintViolation<PasswordChange>> constraintViolations =
-        validator.validate(passwordChange);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "passwordChange", ValidationError.toValidationErrors(constraintViolations));
-    }
+    validateArgument("passwordChange", passwordChange);
 
     if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE) {
       Optional<UUID> userDirectoryIdOptional = securityService.getUserDirectoryIdForUser(username);

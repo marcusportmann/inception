@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.ws;
+package demo.ws;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.Car;
-import digital.inception.demo.service.DuplicateCarException;
-import digital.inception.demo.service.VehicleService;
+import demo.model.Car;
+import demo.service.DuplicateCarException;
+import demo.service.VehicleService;
 import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;

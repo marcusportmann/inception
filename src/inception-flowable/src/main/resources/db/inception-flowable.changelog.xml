@@ -18,10 +18,9 @@
   <changeSet id="inception-flowable-1.0.0" author="Marcus Portmann">
     <comment>inception-flowable-1.0.0</comment>
 
+    <rollback>
 
-
-
-
+    </rollback>
   </changeSet>
 
 </databaseChangeLog>

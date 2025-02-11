@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.service;
+package demo.service;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.Data;
-import digital.inception.demo.model.ReactiveData;
+import demo.model.Data;
+import demo.model.ReactiveData;
 import java.util.List;
 import reactor.core.publisher.Flux;
 

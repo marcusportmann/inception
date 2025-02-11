@@ -2642,7 +2642,438 @@
       <column name="SCOPE_TYPE_"/>
     </createIndex>
 
+    <rollback>
+      <!--
+      NOTE: The rollback steps in the Flowable Liquibase change sets do not revert the database
+            structures to a state compatible with previous Flowable versions. Instead, they remove
+            the Flowable artefacts from the database.
+      -->
 
+      <!-- CONTENT FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_CO_CONTENT_ITEM"/>
+
+      <!-- FORM FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_FO_FORM_INSTANCE"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_FO_FORM_DEFINITION"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_FO_FORM_RESOURCE"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_FO_FORM_DEPLOYMENT"/>
+
+      <!-- DMN FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_DMN_HI_DECISION_EXECUTION"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_DMN_DECISION"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_DMN_DEPLOYMENT_RESOURCE"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_DMN_DEPLOYMENT"/>
+
+      <!-- EVENT REGISTRY FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="FLW_CHANNEL_DEFINITION"/>
+      <dropAllForeignKeyConstraints baseTableName="FLW_EVENT_DEFINITION"/>
+      <dropAllForeignKeyConstraints baseTableName="FLW_EVENT_RESOURCE"/>
+      <dropAllForeignKeyConstraints baseTableName="FLW_EVENT_DEPLOYMENT"/>
+
+      <!-- CMMN FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_HI_PLAN_ITEM_INST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_RU_SENTRY_PART_INST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_RU_PLAN_ITEM_INST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_HI_MIL_INST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_HI_CASE_INST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_RU_MIL_INST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_RU_CASE_INST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_CASEDEF"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_DEPLOYMENT_RESOURCE"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_CMMN_DEPLOYMENT"/>
+
+      <!-- APP FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_APP_APPDEF"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_APP_DEPLOYMENT_RESOURCE"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_APP_DEPLOYMENT"/>
+
+      <!-- IDENTITY FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_PRIV_MAPPING"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_PRIV"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_TOKEN"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_INFO"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_MEMBERSHIP"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_USER"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_GROUP"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_BYTEARRAY"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_ID_PROPERTY"/>
+
+      <!-- ENGINE HISTORY FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_DETAIL"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_ACTINST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_PROCINST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_ATTACHMENT"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_COMMENT"/>
+
+      <!--ENGINE FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_PROCDEF_INFO"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RE_MODEL"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_EXECUTION"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_ACTINST"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_EVT_LOG"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RE_PROCDEF"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RE_DEPLOYMENT"/>
+
+      <!-- EVENT SUBSCRIPTION FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_EVENT_SUBSCR"/>
+
+      <!-- VARIABLE HISTORY FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_VARINST"/>
+
+      <!-- VARIABLE FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_VARIABLE"/>
+
+      <!-- TASK HISTORY FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_TSK_LOG"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_TASKINST"/>
+
+      <!-- TASK FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_TASK"/>
+
+      <!-- BATCH FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="FLW_RU_BATCH_PART"/>
+      <dropAllForeignKeyConstraints baseTableName="FLW_RU_BATCH"/>
+
+      <!-- JOB FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_EXTERNAL_JOB"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_DEADLETTER_JOB"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_SUSPENDED_JOB"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_TIMER_JOB"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_JOB"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_HISTORY_JOB"/>
+
+      <!-- IDENTITYLINK HISTORY FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_IDENTITYLINK"/>
+
+      <!-- IDENTITYLINK FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_IDENTITYLINK"/>
+
+      <!-- ENTITYLINK-HISTORY FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_HI_ENTITYLINK"/>
+
+      <!-- ENTITYLINK FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_RU_ENTITYLINK"/>
+
+      <!-- COMMON FOREIGN KEY CONSTRAINTS -->
+      <dropAllForeignKeyConstraints baseTableName="ACT_GE_BYTEARRAY"/>
+      <dropAllForeignKeyConstraints baseTableName="ACT_GE_PROPERTY"/>
+
+      <!-- CONTENT -->
+      <dropIndex tableName="ACT_CO_CONTENT_ITEM" indexName="IDX_CONTITEM_SCOPE"/>
+      <dropIndex tableName="ACT_CO_CONTENT_ITEM" indexName="IDX_CONTITEM_PROCID"/>
+      <dropIndex tableName="ACT_CO_CONTENT_ITEM" indexName="IDX_CONTITEM_TASKID"/>
+      <dropTable tableName="ACT_CO_CONTENT_ITEM"/>
+
+      <!-- FORM -->
+      <dropIndex tableName="ACT_FO_FORM_INSTANCE" indexName="ACT_IDX_FORM_SCOPE"/>
+      <dropIndex tableName="ACT_FO_FORM_INSTANCE" indexName="ACT_IDX_FORM_PROC"/>
+      <dropIndex tableName="ACT_FO_FORM_INSTANCE" indexName="ACT_IDX_FORM_TASK"/>
+      <dropTable tableName="ACT_FO_FORM_INSTANCE"/>
+
+      <dropIndex tableName="ACT_FO_FORM_DEFINITION" indexName="ACT_IDX_FORM_DEF_UNIQ"/>
+      <dropTable tableName="ACT_FO_FORM_DEFINITION"/>
+
+      <dropTable tableName="ACT_FO_FORM_RESOURCE"/>
+
+      <dropTable tableName="ACT_FO_FORM_DEPLOYMENT"/>
+
+      <!-- DMN -->
+      <dropIndex tableName="ACT_DMN_HI_DECISION_EXECUTION" indexName="ACT_IDX_DMN_INSTANCE_ID"/>
+      <dropTable tableName="ACT_DMN_HI_DECISION_EXECUTION"/>
+
+      <dropIndex tableName="ACT_DMN_DECISION" indexName="ACT_IDX_DMN_DEC_UNIQ"/>
+      <dropTable tableName="ACT_DMN_DECISION"/>
+
+      <dropTable tableName="ACT_DMN_DEPLOYMENT_RESOURCE"/>
+
+      <dropTable tableName="ACT_DMN_DEPLOYMENT"/>
+
+      <!-- EVENT REGISTRY -->
+      <dropIndex tableName="FLW_CHANNEL_DEFINITION" indexName="ACT_IDX_CHANNEL_DEF_UNIQ"/>
+      <dropTable tableName="FLW_CHANNEL_DEFINITION"/>
+
+      <dropIndex tableName="FLW_EVENT_DEFINITION" indexName="ACT_IDX_EVENT_DEF_UNIQ"/>
+      <dropTable tableName="FLW_EVENT_DEFINITION"/>
+
+      <dropTable tableName="FLW_EVENT_RESOURCE"/>
+
+      <dropTable tableName="FLW_EVENT_DEPLOYMENT"/>
+
+      <!-- CMMN -->
+      <dropTable tableName="ACT_CMMN_HI_PLAN_ITEM_INST"/>
+
+      <dropIndex tableName="ACT_CMMN_RU_SENTRY_PART_INST" indexName="ACT_IDX_SENTRY_PLAN_ITEM"/>
+      <dropIndex tableName="ACT_CMMN_RU_SENTRY_PART_INST" indexName="ACT_IDX_SENTRY_CASE_INST"/>
+      <dropIndex tableName="ACT_CMMN_RU_SENTRY_PART_INST" indexName="ACT_IDX_SENTRY_CASE_DEF"/>
+      <dropTable tableName="ACT_CMMN_RU_SENTRY_PART_INST"/>
+
+      <dropIndex tableName="ACT_CMMN_RU_PLAN_ITEM_INST" indexName="ACT_IDX_PLAN_ITEM_STAGE_INST"/>
+      <dropIndex tableName="ACT_CMMN_RU_PLAN_ITEM_INST" indexName="ACT_IDX_PLAN_ITEM_CASE_INST"/>
+      <dropIndex tableName="ACT_CMMN_RU_PLAN_ITEM_INST" indexName="ACT_IDX_PLAN_ITEM_CASE_DEF"/>
+      <dropTable tableName="ACT_CMMN_RU_PLAN_ITEM_INST"/>
+
+      <dropTable tableName="ACT_CMMN_HI_MIL_INST"/>
+
+      <dropIndex tableName="ACT_CMMN_HI_CASE_INST" indexName="ACT_IDX_HI_CASE_INST_END"/>
+      <dropTable tableName="ACT_CMMN_HI_CASE_INST"/>
+
+      <dropIndex tableName="ACT_CMMN_RU_MIL_INST" indexName="ACT_IDX_MIL_CASE_INST"/>
+      <dropIndex tableName="ACT_CMMN_RU_MIL_INST" indexName="ACT_IDX_MIL_CASE_DEF"/>
+      <dropTable tableName="ACT_CMMN_RU_MIL_INST"/>
+
+      <dropIndex tableName="ACT_CMMN_RU_CASE_INST" indexName="ACT_IDX_CASE_INST_REF_ID_"/>
+      <dropIndex tableName="ACT_CMMN_RU_CASE_INST" indexName="ACT_IDX_CASE_INST_PARENT"/>
+      <dropIndex tableName="ACT_CMMN_RU_CASE_INST" indexName="ACT_IDX_CASE_INST_CASE_DEF"/>
+      <dropTable tableName="ACT_CMMN_RU_CASE_INST"/>
+
+      <dropIndex tableName="ACT_CMMN_CASEDEF" indexName="ACT_IDX_CASE_DEF_UNIQ"/>
+      <dropIndex tableName="ACT_CMMN_CASEDEF" indexName="ACT_IDX_CASE_DEF_DPLY"/>
+      <dropTable tableName="ACT_CMMN_CASEDEF"/>
+
+      <dropIndex tableName="ACT_CMMN_DEPLOYMENT_RESOURCE" indexName="ACT_IDX_CMMN_RSRC_DPL"/>
+      <dropTable tableName="ACT_CMMN_DEPLOYMENT_RESOURCE"/>
+
+      <dropTable tableName="ACT_CMMN_DEPLOYMENT"/>
+
+      <!-- APP -->
+      <dropIndex tableName="ACT_APP_APPDEF" indexName="ACT_IDX_APP_DEF_UNIQ"/>
+      <dropIndex tableName="ACT_APP_APPDEF" indexName="ACT_IDX_APP_DEF_DPLY"/>
+      <dropTable tableName="ACT_APP_APPDEF"/>
+
+      <dropIndex tableName="ACT_APP_DEPLOYMENT_RESOURCE" indexName="ACT_IDX_APP_RSRC_DPL"/>
+      <dropTable tableName="ACT_APP_DEPLOYMENT_RESOURCE"/>
+
+      <dropTable tableName="ACT_APP_DEPLOYMENT"/>
+
+      <!-- IDENTITY -->
+      <dropIndex tableName="ACT_ID_PRIV_MAPPING" indexName="ACT_IDX_PRIV_GROUP"/>
+      <dropIndex tableName="ACT_ID_PRIV_MAPPING" indexName="ACT_IDX_PRIV_USER"/>
+      <dropIndex tableName="ACT_ID_PRIV_MAPPING" indexName="ACT_IDX_PRIV_MAPPING"/>
+      <dropTable tableName="ACT_ID_PRIV_MAPPING"/>
+
+      <dropUniqueConstraint tableName="ACT_ID_PRIV" constraintName="ACT_UNIQ_PRIV_NAME"/>
+      <dropTable tableName="ACT_ID_PRIV"/>
+
+      <dropTable tableName="ACT_ID_TOKEN"/>
+
+      <dropTable tableName="ACT_ID_INFO"/>
+
+      <dropIndex tableName="ACT_ID_MEMBERSHIP" indexName="ACT_IDX_MEMB_USER"/>
+      <dropIndex tableName="ACT_ID_MEMBERSHIP" indexName="ACT_IDX_MEMB_GROUP"/>
+      <dropTable tableName="ACT_ID_MEMBERSHIP"/>
+
+      <dropTable tableName="ACT_ID_USER"/>
+
+      <dropTable tableName="ACT_ID_GROUP"/>
+
+      <dropTable tableName="ACT_ID_BYTEARRAY"/>
+
+      <dropTable tableName="ACT_ID_PROPERTY"/>
+
+      <!-- ENGINE HISTORY -->
+      <dropIndex tableName="ACT_HI_DETAIL" indexName="ACT_IDX_HI_DETAIL_TASK_ID"/>
+      <dropIndex tableName="ACT_HI_DETAIL" indexName="ACT_IDX_HI_DETAIL_NAME"/>
+      <dropIndex tableName="ACT_HI_DETAIL" indexName="ACT_IDX_HI_DETAIL_TIME"/>
+      <dropIndex tableName="ACT_HI_DETAIL" indexName="ACT_IDX_HI_DETAIL_ACT_INST"/>
+      <dropIndex tableName="ACT_HI_DETAIL" indexName="ACT_IDX_HI_DETAIL_PROC_INST"/>
+      <dropTable tableName="ACT_HI_DETAIL"/>
+
+      <dropIndex tableName="ACT_HI_ACTINST" indexName="ACT_IDX_HI_ACT_INST_EXEC"/>
+      <dropIndex tableName="ACT_HI_ACTINST" indexName="ACT_IDX_HI_ACT_INST_PROCINST"/>
+      <dropIndex tableName="ACT_HI_ACTINST" indexName="ACT_IDX_HI_ACT_INST_END"/>
+      <dropIndex tableName="ACT_HI_ACTINST" indexName="ACT_IDX_HI_ACT_INST_START"/>
+      <dropTable tableName="ACT_HI_ACTINST"/>
+
+      <dropIndex tableName="ACT_HI_PROCINST" indexName="ACT_IDX_HI_PRO_SUPER_PROCINST"/>
+      <dropIndex tableName="ACT_HI_PROCINST" indexName="ACT_IDX_HI_PRO_I_BUSKEY"/>
+      <dropIndex tableName="ACT_HI_PROCINST" indexName="ACT_IDX_HI_PRO_INST_END"/>
+      <dropTable tableName="ACT_HI_PROCINST"/>
+
+      <dropTable tableName="ACT_HI_ATTACHMENT"/>
+
+      <dropTable tableName="ACT_HI_COMMENT"/>
+
+      <!--ENGINE -->
+      <dropUniqueConstraint tableName="ACT_PROCDEF_INFO" constraintName="ACT_UNIQ_INFO_PROCDEF"/>
+      <dropIndex tableName="ACT_PROCDEF_INFO" indexName="ACT_IDX_PROCDEF_INFO_PROC"/>
+      <dropIndex tableName="ACT_PROCDEF_INFO" indexName="ACT_IDX_PROCDEF_INFO_JSON"/>
+      <dropTable tableName="ACT_PROCDEF_INFO"/>
+
+      <dropIndex tableName="ACT_RE_MODEL" indexName="ACT_IDX_MODEL_DEPLOYMENT"/>
+      <dropIndex tableName="ACT_RE_MODEL" indexName="ACT_IDX_MODEL_SOURCE_EXTRA"/>
+      <dropIndex tableName="ACT_RE_MODEL" indexName="ACT_IDX_MODEL_SOURCE"/>
+      <dropTable tableName="ACT_RE_MODEL"/>
+
+      <dropIndex tableName="ACT_RU_EXECUTION" indexName="ACT_IDX_EXE_PROCDEF"/>
+      <dropIndex tableName="ACT_RU_EXECUTION" indexName="ACT_IDX_EXE_SUPER"/>
+      <dropIndex tableName="ACT_RU_EXECUTION" indexName="ACT_IDX_EXE_PARENT"/>
+      <dropIndex tableName="ACT_RU_EXECUTION" indexName="ACT_IDX_EXE_PROCINST"/>
+      <dropIndex tableName="ACT_RU_EXECUTION" indexName="ACT_IDX_EXEC_REF_ID_"/>
+      <dropIndex tableName="ACT_RU_EXECUTION" indexName="ACT_IDX_EXE_ROOT"/>
+      <dropIndex tableName="ACT_RU_EXECUTION" indexName="ACT_IDX_EXEC_BUSKEY"/>
+      <dropTable tableName="ACT_RU_EXECUTION"/>
+
+      <dropIndex tableName="ACT_RU_ACTINST" indexName="ACT_IDX_RU_ACTI_TASK"/>
+      <dropIndex tableName="ACT_RU_ACTINST" indexName="ACT_IDX_RU_ACTI_EXEC_ACT"/>
+      <dropIndex tableName="ACT_RU_ACTINST" indexName="ACT_IDX_RU_ACTI_EXEC"/>
+      <dropIndex tableName="ACT_RU_ACTINST" indexName="ACT_IDX_RU_ACTI_PROC_ACT"/>
+      <dropIndex tableName="ACT_RU_ACTINST" indexName="ACT_IDX_RU_ACTI_PROC"/>
+      <dropIndex tableName="ACT_RU_ACTINST" indexName="ACT_IDX_RU_ACTI_END"/>
+      <dropIndex tableName="ACT_RU_ACTINST" indexName="ACT_IDX_RU_ACTI_START"/>
+      <dropTable tableName="ACT_RU_ACTINST"/>
+
+      <dropTable tableName="ACT_EVT_LOG"/>
+
+      <dropUniqueConstraint tableName="ACT_RE_PROCDEF" constraintName="ACT_UNIQ_PROCDEF"/>
+      <dropTable tableName="ACT_RE_PROCDEF"/>
+
+      <dropTable tableName="ACT_RE_DEPLOYMENT"/>
+
+      <!-- EVENT SUBSCRIPTION -->
+      <dropIndex tableName="ACT_RU_EVENT_SUBSCR" indexName="ACT_IDX_EVENT_SUBSCR_SCOPEREF_"/>
+      <dropIndex tableName="ACT_RU_EVENT_SUBSCR" indexName="ACT_IDX_EVENT_SUBSCR"/>
+      <dropIndex tableName="ACT_RU_EVENT_SUBSCR" indexName="ACT_IDX_EVENT_SUBSCR_CONFIG_"/>
+      <dropTable tableName="ACT_RU_EVENT_SUBSCR"/>
+
+      <!-- VARIABLE HISTORY -->
+      <dropIndex tableName="ACT_HI_VARINST" indexName="ACT_IDX_HI_PROCVAR_EXE"/>
+      <dropIndex tableName="ACT_HI_VARINST" indexName="ACT_IDX_HI_PROCVAR_TASK_ID"/>
+      <dropIndex tableName="ACT_HI_VARINST" indexName="ACT_IDX_HI_PROCVAR_PROC_INST"/>
+      <dropIndex tableName="ACT_HI_VARINST" indexName="ACT_IDX_HI_VAR_SUB_ID_TYPE"/>
+      <dropIndex tableName="ACT_HI_VARINST" indexName="ACT_IDX_HI_VAR_SCOPE_ID_TYPE"/>
+      <dropIndex tableName="ACT_HI_VARINST" indexName="ACT_IDX_HI_PROCVAR_NAME_TYPE"/>
+      <dropTable tableName="ACT_HI_VARINST"/>
+
+      <!-- VARIABLE -->
+      <dropIndex tableName="ACT_RU_VARIABLE" indexName="ACT_IDX_VAR_PROCINST"/>
+      <dropIndex tableName="ACT_RU_VARIABLE" indexName="ACT_IDX_VAR_EXE"/>
+      <dropIndex tableName="ACT_RU_VARIABLE" indexName="ACT_IDX_VARIABLE_TASK_ID"/>
+      <dropIndex tableName="ACT_RU_VARIABLE" indexName="ACT_IDX_VAR_BYTEARRAY"/>
+      <dropIndex tableName="ACT_RU_VARIABLE" indexName="ACT_IDX_RU_VAR_SUB_ID_TYPE"/>
+      <dropIndex tableName="ACT_RU_VARIABLE" indexName="ACT_IDX_RU_VAR_SCOPE_ID_TYPE"/>
+      <dropTable tableName="ACT_RU_VARIABLE"/>
+
+      <!-- TASK HISTORY -->
+      <dropTable tableName="ACT_HI_TSK_LOG"/>
+
+      <dropIndex tableName="ACT_HI_TASKINST" indexName="ACT_IDX_HI_TASK_INST_PROCINST"/>
+      <dropIndex tableName="ACT_HI_TASKINST" indexName="ACT_IDX_HI_TASK_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_HI_TASKINST" indexName="ACT_IDX_HI_TASK_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_HI_TASKINST" indexName="ACT_IDX_HI_TASK_SCOPE"/>
+      <dropTable tableName="ACT_HI_TASKINST"/>
+
+      <!-- TASK -->
+      <dropIndex tableName="ACT_RU_TASK" indexName="ACT_IDX_TASK_PROCDEF"/>
+      <dropIndex tableName="ACT_RU_TASK" indexName="ACT_IDX_TASK_EXEC"/>
+      <dropIndex tableName="ACT_RU_TASK" indexName="ACT_IDX_TASK_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_TASK" indexName="ACT_IDX_TASK_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_TASK" indexName="ACT_IDX_TASK_SCOPE"/>
+      <dropIndex tableName="ACT_RU_TASK" indexName="ACT_IDX_TASK_CREATE"/>
+      <dropTable tableName="ACT_RU_TASK"/>
+
+      <!-- BATCH -->
+      <dropIndex tableName="FLW_RU_BATCH_PART" indexName="FLW_IDX_BATCH_PART"/>
+      <dropTable tableName="FLW_RU_BATCH_PART"/>
+
+      <dropTable tableName="FLW_RU_BATCH"/>
+
+      <!-- JOB -->
+      <dropIndex tableName="ACT_RU_EXTERNAL_JOB" indexName="ACT_IDX_EJOB_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_EXTERNAL_JOB" indexName="ACT_IDX_EJOB_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_EXTERNAL_JOB" indexName="ACT_IDX_EJOB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_EXTERNAL_JOB" indexName="ACT_IDX_EXTERNAL_JOB_EXCEPTION_STACK_ID"/>
+      <dropIndex tableName="ACT_RU_EXTERNAL_JOB" indexName="ACT_IDX_EXTERNAL_JOB_CUSTOM_VALUES_ID"/>
+      <dropIndex tableName="ACT_RU_EXTERNAL_JOB" indexName="ACT_IDX_EXTERNAL_JOB_CORRELATION_ID"/>
+      <dropTable tableName="ACT_RU_EXTERNAL_JOB"/>
+
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DEADLETTER_JOB_PROC_DEF_ID"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DEADLETTER_JOB_PROCESS_INSTANCE_ID"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DEADLETTER_JOB_EXECUTION_ID"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DJOB_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DJOB_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DJOB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DEADLETTER_JOB_EXCEPTION_STACK_ID"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DEADLETTER_JOB_CUSTOM_VALUES_ID"/>
+      <dropIndex tableName="ACT_RU_DEADLETTER_JOB" indexName="ACT_IDX_DEADLETTER_JOB_CORRELATION_ID"/>
+      <dropTable tableName="ACT_RU_DEADLETTER_JOB"/>
+
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SUSPENDED_JOB_PROC_DEF_ID"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SUSPENDED_JOB_PROCESS_INSTANCE_ID"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SUSPENDED_JOB_EXECUTION_ID"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SJOB_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SJOB_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SJOB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SUSPENDED_JOB_CORRELATION_ID"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SUSPENDED_JOB_CUSTOM_VALUES_ID"/>
+      <dropIndex tableName="ACT_RU_SUSPENDED_JOB" indexName="ACT_IDX_SUSPENDED_JOB_EXCEPTION_STACK_ID"/>
+      <dropTable tableName="ACT_RU_SUSPENDED_JOB"/>
+
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TIMER_JOB_PROC_DEF_ID"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TIMER_JOB_PROCESS_INSTANCE_ID"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TIMER_JOB_EXECUTION_ID"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TJOB_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TJOB_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TJOB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TIMER_JOB_DUEDATE"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TIMER_JOB_CORRELATION_ID"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TIMER_JOB_CUSTOM_VALUES_ID"/>
+      <dropIndex tableName="ACT_RU_TIMER_JOB" indexName="ACT_IDX_TIMER_JOB_EXCEPTION_STACK_ID"/>
+      <dropTable tableName="ACT_RU_TIMER_JOB"/>
+
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_PROC_DEF_ID"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_PROCESS_INSTANCE_ID"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_EXECUTION_ID"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_CORRELATION_ID"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_CUSTOM_VALUES_ID"/>
+      <dropIndex tableName="ACT_RU_JOB" indexName="ACT_IDX_JOB_EXCEPTION_STACK_ID"/>
+      <dropTable tableName="ACT_RU_JOB"/>
+
+      <dropTable tableName="ACT_RU_HISTORY_JOB"/>
+
+      <!-- IDENTITYLINK HISTORY -->
+      <dropIndex tableName="ACT_HI_IDENTITYLINK" indexName="ACT_IDX_HI_IDENT_LNK_PROCINST"/>
+      <dropIndex tableName="ACT_HI_IDENTITYLINK" indexName="ACT_IDX_HI_IDENT_LNK_TASK"/>
+      <dropIndex tableName="ACT_HI_IDENTITYLINK" indexName="ACT_IDX_HI_IDENT_LNK_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_HI_IDENTITYLINK" indexName="ACT_IDX_HI_IDENT_LNK_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_HI_IDENTITYLINK" indexName="ACT_IDX_HI_IDENT_LNK_SCOPE"/>
+      <dropIndex tableName="ACT_HI_IDENTITYLINK" indexName="ACT_IDX_HI_IDENT_LNK_USER"/>
+      <dropTable tableName="ACT_HI_IDENTITYLINK"/>
+
+      <!-- IDENTITYLINK -->
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_IDL_PROCINST"/>
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_ATHRZ_PROCEDEF"/>
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_TSKASS_TASK"/>
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_IDENT_LNK_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_IDENT_LNK_SUB_SCOPE"/>
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_IDENT_LNK_SCOPE"/>
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_IDENT_LNK_GROUP"/>
+      <dropIndex tableName="ACT_RU_IDENTITYLINK" indexName="ACT_IDX_IDENT_LNK_USER"/>
+      <dropTable tableName="ACT_RU_IDENTITYLINK"/>
+
+      <!-- ENTITYLINK-HISTORY -->
+      <dropIndex tableName="ACT_HI_ENTITYLINK" indexName="ACT_IDX_HI_ENT_LNK_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_HI_ENTITYLINK" indexName="ACT_IDX_HI_ENT_LNK_ROOT_SCOPE"/>
+      <dropIndex tableName="ACT_HI_ENTITYLINK" indexName="ACT_IDX_HI_ENT_LNK_REF_SCOPE"/>
+      <dropIndex tableName="ACT_HI_ENTITYLINK" indexName="ACT_IDX_HI_ENT_LNK_SCOPE"/>
+      <dropTable tableName="ACT_HI_ENTITYLINK"/>
+
+      <!-- ENTITYLINK -->
+      <dropIndex tableName="ACT_RU_ENTITYLINK" indexName="ACT_IDX_ENT_LNK_SCOPE_DEF"/>
+      <dropIndex tableName="ACT_RU_ENTITYLINK" indexName="ACT_IDX_ENT_LNK_ROOT_SCOPE"/>
+      <dropIndex tableName="ACT_RU_ENTITYLINK" indexName="ACT_IDX_ENT_LNK_REF_SCOPE"/>
+      <dropIndex tableName="ACT_RU_ENTITYLINK" indexName="ACT_IDX_ENT_LNK_SCOPE"/>
+      <dropTable tableName="ACT_RU_ENTITYLINK"/>
+
+      <!-- COMMON -->
+      <dropIndex tableName="ACT_GE_BYTEARRAY" indexName="ACT_IDX_BYTEAR_DEPL"/>
+      <dropTable tableName="ACT_GE_BYTEARRAY"/>
+
+      <dropTable tableName="ACT_GE_PROPERTY"/>
+
+    </rollback>
   </changeSet>
 
 
@@ -2735,6 +3166,17 @@
     <modifyDataType tableName="ACT_DMN_DEPLOYMENT" columnName="DEPLOY_TIME_" newDataType="datetime(3)" />
     <modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="START_TIME_" newDataType="datetime(3)" />
     <modifyDataType tableName="ACT_DMN_HI_DECISION_EXECUTION" columnName="END_TIME_" newDataType="datetime(3)" />
+
+    <rollback>
+      <!--
+      NOTE: The rollback steps in the Flowable Liquibase change sets do not revert the database
+            structures to a state compatible with previous Flowable versions. Instead, they remove
+            the Flowable artefacts from the database.
+      -->
+
+
+
+    </rollback>
   </changeSet>
 
 
@@ -2819,6 +3261,15 @@
       <column name="VALUE_" value="7.0.1.1"/>
       <where>NAME_ = 'schema.version'</where>
     </update>
+
+    <rollback>
+      <!--
+      NOTE: The rollback steps in the Flowable Liquibase change sets do not revert the database
+            structures to a state compatible with previous Flowable versions. Instead, they remove
+            the Flowable artefacts from the database.
+      -->
+
+    </rollback>
   </changeSet>
 
 
@@ -2839,15 +3290,21 @@
     <modifyDataType tableName="ACT_RU_TASK" columnName="SUSPENDED_TIME_" newDataType="datetime(3)" />
     <modifyDataType tableName="ACT_RU_TASK" columnName="IN_PROGRESS_DUE_DATE_" newDataType="datetime(3)" />
 
-
     <modifyDataType tableName="ACT_HI_TASKINST" columnName="IN_PROGRESS_TIME_" newDataType="datetime(3)" />
     <modifyDataType tableName="ACT_HI_TASKINST" columnName="SUSPENDED_TIME_" newDataType="datetime(3)" />
     <modifyDataType tableName="ACT_HI_TASKINST" columnName="IN_PROGRESS_DUE_DATE_" newDataType="datetime(3)" />
+
+    <rollback>
+      <!--
+      NOTE: The rollback steps in the Flowable Liquibase change sets do not revert the database
+            structures to a state compatible with previous Flowable versions. Instead, they remove
+            the Flowable artefacts from the database.
+      -->
+
+
+
+    </rollback>
   </changeSet>
-
-
-
-
 
 
   <!--
@@ -2935,69 +3392,18 @@
       <where>NAME_ = 'schema.version'</where>
     </update>
 
+    <rollback>
+      <!--
+      NOTE: The rollback steps in the Flowable Liquibase change sets do not revert the database
+            structures to a state compatible with previous Flowable versions. Instead, they remove
+            the Flowable artefacts from the database.
+      -->
+
+      <dropIndex tableName="ACT_RU_EVENT_SUBSCR" indexName="ACT_IDX_EVENT_SUBSCR_PROC_ID"/>
+
+      <dropIndex tableName="ACT_HI_TSK_LOG" indexName="ACT_IDX_ACT_HI_TSK_LOG_TASK"/>
+
+    </rollback>
   </changeSet>
-
-
-
-
-
-
-
 </databaseChangeLog>
 
-
-
-
-<!--
-
-
-  <modifyDataType tableName="" columnName="" newDataType="datetime(3)" />
-
-
-    <createTable tableName="">
-      <column name="ID_" type="nvarchar(64)">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="" type=""/>
-      <column name="" type=""/>
-      <column name="" type=""/>
-    </createTable>
-
-
-
-    <addForeignKeyConstraint constraintName=""
-      baseTableName="" baseColumnNames=""
-      referencedTableName="" referencedColumnNames=""/>
-
-
-
-
--->
-
-
-
-
-  <!--
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--->

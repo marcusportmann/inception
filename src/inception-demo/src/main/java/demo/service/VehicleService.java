@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.service;
+package demo.service;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.demo.model.Car;
-import digital.inception.demo.model.Cars;
-import digital.inception.demo.model.Vehicle;
-import digital.inception.demo.model.Vehicles;
+import demo.model.Car;
+import demo.model.Cars;
+import demo.model.Vehicle;
+import demo.model.Vehicles;
 
 /**
  * The <b>VehicleService</b> interface defines the functionality that must be provided by a Vehicle

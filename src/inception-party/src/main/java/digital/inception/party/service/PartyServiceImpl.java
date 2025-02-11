@@ -120,20 +120,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (association == null) {
-      throw new InvalidArgumentException("association");
-    }
+    validateArgument("association", association);
 
     if (!Objects.equals(tenantId, association.getTenantId())) {
       throw new InvalidArgumentException("association.tenantId");
-    }
-
-    Set<ConstraintViolation<Association>> constraintViolations =
-        validateAssociation(tenantId, association);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "association", ValidationError.toValidationErrors(constraintViolations));
     }
 
     return partyStore.createAssociation(tenantId, association);
@@ -149,19 +139,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (mandate == null) {
-      throw new InvalidArgumentException("mandate");
-    }
+    validateArgument("mandate", mandate);
 
     if (!Objects.equals(tenantId, mandate.getTenantId())) {
       throw new InvalidArgumentException("mandate.tenantId");
-    }
-
-    Set<ConstraintViolation<Mandate>> constraintViolations = validateMandate(tenantId, mandate);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mandate", ValidationError.toValidationErrors(constraintViolations));
     }
 
     return partyStore.createMandate(tenantId, mandate);
@@ -175,20 +156,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (organization == null) {
-      throw new InvalidArgumentException("organization");
-    }
+    validateArgument("organization", organization);
 
     if (!Objects.equals(tenantId, organization.getTenantId())) {
       throw new InvalidArgumentException("organization.tenantId");
-    }
-
-    Set<ConstraintViolation<Organization>> constraintViolations =
-        validateOrganization(tenantId, organization);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "organization", ValidationError.toValidationErrors(constraintViolations));
     }
 
     return partyStore.createOrganization(tenantId, organization);
@@ -202,19 +173,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (person == null) {
-      throw new InvalidArgumentException("person");
-    }
+    validateArgument("person", person);
 
     if (!Objects.equals(tenantId, person.getTenantId())) {
       throw new InvalidArgumentException("person.tenantId");
-    }
-
-    Set<ConstraintViolation<Person>> constraintViolations = validatePerson(tenantId, person);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "person", ValidationError.toValidationErrors(constraintViolations));
     }
 
     return partyStore.createPerson(tenantId, person);
@@ -661,16 +623,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (association == null) {
-      throw new InvalidArgumentException("association");
-    }
+    validateArgument("association", association);
 
-    Set<ConstraintViolation<Association>> constraintViolations =
-        validateAssociation(tenantId, association);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "association", ValidationError.toValidationErrors(constraintViolations));
+    if (!Objects.equals(tenantId, association.getTenantId())) {
+      throw new InvalidArgumentException("association.tenantId");
     }
 
     return partyStore.updateAssociation(tenantId, association);
@@ -686,15 +642,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (mandate == null) {
-      throw new InvalidArgumentException("mandate");
-    }
+    validateArgument("mandate", mandate);
 
-    Set<ConstraintViolation<Mandate>> constraintViolations = validateMandate(tenantId, mandate);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mandate", ValidationError.toValidationErrors(constraintViolations));
+    if (!Objects.equals(tenantId, mandate.getTenantId())) {
+      throw new InvalidArgumentException("mandate.tenantId");
     }
 
     return partyStore.updateMandate(tenantId, mandate);
@@ -708,16 +659,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (organization == null) {
-      throw new InvalidArgumentException("organization");
-    }
+    validateArgument("organization", organization);
 
-    Set<ConstraintViolation<Organization>> constraintViolations =
-        validateOrganization(tenantId, organization);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "organization", ValidationError.toValidationErrors(constraintViolations));
+    if (!Objects.equals(tenantId, organization.getTenantId())) {
+      throw new InvalidArgumentException("organization.tenantId");
     }
 
     return partyStore.updateOrganization(tenantId, organization);
@@ -731,15 +676,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (person == null) {
-      throw new InvalidArgumentException("person");
-    }
+    validateArgument("person", person);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validatePerson(tenantId, person);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "person", ValidationError.toValidationErrors(constraintViolations));
+    if (!Objects.equals(tenantId, person.getTenantId())) {
+      throw new InvalidArgumentException("person.tenantId");
     }
 
     return partyStore.updatePerson(tenantId, person);

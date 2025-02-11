@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.controller;
+package demo.controller;
 
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.Data;
-import digital.inception.demo.model.ReactiveData;
+import demo.model.Data;
+import demo.model.ReactiveData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,7 +42,7 @@ import reactor.core.publisher.Flux;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Data API")
+@Tag(name = "Data")
 @RequestMapping(value = "/api/data")
 public interface DataApiController {
 

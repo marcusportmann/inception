@@ -33,43 +33,47 @@ public interface DocumentStore {
   /**
    * Create the new document.
    *
+   * @param tenantId the ID for the tenant
    * @param document the document
    * @return the document
    * @throws DuplicateDocumentException if the document already exists
    * @throws ServiceUnavailableException if the document could not be created
    */
-  Document createDocument(Document document)
+  Document createDocument(UUID tenantId, Document document)
       throws DuplicateDocumentException, ServiceUnavailableException;
 
   /**
    * Delete the document.
    *
+   * @param tenantId the ID for the tenant
    * @param documentId the ID for the document
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be deleted
    */
-  void deleteDocument(UUID documentId)
+  void deleteDocument(UUID tenantId, UUID documentId)
       throws DocumentNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the document.
    *
+   * @param tenantId the ID for the tenant
    * @param documentId the ID for the document
    * @return the document
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be retrieved
    */
-  Document getDocument(UUID documentId)
+  Document getDocument(UUID tenantId, UUID documentId)
       throws DocumentNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the document.
    *
+   * @param tenantId the ID for the tenant
    * @param document the document
    * @return the document
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be updated
    */
-  Document updateDocument(Document document)
+  Document updateDocument(UUID tenantId, Document document)
       throws DocumentNotFoundException, ServiceUnavailableException;
 }

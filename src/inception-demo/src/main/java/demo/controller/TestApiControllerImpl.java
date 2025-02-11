@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.controller;
+package demo.controller;
 
 import java.time.OffsetDateTime;
 import org.slf4j.Logger;
@@ -29,8 +29,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.CarType;
-import digital.inception.demo.task.DemoTaskData;
+import demo.model.CarType;
+import demo.task.DemoTaskData;
 import digital.inception.executor.service.ExecutorService;
 
 /**

@@ -18,12 +18,13 @@ package digital.inception.operations.service;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionNotFoundException;
 import digital.inception.operations.model.DocumentNotFoundException;
 import digital.inception.operations.model.DuplicateDocumentDefinitionException;
-import digital.inception.operations.model.DuplicateDocumentException;
+import digital.inception.operations.model.UpdateDocumentRequest;
 import java.util.UUID;
 
 /**
@@ -34,18 +35,25 @@ import java.util.UUID;
  */
 public interface DocumentService {
 
+  /** The ID for the default tenant. */
+  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
   /**
-   * Create the new document.
+   * Create a new document.
    *
-   * @param document the document
+   * @param tenantId the ID for the tenant
+   * @param createDocumentRequest the request to create a document
    * @param createdBy the person or system requesting the document creation
    * @return the document
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DuplicateDocumentException if the document already exists
+   * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document could not be created
    */
-  Document createDocument(Document document, String createdBy)
-      throws InvalidArgumentException, DuplicateDocumentException, ServiceUnavailableException;
+  Document createDocument(
+      UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
+      throws InvalidArgumentException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the new document definition.
@@ -63,12 +71,13 @@ public interface DocumentService {
   /**
    * Delete the document.
    *
+   * @param tenantId the ID for the tenant
    * @param documentId the ID for the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be deleted
    */
-  void deleteDocument(UUID documentId)
+  void deleteDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
@@ -98,13 +107,14 @@ public interface DocumentService {
   /**
    * Retrieve the document.
    *
+   * @param tenantId the ID for the tenant
    * @param documentId the ID for the document
    * @return the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be retrieved
    */
-  Document getDocument(UUID documentId)
+  Document getDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
@@ -124,14 +134,16 @@ public interface DocumentService {
   /**
    * Update the document.
    *
-   * @param document the document
+   * @param tenantId the ID for the tenant
+   * @param updateDocumentRequest the request to update the document
    * @param updatedBy the person or system requesting the document update
    * @return the updated document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
-   * @throws ServiceUnavailableException if the document could not be updated
+   * @throws ServiceUnavailableException if the document could not be created
    */
-  Document updateDocument(Document document, String updatedBy)
+  Document updateDocument(
+      UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**

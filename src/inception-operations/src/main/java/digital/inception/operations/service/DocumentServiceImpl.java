@@ -16,9 +16,12 @@
 
 package digital.inception.operations.service;
 
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
+import digital.inception.operations.model.CreateDocumentRequest;
+import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowNotFoundException;
@@ -64,7 +67,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   /** The Document Definition Repository. */
   private final DocumentDefinitionRepository documentDefinitionRepository;
 
-
   /**
    * Constructs a new <b>DocumentServiceImpl</b>.
    *
@@ -74,7 +76,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
    */
   public DocumentServiceImpl(
       ApplicationContext applicationContext,
-      Validator validator,
       DocumentStore documentStore,
       DocumentDefinitionRepository documentDefinitionRepository) {
     super(applicationContext);
@@ -83,18 +84,49 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     this.documentDefinitionRepository = documentDefinitionRepository;
   }
 
+//  @Override
+//  public Document createDocument(Document document, String createdBy)
+//      throws InvalidArgumentException,
+//      DuplicateDocumentException,
+//      ServiceUnavailableException {
+//    XXX
+//
+//    validateDocument(document);
+//
+//    calculateDocumentHash(document);
+//
+//    return documentStore.createDocument(document);
+//  }
+
   @Override
-  public Document createDocument(Document document, String createdBy)
-      throws InvalidArgumentException,
-      DuplicateDocumentException,
-      ServiceUnavailableException {
-    XXX
+  public Document createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest,
+      String createdBy)
+      throws InvalidArgumentException, DocumentDefinitionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
 
-    validateDocument(document);
+    validateArgument("createDocumentRequest", createDocumentRequest);
 
-    calculateDocumentHash(document);
+    if (!StringUtils.hasText(createdBy)) {
+      throw new InvalidArgumentException("createdBy");
+    }
 
-    return documentStore.createDocument(document);
+    try {
+      if (documentDefinitionRepository.existsById(createDocumentRequest.getDefinitionId())) {
+        throw new DocumentDefinitionNotFoundException(createDocumentRequest.getDefinitionId());
+      }
+
+      Document document = new Document();
+
+
+    return documentStore.createDocument(tenantId, document);
+    } catch (DocumentDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document with the document definition ID (" + createDocumentRequest.getDefinitionId() + ") for the tenant (" + tenantId + ")", e);
+    }
   }
 
   @Override
@@ -102,7 +134,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       throws InvalidArgumentException,
       DuplicateDocumentDefinitionException,
       ServiceUnavailableException {
-    validateDocumentDefinition(documentDefinition);
+    validateArgument("documentDefinition", documentDefinition);
 
     try {
       if (documentDefinitionRepository.existsById(documentDefinition.getId())) {
@@ -119,13 +151,17 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public void deleteDocument(UUID documentId)
+  public void deleteDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (documentId == null) {
       throw new InvalidArgumentException("documentId");
     }
 
-    documentStore.deleteDocument(documentId);
+    documentStore.deleteDocument(tenantId, documentId);
   }
 
   @Override
@@ -168,13 +204,17 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document getDocument(UUID documentId)
+  public Document getDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (documentId == null) {
       throw new InvalidArgumentException("documentId");
     }
 
-    return documentStore.getDocument(documentId);
+    return documentStore.getDocument(tenantId, documentId);
   }
 
   @Override
@@ -204,24 +244,34 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document updateDocument(Document document, String updatedBy)
-      throws InvalidArgumentException,
-      WorkflowNotFoundException,
-      DocumentNotFoundException,
-      ServiceUnavailableException {
-    validateDocument(document);
+  public Document updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest,
+      String updatedBy)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
 
-    calculateDocumentHash(document);
+    USE CREATE DOCUMENT AS A BASIS
 
-    return caseStore.updateDocument(document);
+    return null;
   }
+
+//  @Override
+//  public Document updateDocument(Document document, String updatedBy)
+//      throws InvalidArgumentException,
+//      WorkflowNotFoundException,
+//      DocumentNotFoundException,
+//      ServiceUnavailableException {
+//    validateDocument(document);
+//
+//    calculateDocumentHash(document);
+//
+//    return caseStore.updateDocument(document);
+//  }
 
   @Override
   public void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
       DocumentDefinitionNotFoundException,
       ServiceUnavailableException {
-    validateDocumentDefinition(documentDefinition);
+    validateArgument("documentDefinition", documentDefinition);
 
     try {
       if (!documentDefinitionRepository.existsById(documentDefinition.getId())) {
@@ -237,91 +287,22 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
   }
 
-  private void calculateDocumentHash(Document document) throws ServiceUnavailableException {
+  private String calculateDocumentHash(byte[] documentData) {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-      digest.update(document.getData());
+      digest.update(documentData);
 
-      document.setHash(Base64.getEncoder().encodeToString(digest.digest()));
+      return Base64.getEncoder().encodeToString(digest.digest());
     } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to calculate the SHA-256 hash of the data for the document ("
-              + document.getId()
-              + ")",
+      throw new RuntimeException(
+          "Failed to calculate the SHA-256 hash for the document data",
           e);
     }
   }
 
-  private void validateWorkflow(Workflow workflow)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (workflow == null) {
-      throw new InvalidArgumentException("workflow");
-    }
 
-    Set<ConstraintViolation<Workflow>> constraintViolations = validator.validate(workflow);
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "workflow", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
 
-  private void validateWorkflowDefinition(WorkflowDefinition workflowDefinition)
-      throws InvalidArgumentException {
-    if (workflowDefinition == null) {
-      throw new InvalidArgumentException("workflowDefinition");
-    }
 
-    Set<ConstraintViolation<WorkflowDefinition>> constraintViolations =
-        validator.validate(workflowDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "workflowDefinition", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateCreateCaseRequest(CreateWorkflowRequest createCaseRequest)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (createCaseRequest == null) {
-      throw new InvalidArgumentException("createCaseRequest");
-    }
-
-    Set<ConstraintViolation<CreateWorkflowRequest>> constraintViolations =
-        validator.validate(createCaseRequest);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "createCaseRequest", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateDocument(Document document) throws InvalidArgumentException {
-    if (document == null) {
-      throw new InvalidArgumentException("document");
-    }
-
-    Set<ConstraintViolation<Document>> constraintViolations = validator.validate(document);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "document", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateDocumentDefinition(DocumentDefinition documentDefinition)
-      throws InvalidArgumentException {
-    if (documentDefinition == null) {
-      throw new InvalidArgumentException("documentDefinition");
-    }
-
-    Set<ConstraintViolation<DocumentDefinition>> constraintViolations =
-        validator.validate(documentDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "documentDefinition", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
 }

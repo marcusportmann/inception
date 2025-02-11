@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package digital.inception.demo.service;
+package demo.service;
 
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.demo.model.Data;
-import digital.inception.demo.model.ReactiveData;
-import digital.inception.demo.persistence.r2dbc.ReactiveDataRepository;
+import demo.model.Data;
+import demo.model.ReactiveData;
+import demo.persistence.r2dbc.ReactiveDataRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;

@@ -17,16 +17,10 @@
 
   <changeSet id="inception-audit-1.0.0" author="Marcus Portmann">
     <comment>inception-audit-1.0.0</comment>
-    <sql dbms="h2" endDelimiter=";">
-      CREATE SCHEMA IF NOT EXISTS audit
-    </sql>
-    <sql dbms="postgresql" endDelimiter=";">
-      CREATE SCHEMA IF NOT EXISTS audit
-    </sql>
-    <sql dbms="mssql" endDelimiter=";">
-      CREATE SCHEMA audit
-    </sql>
 
+    <rollback>
+
+    </rollback>
   </changeSet>
 
 </databaseChangeLog>

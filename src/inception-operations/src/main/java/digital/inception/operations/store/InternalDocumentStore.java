@@ -61,7 +61,7 @@ public class InternalDocumentStore implements DocumentStore {
   }
 
   @Override
-  public Document createDocument(Document document)
+  public Document createDocument(UUID tenantId, Document document)
       throws DuplicateDocumentException, ServiceUnavailableException {
     try {
       if (documentRepository.existsById(document.getId())) {
@@ -83,7 +83,7 @@ public class InternalDocumentStore implements DocumentStore {
   }
 
   @Override
-  public void deleteDocument(UUID documentId)
+  public void deleteDocument(UUID tenantId, UUID documentId)
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
       if (!documentRepository.existsById(documentId)) {
@@ -100,7 +100,7 @@ public class InternalDocumentStore implements DocumentStore {
   }
 
   @Override
-  public Document getDocument(UUID documentId)
+  public Document getDocument(UUID tenantId, UUID documentId)
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
       Optional<Document> documentOptional = documentRepository.findById(documentId);
@@ -119,7 +119,7 @@ public class InternalDocumentStore implements DocumentStore {
   }
 
   @Override
-  public Document updateDocument(Document document)
+  public Document updateDocument(UUID tenantId, Document document)
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
       if (!documentRepository.existsById(document.getId())) {

@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Scheduler API")
+@Tag(name = "Scheduler")
 @RequestMapping(value = "/api/scheduler")
 // @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface SchedulerApiController {
