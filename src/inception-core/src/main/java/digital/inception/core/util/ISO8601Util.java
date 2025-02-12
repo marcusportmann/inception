@@ -182,8 +182,7 @@ public final class ISO8601Util {
   /**
    * Transform the <b>OffsetTime</b> instance into an ISO 8601 format string.
    *
-   * @param offsetTime the <b>OffsetTime</b> instance to transform into an ISO 8601 format
-   *     string
+   * @param offsetTime the <b>OffsetTime</b> instance to transform into an ISO 8601 format string
    * @return the ISO 8601 format string for the <b>OffsetTime</b> instance
    */
   public static String fromOffsetTime(OffsetTime offsetTime) {

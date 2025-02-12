@@ -45,7 +45,9 @@ public class CodesApiConfiguration {
         .group("codes")
         .packagesToScan("digital.inception.codes")
         .addOpenApiCustomizer(
-            openApi -> openApi.info(new Info().title("Codes API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
+            openApi ->
+                openApi.info(
+                    new Info().title("Codes API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

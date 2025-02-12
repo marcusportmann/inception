@@ -354,8 +354,8 @@ public class WorkflowDefinition implements Serializable {
    * Associate the document definition with the workflow definition.
    *
    * @param documentDefinitionId the ID for the document definition
-   * @param required is a document with the document definition ID required for a workflow associated
-   *     with the workflow definition
+   * @param required is a document with the document definition ID required for a workflow
+   *     associated with the workflow definition
    */
   public void addDocumentDefinition(String documentDefinitionId, boolean required) {
     documentDefinitions.add(
@@ -465,7 +465,8 @@ public class WorkflowDefinition implements Serializable {
    *
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
-  public void setDocumentDefinitions(List<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
+  public void setDocumentDefinitions(
+      List<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
     for (WorkflowDefinitionDocumentDefinition documentDefinition : documentDefinitions) {
       documentDefinition.setWorkflowDefinition(this);
     }

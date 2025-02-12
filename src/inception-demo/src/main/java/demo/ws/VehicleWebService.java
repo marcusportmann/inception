@@ -16,11 +16,11 @@
 
 package demo.ws;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import demo.model.Car;
 import demo.service.DuplicateCarException;
 import demo.service.VehicleService;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;

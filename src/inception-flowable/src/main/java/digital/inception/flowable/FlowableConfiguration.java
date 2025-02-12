@@ -69,7 +69,6 @@ public class FlowableConfiguration {
   /** The Jackson ObjectMapper. */
   private ObjectMapper objectMapper;
 
-
   /**
    * Constructs a new <b>FlowableConfiguration</b>.
    *
@@ -128,23 +127,22 @@ public class FlowableConfiguration {
           ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
 
       processEngineConfiguration.setDbHistoryUsed(true);
-      //processEngineConfiguration.setDisableIdmEngine(true);
-      //processEngineConfiguration.setDisableEventRegistry(true);
-      //processEngineConfiguration.setAppResourceConverter(
+      // processEngineConfiguration.setDisableIdmEngine(true);
+      // processEngineConfiguration.setDisableEventRegistry(true);
+      // processEngineConfiguration.setAppResourceConverter(
       //    new AppResourceConverterImpl(objectMapper));
-
-
 
       processEngineConfiguration.setCreateDiagramOnDeploy(true);
 
+      //      DmnEngineConfigurator dmnEngineConfigurator = new DmnEngineConfigurator();
+      //      dmnEngineConfigurator.setDmnEngineConfiguration(dmnEngineConfiguration);
+      //      processEngineConfiguration.addConfigurator(dmnEngineConfigurator);
 
-//      DmnEngineConfigurator dmnEngineConfigurator = new DmnEngineConfigurator();
-//      dmnEngineConfigurator.setDmnEngineConfiguration(dmnEngineConfiguration);
-//      processEngineConfiguration.addConfigurator(dmnEngineConfigurator);
-
-//      EventRegistryEngineConfigurator eventRegistryEngineConfigurator = new EventRegistryEngineConfigurator();
-//      eventRegistryEngineConfigurator.setEventEngineConfiguration(eventRegistryEngineConfiguration);
-//      processEngineConfiguration.addConfigurator(eventRegistryEngineConfigurator);
+      //      EventRegistryEngineConfigurator eventRegistryEngineConfigurator = new
+      // EventRegistryEngineConfigurator();
+      //
+      // eventRegistryEngineConfigurator.setEventEngineConfiguration(eventRegistryEngineConfiguration);
+      //      processEngineConfiguration.addConfigurator(eventRegistryEngineConfigurator);
 
       FormEngineConfiguration formEngineConfiguration = new FormEngineConfiguration();
 
@@ -152,20 +150,10 @@ public class FlowableConfiguration {
       formEngineConfigurator.setFormEngineConfiguration(formEngineConfiguration);
       processEngineConfiguration.addConfigurator(formEngineConfigurator);
 
-
-
-
-
-
-//      processEngineConfiguration.setEventSubscriptionSchemaManager(new EventSubscriptionDbSchemaManager());
-
-
-
+      //      processEngineConfiguration.setEventSubscriptionSchemaManager(new
+      // EventSubscriptionDbSchemaManager());
 
       ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
-
-
-
 
       return processEngine;
     } catch (Throwable e) {
@@ -173,28 +161,30 @@ public class FlowableConfiguration {
     }
   }
 
-//  /**
-//   * Returns the Flowable app engine configuration.
-//   *
-//   * @return the Flowable app engine configuration
-//   */
-//  @Bean
-//  public AppEngineConfiguration appEngineConfiguration() {
-//    SpringAppEngineConfiguration appEngineConfiguration = new SpringAppEngineConfiguration();
-//    appEngineConfiguration.setApplicationContext(applicationContext);
-//    appEngineConfiguration.setAppEngineName(appEngineName);
-//    appEngineConfiguration.setDataSource(dataSource);
-//    appEngineConfiguration.setTransactionManager(transactionManager);
-//    appEngineConfiguration.setDatabaseType(getDatabaseType(dataSource));
-//    appEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
-//    appEngineConfiguration.setDbHistoryUsed(true);
-//    appEngineConfiguration.setDisableIdmEngine(true);
-//    appEngineConfiguration.setDisableEventRegistry(true);
-//    appEngineConfiguration.setAppResourceConverter(new org.flowable.app.engine.impl.deployer.AppResourceConverterImpl(objectMapper));
-//    appEngineConfiguration.setSchemaManager(new AppDbSchemaManager());
-//
-//    return appEngineConfiguration;
-//  }
+  //  /**
+  //   * Returns the Flowable app engine configuration.
+  //   *
+  //   * @return the Flowable app engine configuration
+  //   */
+  //  @Bean
+  //  public AppEngineConfiguration appEngineConfiguration() {
+  //    SpringAppEngineConfiguration appEngineConfiguration = new SpringAppEngineConfiguration();
+  //    appEngineConfiguration.setApplicationContext(applicationContext);
+  //    appEngineConfiguration.setAppEngineName(appEngineName);
+  //    appEngineConfiguration.setDataSource(dataSource);
+  //    appEngineConfiguration.setTransactionManager(transactionManager);
+  //    appEngineConfiguration.setDatabaseType(getDatabaseType(dataSource));
+  //
+  // appEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+  //    appEngineConfiguration.setDbHistoryUsed(true);
+  //    appEngineConfiguration.setDisableIdmEngine(true);
+  //    appEngineConfiguration.setDisableEventRegistry(true);
+  //    appEngineConfiguration.setAppResourceConverter(new
+  // org.flowable.app.engine.impl.deployer.AppResourceConverterImpl(objectMapper));
+  //    appEngineConfiguration.setSchemaManager(new AppDbSchemaManager());
+  //
+  //    return appEngineConfiguration;
+  //  }
 
   private String getDatabaseType(DataSource dataSource) {
     try (Connection connection = dataSource.getConnection()) {
@@ -205,65 +195,69 @@ public class FlowableConfiguration {
         case "Microsoft SQL Server" -> AbstractEngineConfiguration.DATABASE_TYPE_MSSQL;
         case "Oracle" -> AbstractEngineConfiguration.DATABASE_TYPE_ORACLE;
         case "PostgreSQL" -> AbstractEngineConfiguration.DATABASE_TYPE_POSTGRES;
-        default -> throw new RuntimeException(
-            "Failed to set the database type using the unknown database product name ("
-                + metaData.getDatabaseProductName() + ")");
+        default ->
+            throw new RuntimeException(
+                "Failed to set the database type using the unknown database product name ("
+                    + metaData.getDatabaseProductName()
+                    + ")");
       };
-    }
-    catch (Throwable e) {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to determine the database type", e);
     }
   }
 
-//  /**
-//   * Returns the Flowable event registry engine configuration.
-//   *
-//   * @return the Flowable event registry engine configuration
-//   */
-//  @Bean
-//  public EventRegistryEngineConfiguration eventRegistryEngineConfiguration() {
-//    SpringEventRegistryEngineConfiguration eventRegistryEngineConfiguration = new SpringEventRegistryEngineConfiguration();
-//
-//    eventRegistryEngineConfiguration.setApplicationContext(applicationContext);
-//    eventRegistryEngineConfiguration.setEngineName(dmnEngineName);
-//    eventRegistryEngineConfiguration.setDatabaseType(getDatabaseType(dataSource));
-//    eventRegistryEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
-//    eventRegistryEngineConfiguration.setDataSource(dataSource);
-//    eventRegistryEngineConfiguration.setTransactionManager(transactionManager);
-//    eventRegistryEngineConfiguration.setDbHistoryUsed(true);
-//    eventRegistryEngineConfiguration.setSchemaManager(new EventDbSchemaManager());
-//
-//    return eventRegistryEngineConfiguration;
-//  }
+  //  /**
+  //   * Returns the Flowable event registry engine configuration.
+  //   *
+  //   * @return the Flowable event registry engine configuration
+  //   */
+  //  @Bean
+  //  public EventRegistryEngineConfiguration eventRegistryEngineConfiguration() {
+  //    SpringEventRegistryEngineConfiguration eventRegistryEngineConfiguration = new
+  // SpringEventRegistryEngineConfiguration();
+  //
+  //    eventRegistryEngineConfiguration.setApplicationContext(applicationContext);
+  //    eventRegistryEngineConfiguration.setEngineName(dmnEngineName);
+  //    eventRegistryEngineConfiguration.setDatabaseType(getDatabaseType(dataSource));
+  //
+  // eventRegistryEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+  //    eventRegistryEngineConfiguration.setDataSource(dataSource);
+  //    eventRegistryEngineConfiguration.setTransactionManager(transactionManager);
+  //    eventRegistryEngineConfiguration.setDbHistoryUsed(true);
+  //    eventRegistryEngineConfiguration.setSchemaManager(new EventDbSchemaManager());
+  //
+  //    return eventRegistryEngineConfiguration;
+  //  }
 
-//  /**
-//   * Returns the Flowable DMN engine configuration.
-//   *
-//   * @return the Flowable DMN engine configuration
-//   */
-//  @Bean
-//  public DmnEngineConfiguration dmnEngineConfiguration() {
-//    SpringDmnEngineConfiguration dmnEngineConfiguration = new SpringDmnEngineConfiguration();
-//    dmnEngineConfiguration.setApplicationContext(applicationContext);
-//    dmnEngineConfiguration.setEngineName(dmnEngineName);
-//    dmnEngineConfiguration.setDatabaseType(getDatabaseType(dataSource));
-//    dmnEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
-//    dmnEngineConfiguration.setDataSource(dataSource);
-//    dmnEngineConfiguration.setTransactionManager(transactionManager);
-//    dmnEngineConfiguration.setDbHistoryUsed(true);
-//    dmnEngineConfiguration.setSchemaManager(new DmnDbSchemaManager());
-//
-//    return dmnEngineConfiguration;
-//  }
+  //  /**
+  //   * Returns the Flowable DMN engine configuration.
+  //   *
+  //   * @return the Flowable DMN engine configuration
+  //   */
+  //  @Bean
+  //  public DmnEngineConfiguration dmnEngineConfiguration() {
+  //    SpringDmnEngineConfiguration dmnEngineConfiguration = new SpringDmnEngineConfiguration();
+  //    dmnEngineConfiguration.setApplicationContext(applicationContext);
+  //    dmnEngineConfiguration.setEngineName(dmnEngineName);
+  //    dmnEngineConfiguration.setDatabaseType(getDatabaseType(dataSource));
+  //
+  // dmnEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+  //    dmnEngineConfiguration.setDataSource(dataSource);
+  //    dmnEngineConfiguration.setTransactionManager(transactionManager);
+  //    dmnEngineConfiguration.setDbHistoryUsed(true);
+  //    dmnEngineConfiguration.setSchemaManager(new DmnDbSchemaManager());
+  //
+  //    return dmnEngineConfiguration;
+  //  }
 
-//  /**
-//   * Returns the form engine configuration.
-//   *
-//   * @return the form engine configuration
-//   */
-//  protected FormEngineConfiguration formEngineConfiguration() {
-//    return new FormEngineConfiguration();
-//  }
+  //  /**
+  //   * Returns the form engine configuration.
+  //   *
+  //   * @return the form engine configuration
+  //   */
+  //  protected FormEngineConfiguration formEngineConfiguration() {
+  //    return new FormEngineConfiguration();
+  //  }
 
   private DataSource unwrapDataSource(DataSource dataSource) {
     try {

@@ -30,7 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused"})
-public class OperationsApiControllerImpl extends SecureApiController implements OperationsApiController {
+public class OperationsApiControllerImpl extends SecureApiController
+    implements OperationsApiController {
 
   /** The Operations Service. */
   private final IOperationsService operationsService;
@@ -47,6 +48,4 @@ public class OperationsApiControllerImpl extends SecureApiController implements 
 
     this.operationsService = operationsService;
   }
-
-
 }

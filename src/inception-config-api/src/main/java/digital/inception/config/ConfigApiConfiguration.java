@@ -46,7 +46,8 @@ public class ConfigApiConfiguration {
         .packagesToScan("digital.inception.config")
         .addOpenApiCustomizer(
             openApi ->
-                openApi.info(new Info().title("Config API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
+                openApi.info(
+                    new Info().title("Config API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

@@ -41,8 +41,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ReferenceApiControllerImpl extends SecureApiController implements
-    ReferenceApiController {
+public class ReferenceApiControllerImpl extends SecureApiController
+    implements ReferenceApiController {
 
   /** The Reference Service. */
   private final ReferenceService referenceService;

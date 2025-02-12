@@ -16,8 +16,8 @@
 
 package digital.inception.mail.controller;
 
-import digital.inception.core.api.ApiUtil;
 import digital.inception.api.SecureApiController;
+import digital.inception.core.api.ApiUtil;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.mail.model.DuplicateMailTemplateException;

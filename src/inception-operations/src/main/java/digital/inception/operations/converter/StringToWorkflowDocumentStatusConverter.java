@@ -30,7 +30,8 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class StringToWorkflowDocumentStatusConverter implements Converter<String, WorkflowDocumentStatus> {
+public class StringToWorkflowDocumentStatusConverter
+    implements Converter<String, WorkflowDocumentStatus> {
 
   /** Constructs a new <b>StringToWorkflowDocumentStatusConverter</b>. */
   public StringToWorkflowDocumentStatusConverter() {}

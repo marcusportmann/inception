@@ -22,8 +22,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>WorkflowRepository</b> interface declares the persistence for the <b>Workflow</b> domain type.
+ * The <b>WorkflowRepository</b> interface declares the persistence for the <b>Workflow</b> domain
+ * type.
  *
  * @author Marcus Portmann
  */
-public interface WorkflowRepository extends JpaRepository<Workflow, UUID>, JpaSpecificationExecutor<Workflow> {}
+public interface WorkflowRepository
+    extends JpaRepository<Workflow, UUID>, JpaSpecificationExecutor<Workflow> {}

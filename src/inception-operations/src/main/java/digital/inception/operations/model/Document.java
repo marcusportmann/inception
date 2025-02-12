@@ -238,10 +238,7 @@ public class Document implements Serializable {
   public Document(String definitionId) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.definitionId = definitionId;
-
-
   }
-
 
   /**
    * Indicates whether some other object is "equal to" this one.

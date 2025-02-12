@@ -41,7 +41,10 @@ public class SpringDocOpenApiTimeModelConverter implements ModelConverter {
       if (simpleType.getRawClass() == LocalTime.class) {
         return new Schema<String>().type("string").format("time").example("12:34:56.123");
       } else if (simpleType.getRawClass() == OffsetTime.class) {
-        return new Schema<String>().type("string").format("time-offset").example("12:34:56.123+01:00");
+        return new Schema<String>()
+            .type("string")
+            .format("time-offset")
+            .example("12:34:56.123+01:00");
       }
     }
     return (chain != null && chain.hasNext())

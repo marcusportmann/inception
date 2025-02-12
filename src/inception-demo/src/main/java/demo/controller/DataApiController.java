@@ -16,11 +16,11 @@
 
 package demo.controller;
 
+import demo.model.Data;
+import demo.model.ReactiveData;
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import demo.model.Data;
-import demo.model.ReactiveData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

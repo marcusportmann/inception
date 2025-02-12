@@ -105,7 +105,8 @@ public abstract class AbstractServiceBase {
         }
       }
     } catch (ClassNotFoundException e) {
-      log.warn("The InceptionDateTimeModule class was not found on the classpath and could not be registered with the Jackson Object Mapper");
+      log.warn(
+          "The InceptionDateTimeModule class was not found on the classpath and could not be registered with the Jackson Object Mapper");
     } catch (Exception e) {
       throw new BeanCreationException(
           "Failed to dynamically register the InceptionDateTimeModule module with the Jackson Object Mapper",

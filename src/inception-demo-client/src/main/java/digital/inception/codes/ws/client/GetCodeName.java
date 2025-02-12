@@ -1,12 +1,11 @@
 
 package digital.inception.codes.ws.client;
 
-import java.io.Serializable;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-
+import java.io.Serializable;
 
 /**
  * <p>Java class for GetCodeName complex type.
@@ -55,27 +54,27 @@ public class GetCodeName implements Serializable
     }
 
     /**
-     * Sets the value of the codeCategoryId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCodeCategoryId(String value) {
-        this.codeCategoryId = value;
-    }
-
-    /**
      * Gets the value of the codeId property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getCodeId() {
         return codeId;
+    }
+
+    /**
+     * Sets the value of the codeCategoryId property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setCodeCategoryId(String value) {
+        this.codeCategoryId = value;
     }
 
     /**

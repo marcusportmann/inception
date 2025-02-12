@@ -31,11 +31,11 @@ public class WorkflowDefinitionDocumentDefinitionId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The workflow definition the workflow definition document definition is associated with. */
-  private WorkflowDefinition workflowDefinition;
-
   /** The ID for the document definition. */
   private String documentDefinitionId;
+
+  /** The workflow definition the workflow definition document definition is associated with. */
+  private WorkflowDefinition workflowDefinition;
 
   /** Constructs a new <b>WorkflowDefinitionDocumentDefinitionId</b>. */
   public WorkflowDefinitionDocumentDefinitionId() {}

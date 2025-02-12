@@ -61,11 +61,11 @@ import org.springframework.util.StringUtils;
 @Service
 public class DocumentServiceImpl extends AbstractServiceBase implements DocumentService {
 
-  /** The Document Store. */
-  private final DocumentStore documentStore;
-
   /** The Document Definition Repository. */
   private final DocumentDefinitionRepository documentDefinitionRepository;
+
+  /** The Document Store. */
+  private final DocumentStore documentStore;
 
   /**
    * Constructs a new <b>DocumentServiceImpl</b>.

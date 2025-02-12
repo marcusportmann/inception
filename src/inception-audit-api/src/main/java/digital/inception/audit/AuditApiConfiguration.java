@@ -45,7 +45,9 @@ public class AuditApiConfiguration {
         .group("audit")
         .packagesToScan("digital.inception.audit")
         .addOpenApiCustomizer(
-            openApi -> openApi.info(new Info().title("Audit API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
+            openApi ->
+                openApi.info(
+                    new Info().title("Audit API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

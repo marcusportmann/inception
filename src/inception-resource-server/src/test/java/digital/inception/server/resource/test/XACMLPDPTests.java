@@ -69,11 +69,7 @@ public class XACMLPDPTests {
   public static void init(ApplicationContext applicationContext) {
     xacmlPolicyDecisionPoint =
         new XacmlPolicyDecisionPoint(
-            applicationContext,
-            true,
-            false,
-            "http://localhost:8080/api/security/policies",
-            43200);
+            applicationContext, true, false, "http://localhost:8080/api/security/policies", 43200);
   }
 
   @Test

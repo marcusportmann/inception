@@ -518,14 +518,10 @@ public interface ExecutorApiController {
               description = "The task type code filter to apply to the task summaries")
           @RequestParam(value = "type", required = false)
           String type,
-      @Parameter(
-              name = "status",
-              description = "The status filter to apply to the task summaries")
+      @Parameter(name = "status", description = "The status filter to apply to the task summaries")
           @RequestParam(value = "status", required = false)
           TaskStatus status,
-      @Parameter(
-              name = "filter",
-              description = "The filter to apply to the task summaries")
+      @Parameter(name = "filter", description = "The filter to apply to the task summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(

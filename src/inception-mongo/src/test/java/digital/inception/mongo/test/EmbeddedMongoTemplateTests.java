@@ -36,6 +36,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 /**
@@ -46,7 +47,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
  */
 @SpringBootTest(
     classes = {MongoConfiguration.class},
-    properties = "spring.data.mongodb.uri=mongodb://localhost:49017/test")
+    properties = "spring.data.mongodb.uri=mongodb://localhost:49017/test",
+    webEnvironment = WebEnvironment.NONE)
 @Disabled
 public class EmbeddedMongoTemplateTests {
 

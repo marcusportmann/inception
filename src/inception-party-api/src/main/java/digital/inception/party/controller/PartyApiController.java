@@ -933,9 +933,7 @@ public interface PartyApiController {
       @Parameter(name = "partyId", description = "The ID for the party", required = true)
           @PathVariable
           UUID partyId,
-      @Parameter(
-              name = "sortBy",
-              description = "The method used to sort the mandates e.g. by type")
+      @Parameter(name = "sortBy", description = "The method used to sort the mandates e.g. by type")
           @RequestParam(value = "sortBy", required = false)
           MandateSortBy sortBy,
       @Parameter(
@@ -1158,14 +1156,10 @@ public interface PartyApiController {
       @Parameter(name = "filter", description = "The filter to apply to the parties")
           @RequestParam(value = "filter", required = false)
           String filter,
-      @Parameter(
-              name = "sortBy",
-              description = "The method used to sort the parties e.g. by name")
+      @Parameter(name = "sortBy", description = "The method used to sort the parties e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           PartySortBy sortBy,
-      @Parameter(
-              name = "sortDirection",
-              description = "The sort direction to apply to the parties")
+      @Parameter(name = "sortDirection", description = "The sort direction to apply to the parties")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The page index", example = "0")
@@ -1368,14 +1362,10 @@ public interface PartyApiController {
       @Parameter(name = "filter", description = "The filter to apply to the persons")
           @RequestParam(value = "filter", required = false)
           String filter,
-      @Parameter(
-              name = "sortBy",
-              description = "The method used to sort the persons e.g. by name")
+      @Parameter(name = "sortBy", description = "The method used to sort the persons e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           PersonSortBy sortBy,
-      @Parameter(
-              name = "sortDirection",
-              description = "The sort direction to apply to the persons")
+      @Parameter(name = "sortDirection", description = "The sort direction to apply to the persons")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The page index", example = "0")

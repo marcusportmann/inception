@@ -46,7 +46,8 @@ public class ReportingApiConfiguration {
         .packagesToScan("digital.inception.reporting")
         .addOpenApiCustomizer(
             openApi ->
-                openApi.info(new Info().title("Reporting API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
+                openApi.info(
+                    new Info().title("Reporting API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

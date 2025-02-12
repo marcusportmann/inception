@@ -29,7 +29,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @WritingConverter
-public class WorkflowDocumentStatusToStringConverter implements Converter<WorkflowDocumentStatus, String> {
+public class WorkflowDocumentStatusToStringConverter
+    implements Converter<WorkflowDocumentStatus, String> {
 
   /** Constructs a new <b>WorkflowDocumentStatusToStringConverter</b>. */
   public WorkflowDocumentStatusToStringConverter() {}

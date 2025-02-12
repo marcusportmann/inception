@@ -20,6 +20,9 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
+import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.DuplicateWorkflowDefinitionException;
+import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
@@ -27,9 +30,6 @@ import digital.inception.operations.model.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.model.WorkflowDefinitionVersionNotFoundException;
 import digital.inception.operations.model.WorkflowNotFoundException;
 import digital.inception.operations.model.WorkflowStatus;
-import digital.inception.operations.model.CreateWorkflowRequest;
-import digital.inception.operations.model.DuplicateWorkflowDefinitionException;
-import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.persistence.WorkflowDefinitionRepository;
 import digital.inception.operations.store.WorkflowStore;
 import jakarta.validation.ConstraintViolation;
@@ -38,8 +38,6 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -52,14 +50,14 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class WorkflowServiceImpl implements WorkflowService {
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /** The Workflow Definition Repository. */
   private final WorkflowDefinitionRepository workflowDefinitionRepository;
 
   /** The Workflow Store. */
   private final WorkflowStore workflowStore;
-
-  /** The JSR-303 validator. */
-  private final Validator validator;
 
   /**
    * Constructs a new <b>WorkflowServiceImpl</b>.
@@ -118,6 +116,29 @@ public class WorkflowServiceImpl implements WorkflowService {
   }
 
   @Override
+  public void createCaseDefinition(WorkflowDefinition caseDefinition)
+      throws InvalidArgumentException,
+      DuplicateWorkflowDefinitionException,
+          ServiceUnavailableException {
+    validateCaseDefinition(caseDefinition);
+
+    try {
+      if (caseDefinitionRepository.existsById(caseDefinition.getId())) {
+        throw new DuplicateWorkflowDefinitionException(caseDefinition.getId());
+      }
+
+      caseDefinition.setVersion(1);
+
+      caseDefinitionRepository.saveAndFlush(caseDefinition);
+    } catch (DuplicateWorkflowDefinitionException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the case definition (" + caseDefinition.getId() + ")", e);
+    }
+  }
+
+  @Override
   public Workflow createWorkflow(CreateWorkflowRequest createWorkflowRequest, String createdBy)
       throws InvalidArgumentException,
       WorkflowDefinitionNotFoundException,
@@ -150,29 +171,6 @@ public class WorkflowServiceImpl implements WorkflowService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to create the case (" + createCaseRequest.getDefinitionId() + ")", e);
-    }
-  }
-
-  @Override
-  public void createCaseDefinition(WorkflowDefinition caseDefinition)
-      throws InvalidArgumentException,
-      DuplicateWorkflowDefinitionException,
-          ServiceUnavailableException {
-    validateCaseDefinition(caseDefinition);
-
-    try {
-      if (caseDefinitionRepository.existsById(caseDefinition.getId())) {
-        throw new DuplicateWorkflowDefinitionException(caseDefinition.getId());
-      }
-
-      caseDefinition.setVersion(1);
-
-      caseDefinitionRepository.saveAndFlush(caseDefinition);
-    } catch (DuplicateWorkflowDefinitionException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the case definition (" + caseDefinition.getId() + ")", e);
     }
   }
 

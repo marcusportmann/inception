@@ -1654,8 +1654,7 @@ public class PartyReferenceServiceTests {
     assertTrue(
         partyReferenceService.isValidQualificationType(
             PartyReferenceService.DEFAULT_TENANT_ID, "doctoral_degree"));
-    assertTrue(
-        partyReferenceService.isValidRace(PartyReferenceService.DEFAULT_TENANT_ID, "white"));
+    assertTrue(partyReferenceService.isValidRace(PartyReferenceService.DEFAULT_TENANT_ID, "white"));
     assertTrue(
         partyReferenceService.isValidResidencePermitType(
             PartyReferenceService.DEFAULT_TENANT_ID, "za_general_work_visa"));

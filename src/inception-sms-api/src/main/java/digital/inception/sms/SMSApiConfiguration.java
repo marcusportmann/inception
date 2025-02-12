@@ -46,7 +46,8 @@ public class SMSApiConfiguration {
             .packagesToScan("digital.inception.sms")
             .addOpenApiCustomizer(
                 openApi ->
-                    openApi.info(new Info().title("SMS API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
+                    openApi.info(
+                        new Info().title("SMS API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
             .build();
     return build;
   }

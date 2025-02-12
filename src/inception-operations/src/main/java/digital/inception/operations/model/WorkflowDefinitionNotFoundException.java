@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>WorkflowDefinitionNotFoundException</b> exception is thrown to indicate an error condition as
- * a result of a workflow definition that could not be found.
+ * The <b>WorkflowDefinitionNotFoundException</b> exception is thrown to indicate an error condition
+ * as a result of a workflow definition that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

@@ -51,7 +51,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>LDAPUserDirectoryProvider</b> class provides the LDAP user directory provider implementation.
+ * The <b>LDAPUserDirectoryProvider</b> class provides the LDAP user directory provider
+ * implementation.
  *
  * @author Marcus Portmann
  */
@@ -1221,8 +1222,9 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
       String searchFilter;
       if (StringUtils.hasText(groupNamePrefixFilter)) {
-        searchFilter = "(&(objectClass=%s)(%s=%s*))".formatted(
-            groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
+        searchFilter =
+            "(&(objectClass=%s)(%s=%s*))"
+                .formatted(groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
       } else {
         searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
       }
@@ -1321,8 +1323,9 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
       String searchFilter;
       if (StringUtils.hasText(groupNamePrefixFilter)) {
-        searchFilter = "(&(objectClass=%s)(%s=%s*))".formatted(
-            groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
+        searchFilter =
+            "(&(objectClass=%s)(%s=%s*))"
+                .formatted(groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
       } else {
         searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
       }
@@ -1372,14 +1375,21 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
       String searchFilter;
       if (StringUtils.hasText(filter) && StringUtils.hasText(groupNamePrefixFilter)) {
-        searchFilter = "(&(objectClass=%s)(%s=%s*)(%s=*%s*))".formatted(
-            groupObjectClass, groupNameAttribute, groupNamePrefixFilter, groupNameAttribute, filter);
+        searchFilter =
+            "(&(objectClass=%s)(%s=%s*)(%s=*%s*))"
+                .formatted(
+                    groupObjectClass,
+                    groupNameAttribute,
+                    groupNamePrefixFilter,
+                    groupNameAttribute,
+                    filter);
       } else if (StringUtils.hasText(filter)) {
-        searchFilter = "(&(objectClass=%s)(%s=*%s*))".formatted(
-            groupObjectClass, groupNameAttribute, filter);
+        searchFilter =
+            "(&(objectClass=%s)(%s=*%s*))".formatted(groupObjectClass, groupNameAttribute, filter);
       } else if (StringUtils.hasText(groupNamePrefixFilter)) {
-        searchFilter = "(&(objectClass=%s)(%s=%s*))".formatted(
-            groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
+        searchFilter =
+            "(&(objectClass=%s)(%s=%s*))"
+                .formatted(groupObjectClass, groupNameAttribute, groupNamePrefixFilter);
       } else {
         searchFilter = "(objectClass=%s)".formatted(groupObjectClass);
       }

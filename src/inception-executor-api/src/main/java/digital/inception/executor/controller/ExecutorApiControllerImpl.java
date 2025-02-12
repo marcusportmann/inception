@@ -48,8 +48,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused"})
-public class ExecutorApiControllerImpl extends SecureApiController implements
-    ExecutorApiController {
+public class ExecutorApiControllerImpl extends SecureApiController
+    implements ExecutorApiController {
 
   /** The Executor Service. */
   private final ExecutorService executorService;

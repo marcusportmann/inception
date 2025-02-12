@@ -1,15 +1,14 @@
 
 package digital.inception.core.ws.client;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
-
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>Java class for InvalidArgumentError complex type.
@@ -70,23 +69,23 @@ public class InvalidArgumentError
         return parameter;
     }
 
-    /**
-     * Sets the value of the parameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setParameter(String value) {
-        this.parameter = value;
-    }
-
     public List<ValidationError> getValidationErrors() {
         if (validationErrors == null) {
             validationErrors = new ArrayList<ValidationError>();
         }
         return validationErrors;
+    }
+
+    /**
+     * Sets the value of the parameter property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setParameter(String value) {
+        this.parameter = value;
     }
 
     public void setValidationErrors(List<ValidationError> validationErrors) {

@@ -141,8 +141,7 @@ public class TaskType implements Serializable {
 
   /** The event types that should be tracked for tasks of this type. */
   @Schema(
-      description =
-          "The event types that should be tracked for tasks of this type with task data")
+      description = "The event types that should be tracked for tasks of this type with task data")
   @JsonProperty
   @XmlElementWrapper(name = "EventTypesWithTaskData")
   @XmlElement(name = "EventTypeWithTaskData")
@@ -151,8 +150,8 @@ public class TaskType implements Serializable {
   private List<TaskEventType> eventTypesWithTaskData;
 
   /**
-   * The amount of time in milliseconds after which a locked and executing task of this
-   * type will be considered hung and will be reset.
+   * The amount of time in milliseconds after which a locked and executing task of this type will be
+   * considered hung and will be reset.
    */
   @Schema(
       description =
@@ -491,11 +490,11 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Returns the amount of time in milliseconds after which a locked and executing task of
-   * this type will be considered hung and will be reset.
+   * Returns the amount of time in milliseconds after which a locked and executing task of this type
+   * will be considered hung and will be reset.
    *
-   * @return the amount of time in milliseconds after which a locked and executing task of
-   *     this type will be considered hung and will be reset
+   * @return the amount of time in milliseconds after which a locked and executing task of this type
+   *     will be considered hung and will be reset
    */
   public Integer getExecutionTimeout() {
     return executionTimeout;
@@ -643,11 +642,11 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the amount of time in milliseconds after which a locked and executing task of this
-   * type will be considered hung and will be reset.
+   * Set the amount of time in milliseconds after which a locked and executing task of this type
+   * will be considered hung and will be reset.
    *
-   * @param executionTimeout the amount of time in milliseconds after which a locked and
-   *     executing task of this type will be considered hung and will be reset
+   * @param executionTimeout the amount of time in milliseconds after which a locked and executing
+   *     task of this type will be considered hung and will be reset
    */
   public void setExecutionTimeout(Integer executionTimeout) {
     this.executionTimeout = executionTimeout;

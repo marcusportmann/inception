@@ -32,8 +32,7 @@ import java.io.Serial;
  * @author Marcus Portmann
  */
 @Problem(
-    type =
-        "https://inception.digital/problems/operations/whatsapp-interaction-source-not-found",
+    type = "https://inception.digital/problems/operations/whatsapp-interaction-source-not-found",
     title = "The WhatsApp interaction source could not be found.",
     status = 404)
 @WebFault(

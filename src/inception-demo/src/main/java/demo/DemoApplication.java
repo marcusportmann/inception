@@ -100,8 +100,7 @@ public class DemoApplication extends Application {
   @PostConstruct
   public void init() {
     try {
-      byte[] demoReportDefinitionData =
-          ResourceUtil.getClasspathResource("demo/DemoReport.jasper");
+      byte[] demoReportDefinitionData = ResourceUtil.getClasspathResource("demo/DemoReport.jasper");
 
       ReportDefinition demoReportDefinition =
           new ReportDefinition(
@@ -133,11 +132,7 @@ public class DemoApplication extends Application {
       if (!executorService.taskTypeExists("demo_task")) {
         TaskType demoTaskType =
             new TaskType(
-                "demo_task",
-                "Demo Task",
-                TaskPriority.NORMAL,
-                "demo.task.DemoTaskExecutor",
-                3);
+                "demo_task", "Demo Task", TaskPriority.NORMAL, "demo.task.DemoTaskExecutor", 3);
 
         demoTaskType.setEventTypesWithTaskData(
             List.of(

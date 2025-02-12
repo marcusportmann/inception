@@ -21,7 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>WorkflowDefinitionId</b> class implements the ID class for the <b>WorkflowDefinition</b> class.
+ * The <b>WorkflowDefinitionId</b> class implements the ID class for the <b>WorkflowDefinition</b>
+ * class.
  *
  * @author Marcus Portmann
  */

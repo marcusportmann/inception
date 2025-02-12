@@ -33,8 +33,7 @@ import java.io.Serial;
  * @author Marcus Portmann
  */
 @Problem(
-    type =
-        "https://inception.digital/problems/operations/duplicate-mailbox-interaction-source",
+    type = "https://inception.digital/problems/operations/duplicate-mailbox-interaction-source",
     title = "A mailbox interaction source with the specified ID already exists.",
     status = 409)
 @WebFault(

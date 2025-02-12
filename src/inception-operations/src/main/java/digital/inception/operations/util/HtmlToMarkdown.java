@@ -299,19 +299,17 @@ public final class HtmlToMarkdown {
 
     StringBuilder markdown = new StringBuilder();
 
-//    int lineCount = 1;
-//    for (MarkdownLine markdownLine : markdownLines) {
-//      markdown.append(
-//          String.format(
-//              "%04d: %s  %s", lineCount, markdownLine.getContent(), System.lineSeparator()));
-//      lineCount++;
-//    }
+    //    int lineCount = 1;
+    //    for (MarkdownLine markdownLine : markdownLines) {
+    //      markdown.append(
+    //          String.format(
+    //              "%04d: %s  %s", lineCount, markdownLine.getContent(), System.lineSeparator()));
+    //      lineCount++;
+    //    }
 
     int lineCount = 1;
     for (MarkdownLine markdownLine : markdownLines) {
-      markdown.append(
-          String.format(
-              "%s  %s", markdownLine.getContent(), System.lineSeparator()));
+      markdown.append(String.format("%s  %s", markdownLine.getContent(), System.lineSeparator()));
       lineCount++;
     }
 
@@ -352,6 +350,7 @@ public final class HtmlToMarkdown {
 
     /**
      * Returns whether the markdown line ends with the specified suffix.
+     *
      * @param suffix the suffix
      * @return <b>true</b> if the markdown line ends with the specified suffix <b></b>
      */

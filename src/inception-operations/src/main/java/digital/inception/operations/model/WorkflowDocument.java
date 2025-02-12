@@ -41,7 +41,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>WorkflowDocument</b> class holds the information for an association of a document with a workflow.
+ * The <b>WorkflowDocument</b> class holds the information for an association of a document with a
+ * workflow.
  *
  * @author Marcus Portmann
  */
@@ -84,14 +85,6 @@ public class WorkflowDocument implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the workflow. */
-  @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "WorkflowId", required = true)
-  @NotNull
-  @Column(name = "workflow_id", nullable = false)
-  private UUID workflowId;
-
   /** The ID for the document definition the workflow document is associated with. */
   @Schema(
       description = "The ID for the document definition the workflow document is associated with",
@@ -111,7 +104,9 @@ public class WorkflowDocument implements Serializable {
   private UUID documentId;
 
   /** The ID for the workflow document. */
-  @Schema(description = "The ID for the workflow document", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(
+      description = "The ID for the workflow document",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -186,6 +181,14 @@ public class WorkflowDocument implements Serializable {
   @Column(name = "verified_by", length = 100)
   private String verifiedBy;
 
+  /** The ID for the workflow. */
+  @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "WorkflowId", required = true)
+  @NotNull
+  @Column(name = "workflow_id", nullable = false)
+  private UUID workflowId;
+
   /** Constructs a new <b>WorkflowDocument</b>. */
   public WorkflowDocument() {}
 
@@ -194,8 +197,8 @@ public class WorkflowDocument implements Serializable {
    *
    * @param id the ID for the workflow document
    * @param workflowId the ID for the workflow
-   * @param documentDefinitionId the ID for the document definition the workflow document is associated
-   *     with
+   * @param documentDefinitionId the ID for the document definition the workflow document is
+   *     associated with
    * @param documentId ID for the document
    * @param status the status of the workflow document
    * @param requested the date and time the workflow document was requested
@@ -229,11 +232,12 @@ public class WorkflowDocument implements Serializable {
    *
    * @param id the ID for the workflow document
    * @param workflowId the ID for the workflow
-   * @param documentDefinitionId the ID for the document definition the workflow document is associated
-   *     with
+   * @param documentDefinitionId the ID for the document definition the workflow document is
+   *     associated with
    * @param requestedBy the person or system that requested the workflow document
    */
-  public WorkflowDocument(UUID id, UUID workflowId, String documentDefinitionId, String requestedBy) {
+  public WorkflowDocument(
+      UUID id, UUID workflowId, String documentDefinitionId, String requestedBy) {
     this.id = id;
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
@@ -264,16 +268,8 @@ public class WorkflowDocument implements Serializable {
 
     WorkflowDocument other = (WorkflowDocument) object;
 
-    return Objects.equals(workflowId, other.workflowId) && Objects.equals(documentId, other.documentId);
-  }
-
-  /**
-   * Returns the ID for the workflow.
-   *
-   * @return the ID for the workflow
-   */
-  public UUID getWorkflowId() {
-    return workflowId;
+    return Objects.equals(workflowId, other.workflowId)
+        && Objects.equals(documentId, other.documentId);
   }
 
   /**
@@ -367,19 +363,19 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Returns the ID for the workflow.
    *
-   * @param workflowId the ID for the workflow
+   * @return the ID for the workflow
    */
-  public void setWorkflowId(UUID workflowId) {
-    this.workflowId = workflowId;
+  public UUID getWorkflowId() {
+    return workflowId;
   }
 
   /**
    * Set the ID for the document definition the workflow document is associated with.
    *
-   * @param documentDefinitionId the ID for the document definition the workflow document is associated
-   *     with
+   * @param documentDefinitionId the ID for the document definition the workflow document is
+   *     associated with
    */
   public void setDocumentDefinitionId(String documentDefinitionId) {
     this.documentDefinitionId = documentDefinitionId;
@@ -464,5 +460,14 @@ public class WorkflowDocument implements Serializable {
    */
   public void setVerifiedBy(String verifiedBy) {
     this.verifiedBy = verifiedBy;
+  }
+
+  /**
+   * Set the ID for the workflow.
+   *
+   * @param workflowId the ID for the workflow
+   */
+  public void setWorkflowId(UUID workflowId) {
+    this.workflowId = workflowId;
   }
 }

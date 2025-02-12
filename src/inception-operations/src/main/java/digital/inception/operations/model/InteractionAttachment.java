@@ -253,7 +253,8 @@ public class InteractionAttachment implements Serializable {
   /**
    * Set the ID for the interaction that the interaction attachment is associated with.
    *
-   * @param interactionId the ID for the interaction that the interaction attachment is associated with
+   * @param interactionId the ID for the interaction that the interaction attachment is associated
+   *     with
    */
   public void setInteractionId(UUID interactionId) {
     this.interactionId = interactionId;

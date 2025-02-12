@@ -213,7 +213,13 @@ public class Workflow implements Serializable {
    * @param data the data for the workflow
    * @param createdBy the person or system that created the workflow
    */
-  public Workflow(UUID id, String definitionId, int definitionVersion, WorkflowStatus status, String data, String createdBy) {
+  public Workflow(
+      UUID id,
+      String definitionId,
+      int definitionVersion,
+      WorkflowStatus status,
+      String data,
+      String createdBy) {
     this.id = id;
     this.definitionId = definitionId;
     this.definitionVersion = definitionVersion;

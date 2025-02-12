@@ -630,8 +630,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -727,8 +726,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -810,8 +808,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -926,8 +923,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -986,8 +982,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -1028,8 +1023,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -1119,12 +1113,7 @@ public class PartyServiceTests {
 
     Persons filteredPersons =
         partyService.getPersons(
-            PartyService.DEFAULT_TENANT_ID,
-            "",
-            PersonSortBy.NAME,
-            SortDirection.ASCENDING,
-            0,
-            100);
+            PartyService.DEFAULT_TENANT_ID, "", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
@@ -1160,8 +1149,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2367,8 +2355,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2416,8 +2403,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2602,8 +2588,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -2874,12 +2859,7 @@ public class PartyServiceTests {
 
     Persons filteredPersons =
         partyService.getPersons(
-            PartyService.DEFAULT_TENANT_ID,
-            "",
-            PersonSortBy.NAME,
-            SortDirection.ASCENDING,
-            0,
-            100);
+            PartyService.DEFAULT_TENANT_ID, "", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
@@ -2901,12 +2881,7 @@ public class PartyServiceTests {
 
     filteredPersons =
         partyService.getPersons(
-            PartyService.DEFAULT_TENANT_ID,
-            "",
-            PersonSortBy.NAME,
-            SortDirection.ASCENDING,
-            0,
-            100);
+            PartyService.DEFAULT_TENANT_ID, "", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
@@ -3026,12 +3001,7 @@ public class PartyServiceTests {
 
     filteredPersons =
         partyService.getPersons(
-            PartyService.DEFAULT_TENANT_ID,
-            "",
-            PersonSortBy.NAME,
-            SortDirection.ASCENDING,
-            0,
-            100);
+            PartyService.DEFAULT_TENANT_ID, "", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
@@ -3056,8 +3026,7 @@ public class PartyServiceTests {
 
     comparePersons(person, filteredPersons.getPersons().getFirst());
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3101,8 +3070,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3291,8 +3259,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3309,8 +3276,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3390,8 +3356,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3500,8 +3465,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3591,8 +3555,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3633,8 +3596,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3675,8 +3637,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 
@@ -3755,8 +3716,7 @@ public class PartyServiceTests {
 
     partyService.createPerson(PartyService.DEFAULT_TENANT_ID, person);
 
-    Person retrievedPerson =
-        partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
+    Person retrievedPerson = partyService.getPerson(PartyService.DEFAULT_TENANT_ID, person.getId());
 
     comparePersons(person, retrievedPerson);
 

@@ -1556,9 +1556,7 @@ public interface SecurityApiController {
       @Parameter(name = "filter", description = "The filter to apply to the groups")
           @RequestParam(value = "filter", required = false)
           String filter,
-      @Parameter(
-              name = "sortDirection",
-              description = "The sort direction to apply to the groups")
+      @Parameter(name = "sortDirection", description = "The sort direction to apply to the groups")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The page index", example = "0")
@@ -1843,9 +1841,7 @@ public interface SecurityApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.PolicyAdministration')")
   PolicySummaries getPolicySummaries(
-      @Parameter(
-              name = "filter",
-              description = "The filter to apply to the policy summaries")
+      @Parameter(name = "filter", description = "The filter to apply to the policy summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
@@ -2232,9 +2228,7 @@ public interface SecurityApiController {
       @Parameter(name = "filter", description = "The filter to apply to the tenants")
           @RequestParam(value = "filter", required = false)
           String filter,
-      @Parameter(
-              name = "sortDirection",
-              description = "The sort direction to apply to the tenants")
+      @Parameter(name = "sortDirection", description = "The sort direction to apply to the tenants")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The page index", example = "0")
@@ -2467,14 +2461,10 @@ public interface SecurityApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
   TokenSummaries getTokenSummaries(
-      @Parameter(
-              name = "status",
-              description = "The status filter to apply to the token summaries")
+      @Parameter(name = "status", description = "The status filter to apply to the token summaries")
           @RequestParam(value = "status", required = false)
           TokenStatus status,
-      @Parameter(
-              name = "filter",
-              description = "The filter to apply to the token summaries")
+      @Parameter(name = "filter", description = "The filter to apply to the token summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
@@ -2643,9 +2633,7 @@ public interface SecurityApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
   UserDirectories getUserDirectories(
-      @Parameter(
-              name = "filter",
-              description = "The filter to apply to the user directories")
+      @Parameter(name = "filter", description = "The filter to apply to the user directories")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
@@ -2949,9 +2937,7 @@ public interface SecurityApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.UserDirectoryAdministration')")
   UserDirectorySummaries getUserDirectorySummaries(
-      @Parameter(
-              name = "filter",
-              description = "The filter to apply to the user directories")
+      @Parameter(name = "filter", description = "The filter to apply to the user directories")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
@@ -3263,14 +3249,10 @@ public interface SecurityApiController {
       @Parameter(name = "filter", description = "The filter to apply to the users")
           @RequestParam(value = "filter", required = false)
           String filter,
-      @Parameter(
-              name = "sortBy",
-              description = "The method used to sort the users e.g. by name")
+      @Parameter(name = "sortBy", description = "The method used to sort the users e.g. by name")
           @RequestParam(value = "sortBy", required = false)
           UserSortBy sortBy,
-      @Parameter(
-              name = "sortDirection",
-              description = "The sort direction to apply to the users")
+      @Parameter(name = "sortDirection", description = "The sort direction to apply to the users")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The page index", example = "0")

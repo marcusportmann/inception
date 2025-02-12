@@ -24,7 +24,8 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>WorkflowDocumentStatus</b> enumeration defines the possible statuses for a workflow document.
+ * The <b>WorkflowDocumentStatus</b> enumeration defines the possible statuses for a workflow
+ * document.
  *
  * @author Marcus Portmann
  */

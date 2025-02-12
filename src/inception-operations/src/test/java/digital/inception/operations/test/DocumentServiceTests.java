@@ -18,17 +18,14 @@ package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.operations.OperationsConfiguration;
+import digital.inception.operations.model.DocumentDefinition;
+import digital.inception.operations.model.DocumentDefinitionNotFoundException;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.test.InceptionExtension;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import digital.inception.test.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +36,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import digital.inception.operations.OperationsConfiguration;
-import digital.inception.operations.model.Workflow;
-import digital.inception.operations.model.WorkflowDefinition;
-import digital.inception.operations.model.WorkflowDefinitionNotFoundException;
-import digital.inception.operations.model.WorkflowStatus;
-import digital.inception.operations.model.CreateWorkflowRequest;
-import digital.inception.operations.model.DocumentDefinition;
-import digital.inception.operations.model.DocumentDefinitionNotFoundException;
-import digital.inception.operations.model.UpdateWorkflowRequest;
-import digital.inception.operations.service.WorkflowService;
-import digital.inception.core.util.ResourceUtil;
-import digital.inception.core.validation.ValidationSchemaType;
-import digital.inception.test.TestConfiguration;
 
 /**
  * The <b>DocumentServiceTests</b> class contains the JUnit tests for the <b>DocumentService</b> class.

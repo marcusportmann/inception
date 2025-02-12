@@ -26,9 +26,7 @@
       @jakarta.xml.bind.annotation.XmlNs(
           prefix = "core",
           namespaceURI = "https://inception.digital/core"),
-      @jakarta.xml.bind.annotation.XmlNs(
-          prefix = "demo",
-          namespaceURI = "https://demo"),
+      @jakarta.xml.bind.annotation.XmlNs(prefix = "demo", namespaceURI = "https://demo"),
     })
 @jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapters({
   @jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter(

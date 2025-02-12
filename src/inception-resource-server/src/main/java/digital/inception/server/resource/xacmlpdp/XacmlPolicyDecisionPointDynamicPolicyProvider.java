@@ -83,7 +83,8 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
     implements CloseablePolicyProvider<TopLevelPolicyElementEvaluator> {
 
   /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(XacmlPolicyDecisionPointDynamicPolicyProvider.class);
+  private static final Logger log =
+      LoggerFactory.getLogger(XacmlPolicyDecisionPointDynamicPolicyProvider.class);
 
   /** Should policy sets and policies be loaded from the classpath under pdp/policies? */
   private final Boolean classpathPoliciesEnabled;

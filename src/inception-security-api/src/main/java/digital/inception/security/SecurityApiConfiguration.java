@@ -46,7 +46,8 @@ public class SecurityApiConfiguration {
         .packagesToScan("digital.inception.security")
         .addOpenApiCustomizer(
             openApi ->
-                openApi.info(new Info().title("Security API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
+                openApi.info(
+                    new Info().title("Security API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

@@ -22,8 +22,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>WorkflowSummaryRepository</b> interface declares the persistence for the <b>WorkflowSummary</b>
- * domain type.
+ * The <b>WorkflowSummaryRepository</b> interface declares the persistence for the
+ * <b>WorkflowSummary</b> domain type.
  *
  * @author Marcus Portmann
  */

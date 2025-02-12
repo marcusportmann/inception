@@ -326,8 +326,8 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
-  public InteractionAttachment updateInteractionAttachment(UUID tenantId,
-      InteractionAttachment interactionAttachment)
+  public InteractionAttachment updateInteractionAttachment(
+      UUID tenantId, InteractionAttachment interactionAttachment)
       throws InteractionAttachmentNotFoundException, ServiceUnavailableException {
     try {
       if (!interactionAttachmentRepository.existsById(interactionAttachment.getId())) {

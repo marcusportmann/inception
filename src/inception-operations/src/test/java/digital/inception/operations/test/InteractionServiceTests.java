@@ -37,6 +37,8 @@ import digital.inception.operations.model.WhatsAppInteractionSource;
 import digital.inception.operations.model.WhatsAppInteractionSourceNotFoundException;
 import digital.inception.operations.service.InteractionService;
 import digital.inception.operations.util.MessageUtil;
+import digital.inception.test.InceptionExtension;
+import digital.inception.test.TestConfiguration;
 import jakarta.activation.DataHandler;
 import jakarta.mail.BodyPart;
 import jakarta.mail.Folder;
@@ -65,8 +67,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import digital.inception.test.InceptionExtension;
-import digital.inception.test.TestConfiguration;
 
 /**
  * The <b>InteractionServiceTests</b> class contains the JUnit tests for the <b>InteractionService<b> class.

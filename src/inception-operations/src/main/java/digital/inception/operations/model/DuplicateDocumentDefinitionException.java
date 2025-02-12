@@ -33,8 +33,7 @@ import java.io.Serial;
  * @author Marcus Portmann
  */
 @Problem(
-    type =
-        "https://inception.digital/problems/operations/duplicate-document-definition",
+    type = "https://inception.digital/problems/operations/duplicate-document-definition",
     title = "A document definition with the specified ID already exists.",
     status = 409)
 @WebFault(

@@ -52,6 +52,7 @@ public class CreateDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
+ADD DOCUMENT
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -60,8 +61,6 @@ public class CreateDocumentRequest implements Serializable {
   @NotNull
   @Size(min = 1, max = 41943040)
   private byte[] data;
-
-
 
   /** The ID for the document definition the document is associated with. */
   @Schema(
@@ -72,9 +71,6 @@ public class CreateDocumentRequest implements Serializable {
   @NotNull
   @Size(min = 1, max = 50)
   private String definitionId;
-
-
-
 
   /** The expiry date for the document. */
   @Schema(description = "The ISO 8601 format expiry date for the document")
@@ -102,11 +98,7 @@ public class CreateDocumentRequest implements Serializable {
   @XmlElement(name = "FileType", required = true)
   @NotNull
   @Column(name = "file_type", nullable = false)
-  private FileType fileType;
-
-
-
-  ADD DOCUMENT ATTRIBUTES
+  private FileType fileType; ATTRIBUTES
 
 
 

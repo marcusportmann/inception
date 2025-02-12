@@ -24,7 +24,8 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>WorkflowSortBy</b> enumeration defines the possible methods used to sort a list of workflows.
+ * The <b>WorkflowSortBy</b> enumeration defines the possible methods used to sort a list of
+ * workflows.
  *
  * @author Marcus Portmann
  */
@@ -82,9 +83,11 @@ public enum WorkflowSortBy {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of workflows enumeration value.
+   * Returns the string representation of the method used to sort a list of workflows enumeration
+   * value.
    *
-   * @return the string representation of the method used to sort a list of workflows enumeration value
+   * @return the string representation of the method used to sort a list of workflows enumeration
+   *     value
    */
   public String toString() {
     return description;

@@ -135,8 +135,7 @@ public class SecurityServiceTests {
   private static int userDirectoryCount;
 
   /** The Security Service. */
-  @Autowired
-  SecurityService securityService;
+  @Autowired SecurityService securityService;
 
   @Autowired
   @Qualifier("applicationDataSource")
@@ -1210,7 +1209,8 @@ public class SecurityServiceTests {
 
     List<String> retrievedRoleCodes =
         securityService.getRoleCodesForUser(
-            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, SecurityServiceImpl.ADMINISTRATOR_USERNAME);
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID,
+            SecurityServiceImpl.ADMINISTRATOR_USERNAME);
 
     assertEquals(
         1, retrievedRoleCodes.size(), "The correct number of role codes was not retrieved");
@@ -1222,7 +1222,8 @@ public class SecurityServiceTests {
 
     List<GroupRole> retrievedGroupRoles =
         securityService.getRolesForGroup(
-            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, SecurityServiceImpl.ADMINISTRATORS_GROUP_NAME);
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID,
+            SecurityServiceImpl.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(
         1, retrievedGroupRoles.size(), "The correct number of group roles was not retrieved");
@@ -1234,7 +1235,8 @@ public class SecurityServiceTests {
 
     retrievedRoleCodes =
         securityService.getRoleCodesForGroup(
-            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID, SecurityServiceImpl.ADMINISTRATORS_GROUP_NAME);
+            SecurityServiceImpl.DEFAULT_USER_DIRECTORY_ID,
+            SecurityServiceImpl.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(
         1, retrievedRoleCodes.size(), "The correct number of role codes was not retrieved");

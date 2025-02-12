@@ -107,7 +107,8 @@ public abstract class AbstractApiControllerBase {
         }
       }
     } catch (ClassNotFoundException e) {
-      log.warn("The InceptionDateTimeModule class was not found on the classpath and could not be registered with the Jackson Object Mapper");
+      log.warn(
+          "The InceptionDateTimeModule class was not found on the classpath and could not be registered with the Jackson Object Mapper");
     } catch (Exception e) {
       throw new BeanCreationException(
           "Failed to dynamically register the InceptionDateTimeModule module with the Jackson Object Mapper",
@@ -156,7 +157,8 @@ public abstract class AbstractApiControllerBase {
   /**
    * Returns whether debugging is enabled for the Inception Framework.
    *
-   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b> otherwise
+   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b>
+   *     otherwise
    */
   protected boolean inDebugMode() {
     return inDebugMode;

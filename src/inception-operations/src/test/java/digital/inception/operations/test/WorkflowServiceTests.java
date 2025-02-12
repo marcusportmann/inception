@@ -72,12 +72,6 @@ import digital.inception.test.TestConfiguration;
 public class WorkflowServiceTests {
 
   /**
-   * The Workflow Service.
-   */
-  @Autowired private
-  WorkflowService workflowService;
-
-  /**
    * The Document Service.
    */
   @Autowired private
@@ -90,49 +84,10 @@ public class WorkflowServiceTests {
   private ObjectMapper objectMapper;
 
   /**
-   * Test the workflow definition functionality.
+   * The Workflow Service.
    */
-  @Test
-  public void workflowDefinitionTest() throws Exception {
-    DocumentDefinition documentDefinition = new DocumentDefinition("test_document_definition_" + System.currentTimeMillis(), "Test Document Definition");
-
-    documentService.createDocumentDefinition(documentDefinition);
-
-    DocumentDefinition retrievedDocumentDefinition = documentService.getDocumentDefinition(documentDefinition.getId());
-
-    compareDocumentDefinitions(documentDefinition, retrievedDocumentDefinition);
-
-    WorkflowDefinition workflowDefinition = new WorkflowDefinition("test_json_workflow_definition_" + System.currentTimeMillis(), 1, "Test JSON Workflow Definition",
-        ValidationSchemaType.JSON, ResourceUtil.getStringClasspathResource("TestData.schema.json"));
-
-    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true);
-
-    workflowService.createWorkflowDefinition(workflowDefinition);
-
-    WorkflowDefinition retrievedWorkflowDefinition = workflowService.getWorkflowDefinition(workflowDefinition.getId());
-
-    compareWorkflowDefinitions(workflowDefinition, retrievedWorkflowDefinition);
-
-    WorkflowDefinition updatedWorkflowDefinition = workflowService.updateWorkflowDefinition(workflowDefinition);
-
-    retrievedWorkflowDefinition = workflowService.getWorkflowDefinition(workflowDefinition.getId());
-
-    assertEquals(2, retrievedWorkflowDefinition.getVersion());
-
-    workflowService.deleteWorkflowDefinition(workflowDefinition.getId());
-
-    WorkflowDefinitionNotFoundException workflowDefinitionNotFoundException = assertThrows(
-        WorkflowDefinitionNotFoundException.class, () -> {
-      workflowService.getWorkflowDefinition(workflowDefinition.getId());
-    });
-
-    documentService.deleteDocumentDefinition(documentDefinition.getId());
-
-    DocumentDefinitionNotFoundException documentDefinitionNotFoundException = assertThrows(
-        DocumentDefinitionNotFoundException.class, () -> {
-      workflowService.documentService(documentDefinition.getId());
-    });
-  }
+  @Autowired private
+  WorkflowService workflowService;
 
   /**
    * Test the JSON workflow functionality.
@@ -179,6 +134,51 @@ public class WorkflowServiceTests {
 
     int xxx = 0;
     xxx++;
+  }
+
+  /**
+   * Test the workflow definition functionality.
+   */
+  @Test
+  public void workflowDefinitionTest() throws Exception {
+    DocumentDefinition documentDefinition = new DocumentDefinition("test_document_definition_" + System.currentTimeMillis(), "Test Document Definition");
+
+    documentService.createDocumentDefinition(documentDefinition);
+
+    DocumentDefinition retrievedDocumentDefinition = documentService.getDocumentDefinition(documentDefinition.getId());
+
+    compareDocumentDefinitions(documentDefinition, retrievedDocumentDefinition);
+
+    WorkflowDefinition workflowDefinition = new WorkflowDefinition("test_json_workflow_definition_" + System.currentTimeMillis(), 1, "Test JSON Workflow Definition",
+        ValidationSchemaType.JSON, ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+
+    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true);
+
+    workflowService.createWorkflowDefinition(workflowDefinition);
+
+    WorkflowDefinition retrievedWorkflowDefinition = workflowService.getWorkflowDefinition(workflowDefinition.getId());
+
+    compareWorkflowDefinitions(workflowDefinition, retrievedWorkflowDefinition);
+
+    WorkflowDefinition updatedWorkflowDefinition = workflowService.updateWorkflowDefinition(workflowDefinition);
+
+    retrievedWorkflowDefinition = workflowService.getWorkflowDefinition(workflowDefinition.getId());
+
+    assertEquals(2, retrievedWorkflowDefinition.getVersion());
+
+    workflowService.deleteWorkflowDefinition(workflowDefinition.getId());
+
+    WorkflowDefinitionNotFoundException workflowDefinitionNotFoundException = assertThrows(
+        WorkflowDefinitionNotFoundException.class, () -> {
+      workflowService.getWorkflowDefinition(workflowDefinition.getId());
+    });
+
+    documentService.deleteDocumentDefinition(documentDefinition.getId());
+
+    DocumentDefinitionNotFoundException documentDefinitionNotFoundException = assertThrows(
+        DocumentDefinitionNotFoundException.class, () -> {
+      workflowService.documentService(documentDefinition.getId());
+    });
   }
 
   private void compareWorkflowDefinitions(

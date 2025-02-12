@@ -16,7 +16,6 @@
 
 package digital.inception.codes.controller;
 
-import digital.inception.core.api.ApiUtil;
 import digital.inception.api.SecureApiController;
 import digital.inception.codes.model.Code;
 import digital.inception.codes.model.CodeCategory;
@@ -26,6 +25,7 @@ import digital.inception.codes.model.CodeNotFoundException;
 import digital.inception.codes.model.DuplicateCodeCategoryException;
 import digital.inception.codes.model.DuplicateCodeException;
 import digital.inception.codes.service.CodesService;
+import digital.inception.core.api.ApiUtil;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.time.OffsetDateTime;

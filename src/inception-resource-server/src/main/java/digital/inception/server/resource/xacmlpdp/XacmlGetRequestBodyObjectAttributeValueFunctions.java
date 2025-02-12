@@ -74,9 +74,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
    */
   private static final Map<String, Object> parsedOgnlExpressionCache = new ConcurrentHashMap<>();
 
-  /**
-   * Private constructor to prevent instantiation.
-   */
+  /** Private constructor to prevent instantiation. */
   private XacmlGetRequestBodyObjectAttributeValueFunctions() {}
 
   /**

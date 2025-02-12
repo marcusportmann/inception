@@ -34,7 +34,8 @@ public interface InteractionAttachmentRepository
   /**
    * Retrieve the ID for the interaction attachment with the specified interaction ID and hash.
    *
-   * @param interactionId the ID for the interaction that the interaction attachment is associated with
+   * @param interactionId the ID for the interaction that the interaction attachment is associated
+   *     with
    * @param hash the hash for interaction attachment
    * @return an Optional containing the ID for the interaction attachment with the specified
    *     interaction ID and hash or an empty optional if the interaction attachment could not be

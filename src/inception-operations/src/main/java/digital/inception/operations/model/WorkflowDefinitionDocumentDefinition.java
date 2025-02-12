@@ -44,8 +44,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>WorkflowDefinitionDocumentDefinition</b> class holds the information for an association of a
- * document definition with a workflow definition.
+ * The <b>WorkflowDefinitionDocumentDefinition</b> class holds the information for an association of
+ * a document definition with a workflow definition.
  *
  * @author Marcus Portmann
  */
@@ -79,18 +79,6 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The workflow definition the workflow definition document definition is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("workflowDefinitionDocumentDefinitionReference")
-  @XmlTransient
-  @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({
-    @JoinColumn(name = "workflow_definition_id", referencedColumnName = "id"),
-    @JoinColumn(name = "workflow_definition_version", referencedColumnName = "version")
-  })
-  private WorkflowDefinition workflowDefinition;
-
   /** The ID for the document definition. */
   @Schema(
       description = "The ID for the document definition",
@@ -104,8 +92,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   private String documentDefinitionId;
 
   /**
-   * Is a document with the document definition ID required for a workflow with the workflow definition ID
-   * and workflow definition version?
+   * Is a document with the document definition ID required for a workflow with the workflow
+   * definition ID and workflow definition version?
    */
   @Schema(
       description =
@@ -118,8 +106,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   private boolean required;
 
   /**
-   * Is a workflow with the workflow definition ID and workflow definition version limited to a single document
-   * with the document definition ID?
+   * Is a workflow with the workflow definition ID and workflow definition version limited to a
+   * single document with the document definition ID?
    */
   @Schema(
       description =
@@ -133,8 +121,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   /**
    * The validity period from a document's issue date during which the document, with the document
-   * definition ID, can be associated with a workflow with the workflow definition ID and workflow definition
-   * version.
+   * definition ID, can be associated with a workflow with the workflow definition ID and workflow
+   * definition version.
    */
   @Schema(
       description =
@@ -157,17 +145,29 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   @Column(name = "validity_period_unit")
   private TimeUnit validityPeriodUnit;
 
+  /** The workflow definition the workflow definition document definition is associated with. */
+  @Schema(hidden = true)
+  @JsonBackReference("workflowDefinitionDocumentDefinitionReference")
+  @XmlTransient
+  @Id
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumns({
+    @JoinColumn(name = "workflow_definition_id", referencedColumnName = "id"),
+    @JoinColumn(name = "workflow_definition_version", referencedColumnName = "version")
+  })
+  private WorkflowDefinition workflowDefinition;
+
   /** Constructs a new <b>WorkflowDefinitionDocumentDefinition</b>. */
   public WorkflowDefinitionDocumentDefinition() {}
 
   /**
    * Constructs a new <b>WorkflowDefinitionDocumentDefinition</b>.
    *
-   * @param workflowDefinition the workflow definition the workflow definition document definition is associated
-   *     with
+   * @param workflowDefinition the workflow definition the workflow definition document definition
+   *     is associated with
    * @param documentDefinitionId ID for the document definition
-   * @param required is a document with the document definition ID required for a workflow with the workflow
-   *     definition ID and workflow definition version
+   * @param required is a document with the document definition ID required for a workflow with the
+   *     workflow definition ID and workflow definition version
    */
   public WorkflowDefinitionDocumentDefinition(
       WorkflowDefinition workflowDefinition, String documentDefinitionId, boolean required) {
@@ -203,16 +203,6 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
-   * Returns the workflow definition the workflow definition document definition is associated with.
-   *
-   * @return the workflow definition the workflow definition document definition is associated with
-   */
-  @Schema(hidden = true)
-  public WorkflowDefinition getWorkflowDefinition() {
-    return workflowDefinition;
-  }
-
-  /**
    * Returns the ID for the document definition.
    *
    * @return the ID for the document definition
@@ -223,12 +213,12 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   /**
    * Returns the validity period from a document's issue date during which the document, with the
-   * document definition ID, can be associated with a workflow with the workflow definition ID and workflow
-   * definition version.
+   * document definition ID, can be associated with a workflow with the workflow definition ID and
+   * workflow definition version.
    *
    * @return the validity period from a document's issue date during which the document, with the
-   *     document definition ID, can be associated with a workflow with the workflow definition ID and workflow
-   *     definition version
+   *     document definition ID, can be associated with a workflow with the workflow definition ID
+   *     and workflow definition version
    */
   public Integer getValidityPeriodAmount() {
     return validityPeriodAmount;
@@ -236,48 +226,48 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   /**
    * Returns the unit of measurement of time for the validity period from a document's issue date
-   * during which the document, with the document definition ID, can be associated with a workflow with
-   * the workflow definition ID and workflow definition version.
+   * during which the document, with the document definition ID, can be associated with a workflow
+   * with the workflow definition ID and workflow definition version.
    *
    * @return the unit of measurement of time for the validity period from a document's issue date
-   *     during which the document, with the document definition ID, can be associated with a workflow
-   *     with the workflow definition ID and workflow definition version
+   *     during which the document, with the document definition ID, can be associated with a
+   *     workflow with the workflow definition ID and workflow definition version
    */
   public TimeUnit getValidityPeriodUnit() {
     return validityPeriodUnit;
   }
 
   /**
-   * Returns whether a document with the document definition ID is required for a workflow with the workflow
-   * definition ID and workflow definition version.
+   * Returns the workflow definition the workflow definition document definition is associated with.
    *
-   * @return <b>true</b> if a document with the document definition ID is required for a workflow with
-   *     the workflow definition ID and workflow definition version or <b>false</b> otherwise
+   * @return the workflow definition the workflow definition document definition is associated with
+   */
+  @Schema(hidden = true)
+  public WorkflowDefinition getWorkflowDefinition() {
+    return workflowDefinition;
+  }
+
+  /**
+   * Returns whether a document with the document definition ID is required for a workflow with the
+   * workflow definition ID and workflow definition version.
+   *
+   * @return <b>true</b> if a document with the document definition ID is required for a workflow
+   *     with the workflow definition ID and workflow definition version or <b>false</b> otherwise
    */
   public boolean isRequired() {
     return required;
   }
 
   /**
-   * Returns whether a workflow with the workflow definition ID and workflow definition version is limited to a
-   * single document with the document definition ID.
+   * Returns whether a workflow with the workflow definition ID and workflow definition version is
+   * limited to a single document with the document definition ID.
    *
-   * @return <b>true</b> if a workflow with the workflow definition ID and workflow definition version is
-   *     limited to a single document with the document definition ID or <b>false</b> otherwise
+   * @return <b>true</b> if a workflow with the workflow definition ID and workflow definition
+   *     version is limited to a single document with the document definition ID or <b>false</b>
+   *     otherwise
    */
   public boolean isUnique() {
     return unique;
-  }
-
-  /**
-   * Set the workflow definition the workflow definition document definition is associated with.
-   *
-   * @param workflowDefinition the workflow definition the workflow definition document definition is associated
-   *     with
-   */
-  @Schema(hidden = true)
-  public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
-    this.workflowDefinition = workflowDefinition;
   }
 
   /**
@@ -290,22 +280,24 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
-   * Set whether a document with the document definition ID is required for a workflow with the workflow
-   * definition ID and workflow definition version.
+   * Set whether a document with the document definition ID is required for a workflow with the
+   * workflow definition ID and workflow definition version.
    *
    * @param required <b>true</b> if a document with the document definition ID is required for a
-   *     workflow with the workflow definition ID and workflow definition version or <b>false</b> otherwise
+   *     workflow with the workflow definition ID and workflow definition version or <b>false</b>
+   *     otherwise
    */
   public void setRequired(boolean required) {
     this.required = required;
   }
 
   /**
-   * Set whether a workflow with the workflow definition ID and workflow definition version is limited to a
-   * single document with the document definition ID.
+   * Set whether a workflow with the workflow definition ID and workflow definition version is
+   * limited to a single document with the document definition ID.
    *
-   * @param unique <b>true</b> if a workflow with the workflow definition ID and workflow definition version is
-   *     limited to a single document with the document definition ID or <b>false</b> otherwise
+   * @param unique <b>true</b> if a workflow with the workflow definition ID and workflow definition
+   *     version is limited to a single document with the document definition ID or <b>false</b>
+   *     otherwise
    */
   public void setUnique(boolean unique) {
     this.unique = unique;
@@ -313,12 +305,12 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   /**
    * Set the validity period from a document's issue date during which the document, with the
-   * document definition ID, can be associated with a workflow with the workflow definition ID and workflow
-   * definition version.
+   * document definition ID, can be associated with a workflow with the workflow definition ID and
+   * workflow definition version.
    *
    * @param validityPeriodAmount the validity period from a document's issue date during which the
-   *     document, with the document definition ID, can be associated with a workflow with the workflow
-   *     definition ID and workflow definition version
+   *     document, with the document definition ID, can be associated with a workflow with the
+   *     workflow definition ID and workflow definition version
    */
   public void setValidityPeriodAmount(Integer validityPeriodAmount) {
     this.validityPeriodAmount = validityPeriodAmount;
@@ -335,5 +327,16 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    */
   public void setValidityPeriodUnit(TimeUnit validityPeriodUnit) {
     this.validityPeriodUnit = validityPeriodUnit;
+  }
+
+  /**
+   * Set the workflow definition the workflow definition document definition is associated with.
+   *
+   * @param workflowDefinition the workflow definition the workflow definition document definition
+   *     is associated with
+   */
+  @Schema(hidden = true)
+  public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
+    this.workflowDefinition = workflowDefinition;
   }
 }

@@ -33,8 +33,7 @@ import java.io.Serial;
  * @author Marcus Portmann
  */
 @Problem(
-    type =
-        "https://inception.digital/problems/operations/duplicate-whatsapp-interaction-source",
+    type = "https://inception.digital/problems/operations/duplicate-whatsapp-interaction-source",
     title = "A WhatsApp interaction source with the specified ID already exists.",
     status = 409)
 @WebFault(

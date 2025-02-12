@@ -65,8 +65,7 @@ public interface ErrorService {
    * @param filter the filter to apply to the error report summaries
    * @param fromDate the date to retrieve the error report summaries from
    * @param toDate the date to retrieve the error report summaries to
-   * @param sortBy the method used to sort the error report summaries e.g. by who submitted
-   *     them
+   * @param sortBy the method used to sort the error report summaries e.g. by who submitted them
    * @param sortDirection the sort direction to apply to the error report summaries
    * @param pageIndex the page index
    * @param pageSize the page size

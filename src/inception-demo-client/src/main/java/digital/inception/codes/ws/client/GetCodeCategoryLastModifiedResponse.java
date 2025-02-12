@@ -1,8 +1,6 @@
 
 package digital.inception.codes.ws.client;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -10,7 +8,8 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 /**
  * <p>Java class for GetCodeCategoryLastModifiedResponse complex type.

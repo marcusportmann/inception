@@ -31,7 +31,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TestTransactionalServiceImpl</b> class provides the Test Transactional Service implementation.
+ * The <b>TestTransactionalServiceImpl</b> class provides the Test Transactional Service
+ * implementation.
  *
  * @author Marcus Portmann
  */

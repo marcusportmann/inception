@@ -28,6 +28,7 @@ import digital.inception.core.sorting.SortDirection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
@@ -38,7 +39,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,

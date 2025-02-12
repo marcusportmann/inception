@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import java.io.Serializable;
@@ -7,12 +6,11 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for GetCodeCategoryDataResponse complex type.
- * 
+ * Java class for GetCodeCategoryDataResponse complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetCodeCategoryDataResponse"&gt;
  *   &lt;complexContent&gt;
@@ -24,42 +22,33 @@ import jakarta.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetCodeCategoryDataResponse", propOrder = {
-    "codeCategoryData"
-})
-public class GetCodeCategoryDataResponse implements Serializable
-{
+@XmlType(
+    name = "GetCodeCategoryDataResponse",
+    propOrder = {"codeCategoryData"})
+public class GetCodeCategoryDataResponse implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "CodeCategoryData")
-    protected String codeCategoryData;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the codeCategoryData property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCodeCategoryData() {
-        return codeCategoryData;
-    }
+  @XmlElement(name = "CodeCategoryData")
+  protected String codeCategoryData;
 
-    /**
-     * Sets the value of the codeCategoryData property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCodeCategoryData(String value) {
-        this.codeCategoryData = value;
-    }
+  /**
+   * Gets the value of the codeCategoryData property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getCodeCategoryData() {
+    return codeCategoryData;
+  }
 
+  /**
+   * Sets the value of the codeCategoryData property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setCodeCategoryData(String value) {
+    this.codeCategoryData = value;
+  }
 }

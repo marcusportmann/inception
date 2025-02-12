@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import java.io.Serializable;
@@ -9,12 +8,11 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for GetCodeCategorySummariesResponse complex type.
- * 
+ * Java class for GetCodeCategorySummariesResponse complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetCodeCategorySummariesResponse"&gt;
  *   &lt;complexContent&gt;
@@ -26,47 +24,38 @@ import jakarta.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetCodeCategorySummariesResponse", propOrder = {
-    "codeCategorySummary"
-})
-public class GetCodeCategorySummariesResponse implements Serializable
-{
+@XmlType(
+    name = "GetCodeCategorySummariesResponse",
+    propOrder = {"codeCategorySummary"})
+public class GetCodeCategorySummariesResponse implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "CodeCategorySummary")
-    protected List<CodeCategorySummary> codeCategorySummary;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the codeCategorySummary property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a <CODE>set</CODE> method for the codeCategorySummary property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCodeCategorySummary().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link CodeCategorySummary }
-     * 
-     * 
-     */
-    public List<CodeCategorySummary> getCodeCategorySummary() {
-        if (codeCategorySummary == null) {
-            codeCategorySummary = new ArrayList<CodeCategorySummary>();
-        }
-        return this.codeCategorySummary;
+  @XmlElement(name = "CodeCategorySummary")
+  protected List<CodeCategorySummary> codeCategorySummary;
+
+  /**
+   * Gets the value of the codeCategorySummary property.
+   *
+   * <p>This accessor method returns a reference to the live list, not a snapshot. Therefore any
+   * modification you make to the returned list will be present inside the Jakarta XML Binding
+   * object. This is why there is not a <CODE>set</CODE> method for the codeCategorySummary
+   * property.
+   *
+   * <p>For example, to add a new item, do as follows:
+   *
+   * <pre>
+   *    getCodeCategorySummary().add(newItem);
+   * </pre>
+   *
+   * <p>Objects of the following type(s) are allowed in the list {@link CodeCategorySummary }
+   */
+  public List<CodeCategorySummary> getCodeCategorySummary() {
+    if (codeCategorySummary == null) {
+      codeCategorySummary = new ArrayList<CodeCategorySummary>();
     }
-
+    return this.codeCategorySummary;
+  }
 }

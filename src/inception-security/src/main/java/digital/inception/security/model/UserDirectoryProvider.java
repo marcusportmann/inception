@@ -21,8 +21,8 @@ import digital.inception.core.sorting.SortDirection;
 import java.util.List;
 
 /**
- * The <b>UserDirectoryProvider</b> interface defines the functionality provided by a user
- * directory provider, which manages users and groups.
+ * The <b>UserDirectoryProvider</b> interface defines the functionality provided by a user directory
+ * provider, which manages users and groups.
  *
  * @author Marcus Portmann
  */

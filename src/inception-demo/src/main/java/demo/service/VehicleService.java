@@ -16,13 +16,13 @@
 
 package demo.service;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.sorting.SortDirection;
 import demo.model.Car;
 import demo.model.Cars;
 import demo.model.Vehicle;
 import demo.model.Vehicles;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 
 /**
  * The <b>VehicleService</b> interface defines the functionality that must be provided by a Vehicle

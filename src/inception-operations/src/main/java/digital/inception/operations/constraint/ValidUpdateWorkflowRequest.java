@@ -58,4 +58,3 @@ public @interface ValidUpdateWorkflowRequest {
    */
   Class<? extends Payload>[] payload() default {};
 }
-

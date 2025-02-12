@@ -34,8 +34,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Problem(
-    type =
-        "https://inception.digital/problems/operations/duplicate-interaction-attachment",
+    type = "https://inception.digital/problems/operations/duplicate-interaction-attachment",
     title = "An interaction attachment with the specified ID already exists.",
     status = 409)
 @WebFault(

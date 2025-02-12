@@ -26,8 +26,7 @@ import java.io.Serial;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ApiClientException extends RuntimeException {
 
-  @Serial
-  private static final long serialVersionUID = 1000000;
+  @Serial private static final long serialVersionUID = 1000000;
 
   /** Constructs a new <b>ApiClientException</b> with <b>null</b> as its message. */
   public ApiClientException() {

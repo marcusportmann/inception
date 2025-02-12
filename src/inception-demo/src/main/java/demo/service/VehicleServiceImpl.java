@@ -16,16 +16,16 @@
 
 package demo.service;
 
-import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.sorting.SortDirection;
 import demo.model.Car;
 import demo.model.Cars;
 import demo.model.Vehicle;
 import demo.model.Vehicles;
 import demo.persistence.jpa.CarRepository;
 import demo.persistence.jpa.VehicleRepository;
+import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.context.ApplicationContext;

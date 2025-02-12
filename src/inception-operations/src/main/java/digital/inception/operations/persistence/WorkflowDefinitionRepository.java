@@ -31,7 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Marcus Portmann
  */
-public interface WorkflowDefinitionRepository extends JpaRepository<WorkflowDefinition, WorkflowDefinitionId> {
+public interface WorkflowDefinitionRepository
+    extends JpaRepository<WorkflowDefinition, WorkflowDefinitionId> {
 
   /**
    * Delete all the versions of the workflow definition with the specified ID.
@@ -57,8 +58,8 @@ public interface WorkflowDefinitionRepository extends JpaRepository<WorkflowDefi
    * Retrieve the latest version of the workflow definition with the specified ID.
    *
    * @param workflowDefinitionId the ID for the workflow definition
-   * @return the latest version of the workflow definition with the specified ID or an empty Optional if
-   *     no versions of the workflow definition exist
+   * @return the latest version of the workflow definition with the specified ID or an empty
+   *     Optional if no versions of the workflow definition exist
    */
   @Query(
       value =

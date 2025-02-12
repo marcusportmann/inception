@@ -27,7 +27,8 @@ import jakarta.persistence.Converter;
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class WorkflowDocumentStatusConverter implements AttributeConverter<WorkflowDocumentStatus, String> {
+public class WorkflowDocumentStatusConverter
+    implements AttributeConverter<WorkflowDocumentStatus, String> {
 
   /** Constructs a new <b>WorkflowDocumentStatusConverter</b>. */
   public WorkflowDocumentStatusConverter() {}

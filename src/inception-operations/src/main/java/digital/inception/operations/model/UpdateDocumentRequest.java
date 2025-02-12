@@ -52,16 +52,14 @@ public class UpdateDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
+ADD DOCUMENT
 
   /** The ID for the document. */
   @Schema(description = "The ID for the document", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
-
-
-  ADD DOCUMENT ATTRIBUTES
+  private UUID id; ATTRIBUTES
   
   
   

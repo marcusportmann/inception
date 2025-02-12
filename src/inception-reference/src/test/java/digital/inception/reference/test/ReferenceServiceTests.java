@@ -259,8 +259,7 @@ public class ReferenceServiceTests {
   /** Test the region reference functionality. */
   @Test
   public void regionTest() throws Exception {
-    List<Region> retrievedRegions =
-        referenceService.getRegions(ReferenceService.DEFAULT_LOCALE_ID);
+    List<Region> retrievedRegions = referenceService.getRegions(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(9, retrievedRegions.size(), "The correct number of regions was not retrieved");
 

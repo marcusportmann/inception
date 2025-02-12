@@ -168,8 +168,7 @@ public interface ErrorApiController {
    *     summaries from
    * @param toDate the ISO 8601 format date value for the date to retrieve the error report
    *     summaries from
-   * @param sortBy the method used to sort the error report summaries e.g. by who submitted
-   *     them
+   * @param sortBy the method used to sort the error report summaries e.g. by who submitted them
    * @param sortDirection the sort direction to apply to the error report summaries
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -214,9 +213,7 @@ public interface ErrorApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Error.ErrorReportAdministration') or hasAccessToFunction('Error.ViewErrorReport')")
   ErrorReportSummaries getErrorReportSummaries(
-      @Parameter(
-              name = "filter",
-              description = "The filter to apply to the error report summaries")
+      @Parameter(name = "filter", description = "The filter to apply to the error report summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(

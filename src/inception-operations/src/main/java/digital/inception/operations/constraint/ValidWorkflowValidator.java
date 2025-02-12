@@ -25,14 +25,13 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <b>ValidWorkflowValidator</b> class implements the custom constraint validator for
- * validating a workflow.
+ * The <b>ValidWorkflowValidator</b> class implements the custom constraint validator for validating
+ * a workflow.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ValidWorkflowValidator
-    implements ConstraintValidator<ValidWorkflow, Workflow> {
+public class ValidWorkflowValidator implements ConstraintValidator<ValidWorkflow, Workflow> {
 
   /** The Workflow Service */
   private final WorkflowService workflowService;
@@ -43,8 +42,7 @@ public class ValidWorkflowValidator
    * @param workflowService the Workflow Service
    */
   @Autowired
-  public ValidWorkflowValidator(
-      WorkflowService workflowService) {
+  public ValidWorkflowValidator(WorkflowService workflowService) {
     this.workflowService = workflowService;
   }
 
@@ -57,8 +55,7 @@ public class ValidWorkflowValidator
   public void initialize(ValidWorkflow constraintAnnotation) {}
 
   @Override
-  public boolean isValid(
-      Workflow workflow, ConstraintValidatorContext constraintValidatorContext) {
+  public boolean isValid(Workflow workflow, ConstraintValidatorContext constraintValidatorContext) {
     if (workflowService != null) {
       boolean isValid = true;
 
@@ -69,12 +66,11 @@ public class ValidWorkflowValidator
           constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
 
       try {
-        if (workflowService.workflowDefinitionVersionExists(workflow.getDefinitionId(), workflow.getDefinitionVersion())) {
+        if (workflowService.workflowDefinitionVersionExists(
+            workflow.getDefinitionId(), workflow.getDefinitionVersion())) {
           hibernateConstraintValidatorContext
-              .addMessageParameter(
-                  "workflowDefinitionId", workflow.getDefinitionId())
-              .addMessageParameter(
-                  "workflowDefinitionVersion", workflow.getDefinitionVersion())
+              .addMessageParameter("workflowDefinitionId", workflow.getDefinitionId())
+              .addMessageParameter("workflowDefinitionVersion", workflow.getDefinitionVersion())
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.operations.constraint.ValidWorkflow.invalidWorkflowDefinitionVersion.message}")
               .addPropertyNode("definitionId")

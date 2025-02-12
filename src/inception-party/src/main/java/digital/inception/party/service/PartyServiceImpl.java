@@ -19,7 +19,6 @@ package digital.inception.party.service;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.model.Association;
 import digital.inception.party.model.AssociationNotFoundException;

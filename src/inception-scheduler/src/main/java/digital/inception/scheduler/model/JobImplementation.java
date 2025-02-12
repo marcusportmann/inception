@@ -17,7 +17,8 @@
 package digital.inception.scheduler.model;
 
 /**
- * The <b>JobImplementation</b> interface defines the functionality that must be provided by all jobs.
+ * The <b>JobImplementation</b> interface defines the functionality that must be provided by all
+ * jobs.
  *
  * @author Marcus Portmann
  */

@@ -1,8 +1,6 @@
 
 package digital.inception.codes.ws.client;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -10,7 +8,8 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 /**
  * <p>Java class for CodeCategorySummary complex type.
@@ -45,12 +44,14 @@ public class CodeCategorySummary implements Serializable
     private final static long serialVersionUID = 1000000L;
     @XmlElement(name = "Id", required = true)
     protected String id;
-    @XmlElement(name = "Name", required = true)
-    protected String name;
+
     @XmlElement(name = "LastModified", type = String.class)
     @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
     @XmlSchemaType(name = "dateTime")
     protected OffsetDateTime lastModified;
+
+    @XmlElement(name = "Name", required = true)
+    protected String name;
 
     /**
      * Gets the value of the id property.
@@ -65,15 +66,15 @@ public class CodeCategorySummary implements Serializable
     }
 
     /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
+     * Gets the value of the lastModified property.
+     *
+     * @return
+     *     possible object is
      *     {@link String }
-     *     
+     *
      */
-    public void setId(String value) {
-        this.id = value;
+    public OffsetDateTime getLastModified() {
+        return lastModified;
     }
 
     /**
@@ -89,39 +90,39 @@ public class CodeCategorySummary implements Serializable
     }
 
     /**
-     * Sets the value of the name property.
-     * 
+     * Sets the value of the id property.
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the lastModified property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public OffsetDateTime getLastModified() {
-        return lastModified;
+    public void setId(String value) {
+        this.id = value;
     }
 
     /**
      * Sets the value of the lastModified property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setLastModified(OffsetDateTime value) {
         this.lastModified = value;
+    }
+
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setName(String value) {
+        this.name = value;
     }
 
 }

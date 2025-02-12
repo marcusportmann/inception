@@ -46,7 +46,10 @@ public class OperationsApiConfiguration {
         .packagesToScan("digital.inception.operations")
         .addOpenApiCustomizer(
             openApi ->
-                openApi.info(new Info().title("Operations API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
+                openApi.info(
+                    new Info()
+                        .title("Operations API")
+                        .version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }
