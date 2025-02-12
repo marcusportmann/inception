@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <changeSet id="inception-operations-1.0.0" author="Marcus Portmann">
+    <comment>inception-operations-1.0.0</comment>
+
+    <createTable tableName="operations_workflow_definitions" remarks="Workflow Definitions">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the workflow definition">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="version" type="int" remarks="The version of the workflow definition">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the workflow definition is specific to"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow definition">
+        <constraints nullable="false"/>
+      </column>
+      <column name="validation_schema_type" type="nvarchar(50)" remarks="The schema type for the workflow definition"/>
+      <column name="validation_schema" type="clob" remarks="The XML (XSD) or JSON schema for the workflow definition"/>
+    </createTable>
+    <createIndex indexName="operations_workflow_definitions_tenant_id_ix"
+      tableName="operations_workflow_definitions">
+      <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_document_definitions" remarks="Document Definitions">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the document definition">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the document definition is specific to"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the document definition">
+        <constraints nullable="false"/>
+      </column>
+      <column name="required_document_attributes" type="nvarchar(510)" remarks="The comma-delimited list of codes for the required attributes for a document associated with the document definition"/>
+    </createTable>
+    <createIndex indexName="operations_document_definitions_tenant_id_ix"
+      tableName="operations_document_definitions">
+      <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_definition_document_definitions" remarks="Workflow Definition Document Definitions">
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the workflow definition document definition is specific to"/>
+      <column name="workflow_definition_id" type="nvarchar(50)" remarks="The ID for the workflow definition">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="workflow_definition_version" type="integer" remarks="The version of the workflow definition">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="document_definition_id" type="nvarchar(50)" remarks="The ID for the document definition">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="required" type="boolean" remarks="Is a document with the document definition ID required for a workflow with the workflow definition ID and workflow definition version">
+        <constraints nullable="false"/>
+      </column>
+      <column name="unique" type="boolean" remarks="Is a workflow with the workflow definition ID and workflow definition version limited to a single document with the document definition ID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="validity_period_amount" type="integer" remarks="The validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
+      <column name="validity_period_unit" type="nvarchar(50)" remarks="The unit of measurement of time for the validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_definition_document_definitions_workflow_definitions_fk"
+      baseTableName="operations_workflow_definition_document_definitions" baseColumnNames="workflow_definition_id,workflow_definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="operations_workflow_definition_document_definitions_document_definitions_fk"
+      baseTableName="operations_workflow_definition_document_definitions" baseColumnNames="document_definition_id"
+      referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_definition_document_definitions_document_definition_id_ix"
+      tableName="operations_workflow_definition_document_definitions">
+      <column name="document_definition_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_definition_document_definitions_tenant_id_ix"
+      tableName="operations_workflow_definition_document_definitions">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_definition_document_definitions_workflow_definition_ix"
+      tableName="operations_workflow_definition_document_definitions">
+      <column name="workflow_definition_id"/>
+      <column name="workflow_definition_version"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflows" remarks="Workflows">
+      <column name="id" type="uuid" remarks="The ID for the workflow">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the workflow is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="parent_id" type="uuid" remarks="The ID for the parent workflow"/>
+      <column name="definition_id" type="nvarchar(50)" remarks="The ID for the workflow definition the workflow is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="definition_version" type="int" remarks="The version of the workflow definition the workflow is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="nvarchar(50)" remarks="The code for the status of the workflow">
+        <constraints nullable="false"/>
+      </column>
+      <column name="external_reference" type="nvarchar(100)" remarks="The external reference for the workflow"/>
+      <column name="data" type="clob" remarks="The data for the workflow if not stored in an external repository"/>
+      <column name="created" type="timestamp with time zone" remarks="The date and time the workflow was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="nvarchar(100)" remarks="The person or system that created the workflow">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp with time zone" remarks="The date and time the workflow was updated"/>
+      <column name="updated_by" type="nvarchar(100)" remarks="The person or system that updated the workflow"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflows_workflow_definitions_fk"
+      baseTableName="operations_workflows" baseColumnNames="definition_id,definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_definition_ix"
+      tableName="operations_workflows">
+      <column name="definition_id"/>
+      <column name="definition_version"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_definition_id_ix"
+      tableName="operations_workflows">
+      <column name="definition_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflows_external_reference_ix"
+      tableName="operations_workflows">
+      <column name="external_reference"/>
+    </createIndex>
+    <createIndex indexName="operations_workflows_parent_id_ix"
+      tableName="operations_workflows">
+      <column name="parent_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflows_tenant_id_ix"
+      tableName="operations_workflows">
+      <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_documents" remarks="Documents">
+      <column name="id" type="uuid" remarks="The ID for the document">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the document is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="definition_id" type="nvarchar(50)" remarks="The ID for the document definition the document is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="file_type" type="nvarchar(50)" remarks="The code for the file type for the document">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(200)" remarks="The name of the document">
+        <constraints nullable="false"/>
+      </column>
+      <column name="hash" type="nvarchar(50)" remarks="The base-64 encoded SHA-256 hash of the data for the document">
+        <constraints nullable="false"/>
+      </column>
+      <column name="issue_date" type="date" remarks="The issue date for the document"/>
+      <column name="expiry_date" type="date" remarks="The expiry date for the document"/>
+      <column name="external_reference" type="nvarchar(100)" remarks="The external reference for the document"/>
+      <column name="data" type="${blob_type}" remarks="The data for the document if not stored in an external repository"/>
+      <column name="created" type="timestamp with time zone" remarks="The date and time the document was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="nvarchar(100)" remarks="The person or system that created the document">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp with time zone" remarks="The date and time the document was updated"/>
+      <column name="updated_by" type="nvarchar(100)" remarks="The person or system that updated the document"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_documents_document_definitions_fk"
+      baseTableName="operations_documents" baseColumnNames="definition_id"
+      referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_documents_definition_id_ix"
+      tableName="operations_documents">
+      <column name="definition_id"/>
+    </createIndex>
+    <createIndex indexName="operations_documents_external_reference_ix"
+      tableName="operations_documents">
+      <column name="external_reference"/>
+    </createIndex>
+    <createIndex indexName="operations_documents_tenant_id_ix"
+      tableName="operations_documents">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="operations_documents_updated_ix"
+      tableName="operations_documents">
+      <column name="updated"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_documents" remarks="Workflow Documents">
+      <column name="id" type="uuid" remarks="The ID for the workflow document">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the workflow document is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="workflow_id" type="uuid" remarks="The ID for the workflow">
+        <constraints nullable="false"/>
+      </column>
+      <column name="document_definition_id" type="nvarchar(50)" remarks="The ID for the document definition the workflow document is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="document_id" type="uuid" remarks="The ID for the document"/>
+      <column name="status" type="nvarchar(50)" remarks="The code for the status of the workflow document">
+        <constraints nullable="false"/>
+      </column>
+      <column name="requested" type="timestamp with time zone" remarks="The date and time the workflow document was requested">
+        <constraints nullable="false"/>
+      </column>
+      <column name="requested_by" type="nvarchar(100)" remarks="The person or system that requested the workflow document">
+        <constraints nullable="false"/>
+      </column>
+      <column name="provided" type="timestamp with time zone" remarks="The date and time the workflow document was provided"/>
+      <column name="provided_by" type="nvarchar(100)" remarks="The person or system that provided the workflow document"/>
+      <column name="verified" type="timestamp with time zone" remarks="The date and time the workflow document was verified"/>
+      <column name="verified_by" type="nvarchar(100)" remarks="The person or system that verified the workflow document"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_documents_workflows_fk"
+      baseTableName="operations_workflow_documents" baseColumnNames="workflow_id"
+      referencedTableName="operations_workflows" referencedColumnNames="id" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="operations_workflow_documents_document_definitions_fk"
+      baseTableName="operations_workflow_documents" baseColumnNames="document_definition_id"
+      referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="operations_workflow_documents_documents_fk"
+      baseTableName="operations_workflow_documents" baseColumnNames="document_id"
+      referencedTableName="operations_documents" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_documents_document_id_ix"
+      tableName="operations_workflow_documents">
+      <column name="document_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_documents_tenant_id_ix"
+      tableName="operations_workflow_documents">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_documents_workflow_id_ix"
+      tableName="operations_workflow_documents">
+      <column name="workflow_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_interaction_sources" remarks="Interaction Sources">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the interaction source">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the interaction source is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)" remarks="The code for the interaction source type for the interaction source">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the interaction source">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="operations_interaction_sources_type_ix"
+      tableName="operations_interaction_sources">
+      <column name="type"/>
+    </createIndex>
+    <createIndex indexName="operations_interaction_sources_tenant_id_ix"
+      tableName="operations_interaction_sources">
+      <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_mailbox_interaction_sources" remarks="Mailbox Interaction Sources">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the mailbox interaction source">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="protocol" type="nvarchar(50)" remarks="The code specifying the service provider and email protocol for the service hosting the mailbox">
+        <constraints nullable="false"/>
+      </column>
+      <column name="host" type="nvarchar(500)" remarks="The hostname or IP address for the service hosting the mailbox">
+        <constraints nullable="false"/>
+      </column>
+      <column name="port" type="integer" remarks="The network port for the service hosting the mailbox">
+        <constraints nullable="false"/>
+      </column>
+      <column name="authority" type="nvarchar(1000)" remarks="The OAuth authority responsible for issuing tokens and managing authentication and authorization requests"/>
+      <column name="principal" type="nvarchar(1000)" remarks="The principal identifying the entity that is attempting to authenticate and gain access to the mailbox">
+        <constraints nullable="false"/>
+      </column>
+      <column name="credential" type="nvarchar(1000)" remarks="The credential used to authenticate the entity attempting to access the mailbox">
+        <constraints nullable="false"/>
+      </column>
+      <column name="email_address" type="nvarchar(1000)" remarks="The email address for the mailbox">
+        <constraints nullable="false"/>
+      </column>
+      <column name="archive_mail" type="boolean" remarks="Should mail retrieved from the mailbox be archived">
+        <constraints nullable="false"/>
+      </column>
+      <column name="delete_mail" type="boolean" remarks="Should mail retrieved from the mailbox be deleted">
+        <constraints nullable="false"/>
+      </column>
+      <column name="debug" type="boolean" remarks="Is debugging enabled for the mailbox interaction source">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_mailbox_interaction_sources_interaction_sources_fk"
+      baseTableName="operations_mailbox_interaction_sources" baseColumnNames="id"
+      referencedTableName="operations_interaction_sources" referencedColumnNames="id" onDelete="CASCADE"/>
+
+    <createTable tableName="operations_whatsapp_interaction_sources" remarks="WhatsApp Interaction Sources">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the WhatsApp interaction source">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_whatsapp_interaction_sources_interaction_sources_fk"
+      baseTableName="operations_whatsapp_interaction_sources" baseColumnNames="id"
+      referencedTableName="operations_interaction_sources" referencedColumnNames="id" onDelete="CASCADE"/>
+
+    <createTable tableName="operations_interactions" remarks="Interactions">
+      <column name="id" type="uuid" remarks="The ID for the interaction">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the interaction is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="nvarchar(50)" remarks="The code for the status of the interaction">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)" remarks="The code for the interaction type for the interaction">
+        <constraints nullable="false"/>
+      </column>
+      <column name="source_id" type="nvarchar(50)" remarks="The ID for the interaction source the interaction is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="source_reference" type="nvarchar(400)" remarks="The interaction source specific reference for the interaction">
+        <constraints nullable="false"/>
+      </column>
+      <column name="conversation_id" type="nvarchar(30)" remarks="The ID for the conversation the interaction is associated with"/>
+      <column name="party_id" type="uuid" remarks="The ID for the party the interaction is associated with"/>
+      <column name="from" type="nvarchar(255)" remarks="The identifier representing who the interaction is from, e.g. an email address, a mobile number, etc">
+        <constraints nullable="false"/>
+      </column>
+      <column name="to" type="nvarchar(2000)" remarks="The colon-seperated list of identifiers representing the recipients for the interaction, e.g. email addresses, mobile numbers, etc">
+        <constraints nullable="false"/>
+      </column>
+      <column name="subject" type="nvarchar(2000)" remarks="The subject for the interaction">
+        <constraints nullable="false"/>
+      </column>
+      <column name="mime_type" type="nvarchar(50)" remarks="The mime type for the content for the interaction">
+        <constraints nullable="false"/>
+      </column>
+      <column name="content" type="clob" remarks="The content for the interaction">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp" type="timestamp with time zone" remarks="The date and time the interaction was received or sent">
+        <constraints nullable="false"/>
+      </column>
+      <column name="assigned" type="timestamp with time zone" remarks="The date and time the interaction was assigned"/>
+      <column name="assigned_to" type="nvarchar(100)" remarks="The username for the user the interaction is assigned to"/>
+    </createTable>
+    <createIndex indexName="operations_interactions_assigned_to_ix"
+      tableName="operations_interactions">
+      <column name="assigned_to"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_conversation_id_ix"
+      tableName="operations_interactions">
+      <column name="conversation_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_party_id_ix"
+      tableName="operations_interactions">
+      <column name="party_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_source_id_ix"
+      tableName="operations_interactions">
+      <column name="source_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_source_id_source_reference_ix"
+      tableName="operations_interactions">
+      <column name="source_id"/>
+      <column name="source_reference"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_status_ix"
+      tableName="operations_interactions">
+      <column name="status"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_tenant_id_ix"
+      tableName="operations_interactions">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_timestamp_ix"
+      tableName="operations_interactions">
+      <column name="timestamp"/>
+    </createIndex>
+
+    <createTable tableName="operations_interaction_attachments" remarks="Interaction Attachments">
+      <column name="id" type="uuid" remarks="The ID for the interaction attachment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the interaction attachment is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="interaction_id" type="uuid" remarks="The ID for the interaction the interaction attachment is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="file_type" type="nvarchar(50)" remarks="The code for the file type for the interaction attachment">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(200)" remarks="The name of the interaction attachment">
+        <constraints nullable="false"/>
+      </column>
+      <column name="hash" type="nvarchar(50)" remarks="The base-64 encoded SHA-256 hash of the data for the interaction attachment">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${blob_type}" remarks="The data for the interaction attachment if not stored in an external repository"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_interaction_attachments_interactions_fk"
+      baseTableName="operations_interaction_attachments" baseColumnNames="interaction_id"
+      referencedTableName="operations_interactions" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_interaction_attachments_interaction_id_ix"
+      tableName="operations_interaction_attachments">
+      <column name="interaction_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interaction_attachments_interaction_id_hash_ix"
+      tableName="operations_interaction_attachments">
+      <column name="interaction_id"/>
+      <column name="hash"/>
+    </createIndex>
+    <createIndex indexName="operations_interaction_attachments_tenant_id_ix"
+      tableName="operations_interaction_attachments">
+      <column name="tenant_id"/>
+    </createIndex>
+
+    <rollback>
+      <dropAllForeignKeyConstraints baseTableName="operations_interaction_attachments"/>
+      <dropIndex tableName="operations_interaction_attachments" indexName="operations_interaction_attachments_tenant_id_ix"/>
+      <dropIndex tableName="operations_interaction_attachments" indexName="operations_interaction_attachments_interaction_id_hash_ix"/>
+      <dropIndex tableName="operations_interaction_attachments" indexName="operations_interaction_attachments_interaction_id_ix"/>
+      <dropTable tableName="operations_interaction_attachments"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_interactions"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_timestamp_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_tenant_id_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_status_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_source_id_source_reference_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_source_id_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_party_id_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_conversation_id_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interactions_assigned_to_ix"/>
+      <dropTable tableName="operations_interactions"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_whatsapp_interaction_sources"/>
+      <dropTable tableName="operations_whatsapp_interaction_sources"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_mailbox_interaction_sources"/>
+      <dropTable tableName="operations_mailbox_interaction_sources"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_interaction_sources"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interaction_sources_tenant_id_ix"/>
+      <dropIndex tableName="operations_interactions" indexName="operations_interaction_sources_type_ix"/>
+      <dropTable tableName="operations_interaction_sources"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_documents"/>
+      <dropIndex tableName="operations_documents" indexName="operations_workflow_documents_workflow_id_ix"/>
+      <dropIndex tableName="operations_documents" indexName="operations_workflow_documents_tenant_id_ix"/>
+      <dropIndex tableName="operations_documents" indexName="operations_workflow_documents_document_id_ix"/>
+      <dropTable tableName="operations_workflow_documents"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_documents"/>
+      <dropIndex tableName="operations_documents" indexName="operations_documents_updated_ix"/>
+      <dropIndex tableName="operations_documents" indexName="operations_documents_tenant_id_ix"/>
+      <dropIndex tableName="operations_documents" indexName="operations_documents_external_reference_ix"/>
+      <dropIndex tableName="operations_documents" indexName="operations_documents_definition_id_ix"/>
+      <dropTable tableName="operations_documents"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflows"/>
+      <dropIndex tableName="operations_workflows" indexName="operations_workflows_tenant_id_ix"/>
+      <dropIndex tableName="operations_workflows" indexName="operations_workflows_parent_id_ix"/>
+      <dropIndex tableName="operations_workflows" indexName="operations_workflows_external_reference_ix"/>
+      <dropIndex tableName="operations_workflows" indexName="operations_workflow_definition_id_ix"/>
+      <dropIndex tableName="operations_workflows" indexName="operations_workflow_definition_ix"/>
+      <dropTable tableName="operations_workflows"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_definition_document_definitions"/>
+      <dropIndex tableName="operations_workflow_definition_document_definitions" indexName="operations_workflow_definition_document_definitions_workflow_definition_ix"/>
+      <dropIndex tableName="operations_workflow_definition_document_definitions" indexName="operations_workflow_definition_document_definitions_tenant_id_ix"/>
+      <dropIndex tableName="operations_workflow_definition_document_definitions" indexName="operations_workflow_definition_document_definitions_document_definition_id_ix"/>
+      <dropTable tableName="operations_workflow_definition_document_definitions"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_document_definitions"/>
+      <dropIndex tableName="operations_document_definitions" indexName="operations_document_definitions_tenant_id_ix"/>
+      <dropTable tableName="operations_document_definitions"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_definitions"/>
+      <dropIndex tableName="operations_workflow_definitions" indexName="operations_workflow_definitions_tenant_id_ix"/>
+      <dropTable tableName="operations_workflow_definitions"/>
+
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

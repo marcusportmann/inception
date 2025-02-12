@@ -1,0 +1,9 @@
+[Email from external sender. Proceed with caution and report suspicious emails to Phishing_Alert.]
+
+Hello,
+
+This is a simple plain text message from MacOS Mail.
+
+Kind regards,
+
+Marcus

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="TestData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Id" type="xs:string"/>
+        <xs:element name="Name" type="xs:string"/>
+        <xs:element name="Date" type="xs:date"/>
+        <xs:element name="Number" type="xs:decimal"/>
+        <xs:element name="Time" type="xs:time"/>
+        <xs:element name="Timestamp" type="xs:dateTime"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
