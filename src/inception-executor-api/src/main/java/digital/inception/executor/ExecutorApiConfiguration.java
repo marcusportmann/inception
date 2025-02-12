@@ -46,7 +46,7 @@ public class ExecutorApiConfiguration {
         .packagesToScan("digital.inception.executor")
         .addOpenApiCustomizer(
             openApi ->
-                openApi.info(new Info().title("Executor API").version(Version.PROJECT_VERSION)))
+                openApi.info(new Info().title("Executor API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

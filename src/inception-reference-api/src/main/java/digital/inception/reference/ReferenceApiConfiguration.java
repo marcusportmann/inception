@@ -46,7 +46,7 @@ public class ReferenceApiConfiguration {
         .packagesToScan("digital.inception.reference")
         .addOpenApiCustomizer(
             openApi ->
-                openApi.info(new Info().title("Reference API").version(Version.PROJECT_VERSION)))
+                openApi.info(new Info().title("Reference API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

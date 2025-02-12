@@ -46,7 +46,7 @@ public class SchedulerApiConfiguration {
         .packagesToScan("digital.inception.scheduler")
         .addOpenApiCustomizer(
             openApi ->
-                openApi.info(new Info().title("Scheduler API").version(Version.PROJECT_VERSION)))
+                openApi.info(new Info().title("Scheduler API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

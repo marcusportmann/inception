@@ -735,7 +735,7 @@
     
     <module>inception-demo</module>
 
-     <!-- <module>inception-demo-client</module> -->
+    <module>inception-demo-client</module>
   </modules>
 
   <build>

@@ -117,7 +117,6 @@ import digital.inception.security.persistence.UserRepository;
 import digital.inception.security.store.PolicyStore;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.validation.Validator;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Constructor;
 import java.net.URLEncoder;
@@ -261,7 +260,6 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   public SecurityServiceImpl(
       ApplicationContext applicationContext,
       ResourceLoader resourceLoader,
-      Validator validator,
       MailService mailService,
       PolicyStore policyDataStore,
       FunctionRepository functionRepository,

@@ -190,14 +190,15 @@ public class ReactiveData implements Serializable {
   @Column("time_value")
   private LocalTime timeValue;
 
-  /** The time with time zone value for the data. */
-  @Schema(description = "The time with time zone value for the data")
-  @JsonProperty
-  @XmlElement(name = "TimeWithTimeZoneValue")
-  @XmlJavaTypeAdapter(OffsetTimeAdapter.class)
-  @XmlSchemaType(name = "time")
-  @Column("time_with_time_zone_value")
-  private OffsetTime timeWithTimeZoneValue;
+// NOTE: Time with time zone values are incorrectly treated as time values (local time)
+//  /** The time with time zone value for the data. */
+//  @Schema(description = "The time with time zone value for the data")
+//  @JsonProperty
+//  @XmlElement(name = "TimeWithTimeZoneValue")
+//  @XmlJavaTypeAdapter(OffsetTimeAdapter.class)
+//  @XmlSchemaType(name = "time")
+//  @Column("time_with_time_zone_value")
+//  private OffsetTime timeWithTimeZoneValue;
 
   /** The timestamp value for the data. */
   @Schema(description = "The timestamp value for the data")
@@ -344,14 +345,14 @@ public class ReactiveData implements Serializable {
     return timeValue;
   }
 
-  /**
-   * Returns the time with time zone value for the data.
-   *
-   * @return the time with time zone value for the data
-   */
-  public OffsetTime getTimeWithTimeZoneValue() {
-    return timeWithTimeZoneValue;
-  }
+//  /**
+//   * Returns the time with time zone value for the data.
+//   *
+//   * @return the time with time zone value for the data
+//   */
+//  public OffsetTime getTimeWithTimeZoneValue() {
+//    return timeWithTimeZoneValue;
+//  }
 
   /**
    * Returns the timestamp value for the data.
@@ -470,14 +471,14 @@ public class ReactiveData implements Serializable {
     this.timeValue = timeValue;
   }
 
-  /**
-   * Set the time with time zone value for the data.
-   *
-   * @param timeWithTimeZoneValue the time with time zone value for the data
-   */
-  public void setTimeWithTimeZoneValue(OffsetTime timeWithTimeZoneValue) {
-    this.timeWithTimeZoneValue = timeWithTimeZoneValue;
-  }
+//  /**
+//   * Set the time with time zone value for the data.
+//   *
+//   * @param timeWithTimeZoneValue the time with time zone value for the data
+//   */
+//  public void setTimeWithTimeZoneValue(OffsetTime timeWithTimeZoneValue) {
+//    this.timeWithTimeZoneValue = timeWithTimeZoneValue;
+//  }
 
   /**
    * Set the timestamp value for the data.
@@ -522,8 +523,8 @@ public class ReactiveData implements Serializable {
         + stringValue
         + "\", timeValue=\""
         + timeValue
-        + "\", timeWithTimeZoneValue=\""
-        + timeWithTimeZoneValue
+//        + "\", timeWithTimeZoneValue=\""
+//        + timeWithTimeZoneValue
         + "\", timestampValue=\""
         + timestampValue
         + "\", timestampWithTimeZoneValue=\""

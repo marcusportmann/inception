@@ -45,7 +45,7 @@ public class PartyApiConfiguration {
         .group("party")
         .packagesToScan("digital.inception.party")
         .addOpenApiCustomizer(
-            openApi -> openApi.info(new Info().title("Party API").version(Version.PROJECT_VERSION)))
+            openApi -> openApi.info(new Info().title("Party API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }

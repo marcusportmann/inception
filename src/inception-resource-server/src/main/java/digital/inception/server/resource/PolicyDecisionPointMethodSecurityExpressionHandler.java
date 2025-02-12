@@ -56,10 +56,6 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
    * Constructs a new <b>PolicyDecisionPointMethodSecurityExpressionHandler</b>.
    *
    * @param applicationContext the Spring application context
-<<<<<<< HEAD:src/inception-resource-server/src/main/java/digital/inception/server/resource/PolicyDecisionPointMethodSecurityExpressionHandler.java
-=======
-   * @param policyDecisionPoint the policy decision point
->>>>>>> 5e1076814 (Updates):src/inception-api/src/main/java/digital/inception/api/SecureApiMethodSecurityExpressionHandler.java
    */
   public PolicyDecisionPointMethodSecurityExpressionHandler(ApplicationContext applicationContext) {
 

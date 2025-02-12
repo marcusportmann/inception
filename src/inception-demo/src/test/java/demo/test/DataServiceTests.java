@@ -16,7 +16,11 @@
 
 package demo.test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import demo.model.Data;
 import demo.service.DataService;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +45,14 @@ public class DataServiceTests {
 
   /** The Data Service. */
   @Autowired private DataService dataService;
+
+  /** Test the data functionality. */
+  @Test
+  public void dataTest() throws Exception {
+    List<Data> allData = dataService.getAllData();
+
+    assertFalse(allData.isEmpty());
+  }
 
   /** Test the reactive data functionality. */
   @Test

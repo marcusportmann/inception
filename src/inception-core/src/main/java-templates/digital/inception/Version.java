@@ -23,5 +23,9 @@ package digital.inception;
  */
 public final class Version {
 
-  public static final String PROJECT_VERSION = "${project.version}";
+  /** The version of the Inception Framework. */
+  public static final String INCEPTION_FRAMEWORK_VERSION = "${project.version}";
+
+  /** Constructs a new <b>Version</b>. */
+  public Version() {}
 }

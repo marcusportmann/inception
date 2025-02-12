@@ -45,7 +45,7 @@ public class ErrorApiConfiguration {
         .group("error")
         .packagesToScan("digital.inception.error")
         .addOpenApiCustomizer(
-            openApi -> openApi.info(new Info().title("Error API").version(Version.PROJECT_VERSION)))
+            openApi -> openApi.info(new Info().title("Error API").version(Version.INCEPTION_FRAMEWORK_VERSION)))
         .build();
   }
 }
