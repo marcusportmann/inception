@@ -101,7 +101,7 @@ public class DemoApplication extends Application {
   public void init() {
     try {
       byte[] demoReportDefinitionData =
-          ResourceUtil.getClasspathResource("digital/inception/demo/DemoReport.jasper");
+          ResourceUtil.getClasspathResource("demo/DemoReport.jasper");
 
       ReportDefinition demoReportDefinition =
           new ReportDefinition(

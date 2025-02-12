@@ -37,7 +37,7 @@ import org.springframework.context.ApplicationContext;
 @WebService(
     serviceName = "VehicleService",
     name = "IVehicleService",
-    targetNamespace = "https://inception.digital/demo")
+    targetNamespace = "https://demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class VehicleWebService extends AbstractWebServiceBase {

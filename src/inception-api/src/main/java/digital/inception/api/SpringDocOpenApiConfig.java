@@ -17,6 +17,8 @@
 package digital.inception.api;
 
 import com.fasterxml.jackson.databind.type.SimpleType;
+import io.swagger.v3.core.converter.ModelConverters;
+import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -38,6 +40,12 @@ public class SpringDocOpenApiConfig {
   /** Constructs a new <b>SpringDocOpenApiConfig</b>. */
   public SpringDocOpenApiConfig() {}
 
+  /** Register the time model converter to support LocalTime and OffsetTime properties. */
+  @PostConstruct
+  public void registerTimeModelConverter() {
+    ModelConverters.getInstance().addConverter(new SpringDocOpenApiTimeModelConverter());
+  }
+
   /**
    * Returns the schema property customizer for time-related properties for the
    * <b>springdoc-openapi</b> library.
@@ -58,7 +66,7 @@ public class SpringDocOpenApiConfig {
           property.set$ref(null);
         } else if (simpleType.getRawClass() == OffsetTime.class) {
           property.setTypes(Set.of("string"));
-          property.setFormat("time");
+          property.setFormat("time-offset");
           property.setExample("12:34:56.123+01:00");
           property.setProperties(null);
           property.set$ref(null);

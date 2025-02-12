@@ -24,11 +24,11 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _InvalidArgumentError_QNAME = new QName("http://inception.digital/core", "InvalidArgumentError");
-    private final static QName _ServiceError_QNAME = new QName("http://inception.digital/core", "ServiceError");
-    private final static QName _ValidationError_QNAME = new QName("http://inception.digital/core", "ValidationError");
-    private final static QName _InvalidArgumentException_QNAME = new QName("http://inception.digital/core", "InvalidArgumentException");
-    private final static QName _ServiceUnavailableException_QNAME = new QName("http://inception.digital/core", "ServiceUnavailableException");
+    private final static QName _InvalidArgumentError_QNAME = new QName("https://inception.digital/core", "InvalidArgumentError");
+    private final static QName _ServiceError_QNAME = new QName("https://inception.digital/core", "ServiceError");
+    private final static QName _ValidationError_QNAME = new QName("https://inception.digital/core", "ValidationError");
+    private final static QName _ServiceUnavailableException_QNAME = new QName("https://inception.digital/core", "ServiceUnavailableException");
+    private final static QName _InvalidArgumentException_QNAME = new QName("https://inception.digital/core", "InvalidArgumentException");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: digital.inception.core.ws.client
@@ -69,7 +69,7 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link InvalidArgumentError }{@code >}
      */
-    @XmlElementDecl(namespace = "http://inception.digital/core", name = "InvalidArgumentError")
+    @XmlElementDecl(namespace = "https://inception.digital/core", name = "InvalidArgumentError")
     public JAXBElement<InvalidArgumentError> createInvalidArgumentError(InvalidArgumentError value) {
         return new JAXBElement<InvalidArgumentError>(_InvalidArgumentError_QNAME, InvalidArgumentError.class, null, value);
     }
@@ -82,7 +82,7 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link ServiceError }{@code >}
      */
-    @XmlElementDecl(namespace = "http://inception.digital/core", name = "ServiceError")
+    @XmlElementDecl(namespace = "https://inception.digital/core", name = "ServiceError")
     public JAXBElement<ServiceError> createServiceError(ServiceError value) {
         return new JAXBElement<ServiceError>(_ServiceError_QNAME, ServiceError.class, null, value);
     }
@@ -95,22 +95,9 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link ValidationError }{@code >}
      */
-    @XmlElementDecl(namespace = "http://inception.digital/core", name = "ValidationError")
+    @XmlElementDecl(namespace = "https://inception.digital/core", name = "ValidationError")
     public JAXBElement<ValidationError> createValidationError(ValidationError value) {
         return new JAXBElement<ValidationError>(_ValidationError_QNAME, ValidationError.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link InvalidArgumentError }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link InvalidArgumentError }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://inception.digital/core", name = "InvalidArgumentException")
-    public JAXBElement<InvalidArgumentError> createInvalidArgumentException(InvalidArgumentError value) {
-        return new JAXBElement<InvalidArgumentError>(_InvalidArgumentException_QNAME, InvalidArgumentError.class, null, value);
     }
 
     /**
@@ -121,9 +108,22 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link ServiceError }{@code >}
      */
-    @XmlElementDecl(namespace = "http://inception.digital/core", name = "ServiceUnavailableException")
+    @XmlElementDecl(namespace = "https://inception.digital/core", name = "ServiceUnavailableException")
     public JAXBElement<ServiceError> createServiceUnavailableException(ServiceError value) {
         return new JAXBElement<ServiceError>(_ServiceUnavailableException_QNAME, ServiceError.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link InvalidArgumentError }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link InvalidArgumentError }{@code >}
+     */
+    @XmlElementDecl(namespace = "https://inception.digital/core", name = "InvalidArgumentException")
+    public JAXBElement<InvalidArgumentError> createInvalidArgumentException(InvalidArgumentError value) {
+        return new JAXBElement<InvalidArgumentError>(_InvalidArgumentException_QNAME, InvalidArgumentError.class, null, value);
     }
 
 }

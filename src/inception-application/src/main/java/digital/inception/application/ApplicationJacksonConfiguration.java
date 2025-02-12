@@ -46,7 +46,7 @@ public class ApplicationJacksonConfiguration {
     return jackson2ObjectMapperBuilder()
         .build()
         .disable(SerializationFeature.INDENT_OUTPUT)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
   }
 
   /**
@@ -58,7 +58,6 @@ public class ApplicationJacksonConfiguration {
    */
   protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
-    jackson2ObjectMapperBuilder.indentOutput(true);
 
     /*
      * Install the custom Jackson module that supports serializing and de-serializing ISO 8601 date

@@ -49,13 +49,13 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   @Value("${inception.application.security.jwt:#{null}}")
   private String jwt;
 
+  /** The application key alias. */
+  @Value("${inception.application.security.key-alias:#{null}}")
+  private String keyAlias;
+
   /** The application key password. */
   @Value("${inception.application.security.key-password:#{null}}")
   private String keyPassword;
-
-  /** The application key store alias. */
-  @Value("${inception.application.security.key-alias:#{null}}")
-  private String keyStoreAlias;
 
   /** The application key store password. */
   @Value("${inception.application.security.key-store-password:#{null}}")

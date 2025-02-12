@@ -43,7 +43,7 @@ import org.springframework.context.ApplicationContext;
 @WebService(
     serviceName = "DataService",
     name = "IDataService",
-    targetNamespace = "https://inception.digital/demo")
+    targetNamespace = "https://demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class DataWebService extends AbstractWebServiceBase {

@@ -196,14 +196,6 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <!--
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    -->
   </dependencies>
 
   <build>
@@ -239,25 +231,6 @@
             </configuration>
             <goals>
               <goal>enforce</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <failOnWarnings>true</failOnWarnings>
-          <quiet>true</quiet>
-          <sourceFileExcludes>
-            <sourceFileExclude>**/Version.java</sourceFileExclude>
-          </sourceFileExcludes>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
             </goals>
           </execution>
         </executions>

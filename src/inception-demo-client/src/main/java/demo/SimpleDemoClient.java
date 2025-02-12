@@ -16,19 +16,24 @@
 
 package demo;
 
+import demo.api.client.ApiClient;
 import demo.api.client.DataApi;
 import demo.api.client.TestApi;
 import demo.api.client.model.Data;
+import digital.inception.api.client.ApiClientUtil;
 import digital.inception.codes.ws.client.CodeCategory;
 import digital.inception.codes.ws.client.CodeCategoryNotFoundException;
 import digital.inception.codes.ws.client.CodesService;
 import digital.inception.codes.ws.client.ICodesService;
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.util.CryptoUtil;
+import digital.inception.core.util.ISO8601Util;
 import digital.inception.reference.api.client.ReferenceApi;
 import digital.inception.reference.api.client.model.Language;
 import digital.inception.ws.security.WebServiceClientSecurityHelper;
+import java.math.BigDecimal;
 import java.security.KeyStore;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -74,9 +79,9 @@ public class SimpleDemoClient {
 
     invokeDemoApi();
 
-    invokeReferenceApi();
+    // invokeReferenceApi();
 
-    invokeTestApi();
+    // invokeTestApi();
   }
 
   private static void invokeCodesService() {
@@ -135,9 +140,86 @@ public class SimpleDemoClient {
 
   private static void invokeDemoApi() {
     try {
-      DataApi dataApi = new DataApi();
+      DataApi dataApi = new DataApi(new ApiClient(ApiClientUtil.createWebClient()));
 
       Data data = dataApi.getData().block();
+
+      if (data == null) {
+        throw new RuntimeException("Data is null");
+      }
+
+      if ((data.getBooleanValue() == null) || (!data.getBooleanValue())) {
+        throw new RuntimeException(
+            "Invalid value for booleanValue (" + data.getBooleanValue() + ")");
+      }
+
+      if (!"ZA".equals(data.getCountry())) {
+        throw new RuntimeException("Invalid value for country (" + data.getCountry() + ")");
+      }
+
+      if ((data.getDateValue() == null)
+          || (!LocalDate.parse("1976-03-07").equals(data.getDateValue()))) {
+        throw new RuntimeException("Invalid value for dateValue (" + data.getDateValue() + ")");
+      }
+
+      if ((data.getDecimalValue() == null)
+          || (!(new BigDecimal("111.111")).equals(data.getDecimalValue()))) {
+        throw new RuntimeException(
+            "Invalid value for decimalValue (" + data.getDecimalValue() + ")");
+      }
+
+      if ((data.getDoubleValue() == null)
+          || (!Double.valueOf("222.222").equals(data.getDoubleValue()))) {
+        throw new RuntimeException("Invalid value for doubleValue (" + data.getDoubleValue() + ")");
+      }
+
+      if ((data.getFloatValue() == null)
+          || (!Float.valueOf("333.333").equals(data.getFloatValue()))) {
+        throw new RuntimeException("Invalid value for floatValue (" + data.getFloatValue() + ")");
+      }
+
+      if ((data.getIntegerValue() == null)
+          || (!Integer.valueOf("444").equals(data.getIntegerValue()))) {
+        throw new RuntimeException(
+            "Invalid value for integerValue (" + data.getIntegerValue() + ")");
+      }
+
+      if (!"EN".equals(data.getLanguage())) {
+        throw new RuntimeException("Invalid value for language (" + data.getLanguage() + ")");
+      }
+
+      if (!"This is a valid string value".equals(data.getStringValue())) {
+        throw new RuntimeException("Invalid value for stringValue (" + data.getStringValue() + ")");
+      }
+
+      if ((data.getTimestampValue() == null)
+          || (!ISO8601Util.toOffsetDateTime("2016-07-17T23:56:19.123+02:00")
+              .equals(data.getTimestampValue()))) {
+        throw new RuntimeException(
+            "Invalid value for timestampValue (" + data.getTimestampValue() + ")");
+      }
+
+      if ((data.getTimestampWithTimeZoneValue() == null)
+          || (!ISO8601Util.toOffsetDateTime("2019-02-28T00:14:27.505+02:00")
+              .equals(data.getTimestampWithTimeZoneValue()))) {
+        throw new RuntimeException(
+            "Invalid value for timestampWithTimeZoneValue ("
+                + data.getTimestampWithTimeZoneValue()
+                + ")");
+      }
+
+      if ((data.getTimeValue() == null)
+          || (!ISO8601Util.toLocalTime("14:30:00")
+              .equals(ISO8601Util.toLocalTime(data.getTimeValue())))) {
+        throw new RuntimeException("Invalid value for timeValue (" + data.getTimeValue() + ")");
+      }
+
+      if ((data.getTimeWithTimeZoneValue() == null)
+          || (!ISO8601Util.toOffsetTime("18:30:00+02:00")
+              .equals(ISO8601Util.toOffsetTime(data.getTimeWithTimeZoneValue())))) {
+        throw new RuntimeException(
+            "Invalid value for timeWithTimeZoneValue (" + data.getTimeValue() + ")");
+      }
     } catch (Throwable e) {
       System.err.println("[ERROR] " + e.getMessage());
       e.printStackTrace(System.err);

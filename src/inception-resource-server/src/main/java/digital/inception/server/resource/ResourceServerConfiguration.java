@@ -302,6 +302,11 @@ public class ResourceServerConfiguration implements InitializingBean {
           }
 
           /*
+           * Enable non-authenticated access to SOAP-based web services.
+           */
+          authorizeRequests.requestMatchers(antMatcher("/service/**")).permitAll();
+
+          /*
            * Enable non-authenticated access to the OAuth endpoints.
            */
           authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();

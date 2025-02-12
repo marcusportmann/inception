@@ -18,7 +18,7 @@ import jakarta.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="CodeCategory" type="{http://inception.digital/codes}CodeCategory"/&gt;
+ *         &lt;element name="CodeCategory" type="{https://inception.digital/codes}CodeCategory"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;

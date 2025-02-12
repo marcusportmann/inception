@@ -41,7 +41,7 @@ public class InceptionDateTimeModule extends SimpleModule {
   public InceptionDateTimeModule() {
     super(
         "InceptionDateTimeModule",
-        new Version(1, 0, 0, null, "digital.inception", "inception-json"));
+        new Version(1, 0, 0, null, "digital.inception", "inception-date-time"));
 
     addHandlers(Date.class, new DateSerializer(), new DateDeserializer());
     addHandlers(Instant.class, new InstantSerializer(), new InstantDeserializer());
