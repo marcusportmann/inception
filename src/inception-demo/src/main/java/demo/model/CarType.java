@@ -16,8 +16,7 @@
 
 package demo.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The car type")
 @XmlEnum
 @XmlType(name = "CarType", namespace = "https://demo")
-public enum CarType {
+public enum CarType implements CodeEnum {
 
   /** Electric. */
   @XmlEnumValue("Electric")
@@ -59,28 +58,10 @@ public enum CarType {
   }
 
   /**
-   * Returns the car type given by the specified code value.
-   *
-   * @param code the code for the car type
-   * @return the car type given by the specified code value
-   */
-  @JsonCreator
-  public static CarType fromCode(String code) {
-    for (CarType value : CarType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the car type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the car type.
    *
    * @return the code for the car type
    */
-  @JsonValue
   public String code() {
     return code;
   }

@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -8,10 +7,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * <p>Java class for CreateCodeCategory complex type.
- * 
+ * Java class for CreateCodeCategory complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CreateCodeCategory"&gt;
  *   &lt;complexContent&gt;
@@ -23,42 +22,33 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CreateCodeCategory", propOrder = {
-    "codeCategory"
-})
-public class CreateCodeCategory implements Serializable
-{
+@XmlType(
+    name = "CreateCodeCategory",
+    propOrder = {"codeCategory"})
+public class CreateCodeCategory implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "CodeCategory", required = true)
-    protected CodeCategory codeCategory;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the codeCategory property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CodeCategory }
-     *     
-     */
-    public CodeCategory getCodeCategory() {
-        return codeCategory;
-    }
+  @XmlElement(name = "CodeCategory", required = true)
+  protected CodeCategory codeCategory;
 
-    /**
-     * Sets the value of the codeCategory property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CodeCategory }
-     *     
-     */
-    public void setCodeCategory(CodeCategory value) {
-        this.codeCategory = value;
-    }
+  /**
+   * Gets the value of the codeCategory property.
+   *
+   * @return possible object is {@link CodeCategory }
+   */
+  public CodeCategory getCodeCategory() {
+    return codeCategory;
+  }
 
+  /**
+   * Sets the value of the codeCategory property.
+   *
+   * @param value allowed object is {@link CodeCategory }
+   */
+  public void setCodeCategory(CodeCategory value) {
+    this.codeCategory = value;
+  }
 }

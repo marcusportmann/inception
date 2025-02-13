@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import digital.inception.core.xml.OffsetDateTimeAdapter;
@@ -12,10 +11,10 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 /**
- * <p>Java class for CodeCategory complex type.
- * 
+ * Java class for CodeCategory complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CodeCategory"&gt;
  *   &lt;complexContent&gt;
@@ -30,129 +29,98 @@ import java.time.OffsetDateTime;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CodeCategory", propOrder = {
-    "id",
-    "name",
-    "data",
-    "lastModified"
-})
-public class CodeCategory implements Serializable
-{
+@XmlType(
+    name = "CodeCategory",
+    propOrder = {"id", "name", "data", "lastModified"})
+public class CodeCategory implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
+  private static final long serialVersionUID = 1000000L;
 
-    @XmlElement(name = "Data")
-    protected String data;
+  @XmlElement(name = "Data")
+  protected String data;
 
-    @XmlElement(name = "Id", required = true)
-    protected String id;
+  @XmlElement(name = "Id", required = true)
+  protected String id;
 
-    @XmlElement(name = "LastModified", type = String.class)
-    @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-    @XmlSchemaType(name = "dateTime")
-    protected OffsetDateTime lastModified;
+  @XmlElement(name = "LastModified", type = String.class)
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  protected OffsetDateTime lastModified;
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
+  @XmlElement(name = "Name", required = true)
+  protected String name;
 
-    /**
-     * Gets the value of the data property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getData() {
-        return data;
-    }
+  /**
+   * Gets the value of the data property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getData() {
+    return data;
+  }
 
-    /**
-     * Gets the value of the id property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * Gets the value of the lastModified property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public OffsetDateTime getLastModified() {
-        return lastModified;
-    }
+  /**
+   * Gets the value of the lastModified property.
+   *
+   * @return possible object is {@link String }
+   */
+  public OffsetDateTime getLastModified() {
+    return lastModified;
+  }
 
-    /**
-     * Gets the value of the name property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the data property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setData(String value) {
-        this.data = value;
-    }
+  /**
+   * Sets the value of the data property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setData(String value) {
+    this.data = value;
+  }
 
-    /**
-     * Sets the value of the id property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setId(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Sets the value of the lastModified property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setLastModified(OffsetDateTime value) {
-        this.lastModified = value;
-    }
+  /**
+   * Sets the value of the lastModified property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setLastModified(OffsetDateTime value) {
+    this.lastModified = value;
+  }
 
-    /**
-     * Sets the value of the name property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 }

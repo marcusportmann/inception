@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The required document attribute")
 @XmlEnum
 @XmlType(name = "RequiredDocumentAttribute", namespace = "https://inception.digital/operations")
-public enum RequiredDocumentAttribute {
+public enum RequiredDocumentAttribute implements CodeEnum {
 
   /** Expiry Date. */
   @XmlEnumValue("ExpiryDate")
@@ -56,28 +54,10 @@ public enum RequiredDocumentAttribute {
   }
 
   /**
-   * Returns the required document attribute given by the specified code value.
-   *
-   * @param code the code for the required document attribute
-   * @return the required document attribute given by the specified code value
-   */
-  @JsonCreator
-  public static RequiredDocumentAttribute fromCode(String code) {
-    for (RequiredDocumentAttribute value : RequiredDocumentAttribute.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the required document attribute with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the required document attribute.
    *
    * @return the code for the required document attribute
    */
-  @JsonValue
   public String code() {
     return code;
   }

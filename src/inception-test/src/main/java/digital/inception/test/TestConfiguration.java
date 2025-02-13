@@ -23,7 +23,7 @@ import digital.inception.core.CoreConfiguration;
 import digital.inception.core.jdbc.DataSourceConfiguration;
 import digital.inception.core.jdbc.DataSourceUtil;
 import digital.inception.jpa.JpaUtil;
-import digital.inception.json.InceptionDateTimeModule;
+import digital.inception.json.InceptionModule;
 import digital.inception.r2dbc.ConnectionFactoryConfiguration;
 import digital.inception.r2dbc.ConnectionFactoryUtil;
 import io.r2dbc.spi.ConnectionFactory;
@@ -316,7 +316,7 @@ public class TestConfiguration {
     return jackson2ObjectMapperBuilder()
         .build()
         .disable(SerializationFeature.INDENT_OUTPUT)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
   }
 
   /**
@@ -361,14 +361,16 @@ public class TestConfiguration {
    */
   protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
-    jackson2ObjectMapperBuilder.indentOutput(true);
 
     /*
      * Install the custom Jackson module that supports serializing and de-serializing ISO 8601 date
      * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
      * it does not handle timezones correctly for LocalDateTime, OffsetDateTime or Instant objects.
+     *
+     * This module also supports serializing and deserializing Enum types that implement the
+     * CodeEnum interface.
      */
-    jackson2ObjectMapperBuilder.modulesToInstall(new InceptionDateTimeModule());
+    jackson2ObjectMapperBuilder.modulesToInstall(new InceptionModule());
 
     return jackson2ObjectMapperBuilder;
   }

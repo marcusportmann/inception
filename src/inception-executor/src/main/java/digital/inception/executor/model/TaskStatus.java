@@ -16,8 +16,7 @@
 
 package digital.inception.executor.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The task status")
 @XmlEnum
 @XmlType(name = "TaskStatus", namespace = "https://inception.digital/executor")
-public enum TaskStatus {
+public enum TaskStatus implements CodeEnum {
 
   /** Queued. */
   @XmlEnumValue("Queued")
@@ -67,28 +66,10 @@ public enum TaskStatus {
   }
 
   /**
-   * Returns the task status given by the specified code value.
-   *
-   * @param code the code for the task status
-   * @return the task status given by the specified code value
-   */
-  @JsonCreator
-  public static TaskStatus fromCode(String code) {
-    for (TaskStatus value : TaskStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the task status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the task status.
    *
    * @return the code for the task status
    */
-  @JsonValue
   public String code() {
     return code;
   }

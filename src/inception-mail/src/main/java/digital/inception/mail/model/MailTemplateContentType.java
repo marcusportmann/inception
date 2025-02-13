@@ -16,8 +16,7 @@
 
 package digital.inception.mail.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The mail template content type")
 @XmlEnum
 @XmlType(name = "MailTemplateContentType", namespace = "https://inception.digital/mail")
-public enum MailTemplateContentType {
+public enum MailTemplateContentType implements CodeEnum {
   /** Text. */
   @XmlEnumValue("Text")
   TEXT("text", "Text"),
@@ -51,28 +50,10 @@ public enum MailTemplateContentType {
   }
 
   /**
-   * Returns the mail template content type given by the specified code value.
-   *
-   * @param code the code for the mail template content type
-   * @return the mail template content type given by the specified code value
-   */
-  @JsonCreator
-  public static MailTemplateContentType fromCode(String code) {
-    for (MailTemplateContentType value : MailTemplateContentType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the mail template content type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the mail template content type.
    *
    * @return the code for the mail template content type
    */
-  @JsonValue
   public String code() {
     return code;
   }

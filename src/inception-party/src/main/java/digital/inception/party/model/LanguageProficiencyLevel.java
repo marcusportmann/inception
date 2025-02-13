@@ -16,8 +16,7 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -37,7 +36,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "A language proficiency level")
 @XmlEnum
 @XmlType(name = "LanguageProficiencyLevel", namespace = "https://inception.digital/party")
-public enum LanguageProficiencyLevel {
+public enum LanguageProficiencyLevel implements CodeEnum {
   /** Beginner. */
   @XmlEnumValue("Beginner")
   BEGINNER("beginner", "Beginner"),
@@ -68,28 +67,10 @@ public enum LanguageProficiencyLevel {
   }
 
   /**
-   * Returns the language proficiency level given by the specified code value.
-   *
-   * @param code the code for the language proficiency level
-   * @return the language proficiency level given by the specified code value
-   */
-  @JsonCreator
-  public static LanguageProficiencyLevel fromCode(String code) {
-    for (LanguageProficiencyLevel value : LanguageProficiencyLevel.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the language proficiency level with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the language proficiency level.
    *
    * @return the code for the language proficiency level
    */
-  @JsonValue
   public String code() {
     return code;
   }

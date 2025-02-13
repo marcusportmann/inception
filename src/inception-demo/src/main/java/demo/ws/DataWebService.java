@@ -40,10 +40,7 @@ import org.springframework.context.ApplicationContext;
  *
  * @author Marcus Portmann
  */
-@WebService(
-    serviceName = "DataService",
-    name = "IDataService",
-    targetNamespace = "https://demo")
+@WebService(serviceName = "DataService", name = "IDataService", targetNamespace = "https://demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class DataWebService extends AbstractWebServiceBase {

@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The workflow document status")
 @XmlEnum
 @XmlType(name = "WorkflowDocumentStatus", namespace = "https://inception.digital/operations")
-public enum WorkflowDocumentStatus {
+public enum WorkflowDocumentStatus implements CodeEnum {
 
   /** Requested. */
   @XmlEnumValue("Requested")
@@ -56,28 +54,10 @@ public enum WorkflowDocumentStatus {
   }
 
   /**
-   * Returns the workflow document status given by the specified code value.
-   *
-   * @param code the code for the workflow document status
-   * @return the workflow document status given by the specified code value
-   */
-  @JsonCreator
-  public static WorkflowDocumentStatus fromCode(String code) {
-    for (WorkflowDocumentStatus value : WorkflowDocumentStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the workflow document status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the workflow document status.
    *
    * @return the code for the workflow document status
    */
-  @JsonValue
   public String code() {
     return code;
   }

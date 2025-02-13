@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The policy type")
 @XmlEnum
 @XmlType(name = "PolicyType", namespace = "https://inception.digital/security")
-public enum PolicyType {
+public enum PolicyType implements CodeEnum {
   /** XACML Policy Set. */
   @XmlEnumValue("XACMLPolicySet")
   XACML_POLICY_SET("xacml_policy_set", "XACML Policy Set"),
@@ -50,28 +49,10 @@ public enum PolicyType {
   }
 
   /**
-   * Returns the policy type given by the specified code value.
-   *
-   * @param code the code for the policy type
-   * @return the policy type given by the specified code value
-   */
-  @JsonCreator
-  public static PolicyType fromCode(String code) {
-    for (PolicyType value : PolicyType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the policy type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the policy type.
    *
    * @return the code for the policy type
    */
-  @JsonValue
   public String code() {
     return code;
   }

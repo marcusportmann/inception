@@ -16,8 +16,7 @@
 
 package digital.inception.sms.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The SMS status")
 @XmlEnum
 @XmlType(name = "SMSStatus", namespace = "https://inception.digital/sms")
-public enum SMSStatus {
+public enum SMSStatus implements CodeEnum {
   /** Unknown. */
   @XmlEnumValue("Unknown")
   UNKNOWN("unknown", "Unknown"),
@@ -66,28 +65,10 @@ public enum SMSStatus {
   }
 
   /**
-   * Returns the SMS status given by the specified code value.
-   *
-   * @param code the code for the SMS status
-   * @return the SMS status given by the specified code value
-   */
-  @JsonCreator
-  public static SMSStatus fromCode(String code) {
-    for (SMSStatus value : SMSStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the SMS status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the SMS status.
    *
    * @return the code for the SMS status
    */
-  @JsonValue
   public String code() {
     return code;
   }

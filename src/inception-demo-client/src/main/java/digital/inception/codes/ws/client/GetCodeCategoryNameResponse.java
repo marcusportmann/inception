@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -8,10 +7,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * <p>Java class for GetCodeCategoryNameResponse complex type.
- * 
+ * Java class for GetCodeCategoryNameResponse complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetCodeCategoryNameResponse"&gt;
  *   &lt;complexContent&gt;
@@ -23,42 +22,33 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetCodeCategoryNameResponse", propOrder = {
-    "getCodeCategoryName"
-})
-public class GetCodeCategoryNameResponse implements Serializable
-{
+@XmlType(
+    name = "GetCodeCategoryNameResponse",
+    propOrder = {"getCodeCategoryName"})
+public class GetCodeCategoryNameResponse implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "GetCodeCategoryName")
-    protected String getCodeCategoryName;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the getCodeCategoryName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getGetCodeCategoryName() {
-        return getCodeCategoryName;
-    }
+  @XmlElement(name = "GetCodeCategoryName")
+  protected String getCodeCategoryName;
 
-    /**
-     * Sets the value of the getCodeCategoryName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGetCodeCategoryName(String value) {
-        this.getCodeCategoryName = value;
-    }
+  /**
+   * Gets the value of the getCodeCategoryName property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getGetCodeCategoryName() {
+    return getCodeCategoryName;
+  }
 
+  /**
+   * Sets the value of the getCodeCategoryName property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setGetCodeCategoryName(String value) {
+    this.getCodeCategoryName = value;
+  }
 }

@@ -16,8 +16,7 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "A mandatary requirement")
 @XmlEnum
 @XmlType(name = "RequiredMandataries", namespace = "https://inception.digital/party")
-public enum RequiredMandataries {
+public enum RequiredMandataries implements CodeEnum {
   /** All mandataries. */
   @XmlEnumValue("All")
   ALL("all", "All Mandataries"),
@@ -67,28 +66,10 @@ public enum RequiredMandataries {
   }
 
   /**
-   * Returns the required mandataries given by the specified code value.
-   *
-   * @param code the code for the required mandataries
-   * @return the required mandataries given by the specified code value
-   */
-  @JsonCreator
-  public static RequiredMandataries fromCode(String code) {
-    for (RequiredMandataries value : RequiredMandataries.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the required mandataries with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the required mandataries.
    *
    * @return the code for the required mandataries
    */
-  @JsonValue
   public String code() {
     return code;
   }

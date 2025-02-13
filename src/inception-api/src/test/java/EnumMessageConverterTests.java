@@ -34,9 +34,9 @@ import org.springframework.lang.NonNull;
 /** The <b>EnumMessageConverterTests</b> class. */
 public class EnumMessageConverterTests {
 
-  /** Test the conversion of a JSON annotated enum. */
+  /** Test the conversion of an enum implementing the CodeEnum interface. */
   @Test
-  public void jsonAnnotatedEnumTest() throws Exception {
+  public void codeEnumTest() throws Exception {
     TestEnum testEnum = TestEnum.OPTION2;
 
     EnumMessageConverter enumMessageConverter = new EnumMessageConverter();

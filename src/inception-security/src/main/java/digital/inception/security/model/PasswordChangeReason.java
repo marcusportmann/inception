@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The password change reason")
 @XmlEnum
 @XmlType(name = "PasswordChangeReason", namespace = "https://inception.digital/security")
-public enum PasswordChangeReason {
+public enum PasswordChangeReason implements CodeEnum {
   /** User. */
   @XmlEnumValue("User")
   USER("user", "User"),
@@ -55,28 +54,10 @@ public enum PasswordChangeReason {
   }
 
   /**
-   * Returns the password change reason given by the specified code value.
-   *
-   * @param code the code for the password change reason
-   * @return the password change reason given by the specified code value
-   */
-  @JsonCreator
-  public static PasswordChangeReason fromCode(String code) {
-    for (PasswordChangeReason value : PasswordChangeReason.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the password change reason with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the password change reason.
    *
    * @return the code for the password change reason
    */
-  @JsonValue
   public String code() {
     return code;
   }

@@ -16,8 +16,7 @@
 
 package digital.inception.core.time;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The time unit")
 @XmlEnum
 @XmlType(name = "TimeUnit", namespace = "https://inception.digital/core")
-public enum TimeUnit {
+public enum TimeUnit implements CodeEnum {
 
   /** Nanoseconds. */
   @XmlEnumValue("Nanoseconds")
@@ -83,28 +82,10 @@ public enum TimeUnit {
   }
 
   /**
-   * Returns the time unit given by the specified code value.
-   *
-   * @param code the code for the time unit
-   * @return the time unit given by the specified code value
-   */
-  @JsonCreator
-  public static TimeUnit fromCode(String code) {
-    for (TimeUnit value : TimeUnit.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the time unit with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the time unit.
    *
    * @return the code for the time unit
    */
-  @JsonValue
   public String code() {
     return code;
   }

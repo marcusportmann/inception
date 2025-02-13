@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -8,10 +7,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * <p>Java class for GetCodeName complex type.
- * 
+ * Java class for GetCodeName complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetCodeName"&gt;
  *   &lt;complexContent&gt;
@@ -24,69 +23,54 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetCodeName", propOrder = {
-    "codeCategoryId",
-    "codeId"
-})
-public class GetCodeName implements Serializable
-{
+@XmlType(
+    name = "GetCodeName",
+    propOrder = {"codeCategoryId", "codeId"})
+public class GetCodeName implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "CodeCategoryId", required = true)
-    protected String codeCategoryId;
-    @XmlElement(name = "CodeId", required = true)
-    protected String codeId;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the codeCategoryId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCodeCategoryId() {
-        return codeCategoryId;
-    }
+  @XmlElement(name = "CodeCategoryId", required = true)
+  protected String codeCategoryId;
 
-    /**
-     * Gets the value of the codeId property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getCodeId() {
-        return codeId;
-    }
+  @XmlElement(name = "CodeId", required = true)
+  protected String codeId;
 
-    /**
-     * Sets the value of the codeCategoryId property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setCodeCategoryId(String value) {
-        this.codeCategoryId = value;
-    }
+  /**
+   * Gets the value of the codeCategoryId property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getCodeCategoryId() {
+    return codeCategoryId;
+  }
 
-    /**
-     * Sets the value of the codeId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCodeId(String value) {
-        this.codeId = value;
-    }
+  /**
+   * Gets the value of the codeId property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getCodeId() {
+    return codeId;
+  }
 
+  /**
+   * Sets the value of the codeCategoryId property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setCodeCategoryId(String value) {
+    this.codeCategoryId = value;
+  }
+
+  /**
+   * Sets the value of the codeId property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setCodeId(String value) {
+    this.codeId = value;
+  }
 }

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.security.persistence.TokenClaimListConverter;
+import digital.inception.security.persistence.TokenClaimListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -95,7 +95,7 @@ public class Token implements Serializable {
   @XmlElementWrapper(name = "Claims", required = true)
   @XmlElement(name = "Claim", required = true)
   @Column(name = "claims_json", nullable = false)
-  @Convert(converter = TokenClaimListConverter.class)
+  @Convert(converter = TokenClaimListAttributeConverter.class)
   private List<TokenClaim> claims = new ArrayList<>();
 
   /** The data for the token. */

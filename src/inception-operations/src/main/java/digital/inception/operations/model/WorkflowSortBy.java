@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The method used to sort the list of workflows")
 @XmlEnum
 @XmlType(name = "WorkflowSortBy", namespace = "https://inception.digital/operations")
-public enum WorkflowSortBy {
+public enum WorkflowSortBy implements CodeEnum {
   /** Sort by definition ID. */
   @XmlEnumValue("DefinitionId")
   DEFINITION_ID("definition_id", "Sort By Definition ID");
@@ -47,28 +45,10 @@ public enum WorkflowSortBy {
   }
 
   /**
-   * Returns the method used to sort a list of workflows given by the specified code value.
-   *
-   * @param code the code for the method used to sort a list of workflows
-   * @return the method used to sort a list of workflows given by the specified code value
-   */
-  @JsonCreator
-  public static WorkflowSortBy fromCode(String code) {
-    for (WorkflowSortBy value : WorkflowSortBy.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the workflow sort by with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the method used to sort a list of workflows.
    *
    * @return the code for the method used to sort a list of workflows
    */
-  @JsonValue
   public String code() {
     return code;
   }

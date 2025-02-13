@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The group member type")
 @XmlEnum
 @XmlType(name = "GroupMemberType", namespace = "https://inception.digital/security")
-public enum GroupMemberType {
+public enum GroupMemberType implements CodeEnum {
   /** User. */
   @XmlEnumValue("User")
   USER("user", "User"),
@@ -50,28 +49,10 @@ public enum GroupMemberType {
   }
 
   /**
-   * Returns the group member type given by the specified code value.
-   *
-   * @param code the code for the group member type
-   * @return the group member type given by the specified code value
-   */
-  @JsonCreator
-  public static GroupMemberType fromCode(String code) {
-    for (GroupMemberType value : GroupMemberType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the group member type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the group member type.
    *
    * @return the code for the group member type
    */
-  @JsonValue
   public String code() {
     return code;
   }

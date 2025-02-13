@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
-import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
+import digital.inception.jpa.StringListAttributeConverter;
 import digital.inception.party.constraint.ValidCountryCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -366,7 +366,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElementWrapper(name = "Purposes")
   @XmlElement(name = "Purpose")
   @Size(min = 1, max = 10)
-  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "purposes", length = 510)
   private List<String> purposes;
 

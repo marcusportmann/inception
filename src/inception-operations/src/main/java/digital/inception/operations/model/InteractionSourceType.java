@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The interaction source type")
 @XmlEnum
 @XmlType(name = "InteractionSourceType", namespace = "https://inception.digital/operations")
-public enum InteractionSourceType {
+public enum InteractionSourceType implements CodeEnum {
 
   /** Mailbox. */
   @XmlEnumValue("Mailbox")
@@ -51,28 +49,10 @@ public enum InteractionSourceType {
   }
 
   /**
-   * Returns the interaction source type given by the specified code value.
-   *
-   * @param code the code for the interaction source type
-   * @return the interaction source type given by the specified code value
-   */
-  @JsonCreator
-  public static InteractionSourceType fromCode(String code) {
-    for (InteractionSourceType value : InteractionSourceType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the interaction source type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the interaction source type.
    *
    * @return the code for the interaction source type
    */
-  @JsonValue
   public String code() {
     return code;
   }

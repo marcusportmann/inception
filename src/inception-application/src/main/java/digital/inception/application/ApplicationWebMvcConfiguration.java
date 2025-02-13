@@ -16,7 +16,9 @@
 
 package digital.inception.application;
 
+import digital.inception.core.converter.StringToCodeEnumConverterFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -30,8 +32,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
 
-  /** Constructs a new <b>ApplicationWebMvcConfiguration</b>. */
-  public ApplicationWebMvcConfiguration() {}
+  private final StringToCodeEnumConverterFactory stringToCodeEnumConverterFactory;
+
+  /**
+   * Constructs a new <b>ApplicationWebMvcConfiguration</b>.
+   *
+   * @param stringToCodeEnumConverterFactory the String to CodeEnum converter factory
+   */
+  public ApplicationWebMvcConfiguration(
+      StringToCodeEnumConverterFactory stringToCodeEnumConverterFactory) {
+    this.stringToCodeEnumConverterFactory = stringToCodeEnumConverterFactory;
+  }
+
+  @Override
+  public void addFormatters(FormatterRegistry registry) {
+    /*
+     * NOTE: This enables the conversion of custom Enum types that implement the CodeEnum interface,
+     *       e.g. the conversion of request parameters with the Enum type on a Spring rest
+     *       controller.
+     */
+    registry.addConverterFactory(stringToCodeEnumConverterFactory);
+  }
 
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

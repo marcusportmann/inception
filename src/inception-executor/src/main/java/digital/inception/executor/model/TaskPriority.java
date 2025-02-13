@@ -16,8 +16,7 @@
 
 package digital.inception.executor.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The task priority")
 @XmlEnum
 @XmlType(name = "TaskPriority", namespace = "https://inception.digital/executor")
-public enum TaskPriority {
+public enum TaskPriority implements CodeEnum {
 
   /** Low. */
   @XmlEnumValue("Low")
@@ -62,23 +61,6 @@ public enum TaskPriority {
   }
 
   /**
-   * Returns the task priority given by the specified code value.
-   *
-   * @param code the code for the task priority
-   * @return the task priority given by the specified code value
-   */
-  @JsonCreator
-  public static TaskPriority fromCode(String code) {
-    for (TaskPriority value : TaskPriority.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the task priority with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the task priority given by the specified database code value.
    *
    * @param dbCode the database code for the task priority
@@ -103,7 +85,6 @@ public enum TaskPriority {
    *
    * @return the code for the task priority
    */
-  @JsonValue
   public String code() {
     return code;
   }

@@ -16,8 +16,7 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The method used to sort the list of associations")
 @XmlEnum
 @XmlType(name = "AssociationSortBy", namespace = "https://inception.digital/party")
-public enum AssociationSortBy {
+public enum AssociationSortBy implements CodeEnum {
   /** Sort by type. */
   @XmlEnumValue("Type")
   TYPE("type", "Sort By Type");
@@ -47,28 +46,10 @@ public enum AssociationSortBy {
   }
 
   /**
-   * Returns the method used to sort a list of associations given by the specified code value.
-   *
-   * @param code the code for the method used to sort a list of associations
-   * @return the method used to sort a list of associations given by the specified code value
-   */
-  @JsonCreator
-  public static AssociationSortBy fromCode(String code) {
-    for (AssociationSortBy value : AssociationSortBy.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the association sort by with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the method used to sort a list of associations.
    *
    * @return the code for the method used to sort a list of associations
    */
-  @JsonValue
   public String code() {
     return code;
   }

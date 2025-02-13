@@ -16,8 +16,7 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "A type of unit of measurement")
 @XmlEnum
 @XmlType(name = "MeasurementUnitType", namespace = "https://inception.digital/party")
-public enum MeasurementUnitType {
+public enum MeasurementUnitType implements CodeEnum {
   /** Length. */
   @XmlEnumValue("Length")
   LENGTH("length", "Length"),
@@ -54,28 +53,10 @@ public enum MeasurementUnitType {
   }
 
   /**
-   * Returns the measurement unit type given by the specified code value.
-   *
-   * @param code the code for the measurement unit type
-   * @return the measurement unit type given by the specified code value
-   */
-  @JsonCreator
-  public static MeasurementUnitType fromCode(String code) {
-    for (MeasurementUnitType value : MeasurementUnitType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the measurement unit type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the measurement unit type.
    *
    * @return the code for the measurement unit type
    */
-  @JsonValue
   public String code() {
     return code;
   }

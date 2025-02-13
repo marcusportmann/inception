@@ -38,8 +38,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class SchedulerApiControllerImpl extends SecureApiController implements
-    SchedulerApiController {
+public class SchedulerApiControllerImpl extends SecureApiController
+    implements SchedulerApiController {
 
   /** The Scheduler Service. */
   private final SchedulerService schedulerService;

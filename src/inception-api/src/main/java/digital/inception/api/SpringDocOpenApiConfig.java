@@ -40,10 +40,10 @@ public class SpringDocOpenApiConfig {
   /** Constructs a new <b>SpringDocOpenApiConfig</b>. */
   public SpringDocOpenApiConfig() {}
 
-  /** Register the time model converter to support LocalTime and OffsetTime properties. */
+  /** Register the model converter. */
   @PostConstruct
-  public void registerTimeModelConverter() {
-    ModelConverters.getInstance().addConverter(new SpringDocOpenApiTimeModelConverter());
+  public void registerModelConverter() {
+    ModelConverters.getInstance().addConverter(new SpringDocOpenApiModelConverter());
   }
 
   /**

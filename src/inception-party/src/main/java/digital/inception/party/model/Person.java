@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.jpa.JpaUtil;
-import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
+import digital.inception.jpa.StringListAttributeConverter;
 import digital.inception.party.constraint.ValidPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -417,13 +417,13 @@ public class Person extends PartyBase implements Serializable {
 
   /** The ISO 3166-1 alpha-2 codes for the countries of citizenship for the person. */
   @Size(min = 1, max = 10)
-  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "countries_of_citizenship", length = 50)
   private List<String> countriesOfCitizenship;
 
   /** The ISO 3166-1 alpha-2 codes for the countries of tax residence for the person. */
   @Size(min = 1, max = 10)
-  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "countries_of_tax_residence", length = 50)
   private List<String> countriesOfTaxResidence;
 

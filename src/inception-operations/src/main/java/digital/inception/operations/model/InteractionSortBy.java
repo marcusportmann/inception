@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The method used to sort the list of interactions")
 @XmlEnum
 @XmlType(name = "InteractionSortBy", namespace = "https://inception.digital/operations")
-public enum InteractionSortBy {
+public enum InteractionSortBy implements CodeEnum {
   /** Sort by timestamp. */
   @XmlEnumValue("Timestamp")
   TIMESTAMP("timestamp", "Sort By Timestamp");
@@ -47,28 +45,10 @@ public enum InteractionSortBy {
   }
 
   /**
-   * Returns the method used to sort a list of interactions given by the specified code value.
-   *
-   * @param code the code for the method used to sort a list of interactions
-   * @return the method used to sort a list of interactions given by the specified code value
-   */
-  @JsonCreator
-  public static InteractionSortBy fromCode(String code) {
-    for (InteractionSortBy value : InteractionSortBy.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the interaction sort by with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the method used to sort a list of interactions.
    *
    * @return the code for the method used to sort a list of interactions
    */
-  @JsonValue
   public String code() {
     return code;
   }

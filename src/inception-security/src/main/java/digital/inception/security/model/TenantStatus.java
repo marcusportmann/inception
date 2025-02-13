@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The tenant status")
 @XmlEnum
 @XmlType(name = "TenantStatus", namespace = "https://inception.digital/security")
-public enum TenantStatus {
+public enum TenantStatus implements CodeEnum {
   /** Inactive. */
   @XmlEnumValue("Inactive")
   INACTIVE("inactive", "Inactive"),
@@ -50,28 +49,10 @@ public enum TenantStatus {
   }
 
   /**
-   * Returns the tenant status given by the specified code value.
-   *
-   * @param code the code for the tenant status
-   * @return the tenant status given by the specified code value
-   */
-  @JsonCreator
-  public static TenantStatus fromCode(String code) {
-    for (TenantStatus value : TenantStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the tenant status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code value for the tenant status.
    *
    * @return the code value for the tenant status
    */
-  @JsonValue
   public String code() {
     return code;
   }

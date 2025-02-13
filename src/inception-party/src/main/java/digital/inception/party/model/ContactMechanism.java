@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
+import digital.inception.jpa.StringListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -91,7 +91,7 @@ public class ContactMechanism implements Serializable {
   @XmlElementWrapper(name = "Purposes")
   @XmlElement(name = "Purpose")
   @Size(min = 1, max = 10)
-  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "purposes", length = 510)
   private List<String> purposes;
 

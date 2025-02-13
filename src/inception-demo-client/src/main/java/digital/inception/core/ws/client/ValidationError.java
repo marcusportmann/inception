@@ -1,4 +1,3 @@
-
 package digital.inception.core.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -8,10 +7,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * <p>Java class for ValidationError complex type.
- * 
+ * Java class for ValidationError complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ValidationError"&gt;
  *   &lt;complexContent&gt;
@@ -24,71 +23,54 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ValidationError", propOrder = {
-    "property",
-    "message"
-})
-public class ValidationError implements Serializable
-{
+@XmlType(
+    name = "ValidationError",
+    propOrder = {"property", "message"})
+public class ValidationError implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
+  private static final long serialVersionUID = 1000000L;
 
-    @XmlElement(name = "Message", required = true)
-    protected String message;
+  @XmlElement(name = "Message", required = true)
+  protected String message;
 
-    @XmlElement(name = "Property", required = true)
-    protected String property;
+  @XmlElement(name = "Property", required = true)
+  protected String property;
 
-    /**
-     * Gets the value of the message property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getMessage() {
-        return message;
-    }
+  /**
+   * Gets the value of the message property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getMessage() {
+    return message;
+  }
 
-    /**
-     * Gets the value of the property property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getProperty() {
-        return property;
-    }
+  /**
+   * Gets the value of the property property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getProperty() {
+    return property;
+  }
 
-    /**
-     * Sets the value of the message property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setMessage(String value) {
-        this.message = value;
-    }
+  /**
+   * Sets the value of the message property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setMessage(String value) {
+    this.message = value;
+  }
 
-    /**
-     * Sets the value of the property property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setProperty(String value) {
-        this.property = value;
-    }
-
+  /**
+   * Sets the value of the property property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setProperty(String value) {
+    this.property = value;
+  }
 }

@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -8,10 +7,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * <p>Java class for GetCodeNameResponse complex type.
- * 
+ * Java class for GetCodeNameResponse complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetCodeNameResponse"&gt;
  *   &lt;complexContent&gt;
@@ -23,42 +22,33 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetCodeNameResponse", propOrder = {
-    "codeName"
-})
-public class GetCodeNameResponse implements Serializable
-{
+@XmlType(
+    name = "GetCodeNameResponse",
+    propOrder = {"codeName"})
+public class GetCodeNameResponse implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "CodeName")
-    protected String codeName;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the codeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCodeName() {
-        return codeName;
-    }
+  @XmlElement(name = "CodeName")
+  protected String codeName;
 
-    /**
-     * Sets the value of the codeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCodeName(String value) {
-        this.codeName = value;
-    }
+  /**
+   * Gets the value of the codeName property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getCodeName() {
+    return codeName;
+  }
 
+  /**
+   * Sets the value of the codeName property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setCodeName(String value) {
+    this.codeName = value;
+  }
 }

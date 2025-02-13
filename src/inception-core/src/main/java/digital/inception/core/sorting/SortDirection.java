@@ -16,8 +16,7 @@
 
 package digital.inception.core.sorting;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The sort direction")
 @XmlEnum
 @XmlType(name = "SortDirection", namespace = "https://inception.digital/core")
-public enum SortDirection {
+public enum SortDirection implements CodeEnum {
   /** Sort ascending. */
   @XmlEnumValue("Ascending")
   ASCENDING("asc", "Ascending"),
@@ -51,28 +50,10 @@ public enum SortDirection {
   }
 
   /**
-   * Returns the sort direction given by the specified code value.
-   *
-   * @param code the code for the sort direction
-   * @return the sort direction given by the specified code value
-   */
-  @JsonCreator
-  public static SortDirection fromCode(String code) {
-    for (SortDirection value : SortDirection.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the sort direction with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the sort direction.
    *
    * @return the code for the sort direction
    */
-  @JsonValue
   public String code() {
     return code;
   }

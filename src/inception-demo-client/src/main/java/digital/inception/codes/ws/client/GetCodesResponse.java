@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -10,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Java class for GetCodesResponse complex type.
- * 
+ * Java class for GetCodesResponse complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetCodesResponse"&gt;
  *   &lt;complexContent&gt;
@@ -25,47 +24,37 @@ import java.util.List;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetCodesResponse", propOrder = {
-    "code"
-})
-public class GetCodesResponse implements Serializable
-{
+@XmlType(
+    name = "GetCodesResponse",
+    propOrder = {"code"})
+public class GetCodesResponse implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "Code")
-    protected List<Code> code;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the code property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a <CODE>set</CODE> method for the code property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCode().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Code }
-     * 
-     * 
-     */
-    public List<Code> getCode() {
-        if (code == null) {
-            code = new ArrayList<Code>();
-        }
-        return this.code;
+  @XmlElement(name = "Code")
+  protected List<Code> code;
+
+  /**
+   * Gets the value of the code property.
+   *
+   * <p>This accessor method returns a reference to the live list, not a snapshot. Therefore any
+   * modification you make to the returned list will be present inside the Jakarta XML Binding
+   * object. This is why there is not a <CODE>set</CODE> method for the code property.
+   *
+   * <p>For example, to add a new item, do as follows:
+   *
+   * <pre>
+   *    getCode().add(newItem);
+   * </pre>
+   *
+   * <p>Objects of the following type(s) are allowed in the list {@link Code }
+   */
+  public List<Code> getCode() {
+    if (code == null) {
+      code = new ArrayList<Code>();
     }
-
+    return this.code;
+  }
 }

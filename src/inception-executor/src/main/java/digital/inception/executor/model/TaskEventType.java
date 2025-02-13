@@ -16,8 +16,7 @@
 
 package digital.inception.executor.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The task event type")
 @XmlEnum
 @XmlType(name = "TaskEventType", namespace = "https://inception.digital/executor")
-public enum TaskEventType {
+public enum TaskEventType implements CodeEnum {
 
   /** Step Completed. */
   @XmlEnumValue("StepCompleted")
@@ -55,28 +54,10 @@ public enum TaskEventType {
   }
 
   /**
-   * Returns the task event type given by the specified code value.
-   *
-   * @param code the code for the task event type
-   * @return the task event type given by the specified code value
-   */
-  @JsonCreator
-  public static TaskEventType fromCode(String code) {
-    for (TaskEventType value : TaskEventType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the task event type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the task event type.
    *
    * @return the code for the task event type
    */
-  @JsonValue
   public String code() {
     return code;
   }

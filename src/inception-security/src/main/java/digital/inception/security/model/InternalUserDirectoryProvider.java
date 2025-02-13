@@ -17,6 +17,7 @@
 package digital.inception.security.model;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.model.CodeEnum;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
@@ -566,7 +567,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
       for (UserAttribute userAttribute : userAttributes) {
         if (userAttribute.getName().equalsIgnoreCase("status")) {
-          userCriteria.setStatus(UserStatus.fromCode(userAttribute.getValue()));
+          userCriteria.setStatus(CodeEnum.fromCode(UserStatus.class, userAttribute.getValue()));
         } else if (userAttribute.getName().equalsIgnoreCase("email")) {
           userCriteria.setEmail(userAttribute.getValue());
         } else if (userAttribute.getName().equalsIgnoreCase("name")) {

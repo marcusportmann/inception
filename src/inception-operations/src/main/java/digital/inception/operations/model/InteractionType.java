@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The interaction type")
 @XmlEnum
 @XmlType(name = "InteractionType", namespace = "https://inception.digital/operations")
-public enum InteractionType {
+public enum InteractionType implements CodeEnum {
 
   /** Email. */
   @XmlEnumValue("Email")
@@ -67,28 +65,10 @@ public enum InteractionType {
   }
 
   /**
-   * Returns the interaction type given by the specified code value.
-   *
-   * @param code the code for the interaction type
-   * @return the interaction type given by the specified code value
-   */
-  @JsonCreator
-  public static InteractionType fromCode(String code) {
-    for (InteractionType value : InteractionType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the interaction type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the interaction type.
    *
    * @return the code for the interaction type
    */
-  @JsonValue
   public String code() {
     return code;
   }

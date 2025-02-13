@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The mailbox protocol")
 @XmlEnum
 @XmlType(name = "MailboxProtocol", namespace = "https://inception.digital/operations")
-public enum MailboxProtocol {
+public enum MailboxProtocol implements CodeEnum {
 
   /** Microsoft 365 IMAPS. */
   @XmlEnumValue("Microsoft365IMAPS")
@@ -55,28 +53,10 @@ public enum MailboxProtocol {
   }
 
   /**
-   * Returns the mailbox protocol given by the specified code value.
-   *
-   * @param code the code for the mailbox protocol
-   * @return the mailbox protocol given by the specified code value
-   */
-  @JsonCreator
-  public static MailboxProtocol fromCode(String code) {
-    for (MailboxProtocol value : MailboxProtocol.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the mailbox protocol with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the mailbox protocol.
    *
    * @return the code for the mailbox protocol
    */
-  @JsonValue
   public String code() {
     return code;
   }

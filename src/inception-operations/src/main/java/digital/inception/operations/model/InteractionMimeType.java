@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The interaction mime type")
 @XmlEnum
 @XmlType(name = "InteractionMimeType", namespace = "https://inception.digital/operations")
-public enum InteractionMimeType {
+public enum InteractionMimeType implements CodeEnum {
 
   /** Text/Plain. */
   @XmlEnumValue("text/plain")
@@ -51,28 +49,10 @@ public enum InteractionMimeType {
   }
 
   /**
-   * Returns the interaction mime type given by the specified code value.
-   *
-   * @param code the code for the interaction mime type
-   * @return the interaction mime type given by the specified code value
-   */
-  @JsonCreator
-  public static InteractionMimeType fromCode(String code) {
-    for (InteractionMimeType value : InteractionMimeType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the interaction mime type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the interaction mime type.
    *
    * @return the code for the interaction mime type
    */
-  @JsonValue
   public String code() {
     return code;
   }

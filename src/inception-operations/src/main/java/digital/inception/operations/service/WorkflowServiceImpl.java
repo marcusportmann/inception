@@ -118,7 +118,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   @Override
   public void createCaseDefinition(WorkflowDefinition caseDefinition)
       throws InvalidArgumentException,
-      DuplicateWorkflowDefinitionException,
+          DuplicateWorkflowDefinitionException,
           ServiceUnavailableException {
     validateCaseDefinition(caseDefinition);
 
@@ -141,7 +141,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   @Override
   public Workflow createWorkflow(CreateWorkflowRequest createWorkflowRequest, String createdBy)
       throws InvalidArgumentException,
-      WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
     validateCreateCaseRequest(createCaseRequest);
 
@@ -187,7 +187,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   @Override
   public void deleteCaseDefinition(String caseDefinitionId)
       throws InvalidArgumentException,
-      WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(caseDefinitionId)) {
       throw new InvalidArgumentException("caseDefinitionId");
@@ -210,7 +210,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   @Override
   public void deleteCaseDefinitionVersion(String caseDefinitionId, int caseDefinitionVersion)
       throws InvalidArgumentException,
-      WorkflowDefinitionVersionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(caseDefinitionId)) {
       throw new InvalidArgumentException("caseDefinitionId");
@@ -224,7 +224,8 @@ public class WorkflowServiceImpl implements WorkflowService {
       WorkflowDefinitionId id = new WorkflowDefinitionId(caseDefinitionId, caseDefinitionVersion);
 
       if (!caseDefinitionRepository.existsById(id)) {
-        throw new WorkflowDefinitionVersionNotFoundException(caseDefinitionId, caseDefinitionVersion);
+        throw new WorkflowDefinitionVersionNotFoundException(
+            caseDefinitionId, caseDefinitionVersion);
       }
 
       caseDefinitionRepository.deleteById(id);
@@ -254,7 +255,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   @Override
   public WorkflowDefinition getCaseDefinition(String caseDefinitionId)
       throws InvalidArgumentException,
-      WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(caseDefinitionId)) {
       throw new InvalidArgumentException("caseDefinitionId");
@@ -279,9 +280,10 @@ public class WorkflowServiceImpl implements WorkflowService {
   }
 
   @Override
-  public WorkflowDefinition getCaseDefinitionVersion(String caseDefinitionId, int caseDefinitionVersion)
+  public WorkflowDefinition getCaseDefinitionVersion(
+      String caseDefinitionId, int caseDefinitionVersion)
       throws InvalidArgumentException,
-      WorkflowDefinitionVersionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(caseDefinitionId)) {
       throw new InvalidArgumentException("caseDefinitionId");
@@ -297,7 +299,8 @@ public class WorkflowServiceImpl implements WorkflowService {
               new WorkflowDefinitionId(caseDefinitionId, caseDefinitionVersion));
 
       if (caseDefinitionOptional.isEmpty()) {
-        throw new WorkflowDefinitionVersionNotFoundException(caseDefinitionId, caseDefinitionVersion);
+        throw new WorkflowDefinitionVersionNotFoundException(
+            caseDefinitionId, caseDefinitionVersion);
       }
 
       return caseDefinitionOptional.get();
@@ -345,7 +348,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   @Override
   public void updateCaseDefinition(WorkflowDefinition caseDefinition)
       throws InvalidArgumentException,
-      WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
     validateCaseDefinition(caseDefinition);
 
@@ -366,8 +369,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
   }
 
-  private void validateCase(Workflow theCase)
-      throws InvalidArgumentException {
+  private void validateCase(Workflow theCase) throws InvalidArgumentException {
     if (theCase == null) {
       throw new InvalidArgumentException("case");
     }

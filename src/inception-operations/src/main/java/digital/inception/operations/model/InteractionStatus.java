@@ -16,8 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The interaction status")
 @XmlEnum
 @XmlType(name = "InteractionStatus", namespace = "https://inception.digital/operations")
-public enum InteractionStatus {
+public enum InteractionStatus implements CodeEnum {
 
   /** Received. */
   @XmlEnumValue("Received")
@@ -59,28 +57,10 @@ public enum InteractionStatus {
   }
 
   /**
-   * Returns the interaction status given by the specified code value.
-   *
-   * @param code the code for the interaction status
-   * @return the interaction status given by the specified code value
-   */
-  @JsonCreator
-  public static InteractionStatus fromCode(String code) {
-    for (InteractionStatus value : InteractionStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the interaction status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the interaction status.
    *
    * @return the code for the interaction status
    */
-  @JsonValue
   public String code() {
     return code;
   }

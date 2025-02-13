@@ -48,7 +48,8 @@ public class ConfigApiControllerImpl extends SecureApiController implements Conf
    * @param applicationContext the Spring application context
    * @param configService the Config Service
    */
-  public ConfigApiControllerImpl(ApplicationContext applicationContext, ConfigService configService) {
+  public ConfigApiControllerImpl(
+      ApplicationContext applicationContext, ConfigService configService) {
     super(applicationContext);
 
     this.configService = configService;

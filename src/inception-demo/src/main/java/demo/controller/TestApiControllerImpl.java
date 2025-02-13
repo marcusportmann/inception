@@ -44,8 +44,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class TestApiControllerImpl extends SecureApiController implements TestApiController {
 
   /* Logger */
-  private static final Logger log =
-      LoggerFactory.getLogger(TestApiControllerImpl.class);
+  private static final Logger log = LoggerFactory.getLogger(TestApiControllerImpl.class);
 
   private final ExecutorService executorService;
 

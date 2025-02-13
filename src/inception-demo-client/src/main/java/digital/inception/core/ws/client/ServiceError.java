@@ -1,7 +1,5 @@
 package digital.inception.core.ws.client;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -10,6 +8,8 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 /**
  * Java class for ServiceError complex type.

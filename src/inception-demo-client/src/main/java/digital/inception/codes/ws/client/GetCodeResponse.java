@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -8,10 +7,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * <p>Java class for GetCodeResponse complex type.
- * 
+ * Java class for GetCodeResponse complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetCodeResponse"&gt;
  *   &lt;complexContent&gt;
@@ -23,42 +22,33 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetCodeResponse", propOrder = {
-    "code"
-})
-public class GetCodeResponse implements Serializable
-{
+@XmlType(
+    name = "GetCodeResponse",
+    propOrder = {"code"})
+public class GetCodeResponse implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "Code")
-    protected Code code;
+  private static final long serialVersionUID = 1000000L;
 
-    /**
-     * Gets the value of the code property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Code }
-     *     
-     */
-    public Code getCode() {
-        return code;
-    }
+  @XmlElement(name = "Code")
+  protected Code code;
 
-    /**
-     * Sets the value of the code property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Code }
-     *     
-     */
-    public void setCode(Code value) {
-        this.code = value;
-    }
+  /**
+   * Gets the value of the code property.
+   *
+   * @return possible object is {@link Code }
+   */
+  public Code getCode() {
+    return code;
+  }
 
+  /**
+   * Sets the value of the code property.
+   *
+   * @param value allowed object is {@link Code }
+   */
+  public void setCode(Code value) {
+    this.code = value;
+  }
 }

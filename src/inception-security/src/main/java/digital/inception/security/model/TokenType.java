@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The token type")
 @XmlEnum
 @XmlType(name = "TokenType", namespace = "http://digital.inception.co.za/security")
-public enum TokenType {
+public enum TokenType implements CodeEnum {
   /** JWT. */
   @XmlEnumValue("JWT")
   JWT("jwt", "JWT");
@@ -46,28 +45,10 @@ public enum TokenType {
   }
 
   /**
-   * Returns the token type given by the specified code value.
-   *
-   * @param code the code for the token type
-   * @return the token type given by the specified code value
-   */
-  @JsonCreator
-  public static TokenType fromCode(String code) {
-    for (TokenType value : TokenType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the token type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the token type.
    *
    * @return the code for the token type
    */
-  @JsonValue
   public String code() {
     return code;
   }

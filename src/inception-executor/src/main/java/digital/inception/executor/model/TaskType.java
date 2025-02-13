@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.executor.constraint.ValidTaskType;
-import digital.inception.executor.persistence.TaskEventTypeListConverter;
+import digital.inception.executor.persistence.TaskEventTypeListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -136,7 +136,7 @@ public class TaskType implements Serializable {
   @XmlElementWrapper(name = "EventTypes")
   @XmlElement(name = "EventType")
   @Column(name = "event_types", length = 1000)
-  @Convert(converter = TaskEventTypeListConverter.class)
+  @Convert(converter = TaskEventTypeListAttributeConverter.class)
   private List<TaskEventType> eventTypes;
 
   /** The event types that should be tracked for tasks of this type. */
@@ -146,7 +146,7 @@ public class TaskType implements Serializable {
   @XmlElementWrapper(name = "EventTypesWithTaskData")
   @XmlElement(name = "EventTypeWithTaskData")
   @Column(name = "event_types_with_task_data", length = 1000)
-  @Convert(converter = TaskEventTypeListConverter.class)
+  @Convert(converter = TaskEventTypeListAttributeConverter.class)
   private List<TaskEventType> eventTypesWithTaskData;
 
   /**

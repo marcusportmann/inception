@@ -19,7 +19,7 @@ package digital.inception.party.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.jpa.StringListToCommaDelimitedStringConverter;
+import digital.inception.jpa.StringListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -143,7 +143,7 @@ public class LockType implements Serializable {
   @XmlElement(name = "PartyType", required = true)
   @NotNull
   @Size(min = 1, max = 10)
-  @Convert(converter = StringListToCommaDelimitedStringConverter.class)
+  @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 

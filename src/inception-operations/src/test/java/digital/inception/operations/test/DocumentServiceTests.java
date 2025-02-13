@@ -38,7 +38,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>DocumentServiceTests</b> class contains the JUnit tests for the <b>DocumentService</b> class.
+ * The <b>DocumentServiceTests</b> class contains the JUnit tests for the <b>DocumentService</b>
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -49,52 +50,53 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class DocumentServiceTests {
 
-  /**
-   * The Document Service.
-   */
-  @Autowired private
-  DocumentService documentService;
+  /** The Document Service. */
+  @Autowired private DocumentService documentService;
 
-  /**
-   * The Jackson Object Mapper.
-   */
-  @Autowired
-  private ObjectMapper objectMapper;
+  /** The Jackson Object Mapper. */
+  @Autowired private ObjectMapper objectMapper;
 
-  /**
-   * Test the workflow definition functionality.
-   */
+  /** Test the workflow definition functionality. */
   @Test
   public void workflowDefinitionTest() throws Exception {
-    DocumentDefinition documentDefinition = new DocumentDefinition("test_document_definition_" + System.currentTimeMillis(), "Test Document Definition");
+    DocumentDefinition documentDefinition =
+        new DocumentDefinition(
+            "test_document_definition_" + System.currentTimeMillis(), "Test Document Definition");
 
     documentService.createDocumentDefinition(documentDefinition);
 
-    DocumentDefinition retrievedDocumentDefinition = documentService.getDocumentDefinition(documentDefinition.getId());
+    DocumentDefinition retrievedDocumentDefinition =
+        documentService.getDocumentDefinition(documentDefinition.getId());
 
     compareDocumentDefinitions(documentDefinition, retrievedDocumentDefinition);
 
     documentService.deleteDocumentDefinition(documentDefinition.getId());
 
-    DocumentDefinitionNotFoundException documentDefinitionNotFoundException = assertThrows(
-        DocumentDefinitionNotFoundException.class, () -> {
-          documentService.getDocumentDefinition(documentDefinition.getId());
-        });
+    DocumentDefinitionNotFoundException documentDefinitionNotFoundException =
+        assertThrows(
+            DocumentDefinitionNotFoundException.class,
+            () -> {
+              documentService.getDocumentDefinition(documentDefinition.getId());
+            });
   }
 
-  private void compareDocumentDefinitions(DocumentDefinition documentDefinition1, DocumentDefinition documentDefinition2) {
+  private void compareDocumentDefinitions(
+      DocumentDefinition documentDefinition1, DocumentDefinition documentDefinition2) {
     assertEquals(
-        documentDefinition1.getId(), documentDefinition2.getId(), "The ID values for the document definitions do not match");
+        documentDefinition1.getId(),
+        documentDefinition2.getId(),
+        "The ID values for the document definitions do not match");
     assertEquals(
-        documentDefinition1.getName(), documentDefinition2.getName(), "The name values for the document definitions do not match");
+        documentDefinition1.getName(),
+        documentDefinition2.getName(),
+        "The name values for the document definitions do not match");
   }
-
 }
 
 // TODO: ADD TEST TO VALIDATE REQUIRED ATTRIBUTES FOR A DOCUMENT

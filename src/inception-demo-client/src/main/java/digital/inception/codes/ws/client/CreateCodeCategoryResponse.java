@@ -1,4 +1,3 @@
-
 package digital.inception.codes.ws.client;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -7,10 +6,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * <p>Java class for CreateCodeCategoryResponse complex type.
- * 
+ * Java class for CreateCodeCategoryResponse complex type.
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CreateCodeCategoryResponse"&gt;
  *   &lt;complexContent&gt;
@@ -21,14 +20,10 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CreateCodeCategoryResponse")
-public class CreateCodeCategoryResponse implements Serializable
-{
+public class CreateCodeCategoryResponse implements Serializable {
 
-    private final static long serialVersionUID = 1000000L;
-
+  private static final long serialVersionUID = 1000000L;
 }

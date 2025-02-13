@@ -16,8 +16,7 @@
 
 package digital.inception.core.file;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +31,7 @@ import org.springframework.util.StringUtils;
 @Schema(description = "The file type")
 @XmlEnum
 @XmlType(name = "FileType", namespace = "https://inception.digital/core")
-public enum FileType {
+public enum FileType implements CodeEnum {
 
   /** Audio 3GPP. */
   @XmlEnumValue("Audio3GPP")
@@ -256,23 +255,6 @@ public enum FileType {
   }
 
   /**
-   * Returns the file type given by the specified code value.
-   *
-   * @param code the code for the file type
-   * @return the file type given by the specified code value
-   */
-  @JsonCreator
-  public static FileType fromCode(String code) {
-    for (FileType value : FileType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the file type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the file type for the specified filename.
    *
    * @param filename the filename
@@ -320,7 +302,6 @@ public enum FileType {
    *
    * @return the code for the file type
    */
-  @JsonValue
   public String code() {
     return code;
   }
@@ -348,7 +329,6 @@ public enum FileType {
    *
    * @return the MIME type for the file type
    */
-  @JsonValue
   public String mimeType() {
     return mimeType;
   }

@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 
 /**
  * The <b>TestEnum</b> enumeration.
@@ -23,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public enum TestEnum {
+public enum TestEnum implements CodeEnum {
 
   /** Option1. */
   OPTION1("option1", "Option1"),
@@ -41,28 +40,10 @@ public enum TestEnum {
   }
 
   /**
-   * Returns the test enum given by the specified code value.
-   *
-   * @param code the code for the test enum
-   * @return the test enum given by the specified code value
-   */
-  @JsonCreator
-  public static TestEnum fromCode(String code) {
-    for (TestEnum value : TestEnum.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the test enum with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the test enum.
    *
    * @return the code for the test enum
    */
-  @JsonValue
   public String code() {
     return code;
   }

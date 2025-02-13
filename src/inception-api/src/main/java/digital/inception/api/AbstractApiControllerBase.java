@@ -85,33 +85,33 @@ public abstract class AbstractApiControllerBase {
     }
 
     /*
-     * Register the InceptionDateTimeModule module dynamically with the Jackson Object Mapper if not
+     * Register the InceptionModule module dynamically with the Jackson Object Mapper if not
      * already registered
      */
     try {
-      // Check if the InceptionDateTimeModule module is already registered
+      // Check if the InceptionModule module is already registered
       boolean isModuleRegistered =
-          objectMapper.getRegisteredModuleIds().contains("InceptionDateTimeModule");
+          objectMapper.getRegisteredModuleIds().contains("InceptionModule");
 
       if (!isModuleRegistered) {
-        // Check if the class for the InceptionDateTimeModule module is on the classpath
-        Class<?> moduleClass = Class.forName("digital.inception.json.InceptionDateTimeModule");
+        // Check if the class for the InceptionModule module is on the classpath
+        Class<?> moduleClass = Class.forName("digital.inception.json.InceptionModule");
 
-        // Dynamically instantiate and register InceptionDateTimeModule the module
+        // Dynamically instantiate and register InceptionModule the module
         Object moduleInstance = moduleClass.getDeclaredConstructor().newInstance();
 
         if (moduleInstance instanceof com.fasterxml.jackson.databind.Module) {
           objectMapper.registerModule((com.fasterxml.jackson.databind.Module) moduleInstance);
           log.info(
-              "Successfully registered the InceptionDateTimeModule module with the Jackson Object Mapper");
+              "Successfully registered the InceptionModule module with the Jackson Object Mapper");
         }
       }
     } catch (ClassNotFoundException e) {
       log.warn(
-          "The InceptionDateTimeModule class was not found on the classpath and could not be registered with the Jackson Object Mapper");
+          "The InceptionModule class was not found on the classpath and could not be registered with the Jackson Object Mapper");
     } catch (Exception e) {
       throw new BeanCreationException(
-          "Failed to dynamically register the InceptionDateTimeModule module with the Jackson Object Mapper",
+          "Failed to dynamically register the InceptionModule module with the Jackson Object Mapper",
           e);
     }
 

@@ -16,8 +16,7 @@
 
 package digital.inception.executor.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The method used to sort the list of tasks")
 @XmlEnum
 @XmlType(name = "TaskSortBy", namespace = "https://inception.digital/executor")
-public enum TaskSortBy {
+public enum TaskSortBy implements CodeEnum {
 
   /** Sort by queued. */
   @XmlEnumValue("Queued")
@@ -51,28 +50,10 @@ public enum TaskSortBy {
   }
 
   /**
-   * Returns the method used to sort a list of tasks given by the specified code value.
-   *
-   * @param code the code for the method used to sort a list of tasks
-   * @return the method used to sort a list of tasks given by the specified code value
-   */
-  @JsonCreator
-  public static TaskSortBy fromCode(String code) {
-    for (TaskSortBy value : TaskSortBy.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the task sort by with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the method used to sort a list of tasks.
    *
    * @return the code for the method used to sort a list of tasks
    */
-  @JsonValue
   public String code() {
     return code;
   }

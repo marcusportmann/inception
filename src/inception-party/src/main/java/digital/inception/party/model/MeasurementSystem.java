@@ -16,8 +16,7 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -37,7 +36,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "A system of measurement")
 @XmlEnum
 @XmlType(name = "MeasurementSystem", namespace = "https://inception.digital/party")
-public enum MeasurementSystem {
+public enum MeasurementSystem implements CodeEnum {
   /** Customary. */
   @XmlEnumValue("Customary")
   CUSTOMARY("customary", "United States Customary"),
@@ -60,28 +59,10 @@ public enum MeasurementSystem {
   }
 
   /**
-   * Returns the measurement system given by the specified code value.
-   *
-   * @param code the code for the measurement system
-   * @return the measurement system given by the specified code value
-   */
-  @JsonCreator
-  public static MeasurementSystem fromCode(String code) {
-    for (MeasurementSystem value : MeasurementSystem.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the measurement system with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the measurement system.
    *
    * @return the code for the measurement system
    */
-  @JsonValue
   public String code() {
     return code;
   }

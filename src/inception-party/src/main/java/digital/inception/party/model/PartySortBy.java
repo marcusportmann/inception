@@ -16,8 +16,7 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The method used to sort the list of parties")
 @XmlEnum
 @XmlType(name = "PartySortBy", namespace = "https://inception.digital/party")
-public enum PartySortBy {
+public enum PartySortBy implements CodeEnum {
   /** Sort by name. */
   @XmlEnumValue("Name")
   NAME("name", "Sort By Name");
@@ -46,28 +45,10 @@ public enum PartySortBy {
   }
 
   /**
-   * Returns the method used to sort a list of parties given by the specified code value.
-   *
-   * @param code the code for the method used to sort a list of parties
-   * @return the method used to sort a list of parties given by the specified code value
-   */
-  @JsonCreator
-  public static PartySortBy fromCode(String code) {
-    for (PartySortBy value : PartySortBy.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the party sort by with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the method used to sort a list of parties.
    *
    * @return the code for the method used to sort a list of parties
    */
-  @JsonValue
   public String code() {
     return code;
   }

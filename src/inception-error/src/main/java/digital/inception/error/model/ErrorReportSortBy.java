@@ -16,8 +16,7 @@
 
 package digital.inception.error.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -32,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The method used to sort the list of error reports")
 @XmlEnum
 @XmlType(name = "ErrorReportSortBy", namespace = "https://inception.digital/error")
-public enum ErrorReportSortBy {
+public enum ErrorReportSortBy implements CodeEnum {
   /** Sort by created. */
   @XmlEnumValue("Created")
   CREATED("created", "Sort By Created"),
@@ -51,28 +50,10 @@ public enum ErrorReportSortBy {
   }
 
   /**
-   * Returns the method used to sort a list of error reports given by the specified code value.
-   *
-   * @param code the code for the method used to sort a list of error reports
-   * @return the method used to sort a list of error reports given by the specified code value
-   */
-  @JsonCreator
-  public static ErrorReportSortBy fromCode(String code) {
-    for (ErrorReportSortBy value : ErrorReportSortBy.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the error report sort by with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the method used to sort a list of error reports.
    *
    * @return the code for the method used to sort a list of error reports
    */
-  @JsonValue
   public String code() {
     return code;
   }

@@ -16,8 +16,7 @@
 
 package digital.inception.scheduler.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The job status")
 @XmlEnum
 @XmlType(name = "JobStatus", namespace = "https://inception.digital/scheduler")
-public enum JobStatus {
+public enum JobStatus implements CodeEnum {
   /** Unscheduled. */
   @XmlEnumValue("Unscheduled")
   UNSCHEDULED("unscheduled", "Unscheduled"),
@@ -70,28 +69,10 @@ public enum JobStatus {
   }
 
   /**
-   * Returns the job status given by the specified code value.
-   *
-   * @param code the code for the job status
-   * @return the job status given by the specified code value
-   */
-  @JsonCreator
-  public static JobStatus fromCode(String code) {
-    for (JobStatus value : JobStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the job status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the job status.
    *
    * @return the code for the job status
    */
-  @JsonValue
   public String code() {
     return code;
   }

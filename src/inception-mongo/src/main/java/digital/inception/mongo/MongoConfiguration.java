@@ -17,6 +17,8 @@
 package digital.inception.mongo;
 
 import digital.inception.core.CoreConfiguration;
+import digital.inception.core.converter.CodeEnumToStringConverter;
+import digital.inception.core.converter.StringToCodeEnumConverterFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -141,18 +143,16 @@ public class MongoConfiguration {
     converters.addAll(readingConverters.values());
 
     /*
-     * Add the converter that converts Enum values to String values using the Jackson approach,
-     * which uses the @JsonValue annotation on a method on the custom Enum class. If this is not
-     * possible, the standard approach of using the name() method on the Enum class is used.
+     * Add the converter that converts Enum values that implement the CodeEnum interface to String
+     * snake case code values.
      */
-    converters.add(new MongoEnumToStringConverter());
+    converters.add(new CodeEnumToStringConverter());
 
     /*
-     * Add the converter that converts String values to Enum values using the Jackson approach,
-     * which uses the @JsonCreator annotation on a method on the custom Enum class. If this is not
-     * possible, the standard approach of using the valueOf() method on the Enum class is used.
+     * Add the converter that converts String snake case code values to enumeration values for
+     * custom Enums that implement the CodeEnum interface.
      */
-    converters.add(new MongoStringToEnumConverterFactory());
+    converters.add(new StringToCodeEnumConverterFactory());
 
     return new MongoCustomConversions(converters);
   }

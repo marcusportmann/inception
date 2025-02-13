@@ -16,11 +16,10 @@
 
 package digital.inception.ws.security;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 
 /** The enumeration giving the supported types of web service security. */
-public enum WebServiceSecurityType {
+public enum WebServiceSecurityType implements CodeEnum {
   /** The value indicating that the web service does not implement a security service. */
   NONE("none", "None"),
 
@@ -61,28 +60,10 @@ public enum WebServiceSecurityType {
   }
 
   /**
-   * Returns the web service security type given by the specified code value.
-   *
-   * @param code the code for the web service security type
-   * @return the web service security type given by the specified code value
-   */
-  @JsonCreator
-  public static WebServiceSecurityType fromCode(String code) {
-    for (WebServiceSecurityType value : WebServiceSecurityType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the web service security type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the web service security type.
    *
    * @return the code for the web service security type
    */
-  @JsonValue
   public String code() {
     return code;
   }

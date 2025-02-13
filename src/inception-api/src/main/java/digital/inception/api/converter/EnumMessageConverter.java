@@ -18,6 +18,7 @@ package digital.inception.api.converter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,7 +43,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class EnumMessageConverter extends AbstractHttpMessageConverter<Enum<?>> {
 
+  // Cache for conversion methods (either annotated with @JsonCreator or valueOf(String))
   private static final ConcurrentHashMap<Class<? extends Enum<?>>, Method> enumConversionMethods =
+      new ConcurrentHashMap<>();
+
+  // Cache for the fromCode methods for Enums implementing the CodeEnum interface
+  private static final ConcurrentHashMap<Class<? extends Enum<?>>, Method> enumFromCodeMethods =
+      new ConcurrentHashMap<>();
+
+  // Cache for the @JsonValue method (if one exists)
+  private static final ConcurrentHashMap<Class<? extends Enum<?>>, Method> enumJsonValueMethods =
       new ConcurrentHashMap<>();
 
   /** Constructs a new <b>EnumMessageConverter</b>. */
@@ -59,10 +69,33 @@ public class EnumMessageConverter extends AbstractHttpMessageConverter<Enum<?>> 
         new BufferedReader(new InputStreamReader(inputMessage.getBody(), StandardCharsets.UTF_8))) {
       String enumValue = reader.readLine();
 
-      Method enumConversionMethod = getEnumConversionMethod(clazz);
+      if (enumValue == null) {
+        throw new HttpMessageNotReadableException("No enum value provided", inputMessage);
+      }
 
-      Object enumObject = enumConversionMethod.invoke(null, enumValue);
+      // If the enum implements CodeEnum, use its static fromCode method directly.
+      if (CodeEnum.class.isAssignableFrom(clazz)) {
+        return (Enum<?>)
+            enumFromCodeMethods
+                .computeIfAbsent(
+                    clazz,
+                    clz -> {
+                      try {
+                        return CodeEnum.class.getMethod("fromCode", Class.class, String.class);
+                      } catch (Throwable e) {
+                        throw new RuntimeException(
+                            "Failed to retrieve the enum conversion method (fromCode) for the Enum class ("
+                                + clz.getSimpleName()
+                                + ") implementing the CodeEnum interface",
+                            e);
+                      }
+                    })
+                .invoke(null, clazz, enumValue);
+      }
 
+      // Otherwise, look up the conversion method (cached).
+      Method conversionMethod = getEnumConversionMethod(clazz);
+      Object enumObject = conversionMethod.invoke(null, enumValue);
       return clazz.cast(enumObject);
     } catch (Throwable e) {
       throw new HttpMessageNotReadableException("Failed to read the enum value", e, inputMessage);
@@ -75,51 +108,74 @@ public class EnumMessageConverter extends AbstractHttpMessageConverter<Enum<?>> 
   }
 
   @Override
-  protected void writeInternal(@NonNull Enum value, @NonNull HttpOutputMessage outputMessage)
+  protected void writeInternal(@NonNull Enum<?> value, @NonNull HttpOutputMessage outputMessage)
       throws IOException, HttpMessageNotWritableException {
     try (OutputStreamWriter writer =
         new OutputStreamWriter(outputMessage.getBody(), StandardCharsets.UTF_8)) {
 
-      for (Method method : value.getClass().getMethods()) {
-        if (method.isAnnotationPresent(JsonValue.class)) {
-          Object enumValue = method.invoke(value);
-
-          writer.write(enumValue.toString());
-          return;
+      if (value instanceof CodeEnum codeEnum) {
+        writer.write(codeEnum.code());
+      } else {
+        Method jsonValueMethod = getJsonValueMethod(value.getClass());
+        if (jsonValueMethod != null) {
+          Object enumValue = jsonValueMethod.invoke(value);
+          writer.write(enumValue != null ? enumValue.toString() : "");
+        } else {
+          writer.write(value.name());
         }
       }
-
-      writer.write(value.name());
     } catch (Throwable e) {
-      throw new HttpMessageNotWritableException("Failed to write the enum value", e);
+      throw new HttpMessageNotWritableException(
+          "Failed to write the enum value (" + value + ")", e);
     }
   }
 
+  /**
+   * Returns the conversion method for the enum class.
+   *
+   * <p>This method either returns a method annotated with @JsonCreator that takes a single String
+   * parameter or the standard valueOf(String) method.
+   */
   private Method getEnumConversionMethod(Class<? extends Enum<?>> clazz) {
-    Method enumConversionMethod = enumConversionMethods.get(clazz);
-
-    if (enumConversionMethod != null) {
-      return enumConversionMethod;
-    }
-
-    try {
-      for (Method method : clazz.getMethods()) {
-        if (method.isAnnotationPresent(JsonCreator.class)) {
-          Class<?>[] methodParameterTypes = method.getParameterTypes();
-
-          if ((methodParameterTypes.length == 1)
-              && (methodParameterTypes[0].isAssignableFrom(String.class))) {
-            enumConversionMethods.put(clazz, method);
-            return method;
+    return enumConversionMethods.computeIfAbsent(
+        clazz,
+        clz -> {
+          try {
+            // Look for a method annotated with @JsonCreator with a single parameter assignable from
+            // String.
+            for (Method method : clz.getMethods()) {
+              if (method.isAnnotationPresent(JsonCreator.class)) {
+                Class<?>[] params = method.getParameterTypes();
+                if (params.length == 1 && params[0].isAssignableFrom(String.class)) {
+                  return method;
+                }
+              }
+            }
+            // Fallback to the standard valueOf(String) method.
+            return clz.getMethod("valueOf", String.class);
+          } catch (Throwable e) {
+            throw new RuntimeException(
+                "Failed to retrieve the enum conversion method (valueOf) for the Enum class ("
+                    + clz.getSimpleName()
+                    + ")",
+                e);
           }
-        }
-      }
+        });
+  }
 
-      Method method = clazz.getMethod("valueOf", String.class);
-      enumConversionMethods.put(clazz, method);
-      return method;
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to retrieve the enum conversion method", e);
-    }
+  /** Returns the method annotated with @JsonValue for the enum class if available. */
+  private Method getJsonValueMethod(Class<?> clazz) {
+    @SuppressWarnings("unchecked")
+    Class<? extends Enum<?>> enumClass = (Class<? extends Enum<?>>) clazz;
+    return enumJsonValueMethods.computeIfAbsent(
+        enumClass,
+        clz -> {
+          for (Method method : clz.getMethods()) {
+            if (method.isAnnotationPresent(JsonValue.class)) {
+              return method;
+            }
+          }
+          return null;
+        });
   }
 }

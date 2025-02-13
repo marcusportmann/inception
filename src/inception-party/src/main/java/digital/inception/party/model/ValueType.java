@@ -16,8 +16,7 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The value type")
 @XmlEnum
 @XmlType(name = "ValueType", namespace = "https://inception.digital/party")
-public enum ValueType {
+public enum ValueType implements CodeEnum {
   /** Boolean. */
   @XmlEnumValue("Boolean")
   BOOLEAN("boolean", "A boolean value"),
@@ -66,28 +65,10 @@ public enum ValueType {
   }
 
   /**
-   * Returns the value type given by the specified code value.
-   *
-   * @param code the code for the value type
-   * @return the value type given by the specified code value
-   */
-  @JsonCreator
-  public static ValueType fromCode(String code) {
-    for (ValueType value : ValueType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the value type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the value type.
    *
    * @return the code for the value type
    */
-  @JsonValue
   public String code() {
     return code;
   }

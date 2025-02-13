@@ -16,8 +16,7 @@
 
 package digital.inception.core.validation;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The validation schema type")
 @XmlEnum
 @XmlType(name = "ValidationSchemaType", namespace = "https://inception.digital/core")
-public enum ValidationSchemaType {
+public enum ValidationSchemaType implements CodeEnum {
 
   /** JSON Schema. */
   @XmlEnumValue("JSON")
@@ -57,23 +56,6 @@ public enum ValidationSchemaType {
   }
 
   /**
-   * Returns the validation schema type given by the specified code value.
-   *
-   * @param code the code for the validation schema type
-   * @return the validation schema type given by the specified code value
-   */
-  @JsonCreator
-  public static ValidationSchemaType fromCode(String code) {
-    for (ValidationSchemaType value : ValidationSchemaType.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the validation schema type with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the validation schema type with the specified MIME type.
    *
    * @param mimeType the MIME type for the validation schema type
@@ -96,7 +78,6 @@ public enum ValidationSchemaType {
    *
    * @return the code for the validation schema type
    */
-  @JsonValue
   public String code() {
     return code;
   }
@@ -115,7 +96,6 @@ public enum ValidationSchemaType {
    *
    * @return the MIME type for the validation schema type
    */
-  @JsonValue
   public String mimeType() {
     return mimeType;
   }

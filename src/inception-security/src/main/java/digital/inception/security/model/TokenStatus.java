@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The token status")
 @XmlEnum
 @XmlType(name = "TokenStatus", namespace = "http://digital.inception.co.za/security")
-public enum TokenStatus {
+public enum TokenStatus implements CodeEnum {
 
   /** All. */
   @XmlEnumValue("All")
@@ -63,28 +62,10 @@ public enum TokenStatus {
   }
 
   /**
-   * Returns the token status given by the specified code value.
-   *
-   * @param code the code for the token status
-   * @return the token status given by the specified code value
-   */
-  @JsonCreator
-  public static TokenStatus fromCode(String code) {
-    for (TokenStatus value : TokenStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the token status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the token status.
    *
    * @return the code for the token status
    */
-  @JsonValue
   public String code() {
     return code;
   }

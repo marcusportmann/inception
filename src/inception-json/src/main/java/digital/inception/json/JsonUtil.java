@@ -34,7 +34,7 @@ public final class JsonUtil {
     objectMapper = new ObjectMapper();
     objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
     objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    objectMapper.registerModule(new InceptionDateTimeModule());
+    objectMapper.registerModule(new InceptionModule());
   }
 
   /** Private constructor to prevent instantiation. */

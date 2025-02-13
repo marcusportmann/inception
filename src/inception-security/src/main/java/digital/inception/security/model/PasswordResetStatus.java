@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The password reset status")
 @XmlEnum
 @XmlType(name = "PasswordResetStatus", namespace = "https://inception.digital/security")
-public enum PasswordResetStatus {
+public enum PasswordResetStatus implements CodeEnum {
   /** Requested. */
   @XmlEnumValue("Requested")
   REQUESTED("requested", "Requested"),
@@ -54,28 +53,10 @@ public enum PasswordResetStatus {
   }
 
   /**
-   * Returns the password reset status given by the specified code value.
-   *
-   * @param code the code for the password reset status
-   * @return the password reset status given by the specified code value
-   */
-  @JsonCreator
-  public static PasswordResetStatus fromCode(String code) {
-    for (PasswordResetStatus value : PasswordResetStatus.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the password reset status with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code value for the password reset status.
    *
    * @return the code value for the password reset status
    */
-  @JsonValue
   public String code() {
     return code;
   }

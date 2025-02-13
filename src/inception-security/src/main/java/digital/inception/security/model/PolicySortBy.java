@@ -16,8 +16,7 @@
 
 package digital.inception.security.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The method used to sort the list of policies")
 @XmlEnum
 @XmlType(name = "PolicySortBy", namespace = "https://inception.digital/security")
-public enum PolicySortBy {
+public enum PolicySortBy implements CodeEnum {
   /** Sort by name. */
   @XmlEnumValue("Name")
   NAME("name", "Sort By Name"),
@@ -50,28 +49,10 @@ public enum PolicySortBy {
   }
 
   /**
-   * Returns the method used to sort a list of policies given by the specified code value.
-   *
-   * @param code the code for the method used to sort a list of policies
-   * @return the method used to sort a list of policies given by the specified code value
-   */
-  @JsonCreator
-  public static PolicySortBy fromCode(String code) {
-    for (PolicySortBy value : PolicySortBy.values()) {
-      if (value.code.equalsIgnoreCase(code)) {
-        return value;
-      }
-    }
-    throw new RuntimeException(
-        "Failed to determine the policy sort by with the invalid code (" + code + ")");
-  }
-
-  /**
    * Returns the code for the method used to sort a list of policies.
    *
    * @return the code for the method used to sort a list of policies
    */
-  @JsonValue
   public String code() {
     return code;
   }
