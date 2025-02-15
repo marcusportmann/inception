@@ -29,7 +29,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration(
     excludeName = {
       "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
-      "org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration"
+      "org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration",
+      "org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration",
+      "org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration"
     })
 public class ApplicationExcludedAutoConfiguration {
 

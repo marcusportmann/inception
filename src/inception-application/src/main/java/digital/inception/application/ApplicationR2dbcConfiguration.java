@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -126,6 +127,7 @@ public class ApplicationR2dbcConfiguration {
    */
   @Bean("applicationEntityOperations")
   @Primary
+  @Lazy(false)
   public R2dbcEntityOperations applicationEntityOperations(
       @Qualifier("applicationConnectionFactory") ConnectionFactory applicationConnectionFactory) {
     return new R2dbcEntityTemplate(applicationConnectionFactory);

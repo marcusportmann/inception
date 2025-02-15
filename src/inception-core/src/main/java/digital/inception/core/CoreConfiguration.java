@@ -17,10 +17,7 @@
 package digital.inception.core;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.support.DefaultConversionService;
 
 /** The {@code CoreConfiguration} class provides the Spring configuration for the Core module. */
 @Configuration
@@ -36,19 +33,5 @@ public class CoreConfiguration {
    */
   public CoreConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
-  }
-
-  /**
-   * Returns the Spring {@link ConversionService} that incorporates the custom converters that form
-   * part of the Nova Framework.
-   *
-   * @return the Spring {@link ConversionService} that incorporates the custom converters that form
-   *     part of the Nova Framework
-   */
-  @Bean
-  public ConversionService conversionService() {
-    DefaultConversionService conversionService = new DefaultConversionService();
-
-    return conversionService;
   }
 }
