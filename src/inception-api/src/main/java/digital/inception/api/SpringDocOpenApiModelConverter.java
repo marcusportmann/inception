@@ -22,6 +22,7 @@ import io.swagger.v3.core.converter.ModelConverter;
 import io.swagger.v3.core.converter.ModelConverterContext;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
+import java.lang.annotation.Annotation;
 import java.time.LocalTime;
 import java.time.OffsetTime;
 import java.util.Arrays;
@@ -70,6 +71,18 @@ public class SpringDocOpenApiModelConverter implements ModelConverter {
                 : null;
         if (schema != null) {
           if (schema instanceof StringSchema stringSchema) {
+            // Support overriding of allowed values through Schema annotation
+            for (Annotation annotation : annotatedType.getCtxAnnotations()) {
+              if (annotation
+                  instanceof io.swagger.v3.oas.annotations.media.Schema schemaAnnotation) {
+                if ((schemaAnnotation.allowableValues() != null)
+                    && (schemaAnnotation.allowableValues().length > 0)) {
+                  stringSchema.setEnum(List.of(schemaAnnotation.allowableValues()));
+                  return stringSchema;
+                }
+              }
+            }
+
             List<String> enumCodes =
                 Arrays.stream(codeEnumClass.getEnumConstants())
                     .map(CodeEnum::code)
