@@ -63,11 +63,9 @@ public enum WorkflowSortBy implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of workflows enumeration
-   * value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the method used to sort a list of workflows enumeration
-   *     value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

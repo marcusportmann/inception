@@ -63,11 +63,9 @@ public enum PartySortBy implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of parties enumeration
-   * value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the method used to sort a list of parties enumeration
-   *     value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

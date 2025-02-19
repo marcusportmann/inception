@@ -67,11 +67,9 @@ public enum PolicySortBy implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of policies enumeration
-   * value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the method used to sort a list of policies enumeration
-   *     value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

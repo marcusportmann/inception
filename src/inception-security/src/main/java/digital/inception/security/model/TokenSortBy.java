@@ -79,10 +79,9 @@ public enum TokenSortBy implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of tokens enumeration
-   * value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the method used to sort a list of tokens enumeration value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

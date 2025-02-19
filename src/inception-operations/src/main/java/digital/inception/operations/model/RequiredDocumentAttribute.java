@@ -72,9 +72,9 @@ public enum RequiredDocumentAttribute implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the required document attribute enumeration value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the required document attribute enumeration value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

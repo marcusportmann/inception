@@ -83,9 +83,9 @@ public enum SMSStatus implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the SMS status enumeration value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the SMS status enumeration value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

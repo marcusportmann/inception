@@ -67,11 +67,9 @@ public enum PersonSortBy implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of persons enumeration
-   * value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the method used to sort a list of persons enumeration
-   *     value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

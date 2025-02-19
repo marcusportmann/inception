@@ -71,9 +71,9 @@ public enum UserSortBy implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of users enumeration value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the method used to sort a list of users enumeration value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

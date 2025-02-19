@@ -124,9 +124,9 @@ public enum TimeUnit implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the time unit enumeration value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the time unit enumeration value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;

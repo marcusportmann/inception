@@ -68,9 +68,9 @@ public enum TaskSortBy implements CodeEnum {
   }
 
   /**
-   * Returns the string representation of the method used to sort a list of tasks enumeration value.
+   * Returns the string representation of the enumeration value.
    *
-   * @return the string representation of the method used to sort a list of tasks enumeration value
+   * @return the string representation of the enumeration value
    */
   public String toString() {
     return description;
