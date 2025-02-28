@@ -20,34 +20,25 @@ import digital.inception.core.model.CodeEnum;
 
 /** The enumeration giving the supported types of web service security. */
 public enum WebServiceSecurityType implements CodeEnum {
-  /** The value indicating that the web service does not implement a security service. */
+  /** The value indicating that the web service is not secured. */
   NONE("none", "None"),
 
   /**
-   * The value indicating that the web service implements the WS-Security X509 token authentication
-   * security service.
+   * The value indicating that the web service implements WS-Security X509 token authentication
+   * security.
    */
   WSS_SECURITY_X509_TOKEN("wss_security_x509_token", "WS-Security X509 Token"),
 
-  /**
-   * The value indicating that the web service implements the WS-Security username token security
-   * service.
-   */
+  /** The value indicating that the web service implements WS-Security username token security. */
   WSS_SECURITY_USERNAME_TOKEN("wss_security_username_token", "WS-Security Username Token"),
 
-  /** The value indicating that the web service implements the Mutual SSL security service. */
+  /** The value indicating that the web service implements Mutual SSL security. */
   MUTUAL_SSL("mutual_ssl", "Mutual SSL"),
 
-  /**
-   * The value indicating that the web service implements the basic HTTP authentication security
-   * service.
-   */
+  /** The value indicating that the web service implements basic HTTP authentication security. */
   HTTP_AUTHENTICATION("http_authentication", "HTTP Authentication"),
 
-  /**
-   * The value indicating that the web service implements the digest authentication security
-   * service.
-   */
+  /** The value indicating that the web service implements digest authentication security. */
   DIGEST_AUTHENTICATION("digest_authentication", "Digest Authentication");
 
   private final String code;
