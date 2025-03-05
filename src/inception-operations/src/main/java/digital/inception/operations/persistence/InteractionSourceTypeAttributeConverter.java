@@ -20,8 +20,8 @@ import digital.inception.operations.model.InteractionSourceType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>InteractionSourceTypeAttributeConverter</b> class implements the custom JPA converter for
- * the <b>InteractionSourceType</b> enumeration.
+ * The <b>InteractionSourceTypeAttributeConverter</b> class implements the custom JPA attribute
+ * converter for the <b>InteractionSourceType</b> enumeration.
  *
  * @author Marcus Portmann
  */

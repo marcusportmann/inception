@@ -21,8 +21,8 @@ import digital.inception.party.model.PartyType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>PartyTypeAttributeConverter</b> class implements the custom JPA converter for the
- * <b>PartyType</b> enumeration.
+ * The <b>PartyTypeAttributeConverter</b> class implements the custom JPA attribute converter for
+ * the <b>PartyType</b> enumeration.
  *
  * @author Marcus Portmann
  */

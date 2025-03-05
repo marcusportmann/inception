@@ -21,8 +21,8 @@ import digital.inception.security.model.UserStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>UserStatusAttributeConverter</b> class implements the custom JPA converter for the
- * <b>UserStatus</b> enumeration.
+ * The <b>UserStatusAttributeConverter</b> class implements the custom JPA attribute converter for
+ * the <b>UserStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

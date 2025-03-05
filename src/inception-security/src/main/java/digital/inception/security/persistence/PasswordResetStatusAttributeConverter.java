@@ -21,8 +21,8 @@ import digital.inception.security.model.PasswordResetStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>PasswordResetStatusAttributeConverter</b> class implements the custom JPA converter for
- * the <b>PasswordResetStatus</b> enumeration.
+ * The <b>PasswordResetStatusAttributeConverter</b> class implements the custom JPA attribute
+ * converter for the <b>PasswordResetStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

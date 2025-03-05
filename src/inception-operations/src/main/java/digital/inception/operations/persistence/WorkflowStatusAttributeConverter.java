@@ -20,8 +20,8 @@ import digital.inception.operations.model.WorkflowStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>WorkflowStatusAttributeConverter</b> class implements the custom JPA converter for the
- * <b>WorkflowStatus</b> enumeration.
+ * The <b>WorkflowStatusAttributeConverter</b> class implements the custom JPA attribute converter
+ * for the <b>WorkflowStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

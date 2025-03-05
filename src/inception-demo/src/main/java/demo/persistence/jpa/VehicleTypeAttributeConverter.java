@@ -21,8 +21,8 @@ import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>VehicleTypeAttributeConverter</b> class implements the custom JPA converter for the
- * <b>VehicleType</b> enumeration.
+ * The <b>VehicleTypeAttributeConverter</b> class implements the custom JPA attribute converter for
+ * the <b>VehicleType</b> enumeration.
  *
  * @author Marcus Portmann
  */

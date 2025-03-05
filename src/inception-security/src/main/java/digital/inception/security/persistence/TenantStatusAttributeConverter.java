@@ -21,8 +21,8 @@ import digital.inception.security.model.TenantStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>TenantStatusAttributeConverter</b> class implements the custom JPA converter for the
- * <b>TenantStatus</b> enumeration.
+ * The <b>TenantStatusAttributeConverter</b> class implements the custom JPA attribute converter for
+ * the <b>TenantStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

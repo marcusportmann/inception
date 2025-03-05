@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>TaskEventTypeListAttributeConverter</b> class implements the custom JPA converter for a
- * list of <b>TaskEventType</b> instances.
+ * The <b>TaskEventTypeListAttributeConverter</b> class implements the custom JPA attribute
+ * converter for a list of <b>TaskEventType</b> instances.
  *
  * @author Marcus Portmann
  */

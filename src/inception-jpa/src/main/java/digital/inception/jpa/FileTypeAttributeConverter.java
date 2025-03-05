@@ -20,7 +20,7 @@ import digital.inception.core.file.FileType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>FileTypeAttributeConverter</b> class implements the custom JPA converter for the
+ * The <b>FileTypeAttributeConverter</b> class implements the custom JPA attribute converter for the
  * <b>FileType</b> enumeration.
  *
  * @author Marcus Portmann

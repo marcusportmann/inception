@@ -21,8 +21,8 @@ import digital.inception.mail.model.MailTemplateContentType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>MailTemplateContentTypeAttributeConverter</b> class implements the custom JPA converter
- * for the <b>MailTemplateContentType</b> enumeration.
+ * The <b>MailTemplateContentTypeAttributeConverter</b> class implements the custom JPA attribute
+ * converter for the <b>MailTemplateContentType</b> enumeration.
  *
  * @author Marcus Portmann
  */

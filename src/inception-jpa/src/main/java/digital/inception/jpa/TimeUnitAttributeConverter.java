@@ -20,7 +20,7 @@ import digital.inception.core.time.TimeUnit;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>TimeUnitAttributeConverter</b> class implements the custom JPA converter for the
+ * The <b>TimeUnitAttributeConverter</b> class implements the custom JPA attribute converter for the
  * <b>TimeUnit</b> enumeration.
  *
  * @author Marcus Portmann

@@ -13,8 +13,8 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>TaskPriorityAttributeConverter</b> class implements the custom JPA converter for the
- * <b>TaskPriority</b> enumeration.
+ * The <b>TaskPriorityAttributeConverter</b> class implements the custom JPA attribute converter for
+ * the <b>TaskPriority</b> enumeration.
  */
 @Converter(autoApply = true)
 public class TaskPriorityAttributeConverter implements AttributeConverter<TaskPriority, Integer> {

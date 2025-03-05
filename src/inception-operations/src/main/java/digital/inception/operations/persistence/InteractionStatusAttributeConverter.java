@@ -19,8 +19,8 @@ package digital.inception.operations.persistence;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>InteractionStatusAttributeAttributeConverter</b> class implements the custom JPA converter
- * for the <b>InteractionStatusAttribute</b> enumeration.
+ * The <b>InteractionStatusAttributeAttributeConverter</b> class implements the custom JPA attribute
+ * converter for the <b>InteractionStatusAttribute</b> enumeration.
  *
  * @author Marcus Portmann
  */

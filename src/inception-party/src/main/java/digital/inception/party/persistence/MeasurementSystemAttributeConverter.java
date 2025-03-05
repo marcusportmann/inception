@@ -21,8 +21,8 @@ import digital.inception.party.model.MeasurementSystem;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>MeasurementSystemAttributeConverter</b> class implements the custom JPA converter for the
- * <b>MeasurementSystem</b> enumeration.
+ * The <b>MeasurementSystemAttributeConverter</b> class implements the custom JPA attribute
+ * converter for the <b>MeasurementSystem</b> enumeration.
  *
  * @author Marcus Portmann
  */

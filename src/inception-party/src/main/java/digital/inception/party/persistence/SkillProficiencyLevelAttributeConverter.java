@@ -21,8 +21,8 @@ import digital.inception.party.model.SkillProficiencyLevel;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>SkillProficiencyLevelAttributeConverter</b> class implements the custom JPA converter for
- * the <b>SkillProficiencyLevel</b> enumeration.
+ * The <b>SkillProficiencyLevelAttributeConverter</b> class implements the custom JPA attribute
+ * converter for the <b>SkillProficiencyLevel</b> enumeration.
  *
  * @author Marcus Portmann
  */

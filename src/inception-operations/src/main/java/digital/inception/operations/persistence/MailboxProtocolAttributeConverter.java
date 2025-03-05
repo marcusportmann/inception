@@ -20,8 +20,8 @@ import digital.inception.operations.model.MailboxProtocol;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>MailboxProtocolAttributeConverter</b> class implements the custom JPA converter for the
- * <b>MailboxProtocol</b> enumeration.
+ * The <b>MailboxProtocolAttributeConverter</b> class implements the custom JPA attribute converter
+ * for the <b>MailboxProtocol</b> enumeration.
  *
  * @author Marcus Portmann
  */
