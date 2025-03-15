@@ -1134,7 +1134,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(groupMemberAttributeArray);
+      searchControls.setReturningAttributes(new String[] {groupNameAttribute});
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 

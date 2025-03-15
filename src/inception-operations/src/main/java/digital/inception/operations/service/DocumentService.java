@@ -140,7 +140,7 @@ public interface DocumentService {
    * @return the updated document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
-   * @throws ServiceUnavailableException if the document could not be created
+   * @throws ServiceUnavailableException if the document could not be updated
    */
   Document updateDocument(
       UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)

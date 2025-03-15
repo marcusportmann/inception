@@ -21,14 +21,14 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * The <b>InternalPolicyStoreEnabledCondition</b> class implements the condition that must be
+ * The <b>InternalPartyStoreEnabledCondition</b> class implements the condition that must be
  * matched to enable the internal party store.
  *
  * @author Marcus Portmann
  */
 public class InternalPartyStoreEnabledCondition implements Condition {
 
-  /** Constructs a new <b>InternalPolicyStoreEnabledCondition</b>. */
+  /** Constructs a new <b>InternalPartyStoreEnabledCondition</b>. */
   public InternalPartyStoreEnabledCondition() {}
 
   @Override
