@@ -17,11 +17,11 @@
 package digital.inception.opentelemetry;
 
 import io.opentelemetry.api.common.AttributeKey;
-import io.opentelemetry.api.incubator.config.DeclarativeConfigProperties;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.sdk.autoconfigure.spi.ConfigurationException;
 import io.opentelemetry.sdk.autoconfigure.spi.internal.ComponentProvider;
-import io.opentelemetry.sdk.extension.incubator.fileconfig.DeclarativeConfiguration;
+import io.opentelemetry.sdk.autoconfigure.spi.internal.StructuredConfigProperties;
+import io.opentelemetry.sdk.extension.incubator.fileconfig.FileConfiguration;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import java.util.List;
 
@@ -31,6 +31,8 @@ import java.util.List;
  *
  * <p>This class is internal and is hence not for public use. Its APIs are unstable and can change
  * at any time.
+ *
+ * @author Marcus Portmann
  */
 public class RateLimitedRuleBasedSamplerComponentProvider implements ComponentProvider<Sampler> {
 
@@ -42,17 +44,17 @@ public class RateLimitedRuleBasedSamplerComponentProvider implements ComponentPr
   public RateLimitedRuleBasedSamplerComponentProvider() {}
 
   @Override
-  public Sampler create(DeclarativeConfigProperties config) {
+  public Sampler create(StructuredConfigProperties config) {
     boolean enableRuleLogging = config.getBoolean("enable_rule_logging", false);
 
-    DeclarativeConfigProperties fallbackSamplerString = config.getStructured("fallback_sampler");
+    StructuredConfigProperties fallbackSamplerString = config.getStructured("fallback_sampler");
     if (fallbackSamplerString == null) {
       throw new ConfigurationException(
           "rate_limited_rule_based sampler .fallback is required but is null");
     }
     Sampler fallbackSampler;
     try {
-      fallbackSampler = DeclarativeConfiguration.createSampler(fallbackSamplerString);
+      fallbackSampler = FileConfiguration.createSampler(fallbackSamplerString);
     } catch (ConfigurationException e) {
       throw new ConfigurationException(
           "rule_Based_routing sampler failed to create .fallback sampler", e);
@@ -64,12 +66,12 @@ public class RateLimitedRuleBasedSamplerComponentProvider implements ComponentPr
         RateLimitedRuleBasedSampler.builder(
             enableRuleLogging, spansPerSecondLimit, fallbackSampler);
 
-    List<DeclarativeConfigProperties> rules = config.getStructuredList("rules");
+    List<StructuredConfigProperties> rules = config.getStructuredList("rules");
     if (rules == null || rules.isEmpty()) {
       throw new ConfigurationException("rate_limited_rule_based sampler .rules is required");
     }
 
-    for (DeclarativeConfigProperties rule : rules) {
+    for (StructuredConfigProperties rule : rules) {
       String spanKindString = rule.getString("span_kind");
       if (spanKindString == null) {
         throw new ConfigurationException(

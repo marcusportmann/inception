@@ -120,6 +120,11 @@ Complete the following steps to set up a development environment on MacOS.
     ```
     yarn global add @angular/cli
     ```
+13. Alternatively, execute the following command to upgrade the globally installed 
+    Angular CLI.
+    ```
+    yarn global add @angular/cli
+    ```
 
 ### Setup MailSlurper on MacOS
 
@@ -221,6 +226,10 @@ Complete the following steps to checkout and build the Inception Framework on Ma
 8. Execute the following command to change to use explicit version dependencies with yarn.
    ```
    yarn config set save-prefix ''
+   ```
+9. Execute the following command to install the Angular CLI globally using yarn.
+   ```
+   yarn global add @angular/cli
    ```
 
 
