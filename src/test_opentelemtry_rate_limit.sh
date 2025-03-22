@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Loop to request tokens
-for i in {1..600}; do
+for i in {1..800}; do
   RESPONSE=$(curl -s -w "%{http_code}" -X 'GET' \
     -H 'accept: application/json' \
     'http://localhost:8080/api/config/configs/AnotherTestId')
