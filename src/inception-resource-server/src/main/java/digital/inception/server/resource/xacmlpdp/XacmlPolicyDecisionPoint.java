@@ -398,28 +398,26 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
 
         return true;
       } else {
-        if (inDebugMode) {
-          if (authenticationObject instanceof Authentication authentication) {
-            log.info(
-                "Policy decision point authorization failed for class ("
-                    + methodInvocation.getMethod().getDeclaringClass().getName()
-                    + ") and method ("
-                    + methodInvocation.getMethod().getName()
-                    + ") for user ("
-                    + authentication.getName()
-                    + ") with applicable policies ("
-                    + XacmlUtil.policiesToString(decisionResult.getApplicablePolicies())
-                    + ")");
-          } else {
-            log.info(
-                "Policy decision point authorization failed for class ("
-                    + methodInvocation.getMethod().getDeclaringClass().getName()
-                    + ") and method ("
-                    + methodInvocation.getMethod().getName()
-                    + ") with applicable policies ("
-                    + XacmlUtil.policiesToString(decisionResult.getApplicablePolicies())
-                    + ")");
-          }
+        if (authenticationObject instanceof Authentication authentication) {
+          log.warn(
+              "Policy decision point authorization failed for class ("
+                  + methodInvocation.getMethod().getDeclaringClass().getName()
+                  + ") and method ("
+                  + methodInvocation.getMethod().getName()
+                  + ") for user ("
+                  + authentication.getName()
+                  + ") with applicable policies ("
+                  + XacmlUtil.policiesToString(decisionResult.getApplicablePolicies())
+                  + ")");
+        } else {
+          log.warn(
+              "Policy decision point authorization failed for class ("
+                  + methodInvocation.getMethod().getDeclaringClass().getName()
+                  + ") and method ("
+                  + methodInvocation.getMethod().getName()
+                  + ") with applicable policies ("
+                  + XacmlUtil.policiesToString(decisionResult.getApplicablePolicies())
+                  + ")");
         }
 
         if (meterRegistry != null) {

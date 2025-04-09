@@ -112,28 +112,24 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
     if (isSecurityEnabled) {
       for (var policyDecisionPoint : policyDecisionPoints.entrySet()) {
         if (policyDecisionPoint.getValue().authorize(getAuthentication(), methodInvocation)) {
-          String message =
-              String.format(
-                  "Authorization successful for policy decision point (%s)",
-                  policyDecisionPoint.getKey());
+          if (inDebugMode || log.isDebugEnabled()) {
+            String message =
+                String.format(
+                    "Authorization successful for policy decision point (%s)",
+                    policyDecisionPoint.getKey());
 
-          if (inDebugMode) {
             log.info(message);
-          } else if (log.isDebugEnabled()) {
-            log.debug(message);
           }
 
           return true;
         } else {
-          String message =
-              String.format(
-                  "Authorization failed for policy decision point (%s)",
-                  policyDecisionPoint.getKey());
+          if (inDebugMode || log.isDebugEnabled()) {
+            String message =
+                String.format(
+                    "Authorization failed for policy decision point (%s)",
+                    policyDecisionPoint.getKey());
 
-          if (inDebugMode) {
             log.info(message);
-          } else if (log.isDebugEnabled()) {
-            log.debug(message);
           }
         }
       }

@@ -27,6 +27,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,16 @@ public class JDBCUtil {
     } catch (Throwable e) {
       throw new RuntimeException("Failed to convert the CLOB to a string", e);
     }
+
+    // Free the Clob if supported
+    try {
+      clob.free();
+    } catch (SQLFeatureNotSupportedException ignored) {
+    } catch (Throwable e) {
+      throw new RuntimeException(
+          "Failed to free the CLOB after converting the CLOB to a string", e);
+    }
+
     return sb.toString();
   }
 

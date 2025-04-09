@@ -1525,9 +1525,7 @@
       <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the identification">
         <constraints nullable="false"/>
       </column>
-      <column name="issue_date" type="date" remarks="The issue date for the identification">
-        <constraints nullable="false"/>
-      </column>
+      <column name="issue_date" type="date" remarks="The issue date for the identification"/>
       <column name="number" type="nvarchar(50)" remarks="The number for the identification">
         <constraints nullable="false"/>
       </column>

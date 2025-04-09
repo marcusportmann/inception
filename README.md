@@ -57,6 +57,8 @@ Complete the following steps to set up a development environment on MacOS.
    ```
    brew install --cask zulu@8
    
+   brew install --cask zulu@11
+   
    brew install openjdk@21
    
    brew pin openjdk@21
@@ -65,7 +67,8 @@ Complete the following steps to set up a development environment on MacOS.
    ```
 4. Configure the Java Environment Variables by adding the following lines to your shell configuration file (~/.zshrc for Zsh or ~/.bash_profile for Bash):
    ```
-   export JAVA_8_HOME="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
+   export JAVA_8_HOME=$(/usr/libexec/java_home -v 1.8)
+   export JAVA_11_HOME=$(/usr/libexec/java_home -v 11)
    export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home"
    export JDK_HOME=$JAVA_HOME
    ```
@@ -93,6 +96,7 @@ Complete the following steps to set up a development environment on MacOS.
    Add the installed Java versions to jenv:
    ```
    jenv add /Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/
+   jenv add /Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home/
    jenv add /Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home/
    ```
 7. Install liquibase by executing the following commands in a Terminal window.

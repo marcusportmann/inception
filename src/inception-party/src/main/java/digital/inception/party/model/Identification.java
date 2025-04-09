@@ -128,15 +128,13 @@ public class Identification implements Serializable {
 
   /** The issue date for the identification. */
   @Schema(
-      description = "The ISO 8601 format issue date for the identification",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
+      description = "The ISO 8601 format issue date for the identification")
+  @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "IssueDate", required = true)
+  @XmlElement(name = "IssueDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @NotNull
-  @Column(name = "issue_date", nullable = false)
+  @Column(name = "issue_date")
   private LocalDate issueDate;
 
   /** The number for the identification. */
