@@ -4,8 +4,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>inception-application</artifactId>
-  <name>inception-application</name>
+  <artifactId>inception-liquibase</artifactId>
+  <name>inception-liquibase</name>
 
   <parent>
     <groupId>digital.inception</groupId>
@@ -19,77 +19,27 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-json</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-liquibase</artifactId>
-    </dependency>
 
     <!-- Dependencies -->
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
+      <groupId>com.mattbertolini</groupId>
+      <artifactId>liquibase-slf4j</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-registry-prometheus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-tx</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-undertow</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.xml.bind</groupId>
+          <artifactId>jaxb-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- Provided Dependencies -->
-    <!-- NOTE: The inception-jpa dependency is optional as not every application will make use of JPA -->
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-jpa</artifactId>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
-    <!-- NOTE: The inception-r2dbc dependency is optional as not every application will make use of R2DBC -->
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-r2dbc</artifactId>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
 
     <!-- Test Dependencies -->
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-test</artifactId>
-      <scope>test</scope>
-    </dependency>
+
   </dependencies>
 
   <build>

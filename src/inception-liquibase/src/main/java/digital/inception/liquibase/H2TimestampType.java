@@ -14,38 +14,38 @@
  * limitations under the License.
  */
 
-package digital.inception.test;
+package digital.inception.liquibase;
 
 import liquibase.database.Database;
 import liquibase.database.core.H2Database;
 import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
-import liquibase.datatype.core.TimeType;
+import liquibase.datatype.core.TimestampType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>H2TimeType</b> class overrides the default time mapping for Liquibase when working with an
- * H2 database to increase the timestamp precision to include nanoseconds. This is required when
- * using Java 15+ on Linux and Windows where nanosecond date-time values are used.
+ * The <b>H2TimestampType</b> class overrides the default timestamp mapping for Liquibase when
+ * working with an H2 database to increase the timestamp precision to include nanoseconds. This is
+ * required when using Java 15+ on Linux and Windows where nanosecond date-time values are used.
  *
  * @author Marcus Portmann
  */
 @DataTypeInfo(
-    name = "time",
+    name = "timestamp",
     aliases = {
-      "java.sql.Types.TIME",
-      "java.sql.Types.TIMES_WITH_TIMEZONE",
-      "java.sql.Time",
-      "timetz"
+      "java.sql.Types.TIMESTAMP",
+      "java.sql.Types.TIMESTAMP_WITH_TIMEZONE",
+      "java.sql.Timestamp",
+      "timestamptz"
     },
     minParameters = 0,
     maxParameters = 1,
     priority = LiquibaseDataType.PRIORITY_DEFAULT + 1)
-public class H2TimeType extends TimeType {
+public class H2TimestampType extends TimestampType {
 
-  /** Constructs a new <b>H2TimeType</b>. */
-  public H2TimeType() {}
+  /** Constructs a new <b>H2TimestampType</b>. */
+  public H2TimestampType() {}
 
   @Override
   public DatabaseDataType toDatabaseDataType(Database database) {
@@ -55,12 +55,12 @@ public class H2TimeType extends TimeType {
             : "";
 
     if (database instanceof H2Database) {
-      if ("timewithtimezone".equalsIgnoreCase(originalDefinition)) {
-        return new DatabaseDataType("TIME(9) WITH TIME ZONE");
-      } else if ("time with time zone".equalsIgnoreCase(originalDefinition)) {
-        return new DatabaseDataType("TIME(9) WITH TIME ZONE");
-      } else if ("time".equalsIgnoreCase(originalDefinition)) {
-        return new DatabaseDataType("TIME(9)");
+      if ("timestampwithtimezone".equalsIgnoreCase(originalDefinition)) {
+        return new DatabaseDataType("TIMESTAMP(9) WITH TIME ZONE");
+      } else if ("timestamp with time zone".equalsIgnoreCase(originalDefinition)) {
+        return new DatabaseDataType("TIMESTAMP(9) WITH TIME ZONE");
+      } else if ("timestamp".equalsIgnoreCase(originalDefinition)) {
+        return new DatabaseDataType("TIMESTAMP(9)");
       }
     }
 
