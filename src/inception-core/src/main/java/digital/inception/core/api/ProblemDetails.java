@@ -27,6 +27,7 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * The <b>ProblemDetails</b> class holds the information for a Problem Details Object as defined in
@@ -283,5 +284,24 @@ public class ProblemDetails {
    */
   public void setValidationErrors(List<ValidationError> validationErrors) {
     this.validationErrors = validationErrors;
+  }
+
+  /**
+   * Return the String representation of the problem details object.
+   *
+   * @return the String representation of the problem details object
+   */
+  public String toString() {
+    StringJoiner joiner = new StringJoiner(", ", "ProblemDetails [", "]");
+
+    joiner.add("status=\"" + status + "\"");
+
+    if (type != null) joiner.add("type=\"" + type + "\"");
+    if (title != null) joiner.add("title=\"" + title + "\"");
+    if (detail != null) joiner.add("detail=\"" + detail + "\"");
+    if (code != null) joiner.add("code=\"" + code + "\"");
+    if (parameter != null) joiner.add("parameter=\"" + parameter + "\"");
+
+    return joiner.toString();
   }
 }

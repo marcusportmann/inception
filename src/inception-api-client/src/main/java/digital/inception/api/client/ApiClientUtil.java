@@ -17,6 +17,8 @@
 package digital.inception.api.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.service.Problem;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.json.JsonUtil;
 import io.netty.handler.ssl.SslContext;
@@ -32,6 +34,7 @@ import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.netty.http.client.HttpClient;
 
 /**
@@ -214,6 +217,68 @@ public final class ApiClientUtil {
     } catch (Throwable e) {
       throw new ApiClientException("Failed to create the web client", e);
     }
+  }
+
+  /**
+   * Verify whether the web client response exception holds the information for a Problem Details
+   * Object, as defined in RFC 7807, which matches the type annotated with the @Problem annotation.
+   *
+   * <p>The <b>type</b> attribute for the Problem Details Object is checked against the <b>type</b>
+   * and <b>typeAlias</b> attributes on the @Problem annotation.
+   *
+   * @param webClientResponseException the web client response exception
+   * @param annotatedClass the Java class annotated with the @Problem annotation
+   * @return <b>true</b> if the web client response exception holds the information for a Problem
+   *     Details Object that matches the type annotated with the @Problem annotation or <b>false</b>
+   *     otherwise
+   */
+  public static boolean problemMatches(
+      WebClientResponseException webClientResponseException, Class<?> annotatedClass) {
+
+    if (webClientResponseException == null || annotatedClass == null) {
+      return false;
+    }
+
+    Problem problem = annotatedClass.getAnnotation(Problem.class);
+    if (problem == null) {
+      return false;
+    }
+
+    ProblemDetails problemDetails =
+        webClientResponseException.getResponseBodyAs(ProblemDetails.class);
+    if (problemDetails == null) {
+      return false;
+    }
+
+    String type = problemDetails.getType();
+    return (problem.type().equals(type) || problem.typeAlias().equals(type));
+  }
+
+  /**
+   * Verify whether the Problem Details Object, as defined in RFC 7807, matches the type annotated
+   * with the @Problem annotation.
+   *
+   * <p>The <b>type</b> attribute for the Problem Details Object is checked against the <b>type</b>
+   * and <b>typeAlias</b> attributes on the @Problem annotation.
+   *
+   * @param problemDetails the Problem Details Object
+   * @param annotatedClass the Java class annotated with the @Problem annotation
+   * @return <b>true</b> if the Problem Details Object matches the type annotated with the @Problem
+   *     annotation or <b>false</b> otherwise
+   */
+  public static boolean problemMatches(ProblemDetails problemDetails, Class<?> annotatedClass) {
+
+    if (problemDetails == null || annotatedClass == null) {
+      return false;
+    }
+
+    Problem problem = annotatedClass.getAnnotation(Problem.class);
+    if (problem == null) {
+      return false;
+    }
+
+    String type = problemDetails.getType();
+    return (problem.type().equals(type) || problem.typeAlias().equals(type));
   }
 
   /**

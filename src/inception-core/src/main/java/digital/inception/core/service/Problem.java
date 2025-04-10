@@ -50,4 +50,11 @@ public @interface Problem {
    * @return the URI reference that identifies the problem type
    */
   String type() default "about:blank";
+
+  /**
+   * The alias URI reference that identifies the problem type.
+   *
+   * @return the alias URI reference that identifies the problem type
+   */
+  String typeAlias() default "";
 }
