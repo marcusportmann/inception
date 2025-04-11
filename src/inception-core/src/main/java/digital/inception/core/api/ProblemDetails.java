@@ -124,6 +124,23 @@ public class ProblemDetails {
   public ProblemDetails() {}
 
   /**
+   * Verify whether the web Problem Details Object matches the problem type.
+   *
+   * @param problemDetails the Problem Details Object
+   * @param type the URI reference that identifies the problem type
+   * @return <b>true</b> if the Problem Details Object that matches the problem type or <b>false</b>
+   *     otherwise
+   */
+  public static boolean isProblemDetails(ProblemDetails problemDetails, String type) {
+
+    if (problemDetails == null || type == null || type.isEmpty()) {
+      return false;
+    }
+
+    return type.equals(problemDetails.getType());
+  }
+
+  /**
    * Returns the error code associated with the problem.
    *
    * @return the error code associated with the problem

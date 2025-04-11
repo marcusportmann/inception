@@ -128,11 +128,19 @@ public class ProblemHandler {
 
       problemDetails.setParameter(invalidArgumentException.getParameter());
       problemDetails.setValidationErrors(invalidArgumentException.getValidationErrors());
-    } else if (serviceException instanceof ServiceUnavailableException) {
-      log.error(
-          "A service unavailable error occurred while processing the request: {}",
-          serviceException.getMessage(),
-          serviceException);
+    } else if (serviceException
+        instanceof ServiceUnavailableException serviceUnavailableException) {
+      if (serviceUnavailableException.getProblemDetails() != null) {
+        log.error(
+            "A service unavailable error occurred while processing the request: {}: {}",
+            serviceException.getMessage(),
+            serviceUnavailableException.getProblemDetails().toString());
+      } else {
+        log.error(
+            "A service unavailable error occurred while processing the request: {}",
+            serviceException.getMessage(),
+            serviceException);
+      }
 
       problemDetails.setType("https://inception.digital/problems/service-unavailable");
       problemDetails.setTitle(

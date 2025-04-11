@@ -251,15 +251,53 @@ public final class ApiClientUtil {
     }
 
     String type = problemDetails.getType();
-    return (problem.type().equals(type) || problem.typeAlias().equals(type));
+    return problem.type().equals(type);
+  }
+
+  /**
+   * Verify whether the web Problem Details Object matches the problem type.
+   *
+   * @param problemDetails the Problem Details Object
+   * @param type the URI reference that identifies the problem type
+   * @return <b>true</b> if the Problem Details Object that matches the problem type or <b>false</b> otherwise
+   */
+  public static boolean problemMatches(ProblemDetails problemDetails, String type) {
+
+    if (problemDetails == null || type == null || type.isEmpty()) {
+      return false;
+    }
+
+    return type.equals(problemDetails.getType());
+  }
+
+  /**
+   * Verify whether the web client response exception holds the information for a Problem Details
+   * Object, as defined in RFC 7807, which matches the problem type.
+   *
+   * @param webClientResponseException the web client response exception
+   * @param type the URI reference that identifies the problem type
+   * @return <b>true</b> if the web client response exception holds the information for a Problem
+   *     Details Object that matches the problem type
+   */
+  public static boolean problemMatches(
+      WebClientResponseException webClientResponseException, String type) {
+
+    if (webClientResponseException == null || type == null || type.isEmpty()) {
+      return false;
+    }
+
+    ProblemDetails problemDetails =
+        webClientResponseException.getResponseBodyAs(ProblemDetails.class);
+    if (problemDetails == null) {
+      return false;
+    }
+
+    return type.equals(problemDetails.getType());
   }
 
   /**
    * Verify whether the Problem Details Object, as defined in RFC 7807, matches the type annotated
    * with the @Problem annotation.
-   *
-   * <p>The <b>type</b> attribute for the Problem Details Object is checked against the <b>type</b>
-   * and <b>typeAlias</b> attributes on the @Problem annotation.
    *
    * @param problemDetails the Problem Details Object
    * @param annotatedClass the Java class annotated with the @Problem annotation
@@ -278,7 +316,7 @@ public final class ApiClientUtil {
     }
 
     String type = problemDetails.getType();
-    return (problem.type().equals(type) || problem.typeAlias().equals(type));
+    return problem.type().equals(type);
   }
 
   /**

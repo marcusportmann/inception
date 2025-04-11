@@ -16,6 +16,7 @@
 
 package digital.inception.core.service;
 
+import digital.inception.core.api.ProblemDetails;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
@@ -39,6 +40,9 @@ public class ServiceUnavailableException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
+  /** The problem details object, as defined by RFC 7807, associated with the exception. */
+  private final ProblemDetails problemDetails;
+
   /**
    * Constructs a new <b>ServiceUnavailableException</b> with the specified message.
    *
@@ -46,6 +50,8 @@ public class ServiceUnavailableException extends ServiceException {
    */
   public ServiceUnavailableException(String message) {
     super(message);
+
+    problemDetails = null;
   }
 
   /**
@@ -57,5 +63,45 @@ public class ServiceUnavailableException extends ServiceException {
    */
   public ServiceUnavailableException(String message, Throwable cause) {
     super(message, cause);
+
+    problemDetails = null;
+  }
+
+  /**
+   * Constructs a new <b>ServiceUnavailableException</b> with the specified message and cause.
+   *
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param problemDetails the problem details object, as defined by RFC 7807, associated with the
+   *     exception
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   */
+  public ServiceUnavailableException(
+      String message, ProblemDetails problemDetails, Throwable cause) {
+    super(message, cause);
+
+    this.problemDetails = problemDetails;
+  }
+
+  /**
+   * Constructs a new <b>ServiceUnavailableException</b> with the specified message and cause.
+   *
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param problemDetails the problem details object, as defined by RFC 7807, associated with the
+   *     exception
+   */
+  public ServiceUnavailableException(String message, ProblemDetails problemDetails) {
+    super(message);
+
+    this.problemDetails = problemDetails;
+  }
+
+  /**
+   * Returns the problem details object, as defined by RFC 7807, associated with the exception.
+   *
+   * @return the problem details object, as defined by RFC 7807, associated with the exception
+   */
+  public ProblemDetails getProblemDetails() {
+    return problemDetails;
   }
 }
