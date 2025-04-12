@@ -220,6 +220,22 @@ public final class ApiClientUtil {
   }
 
   /**
+   * Extract the problem details object from the web client response exception.
+   *
+   * @param webClientResponseException the web client response exception
+   * @return the problem details object extracted from the web client response exception or
+   *     <b>null</b> if the problem details object could not be extracted
+   */
+  public static ProblemDetails getProblemDetails(
+      WebClientResponseException webClientResponseException) {
+    try {
+      return webClientResponseException.getResponseBodyAs(ProblemDetails.class);
+    } catch (Throwable e) {
+      return null;
+    }
+  }
+
+  /**
    * Verify whether the web client response exception holds the information for a Problem Details
    * Object, as defined in RFC 7807, which matches the type annotated with the @Problem annotation.
    *
@@ -259,7 +275,8 @@ public final class ApiClientUtil {
    *
    * @param problemDetails the Problem Details Object
    * @param type the URI reference that identifies the problem type
-   * @return <b>true</b> if the Problem Details Object that matches the problem type or <b>false</b> otherwise
+   * @return <b>true</b> if the Problem Details Object that matches the problem type or <b>false</b>
+   *     otherwise
    */
   public static boolean problemMatches(ProblemDetails problemDetails, String type) {
 
