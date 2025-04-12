@@ -309,7 +309,7 @@ public class ProblemDetails {
    * @return the String representation of the problem details object
    */
   public String toString() {
-    StringJoiner joiner = new StringJoiner(", ", "ProblemDetails [", "]");
+    StringJoiner joiner = new StringJoiner(", ", "ProblemDetails {", "}");
 
     joiner.add("status=\"" + status + "\"");
 

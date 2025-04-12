@@ -132,7 +132,7 @@ public class ProblemHandler {
         instanceof ServiceUnavailableException serviceUnavailableException) {
       if (serviceUnavailableException.getProblemDetails() != null) {
         log.error(
-            "A service unavailable error occurred while processing the request: {}: {}",
+            "A service unavailable error occurred while processing the request: {}: Failed to invoke the API: {}",
             serviceException.getMessage(),
             serviceUnavailableException.getProblemDetails().toString());
       } else {
