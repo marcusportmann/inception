@@ -48,7 +48,7 @@ public @interface ValidOrganization {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.party.constraint.ValidOrganization.message}";
+  String message() default "{digital.inception.party.constraint.ValidOrganization.invalidOrganization.message}";
 
   /**
    * The payload type.

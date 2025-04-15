@@ -49,7 +49,7 @@ public @interface ValidCreateDocumentRequest {
    * @return the error message key
    */
   String message() default
-      "{digital.inception.operations.constraint.ValidCreateDocumentRequest.message}";
+      "{digital.inception.operations.constraint.ValidCreateDocumentRequest.invalidCreateDocumentRequest.message}";
 
   /**
    * The payload type.

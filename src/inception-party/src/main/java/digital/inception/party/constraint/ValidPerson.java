@@ -48,7 +48,7 @@ public @interface ValidPerson {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.party.constraint.ValidPerson.message}";
+  String message() default "{digital.inception.party.constraint.ValidPerson.invalidPerson.message}";
 
   /**
    * The payload type.

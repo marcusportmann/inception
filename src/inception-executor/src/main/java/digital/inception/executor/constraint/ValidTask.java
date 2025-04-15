@@ -48,7 +48,7 @@ public @interface ValidTask {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.executor.constraint.ValidTask.message}";
+  String message() default "{digital.inception.executor.constraint.ValidTask.invalidTask.message}";
 
   /**
    * The payload type.

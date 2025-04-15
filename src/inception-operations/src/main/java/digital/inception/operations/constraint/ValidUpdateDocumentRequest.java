@@ -49,7 +49,7 @@ public @interface ValidUpdateDocumentRequest {
    * @return the error message key
    */
   String message() default
-      "{digital.inception.operations.constraint.ValidUpdateDocumentRequest.message}";
+      "{digital.inception.operations.constraint.ValidUpdateDocumentRequest.invalidUpdateDocumentRequest.message}";
 
   /**
    * The payload type.

@@ -38,7 +38,7 @@
 //
 //  Class<?>[] groups() default {};
 //
-//  String message() default "{digital.inception.party.constraint.ValidPhysicalAddress.message}";
+//  String message() default "{digital.inception.party.constraint.ValidPhysicalAddress.invalidPhysicalAddress.message}";
 //
 //  Class<? extends Payload>[] payload() default {};
 // }

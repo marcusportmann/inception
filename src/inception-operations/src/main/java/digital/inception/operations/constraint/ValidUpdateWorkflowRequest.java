@@ -49,7 +49,7 @@ public @interface ValidUpdateWorkflowRequest {
    * @return the error message key
    */
   String message() default
-      "{digital.inception.operations.constraint.ValidUpdateWorkflowRequest.message}";
+      "{digital.inception.operations.constraint.ValidUpdateWorkflowRequest.invalidUpdateWorkflowRequest.message}";
 
   /**
    * The payload type.
