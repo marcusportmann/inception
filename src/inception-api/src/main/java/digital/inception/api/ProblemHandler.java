@@ -83,16 +83,19 @@ public class ProblemHandler {
         AnnotatedElementUtils.findMergedAnnotation(serviceException.getClass(), Problem.class);
 
     if (problem != null) {
-      if (inDebugMode || verboseErrorHandling) {
-        log.error(
-            "A service error ({}) occurred while processing the request: {}",
-            problem.type(),
-            serviceException.getMessage(),
-            serviceException);
-      }
       problemDetails.setType(problem.type());
       problemDetails.setTitle(problem.title());
       problemDetails.setStatus(problem.status());
+      problemDetails.setDetail(serviceException.getMessage());
+
+      if (inDebugMode || verboseErrorHandling) {
+        log.error(
+            "A service error occurred while processing the request: {}",
+            problemDetails,
+            serviceException);
+      } else {
+        log.error("A service error occurred while processing the request: {}", problemDetails);
+      }
     } else if (serviceException instanceof BusinessException businessException) {
       log.error(
           "A business error occurred while processing the request: {}",
@@ -106,6 +109,7 @@ public class ProblemHandler {
         problemDetails.setCode(businessException.getCode());
       }
       problemDetails.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+      problemDetails.setDetail(serviceException.getMessage());
     } else if (serviceException instanceof InvalidArgumentException invalidArgumentException) {
       if (inDebugMode || verboseErrorHandling) {
         String validationErrorsAsString = invalidArgumentException.getValidationErrorsAsString();
@@ -128,6 +132,7 @@ public class ProblemHandler {
 
       problemDetails.setParameter(invalidArgumentException.getParameter());
       problemDetails.setValidationErrors(invalidArgumentException.getValidationErrors());
+      problemDetails.setDetail(serviceException.getMessage());
     } else if (serviceException
         instanceof ServiceUnavailableException serviceUnavailableException) {
       if (serviceUnavailableException.getProblemDetails() != null) {
@@ -146,6 +151,7 @@ public class ProblemHandler {
       problemDetails.setTitle(
           "An error has occurred and your request could not be processed at this time.");
       problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      problemDetails.setDetail(serviceException.getMessage());
     } else {
       log.error(
           "An unknown service error with no problem details occurred while processing the request: {}",
@@ -156,9 +162,8 @@ public class ProblemHandler {
       problemDetails.setTitle(
           "An error has occurred and your request could not be processed at this time.");
       problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      problemDetails.setDetail(serviceException.getMessage());
     }
-
-    problemDetails.setDetail(serviceException.getMessage());
 
     if ((inDebugMode || verboseErrorHandling)
         && (!(serviceException instanceof InvalidArgumentException))) {
