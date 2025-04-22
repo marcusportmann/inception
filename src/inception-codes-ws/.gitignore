@@ -3,9 +3,9 @@
 /**/desktop.ini
 
 # Mac-specific files
-/**/.DS_Store/
-/**/.Spotlight-V100
-/**/.Trashes
+**/.DS_Store
+**/.Spotlight-V100
+**/.Trashes
 
 # Editors temporary files
 /**/*~

@@ -129,6 +129,11 @@ Complete the following steps to set up a development environment on MacOS.
     ```
     yarn global add @angular/cli
     ```
+13. Execute the following command to install the OpenAPI Generator globally using yarn.
+    ```
+    yarn global add @openapitools/openapi-generator-cli
+    ```   
+
 
 ### Setup MailSlurper on MacOS
 
@@ -235,6 +240,10 @@ Complete the following steps to checkout and build the Inception Framework on Ma
    ```
    yarn global add @angular/cli
    ```
+10. Execute the following command to install the OpenAPI Generator globally using yarn.
+    ```
+    yarn global add @openapitools/openapi-generator-cli
+    ```   
 
 
 ### Checkout and build the Inception Framework on Windows
