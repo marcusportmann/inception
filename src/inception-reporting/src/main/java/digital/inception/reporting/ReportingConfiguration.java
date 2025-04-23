@@ -36,7 +36,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @Configuration
 @Import(CoreConfiguration.class)
 @EnableJpaRepositories(
-    basePackages = {"digital.inception.reporting"},
+    basePackages = {"digital.inception.reporting.persistence.jpa"},
     entityManagerFactoryRef = "reportingEntityManagerFactory")
 public class ReportingConfiguration {
 

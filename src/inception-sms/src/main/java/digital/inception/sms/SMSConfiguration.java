@@ -36,7 +36,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @Import(CoreConfiguration.class)
 @EnableJpaRepositories(
-    basePackages = {"digital.inception.sms"},
+    basePackages = {"digital.inception.sms.persistence.jpa"},
     entityManagerFactoryRef = "smsEntityManagerFactory")
 @EnableScheduling
 public class SMSConfiguration {

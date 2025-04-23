@@ -48,7 +48,8 @@ public @interface ValidDocument {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.operations.constraint.ValidDocument.invalidDocument.message}";
+  String message() default
+      "{digital.inception.operations.constraint.ValidDocument.invalidDocument.message}";
 
   /**
    * The payload type.

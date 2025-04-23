@@ -127,8 +127,7 @@ public class Identification implements Serializable {
   private UUID id;
 
   /** The issue date for the identification. */
-  @Schema(
-      description = "The ISO 8601 format issue date for the identification")
+  @Schema(description = "The ISO 8601 format issue date for the identification")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "IssueDate")

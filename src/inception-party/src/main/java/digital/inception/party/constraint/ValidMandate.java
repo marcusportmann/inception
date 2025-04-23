@@ -48,7 +48,8 @@ public @interface ValidMandate {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.party.constraint.ValidMandate.invalidMandate.message}";
+  String message() default
+      "{digital.inception.party.constraint.ValidMandate.invalidMandate.message}";
 
   /**
    * The payload type.

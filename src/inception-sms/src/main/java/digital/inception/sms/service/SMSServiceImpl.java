@@ -26,7 +26,7 @@ import digital.inception.core.xml.XmlUtil;
 import digital.inception.sms.model.SMS;
 import digital.inception.sms.model.SMSNotFoundException;
 import digital.inception.sms.model.SMSStatus;
-import digital.inception.sms.persistence.SMSRepository;
+import digital.inception.sms.persistence.jpa.SMSRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.io.StringReader;

@@ -44,7 +44,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    basePackages = {"digital.inception.flowable"},
+    basePackages = {"digital.inception.flowable.persistence.jpa"},
     entityManagerFactoryRef = "flowableEntityManagerFactory")
 public class FlowableConfiguration {
 

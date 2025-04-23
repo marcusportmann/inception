@@ -35,7 +35,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @Configuration
 @Import(CoreConfiguration.class)
 @EnableJpaRepositories(
-    basePackages = {"digital.inception.error"},
+    basePackages = {"digital.inception.error.persistence.jpa"},
     entityManagerFactoryRef = "errorEntityManagerFactory")
 public class ErrorConfiguration {
 

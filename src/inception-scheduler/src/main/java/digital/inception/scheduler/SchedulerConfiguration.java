@@ -37,7 +37,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @Import(CoreConfiguration.class)
 @EnableJpaRepositories(
-    basePackages = {"digital.inception.scheduler"},
+    basePackages = {"digital.inception.scheduler.persistence.jpa"},
     entityManagerFactoryRef = "schedulerEntityManagerFactory")
 @EnableScheduling
 public class SchedulerConfiguration {

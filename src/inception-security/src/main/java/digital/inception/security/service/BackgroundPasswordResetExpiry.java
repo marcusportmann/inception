@@ -16,7 +16,7 @@
 
 package digital.inception.security.service;
 
-import digital.inception.security.persistence.PasswordResetRepository;
+import digital.inception.security.persistence.jpa.PasswordResetRepository;
 import java.time.OffsetDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

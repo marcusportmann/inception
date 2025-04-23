@@ -29,7 +29,7 @@ import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.model.JobParameter;
 import digital.inception.scheduler.model.JobStatus;
 import digital.inception.scheduler.model.Predictor;
-import digital.inception.scheduler.persistence.JobRepository;
+import digital.inception.scheduler.persistence.jpa.JobRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

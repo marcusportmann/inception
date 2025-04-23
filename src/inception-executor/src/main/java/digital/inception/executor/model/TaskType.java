@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.executor.constraint.ValidTaskType;
-import digital.inception.executor.persistence.TaskEventTypeListAttributeConverter;
+import digital.inception.executor.persistence.jpa.TaskEventTypeListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

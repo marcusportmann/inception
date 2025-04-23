@@ -48,7 +48,8 @@ public @interface ValidWorkflow {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.operations.constraint.ValidWorkflow.invalidWorkflow.message}";
+  String message() default
+      "{digital.inception.operations.constraint.ValidWorkflow.invalidWorkflow.message}";
 
   /**
    * The payload type.

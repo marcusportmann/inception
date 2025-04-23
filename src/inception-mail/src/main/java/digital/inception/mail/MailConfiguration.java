@@ -35,7 +35,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @Configuration
 @Import(CoreConfiguration.class)
 @EnableJpaRepositories(
-    basePackages = {"digital.inception.mail"},
+    basePackages = {"digital.inception.mail.persistence.jpa"},
     entityManagerFactoryRef = "mailEntityManagerFactory")
 public class MailConfiguration {
 

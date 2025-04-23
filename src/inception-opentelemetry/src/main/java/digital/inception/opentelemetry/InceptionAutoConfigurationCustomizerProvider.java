@@ -141,14 +141,11 @@ public class InceptionAutoConfigurationCustomizerProvider
             log.info("Inception Framework internal span tracing enabled");
 
             rateLimitedRuleBasedSamplerBuilder.recordAndSample(
-                SpanKind.INTERNAL,
-                AttributeKey.stringKey("code.namespace"),
-                "digital.inception.*");
+                SpanKind.INTERNAL, AttributeKey.stringKey("code.namespace"), "digital.inception.*");
           }
 
           if (otelTracingInternalSpanRulePackages != null
-              && !otelTracingInternalSpanRulePackages.isEmpty())
-          {
+              && !otelTracingInternalSpanRulePackages.isEmpty()) {
             String[] packageNames = otelTracingInternalSpanRulePackages.split(",");
 
             String[] trimmedPackageNames =

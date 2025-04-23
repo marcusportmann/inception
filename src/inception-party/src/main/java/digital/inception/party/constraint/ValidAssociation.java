@@ -48,7 +48,8 @@ public @interface ValidAssociation {
    *
    * @return the error message key
    */
-  String message() default "{digital.inception.party.constraint.ValidAssociation.invalidAssociation.message}";
+  String message() default
+      "{digital.inception.party.constraint.ValidAssociation.invalidAssociation.message}";
 
   /**
    * The payload type.

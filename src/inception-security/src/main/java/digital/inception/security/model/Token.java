@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.security.persistence.TokenClaimListAttributeConverter;
+import digital.inception.security.persistence.jpa.TokenClaimListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

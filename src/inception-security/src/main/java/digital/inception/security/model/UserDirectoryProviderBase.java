@@ -16,9 +16,9 @@
 
 package digital.inception.security.model;
 
-import digital.inception.security.persistence.GroupRepository;
-import digital.inception.security.persistence.RoleRepository;
-import digital.inception.security.persistence.UserRepository;
+import digital.inception.security.persistence.jpa.GroupRepository;
+import digital.inception.security.persistence.jpa.RoleRepository;
+import digital.inception.security.persistence.jpa.UserRepository;
 import java.util.List;
 import java.util.UUID;
 

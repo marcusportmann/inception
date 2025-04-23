@@ -35,7 +35,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @Configuration
 @Import(CoreConfiguration.class)
 @EnableJpaRepositories(
-    basePackages = {"digital.inception.audit"},
+    basePackages = {"digital.inception.audit.persistence.jpa"},
     entityManagerFactoryRef = "auditEntityManagerFactory")
 public class AuditConfiguration {
 
