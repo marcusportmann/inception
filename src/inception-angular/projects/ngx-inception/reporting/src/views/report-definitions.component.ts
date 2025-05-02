@@ -35,7 +35,8 @@ import {ReportingService} from '../services/reporting.service';
  */
 @Component({
   templateUrl: 'report-definitions.component.html',
-  styleUrls: ['report-definitions.component.css']
+  styleUrls: ['report-definitions.component.css'],
+  standalone: false
 })
 export class ReportDefinitionsComponent extends AdminContainerView implements AfterViewInit {
 

@@ -38,6 +38,7 @@ import {TokenClaimDialogComponent, TokenClaimDialogData} from './token-claim-dia
 @Component({
   templateUrl: 'new-token.component.html',
   styleUrls: ['new-token.component.css'],
+  standalone: false
 })
 export class NewTokenComponent extends AdminContainerView implements AfterViewInit {
 

@@ -35,6 +35,7 @@ import {UserStatus} from '../services/user-status';
 @Component({
   templateUrl: 'new-user.component.html',
   styleUrls: ['new-user.component.css'],
+  standalone: false
 })
 export class NewUserComponent extends AdminContainerView implements AfterViewInit {
 

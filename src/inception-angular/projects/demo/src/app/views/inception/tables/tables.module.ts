@@ -26,53 +26,54 @@ import {FilterableTableComponent} from './filterable-table.component';
 import {PaginationTableComponent} from './pagination-table.component';
 import {SortableTableComponent} from './sortable-table.component';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'action-list-table',
-}, {
-  path: 'action-list-table',
-  pathMatch: 'prefix',
-  component: ActionListTableComponent,
-  data: {
-    title: 'Action List Table',
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'action-list-table',
+  }, {
+    path: 'action-list-table',
+    pathMatch: 'prefix',
+    component: ActionListTableComponent,
+    data: {
+      title: 'Action List Table',
+    }
+  }, {
+    path: 'action-menu-table',
+    pathMatch: 'prefix',
+    component: ActionMenuTableComponent,
+    data: {
+      title: 'Action Menu Table',
+    }
+  }, {
+    path: 'basic-table',
+    pathMatch: 'prefix',
+    component: BasicTableComponent,
+    data: {
+      title: 'Basic Table',
+    }
+  }, {
+    path: 'filterable-table',
+    pathMatch: 'prefix',
+    component: FilterableTableComponent,
+    data: {
+      title: 'Filterable Table',
+    }
+  }, {
+    path: 'pagination-table',
+    pathMatch: 'prefix',
+    component: PaginationTableComponent,
+    data: {
+      title: 'Pagination Table',
+    }
+  }, {
+    path: 'sortable-table',
+    pathMatch: 'prefix',
+    component: SortableTableComponent,
+    data: {
+      title: 'Sortable Table',
+    }
   }
-}, {
-  path: 'action-menu-table',
-  pathMatch: 'prefix',
-  component: ActionMenuTableComponent,
-  data: {
-    title: 'Action Menu Table',
-  }
-}, {
-  path: 'basic-table',
-  pathMatch: 'prefix',
-  component: BasicTableComponent,
-  data: {
-    title: 'Basic Table',
-  }
-}, {
-  path: 'filterable-table',
-  pathMatch: 'prefix',
-  component: FilterableTableComponent,
-  data: {
-    title: 'Filterable Table',
-  }
-}, {
-  path: 'pagination-table',
-  pathMatch: 'prefix',
-  component: PaginationTableComponent,
-  data: {
-    title: 'Pagination Table',
-  }
-}, {
-  path: 'sortable-table',
-  pathMatch: 'prefix',
-  component: SortableTableComponent,
-  data: {
-    title: 'Sortable Table',
-  }
-}
 ];
 
 @NgModule({
@@ -83,7 +84,8 @@ const routes: Routes = [{
     // Inception modules
     CoreModule
   ],
-  declarations: [ActionListTableComponent, ActionMenuTableComponent, BasicTableComponent,
+  declarations: [
+    ActionListTableComponent, ActionMenuTableComponent, BasicTableComponent,
     FilterableTableComponent, PaginationTableComponent, SortableTableComponent
   ],
   providers: []

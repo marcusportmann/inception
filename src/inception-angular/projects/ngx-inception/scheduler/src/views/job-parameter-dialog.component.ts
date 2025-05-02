@@ -52,59 +52,60 @@ export interface JobParameterDialogData {
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'job-parameter-dialog',
   template: `
-      <div class="mat-mdc-dialog-title"><span>Job Parameter</span></div>
-      <div class="mat-mdc-dialog-content">
-          <form [formGroup]="jobParameterForm" autocomplete="off"
-                class="d-flex flex-column flex-fill"
-                validatedForm>
-              <div class="row">
-                  <div class="col-sm">
-                      <mat-form-field>
-                          <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_name">
-                              Name
-                          </mat-label>
-                          <input type="text" matInput formControlName="name" required="true">
-                          <mat-error *ngIf="nameControl.errors && !nameControl.untouched">
+    <div class="mat-mdc-dialog-title"><span>Job Parameter</span></div>
+    <div class="mat-mdc-dialog-content">
+      <form [formGroup]="jobParameterForm" autocomplete="off"
+            class="d-flex flex-column flex-fill"
+            validatedForm>
+        <div class="row">
+          <div class="col-sm">
+            <mat-form-field>
+              <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_name">
+                Name
+              </mat-label>
+              <input type="text" matInput formControlName="name" required="true">
+              <mat-error *ngIf="nameControl.errors && !nameControl.untouched">
                 <span *ngIf="nameControl.errors?.['required']"
                       i18n="@@scheduler_job_parameter_dialog_component_error_name_required">
                   A name is required.
                 </span>
-                              <span *ngIf="nameControl.errors?.['maxlength']"
-                                    i18n="@@scheduler_job_parameter_dialog_component_error_name_maxlength">
+                <span *ngIf="nameControl.errors?.['maxlength']"
+                      i18n="@@scheduler_job_parameter_dialog_component_error_name_maxlength">
                   Name must not exceed 100 characters.
                 </span>
-                          </mat-error>
-                      </mat-form-field>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-sm">
-                      <mat-form-field>
-                          <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_value">
-                              Value
-                          </mat-label>
-                          <input type="text" matInput formControlName="value">
-                          <mat-error *ngIf="valueControl.errors && !valueControl.untouched">
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <mat-form-field>
+              <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_value">
+                Value
+              </mat-label>
+              <input type="text" matInput formControlName="value">
+              <mat-error *ngIf="valueControl.errors && !valueControl.untouched">
                 <span *ngIf="valueControl.errors?.['maxlength']"
                       i18n="@@scheduler_job_parameter_dialog_component_error_value_maxlength">
                   Value must not exceed 100 characters.
                 </span>
-                          </mat-error>
-                      </mat-form-field>
-                  </div>
-              </div>
-          </form>
-      </div>
-      <div class="mat-mdc-dialog-actions">
-          <button type="button" mat-flat-button color="link" (click)="cancel()" tabindex="-1"
-                  i18n="@@scheduler_job_parameter_dialog_component_button_cancel">Cancel
-          </button>
-          <button type="button" mat-flat-button color="primary" [disabled]="!jobParameterForm.valid"
-                  (click)="ok()" tabindex="-1"
-                  i18n="@@scheduler_job_parameter_dialog_component_button_ok">OK
-          </button>
-      </div>
-  `
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="mat-mdc-dialog-actions">
+      <button type="button" mat-flat-button color="link" (click)="cancel()" tabindex="-1"
+              i18n="@@scheduler_job_parameter_dialog_component_button_cancel">Cancel
+      </button>
+      <button type="button" mat-flat-button color="primary" [disabled]="!jobParameterForm.valid"
+              (click)="ok()" tabindex="-1"
+              i18n="@@scheduler_job_parameter_dialog_component_button_ok">OK
+      </button>
+    </div>
+  `,
+  standalone: false
 })
 export class JobParameterDialogComponent {
 

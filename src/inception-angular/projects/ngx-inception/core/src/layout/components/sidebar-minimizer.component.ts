@@ -26,8 +26,9 @@ import {Replace} from '../../util/replace';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-minimizer',
   template: `
-      <button class="sidebar-minimizer" type="button" sidebarMinimizer brandMinimizer></button>
-  `
+    <button class="sidebar-minimizer" type="button" sidebarMinimizer brandMinimizer></button>
+  `,
+  standalone: false
 })
 export class SidebarMinimizerComponent implements OnInit {
 

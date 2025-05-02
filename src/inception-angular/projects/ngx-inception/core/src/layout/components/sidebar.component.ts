@@ -31,7 +31,8 @@ import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
   selector: 'sidebar',
   template: `
     <ng-content></ng-content>`,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class SidebarComponent implements OnInit, OnDestroy {
 

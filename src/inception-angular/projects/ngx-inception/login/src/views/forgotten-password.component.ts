@@ -33,6 +33,7 @@ import {catchError, finalize, first} from 'rxjs/operators';
  */
 @Component({
   templateUrl: 'forgotten-password.component.html',
+  standalone: false
 })
 export class ForgottenPasswordComponent {
   forgottenPasswordForm: FormGroup;

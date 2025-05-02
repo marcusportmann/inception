@@ -22,11 +22,12 @@ import {DashboardComponent} from './dashboard.component';
 // Import 3rd party modules
 // import { ChartsModule } from 'ng2-charts/ng2-charts';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  component: DashboardComponent
-}
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    component: DashboardComponent
+  }
 ];
 
 @NgModule({

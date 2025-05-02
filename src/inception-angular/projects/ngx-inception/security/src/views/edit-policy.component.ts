@@ -33,6 +33,7 @@ import {SecurityService} from '../services/security.service';
 @Component({
   templateUrl: 'edit-policy.component.html',
   styleUrls: ['edit-policy.component.css'],
+  standalone: false
 })
 export class EditPolicyComponent extends AdminContainerView implements AfterViewInit {
 

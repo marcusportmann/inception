@@ -34,6 +34,7 @@ import {MailService} from '../services/mail.service';
 @Component({
   templateUrl: 'edit-mail-template.component.html',
   styleUrls: ['edit-mail-template.component.css'],
+  standalone: false
 })
 export class EditMailTemplateComponent extends AdminContainerView implements AfterViewInit {
 

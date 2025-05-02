@@ -39,7 +39,8 @@ import {SecurityService} from '../services/security.service';
  */
 @Component({
   templateUrl: 'group-members.component.html',
-  styleUrls: ['group-members.component.css']
+  styleUrls: ['group-members.component.css'],
+  standalone: false
 })
 export class GroupMembersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: GroupMemberDataSource;

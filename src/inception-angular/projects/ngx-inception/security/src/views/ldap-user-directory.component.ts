@@ -36,7 +36,8 @@ import {UserDirectoryUtil} from '../services/user-directory-util';
       useExisting: forwardRef(() => LdapUserDirectoryComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
 

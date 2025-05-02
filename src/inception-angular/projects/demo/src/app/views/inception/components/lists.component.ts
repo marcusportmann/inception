@@ -22,47 +22,51 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'lists.component.html'
+  templateUrl: 'lists.component.html',
+  standalone: false
 })
 export class ListsComponent {
 
-  folders = [{
-    name: 'Photos',
-    updated: new Date('1/1/16'),
-  }, {
-    name: 'Recipes',
-    updated: new Date('1/17/16'),
-  }, {
-    name: 'Work',
-    updated: new Date('1/28/16'),
-  }
+  folders = [
+    {
+      name: 'Photos',
+      updated: new Date('1/1/16'),
+    }, {
+      name: 'Recipes',
+      updated: new Date('1/17/16'),
+    }, {
+      name: 'Work',
+      updated: new Date('1/28/16'),
+    }
   ];
 
-  notes = [{
-    name: 'Vacation Itinerary',
-    updated: new Date('2/20/16'),
-  }, {
-    name: 'Kitchen Remodel',
-    updated: new Date('1/18/16'),
-  }
+  notes = [
+    {
+      name: 'Vacation Itinerary',
+      updated: new Date('2/20/16'),
+    }, {
+      name: 'Kitchen Remodel',
+      updated: new Date('1/18/16'),
+    }
   ];
 
-  planets: any[] = [{
-    name: 'Jupiter',
-    image: 'assets/images/planets/1.png',
-    description: 'Fifth planet',
-    detail: 'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
-  }, {
-    name: 'Venus',
-    image: 'assets/images/planets/2.png',
-    description: 'Second planet',
-    detail: 'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
-  }, {
-    name: 'Mars',
-    image: 'assets/images/planets/3.png',
-    description: 'Fourth planet',
-    detail: 'Mars is the fourth planet from the Sun and the second-smallest planet'
-  }
+  planets: any[] = [
+    {
+      name: 'Jupiter',
+      image: 'assets/images/planets/1.png',
+      description: 'Fifth planet',
+      detail: 'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
+    }, {
+      name: 'Venus',
+      image: 'assets/images/planets/2.png',
+      description: 'Second planet',
+      detail: 'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
+    }, {
+      name: 'Mars',
+      image: 'assets/images/planets/3.png',
+      description: 'Fourth planet',
+      detail: 'Mars is the fourth planet from the Sun and the second-smallest planet'
+    }
   ];
 
   typesOfShoes = ['Dogs', 'Cats', 'Birds', 'Hamsters', 'Ponies'];

@@ -35,6 +35,7 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
 @Component({
   templateUrl: 'edit-user.component.html',
   styleUrls: ['edit-user.component.css'],
+  standalone: false
 })
 export class EditUserComponent extends AdminContainerView implements AfterViewInit {
 

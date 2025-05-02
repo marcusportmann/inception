@@ -35,6 +35,7 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
 @Component({
   templateUrl: 'edit-group.component.html',
   styleUrls: ['edit-group.component.css'],
+  standalone: false
 })
 export class EditGroupComponent extends AdminContainerView implements AfterViewInit {
 

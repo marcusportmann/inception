@@ -28,7 +28,8 @@ import {debounceTime, first, map, startWith, takeUntil} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'select-tenant.component.html'
+  templateUrl: 'select-tenant.component.html',
+  standalone: false
 })
 export class SelectTenantComponent implements OnInit, OnDestroy {
 

@@ -22,7 +22,8 @@ import {Subscription} from 'rxjs';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[autocompleteSelectionRequired]'
+  selector: '[autocompleteSelectionRequired]',
+  standalone: false
 })
 export class AutocompleteSelectionRequiredDirective implements AfterViewInit, OnDestroy {
 

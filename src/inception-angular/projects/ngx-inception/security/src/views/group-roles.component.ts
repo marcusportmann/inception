@@ -36,7 +36,8 @@ import {SecurityService} from '../services/security.service';
  */
 @Component({
   templateUrl: 'group-roles.component.html',
-  styleUrls: ['group-roles.component.css']
+  styleUrls: ['group-roles.component.css'],
+  standalone: false
 })
 export class GroupRolesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 

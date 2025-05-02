@@ -33,6 +33,7 @@ import {TokenType} from '../services/token-type';
 @Component({
   templateUrl: 'view-token.component.html',
   styleUrls: ['view-token.component.css'],
+  standalone: false
 })
 export class ViewTokenComponent extends AdminContainerView implements AfterViewInit {
 

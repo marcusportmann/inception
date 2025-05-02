@@ -33,6 +33,7 @@ import {ReportingService} from '../services/reporting.service';
 @Component({
   templateUrl: 'edit-report-definition.component.html',
   styleUrls: ['edit-report-definition.component.css'],
+  standalone: false
 })
 export class EditReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
 

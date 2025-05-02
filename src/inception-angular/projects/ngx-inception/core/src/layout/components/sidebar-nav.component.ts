@@ -34,7 +34,8 @@ import {NavigationService} from '../services/navigation.service';
     <ul class="nav">
       <sidebar-nav-item *ngFor="let navItem of navItems" [navItem]="navItem"></sidebar-nav-item>
     </ul>`,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {Error} from './error';
 
 /**

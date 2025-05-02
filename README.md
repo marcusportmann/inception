@@ -708,7 +708,14 @@ Complete the following steps to create a new application based on the Inception 
         ...
       }
       ```
-   7. Add the path mapping for the ngx-inception library to the *src/main/frontend/tsconfig.app.json* file.
+   7. Edit the *src/main/frontend/angular.json* file and add the *@angular/localize/init* entry to the polyfills.
+      ```
+      "polyfills": [
+              "zone.js",
+              "@angular/localize/init"
+            ],
+      ```
+   8. Add the path mapping for the ngx-inception library to the *src/main/frontend/tsconfig.app.json* file.
       ```
       "compilerOptions": {
         ...,
@@ -719,7 +726,7 @@ Complete the following steps to create a new application based on the Inception 
         }
       },
       ```
-   8. Add the *BrowserAnimationsModule* and Inception Framework imports to the
+   9. Add the *BrowserAnimationsModule* and Inception Framework imports to the
       *src/main/frontend/src/app/app.config.ts* file.
       ```
       ...
@@ -734,7 +741,7 @@ Complete the following steps to create a new application based on the Inception 
 
       ...
       ```
-   9. Add the *ngxInceptionConfig* to the *src/main/frontend/src/app/app.module.ts* file.
+   10. Add the *ngxInceptionConfig* to the *src/main/frontend/src/app/app.module.ts* file.
 
        **NOTE:** If the application has a logged out landing page, which unauthenticated
        users can access, then the *logoutRedirectUri* should be changed to the URL for this
@@ -764,7 +771,7 @@ Complete the following steps to create a new application based on the Inception 
        @NgModule({
        ...
        ```
-   10. Add the *BrowserAnimationsModule* and *CoreModule.forRoot(ngxInceptionConfig)*
+   11. Add the *BrowserAnimationsModule* and *CoreModule.forRoot(ngxInceptionConfig)*
        module imports to the *@NgModule* annotation in
        the *src/main/frontend/src/app/app.module.ts* file.
        ```
@@ -780,7 +787,7 @@ Complete the following steps to create a new application based on the Inception 
          ]
        })
        ```
-   11. Change the *AppModule* class so that it extends the *InceptionAppModule* class, then
+   12. Change the *AppModule* class so that it extends the *InceptionAppModule* class, then
        implement the *initNavigation* method. The *initNavigation* method specifies which
        Inception Framework and application-specific views to include in the navigation.
        ```
@@ -868,11 +875,11 @@ Complete the following steps to create a new application based on the Inception 
          }
        }
        ```
-   12. Create the *src/main/frontend/src/app/views/administration* directory.
+   13. Create the *src/main/frontend/src/app/views/administration* directory.
        ```
        mkdir -p src/main/frontend/src/app/views/administration
        ```
-   13. Create the *src/main/frontend/src/app/views/administration/administration.component.ts* file with the
+   14. Create the *src/main/frontend/src/app/views/administration/administration.component.ts* file with the
        following contents.
        ```
        import {Component} from '@angular/core';
@@ -890,7 +897,7 @@ Complete the following steps to create a new application based on the Inception 
          }
        }
        ```
-   14. Create the wrapper modules for the Inception Framework modules:
+   15. Create the wrapper modules for the Inception Framework modules:
        1. Create the *src/main/frontend/src/app/views/wrappers* directory.
           ```
           mkdir -p src/main/frontend/src/app/views/wrappers
@@ -992,7 +999,7 @@ Complete the following steps to create a new application based on the Inception 
           export class SecurityViewsWrapperModule {
           }
           ```
-   15. Create the *src/main/frontend/src/app/views/administration/administration.module.ts* file with the
+   16. Create the *src/main/frontend/src/app/views/administration/administration.module.ts* file with the
        following contents.
        ```
        import {CommonModule} from '@angular/common';
@@ -1091,7 +1098,7 @@ Complete the following steps to create a new application based on the Inception 
        export class AdministrationModule {
        }
        ```
-   16. Create the *src/main/frontend/src/app/views/administration/administration-title-resolver.ts* file with
+   17. Create the *src/main/frontend/src/app/views/administration/administration-title-resolver.ts* file with
        the following contents.
        ```
        import {Injectable} from '@angular/core';
@@ -1123,7 +1130,7 @@ Complete the following steps to create a new application based on the Inception 
          }
        }
        ```
-   17. Create the *src/main/frontend/src/app/views/administration/system-title-resolver.ts* file with the
+   18. Create the *src/main/frontend/src/app/views/administration/system-title-resolver.ts* file with the
        following contents.
        ```
        import {Injectable} from '@angular/core';
@@ -1155,11 +1162,11 @@ Complete the following steps to create a new application based on the Inception 
          }
        }
        ```
-   18. Create the *src/main/frontend/src/app/views/dashboard* directory.
+   19. Create the *src/main/frontend/src/app/views/dashboard* directory.
        ```
        mkdir -p src/main/frontend/src/app/views/dashboard
        ```
-   19. Create the *src/main/frontend/src/app/views/dashboard/dashboard.component.ts* file with the following
+   20. Create the *src/main/frontend/src/app/views/dashboard/dashboard.component.ts* file with the following
        contents.
        ```
        import {Component} from '@angular/core';
@@ -1177,7 +1184,7 @@ Complete the following steps to create a new application based on the Inception 
          }
        }
        ```
-   20. Create the *src/main/frontend/src/app/views/dashboard/dashboard.module.ts* file with the following
+   21. Create the *src/main/frontend/src/app/views/dashboard/dashboard.module.ts* file with the following
        contents.
        ```
        import {CommonModule} from '@angular/common';
@@ -1201,7 +1208,7 @@ Complete the following steps to create a new application based on the Inception 
        export class DashboardModule {
        }
        ```
-   21. Replace the contents of the *src/main/frontend/src/app/app-routing.module.ts* file with the following.
+   22. Replace the contents of the *src/main/frontend/src/app/app-routing.module.ts* file with the following.
        ```
        import {NgModule} from '@angular/core';
        import {RouterModule, Routes} from '@angular/router';
@@ -1281,7 +1288,7 @@ Complete the following steps to create a new application based on the Inception 
        export class AppRoutingModule {
        }
        ```
-   22. Delete the *src/main/frontend/src/app/app.component.html*,
+   23. Delete the *src/main/frontend/src/app/app.component.html*,
        *src/main/frontend/src/app/app.component.scss*, and
        *src/main/frontend/src/app/app.component.spec.ts* files.
        ```
@@ -1289,7 +1296,7 @@ Complete the following steps to create a new application based on the Inception 
        rm -f src/main/frontend/src/app/app.component.scss
        rm -f src/main/frontend/src/app/app.component.spec.ts
        ```
-   23. Replace the contents of the *src/main/frontend/src/app/app.component.ts* file with the following.
+   24. Replace the contents of the *src/main/frontend/src/app/app.component.ts* file with the following.
        ```
        import {Component, OnDestroy, OnInit} from '@angular/core';
        import {NavigationEnd, Router} from '@angular/router';
@@ -1324,12 +1331,12 @@ Complete the following steps to create a new application based on the Inception 
          }
        }
        ```
-   24. Create the *src/main/frontend/src/assets/images* and *src/main/frontend/src/assets/scss* directories.
+   25. Create the *src/main/frontend/src/assets/images* and *src/main/frontend/src/assets/scss* directories.
        ```
        mkdir -p src/main/frontend/src/assets/images
        mkdir -p src/main/frontend/src/assets/scss
        ```
-   25. Copy the image for the logo to *src/main/frontend/src/assets/images/logo.png* and the image for the
+   26. Copy the image for the logo to *src/main/frontend/src/assets/images/logo.png* and the image for the
        logo symbol to *src/main/frontend/src/assets/images/logo-symbol.png*.
 
        NOTE: If you do not have application-specific logo and logo symbol images then you can
@@ -1338,7 +1345,7 @@ Complete the following steps to create a new application based on the Inception 
        cp src/main/frontend/node_modules/ngx-inception/assets/images/logo.png src/main/frontend/src/assets/images/logo.png
        cp src/main/frontend/node_modules/ngx-inception/assets/images/logo-symbol.png src/main/frontend/src/assets/images/logo-symbol.png
        ```
-   26. Replace the contents of the *src/main/frontend/src/styles.scss* file with the following.
+   27. Replace the contents of the *src/main/frontend/src/styles.scss* file with the following.
        ```
        @import "../node_modules/ngx-inception/assets/scss/default-theme";
 
@@ -1371,7 +1378,7 @@ Complete the following steps to create a new application based on the Inception 
          content: "Marcus Portmann";
        }
        ```
-   27. Replace the contents of the *src/main/frontend/src/environments/environment.development.ts* file with the following.
+   28. Replace the contents of the *src/main/frontend/src/environments/environment.development.ts* file with the following.
        ```
        export const environment = {
          production: false,
@@ -1387,7 +1394,7 @@ Complete the following steps to create a new application based on the Inception 
         */
        import 'zone.js/plugins/zone-error';
        ```
-   28. Replace the contents of the *src/main/frontend/src/environments/environment.ts* file with the following.
+   29. Replace the contents of the *src/main/frontend/src/environments/environment.ts* file with the following.
        ```
        export const environment = {
          production: true,

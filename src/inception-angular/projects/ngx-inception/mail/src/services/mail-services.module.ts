@@ -15,9 +15,8 @@
  */
 
 import {CommonModule} from '@angular/common';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import '@angular/localize/init';
 import {MailService} from './mail.service';
 
 /**
@@ -25,10 +24,14 @@ import {MailService} from './mail.service';
  *
  * @author Marcus Portmann
  */
-@NgModule({ declarations: [],
-    exports: [], imports: [
-        // Angular modules
-        CommonModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+@NgModule({
+  declarations: [],
+  exports: [],
+  imports: [
+    // Angular modules
+    CommonModule],
+  providers: [provideHttpClient(withInterceptorsFromDi())]
+})
 export class MailServicesModule {
   constructor() {
   }

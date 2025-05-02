@@ -39,6 +39,7 @@ import {
 @Component({
   templateUrl: 'new-job.component.html',
   styleUrls: ['new-job.component.css'],
+  standalone: false
 })
 export class NewJobComponent extends AdminContainerView implements AfterViewInit {
 

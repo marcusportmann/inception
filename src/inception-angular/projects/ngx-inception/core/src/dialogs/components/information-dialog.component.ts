@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, Inject} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogData} from '../services/dialog-data';
 
@@ -47,11 +47,16 @@ import {DialogData} from '../services/dialog-data';
         </button>
       </ng-template>
     </div>
-  `
+  `,
+  host: {
+    'class': 'information-dialog',
+    '(document:keydown.enter)': 'onEnter($event)'
+  },
+
+
+  standalone: false
 })
 export class InformationDialogComponent {
-
-  @HostBinding('class') hostClass = 'information-dialog';
 
   /**
    * Constructs a new InformationDialogComponent.
@@ -65,5 +70,10 @@ export class InformationDialogComponent {
 
   ok(): void {
     this.dialogRef.close();
+  }
+
+  onEnter(event: KeyboardEvent) {
+    event.preventDefault(); // Optional: prevent unintended form submissions
+    this.ok();
   }
 }

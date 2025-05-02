@@ -31,7 +31,8 @@ import {catchError, finalize, first, Observable, throwError} from 'rxjs';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'reset-password.component.html'
+  templateUrl: 'reset-password.component.html',
+  standalone: false
 })
 export class ResetPasswordComponent implements OnInit {
 

@@ -34,6 +34,7 @@ import {SecurityService} from '../services/security.service';
 @Component({
   templateUrl: 'new-policy.component.html',
   styleUrls: ['new-policy.component.css'],
+  standalone: false
 })
 export class NewPolicyComponent extends AdminContainerView implements AfterViewInit {
 

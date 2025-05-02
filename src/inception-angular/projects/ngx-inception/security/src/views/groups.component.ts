@@ -41,6 +41,7 @@ import {UserDirectorySummary} from '../services/user-directory-summary';
 @Component({
   templateUrl: 'groups.component.html',
   styleUrls: ['groups.component.css'],
+  standalone: false
 })
 export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: GroupDataSource;

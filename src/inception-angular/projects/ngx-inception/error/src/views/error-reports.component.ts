@@ -38,7 +38,8 @@ import {ErrorService} from '../services/error.service';
  */
 @Component({
   templateUrl: 'error-reports.component.html',
-  styleUrls: ['error-reports.component.css']
+  styleUrls: ['error-reports.component.css'],
+  standalone: false
 })
 export class ErrorReportsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: ErrorReportSummaryDataSource;

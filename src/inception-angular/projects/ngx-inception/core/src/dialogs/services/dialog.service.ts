@@ -61,10 +61,10 @@ export class DialogService {
    * @param error The error.
    */
   showErrorDialog(error: Error): MatDialogRef<ErrorDialogComponent> {
-    console.log('Error: ', error);
+    console.error('Error: ', error);
 
     if (error.cause) {
-      console.log('Cause: ', error.cause);
+      console.error('Cause: ', error.cause);
     }
 
     return this.matDialog.open(ErrorDialogComponent, {

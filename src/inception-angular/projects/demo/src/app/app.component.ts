@@ -23,7 +23,8 @@ import {takeUntil} from 'rxjs/operators';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'body',
   template: `
-      <router-outlet></router-outlet>`
+    <router-outlet></router-outlet>`,
+  standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
 

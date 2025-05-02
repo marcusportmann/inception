@@ -17,208 +17,213 @@
 import {FocusMonitor} from '@angular/cdk/a11y';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  Component, DoCheck, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit, Optional,
-  Renderer2, Self
+  Component, DoCheck, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
-import {ControlValueAccessor, FormGroupDirective, NgControl, NgForm} from '@angular/forms';
-import {ErrorStateMatcher, mixinErrorState} from '@angular/material/core';
+import {
+  AbstractControl, ControlValueAccessor, FormGroupDirective, NgControl, NgForm
+} from '@angular/forms';
+import {ErrorStateMatcher} from '@angular/material/core';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {Subject} from 'rxjs';
 
-const _FileUploadMixinBase = mixinErrorState(
-  class {
-    /**
-     * Emits whenever the component state changes and should cause the parent
-     * form field to update. Implemented as part of `MatFormFieldControl`.
-     * @docs-private
-     */
-    readonly stateChanges = new Subject<void>();
-
-    constructor(public _defaultErrorStateMatcher: ErrorStateMatcher, public _parentForm: NgForm,
-                public _parentFormGroup: FormGroupDirective,
-                /**
-                 * Form control bound to the component.
-                 * Implemented as part of `MatFormFieldControl`.
-                 * @docs-private
-                 */
-                public ngControl: NgControl) {
-    }
-  }
-);
-
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'file-upload',
+  standalone: false,
   template: `
-      <input #input type="file" [attr.multiple]="multiple? '' : null" [attr.accept]="accept">
-      <span class="filename">{{ fileNames }}</span>
+    <div class="file-upload"
+         role="button"
+         tabindex="0"
+         (click)="open()"
+         (keydown.enter)="open()"
+         [class.disabled]="disabled"
+         [class.mat-form-field-should-float]="shouldLabelFloat">
+      <span class="filename">{{ fileNames || placeholder }}</span>
+    </div>
+
+    <input #input
+           type="file"
+           [attr.accept]="accept"
+           [attr.multiple]="multiple ? '' : null"
+           (change)="onFileSelected($event)"
+           hidden>
   `,
   styles: [
     `
-      :host {
-        display: inline-block;
-      }
-
-      :host:not(.file-input-disabled) {
+      .file-upload {
+        display: inline-flex;
+        align-items: center;
         cursor: pointer;
       }
 
-      input {
-        width: 0;
-        height: 0;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
+      .file-upload.disabled {
+        cursor: default;
+        opacity: 0.5;
       }
 
       .filename {
-        display: inline-block;
+        margin-left: 8px;
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-    `
-  ],
+    `],
   providers: [
     {
       provide: MatFormFieldControl,
       useExisting: FileUploadComponent
-    }
-  ]
+    }]
 })
-export class FileUploadComponent extends _FileUploadMixinBase implements MatFormFieldControl<File[]>,
-  ControlValueAccessor, OnInit, OnDestroy, DoCheck {
+export class FileUploadComponent implements MatFormFieldControl<File[]>, ControlValueAccessor, OnInit, OnDestroy, DoCheck {
   static nextId = 0;
 
-  @Input() accept?: string;
+  @Input() accept = '';
 
-  @Input() autofilled = false;
-
-  controlType = 'file-input';
+  controlType = 'file-upload';
 
   @HostBinding('attr.aria-describedby') describedBy = '';
 
-  @Input() override errorStateMatcher: ErrorStateMatcher;
+  errorState = false;
+
+  @Input() errorStateMatcher: ErrorStateMatcher;
+
+  /** allow parent or consumer to control float behavior */
+  @Input() floatLabel: 'auto' | 'always' | 'never' = 'auto';
 
   focused = false;
 
-  @HostBinding() id = `ngx-mat-file-input-${FileUploadComponent.nextId++}`;
+  @HostBinding() id = `file-upload-${FileUploadComponent.nextId++}`;
 
-  @Input() multiple = false;
+  @ViewChild('input', {static: true}) inputRef!: ElementRef<HTMLInputElement>;
+
+  //@Input() placeholder = 'No file chosen';
 
   @Input() placeholder = '';
 
-  /**
-   * @see https://angular.io/api/forms/ControlValueAccessor
-   */
-  constructor(private fm: FocusMonitor, private _elementRef: ElementRef,
-              private _renderer: Renderer2,
-              public override _defaultErrorStateMatcher: ErrorStateMatcher,
-              @Optional() @Self() public override ngControl: NgControl,
-              @Optional() public override _parentForm: NgForm,
-              @Optional() public override _parentFormGroup: FormGroupDirective) {
-    super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
+  stateChanges = new Subject<void>();
 
-    this.errorStateMatcher = _defaultErrorStateMatcher;
+  private _explicitRequired = false;
 
-    if (this.ngControl != null) {
+  private _files: File[] | null = null;
+
+  constructor(private fm: FocusMonitor, private _elementRef: ElementRef<HTMLElement>,
+              @Optional() @Self() public ngControl: NgControl,
+              @Optional() public _parentForm: NgForm,
+              @Optional() public _parentFormGroup: FormGroupDirective,
+              defaultErrorStateMatcher: ErrorStateMatcher) {
+    if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
-    fm.monitor(_elementRef.nativeElement, true).subscribe(origin => {
+    this.errorStateMatcher = defaultErrorStateMatcher;
+
+    this.fm.monitor(this._elementRef.nativeElement, true).subscribe(origin => {
       this.focused = !!origin;
       this.stateChanges.next();
     });
   }
 
-  private _required = false;
-
-  @Input() get required() {
-    return this._required;
-  }
-
-  set required(req: boolean) {
-    this._required = coerceBooleanProperty(req);
-    this.stateChanges.next();
-  }
+  private _disabled = false;
 
   @Input() get disabled(): boolean {
-    return this._elementRef.nativeElement.disabled;
+    return this._disabled;
   }
 
-  set disabled(dis: boolean) {
-    this.setDisabledState(coerceBooleanProperty(dis));
+  set disabled(v: boolean) {
+    this._disabled = coerceBooleanProperty(v);
+    this.setDisabledState(this._disabled);
     this.stateChanges.next();
   }
 
-  /**
-   * Whether the current input has files
-   */
-  get empty() {
-    return !this._elementRef.nativeElement.value || this._elementRef.nativeElement.value.length === 0;
+  private _hideRequiredMarker = false;
+
+  /** Whether to hide the required‐field asterisk (matFormField reads this) */
+  @Input() get hideRequiredMarker(): boolean {
+    return this._hideRequiredMarker;
   }
 
-  get fileNames() {
-    if (this.value) {
-      return this.value.map((f: File) => f.name).join(',');
-    } else {
-      return this.placeholder;
+  set hideRequiredMarker(v: boolean) {
+    console.log('[FileUploadComponent][hideRequiredMarker] Setting hide required = ', v);
+
+    this._hideRequiredMarker = coerceBooleanProperty(v);
+    this.stateChanges.next();
+  }
+
+  private _multiple = false;
+
+  @Input() get multiple(): boolean {
+    return this._multiple;
+  }
+
+  set multiple(v: boolean) {
+    this._multiple = coerceBooleanProperty(v);
+    this.stateChanges.next();
+  }
+
+  get empty(): boolean {
+    return !this._files || this._files.length === 0;
+  }
+
+  /** Human-readable file names */
+  get fileNames(): string {
+    if (Array.isArray(this._files) && this._files.length) {
+      return this._files.map(f => f.name).join(', ');
     }
+    return '';
   }
 
-  @HostBinding('class.file-input-disabled') get isDisabled() {
-    return this.disabled;
+  /** Explicit required attribute */
+  @Input() get required(): boolean {
+    if (this._explicitRequired) {
+      return true;
+    }
+    // auto-detect Validators.required on FormControl
+    const control: AbstractControl | null = this.ngControl?.control ?? null;
+    if (control && control.validator) {
+      const errors = control.validator(control);
+      if (errors?.['required']) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  set required(v: boolean) {
+    this._explicitRequired = coerceBooleanProperty(v);
+    this.stateChanges.next();
   }
 
   @HostBinding('class.mat-form-field-should-float') get shouldLabelFloat() {
-    return this.focused || !this.empty || this.placeholder !== undefined;
+    // always float
+    if (this.floatLabel === 'always') {
+      return true;
+    }
+    // never float
+    if (this.floatLabel === 'never') {
+      return false;
+    }
+    // auto (default): float on focus or when there's a value or when there's a placeholder
+    return this.focused || !!this.fileNames || (!!this.placeholder);
   }
 
+  /** MatFormFieldControl.value */
   @Input() get value(): File[] | null {
-    return this.empty ? null : this._elementRef.nativeElement.value || [];
+    return this._files;
   }
 
   set value(files: File[] | null) {
-    if (files) {
-      this.writeValue(files);
+    // only accept arrays, otherwise clear
+    this._files = Array.isArray(files) ? files : null;
+    this._onChange(this._files);
+    this.stateChanges.next();
+  }
+
+  ngDoCheck() {
+    const control = this.ngControl?.control;
+    const newState = this.errorStateMatcher.isErrorState(control,
+      this._parentForm || this._parentFormGroup);
+    if (newState !== this.errorState) {
+      this.errorState = newState;
       this.stateChanges.next();
-    }
-  }
-
-  @HostListener('focusout') blur() {
-    this.focused = false;
-    this._onTouched();
-  }
-
-  @HostListener('change', ['$event']) change(event: Event) {
-    const fileList: FileList | null = (event.target as HTMLInputElement).files;
-    const fileArray: File[] = [];
-    if (fileList) {
-      for (let i = 0; i < fileList.length; i++) {
-        fileArray.push(fileList[i]);
-      }
-    }
-    this.value = fileArray;
-    this._onChange(this.value);
-  }
-
-  /**
-   * Remove all files from the file input component
-   * @param [event] optional event that may have triggered the clear action
-   */
-  clear(event?: Event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    this.value = null;
-    this._elementRef.nativeElement.querySelector('input').value = null;
-    this._onChange(this.value);
-  }
-
-  ngDoCheck(): void {
-    if (this.ngControl) {
-      // We need to re-evaluate this on every change detection cycle, because there are some
-      // error triggers that we can't subscribe to (e.g. parent form submissions). This means
-      // that whatever logic is in here has to be super lean or we risk destroying the performance.
-      this.updateErrorState();
     }
   }
 
@@ -228,24 +233,29 @@ export class FileUploadComponent extends _FileUploadMixinBase implements MatForm
   }
 
   ngOnInit() {
-    this.multiple = coerceBooleanProperty(this.multiple);
+    // no-op
   }
 
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() !== 'input' && !this.disabled) {
-      this._elementRef.nativeElement.querySelector('input').focus();
-      this.focused = true;
+  onContainerClick(event: MouseEvent): void {
+    if (!this.disabled) {
       this.open();
     }
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this._files = input.files ? Array.from(input.files) : null;
+    this._onChange(this._files);
+    this.stateChanges.next();
+  }
+
   open() {
     if (!this.disabled) {
-      this._elementRef.nativeElement.querySelector('input').click();
+      this.inputRef.nativeElement.click();
     }
   }
 
-  registerOnChange(fn: (_: any) => void): void {
+  registerOnChange(fn: any): void {
     this._onChange = fn;
   }
 
@@ -253,27 +263,21 @@ export class FileUploadComponent extends _FileUploadMixinBase implements MatForm
     this._onTouched = fn;
   }
 
-  setDescribedByIds(ids: string[]) {
+  setDescribedByIds(ids: string[]): void {
     this.describedBy = ids.join(' ');
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
+    this.inputRef.nativeElement.disabled = isDisabled;
+    this.stateChanges.next();
   }
 
-  /**
-   * Writes a new value to the control.
-   *
-   * This method is called by the forms API to write to the view when programmatic changes from
-   * model to view are requested.
-   *
-   * @param value The new value for the control.
-   */
   writeValue(files: File[] | null): void {
-    this._renderer.setProperty(this._elementRef.nativeElement, 'value', files);
+    this._files = files;
+    this.stateChanges.next();
   }
 
-  private _onChange = (_: any) => {
+  private _onChange: (_: File[] | null) => void = () => {
   };
 
   private _onTouched = () => {

@@ -33,6 +33,7 @@ import {catchError, finalize, first, map} from 'rxjs/operators';
  */
 @Component({
   templateUrl: 'expired-password.component.html',
+  standalone: false
 })
 export class ExpiredPasswordComponent implements OnInit {
   confirmNewPasswordControl: FormControl;

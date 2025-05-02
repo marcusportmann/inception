@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, Inject} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 /**
@@ -57,11 +57,13 @@ export interface ConfirmationDialogData {
         Yes
       </button>
     </div>
-  `
+  `,
+  host: {
+    'class': 'confirmation-dialog'
+  },
+  standalone: false
 })
 export class ConfirmationDialogComponent {
-
-  @HostBinding('class') hostClass = 'confirmation-dialog';
 
   /**
    * Constructs a new ConfirmationDialogComponent.

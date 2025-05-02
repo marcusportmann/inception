@@ -33,6 +33,7 @@ import {ErrorService} from '../services/error.service';
 @Component({
   templateUrl: 'error-report.component.html',
   styleUrls: ['error-report.component.css'],
+  standalone: false
 })
 export class ErrorReportComponent extends AdminContainerView implements AfterViewInit {
 

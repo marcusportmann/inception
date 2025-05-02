@@ -33,6 +33,7 @@ import {ConfigService} from '../services/config.service';
 @Component({
   templateUrl: 'new-config.component.html',
   styleUrls: ['new-config.component.css'],
+  standalone: false
 })
 export class NewConfigComponent extends AdminContainerView implements AfterViewInit {
 

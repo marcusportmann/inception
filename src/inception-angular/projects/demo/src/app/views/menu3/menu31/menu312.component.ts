@@ -23,12 +23,13 @@ import {Component} from '@angular/core';
  */
 @Component({
   template: `
-      <mat-card class="flex-grow-1">
-          <mat-card-content>
-              Menu 3.1.2
-          </mat-card-content>
-      </mat-card>
-  `
+    <mat-card class="flex-grow-1">
+      <mat-card-content>
+        Menu 3.1.2
+      </mat-card-content>
+    </mat-card>
+  `,
+  standalone: false
 })
 export class Menu312Component {
 

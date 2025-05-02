@@ -23,25 +23,26 @@ import {ReferenceComponentsModule} from 'ngx-inception/reference';
 import {ExampleComponent} from './example.component';
 import {ReferenceComponentsComponent} from './reference-components.component';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'example'
-}, {
-  path: 'example',
-  pathMatch: 'prefix',
-  component: ExampleComponent,
-  data: {
-    title: 'Example',
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'example'
+  }, {
+    path: 'example',
+    pathMatch: 'prefix',
+    component: ExampleComponent,
+    data: {
+      title: 'Example',
+    }
+  }, {
+    path: 'reference-components',
+    pathMatch: 'prefix',
+    component: ReferenceComponentsComponent,
+    data: {
+      title: 'Reference Components',
+    }
   }
-}, {
-  path: 'reference-components',
-  pathMatch: 'prefix',
-  component: ReferenceComponentsComponent,
-  data: {
-    title: 'Reference Components',
-  }
-}
 ];
 
 @NgModule({

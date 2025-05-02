@@ -33,6 +33,7 @@ import {Tenant} from '../services/tenant';
 @Component({
   templateUrl: 'edit-tenant.component.html',
   styleUrls: ['edit-tenant.component.css'],
+  standalone: false
 })
 export class EditTenantComponent extends AdminContainerView implements AfterViewInit {
 

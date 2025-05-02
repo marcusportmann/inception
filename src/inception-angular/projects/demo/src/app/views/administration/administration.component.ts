@@ -23,7 +23,8 @@ import {Component} from '@angular/core';
  */
 @Component({
   template: `Administration
-  `
+  `,
+  standalone: false
 })
 export class AdministrationComponent {
 

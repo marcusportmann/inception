@@ -30,7 +30,8 @@ import {Observable} from 'rxjs';
         Menu 3.1.1
       </mat-card-content>
     </mat-card>
-  `
+  `,
+  standalone: false
 })
 export class Menu311Component extends AdminContainerView {
 

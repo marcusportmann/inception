@@ -41,7 +41,8 @@ import {Users} from '../services/users';
  */
 @Component({
   templateUrl: 'users.component.html',
-  styleUrls: ['users.component.css']
+  styleUrls: ['users.component.css'],
+  standalone: false
 })
 export class UsersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: UserDataSource;

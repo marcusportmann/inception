@@ -25,6 +25,7 @@ import {Component} from '@angular/core';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'simple-container',
   template: '<router-outlet></router-outlet>',
+  standalone: false
 })
 export class SimpleContainerComponent {
 

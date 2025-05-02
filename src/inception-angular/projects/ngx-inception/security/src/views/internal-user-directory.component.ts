@@ -36,7 +36,8 @@ import {UserDirectoryUtil} from '../services/user-directory-util';
       useExisting: forwardRef(() => InternalUserDirectoryComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class InternalUserDirectoryComponent implements ControlValueAccessor, Validator {
 

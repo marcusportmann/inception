@@ -111,3 +111,5 @@ Complete the following steps to setup a development environment on Windows.
    ng serve --host 0.0.0.0
    ```
 
+“If you use any i18n tags or rely on $localize calls in templates, be sure to add
+import '@angular/localize/init'; at the top of your app’s polyfills.ts.”

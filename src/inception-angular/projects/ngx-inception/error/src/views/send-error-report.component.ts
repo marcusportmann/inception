@@ -32,6 +32,7 @@ import {ErrorService} from '../services/error.service';
  */
 @Component({
   templateUrl: 'send-error-report.component.html',
+  standalone: false
 })
 export class SendErrorReportComponent implements OnInit {
 

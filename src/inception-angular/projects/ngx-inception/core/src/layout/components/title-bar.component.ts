@@ -30,20 +30,21 @@ import {BackNavigation} from './back-navigation';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'title-bar',
   template: `
-      <div *ngIf="title | async as title; else noTitle" class="title-bar">
-          <div *ngIf="backNavigation | async as backNavigation" class="back"
-               (click)="navigateBack(backNavigation)">
-              <span class="fa fa-chevron-left"></span> {{ backNavigation.title }}
-          </div>
-          <div class="title">{{ title }}</div>
+    <div *ngIf="title | async as title; else noTitle" class="title-bar">
+      <div *ngIf="backNavigation | async as backNavigation" class="back"
+           (click)="navigateBack(backNavigation)">
+        <span class="fa fa-chevron-left"></span> {{ backNavigation.title }}
       </div>
+      <div class="title">{{ title }}</div>
+    </div>
 
-      <ng-template #noTitle>
-          <div class="title-bar">
-              <div class="title">No Title</div>
-          </div>
-      </ng-template>
-  `
+    <ng-template #noTitle>
+      <div class="title-bar">
+        <div class="title">No Title</div>
+      </div>
+    </ng-template>
+  `,
+  standalone: false
 })
 export class TitleBarComponent implements OnInit {
 

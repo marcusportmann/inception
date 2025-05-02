@@ -37,7 +37,8 @@ import {CodesService} from '../services/codes.service';
  */
 @Component({
   templateUrl: 'code-categories.component.html',
-  styleUrls: ['code-categories.component.css']
+  styleUrls: ['code-categories.component.css'],
+  standalone: false
 })
 export class CodeCategoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: MatTableDataSource<CodeCategorySummary> = new MatTableDataSource<CodeCategorySummary>();

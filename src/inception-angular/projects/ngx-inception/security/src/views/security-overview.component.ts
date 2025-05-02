@@ -24,7 +24,8 @@ import {AdminContainerView} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Security Overview`
+  template: `Security Overview`,
+  standalone: false
 })
 export class SecurityOverviewComponent extends AdminContainerView {
 

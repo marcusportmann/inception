@@ -38,7 +38,8 @@ import {SecurityService} from '../services/security.service';
  */
 @Component({
   templateUrl: 'policies.component.html',
-  styleUrls: ['policies.component.css']
+  styleUrls: ['policies.component.css'],
+  standalone: false
 })
 export class PoliciesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: PolicySummaryDataSource;

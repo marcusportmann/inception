@@ -28,7 +28,8 @@ import {Component} from '@angular/core';
               Menu 2.1
           </mat-card-content>
       </mat-card>
-  `
+  `,
+  standalone: false
 })
 export class Menu21Component {
 

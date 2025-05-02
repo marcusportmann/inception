@@ -19,25 +19,26 @@ import {NgModule} from '@angular/core';
 
 import {RouterModule, Routes} from '@angular/router';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'menu31'
-}, {
-  path: 'menu31',
-  pathMatch: 'prefix',
-  loadChildren: () => import('./menu31/menu31.module').then(m => m.Menu31Module),
-  data: {
-    title: 'Menu 3.1',
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'menu31'
+  }, {
+    path: 'menu31',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./menu31/menu31.module').then(m => m.Menu31Module),
+    data: {
+      title: 'Menu 3.1',
+    }
+  }, {
+    path: 'menu32',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./menu32/menu32.module').then(m => m.Menu32Module),
+    data: {
+      title: 'Menu 3.2',
+    }
   }
-}, {
-  path: 'menu32',
-  pathMatch: 'prefix',
-  loadChildren: () => import('./menu32/menu32.module').then(m => m.Menu32Module),
-  data: {
-    title: 'Menu 3.2',
-  }
-}
 ];
 
 /**
@@ -48,7 +49,8 @@ const routes: Routes = [{
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
 
     RouterModule.forChild(routes)
   ],

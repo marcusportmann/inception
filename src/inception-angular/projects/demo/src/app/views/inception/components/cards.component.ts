@@ -22,7 +22,8 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'cards.component.html'
+  templateUrl: 'cards.component.html',
+  standalone: false
 })
 export class CardsComponent {
 

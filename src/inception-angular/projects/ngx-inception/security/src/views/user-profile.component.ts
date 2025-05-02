@@ -34,6 +34,7 @@ import {User} from '../services/user';
 @Component({
   templateUrl: 'user-profile.component.html',
   styleUrls: ['user-profile.component.css'],
+  standalone: false
 })
 export class UserProfileComponent extends AdminContainerView implements AfterViewInit {
 

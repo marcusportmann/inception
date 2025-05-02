@@ -16,19 +16,16 @@
 
 import {ObserversModule} from '@angular/cdk/observers';
 import {CommonModule, formatDate, HashLocationStrategy, LocationStrategy} from '@angular/common';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {Injectable, Injector, ModuleWithProviders, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import '@angular/localize/init';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
-import {
-  DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter
-} from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -112,19 +109,37 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 
 export const INCEPTION_DATE_FORMATS = {
-  parse: {dateInput: {month: 'short', year: 'numeric', day: 'numeric'}},
+  parse: {
+    dateInput: {
+      month: 'short',
+      year: 'numeric',
+      day: 'numeric'
+    }
+  },
   display: {
     dateInput: 'input',
-    monthYearLabel: {year: 'numeric', month: 'short'},
-    dateA11yLabel: {year: 'numeric', month: 'long', day: 'numeric'},
-    monthYearA11yLabel: {year: 'numeric', month: 'long'}
+    monthYearLabel: {
+      year: 'numeric',
+      month: 'short'
+    },
+    dateA11yLabel: {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    },
+    monthYearA11yLabel: {
+      year: 'numeric',
+      month: 'long'
+    }
   }
 };
 
+@Injectable()
 class InceptionDateAdapter extends NativeDateAdapter {
   override format(date: Date, displayFormat: Object): string {
     if (displayFormat === 'input') {
-      return formatDate(date,'yyyy-MM-dd',this.locale);;
+      return formatDate(date, 'yyyy-MM-dd', this.locale);
+
     } else {
       return date.toDateString();
     }
@@ -137,77 +152,81 @@ class InceptionDateAdapter extends NativeDateAdapter {
  *
  * @author Marcus Portmann
  */
-@NgModule({ declarations: [
-        // Dialog Components
-        ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
-        WarningDialogComponent,
-        // Forms Components
-        FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
-        TableFilterComponent,
-        // Forms  Directives
-        AutocompleteSelectionRequiredDirective, AutofocusDirective,
-        ValidatedFormDirective,
-        // Layout Components
-        AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
-        NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
-        SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
-        SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
-        // Layout Directives
-        BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
-        SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
-        SidebarTogglerDirective,
-        // Session Directives
-        HasAuthorityDirective
-    ],
-    exports: [
-        // Angular modules
-        CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
-        // 3rd party modules
-        // ChartsModule,
-        PerfectScrollbarModule,
-        // Material modules
-        MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-        MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
-        MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
-        MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
-        MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
-        // Forms Components
-        FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
-        TableFilterComponent,
-        // Forms Directives
-        AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective,
-        // Layout Components
-        AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
-        NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
-        SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
-        SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
-        // Layout Directives
-        BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
-        SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
-        SidebarTogglerDirective,
-        // Session Directives
-        HasAuthorityDirective
-    ], imports: [
-        // Angular modules
-        CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
-        // 3rd party modules
-        // ChartsModule,
-        PerfectScrollbarModule,
-        // CDK modules
-        ObserversModule,
-        // Material modules
-        MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-        MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
-        MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
-        MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
-        MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule], providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: SessionInterceptor,
-            multi: true,
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
+@NgModule({
+  declarations: [
+    // Dialog Components
+    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
+    WarningDialogComponent,
+    // Forms Components
+    FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
+    TableFilterComponent,
+    // Forms  Directives
+    AutocompleteSelectionRequiredDirective, AutofocusDirective,
+    ValidatedFormDirective,
+    // Layout Components
+    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
+    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
+    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+    SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
+    // Layout Directives
+    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
+    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+    SidebarTogglerDirective,
+    // Session Directives
+    HasAuthorityDirective
+  ],
+  exports: [
+    // Angular modules
+    CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+    // 3rd party modules
+    // ChartsModule,
+    PerfectScrollbarModule,
+    // Material modules
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
+    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
+    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
+    // Forms Components
+    FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
+    TableFilterComponent,
+    // Forms Directives
+    AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective,
+    // Layout Components
+    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
+    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
+    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+    SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
+    // Layout Directives
+    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
+    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+    SidebarTogglerDirective,
+    // Session Directives
+    HasAuthorityDirective
+  ],
+  imports: [
+    // Angular modules
+    CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+    // 3rd party modules
+    // ChartsModule,
+    PerfectScrollbarModule,
+    // CDK modules
+    ObserversModule,
+    // Material modules
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
+    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
+    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SessionInterceptor,
+      multi: true,
+    },
+    provideHttpClient(withInterceptorsFromDi()),
+  ]
+})
 export class CoreModule {
   constructor(injector: Injector) {
     setInceptionInjector(injector);

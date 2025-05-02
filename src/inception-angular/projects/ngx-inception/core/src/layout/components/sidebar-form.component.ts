@@ -26,10 +26,11 @@ import {Replace} from '../../util/replace';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-form',
   template: `
-      <form class="sidebar-form">
-          <ng-content></ng-content>
-      </form>
-  `
+    <form class="sidebar-form">
+      <ng-content></ng-content>
+    </form>
+  `,
+  standalone: false
 })
 export class SidebarFormComponent implements OnInit {
 

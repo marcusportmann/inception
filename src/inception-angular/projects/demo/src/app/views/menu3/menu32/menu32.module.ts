@@ -23,25 +23,26 @@ import {Menu321Component} from './menu321.component';
 import {Menu322TitleResolver} from './menu322-title-resolver';
 import {Menu322Component} from './menu322.component';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'menu321'
-}, {
-  path: 'menu321',
-  pathMatch: 'prefix',
-  component: Menu321Component,
-  resolve: {
-    title: Menu321TitleResolver
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'menu321'
+  }, {
+    path: 'menu321',
+    pathMatch: 'prefix',
+    component: Menu321Component,
+    resolve: {
+      title: Menu321TitleResolver
+    }
+  }, {
+    path: 'menu322',
+    pathMatch: 'prefix',
+    component: Menu322Component,
+    resolve: {
+      title: Menu322TitleResolver
+    }
   }
-}, {
-  path: 'menu322',
-  pathMatch: 'prefix',
-  component: Menu322Component,
-  resolve: {
-    title: Menu322TitleResolver
-  }
-}
 ];
 
 /**

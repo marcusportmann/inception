@@ -21,25 +21,26 @@ import {CoreModule} from 'ngx-inception/core';
 import {Menu311Component} from './menu311.component';
 import {Menu312Component} from './menu312.component';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'menu311'
-}, {
-  path: 'menu311',
-  pathMatch: 'prefix',
-  component: Menu311Component,
-  data: {
-    title: 'Menu 3.1.1',
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'menu311'
+  }, {
+    path: 'menu311',
+    pathMatch: 'prefix',
+    component: Menu311Component,
+    data: {
+      title: 'Menu 3.1.1',
+    }
+  }, {
+    path: 'menu312',
+    pathMatch: 'prefix',
+    component: Menu312Component,
+    data: {
+      title: 'Menu 3.1.2',
+    }
   }
-}, {
-  path: 'menu312',
-  pathMatch: 'prefix',
-  component: Menu312Component,
-  data: {
-    title: 'Menu 3.1.2',
-  }
-}
 ];
 
 /**

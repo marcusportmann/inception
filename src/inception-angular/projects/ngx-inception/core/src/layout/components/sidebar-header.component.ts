@@ -26,10 +26,11 @@ import {Replace} from '../../util/replace';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-header',
   template: `
-      <div class="sidebar-header">
-          <ng-content></ng-content>
-      </div>
-  `
+    <div class="sidebar-header">
+      <ng-content></ng-content>
+    </div>
+  `,
+  standalone: false
 })
 export class SidebarHeaderComponent implements OnInit {
 

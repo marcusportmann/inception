@@ -22,7 +22,8 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'tooltips.component.html'
+  templateUrl: 'tooltips.component.html',
+  standalone: false
 })
 export class TooltipsComponent {
 

@@ -22,7 +22,8 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'switches.component.html'
+  templateUrl: 'switches.component.html',
+  standalone: false
 })
 export class SwitchesComponent {
 

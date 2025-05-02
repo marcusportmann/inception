@@ -23,7 +23,8 @@ import {Component} from '@angular/core';
  */
 @Component({
   template: `Dashboard
-  `
+  `,
+  standalone: false
 })
 export class DashboardComponent {
 

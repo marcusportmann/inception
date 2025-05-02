@@ -28,7 +28,8 @@ import {TestService} from '../../../services/test.service';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'error-report.component.html'
+  templateUrl: 'error-report.component.html',
+  standalone: false
 })
 export class ErrorReportComponent {
 

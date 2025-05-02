@@ -47,14 +47,14 @@ export class TokenSummaries {
   sortBy: TokenSortBy;
 
   /**
-   * The status filter that was applied to the token summaries.
-   */
-  status: TokenStatus | null = null;
-
-  /**
    * The sort direction that was applied to the token summaries.
    */
   sortDirection: SortDirection;
+
+  /**
+   * The status filter that was applied to the token summaries.
+   */
+  status: TokenStatus | null = null;
 
   /**
    * The token summaries.
@@ -79,7 +79,8 @@ export class TokenSummaries {
    * @param filter         The filter that was applied to the token summaries.
    */
   constructor(tokenSummaries: TokenSummary[], total: number, sortBy: TokenSortBy,
-              sortDirection: SortDirection, pageIndex: number, pageSize: number, status?: TokenStatus, filter?: string) {
+              sortDirection: SortDirection, pageIndex: number, pageSize: number,
+              status?: TokenStatus, filter?: string) {
     this.tokenSummaries = tokenSummaries;
     this.total = total;
     this.sortBy = sortBy;

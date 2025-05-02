@@ -38,19 +38,22 @@ import {UserDirectorySummary} from '../services/user-directory-summary';
  */
 @Component({
   templateUrl: 'tenant-user-directories.component.html',
-  styleUrls: ['tenant-user-directories.component.css']
+  styleUrls: ['tenant-user-directories.component.css'],
+  standalone: false
 })
 export class TenantUserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   allUserDirectories: UserDirectorySummary[] = [];
 
-  availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>(1);
+  availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>(
+    1);
 
   dataSource = new MatTableDataSource<UserDirectorySummary>([]);
 
   displayedColumns = ['existingUserDirectoryName', 'actions'];
 
-  filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>(1);
+  filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>(
+    1);
 
   newUserDirectoryControl: FormControl;
 

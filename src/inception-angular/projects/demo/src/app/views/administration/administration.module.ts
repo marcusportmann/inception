@@ -28,78 +28,80 @@ import {AdministrationTitleResolver} from './administration-title-resolver';
 import {AdministrationComponent} from './administration.component';
 import {SystemTitleResolver} from './system-title-resolver';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'full',
-  component: AdministrationComponent,
-  resolve: {
-    title: AdministrationTitleResolver
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    component: AdministrationComponent,
+    resolve: {
+      title: AdministrationTitleResolver
+    }
+  }, {
+    path: 'security',
+    pathMatch: 'prefix',
+    resolve: {
+      title: SecurityTitleResolver
+    },
+    loadChildren: () => import('../wrappers/security-views-wrapper.module').then(
+      m => m.SecurityViewsWrapperModule)
+  }, {
+    path: 'system',
+    pathMatch: 'prefix',
+    resolve: {
+      title: SystemTitleResolver
+    },
+    children: [
+      {
+        path: 'code-categories',
+        pathMatch: 'prefix',
+        resolve: {
+          title: CodeCategoriesTitleResolver
+        },
+        loadChildren: () => import('../wrappers/codes-views-wrapper.module').then(
+          m => m.CodesViewsWrapperModule)
+      }, {
+        path: 'config',
+        pathMatch: 'prefix',
+        resolve: {
+          title: ConfigsTitleResolver
+        },
+        loadChildren: () => import('../wrappers/config-views-wrapper.module').then(
+          m => m.ConfigViewsWrapperModule)
+      }, {
+        path: 'error-reports',
+        pathMatch: 'prefix',
+        resolve: {
+          title: ErrorReportsTitleResolver
+        },
+        loadChildren: () => import('../wrappers/error-views-wrapper.module').then(
+          m => m.ErrorViewsWrapperModule)
+      }, {
+        path: 'mail',
+        pathMatch: 'prefix',
+        resolve: {
+          title: MailTitleResolver
+        },
+        loadChildren: () => import('../wrappers/mail-views-wrapper.module').then(
+          m => m.MailViewsWrapperModule)
+      }, {
+        path: 'scheduler',
+        pathMatch: 'prefix',
+        resolve: {
+          title: SchedulerTitleResolver
+        },
+        loadChildren: () => import('../wrappers/scheduler-views-wrapper.module').then(
+          m => m.SchedulerViewsWrapperModule)
+      }, {
+        path: 'reporting',
+        pathMatch: 'prefix',
+        resolve: {
+          title: ReportingTitleResolver
+        },
+        loadChildren: () => import('../wrappers/reporting-views-wrapper.module').then(
+          m => m.ReportingViewsWrapperModule)
+      }
+    ]
   }
-}, {
-  path: 'security',
-  pathMatch: 'prefix',
-  resolve: {
-    title: SecurityTitleResolver
-  },
-  loadChildren: () => import('../wrappers/security-views-wrapper.module').then(
-    m => m.SecurityViewsWrapperModule)
-}, {
-  path: 'system',
-  pathMatch: 'prefix',
-  resolve: {
-    title: SystemTitleResolver
-  },
-  children: [{
-    path: 'code-categories',
-    pathMatch: 'prefix',
-    resolve: {
-      title: CodeCategoriesTitleResolver
-    },
-    loadChildren: () => import('../wrappers/codes-views-wrapper.module').then(
-      m => m.CodesViewsWrapperModule)
-  }, {
-    path: 'config',
-    pathMatch: 'prefix',
-    resolve: {
-      title: ConfigsTitleResolver
-    },
-    loadChildren: () => import('../wrappers/config-views-wrapper.module').then(
-      m => m.ConfigViewsWrapperModule)
-  }, {
-    path: 'error-reports',
-    pathMatch: 'prefix',
-    resolve: {
-      title: ErrorReportsTitleResolver
-    },
-    loadChildren: () => import('../wrappers/error-views-wrapper.module').then(
-      m => m.ErrorViewsWrapperModule)
-  }, {
-    path: 'mail',
-    pathMatch: 'prefix',
-    resolve: {
-      title: MailTitleResolver
-    },
-    loadChildren: () => import('../wrappers/mail-views-wrapper.module').then(
-      m => m.MailViewsWrapperModule)
-  }, {
-    path: 'scheduler',
-    pathMatch: 'prefix',
-    resolve: {
-      title: SchedulerTitleResolver
-    },
-    loadChildren: () => import('../wrappers/scheduler-views-wrapper.module').then(
-      m => m.SchedulerViewsWrapperModule)
-  }, {
-    path: 'reporting',
-    pathMatch: 'prefix',
-    resolve: {
-      title: ReportingTitleResolver
-    },
-    loadChildren: () => import('../wrappers/reporting-views-wrapper.module').then(
-      m => m.ReportingViewsWrapperModule)
-  }
-  ]
-}
 ];
 
 @NgModule({

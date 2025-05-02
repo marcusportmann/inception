@@ -37,7 +37,8 @@ import {UserDirectorySummaryDataSource} from '../services/user-directory-summary
  */
 @Component({
   templateUrl: 'user-directories.component.html',
-  styleUrls: ['user-directories.component.css']
+  styleUrls: ['user-directories.component.css'],
+  standalone: false
 })
 export class UserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: UserDirectorySummaryDataSource;

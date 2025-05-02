@@ -90,7 +90,8 @@ import {NavigationItem} from '../services/navigation-item';
     </ng-container>
   `,
   styles: ['.nav-dropdown-toggle { cursor: pointer; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class SidebarNavItemComponent {
 

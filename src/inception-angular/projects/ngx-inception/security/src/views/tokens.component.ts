@@ -41,7 +41,8 @@ import {TokenType} from '../services/token-type';
  */
 @Component({
   templateUrl: 'tokens.component.html',
-  styleUrls: ['tokens.component.css']
+  styleUrls: ['tokens.component.css'],
+  standalone: false
 })
 export class TokensComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: TokenSummaryDataSource;

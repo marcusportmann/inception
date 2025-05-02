@@ -26,7 +26,8 @@ import {SessionService} from '../services/session.service';
  */
 @Directive({
   // eslint-disable-next-line
-  selector: '[hasAuthority]'
+  selector: '[hasAuthority]',
+  standalone: false
 })
 export class HasAuthorityDirective implements OnInit {
 

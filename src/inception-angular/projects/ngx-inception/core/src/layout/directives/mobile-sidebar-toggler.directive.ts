@@ -23,7 +23,8 @@ import {Directive, HostListener} from '@angular/core';
  */
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[mobileSidebarToggler]'
+  selector: '[mobileSidebarToggler]',
+  standalone: false
 })
 export class MobileSidebarTogglerDirective {
 

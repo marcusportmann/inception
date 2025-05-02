@@ -54,9 +54,10 @@ import {AdminContainerView} from './admin-container-view';
       </main>
     </div>
     <admin-footer [fixed]="false">
-      <span>2024 &copy; <span class="copyright-name"></span></span>
+      <span>2025 &copy; <span class="copyright-name"></span></span>
     </admin-footer>
-  `
+  `,
+  standalone: false
 })
 export class AdminContainerComponent implements OnDestroy {
 

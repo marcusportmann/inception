@@ -38,6 +38,7 @@ import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
 @Component({
   templateUrl: 'new-user-directory.component.html',
   styleUrls: ['new-user-directory.component.css'],
+  standalone: false
 })
 export class NewUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 

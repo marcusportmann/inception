@@ -41,6 +41,7 @@ import {ConfigService} from '../services/config.service';
 @Component({
   templateUrl: 'configs.component.html',
   styleUrls: ['configs.component.css'],
+  standalone: false
 })
 export class ConfigsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<Config>();

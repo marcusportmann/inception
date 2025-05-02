@@ -36,37 +36,38 @@ import {TimeZone} from '../services/time-zone';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'time-zone-input',
   template: `
-      <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
-          <input
-                  #timeZoneInput
-                  type="text"
-                  matInput
-                  autocompleteSelectionRequired
-                  required="required"
-                  [matAutocomplete]="timeZoneAutocomplete"
-                  [matAutocompleteConnectedTo]="origin"
-                  (input)="inputChanged($event)"
-                  (focusin)="onFocusIn($event)"
-                  (focusout)="onFocusOut($event)">
-          <mat-autocomplete
-                  #timeZoneAutocomplete="matAutocomplete"
-                  (closed)="onClosed()"
-                  (optionSelected)="optionSelected($event)"
-                  [displayWith]="displayWith">
-              <mat-option
-                      *ngFor="let filteredOption of filteredOptions$ | async"
-                      [value]="filteredOption">
-                  {{ filteredOption.id }}
-              </mat-option>
-          </mat-autocomplete>
-      </div>
+    <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
+      <input
+        #timeZoneInput
+        type="text"
+        matInput
+        autocompleteSelectionRequired
+        required="required"
+        [matAutocomplete]="timeZoneAutocomplete"
+        [matAutocompleteConnectedTo]="origin"
+        (input)="inputChanged($event)"
+        (focusin)="onFocusIn($event)"
+        (focusout)="onFocusOut($event)">
+      <mat-autocomplete
+        #timeZoneAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
+        <mat-option
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.id }}
+        </mat-option>
+      </mat-autocomplete>
+    </div>
   `,
   providers: [
     {
       provide: MatFormFieldControl,
       useExisting: TimeZoneInputComponent
     }
-  ]
+  ],
+  standalone: false
 })
 export class TimeZoneInputComponent implements MatFormFieldControl<string>,
   ControlValueAccessor, OnInit, OnDestroy {

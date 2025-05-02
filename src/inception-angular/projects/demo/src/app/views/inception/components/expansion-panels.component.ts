@@ -22,7 +22,8 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'expansion-panels.component.html'
+  templateUrl: 'expansion-panels.component.html',
+  standalone: false
 })
 export class ExpansionPanelsComponent {
   panelOpenState = false;

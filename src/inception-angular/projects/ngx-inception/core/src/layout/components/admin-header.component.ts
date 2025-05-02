@@ -32,57 +32,58 @@ import {Replace} from '../../util/replace';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'admin-header',
   template: `
-      <header class="admin-header">
-          <button class="toggler d-lg-none" type="button" sidebarToggler>
-              <span class="toggler-icon"></span>
-          </button>
-          <a class="brand" href="#">
-              <div class="brand-full"></div>
-              <div class="brand-minimized"></div>
+    <header class="admin-header">
+      <button class="toggler d-lg-none" type="button" sidebarToggler>
+        <span class="toggler-icon"></span>
+      </button>
+      <a class="brand" href="#">
+        <div class="brand-full"></div>
+        <div class="brand-minimized"></div>
+      </a>
+
+      <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
+        <span class="toggler-icon"></span>
+      </button>
+
+      <ul class="nav ml-auto">
+        <!--
+        <li class="nav-item d-md-down-none">
+          <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
+        </li>
+        -->
+        <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item"
+            [matMenuTriggerFor]="userMenu">
+          <a href="#" class="nav-link" (click)="false">
+            <span class="user-icon"></span>
+            <span class="user-name d-md-down-none">{{ userName() | async }}</span>
           </a>
+        </li>
 
-          <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
-              <span class="toggler-icon"></span>
-          </button>
+        <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false"
+                  class="user-menu">
+          <a *ngIf="isUserProfileEnabled()" mat-menu-item (click)="profile()">
+            <i class="fas fa-user-circle"></i>
+            <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
+          </a>
+          <a mat-menu-item (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
+          </a>
+        </mat-menu>
 
-          <ul class="nav ml-auto">
-              <!--
-              <li class="nav-item d-md-down-none">
-                <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
-              </li>
-              -->
-              <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item"
-                  [matMenuTriggerFor]="userMenu">
-                  <a href="#" class="nav-link" (click)="false">
-                      <span class="user-icon"></span>
-                      <span class="user-name d-md-down-none">{{ userName() | async }}</span>
-                  </a>
-              </li>
-
-              <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false"
-                        class="user-menu">
-                  <a *ngIf="isUserProfileEnabled()" mat-menu-item (click)="profile()">
-                      <i class="fas fa-user-circle"></i>
-                      <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
-                  </a>
-                  <a mat-menu-item (click)="logout()">
-                      <i class="fas fa-sign-out-alt"></i>
-                      <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
-                  </a>
-              </mat-menu>
-
-              <ng-template #login_link>
-                  <li class="nav-item">
-                      <a class="nav-link" (click)="login()">
-                          <span class="login-icon"></span>
-                          <span class="login d-md-down-none"
-                                i18n="@@admin_header_component_link_login">Login</span>
-                      </a>
-                  </li>
-              </ng-template>
-          </ul>
-      </header>
-  `
+        <ng-template #login_link>
+          <li class="nav-item">
+            <a class="nav-link" (click)="login()">
+              <span class="login-icon"></span>
+              <span class="login d-md-down-none"
+                    i18n="@@admin_header_component_link_login">Login</span>
+            </a>
+          </li>
+        </ng-template>
+      </ul>
+    </header>
+  `,
+  standalone: false
 })
 export class AdminHeaderComponent implements OnInit {
 

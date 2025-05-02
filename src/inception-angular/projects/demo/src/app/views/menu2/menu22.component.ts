@@ -34,6 +34,7 @@ import {DataService} from '../../services/data.service';
  */
 @Component({
   templateUrl: 'menu22.component.html',
+  standalone: false
 })
 export class Menu22Component implements AfterViewInit {
 

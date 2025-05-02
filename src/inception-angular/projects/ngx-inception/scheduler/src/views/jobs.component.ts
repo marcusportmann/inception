@@ -36,7 +36,8 @@ import {SchedulerService} from '../services/scheduler.service';
  */
 @Component({
   templateUrl: 'jobs.component.html',
-  styleUrls: ['jobs.component.css']
+  styleUrls: ['jobs.component.css'],
+  standalone: false
 })
 export class JobsComponent extends AdminContainerView implements AfterViewInit {
 

@@ -19,32 +19,33 @@ import {NgModule} from '@angular/core';
 
 import {RouterModule, Routes} from '@angular/router';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'components/buttons'
-}, {
-  path: 'components',
-  pathMatch: 'prefix',
-  loadChildren: () => import('./components/components.module').then(m => m.ComponentsModule),
-  data: {
-    title: 'Components',
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'components/buttons'
+  }, {
+    path: 'components',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./components/components.module').then(m => m.ComponentsModule),
+    data: {
+      title: 'Components',
+    }
+  }, {
+    path: 'forms',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./forms/forms.module').then(m => m.FormsModule),
+    data: {
+      title: 'Forms',
+    }
+  }, {
+    path: 'tables',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
+    data: {
+      title: 'Tables',
+    }
   }
-}, {
-  path: 'forms',
-  pathMatch: 'prefix',
-  loadChildren: () => import('./forms/forms.module').then(m => m.FormsModule),
-  data: {
-    title: 'Forms',
-  }
-}, {
-  path: 'tables',
-  pathMatch: 'prefix',
-  loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
-  data: {
-    title: 'Tables',
-  }
-}
 ];
 
 /**
@@ -54,7 +55,8 @@ const routes: Routes = [{
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
 
     RouterModule.forChild(routes)
   ],

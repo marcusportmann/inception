@@ -35,6 +35,7 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
 @Component({
   templateUrl: 'reset-user-password.component.html',
   styleUrls: ['reset-user-password.component.css'],
+  standalone: false
 })
 export class ResetUserPasswordComponent extends AdminContainerView implements AfterViewInit {
 

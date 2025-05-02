@@ -21,25 +21,26 @@ import {CoreModule} from 'ngx-inception/core';
 import {Menu21Component} from './menu21.component';
 import {Menu22Component} from './menu22.component';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'menu21',
-}, {
-  path: 'menu21',
-  pathMatch: 'prefix',
-  component: Menu21Component,
-  data: {
-    title: 'Menu 2.1',
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'menu21',
+  }, {
+    path: 'menu21',
+    pathMatch: 'prefix',
+    component: Menu21Component,
+    data: {
+      title: 'Menu 2.1',
+    }
+  }, {
+    path: 'menu22',
+    pathMatch: 'prefix',
+    component: Menu22Component,
+    data: {
+      title: 'Menu 2.2',
+    }
   }
-}, {
-  path: 'menu22',
-  pathMatch: 'prefix',
-  component: Menu22Component,
-  data: {
-    title: 'Menu 2.2',
-  }
-}
 ];
 
 /**

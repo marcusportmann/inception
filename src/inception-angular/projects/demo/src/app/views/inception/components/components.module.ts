@@ -31,88 +31,89 @@ import {SwitchesComponent} from './switches.component';
 import {TabsComponent} from './tabs.component';
 import {TooltipsComponent} from './tooltips.component';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  redirectTo: 'buttons'
-}, {
-  path: 'buttons',
-  pathMatch: 'prefix',
-  component: ButtonsComponent,
-  data: {
-    title: 'Buttons',
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: 'buttons'
+  }, {
+    path: 'buttons',
+    pathMatch: 'prefix',
+    component: ButtonsComponent,
+    data: {
+      title: 'Buttons',
+    }
+  }, {
+    path: 'cards',
+    pathMatch: 'prefix',
+    component: CardsComponent,
+    data: {
+      title: 'Cards',
+    }
+  }, {
+    path: 'dialogs',
+    pathMatch: 'prefix',
+    component: DialogsComponent,
+    data: {
+      title: 'Dialogs',
+    }
+  }, {
+    path: 'error-report',
+    pathMatch: 'prefix',
+    component: ErrorReportComponent,
+    data: {
+      title: 'Error Report',
+    }
+  }, {
+    path: 'expansion-panels',
+    pathMatch: 'prefix',
+    component: ExpansionPanelsComponent,
+    data: {
+      title: 'Expansion Panels',
+    }
+  }, {
+    path: 'grid-list',
+    pathMatch: 'prefix',
+    component: GridListComponent,
+    data: {
+      title: 'Grid List',
+    }
+  }, {
+    path: 'lists',
+    pathMatch: 'prefix',
+    component: ListsComponent,
+    data: {
+      title: 'Lists',
+    }
+  }, {
+    path: 'progress',
+    pathMatch: 'prefix',
+    component: ProgressComponent,
+    data: {
+      title: 'Progress',
+    }
+  }, {
+    path: 'switches',
+    pathMatch: 'prefix',
+    component: SwitchesComponent,
+    data: {
+      title: 'Switches',
+    }
+  }, {
+    path: 'tabs',
+    pathMatch: 'prefix',
+    component: TabsComponent,
+    data: {
+      title: 'Tabs',
+    }
+  }, {
+    path: 'tooltips',
+    pathMatch: 'prefix',
+    component: TooltipsComponent,
+    data: {
+      title: 'Tooltips',
+    }
   }
-}, {
-  path: 'cards',
-  pathMatch: 'prefix',
-  component: CardsComponent,
-  data: {
-    title: 'Cards',
-  }
-}, {
-  path: 'dialogs',
-  pathMatch: 'prefix',
-  component: DialogsComponent,
-  data: {
-    title: 'Dialogs',
-  }
-}, {
-  path: 'error-report',
-  pathMatch: 'prefix',
-  component: ErrorReportComponent,
-  data: {
-    title: 'Error Report',
-  }
-}, {
-  path: 'expansion-panels',
-  pathMatch: 'prefix',
-  component: ExpansionPanelsComponent,
-  data: {
-    title: 'Expansion Panels',
-  }
-}, {
-  path: 'grid-list',
-  pathMatch: 'prefix',
-  component: GridListComponent,
-  data: {
-    title: 'Grid List',
-  }
-}, {
-  path: 'lists',
-  pathMatch: 'prefix',
-  component: ListsComponent,
-  data: {
-    title: 'Lists',
-  }
-}, {
-  path: 'progress',
-  pathMatch: 'prefix',
-  component: ProgressComponent,
-  data: {
-    title: 'Progress',
-  }
-}, {
-  path: 'switches',
-  pathMatch: 'prefix',
-  component: SwitchesComponent,
-  data: {
-    title: 'Switches',
-  }
-}, {
-  path: 'tabs',
-  pathMatch: 'prefix',
-  component: TabsComponent,
-  data: {
-    title: 'Tabs',
-  }
-}, {
-  path: 'tooltips',
-  pathMatch: 'prefix',
-  component: TooltipsComponent,
-  data: {
-    title: 'Tooltips',
-  }
-}
 ];
 
 @NgModule({
@@ -123,7 +124,8 @@ const routes: Routes = [{
     // Inception modules
     CoreModule
   ],
-  declarations: [ButtonsComponent, CardsComponent, DialogsComponent, ErrorReportComponent,
+  declarations: [
+    ButtonsComponent, CardsComponent, DialogsComponent, ErrorReportComponent,
     ExpansionPanelsComponent, GridListComponent, ListsComponent, ProgressComponent,
     SwitchesComponent, TabsComponent, TooltipsComponent
   ]

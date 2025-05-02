@@ -35,7 +35,8 @@ import {SecurityService} from '../services/security.service';
  */
 @Component({
   templateUrl: 'user-groups.component.html',
-  styleUrls: ['user-groups.component.css']
+  styleUrls: ['user-groups.component.css'],
+  standalone: false
 })
 export class UserGroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 

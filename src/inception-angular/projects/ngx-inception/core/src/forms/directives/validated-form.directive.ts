@@ -24,7 +24,8 @@ import {FormGroupDirective} from '@angular/forms';
  */
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: 'form[validatedForm]'
+  selector: 'form[validatedForm]',
+  standalone: false
 })
 export class ValidatedFormDirective {
 

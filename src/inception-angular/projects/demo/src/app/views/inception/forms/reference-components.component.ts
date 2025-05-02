@@ -24,7 +24,8 @@ import {ActivatedRoute, Router} from '@angular/router';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'reference-components.component.html'
+  templateUrl: 'reference-components.component.html',
+  standalone: false
 })
 export class ReferenceComponentsComponent implements OnInit {
 

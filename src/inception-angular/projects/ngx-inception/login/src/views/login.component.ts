@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -31,13 +31,16 @@ import {catchError, finalize, first, map, Observable, throwError} from 'rxjs';
  */
 @Component({
   templateUrl: 'login.component.html',
+  standalone: false
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements AfterViewInit, OnInit {
   loginForm: FormGroup;
 
   passwordControl: FormControl;
 
   usernameControl: FormControl;
+
+  @ViewChild('usernameInput') usernameInput!: ElementRef<HTMLInputElement>;
 
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router,
               private activatedRoute: ActivatedRoute, private dialogService: DialogService,
@@ -91,6 +94,13 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    // Delay slightly to ensure it's safe
+    setTimeout(() => {
+      this.usernameInput.nativeElement.focus();
+    });
+  }
+
   ngOnInit(): void {
     this.activatedRoute.paramMap
     .pipe(first(), map(() => window.history.state))
@@ -112,7 +122,13 @@ export class LoginComponent implements OnInit {
         state: {username},
       });
     } else {
-      this.dialogService.showErrorDialog(error);
+      this.dialogService.showErrorDialog(error).afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        setTimeout(() => {
+          this.usernameInput.nativeElement.focus();
+        });
+      });
     }
     return throwError(() => error);
   }

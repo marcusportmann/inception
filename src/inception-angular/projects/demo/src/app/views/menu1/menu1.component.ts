@@ -32,7 +32,8 @@ import {DataService} from '../../services/data.service';
           <mat-card-content>
           </mat-card-content>
       </mat-card>
-  `
+  `,
+  standalone: false
 })
 export class Menu1Component {
 

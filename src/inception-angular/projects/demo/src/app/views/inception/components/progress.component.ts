@@ -22,7 +22,8 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'progress.component.html'
+  templateUrl: 'progress.component.html',
+  standalone: false
 })
 export class ProgressComponent {
 

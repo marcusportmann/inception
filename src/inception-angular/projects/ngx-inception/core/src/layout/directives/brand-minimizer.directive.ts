@@ -23,7 +23,8 @@ import {Directive, HostListener} from '@angular/core';
  */
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[brandMinimizer]'
+  selector: '[brandMinimizer]',
+  standalone: false
 })
 export class BrandMinimizerDirective {
 

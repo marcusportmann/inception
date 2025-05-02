@@ -40,46 +40,47 @@ import {ReferenceService} from '../services/reference.service';
   selector: 'countries-chip-grid',
   template: `
 
-      <mat-chip-grid #countriesChipGrid>
-          <mat-chip-row *ngFor="let country of countries; let index = index;"
-                        (removed)="removeCountry(country, index)">
-              {{ country.shortName }}
-              <button matChipRemove>
-                  <mat-icon>cancel</mat-icon>
-              </button>
-          </mat-chip-row>
-          <input
-                  #addCountryInput
-                  type="text"
-                  matInput
-                  [matAutocomplete]="addCountryAutocomplete"
-                  [matChipInputFor]="countriesChipGrid"
-                  (input)="addCountryInputChanged($event)"
-                  (focusin)="onFocusIn($event)"
-                  (focusout)="onFocusOut($event)">
-          <mat-autocomplete
-                  #addCountryAutocomplete="matAutocomplete"
-                  (optionSelected)="selectCountry($event)">
-              <mat-option *ngFor="let filteredCountry of filteredCountries$ | async"
-                          [value]="filteredCountry">
-                  {{ filteredCountry.shortName }}
-              </mat-option>
-          </mat-autocomplete>
-      </mat-chip-grid>
+    <mat-chip-grid #countriesChipGrid>
+      <mat-chip-row *ngFor="let country of countries; let index = index;"
+                    (removed)="removeCountry(country, index)">
+        {{ country.shortName }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+      <input
+        #addCountryInput
+        type="text"
+        matInput
+        [matAutocomplete]="addCountryAutocomplete"
+        [matChipInputFor]="countriesChipGrid"
+        (input)="addCountryInputChanged($event)"
+        (focusin)="onFocusIn($event)"
+        (focusout)="onFocusOut($event)">
+      <mat-autocomplete
+        #addCountryAutocomplete="matAutocomplete"
+        (optionSelected)="selectCountry($event)">
+        <mat-option *ngFor="let filteredCountry of filteredCountries$ | async"
+                    [value]="filteredCountry">
+          {{ filteredCountry.shortName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-chip-grid>
   `,
   styles: [
     `
-    .mat-chip {
-      font-weight: normal;
-    }
-  `
+      .mat-chip {
+        font-weight: normal;
+      }
+    `
   ],
   providers: [
     {
       provide: MatFormFieldControl,
       useExisting: CountriesChipGridComponent
     }
-  ]
+  ],
+  standalone: false
 })
 export class CountriesChipGridComponent implements MatFormFieldControl<string[]>,
   ControlValueAccessor, OnInit, OnDestroy {

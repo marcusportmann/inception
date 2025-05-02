@@ -82,7 +82,9 @@ export interface TokenClaimDialogData {
               <mat-label i18n="@@security_token_claim_dialog_component_label_values">
                 Values
               </mat-label>
-              <textarea matInput formControlName="values" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="5"></textarea>
+              <textarea matInput formControlName="values" cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5"
+                        cdkAutosizeMaxRows="5"></textarea>
               <mat-error *ngIf="valuesControl.errors && !valuesControl.untouched">
                 <span *ngIf="valuesControl.errors?.['maxlength']"
                       i18n="@@security_token_claim_dialog_component_error_values_maxlength">
@@ -103,7 +105,8 @@ export interface TokenClaimDialogData {
               i18n="@@security_token_claim_dialog_component_button_ok">OK
       </button>
     </div>
-  `
+  `,
+  standalone: false
 })
 export class TokenClaimDialogComponent {
 
@@ -142,7 +145,7 @@ export class TokenClaimDialogComponent {
 
   ok(): void {
     const tokenClaim: TokenClaim = new TokenClaim(this.nameControl.value,
-        this.valuesControl.value.split(','));
+      this.valuesControl.value.split(','));
 
     this.dialogRef.close(tokenClaim);
   }

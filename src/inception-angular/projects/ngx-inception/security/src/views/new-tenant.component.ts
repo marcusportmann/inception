@@ -35,6 +35,7 @@ import {TenantStatus} from '../services/tenant-status';
 @Component({
   templateUrl: 'new-tenant.component.html',
   styleUrls: ['new-tenant.component.css'],
+  standalone: false
 })
 export class NewTenantComponent extends AdminContainerView implements AfterViewInit {
 

@@ -20,11 +20,12 @@ import {RouterModule, Routes} from '@angular/router';
 import {CoreModule} from 'ngx-inception/core';
 import {Menu1Component} from './menu1.component';
 
-const routes: Routes = [{
-  path: '',
-  pathMatch: 'prefix',
-  component: Menu1Component,
-}
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'prefix',
+    component: Menu1Component,
+  }
 ];
 
 /**

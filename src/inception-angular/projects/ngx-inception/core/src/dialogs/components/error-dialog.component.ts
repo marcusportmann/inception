@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, Inject} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Error} from '../../errors/error';
 
@@ -53,11 +53,14 @@ export interface ErrorDialogData {
               i18n="@@error_dialog_button_ok">OK
       </button>
     </div>
-  `
+  `,
+  host: {
+    'class': 'error-dialog',
+    '(document:keydown.enter)': 'onEnter($event)'
+  },
+  standalone: false
 })
 export class ErrorDialogComponent {
-
-  @HostBinding('class') hostClass = 'error-dialog';
 
   /**
    * Constructs a new ErrorDialogComponent.
@@ -75,5 +78,10 @@ export class ErrorDialogComponent {
 
   ok(): void {
     this.dialogRef.close();
+  }
+
+  onEnter(event: KeyboardEvent) {
+    event.preventDefault(); // Optional: prevent unintended form submissions
+    this.ok();
   }
 }

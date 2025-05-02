@@ -35,7 +35,8 @@ import {TenantDataSource} from '../services/tenant-data-source';
  */
 @Component({
   templateUrl: 'tenants.component.html',
-  styleUrls: ['tenants.component.css']
+  styleUrls: ['tenants.component.css'],
+  standalone: false
 })
 export class TenantsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 

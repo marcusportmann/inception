@@ -26,10 +26,11 @@ import {Replace} from '../../util/replace';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'admin-footer',
   template: `
-      <footer class="admin-footer">
-          <ng-content></ng-content>
-      </footer>
-  `
+    <footer class="admin-footer">
+      <ng-content></ng-content>
+    </footer>
+  `,
+  standalone: false
 })
 export class AdminFooterComponent implements OnInit {
 

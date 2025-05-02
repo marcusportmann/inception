@@ -24,66 +24,71 @@ import {
 import {UserProfileComponent} from 'ngx-inception/security';
 import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
 
-export const routes: Routes = [{
-  path: '',
-  pathMatch: 'full',
-  redirectTo: 'menu1',
-}, {
-  path: '',
-  component: AdminContainerComponent,
-  children: [{
-    path: 'profile',
-    pathMatch: 'prefix',
-    component: UserProfileComponent
+export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'menu1',
   }, {
-    path: 'dashboard',
-    pathMatch: 'prefix',
-    canActivate: [CanActivateFunctionGuard
-    ],
-    data: {
-      title: 'Dashboard',
-      authorities: ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard']
-    },
-    loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
-  }, {
-    path: 'inception',
-    pathMatch: 'prefix',
-    data: {
-      title: 'Inception'
-    },
-    loadChildren: () => import('./views/inception/inception.module').then(m => m.InceptionModule)
-  }, {
-    path: 'menu1',
-    pathMatch: 'prefix',
-    data: {
-      title: 'Menu 1'
-    },
-    loadChildren: () => import('./views/menu1/menu1.module').then(m => m.Menu1Module)
-  }, {
-    path: 'menu2',
-    pathMatch: 'prefix',
-    data: {
-      title: 'Menu 2'
-    },
-    loadChildren: () => import('./views/menu2/menu2.module').then(m => m.Menu2Module)
-  }, {
-    path: 'menu3',
-    pathMatch: 'prefix',
-    data: {
-      title: 'Menu 3'
-    },
-    loadChildren: () => import('./views/menu3/menu3.module').then(m => m.Menu3Module)
-  }, {
-    path: 'administration',
-    pathMatch: 'prefix',
-    resolve: {
-      title: AdministrationTitleResolver
-    },
-    loadChildren: () => import('./views/administration/administration.module').then(
-      m => m.AdministrationModule)
-  }
-  ]
-},
+    path: '',
+    component: AdminContainerComponent,
+    children: [
+      {
+        path: 'profile',
+        pathMatch: 'prefix',
+        component: UserProfileComponent
+      }, {
+        path: 'dashboard',
+        pathMatch: 'prefix',
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        data: {
+          title: 'Dashboard',
+          authorities: ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard']
+        },
+        loadChildren: () => import('./views/dashboard/dashboard.module').then(
+          m => m.DashboardModule)
+      }, {
+        path: 'inception',
+        pathMatch: 'prefix',
+        data: {
+          title: 'Inception'
+        },
+        loadChildren: () => import('./views/inception/inception.module').then(
+          m => m.InceptionModule)
+      }, {
+        path: 'menu1',
+        pathMatch: 'prefix',
+        data: {
+          title: 'Menu 1'
+        },
+        loadChildren: () => import('./views/menu1/menu1.module').then(m => m.Menu1Module)
+      }, {
+        path: 'menu2',
+        pathMatch: 'prefix',
+        data: {
+          title: 'Menu 2'
+        },
+        loadChildren: () => import('./views/menu2/menu2.module').then(m => m.Menu2Module)
+      }, {
+        path: 'menu3',
+        pathMatch: 'prefix',
+        data: {
+          title: 'Menu 3'
+        },
+        loadChildren: () => import('./views/menu3/menu3.module').then(m => m.Menu3Module)
+      }, {
+        path: 'administration',
+        pathMatch: 'prefix',
+        resolve: {
+          title: AdministrationTitleResolver
+        },
+        loadChildren: () => import('./views/administration/administration.module').then(
+          m => m.AdministrationModule)
+      }
+    ]
+  },
 
   // Login route
   {

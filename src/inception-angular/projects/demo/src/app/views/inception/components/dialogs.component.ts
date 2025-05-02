@@ -25,7 +25,8 @@ import {first} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'dialogs.component.html'
+  templateUrl: 'dialogs.component.html',
+  standalone: false
 })
 export class DialogsComponent {
 

@@ -33,6 +33,7 @@ import {CodesService} from '../services/codes.service';
 @Component({
   templateUrl: 'new-code-category.component.html',
   styleUrls: ['new-code-category.component.css'],
+  standalone: false
 })
 export class NewCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
 

@@ -36,37 +36,38 @@ import {ReferenceService} from '../services/reference.service';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'country-input',
   template: `
-      <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
-          <input
-                  #countryInput
-                  type="text"
-                  matInput
-                  autocompleteSelectionRequired
-                  required="required"
-                  [matAutocomplete]="countryAutocomplete"
-                  [matAutocompleteConnectedTo]="origin"
-                  (input)="inputChanged($event)"
-                  (focusin)="onFocusIn($event)"
-                  (focusout)="onFocusOut($event)">
-          <mat-autocomplete
-                  #countryAutocomplete="matAutocomplete"
-                  (closed)="onClosed()"
-                  (optionSelected)="optionSelected($event)"
-                  [displayWith]="displayWith">
-              <mat-option
-                      *ngFor="let filteredOption of filteredOptions$ | async"
-                      [value]="filteredOption">
-                  {{ filteredOption.shortName }}
-              </mat-option>
-          </mat-autocomplete>
-      </div>
+    <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
+      <input
+        #countryInput
+        type="text"
+        matInput
+        autocompleteSelectionRequired
+        required="required"
+        [matAutocomplete]="countryAutocomplete"
+        [matAutocompleteConnectedTo]="origin"
+        (input)="inputChanged($event)"
+        (focusin)="onFocusIn($event)"
+        (focusout)="onFocusOut($event)">
+      <mat-autocomplete
+        #countryAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
+        <mat-option
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.shortName }}
+        </mat-option>
+      </mat-autocomplete>
+    </div>
   `,
   providers: [
     {
       provide: MatFormFieldControl,
       useExisting: CountryInputComponent
     }
-  ]
+  ],
+  standalone: false
 })
 export class CountryInputComponent implements MatFormFieldControl<string>,
   ControlValueAccessor, OnInit, OnDestroy {

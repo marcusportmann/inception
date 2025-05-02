@@ -24,17 +24,17 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
   // eslint-disable-next-line
   selector: 'table-filter',
   template: `
-      <div class="table-filter-container">
-          <div class="table-filter-icon">
-              <i class="fa fa-search"></i>
-          </div>
-          <input class="table-filter-input" matInput #tableFilterInput placeholder="Search..."
-                 autocomplete="off">
-          <button class="table-filter-reset" mat-icon-button *ngIf="changed | async"
-                  (click)="reset(true)">
-              <i class="fa fa-times"></i>
-          </button>
+    <div class="table-filter-container">
+      <div class="table-filter-icon">
+        <i class="fa fa-search"></i>
       </div>
+      <input class="table-filter-input" matInput #tableFilterInput placeholder="Search..."
+             autocomplete="off">
+      <button class="table-filter-reset" mat-icon-button *ngIf="changed | async"
+              (click)="reset(true)">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
   `,
   styles: [
     `
@@ -75,8 +75,8 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
         padding: 0;
         border: none !important;
       }
-    `
-  ]
+    `],
+  standalone: false
 }) // eslint-disable-next-line
 export class TableFilterComponent implements OnInit, OnDestroy {
 

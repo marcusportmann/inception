@@ -20,10 +20,9 @@ import {Platform} from '@angular/cdk/platform';
 import {
   AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
   Component, ContentChild, ContentChildren, ElementRef, Inject, InjectionToken, Input, NgZone,
-  OnDestroy, Optional, QueryList, ViewChild, ViewEncapsulation,
+  OnDestroy, Optional, QueryList, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import {MatCheckbox} from '@angular/material/checkbox';
-import {CanColor, mixinColor,} from '@angular/material/core';
 import {
   FloatLabelType, getMatFormFieldDuplicatedHintError, MAT_ERROR, MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MAT_PREFIX, MAT_SUFFIX, MatError, matFormFieldAnimations, MatFormFieldAppearance,
@@ -31,25 +30,11 @@ import {
 } from '@angular/material/form-field';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
-import {merge, Subject} from 'rxjs';
-import {startWith, takeUntil} from 'rxjs/operators';
+import {merge, startWith, Subject, takeUntil} from 'rxjs';
 
 let nextUniqueId = 0;
 const floatingLabelScale = 0.75;
 const outlineGapPadding = 5;
-
-
-/**
- * Boilerplate for applying mixins to GroupFormField.
- * @docs-private
- */
-const _GroupFormFieldBase = mixinColor(
-  class {
-    constructor(public _elementRef: ElementRef) {
-    }
-  },
-  'primary',
-);
 
 /**
  * Injection token that can be used to inject an instances of `GroupFormField`. It serves
@@ -61,44 +46,40 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
 
 /** Container for form controls that applies Material Design styling and behavior. */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'group-form-field',
   exportAs: 'groupFormField',
   templateUrl: 'group-form-field.component.html',
-  styleUrls: [
-    'group-form-field.component.scss'
-  ],
+  styleUrls: ['group-form-field.component.scss'],
   animations: [matFormFieldAnimations.transitionMessages],
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
-  host: {
-    'class': 'group-form-field mat-mdc-form-field mat-mdc-form-field-type-mat-input mat-form-field-hide-placeholder',
-    '[class.mat-form-field-appearance-fill]': 'appearance == "fill"',
-    '[class.mat-form-field-appearance-outline]': 'appearance == "outline"',
-    '[class.mat-form-field-invalid]': '_hasError()',
-    // '[class.mat-form-field-has-label]': '_hasFloatingLabel()',
-    '[class.mat-form-field-disabled]': '_isDisabled()',
-    '[class.mat-focused]': '_isFocused()',
-    '[class._mat-animation-noopable]': '!_animationsEnabled',
-    '[class.mat-primary]': 'color != "accent" && color != "warn"',
-    '[class.mat-accent]': 'color == "accent"',
-    '[class.mat-warn]': 'color == "warn"',
-  },
-  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['color'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: GROUP_FORM_FIELD_COMPONENT,
       useExisting: GroupFormFieldComponent
-    },
-  ]
+    }],
+  host: {
+    'class': 'group-form-field mat-mdc-form-field mat-mdc-form-field-type-mat-input mat-form-field-hide-placeholder',
+    '[class.mat-form-field-appearance-fill]': 'appearance === "fill"',
+    '[class.mat-form-field-appearance-outline]': 'appearance === "outline"',
+    '[class.mat-form-field-invalid]': '_hasError()',
+    '[class.mat-form-field-disabled]': '_isDisabled()',
+    '[class.mat-focused]': '_isFocused()',
+    '[class._mat-animation-noopable]': '!_animationsEnabled',
+    '[class.mat-primary]': 'color !== "accent" && color !== "warn"',
+    '[class.mat-accent]': 'color === "accent"',
+    '[class.mat-warn]': 'color === "warn"'
+  }, // bind the `color` input so host classes toggle correctly
+  inputs: ['color'],
+  standalone: false
 })
 
-export class GroupFormFieldComponent extends _GroupFormFieldBase
-  implements AfterContentInit, AfterContentChecked, AfterViewInit, OnDestroy, CanColor {
+export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked, AfterViewInit, OnDestroy {
 
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;
+
+  /** Whether the Angular animations are enabled. */
+  public readonly _animationsEnabled: boolean;
 
   @ContentChildren(MatCheckbox, {descendants: true}) _checkboxChildren!: QueryList<MatCheckbox>;
 
@@ -129,8 +110,8 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
 
   @ContentChildren(MAT_SUFFIX, {descendants: true}) _suffixChildren!: QueryList<MatSuffix>;
 
-  /** Whether the Angular animations are enabled. */
-  private readonly _animationsEnabled: boolean;
+  /** Replace the old mixin—just a simple @Input */
+  @Input() color: 'primary' | 'accent' | 'warn' = 'primary';
 
   private _destroyed = new Subject<void>();
 
@@ -147,29 +128,22 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
   /** Override for the logic that disables the label animation in certain cases. */
   private _showAlwaysAnimate = false;
 
-  constructor(
-    public override _elementRef: ElementRef,
-    private _changeDetectorRef: ChangeDetectorRef,
-    @Optional() private _dir: Directionality,
-    @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private _defaults:
-      MatFormFieldDefaultOptions, private _platform: Platform, private _ngZone: NgZone,
-    @Optional() @Inject(ANIMATION_MODULE_TYPE) _animationMode: string) {
-    super(_elementRef);
-
+  constructor(/** no override here—just inject */
+              public _elementRef: ElementRef, private _changeDetectorRef: ChangeDetectorRef,
+              @Optional() private _dir: Directionality, @Optional() @Inject(
+      MAT_FORM_FIELD_DEFAULT_OPTIONS) private _defaults: MatFormFieldDefaultOptions,
+              private _platform: Platform, private _ngZone: NgZone,
+              @Optional() @Inject(ANIMATION_MODULE_TYPE) _animationMode?: string) {
+    // NOTE: no super() call
     this.floatLabel = this._getDefaultFloatLabelState();
     this._animationsEnabled = _animationMode !== 'NoopAnimations';
-
-    // Set the default through here so we invoke the setter on the first run.
-    this.appearance = _defaults && _defaults.appearance ? _defaults.appearance : 'outline';
-    this._hideRequiredMarker =
-      _defaults && _defaults.hideRequiredMarker != null ? _defaults.hideRequiredMarker : false;
+    // …
   }
 
   private _appearance!: MatFormFieldAppearance;
 
   /** The form-field appearance style. */
-  @Input()
-  get appearance(): MatFormFieldAppearance {
+  @Input() get appearance(): MatFormFieldAppearance {
     return this._appearance;
   }
 
@@ -193,8 +167,7 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
    * the form field now supports both floating labels and placeholders. Therefore in the non-legacy
    * appearances the `never` option has been disabled in favor of just using the placeholder.
    */
-  @Input()
-  get floatLabel(): FloatLabelType {
+  @Input() get floatLabel(): FloatLabelType {
     return this._floatLabel;
   }
 
@@ -205,11 +178,10 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
     }
   }
 
-  private _hideRequiredMarker: boolean;
+  private _hideRequiredMarker = false;
 
   /** Whether the required marker should be hidden. */
-  @Input()
-  get hideRequiredMarker(): boolean {
+  @Input() get hideRequiredMarker(): boolean {
     return this._hideRequiredMarker;
   }
 
@@ -220,8 +192,7 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
   private _hintLabel: string = '';
 
   /** Text for the form field hint. */
-  @Input()
-  get hintLabel(): string {
+  @Input() get hintLabel(): string {
     return this._hintLabel;
   }
 
@@ -334,8 +305,7 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
   _updateOutlineGap() {
     const labelEl = this._label ? this._label.nativeElement : null;
 
-    if (this.appearance !== 'outline' || !labelEl || !labelEl.children.length ||
-      !labelEl.textContent.trim()) {
+    if (this.appearance !== 'outline' || !labelEl || !labelEl.children.length || !labelEl.textContent.trim()) {
       return;
     }
 
@@ -390,8 +360,7 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
       gapEls[i].style.width = `${gapWidth}px`;
     }
 
-    this._outlineGapCalculationNeededOnStable =
-      this._outlineGapCalculationNeededImmediately = false;
+    this._outlineGapCalculationNeededOnStable = this._outlineGapCalculationNeededImmediately = false;
   }
 
   /** Throws an error if there are no valid child controls for the group form field control. */
@@ -520,7 +489,9 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
   // hint.align === 'start') : null; const endHint = this._hintChildren ?
   // this._hintChildren.find(hint => hint.align === 'end') : null;  if (startHint) {
   // ids.push(startHint.id); } else if (this._hintLabel) { ids.push(this._hintLabelId); }  if
-  // (endHint) { ids.push(endHint.id); } } else if (this._errorChildren) { ids.push(...this._errorChildren.map(error => error.id)); }  this._control.setDescribedByIds(ids); } }
+  // (endHint) { ids.push(endHint.id); } } else if (this._errorChildren) {
+  // ids.push(...this._errorChildren.map(error => error.id)); }
+  // this._control.setDescribedByIds(ids); } }
 
   /**
    * Ensure that there is a maximum of one of each `<mat-hint>` alignment specified, with the

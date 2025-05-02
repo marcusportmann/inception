@@ -28,16 +28,17 @@ import {
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'div[groupFormFieldNotchedOutline]',
-  templateUrl: './group-form-field-notched-outline.component.html',
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+  templateUrl: './group-form-field-notched-outline.component.html', // eslint-disable-next-line
+                                                                    // @angular-eslint/no-host-metadata-property
   host: {
-    'class': 'mdc-notched-outline',
-    // Besides updating the notch state through the MDC component, we toggle this class through
+    'class': 'mdc-notched-outline', // Besides updating the notch state through the MDC component,
+                                    // we toggle this class through
     // a host binding in order to ensure that the notched-outline renders correctly on the server.
     '[class.mdc-notched-outline--notched]': 'groupFormFieldNotchedOutlineOpen',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: false
 })
 export class GroupFormFieldNotchedOutlineComponent implements AfterViewInit {
   // @ts-ignore
@@ -55,9 +56,7 @@ export class GroupFormFieldNotchedOutlineComponent implements AfterViewInit {
     } else {
       const NOTCH_ELEMENT_PADDING = 8;
       const NOTCH_ELEMENT_BORDER = 1;
-      this._notch.nativeElement.style.width = `calc(${labelWidth}px * var(--mat-mdc-form-field-floating-label-scale, 0.75) + ${
-        NOTCH_ELEMENT_PADDING + NOTCH_ELEMENT_BORDER
-      }px)`;
+      this._notch.nativeElement.style.width = `calc(${labelWidth}px * var(--mat-mdc-form-field-floating-label-scale, 0.75) + ${NOTCH_ELEMENT_PADDING + NOTCH_ELEMENT_BORDER}px)`;
     }
   }
 

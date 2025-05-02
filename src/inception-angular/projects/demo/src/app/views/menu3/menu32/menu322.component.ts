@@ -26,12 +26,13 @@ import {Observable} from 'rxjs';
  */
 @Component({
   template: `
-      <mat-card class="flex-grow-1">
-          <mat-card-content>
-              Menu 3.2.2
-          </mat-card-content>
-      </mat-card>
-  `
+    <mat-card class="flex-grow-1">
+      <mat-card-content>
+        Menu 3.2.2
+      </mat-card-content>
+    </mat-card>
+  `,
+  standalone: false
 })
 export class Menu322Component extends AdminContainerView {
 

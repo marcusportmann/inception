@@ -45,7 +45,8 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
       </ol>
     </ng-container>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
@@ -64,7 +65,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
    * @param breadcrumbsService The breadcrumbs service.
    * @param changeDetectorRef  The ChangeDetectorRef instance.
    */
-  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService,
+              private changeDetectorRef: ChangeDetectorRef) {
     this.breadcrumbs = this.breadcrumbsService.breadcrumbs$;
   }
 

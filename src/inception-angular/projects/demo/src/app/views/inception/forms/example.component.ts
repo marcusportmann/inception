@@ -40,7 +40,8 @@ class Title {
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'example.component.html'
+  templateUrl: 'example.component.html',
+  standalone: false
 })
 export class ExampleComponent implements OnInit, OnDestroy {
 

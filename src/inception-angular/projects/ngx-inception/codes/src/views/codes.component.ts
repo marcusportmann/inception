@@ -35,7 +35,8 @@ import {CodesService} from '../services/codes.service';
  */
 @Component({
   templateUrl: 'codes.component.html',
-  styleUrls: ['codes.component.css']
+  styleUrls: ['codes.component.css'],
+  standalone: false
 })
 export class CodesComponent extends AdminContainerView implements AfterViewInit {
   codeCategoryId: string;

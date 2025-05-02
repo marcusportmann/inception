@@ -34,6 +34,7 @@ import {ConfigService} from '../services/config.service';
 @Component({
   templateUrl: 'edit-config.component.html',
   styleUrls: ['edit-config.component.css'],
+  standalone: false
 })
 export class EditConfigComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   config: Config | null = null;
