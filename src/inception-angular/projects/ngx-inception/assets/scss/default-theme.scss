@@ -1,5 +1,114 @@
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use 'sass:string';
+
 @use 'inception' as * with (
-  $xxx: 'xxx'
+  $theme-colors: (
+    primary:                                    #2196f3,
+    secondary:                                  #a4b7c1,
+    success:                                    #4dbd74,
+    info:                                       #63c2de,
+    warning:                                    #ffc107,
+    danger:                                     #f86c6b,
+    light:                                      #f0f3f5,
+    dark:                                       #29363d,
+
+    blue:                                       #2196f3,
+    indigo:                                     #6610f2,
+    purple:                                     #6f42c1,
+    pink:                                       #e83e8c,
+    red:                                        #f86c6b,
+    orange:                                     #f8cb00,
+    yellow:                                     #ffc107,
+    green:                                      #4dbd74,
+    teal:                                       #20c997,
+    cyan:                                       #63c2de,
+
+    gray-100:                                   #f0f3f5,
+    gray-200:                                   #c2cfd6,
+    gray-300:                                   #a4b7c1,
+    gray-400:                                   #869fac,
+    gray-500:                                   #678898,
+    gray-600:                                   #536c79,
+    gray-700:                                   #3e515b,
+    gray-800:                                   #29363d,
+    gray-900:                                   #151b1e,
+
+    white:                                      #ffffff,
+    black:                                      #000000,
+
+    border-color:                               #a4b7c1, // Same as gray-300
+    body-color:                                 #29363d, // Sames as dark
+    body-bg-color:                              #f0f3f5, // Same as light
+    link-color:                                 #2196f3, // Same as primary
+    blockquote-small-color:                     #536c79, // Same as gray-600
+    headings-color:                             #29363d, // Same as dark
+    text-muted-color:                           #6c757d,
+    table-caption-color:                        #6c757d,
+
+    breadcrumb-bg-color:                        #ffffff,
+    breadcrumb-divider-color:                   #536c79, // Same as gray-600
+    breadcrumb-active-color:                    #536c79, // Same as gray-600
+    breadcrumb-border-color:                    #a4b7c1, // Same as gray-300
+
+    card-icon-color:                            #29363d, // Same as dark
+    card-icon-bg-color:                         transparent,
+
+    admin-header-color:                         #6c757d,
+    admin-header-hover-color:                   #343a40,
+    admin-header-active-color:                  #343a40,
+    admin-header-disabled-color:                #dee2e6,
+    admin-header-border-color:                  #a4b7c1,
+    admin-header-bg-color:                      #ffffff,
+    admin-header-brand-bg-color:                transparent,
+    admin-header-brand-minimized-bg-color:      transparent,
+    admin-footer-color:                         #29363d,
+    admin-footer-bg-color:                      #f8f9fa,
+    admin-footer-border-color:                  #a4b7c1, // Same as gray-300
+
+    title-bar-bg-color:                         #ffffff,
+
+    sidebar-color:                              #ffffff,
+    sidebar-bg-color:                           #343a40,
+    sidebar-form-color:                         #ffffff,
+    sidebar-form-placeholder-color:             rgba(255,255,255,.7),
+    sidebar-form-bg-color:                      color.adjust(#343a40, $lightness: -10%),
+    sidebar-header-bg-color:                    rgba(0,0,0,.2),
+    sidebar-footer-bg-color:                    rgba(0,0,0,.2),
+
+    sidebar-minimizer-bg-color:                 rgba(0,0,0,.2),
+    sidebar-minimizer-indicator-color:          #6c757d,
+    sidebar-minimizer-hover-bg-color:           rgba(0,0,0,.3),
+    sidebar-minimizer-hover-indicator-color:    #ffffff,
+
+    sidebar-nav-color:                          #ffffff,
+    sidebar-nav-title-color:                    #e9ecef,
+    sidebar-nav-link-color:                     #ffffff,
+    sidebar-nav-link-hover-color:               #ffffff,
+    sidebar-nav-link-hover-icon-color:          #ffffff,
+    sidebar-nav-link-hover-bg-color:            #2196f3, // Same as blue
+
+    sidebar-nav-link-active-color:              #ffffff,
+    sidebar-nav-link-active-bg-color:           color.adjust(#343a40, $lightness: 5%),
+    sidebar-nav-link-active-icon-color:         #2196f3, // Same as blue
+    sidebar-nav-link-bg-color:                  transparent,
+    sidebar-nav-link-icon-color:                #6c757d,
+    sidebar-nav-dropdown-color:                 #ffffff,
+    sidebar-nav-dropdown-bg-color:              rgba(0,0,0,.2),
+    sidebar-nav-dropdown-indicator-color:       #6c757d,
+    sidebar-nav-dropdown-indicator-hover-color: #ffffff,
+
+    switch-bg-color:                            #ffffff,
+    switch-handle-bg-color:                     #ffffff,
+
+    title-bar-color:                            #495057,
+    title-bar-back-color:                       #AEB6BE,
+
+    hr-border-color:                            rgba(#000000, .1)
+  )
 );
 
 

@@ -1,0 +1,121 @@
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use 'sass:string';
+
+// Characters to escape in SVG data URIs
+$escaped-characters: (
+  "<": "%3C",
+  ">": "%3E",
+  "#": "%23",
+  "%": "%25",
+  '"': "%22",
+  "{": "%7B",
+  "}": "%7D",
+  "|": "%7C",
+  "^": "%5E",
+  "`": "%60",
+  " ": "%20"
+);
+
+/// Replaces occurrences of $search with $replace in $string.
+/// @param $string Input string
+/// @param $search Substring to find
+/// @param $replace Replacement string (default: empty)
+/// @return Updated string
+@function str-replace($string, $search, $replace: '') {
+  $index: string.index($string, $search);
+  @if $index {
+    @return string.slice($string, 1, $index - 1)
+      + $replace
+      + str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
+  }
+  @return $string;
+}
+
+/// Escapes characters in SVG data URI strings for CSS usage.
+/// @param $string CSS url() or data URI string
+/// @return Escaped string
+@function escape-svg($string) {
+  @if string.index($string, 'data:image/svg+xml') {
+    @each $char, $encoded in $escaped-characters {
+      @if string.index($string, 'url(') == 1 {
+        $content: string.slice($string, 6, -3);
+        @return url("#{str-replace($content, $char, $encoded)}");
+      } @else {
+        $string: str-replace($string, $char, $encoded);
+      }
+    }
+  }
+  @return $string;
+}
+
+/// Adds two values, using calc() if necessary.
+/// @param $value1 First value
+/// @param $value2 Second value
+/// @param $return-calc If true, wrap in calc()
+@function add($value1, $value2, $return-calc: true) {
+  @if $value1 == null { @return $value2; }
+  @if $value2 == null { @return $value1; }
+  @if meta.type-of($value1) == 'number' and meta.type-of($value2) == 'number' and comparable($value1, $value2) {
+    @return $value1 + $value2;
+  }
+  @return if($return-calc, calc(#{$value1} + #{$value2}), $value1 + ' + ' + $value2);
+}
+
+/// Subtracts two values, using calc() if necessary.
+/// @param $value1 Minuend
+/// @param $value2 Subtrahend
+/// @param $return-calc If true, wrap in calc()
+@function subtract($value1, $value2, $return-calc: true) {
+  @if $value1 == null and $value2 == null { @return null; }
+  @if $value1 == null { @return -$value2; }
+  @if $value2 == null { @return $value1; }
+  @if meta.type-of($value1) == 'number' and meta.type-of($value2) == 'number' and comparable($value1, $value2) {
+    @return $value1 - $value2;
+  }
+  @if meta.type-of($value2) != 'number' {
+    $value2: '(' + $value2 + ')';
+  }
+  @return if($return-calc, calc(#{$value1} - #{$value2}), $value1 + ' - ' + $value2);
+}
+
+/// Divides two values with optional precision.
+/// @param $dividend Dividend
+/// @param $divisor Divisor
+/// @param $precision Decimal precision (default: 10)
+/// @return Result with correct unit
+@function divide($dividend, $divisor, $precision: 10) {
+  $sign: if($dividend * $divisor >= 0, 1, -1);
+  $dividend: math.abs($dividend);
+  $divisor: math.abs($divisor);
+  @if $dividend == 0 { @return 0; }
+  @if $divisor == 0 { @error "Cannot divide by 0."; }
+
+  $result: 0;
+  $remainder: $dividend;
+  $factor: 1;
+  $count: $precision;
+
+  @while $count >= 0 {
+    $quotient: math.floor(calc($remainder / $divisor));
+    $result: $result * 10 + $quotient;
+    $remainder: ($remainder - $quotient * $divisor) * 10;
+    $factor: $factor * 10;
+    $count: $count - 1;
+  }
+
+  $result: calc($result / $factor) * $sign;
+
+  $unit-map: (px: 1px, rem: 1rem, em: 1em, '%': 1%);
+  $d-unit: math.unit($dividend);
+  $r-unit: math.unit($divisor);
+
+  @if $d-unit != $r-unit and map.has-key($unit-map, $d-unit) {
+    @return $result * map.get($unit-map, $d-unit);
+  }
+
+  @return $result;
+}
+

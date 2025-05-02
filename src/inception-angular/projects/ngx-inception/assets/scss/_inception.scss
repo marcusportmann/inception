@@ -1,12 +1,14 @@
 @forward "vendors/perfect-scrollbar/perfect-scrollbar";
 
-
 @use 'sass:color';
 @use 'sass:list';
 @use 'sass:map';
 @use 'sass:math';
 @use 'sass:meta';
 @use 'sass:string';
+
+@use "functions" as *;
+@use "mixins" as *;
 
 @use '@angular/material' as mat;
 @use "@angular/material/core/typography/typography";
@@ -17,674 +19,10 @@
 
 
 
-// Default variables
-$xxx: 'xxx' !default;
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-//         __                  _   _
-//        / _|_   _ _ __   ___| |_(_) ___  _ __  ___   ___  ___ ___ ___
-//       | |_| | | | '_ \ / __| __| |/ _ \| '_ \/ __| / __|/ __/ __/ __|
-//       |  _| |_| | | | | (__| |_| | (_) | | | \__ \_\__ \ (__\__ \__ \
-//   ____|_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___(_)___/\___|___/___/
-//  |_____|
-
-// Characters to escape in SVG data URIs
-$escaped-characters: (
-  "<": "%3C",
-  ">": "%3E",
-  "#": "%23",
-  "%": "%25",
-  '"': "%22",
-  "{": "%7B",
-  "}": "%7D",
-  "|": "%7C",
-  "^": "%5E",
-  "`": "%60",
-  " ": "%20"
-);
-
-// Mixins
-
-/// Ensures map values are in ascending order.
-/// @param $map Map to check
-/// @param $map-name Name used in warnings
-@mixin assert-ascending($map, $map-name) {
-  $prev-key: null;
-  $prev-value: null;
-
-  @each $key, $value in $map {
-    @if $prev-value != null and math.unit($value) != '%' and math.unit($prev-value) != '%' {
-      @if not math.compatible($prev-value, $value) {
-        @warn "In #{$map-name}, value for '#{$key}' (#{$value}) is not comparable to previous '#{$prev-key}' (#{$prev-value}).";
-      } @else if $prev-value >= $value {
-        @warn "In #{$map-name}, value for '#{$key}' (#{$value}) must be greater than previous '#{$prev-key}' (#{$prev-value}).";
-      }
-    }
-    $prev-key: $key;
-    $prev-value: $value;
-  }
-}
-
-/// Ensures the first map value starts at zero.
-/// @param $map Map to check
-/// @param $map-name Name used in warnings
-@mixin assert-starts-at-zero($map, $map-name: 'grid-breakpoints') {
-  @if list.length($map) > 0 {
-    $first-value: list.nth(map.values($map), 1);
-    @if $first-value != 0 {
-      @warn "First breakpoint in #{$map-name} should start at 0 but starts at #{$first-value}.";
-    }
-  }
-}
-
-// Functions
-
-/// Replaces occurrences of $search with $replace in $string.
-/// @param $string Input string
-/// @param $search Substring to find
-/// @param $replace Replacement string (default: empty)
-/// @return Updated string
-@function str-replace($string, $search, $replace: '') {
-  $index: string.index($string, $search);
-  @if $index {
-    @return string.slice($string, 1, $index - 1)
-      + $replace
-      + str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
-  }
-  @return $string;
-}
-
-/// Escapes characters in SVG data URI strings for CSS usage.
-/// @param $string CSS url() or data URI string
-/// @return Escaped string
-@function escape-svg($string) {
-  @if string.index($string, 'data:image/svg+xml') {
-    @each $char, $encoded in $escaped-characters {
-      @if string.index($string, 'url(') == 1 {
-        $content: string.slice($string, 6, -3);
-        @return url("#{str-replace($content, $char, $encoded)}");
-      } @else {
-        $string: str-replace($string, $char, $encoded);
-      }
-    }
-  }
-  @return $string;
-}
-
-/// Adds two values, using calc() if necessary.
-/// @param $value1 First value
-/// @param $value2 Second value
-/// @param $return-calc If true, wrap in calc()
-@function add($value1, $value2, $return-calc: true) {
-  @if $value1 == null { @return $value2; }
-  @if $value2 == null { @return $value1; }
-  @if meta.type-of($value1) == 'number' and meta.type-of($value2) == 'number' and comparable($value1, $value2) {
-    @return $value1 + $value2;
-  }
-  @return if($return-calc, calc(#{$value1} + #{$value2}), $value1 + ' + ' + $value2);
-}
-
-/// Subtracts two values, using calc() if necessary.
-/// @param $value1 Minuend
-/// @param $value2 Subtrahend
-/// @param $return-calc If true, wrap in calc()
-@function subtract($value1, $value2, $return-calc: true) {
-  @if $value1 == null and $value2 == null { @return null; }
-  @if $value1 == null { @return -$value2; }
-  @if $value2 == null { @return $value1; }
-  @if meta.type-of($value1) == 'number' and meta.type-of($value2) == 'number' and comparable($value1, $value2) {
-    @return $value1 - $value2;
-  }
-  @if meta.type-of($value2) != 'number' {
-    $value2: '(' + $value2 + ')';
-  }
-  @return if($return-calc, calc(#{$value1} - #{$value2}), $value1 + ' - ' + $value2);
-}
-
-/// Divides two values with optional precision.
-/// @param $dividend Dividend
-/// @param $divisor Divisor
-/// @param $precision Decimal precision (default: 10)
-/// @return Result with correct unit
-@function divide($dividend, $divisor, $precision: 10) {
-  $sign: if($dividend * $divisor >= 0, 1, -1);
-  $dividend: math.abs($dividend);
-  $divisor: math.abs($divisor);
-  @if $dividend == 0 { @return 0; }
-  @if $divisor == 0 { @error "Cannot divide by 0."; }
-
-  $result: 0;
-  $remainder: $dividend;
-  $factor: 1;
-  $count: $precision;
-
-  @while $count >= 0 {
-    $quotient: math.floor(calc($remainder / $divisor));
-    $result: $result * 10 + $quotient;
-    $remainder: ($remainder - $quotient * $divisor) * 10;
-    $factor: $factor * 10;
-    $count: $count - 1;
-  }
-
-  $result: calc($result / $factor) * $sign;
-
-  $unit-map: (px: 1px, rem: 1rem, em: 1em, '%': 1%);
-  $d-unit: math.unit($dividend);
-  $r-unit: math.unit($divisor);
-
-  @if $d-unit != $r-unit and map.has-key($unit-map, $d-unit) {
-    @return $result * map.get($unit-map, $d-unit);
-  }
-
-  @return $result;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//                  _      _
-//        _ __ ___ (_)_  _(_)_ __  ___   ___  ___ ___ ___
-//       | '_ ` _ \| \ \/ / | '_ \/ __| / __|/ __/ __/ __|
-//       | | | | | | |>  <| | | | \__ \_\__ \ (__\__ \__ \
-//   ____|_| |_| |_|_/_/\_\_|_| |_|___(_)___/\___|___/___/
-//  |_____|
-
-// -----------------------------------------------------------------------------
-// Button social-size
-// -----------------------------------------------------------------------------
-@mixin button-social-size(
-  $padding-y,
-  $padding-x,
-  $font-size,
-  $line-height,
-  $border-radius
-) {
-  // Compute icon dimension once
-  $icon-size: $padding-y * 2 + $font-size * $line-height;
-
-  padding: $padding-y $padding-x;
-  font-size: $font-size;
-  line-height: $line-height;
-  border: 0;
-  @include border-radius($border-radius);
-
-  &::before {
-    width:  $icon-size;
-    height: $icon-size;
-    padding: $padding-y 0;
-    font-size: $font-size;
-    line-height: $line-height;
-    @include border-radius($border-radius);
-  }
-
-  span {
-    margin-left: $icon-size;
-  }
-
-  &.icon {
-    width:  $icon-size;
-    height: $icon-size;
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Borders
-// -----------------------------------------------------------------------------
-@mixin borders($borders) {
-  @each $direction, $settings in $borders {
-    $size:  map.get($settings, size);
-    $style: map.get($settings, style);
-    $color: map.get($settings, color);
-
-    @if $direction == all {
-      border: $size $style $color;
-    } @else {
-      border-#{$direction}: $size $style $color;
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Sidebar width
-// -----------------------------------------------------------------------------
-@mixin sidebar-width($borders, $width) {
-  $sidebar-width: $width;
-
-  @each $direction, $settings in $borders {
-    $size: map.get($settings, size);
-
-    @if $direction == all {
-      $sidebar-width: $sidebar-width - 2 * $size;
-    } @else if list.index((left, right), $direction) {
-      $sidebar-width: $sidebar-width - $size;
-    }
-  }
-
-  width: $sidebar-width;
-}
-
-// -----------------------------------------------------------------------------
-// Card accent
-// -----------------------------------------------------------------------------
-@mixin card-accent-variant($color) {
-  border-top-width: 2px;
-  border-top-color: $color;
-}
-
-// -----------------------------------------------------------------------------
-// Switch size
-// -----------------------------------------------------------------------------
-@mixin switch-size($width, $height, $font-size, $handle-margin) {
-  // Pre-calc reusable values
-  $handle-size:   $height - 2 * $handle-margin - 2 * $border-width;
-  $translate-x:   $width  - $height;
-
-  width: $width;
-  height: $height;
-
-  .switch-slider {
-    font-size: $font-size;
-
-    &::before {
-      width:  $handle-size;
-      height: $handle-size;
-    }
-
-    &::after {
-      font-size: $font-size;
-    }
-  }
-
-  .switch-input:checked ~ .switch-slider::before {
-    transform: translateX($translate-x);
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Switch 3D size
-// -----------------------------------------------------------------------------
-@mixin switch-3d-size($width, $height) {
-  $translate-x: $width - $height;
-
-  width: $width;
-  height: $height;
-
-  .switch-slider::before {
-    width:  $height;
-    height: $height;
-  }
-
-  .switch-input:checked ~ .switch-slider::before {
-    transform: translateX($translate-x);
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Switch variants
-// -----------------------------------------------------------------------------
-@mixin switch-variant($color) {
-  $dark: color.adjust($color, $lightness: -10%);
-
-  .switch-input:checked + .switch-slider {
-    background-color: $color;
-    border-color:     $dark;
-
-    &::before {
-      border-color: $dark;
-    }
-  }
-}
-
-@mixin switch-outline-variant($color) {
-  .switch-input:checked + .switch-slider {
-    background-color: $switch-bg;
-    border-color:     $color;
-
-    &::before { border-color: $color; }
-    &::after   { color:        $color; }
-  }
-}
-
-@mixin switch-outline-variant-alt($color) {
-  .switch-input:checked + .switch-slider {
-    background-color: $switch-bg;
-    border-color:     $color;
-
-    &::before {
-      background-color: $color;
-      border-color:     $color;
-    }
-    &::after {
-      color: $color;
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Breakpoint utilities
-// -----------------------------------------------------------------------------
-@function breakpoint-next(
-  $name,
-  $breakpoints:       $grid-breakpoints,
-  $breakpoint-names:  map.keys($breakpoints)
-) {
-  $idx: list.index($breakpoint-names, $name);
-  @return if(
-      $idx != null and $idx < list.length($breakpoint-names),
-      list.nth($breakpoint-names, $idx + 1),
-      null
-  );
-}
-
-@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
-  $min: map.get($breakpoints, $name);
-  @return if($min != 0, $min, null);
-}
-
-@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
-  $next: breakpoint-next($name, $breakpoints);
-  @return if($next, breakpoint-min($next, $breakpoints) - .02, null);
-}
-
-@function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
-  @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
-}
-
-@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
-  $min: breakpoint-min($name, $breakpoints);
-
-  @if $min {
-    @media (min-width: $min) { @content; }
-  } @else {
-    @content;
-  }
-}
-
-@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
-  $max: breakpoint-max($name, $breakpoints);
-
-  @if $max {
-    @media (max-width: $max) { @content; }
-  } @else {
-    @content;
-  }
-}
-
-@mixin media-breakpoint-between(
-  $lower,
-  $upper,
-  $breakpoints: $grid-breakpoints
-) {
-  $min: breakpoint-min($lower, $breakpoints);
-  $max: breakpoint-max($upper, $breakpoints);
-
-  @if $min != null and $max != null {
-    @media (min-width: $min) and (max-width: $max) { @content; }
-  } @else if $max == null {
-    @include media-breakpoint-up($lower, $breakpoints) { @content; }
-  } @else if $min == null {
-    @include media-breakpoint-down($upper, $breakpoints) { @content; }
-  }
-}
-
-@mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
-  $min: breakpoint-min($name, $breakpoints);
-  $max: breakpoint-max($name, $breakpoints);
-
-  @if $min != null and $max != null {
-    @media (min-width: $min) and (max-width: $max) { @content; }
-  } @else if $max == null {
-    @include media-breakpoint-up($name, $breakpoints) { @content; }
-  } @else if $min == null {
-    @include media-breakpoint-down($name, $breakpoints) { @content; }
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Border-radius helpers
-// -----------------------------------------------------------------------------
-@function valid-radius($radius) {
-  $result: ();
-  @each $val in $radius {
-    @if meta.type-of($val) == number {
-      $result: list.append($result, max($val, 0));
-    } @else {
-      $result: list.append($result, $val);
-    }
-  }
-  @return $result;
-}
-
-@mixin border-radius($radius: $border-radius, $fallback: false) {
-  @if $enable-rounded {
-    border-radius: valid-radius($radius);
-  } @else if $fallback != false {
-    border-radius: $fallback;
-  }
-}
-
-// (Other single-side border-radius mixins unchanged…)
-
-// -----------------------------------------------------------------------------
-// Utility mixins
-// -----------------------------------------------------------------------------
-@mixin list-unstyled() {
-  padding-left: 0;
-  list-style:   none;
-}
-
-@mixin hover() {
-  &:hover { @content; }
-}
-
-@mixin hover-focus() {
-  &:hover,
-  &:focus { @content; }
-}
-
-@mixin clearfix() {
-  &::after {
-    display: block;
-    clear:   both;
-    content: "";
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Grid generation
-// -----------------------------------------------------------------------------
-@mixin make-grid-columns(
-  $columns:     $grid-columns,
-  $gutter:      $grid-gutter-width,
-  $breakpoints: $grid-breakpoints
-) {
-  %grid-column {
-    position:       relative;
-    width:          100%;
-    padding-right:  $gutter * .5;
-    padding-left:   $gutter * .5;
-  }
-
-  @each $bp in map.keys($breakpoints) {
-    $infix: breakpoint-infix($bp, $breakpoints);
-
-    @if $columns > 0 {
-      @for $i from 1 through $columns {
-        .col#{$infix}-#{$i} { @extend %grid-column; }
-      }
-    }
-
-    .col#{$infix},
-    .col#{$infix}-auto { @extend %grid-column; }
-
-    @include media-breakpoint-up($bp, $breakpoints) {
-      .col#{$infix} {
-        flex-basis: 0;
-        flex-grow: 1;
-        max-width: 100%;
-      }
-
-      @if $grid-row-columns > 0 {
-        @for $i from 1 through $grid-row-columns {
-          .row-cols#{$infix}-#{$i} { @include row-cols($i); }
-        }
-      }
-
-      .col#{$infix}-auto { @include make-col-auto(); }
-
-      @if $columns > 0 {
-        @for $i from 1 through $columns {
-          .col#{$infix}-#{$i} { @include make-col($i, $columns); }
-        }
-      }
-
-      .order#{$infix}-first { order: -1; }
-      .order#{$infix}-last  { order: $columns + 1; }
-
-      @for $i from 0 through $columns {
-        .order#{$infix}-#{$i} { order: $i; }
-      }
-
-      @if $columns > 0 {
-        @for $i from 0 through ($columns - 1) {
-          @if not ($infix == "" and $i == 0) {
-            .offset#{$infix}-#{$i} {
-              @include make-col-offset($i, $columns);
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-@mixin make-container($gutter: $grid-gutter-width) {
-  width:         100%;
-  padding-right: $gutter * .5;
-  padding-left:  $gutter * .5;
-  margin-right:  auto;
-  margin-left:   auto;
-}
-
-@mixin make-row($gutter: $grid-gutter-width) {
-  display:      flex;
-  flex-wrap:    wrap;
-  margin-right: -$gutter * .5;
-  margin-left:  -$gutter * .5;
-}
-
-@mixin make-container-max-widths(
-  $max-widths:  $container-max-widths,
-  $breakpoints: $grid-breakpoints
-) {
-  @each $bp, $mw in $max-widths {
-    @include media-breakpoint-up($bp, $breakpoints) {
-      max-width: $mw;
-    }
-  }
-}
-
-@mixin make-col-ready($gutter: $grid-gutter-width) {
-  position:       relative;
-  width:          100%;
-  padding-right:  $gutter * .5;
-  padding-left:   $gutter * .5;
-}
-
-@mixin make-col($size, $columns: $grid-columns) {
-  flex:      0 0 math.percentage(divide($size, $columns));
-  max-width: math.percentage(divide($size, $columns));
-}
-
-@mixin make-col-auto() {
-  flex:      0 0 auto;
-  width:     auto;
-  max-width: 100%;
-}
-
-@mixin make-col-offset($size, $columns: $grid-columns) {
-  $pct: divide($size, $columns);
-  margin-left: if($pct == 0, 0, math.percentage($pct));
-}
-
-@mixin row-cols($count) {
-  > * {
-    flex:      0 0 math.div(100%, $count);
-    max-width: math.div(100%, $count);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//                      _       _     _
-//     __   ____ _ _ __(_) __ _| |__ | | ___  ___   ___  ___ ___ ___
-//     \ \ / / _` | '__| |/ _` | '_ \| |/ _ \/ __| / __|/ __/ __/ __|
-//      \ V / (_| | |  | | (_| | |_) | |  __/\__ \_\__ \ (__\__ \__ \
-//   ____\_/ \__,_|_|  |_|\__,_|_.__/|_|\___||___(_)___/\___|___/___/
-//  |_____|
 
 // Options
 $enable-rounded:                              true !default;
@@ -700,6 +38,7 @@ $border-radius:               .25rem !default;
 $spacer:                              1rem !default;
 
 // Breadcrumbs
+$breadcrumb-height:                 35px;
 $breadcrumb-font-size:              .8rem !default;
 $breadcrumb-line-height:             1rem !default;
 $breadcrumb-padding-y:              8px !default;
@@ -724,14 +63,7 @@ $paragraph-margin-bottom:   1rem !default;
 // Warning: Avoid customizing these values. They're used for a bird's eye view
 // of components dependent on the z-axis and are designed to all work together.
 
-//$zindex-dropdown:                   1000 !default;
 $zindex-sticky:                     1020 !default;
-//$zindex-fixed:                      1030 !default;
-//$zindex-modal-backdrop:             1040 !default;
-//$zindex-modal:                      1050 !default;
-//$zindex-popover:                    1060 !default;
-//$zindex-tooltip:                    1070 !default;
-
 
 // Admin Header
 $admin-header-height:                 40px !default;
@@ -793,18 +125,10 @@ $title-bar-back-font-size:            0.875rem;
 $title-bar-padding-y:                 .75rem !default;
 $title-bar-height:                    35px;
 
-// Breadcrumb
-$breadcrumb-height:                   35px;
-
 // Aside
 $aside-menu-width:                    250px !default;
 $aside-menu-nav-padding-y:            .75rem !default;
 $aside-menu-nav-padding-x:            1rem !default;
-
-// TODO: REMOVE ME
-// Cards
-//$card-border-radius:                  $border-radius !default;
-//$card-border-radius-inner:            $border-radius !default;
 
 // Fonts
 $font-family-sans-serif:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
@@ -853,8 +177,6 @@ $display-line-height:         $headings-line-height !default;
 $blockquote-small-font-size:  $small-font-size !default;
 $blockquote-font-size:        $font-size-base * 1.25 !default;
 
-$small-font-size:             80% !default;
-
 $code-font-size:              0.75rem;
 
 $hr-border-width:             $border-width !default;
@@ -867,6 +189,7 @@ $hr-margin-y:                 $spacer !default;
 $switch-width:                        40px !default;
 $switch-height:                       26px !default;
 $switch-font-size:                    10px !default;
+$switch-border-width:                 1px !default;
 
 $switch-lg-width:                     48px !default;
 $switch-lg-height:                    30px !default;
@@ -886,10 +209,10 @@ $switch-handle-margin:                2px !default;
 $table-cell-padding:          .75rem !default;
 $table-th-font-weight:        null !default;
 
-// Grid breakpoints
+// Media Breakpoints
 // Define the minimum dimensions at which your layout will change,
 // adapting to different screen sizes, for use in media queries.
-$grid-breakpoints: (
+$media-breakpoints: (
   xs: 0,
   sm: 576px,
   md: 768px,
@@ -897,10 +220,10 @@ $grid-breakpoints: (
   xl: 1200px
 ) !default;
 
-@include assert-ascending($grid-breakpoints, "$grid-breakpoints");
-@include assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
+@include assert-ascending($media-breakpoints, "$media-breakpoints");
+@include assert-starts-at-zero($media-breakpoints, "$media-breakpoints");
 
-// Grid containers
+// Containers
 // Define the maximum width of `.container` for different screen sizes.
 $container-max-widths: (
   sm: 540px,
@@ -920,7 +243,6 @@ $grid-row-columns:            6 !default;
 // Spacing
 // Control the default styling of most Bootstrap elements by modifying these variables.
 // Mostly focused on spacing. You can add more entries to the $spacers map, should you need more variation.
-$spacer: 1rem !default;
 $spacers: () !default;
 $spacers: map.merge(
     (
@@ -941,223 +263,267 @@ $positions: static, relative, absolute, fixed, sticky !default;
 $user-selects: all, auto, none !default;
 
 
-
-
-
-
-$inception-palette-50:                #e4f5fa !default;
-$inception-palette-100:               #bce5f3 !default;
-$inception-palette-200:               #90d4ec !default;
-$inception-palette-300:               #63c2e4 !default;
-$inception-palette-400:               #41b5de !default;
-$inception-palette-500:               #2196f3 !default;
-$inception-palette-600:               #1ca0d4 !default;
-$inception-palette-700:               #1897ce !default;
-$inception-palette-800:               #138dc8 !default;
-$inception-palette-900:               #0b7dbf !default;
-$inception-palette-A100:              #ebf7ff !default;
-$inception-palette-A200:              #b8e2ff !default;
-$inception-palette-A400:              #85cdff !default;
-$inception-palette-A700:              #6bc3ff !default;
-
-$white:                               #fff;
-$gray-100:                            #f0f3f5;
-$gray-200:                            #c2cfd6;
-$gray-300:                            #a4b7c1;
-$gray-400:                            #869fac;
-$gray-500:                            #678898;
-$gray-600:                            #536c79;
-$gray-700:                            #3e515b;
-$gray-800:                            #29363d;
-$gray-900:                            #151b1e;
-$black:                               #000 !default;
-
-$blue:                                #2196f3;
-$indigo:                              #6610f2 !default;
-$purple:                              #6f42c1 !default;
-$pink:                                #e83e8c !default;
-$red:                                 #f86c6b;
-$orange:                              #f8cb00;
-$yellow:                              #ffc107 !default;
-$green:                               #4dbd74;
-$teal:                                #20c997 !default;
-$cyan:                                #63c2de;
-
 $theme-colors: (
-  "primary":                          $blue,
-  "secondary":                        $gray-300,
-  "success":                          $green,
-  "info":                             $cyan,
-  "warning":                          $yellow,
-  "danger":                           $red,
-  "light":                            $gray-100,
-  "dark":                             $gray-800,
+  primary:                                    #2196f3,
+  secondary:                                  #a4b7c1,
+  success:                                    #4dbd74,
+  info:                                       #63c2de,
+  warning:                                    #ffc107,
+  danger:                                     #f86c6b,
+  light:                                      #f0f3f5,
+  dark:                                       #29363d,
 
-  "blue":                             $blue,
-  "indigo":                           $indigo,
-  "purple":                           $purple,
-  "pink":                             $pink,
-  "red":                              $red,
-  "orange":                           $orange,
-  "yellow":                           $yellow,
-  "green":                            $green,
-  "teal":                             $teal,
-  "cyan":                             $cyan,
+  blue:                                       #2196f3,
+  indigo:                                     #6610f2,
+  purple:                                     #6f42c1,
+  pink:                                       #e83e8c,
+  red:                                        #f86c6b,
+  orange:                                     #f8cb00,
+  yellow:                                     #ffc107,
+  green:                                      #4dbd74,
+  teal:                                       #20c997,
+  cyan:                                       #63c2de,
 
-  "gray-100":                         $gray-100,
-  "gray-200":                         $gray-200,
-  "gray-300":                         $gray-300,
-  "gray-400":                         $gray-400,
-  "gray-500":                         $gray-500,
-  "gray-600":                         $gray-600,
-  "gray-700":                         $gray-700,
-  "gray-800":                         $gray-800,
-  "gray-900":                         $gray-900
-);
+  gray-100:                                   #f0f3f5,
+  gray-200:                                   #c2cfd6,
+  gray-300:                                   #a4b7c1,
+  gray-400:                                   #869fac,
+  gray-500:                                   #678898,
+  gray-600:                                   #536c79,
+  gray-700:                                   #3e515b,
+  gray-800:                                   #29363d,
+  gray-900:                                   #151b1e,
 
-// Background Colors
+  white:                                      #ffffff,
+  black:                                      #000000,
 
+  border-color:                               #a4b7c1, // Same as gray-300
+  body-color:                                 #29363d, // Sames as dark
+  body-bg-color:                              #f0f3f5, // Same as light
+  link-color:                                 #2196f3, // Same as primary
+  blockquote-small-color:                     #536c79, // Same as gray-600
+  headings-color:                             #29363d, // Same as dark
+  text-muted-color:                           #6c757d,
+  table-caption-color:                        #6c757d,
 
-// Components
-$border-color:                        $gray-300 !default;
+  breadcrumb-bg-color:                        #ffffff,
+  breadcrumb-divider-color:                   #536c79, // Same as gray-600
+  breadcrumb-active-color:                    #536c79, // Same as gray-600
+  breadcrumb-border-color:                    #a4b7c1, // Same as gray-300
 
-// Body
-$body-color:                          $gray-900 !default;
-$body-bg:                             #e4e5e6 !default;
+  card-icon-color:                            #29363d, // Same as dark
+  card-icon-bg-color:                         transparent,
 
-// Breadcrumbs
-$breadcrumb-bg:                       $white !default;
-$breadcrumb-divider-color:            $gray-600 !default;
-$breadcrumb-active-color:             $gray-600 !default;
+  admin-header-color:                         #6c757d,
+  admin-header-hover-color:                   #343a40,
+  admin-header-active-color:                  #343a40,
+  admin-header-disabled-color:                #dee2e6,
+  admin-header-border-color:                  #a4b7c1,
+  admin-header-bg-color:                      #ffffff,
+  admin-header-brand-bg-color:                transparent,
+  admin-header-brand-minimized-bg-color:      transparent,
+  admin-footer-color:                         #29363d,
+  admin-footer-bg-color:                      #f8f9fa,
+  admin-footer-border-color:                  #a4b7c1, // Same as gray-300
 
-// Links
-$link-color:                          $blue !default;
-$link-hover-color:                    color.adjust($link-color, $lightness: -15%) !default;
+  title-bar-bg-color:                         #ffffff,
 
+  sidebar-color:                              #ffffff,
+  sidebar-bg-color:                           #343a40,
+  sidebar-form-color:                         #ffffff,
+  sidebar-form-placeholder-color:             rgba(255,255,255,.7),
+  sidebar-form-bg-color:                      color.adjust(#343a40, $lightness: -10%),
+  sidebar-header-bg-color:                    rgba(0,0,0,.2),
+  sidebar-footer-bg-color:                    rgba(0,0,0,.2),
+
+  sidebar-minimizer-bg-color:                 rgba(0,0,0,.2),
+  sidebar-minimizer-indicator-color:          #6c757d,
+  sidebar-minimizer-hover-bg-color:           rgba(0,0,0,.3),
+  sidebar-minimizer-hover-indicator-color:    #ffffff,
+
+  sidebar-nav-color:                          #ffffff,
+  sidebar-nav-title-color:                    #e9ecef,
+  sidebar-nav-link-color:                     #ffffff,
+  sidebar-nav-link-hover-color:               #ffffff,
+  sidebar-nav-link-hover-icon-color:          #ffffff,
+  sidebar-nav-link-hover-bg-color:            #2196f3, // Same as blue
+
+  sidebar-nav-link-active-color:              #ffffff,
+  sidebar-nav-link-active-bg-color:           color.adjust(#343a40, $lightness: 5%),
+  sidebar-nav-link-active-icon-color:         #2196f3, // Same as blue
+  sidebar-nav-link-bg-color:                  transparent,
+  sidebar-nav-link-icon-color:                #6c757d,
+  sidebar-nav-dropdown-color:                 #ffffff,
+  sidebar-nav-dropdown-bg-color:              rgba(0,0,0,.2),
+  sidebar-nav-dropdown-indicator-color:       #6c757d,
+  sidebar-nav-dropdown-indicator-hover-color: #ffffff,
+
+  switch-bg-color:                            #ffffff,
+  switch-handle-bg-color:                     #ffffff,
+
+  title-bar-color:                            #495057,
+  title-bar-back-color:                       #AEB6BE,
+
+  hr-border-color:                            rgba(#000000, .1)
+) !default;
 
 // Admin Header
-$admin-header-bg:                     $white !default;
-$admin-header-border:                 (bottom: (size: 1px, style: solid, color: $border-color)) !default;
-
-$admin-header-color:                  #6c757d !default;
-$admin-header-hover-color:            #343a40 !default;
-$admin-header-active-color:           #343a40 !default;
-$admin-header-disabled-color:         #dee2e6 !default;
-
-$admin-header-brand-bg:               transparent !default;
-$admin-header-brand-minimized-bg:     $admin-header-brand-bg !default;
+$admin-header-borders:                        (bottom: (size: 1px, style: solid, color: map.get($theme-colors, admin-header-border-color))) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-toggler-icon:           str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$admin-header-color}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-toggler-icon:                   str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{map.get($theme-colors, admin-header-color)}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-toggler-icon-hover:     str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$admin-header-hover-color}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-toggler-icon-hover:             str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{map.get($theme-colors, admin-header-hover-color)}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-login-icon:             str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{$admin-header-color}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-login-icon:                     str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{map.get($theme-colors, admin-header-color)}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"), "#", "%23") !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-login-icon-hover:       str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{$admin-header-hover-color}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-login-icon-hover:               str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{map.get($theme-colors, admin-header-hover-color)}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"), "#", "%23") !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-user-icon:              str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{$admin-header-color}'/%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-user-icon:                      str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{map.get($theme-colors, admin-header-color)}'/%3E%3C/svg%3E"), "#", "%23") !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-user-icon-hover:        str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{$admin-header-hover-color}'/%3E%3C/svg%3E"), "#", "%23") !default;
-
-
-// Admin Body
+$admin-header-user-icon-hover:                str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{map.get($theme-colors, admin-header-hover-color)}'/%3E%3C/svg%3E"), "#", "%23") !default;
 
 // Admin Footer
-$admin-footer-bg:                     #f8f9fa !default;
-$admin-footer-color:                  $body-color !default;
-$admin-footer-borders:                (top: (size: 1px, style: solid, color: $border-color)) !default;
+$admin-footer-borders:                        (top: (size: 1px, style: solid, color: map.get($theme-colors, admin-footer-border-color))) !default;
 
 // Sidebar
-$sidebar-color:                       $white !default;
-$sidebar-bg:                          #343a40 !default;
-
-// Sidebar Header
-$sidebar-header-bg:                   rgba(0,0,0,.2) !default;
-
-// Sidebar Form
-$sidebar-form-bg:                     color.adjust($sidebar-bg, $lightness: -10%) !default;
-
-$sidebar-form-color:                  $white !default;
-$sidebar-form-placeholder-color:      rgba(255,255,255,.7) !default;
-
-// Sidebar Navigation
-$sidebar-nav-color:                   $white !default;
-$sidebar-nav-title-color:             #e9ecef !default;
-$sidebar-nav-link-color:              $white !default;
-$sidebar-nav-link-bg:                 transparent !default;
-$sidebar-nav-link-icon-color:         #6c757d !default;
-
-$sidebar-nav-link-hover-color:        $white !default;
-$sidebar-nav-link-hover-bg:           $blue !default;
-$sidebar-nav-link-hover-icon-color:   $white !default;
-
-$sidebar-nav-link-active-color:       $white !default;
-$sidebar-nav-link-active-bg:          color.adjust($sidebar-bg, $lightness: 5%) !default;
-
-$sidebar-nav-link-active-icon-color:  $blue !default;
-
-$sidebar-nav-dropdown-color:          $white !default;
-$sidebar-nav-dropdown-bg:             rgba(0,0,0,.2) !default;
-$sidebar-nav-dropdown-indicator-color: #6c757d !default;
-$sidebar-nav-dropdown-indicator-hover-color: $sidebar-nav-link-hover-color;
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-nav-dropdown-indicator:      str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{$sidebar-nav-dropdown-indicator-color}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$sidebar-nav-dropdown-indicator:              str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-nav-dropdown-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-nav-dropdown-indicator-hover: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{$sidebar-nav-dropdown-indicator-hover-color}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$sidebar-nav-dropdown-indicator-hover:        str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-nav-dropdown-indicator-hover-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
 
-// Sidebar Footer
-$sidebar-footer-bg:                   rgba(0,0,0,.2) !default;
-
-// Sidebar Minimizer
-$sidebar-minimizer-bg:                rgba(0,0,0,.2) !default;
-$sidebar-minimizer-indicator-color:   #6c757d !default;
-$sidebar-minimizer-hover-bg:          rgba(0,0,0,.3) !default;
-$sidebar-minimizer-hover-indicator-color:$sidebar-nav-link-hover-color !default;
+// Sidebar Footer & Minimizer…
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-minimizer-indicator:         str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{$sidebar-minimizer-indicator-color}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$sidebar-minimizer-indicator:                 str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-minimizer-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-minimizer-hover-indicator:   str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{$sidebar-minimizer-hover-indicator-color}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
-
-// Title bar
-$title-bar-color:                     #495057;
-$title-bar-back-color:                #AEB6BE;
-$title-bar-bg:                        $white;
+$sidebar-minimizer-hover-indicator:           str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-minimizer-hover-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
 
 // Breadcrumb
-$breadcrumb-active-color:             #6c757d;
-$breadcrumb-borders: (bottom: (size: 1px, style: solid, color: $border-color)) !default;
+$breadcrumb-borders:                          (bottom: (size: 1px, style: solid, color: map.get($theme-colors, breadcrumb-border-color))) !default;
 
-// Aside
-$aside-menu-color:                    #343a40 !default;
-$aside-menu-bg:                       $white !default;
-$aside-menu-borders: (left: (size: 1px, style: solid, color: $border-color)) !default;
 
-// Cards
-$card-icon-bg:                        transparent !default;
-$card-icon-color:                     $body-color !default;
 
-// Fonts
-$text-muted:                  #6c757d !default;
-$hr-border-color:             rgba($black, .1) !default;
-$headings-color:              inherit !default;
-$blockquote-small-color:      $gray-600 !default;
 
-// Switches
-$switch-bg:                           $white !default;
-$switch-handle-bg:                    $white !default;
 
-// Tables
-$table-caption-color:         $text-muted !default;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Default variables
+$xxx: 'xxx' !default;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1225,7 +591,7 @@ $table-caption-color:         $text-muted !default;
   font-size: 15px;
 
   // Generate CSS variables for each grid breakpoint
-  @each $bp, $value in $grid-breakpoints {
+  @each $bp, $value in $media-breakpoints {
     --breakpoint-#{$bp}: #{$value};
   }
 
@@ -1262,7 +628,7 @@ html {
   font-family: sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: $black;
+  -webkit-tap-highlight-color: map.get($theme-colors, black);
 }
 
 // Structural elements
@@ -1286,9 +652,9 @@ body {
   font-size: $font-size-base;
   font-weight: $font-weight-base;
   line-height: $line-height-base;
-  color: $body-color;
+  color: map.get($theme-colors, body-color);
   text-align: left;
-  background-color: $body-bg;
+  background-color: map.get($theme-colors, body-bg-color);
 }
 
 // Suppress focus ring when not keyboard-triggered
@@ -1377,11 +743,11 @@ sup { top: -.5em; }
 // Links
 a {
   background-color: transparent;
-  color: $link-color;
+  color: map.get($theme-colors, link-color);
   text-decoration: $link-decoration;
 
   @include hover() {
-    color: $link-hover-color;
+    color: color.adjust(map.get($theme-colors, link-color), $lightness: -15%);
     text-decoration: $link-hover-decoration;
   }
 }
@@ -1438,7 +804,7 @@ table {
 caption {
   caption-side: bottom;
   padding: $table-cell-padding 0;
-  color: $table-caption-color;
+  color: map.get($theme-colors, table-caption-color);
   text-align: left;
 }
 
@@ -1623,7 +989,7 @@ template {
   // Container widths
   .container,
   .container-fluid {
-    @include make-container();
+    @include make-container($gutter: $grid-gutter-width);
   }
 
   // Responsive containers
@@ -1632,16 +998,16 @@ template {
       @extend .container-fluid;
     }
 
-    @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint, $media-breakpoints) {
       %responsive-container-#{$breakpoint} {
         max-width: $container-max-width;
       }
 
       $extend-breakpoint: true;
 
-      @each $name, $width in $grid-breakpoints {
+      @each $name, $width in $media-breakpoints {
         @if $extend-breakpoint {
-          .container#{breakpoint-infix($name, $grid-breakpoints)} {
+          .container#{breakpoint-infix($name, $media-breakpoints)} {
             @extend %responsive-container-#{$breakpoint};
           }
 
@@ -1655,7 +1021,7 @@ template {
 
   // Row and gutter utilities
   .row {
-    @include make-row();
+    @include make-row($gutter: $grid-gutter-width);
   }
 
   .no-gutters {
@@ -1670,7 +1036,7 @@ template {
   }
 
   // Column generation
-  @include make-grid-columns();
+  @include make-grid-columns($columns: $grid-columns, $row-columns: $grid-row-columns, $gutter: $grid-gutter-width, $breakpoints: $media-breakpoints);
 }
 
 
@@ -1688,7 +1054,7 @@ template {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
-  background-color: $breadcrumb-bg;
+  background-color: map.get($theme-colors, breadcrumb-bg-color);
   padding: $breadcrumb-padding-y $breadcrumb-padding-x;
   margin-bottom: $breadcrumb-margin-bottom;
   font-size: $breadcrumb-font-size;
@@ -1708,7 +1074,7 @@ template {
     &::before {
       float: left;                     // suppress inline spacing/underline
       padding-right: $breadcrumb-item-padding;
-      color: $breadcrumb-divider-color;
+      color: map.get($theme-colors, breadcrumb-divider-color);
       content: escape-svg($breadcrumb-divider);
     }
 
@@ -1719,7 +1085,7 @@ template {
   }
 
   &.active {
-    color: $breadcrumb-active-color;
+    color: map.get($theme-colors, breadcrumb-active-color);
   }
 }
 
@@ -1743,9 +1109,9 @@ template {
 //  |_____|         |_|            |___/
 
 // Display utilities for responsive breakpoints
-@each $breakpoint in map.keys($grid-breakpoints) {
-  @include media-breakpoint-up($breakpoint) {
-    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+@each $breakpoint in map.keys($media-breakpoints) {
+  @include media-breakpoint-up($breakpoint, $media-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $media-breakpoints);
 
     @each $display in $displays {
       .d#{$infix}-#{$display} {
@@ -1778,9 +1144,9 @@ template {
 
 // Custom styles for additional flex alignment options.
 // noinspection SassScssResolvedByNameOnly
-@each $breakpoint in map.keys($grid-breakpoints) {
-  @include media-breakpoint-up($breakpoint) {
-    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+@each $breakpoint in map.keys($media-breakpoints) {
+  @include media-breakpoint-up($breakpoint, $media-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $media-breakpoints);
 
     .flex#{$infix}-row            { flex-direction: row !important; }
     .flex#{$infix}-column         { flex-direction: column !important; }
@@ -1834,9 +1200,9 @@ template {
 //  |_____|
 
 // noinspection SassScssResolvedByNameOnly
-@each $breakpoint in map.keys($grid-breakpoints) {
-  @include media-breakpoint-up($breakpoint) {
-    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+@each $breakpoint in map.keys($media-breakpoints) {
+  @include media-breakpoint-up($breakpoint, $media-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $media-breakpoints);
 
     .float#{$infix}-left  { float: left !important; }
     .float#{$infix}-right { float: right !important; }
@@ -1901,8 +1267,8 @@ admin-root {
   height: $admin-header-height;;
   padding: 0;
   margin: 0;
-  background-color: $admin-header-bg;
-  @include borders($admin-header-border);
+  background-color: map.get($theme-colors, admin-header-bg-color);
+  @include borders($admin-header-borders);
 
   .brand {
     display: inline-flex;
@@ -1912,7 +1278,7 @@ admin-root {
     height: $admin-header-height;
     padding: 0;
     margin-right: 0;
-    background-color: $admin-header-brand-bg;
+    background-color: map.get($theme-colors, admin-header-brand-bg-color);
     @include borders($admin-header-brand-border);
 
     .brand-minimized {
@@ -1968,7 +1334,7 @@ admin-root {
         justify-content: center;
         height: $admin-header-height;
 
-        color: $admin-header-color;
+        color: map.get($theme-colors, admin-header-color);
 
         padding: 0 1rem;
 
@@ -1986,7 +1352,7 @@ admin-root {
 
         .login {
           display: inline-block;
-          color: $admin-header-color;
+          color: map.get($theme-colors, admin-header-color);
           padding-left: 6px;
           height: 24px;
           line-height: 24px;
@@ -1998,7 +1364,7 @@ admin-root {
         }
 
         &:hover .login {
-          color: $admin-header-hover-color;
+          color: map.get($theme-colors, admin-header-hover-color);
           cursor: pointer;
         }
 
@@ -2012,7 +1378,7 @@ admin-root {
 
         .user-name {
           display: inline-block;
-          color: $admin-header-color;
+          color: map.get($theme-colors, admin-header-color);
           padding-left: 6px;
           height: 24px;
           line-height: 24px;
@@ -2024,7 +1390,7 @@ admin-root {
         }
 
         &:hover .user-name {
-          color: $admin-header-hover-color;
+          color: map.get($theme-colors, admin-header-hover-color);
           cursor: pointer;
         }
 
@@ -2056,7 +1422,7 @@ admin-root {
     min-width: 0;
 
     .title-bar {
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid map.get($theme-colors, border-color);
       cursor: pointer;
 
       .back {
@@ -2065,7 +1431,7 @@ admin-root {
     }
 
     .breadcrumb {
-      border-bottom: 1px solid $gray-300;
+      border-bottom: 1px solid map.get($theme-colors, gray-300);
     }
 
     .container-fluid {
@@ -2084,7 +1450,7 @@ admin-root {
   }
 }
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(md, $media-breakpoints) {
   .admin-header {
     .brand {
       flex: 1;
@@ -2093,12 +1459,12 @@ admin-root {
 }
 
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(lg, $media-breakpoints) {
   .admin-brand-minimized {
     .admin-header {
       .brand {
         width: $admin-header-brand-minimized-width;
-        background-color: $admin-header-brand-minimized-bg;
+        background-color: map.get($theme-colors, admin-header-brand-minimized-bg-color);
         @include borders($admin-header-brand-minimized-border);
 
         .brand-full {
@@ -2121,8 +1487,8 @@ admin-root {
   height: $admin-footer-height;
   align-items: center;
   padding: 0 $spacer;
-  color: $admin-footer-color;
-  background: $admin-footer-bg;
+  color: map.get($theme-colors, admin-footer-color);
+  background: map.get($theme-colors, admin-footer-bg-color);
   @include borders($admin-footer-borders);
 }
 
@@ -2142,15 +1508,15 @@ admin-root {
 
 // noinspection SassScssResolvedByNameOnly
 .title-bar {
-  background-color: $title-bar-bg;
-  color: $title-bar-color;
+  background-color: map.get($theme-colors, title-bar-bg-color);
+  color: map.get($theme-colors, title-bar-color);
   padding: 0 15px;
 
   .back {
     position: absolute;
     top: 0;
     left: 0;
-    color: $title-bar-back-color;
+    color: map.get($theme-colors, title-bar-back-color);
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: $title-bar-back-font-size;
@@ -2181,7 +1547,7 @@ admin-root {
 }
 
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(lg, $media-breakpoints) {
   //
   // Header
   //
@@ -2279,15 +1645,15 @@ admin-root {
 }
 
 // noinspection SassScssResolvedByNameOnly
-@each $breakpoint in map.keys($grid-breakpoints) {
-  @include media-breakpoint-up($breakpoint) {
-    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+@each $breakpoint in map.keys($media-breakpoints) {
+  @include media-breakpoint-up($breakpoint, $media-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $media-breakpoints);
     .sidebar#{$infix}-show {
       .sidebar {
         margin-left: 0;
       }
 
-      @include media-breakpoint-up(lg) {
+      @include media-breakpoint-up(lg, $media-breakpoints) {
         &.sidebar-fixed {
           .main,
           .admin-footer {
@@ -2358,7 +1724,7 @@ admin-root {
       }
 
       // Changed xs to md
-      @include media-breakpoint-down(md) {
+      @include media-breakpoint-down(md, $media-breakpoints) {
         .main {
           position: relative;
           &::before {
@@ -2425,29 +1791,29 @@ admin-root {
 
 // Mobile layout
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(md, $media-breakpoints) {
   .admin-header {
     position: fixed;
     z-index: $zindex-sticky;
     width: 100%;
     text-align: center;
-    @if $admin-header-brand-bg == transparent {
-      background-color: $admin-header-bg;
+    @if map.get($theme-colors, admin-header-brand-bg-color) == transparent {
+      background-color: map.get($theme-colors, admin-header-bg-color);
     } @else {
-      background-color: $admin-header-brand-bg;
+      background-color: map.get($theme-colors, admin-header-brand-bg-color);
     }
     @include borders($admin-header-brand-border);
 
     .navbar-toggler {
-      //@if (color.lightness( $admin-header-brand-bg ) > 40) {
-      //  color: $admin-header-color;
+      //@if (color.lightness( map.get($theme-colors, admin-header-brand-bg-color) ) > 40) {
+      //  color: map.get($theme-colors, admin-header-color);
       //} @else {
-      //  color: $white;
+      //  color: map.get($theme-colors, white);
       //}
-      @if (color.channel($admin-header-brand-bg, "lightness", $space: hsl) > 40%) {
-        color: $admin-header-color;
+      @if (color.channel(map.get($theme-colors, admin-header-brand-bg-color), "lightness", $space: hsl) > 40%) {
+        color: map.get($theme-colors, admin-header-color);
       } @else {
-        color: $white;
+        color: map.get($theme-colors, white);
       }
     }
 
@@ -2487,7 +1853,7 @@ admin-root {
 }
 
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-down(xs) {
+@include media-breakpoint-down(xs, $media-breakpoints) {
   .admin-body {
     margin-top: $admin-header-height;
   }
@@ -2495,7 +1861,7 @@ admin-root {
 
 // Sidebar needs to be bigger on mobile devices
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(sm, $media-breakpoints) {
   .sidebar {
     flex: 0 0 $mobile-sidebar-width !important;
     width: $mobile-sidebar-width !important;
@@ -2539,7 +1905,7 @@ simple-container {
 }
 
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-down(xs) {
+@include media-breakpoint-down(xs, $media-breakpoints) {
   simple-container .container .mat-card {
     min-width: 300px !important;
     max-width: 300px !important;
@@ -2548,7 +1914,7 @@ simple-container {
 }
 
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-up(sm) {
+@include media-breakpoint-up(sm, $media-breakpoints) {
   simple-container .container .mat-card {
     min-width: 400px !important;
     max-width: 400px !important;
@@ -3216,7 +2582,7 @@ $inception-theme: mat.m2-define-light-theme((
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid $gray-200;
+  border-bottom: 1px solid map.get($theme-colors, gray-200);
   min-height: 3rem;
   padding-right: 6px;
 }
@@ -3302,10 +2668,10 @@ $inception-theme: mat.m2-define-light-theme((
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid $gray-200;
-  background-color: $gray-100;
+  border-bottom: 1px solid map.get($theme-colors, gray-200);
+  background-color: map.get($theme-colors, gray-100);
   padding: 8px !important;
-  color: $gray-800;
+  color: map.get($theme-colors, gray-800);
   min-height: 55px;
 
   .date-range-container {
@@ -3407,7 +2773,7 @@ $inception-theme: mat.m2-define-light-theme((
     border-left: 1px solid;
     border-radius: 0;
 
-    color: $gray-700;
+    color: map.get($theme-colors, gray-700);
 
     .table-filter-input {
       width: 10em;
@@ -3499,7 +2865,7 @@ $inception-theme: mat.m2-define-light-theme((
 
 
 
-@include media-breakpoint-down(xs) {
+@include media-breakpoint-down(xs, $media-breakpoints) {
   .mat-mdc-dialog-container {
     .mat-mdc-dialog-content {
       min-width: 80vw !important;
@@ -3513,7 +2879,7 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-@include media-breakpoint-up(sm) {
+@include media-breakpoint-up(sm, $media-breakpoints) {
   .mat-mdc-dialog-container {
     .mat-mdc-dialog-content {
       min-width: 400px !important;
@@ -3598,8 +2964,8 @@ textarea.mat-mdc-input-element {
   display: flex;
   flex-direction: column;
   padding: $sidebar-padding;
-  color: $sidebar-color;
-  background: $sidebar-bg;
+  color: map.get($theme-colors, sidebar-color);
+  background: map.get($theme-colors, sidebar-bg-color);
   @include borders($sidebar-borders);
 
   .sidebar-close {
@@ -3610,7 +2976,7 @@ textarea.mat-mdc-input-element {
     font-size: 24px;
     font-weight: 800;
     line-height: $admin-header-height;
-    color: $sidebar-color;
+    color: map.get($theme-colors, sidebar-color);
     background: 0;
     border: 0;
     opacity: .8;
@@ -3624,16 +2990,16 @@ textarea.mat-mdc-input-element {
     flex: 0 0 $sidebar-header-height;
     padding: $sidebar-header-padding-y $sidebar-header-padding-x;
     text-align: center;
-    background: $sidebar-header-bg;
+    background: map.get($theme-colors, sidebar-header-bg-color);
   }
 
   .sidebar-form .form-control {
-    color: $sidebar-form-color;
-    background: $sidebar-form-bg;
+    color: map.get($theme-colors, sidebar-form-color);
+    background: map.get($theme-colors, sidebar-form-bg-color);
     border: $sidebar-form-border;
 
     &::placeholder {
-      color: $sidebar-form-placeholder-color;
+      color: map.get($theme-colors, sidebar-form-placeholder-color);
     }
   }
 
@@ -3657,7 +3023,7 @@ textarea.mat-mdc-input-element {
     padding: $sidebar-nav-title-padding-y $sidebar-nav-title-padding-x;
     font-size: 80%;
     font-weight: 700;
-    color: $sidebar-nav-title-color;
+    color: map.get($theme-colors, sidebar-nav-title-color);
     text-transform: uppercase;
   }
 
@@ -3687,9 +3053,9 @@ textarea.mat-mdc-input-element {
   .nav-link {
     display: block;
     padding: $sidebar-nav-link-padding-y $sidebar-nav-link-padding-x;
-    color: $sidebar-nav-link-color;
+    color: map.get($theme-colors, sidebar-nav-link-color);
     text-decoration: none;
-    background: $sidebar-nav-link-bg;
+    background: map.get($theme-colors, sidebar-nav-link-bg-color);
     @include borders($sidebar-nav-link-borders);
     @if $enable-sidebar-nav-rounded {
       border-radius: $border-radius;
@@ -3700,7 +3066,7 @@ textarea.mat-mdc-input-element {
       width: ($font-size-base * 1.25);
       margin: 0 math.div($sidebar-nav-link-padding-x, 2) 0 0;
       font-size: $font-size-base;
-      color: $sidebar-nav-link-icon-color;
+      color: map.get($theme-colors, sidebar-nav-link-icon-color);
       text-align: center;
     }
 
@@ -3710,22 +3076,22 @@ textarea.mat-mdc-input-element {
     }
 
     &.active {
-      color: $sidebar-nav-link-active-color;
-      background: $sidebar-nav-link-active-bg;
+      color: map.get($theme-colors, sidebar-nav-link-active-color);
+      background: map.get($theme-colors, sidebar-nav-link-active-bg-color);
       @include borders($sidebar-nav-link-active-borders);
 
       .nav-icon {
-        color: $sidebar-nav-link-active-icon-color;
+        color: map.get($theme-colors, sidebar-nav-link-active-icon-color);
       }
     }
 
     &:hover {
-      color: $sidebar-nav-link-hover-color;
-      background: $sidebar-nav-link-hover-bg;
+      color: map.get($theme-colors, sidebar-nav-link-hover-color);
+      background: map.get($theme-colors, sidebar-nav-link-hover-bg-color);
       @include borders($sidebar-nav-link-hover-borders);
 
       .nav-icon {
-        color: $sidebar-nav-link-hover-icon-color;
+        color: map.get($theme-colors, sidebar-nav-link-hover-icon-color);
       }
 
       &.nav-dropdown-toggle::before {
@@ -3755,7 +3121,7 @@ textarea.mat-mdc-input-element {
   }
 
   .nav-dropdown.open {
-    background: $sidebar-nav-dropdown-bg;
+    background: map.get($theme-colors, sidebar-nav-dropdown-bg-color);
     @include borders($sidebar-nav-dropdown-borders);
     @if $enable-sidebar-nav-rounded {
       border-radius: $border-radius;
@@ -3769,7 +3135,7 @@ textarea.mat-mdc-input-element {
 
       .nav-link
       {
-        color: $sidebar-nav-dropdown-color;
+        color: map.get($theme-colors, sidebar-nav-dropdown-color);
         border-left: 0;
       }
 
@@ -3788,10 +3154,10 @@ textarea.mat-mdc-input-element {
   .nav-label {
     display: block;
     padding: math.div($sidebar-nav-link-padding-y, 8) $sidebar-nav-link-padding-x;
-    color: $sidebar-nav-title-color;
+    color: map.get($theme-colors, sidebar-nav-title-color);
 
     &:hover {
-      color: $sidebar-color;
+      color: map.get($theme-colors, sidebar-color);
       text-decoration: none;
     }
 
@@ -3799,29 +3165,29 @@ textarea.mat-mdc-input-element {
       width: 20px;
       margin: -3px math.div($sidebar-nav-link-padding-x, 2) 0 0;
       font-size: 10px;
-      color: $sidebar-nav-link-icon-color;
+      color: map.get($theme-colors, sidebar-nav-link-icon-color);
       text-align: center;
       vertical-align: middle;
     }
   }
 
-  @if (color.channel($sidebar-bg, "lightness", $space: hsl) < 40) {
+  @if (color.channel(map.get($theme-colors, sidebar-bg-color), "lightness", $space: hsl) < 40) {
     .progress {
-      background-color: color.adjust($sidebar-bg, $lightness: 15%) !important;
+      background-color: color.adjust(map.get($theme-colors, sidebar-bg-color), $lightness: 15%) !important;
     }
   }
 
   .sidebar-footer {
     flex: 0 0 $sidebar-footer-height;
     padding: $sidebar-footer-padding-y $sidebar-footer-padding-x;
-    background: $sidebar-footer-bg;
+    background: map.get($theme-colors, sidebar-footer-bg-color);
     @include borders($sidebar-footer-borders);
   }
 
   .sidebar-minimizer {
     position: relative;
     flex: 0 0 $sidebar-minimizer-height;
-    background-color: $sidebar-minimizer-bg;
+    background-color: map.get($theme-colors, sidebar-minimizer-bg-color);
     border: 0;
     @include borders($sidebar-minimizer-borders);
 
@@ -3845,7 +3211,7 @@ textarea.mat-mdc-input-element {
     }
 
     &:hover {
-      background-color: $sidebar-minimizer-hover-bg;
+      background-color: map.get($theme-colors, sidebar-minimizer-hover-bg-color);
       &::before {
         background-image: $sidebar-minimizer-hover-indicator;
       }
@@ -3854,7 +3220,7 @@ textarea.mat-mdc-input-element {
 }
 
 // noinspection SassScssResolvedByNameOnly
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(lg, $media-breakpoints) {
   .sidebar-compact {
     .sidebar {
       .sidebar-nav {
@@ -3943,14 +3309,14 @@ textarea.mat-mdc-input-element {
           overflow: visible;
 
           > .nav-link {
-            background: $sidebar-nav-link-hover-bg;
+            background: map.get($theme-colors, sidebar-nav-link-hover-bg-color);
 
             .nav-item-name {
               display: inline;
             }
 
             .nav-icon {
-              color: $sidebar-nav-link-hover-color;
+              color: map.get($theme-colors, sidebar-nav-link-hover-color);
             }
           }
         }
@@ -3969,7 +3335,7 @@ textarea.mat-mdc-input-element {
 
         &:hover {
           width: $sidebar-width + $sidebar-minimized-width;
-          background: $sidebar-nav-link-hover-bg;
+          background: map.get($theme-colors, sidebar-nav-link-hover-bg-color);
 
           .badge {
             display: inline;
@@ -3999,13 +3365,13 @@ textarea.mat-mdc-input-element {
           {
             display: none;
             max-height: 1000px;
-            background: $sidebar-bg;
+            background: map.get($theme-colors, sidebar-bg-color);
           }
         }
 
         &:hover
         {
-          background: $sidebar-nav-link-hover-bg;
+          background: map.get($theme-colors, sidebar-nav-link-hover-bg-color);
 
           > .sidebar-nav-dropdown {
 
@@ -4041,9 +3407,9 @@ textarea.mat-mdc-input-element {
 
 // Margin and Padding
 // noinspection SassScssResolvedByNameOnly
-@each $breakpoint in map.keys($grid-breakpoints) {
-  @include media-breakpoint-up($breakpoint) {
-    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+@each $breakpoint in map.keys($media-breakpoints) {
+  @include media-breakpoint-up($breakpoint, $media-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $media-breakpoints);
 
     @each $prop, $abbrev in (margin: m, padding: p) {
       @each $size, $length in $spacers {
@@ -4165,10 +3531,10 @@ textarea.mat-mdc-input-element {
   display: block;
   height: inherit;
   cursor: pointer;
-  background-color: $white;
-  border: $border-width solid $border-color;
+  background-color: map.get($theme-colors, white);
+  border: $border-width solid map.get($theme-colors, border-color);
   transition: .15s ease-out;
-  @include border-radius($border-radius);
+  @include border-radius($enable-rounded, $border-radius);
 
   &::before {
     position: absolute;
@@ -4178,10 +3544,10 @@ textarea.mat-mdc-input-element {
     width: $switch-height - ($switch-handle-margin * 2) - ($border-width * 2);
     height: $switch-height - ($switch-handle-margin * 2) - ($border-width * 2);
     content: "";
-    background-color: $white;
-    border: 1px solid $border-color;
+    background-color: map.get($theme-colors, white);
+    border: 1px solid map.get($theme-colors, border-color);
     transition: .15s ease-out;
-    @include border-radius(math.div($border-radius, 2));
+    @include border-radius($enable-rounded, math.div($border-radius, 2));
   }
 }
 
@@ -4199,12 +3565,12 @@ textarea.mat-mdc-input-element {
 
 // noinspection SassScssResolvedByNameOnly
 .switch-lg {
-  @include switch-size($switch-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin);
+  @include switch-size($switch-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin, $switch-border-width);
 }
 
 // noinspection SassScssResolvedByNameOnly
 .switch-sm {
-  @include switch-size($switch-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin);
+  @include switch-size($switch-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin, $switch-border-width);
 }
 
 // noinspection SassScssResolvedByNameOnly
@@ -4239,25 +3605,25 @@ textarea.mat-mdc-input-element {
     }
     &::after {
       left: 1px;
-      color: $white;
+      color: map.get($theme-colors, white);
       content: attr(data-checked);
     }
   }
 
   // Sizes
   &.switch-lg {
-    @include switch-size($switch-label-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin);
+    @include switch-size($switch-label-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin, $switch-border-width);
   }
 
   &.switch-sm {
-    @include switch-size($switch-label-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin);
+    @include switch-size($switch-label-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin, $switch-border-width);
   }
 }
 
 // noinspection SassScssResolvedByNameOnly
 .switch-3d {
   .switch-slider {
-    background-color: $gray-100;
+    background-color: map.get($theme-colors, gray-100);
     border-radius: 50em;
 
     &::before {
@@ -4289,13 +3655,14 @@ textarea.mat-mdc-input-element {
   }
   //outline style
   .switch-outline-#{"" + $color} {
-    @include switch-outline-variant($value);
+    @include switch-outline-variant($value, map.get($theme-colors, switch-bg-color));
   }
   //outline alternative style
   .switch-outline-#{"" + $color}-alt {
-    @include switch-outline-variant-alt($value);
+    @include switch-outline-variant-alt($value, map.get($theme-colors, switch-bg-color));
   }
 }
+
 
 
 
@@ -4320,7 +3687,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: $headings-font-family;
   font-weight: $headings-font-weight;
   line-height: $headings-line-height;
-  color: $headings-color;
+  color: map.get($theme-colors, headings-color);
 }
 
 // noinspection SassScssResolvedByNameOnly
@@ -4380,7 +3747,7 @@ hr {
   margin-top: $hr-margin-y;
   margin-bottom: $hr-margin-y;
   border: 0;
-  border-top: $hr-border-width solid $hr-border-color;
+  border-top: $hr-border-width solid map.get($theme-colors, hr-border-color);
 }
 
 // noinspection SassScssResolvedByNameOnly
@@ -4419,7 +3786,7 @@ small, .small {
 .blockquote-footer {
   display: block;
   font-size: 80%; // back to default font-size
-  color: $blockquote-small-color;
+  color: map.get($theme-colors, blockquote-small-color);
 
   &::before {
     content: "\2014 \00A0"; // em dash, nbsp

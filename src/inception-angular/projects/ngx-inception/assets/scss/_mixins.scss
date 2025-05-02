@@ -1,0 +1,484 @@
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use 'sass:string';
+
+// -----------------------------------------------------------------------------
+// Button social-size
+// -----------------------------------------------------------------------------
+
+/// Ensures map values are in ascending order.
+/// @param $map Map to check
+/// @param $map-name Name used in warnings
+@mixin assert-ascending($map, $map-name) {
+  $prev-key: null;
+  $prev-value: null;
+
+  @each $key, $value in $map {
+    @if $prev-value != null and math.unit($value) != '%' and math.unit($prev-value) != '%' {
+      @if not math.compatible($prev-value, $value) {
+        @warn "In #{$map-name}, value for '#{$key}' (#{$value}) is not comparable to previous '#{$prev-key}' (#{$prev-value}).";
+      } @else if $prev-value >= $value {
+        @warn "In #{$map-name}, value for '#{$key}' (#{$value}) must be greater than previous '#{$prev-key}' (#{$prev-value}).";
+      }
+    }
+    $prev-key: $key;
+    $prev-value: $value;
+  }
+}
+
+/// Ensures the first map value starts at zero.
+/// @param $map Map to check
+/// @param $map-name Name used in warnings
+@mixin assert-starts-at-zero($map, $map-name) {
+  @if list.length($map) > 0 {
+    $first-value: list.nth(map.values($map), 1);
+    @if $first-value != 0 {
+      @warn "First breakpoint in #{$map-name} should start at 0 but starts at #{$first-value}.";
+    }
+  }
+}
+
+@mixin button-social-size(
+  $padding-y,
+  $padding-x,
+  $font-size,
+  $line-height,
+  $border-radius
+) {
+  // Compute icon dimension once
+  $icon-size: $padding-y * 2 + $font-size * $line-height;
+
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+  line-height: $line-height;
+  border: 0;
+  @include border-radius($border-radius);
+
+  &::before {
+    width:  $icon-size;
+    height: $icon-size;
+    padding: $padding-y 0;
+    font-size: $font-size;
+    line-height: $line-height;
+    @include border-radius($border-radius);
+  }
+
+  span {
+    margin-left: $icon-size;
+  }
+
+  &.icon {
+    width:  $icon-size;
+    height: $icon-size;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Borders
+// -----------------------------------------------------------------------------
+@mixin borders($borders) {
+  @each $direction, $settings in $borders {
+    $size:  map.get($settings, size);
+    $style: map.get($settings, style);
+    $color: map.get($settings, color);
+
+    @if $direction == all {
+      border: $size $style $color;
+    } @else {
+      border-#{$direction}: $size $style $color;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Sidebar width
+// -----------------------------------------------------------------------------
+@mixin sidebar-width($borders, $width) {
+  $sidebar-width: $width;
+
+  @each $direction, $settings in $borders {
+    $size: map.get($settings, size);
+
+    @if $direction == all {
+      $sidebar-width: $sidebar-width - 2 * $size;
+    } @else if list.index((left, right), $direction) {
+      $sidebar-width: $sidebar-width - $size;
+    }
+  }
+
+  width: $sidebar-width;
+}
+
+// -----------------------------------------------------------------------------
+// Card accent
+// -----------------------------------------------------------------------------
+@mixin card-accent-variant($color) {
+  border-top-width: 2px;
+  border-top-color: $color;
+}
+
+// -----------------------------------------------------------------------------
+// Switch size
+// -----------------------------------------------------------------------------
+@mixin switch-size($width, $height, $font-size, $handle-margin, $border-width) {
+  // Pre-calc reusable values
+  $handle-size:   $height - 2 * $handle-margin - 2 * $border-width;
+  $translate-x:   $width  - $height;
+
+  width: $width;
+  height: $height;
+
+  .switch-slider {
+    font-size: $font-size;
+
+    &::before {
+      width:  $handle-size;
+      height: $handle-size;
+    }
+
+    &::after {
+      font-size: $font-size;
+    }
+  }
+
+  .switch-input:checked ~ .switch-slider::before {
+    transform: translateX($translate-x);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Switch 3D size
+// -----------------------------------------------------------------------------
+@mixin switch-3d-size($width, $height) {
+  $translate-x: $width - $height;
+
+  width: $width;
+  height: $height;
+
+  .switch-slider::before {
+    width:  $height;
+    height: $height;
+  }
+
+  .switch-input:checked ~ .switch-slider::before {
+    transform: translateX($translate-x);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Switch variants
+// -----------------------------------------------------------------------------
+@mixin switch-variant($color) {
+  $dark: color.adjust($color, $lightness: -10%);
+
+  .switch-input:checked + .switch-slider {
+    background-color: $color;
+    border-color:     $dark;
+
+    &::before {
+      border-color: $dark;
+    }
+  }
+}
+
+@mixin switch-outline-variant($color, $bg-color) {
+  .switch-input:checked + .switch-slider {
+    background-color: $bg-color;
+    border-color:     $color;
+
+    &::before { border-color: $color; }
+    &::after   { color:        $color; }
+  }
+}
+
+@mixin switch-outline-variant-alt($color, $bg-color) {
+  .switch-input:checked + .switch-slider {
+    background-color: $bg-color;
+    border-color:     $color;
+
+    &::before {
+      background-color: $color;
+      border-color:     $color;
+    }
+    &::after {
+      color: $color;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Breakpoint utilities
+// -----------------------------------------------------------------------------
+@function breakpoint-next(
+  $name,
+  $breakpoints,
+  $breakpoint-names:  map.keys($breakpoints)
+) {
+  $idx: list.index($breakpoint-names, $name);
+  @return if(
+      $idx != null and $idx < list.length($breakpoint-names),
+      list.nth($breakpoint-names, $idx + 1),
+      null
+  );
+}
+
+@function breakpoint-min($name, $breakpoints) {
+  $min: map.get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+@function breakpoint-max($name, $breakpoints) {
+  $next: breakpoint-next($name, $breakpoints);
+  @return if($next, breakpoint-min($next, $breakpoints) - .02, null);
+}
+
+@function breakpoint-infix($name, $breakpoints) {
+  @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
+}
+
+@mixin media-breakpoint-up($name, $breakpoints) {
+  $min: breakpoint-min($name, $breakpoints);
+
+  @if $min {
+    @media (min-width: $min) { @content; }
+  } @else {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-down($name, $breakpoints) {
+  $max: breakpoint-max($name, $breakpoints);
+
+  @if $max {
+    @media (max-width: $max) { @content; }
+  } @else {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-between(
+  $lower,
+  $upper,
+  $breakpoints
+) {
+  $min: breakpoint-min($lower, $breakpoints);
+  $max: breakpoint-max($upper, $breakpoints);
+
+  @if $min != null and $max != null {
+    @media (min-width: $min) and (max-width: $max) { @content; }
+  } @else if $max == null {
+    @include media-breakpoint-up($lower, $breakpoints) { @content; }
+  } @else if $min == null {
+    @include media-breakpoint-down($upper, $breakpoints) { @content; }
+  }
+}
+
+@mixin media-breakpoint-only($name, $breakpoints) {
+  $min: breakpoint-min($name, $breakpoints);
+  $max: breakpoint-max($name, $breakpoints);
+
+  @if $min != null and $max != null {
+    @media (min-width: $min) and (max-width: $max) { @content; }
+  } @else if $max == null {
+    @include media-breakpoint-up($name, $breakpoints) { @content; }
+  } @else if $min == null {
+    @include media-breakpoint-down($name, $breakpoints) { @content; }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Border-radius helpers
+// -----------------------------------------------------------------------------
+@function valid-radius($radius) {
+  $result: ();
+  @each $val in $radius {
+    @if meta.type-of($val) == number {
+      $result: list.append($result, max($val, 0));
+    } @else {
+      $result: list.append($result, $val);
+    }
+  }
+  @return $result;
+}
+
+@mixin border-radius($enable-rounded, $radius) {
+  @if $enable-rounded {
+    border-radius: valid-radius($radius);
+  }
+}
+
+@mixin border-top-radius($enable-rounded, $radius) {
+  @if $enable-rounded {
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+  }
+}
+
+@mixin border-right-radius($enable-rounded, $radius) {
+  @if $enable-rounded {
+    border-top-right-radius: $radius;
+    border-bottom-right-radius: $radius;
+  }
+}
+
+@mixin border-bottom-radius($enable-rounded, $radius) {
+  @if $enable-rounded {
+    border-bottom-right-radius: $radius;
+    border-bottom-left-radius: $radius;
+  }
+}
+
+@mixin border-left-radius($enable-rounded, $radius) {
+  @if $enable-rounded {
+    border-top-left-radius: $radius;
+    border-bottom-left-radius: $radius;
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// Utility mixins
+// -----------------------------------------------------------------------------
+@mixin list-unstyled() {
+  padding-left: 0;
+  list-style:   none;
+}
+
+@mixin hover() {
+  &:hover { @content; }
+}
+
+@mixin hover-focus() {
+  &:hover,
+  &:focus { @content; }
+}
+
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear:   both;
+    content: "";
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Grid generation
+// -----------------------------------------------------------------------------
+@mixin make-grid-columns($columns, $row-columns, $gutter, $breakpoints) {
+  %grid-column {
+    position:       relative;
+    width:          100%;
+    padding-right:  $gutter * .5;
+    padding-left:   $gutter * .5;
+  }
+
+  @each $bp in map.keys($breakpoints) {
+    $infix: breakpoint-infix($bp, $breakpoints);
+
+    @if $columns > 0 {
+      @for $i from 1 through $columns {
+        .col#{$infix}-#{$i} { @extend %grid-column; }
+      }
+    }
+
+    .col#{$infix},
+    .col#{$infix}-auto { @extend %grid-column; }
+
+    @include media-breakpoint-up($bp, $breakpoints) {
+      .col#{$infix} {
+        flex-basis: 0;
+        flex-grow: 1;
+        max-width: 100%;
+      }
+
+      @if $row-columns > 0 {
+        @for $i from 1 through $row-columns {
+          .row-cols#{$infix}-#{$i} { @include row-cols($i); }
+        }
+      }
+
+      .col#{$infix}-auto { @include make-col-auto(); }
+
+      @if $columns > 0 {
+        @for $i from 1 through $columns {
+          .col#{$infix}-#{$i} { @include make-col($i, $columns); }
+        }
+      }
+
+      .order#{$infix}-first { order: -1; }
+      .order#{$infix}-last  { order: $columns + 1; }
+
+      @for $i from 0 through $columns {
+        .order#{$infix}-#{$i} { order: $i; }
+      }
+
+      @if $columns > 0 {
+        @for $i from 0 through ($columns - 1) {
+          @if not ($infix == "" and $i == 0) {
+            .offset#{$infix}-#{$i} {
+              @include make-col-offset($i, $columns);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin make-container($gutter) {
+  width:         100%;
+  padding-right: $gutter * .5;
+  padding-left:  $gutter * .5;
+  margin-right:  auto;
+  margin-left:   auto;
+}
+
+@mixin make-row($gutter) {
+  display:      flex;
+  flex-wrap:    wrap;
+  margin-right: -$gutter * .5;
+  margin-left:  -$gutter * .5;
+}
+
+@mixin make-container-max-widths($max-widths, $breakpoints) {
+  @each $bp, $mw in $max-widths {
+    @include media-breakpoint-up($bp, $breakpoints) {
+      max-width: $mw;
+    }
+  }
+}
+
+@mixin make-col-ready($gutter) {
+  position:       relative;
+  width:          100%;
+  padding-right:  $gutter * .5;
+  padding-left:   $gutter * .5;
+}
+
+@mixin make-col($size, $columns) {
+  flex:      0 0 math.percentage(math.div($size, $columns));
+  max-width: math.percentage(math.div($size, $columns));
+}
+
+@mixin make-col-auto() {
+  flex:      0 0 auto;
+  width:     auto;
+  max-width: 100%;
+}
+
+@mixin make-col-offset($size, $columns) {
+  $pct: math.div($size, $columns);
+  margin-left: if($pct == 0, 0, math.percentage($pct));
+}
+
+@mixin row-cols($count) {
+  > * {
+    flex:      0 0 math.div(100%, $count);
+    max-width: math.div(100%, $count);
+  }
+}
+
+
