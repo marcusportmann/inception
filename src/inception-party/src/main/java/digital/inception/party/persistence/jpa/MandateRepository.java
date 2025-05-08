@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>MandateRepository</b> interface declares the persistence for the <b>Mandate</b> domain
+ * The {@code MandateRepository} interface declares the persistence for the {@code Mandate} domain
  * type.
  *
  * @author Marcus Portmann
@@ -51,7 +51,7 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the mandate
-   * @return <b>true</b> if the mandate exists or <b>false</b> otherwise
+   * @return {@code true} if the mandate exists or {@code false} otherwise
    */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 

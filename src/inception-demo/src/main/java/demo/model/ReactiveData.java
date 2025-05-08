@@ -49,7 +49,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 /**
- * The <b>ReactiveData</b> class.
+ * The {@code ReactiveData} class.
  *
  * @author Marcus Portmann
  */
@@ -214,14 +214,14 @@ public class ReactiveData implements Serializable {
   @Column("timestamp_with_time_zone_value")
   private OffsetDateTime timestampWithTimeZoneValue;
 
-  /** Constructs a new <b>ReactiveData</b>. */
+  /** Creates a new {@code ReactiveData} instance. */
   public ReactiveData() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -427,7 +427,7 @@ public class ReactiveData implements Serializable {
    *
    * @param id the ID for the data.
    */
-  public void setId(@NotNull long id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -445,7 +445,7 @@ public class ReactiveData implements Serializable {
    *
    * @param language the ISO 639-1 language code value for the data
    */
-  public void setLanguage(@NotNull @Size(min = 2, max = 2) String language) {
+  public void setLanguage(String language) {
     this.language = language;
   }
 

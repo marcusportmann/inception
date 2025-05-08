@@ -23,7 +23,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Optional;
 
 /**
- * The <b>ValidISOCountryCodeValidator</b> class implements the custom constraint validator that
+ * The {@code ValidISOCountryCodeValidator} class implements the custom constraint validator that
  * validates whether a <b>String</b> contains a valid ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3
  * country code.
  *
@@ -32,7 +32,7 @@ import java.util.Optional;
 public class ValidISOCountryCodeValidator
     implements ConstraintValidator<ValidISOCountryCode, Object> {
 
-  /** Constructs a new <b>ValidISOCountryCodeValidator</b>. */
+  /** Creates a new {@code ValidISOCountryCodeValidator} instance. */
   public ValidISOCountryCodeValidator() {}
 
   @Override

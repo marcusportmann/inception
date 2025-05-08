@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>TimeUnit</b> enumeration defines the possible time units.
+ * The {@code TimeUnit} enumeration defines the possible time units.
  *
  * @author Marcus Portmann
  */

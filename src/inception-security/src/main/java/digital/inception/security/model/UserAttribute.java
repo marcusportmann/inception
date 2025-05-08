@@ -35,7 +35,7 @@ import java.util.Base64;
 import java.util.List;
 
 /**
- * The <b>UserAttribute</b> class stores a user attribute as a name-value pair.
+ * The {@code UserAttribute} class stores a user attribute as a name-value pair.
  *
  * @author Marcus Portmann
  */
@@ -73,11 +73,11 @@ public class UserAttribute implements Serializable {
   @Size(max = 2000)
   private String value;
 
-  /** Constructs a new <b>UserAttribute</b>. */
+  /** Creates a new {@code UserAttribute} instance. */
   public UserAttribute() {}
 
   /**
-   * Constructs a new <b>UserAttribute</b>.
+   * Creates a new {@code UserAttribute} instance.
    *
    * @param name the name of the user attribute
    * @param value the <b>BigDecimal</b> value for the user attribute
@@ -88,7 +88,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserAttribute</b>.
+   * Creates a new {@code UserAttribute} instance.
    *
    * @param name the name of the user attribute
    * @param value the binary value for the user attribute
@@ -99,7 +99,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserAttribute</b>.
+   * Creates a new {@code UserAttribute} instance.
    *
    * @param name the name of the user attribute
    * @param value the binary value for the user attribute
@@ -110,7 +110,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserAttribute</b>.
+   * Creates a new {@code UserAttribute} instance.
    *
    * @param name the name of the user attribute
    * @param value the <b>double</b> value for the user attribute
@@ -121,7 +121,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserAttribute</b>.
+   * Creates a new {@code UserAttribute} instance.
    *
    * @param name the name of the user attribute
    * @param value the <b>long</b> value for the user attribute
@@ -132,7 +132,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserAttribute</b>.
+   * Creates a new {@code UserAttribute} instance.
    *
    * @param name the name of the user attribute
    * @param value the <b>String</b> value for the user attribute
@@ -148,8 +148,8 @@ public class UserAttribute implements Serializable {
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return <b>true</b> if the list of user attributes contains a user attribute whose name matches
-   *     the specified name or <b>false</b> otherwise
+   * @return {@code true} if the list of user attributes contains a user attribute whose name
+   *     matches the specified name or {@code false} otherwise
    */
   public static boolean contains(List<UserAttribute> list, String name) {
     for (UserAttribute userAttribute : list) {

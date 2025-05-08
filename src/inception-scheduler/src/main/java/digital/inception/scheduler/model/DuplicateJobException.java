@@ -45,7 +45,7 @@ public class DuplicateJobException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateJobException</b>.
+   * Creates a new {@code DuplicateJobException} instance.
    *
    * @param jobId the ID for the job
    */

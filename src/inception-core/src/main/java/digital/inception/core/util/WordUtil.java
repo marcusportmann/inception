@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>WordUtil</b> class is a utility class which provides methods for performing operations on
+ * The {@code WordUtil} class is a utility class which provides methods for performing operations on
  * strings that contain words.
  *
  * <p>Derived from the org.apache.commons.text.WordUtil class in the commons-text library.

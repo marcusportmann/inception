@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>WorkflowDefinitionId</b> class implements the ID class for the <b>WorkflowDefinition</b>
+ * The {@code WorkflowDefinitionId} class implements the ID class for the {@code WorkflowDefinition}
  * class.
  *
  * @author Marcus Portmann
@@ -37,11 +37,11 @@ public class WorkflowDefinitionId implements Serializable {
   /** The version of the case definition. */
   private int version;
 
-  /** Constructs a new <b>WorkflowDefinitionId</b>. */
+  /** Constructs a new {@code WorkflowDefinitionId}. */
   public WorkflowDefinitionId() {}
 
   /**
-   * Constructs a new <b>WorkflowDefinitionId</b>.
+   * Constructs a new {@code WorkflowDefinitionId}.
    *
    * @param id the ID for the Workflow definition
    * @param version the version of the workflow definition
@@ -55,7 +55,7 @@ public class WorkflowDefinitionId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

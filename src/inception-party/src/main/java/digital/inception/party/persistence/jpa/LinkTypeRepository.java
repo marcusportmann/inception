@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>LinkTypeRepository</b> interface declares the persistence for the <b> LinkType</b> domain
+ * The {@code LinkTypeRepository} interface declares the persistence for the {@code LinkType} domain
  * type.
  *
  * @author Marcus Portmann

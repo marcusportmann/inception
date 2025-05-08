@@ -96,7 +96,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>SecurityApiControllerImpl</b> class.
+ * The {@code SecurityApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -113,7 +113,7 @@ public class SecurityApiControllerImpl extends SecureApiController
   private final SecurityService securityService;
 
   /**
-   * Constructs a new <b>SecurityApiControllerImpl</b>.
+   * Creates a new {@code SecurityApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param securityService the Security Service
@@ -1153,8 +1153,8 @@ public class SecurityApiControllerImpl extends SecureApiController
    * directory.
    *
    * @param userDirectoryId the ID for the user directory
-   * @return <b>true</b> if the user associated with the authenticated request has access to the
-   *     user directory or <b>false</b> otherwise
+   * @return {@code true} if the user associated with the authenticated request has access to the
+   *     user directory or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    */
   protected boolean hasAccessToUserDirectory(UUID userDirectoryId) throws InvalidArgumentException {

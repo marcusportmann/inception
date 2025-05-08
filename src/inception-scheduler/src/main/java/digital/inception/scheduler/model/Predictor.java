@@ -28,7 +28,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 /**
- * The <b>Predictor</b> class provides the capability to predict when a scheduling pattern will be
+ * The {@code Predictor} class provides the capability to predict when a scheduling pattern will be
  * matched.
  *
  * <p>Suppose you want to know when the scheduler will execute a job scheduled with the pattern
@@ -59,7 +59,7 @@ public class Predictor {
   private TimeZone timeZone = TimeZone.getDefault();
 
   /**
-   * Constructs a new <b>SchedulingPattern</b>.
+   * Creates a new {@code SchedulingPattern} instance.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    */
@@ -68,7 +68,7 @@ public class Predictor {
   }
 
   /**
-   * Constructs a new <b>SchedulingPattern</b>.
+   * Creates a new {@code SchedulingPattern} instance.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    * @throws InvalidSchedulingPatternException if the scheduling pattern is invalid
@@ -78,7 +78,7 @@ public class Predictor {
   }
 
   /**
-   * Constructs a new <b>SchedulingPattern</b>.
+   * Creates a new {@code SchedulingPattern} instance.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    * @param start the start time of the prediction
@@ -334,30 +334,30 @@ public class Predictor {
      * Validate the given integer value against a set of rules.
      *
      * @param value the value
-     * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b> ,
-     *     <b>false</b> otherwise
+     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
+     *     false} otherwise
      */
     boolean match(int value);
   }
 
   /**
-   * The <b>AlwaysTrueValueMatcher</b> class implements a <b>ValueMatcher</b> that always returns
-   * <b>true</b>.
+   * The {@code AlwaysTrueValueMatcher} class implements a <b>ValueMatcher</b> that always returns
+   * {@code true}.
    *
    * @author Carlo Pelliccia
    * @author Marcus Portmann
    */
   public static class AlwaysTrueValueMatcher implements ValueMatcher {
 
-    /** Constructs a new <b>AlwaysTrueValueMatcher</b>. */
+    /** Creates a new {@code AlwaysTrueValueMatcher} instance. */
     public AlwaysTrueValueMatcher() {}
 
     /**
      * Validate the given integer value against a set of rules.
      *
      * @param value the value
-     * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b> ,
-     *     <b>false</b> otherwise
+     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
+     *     false} otherwise
      */
     public boolean match(int value) {
       return true;
@@ -365,7 +365,7 @@ public class Predictor {
   }
 
   /**
-   * The <b>DayOfMonthValueMatcher</b> class implements a <b>ValueMatcher</b> whose rules are in a
+   * The {@code DayOfMonthValueMatcher} class implements a <b>ValueMatcher</b> whose rules are in a
    * plain array of integer values.
    *
    * <p>When asked to validate a value, this ValueMatcher checks if it is in the array and, if not,
@@ -380,10 +380,10 @@ public class Predictor {
     private static final int[] lastDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     /**
-     * Constructs a new <b>DayOfMonthValueMatcher</b>.
+     * Creates a new {@code DayOfMonthValueMatcher} instance.
      *
      * @param integers The Integer elements, one for every value accepted by the matcher. The
-     *     match() method will return <b>true</b> only if its parameter will be one of this list or
+     *     match() method will return {@code true} only if its parameter will be one of this list or
      *     the last-day-of-month setting applies.
      */
     public DayOfMonthValueMatcher(List<Integer> integers) {
@@ -391,14 +391,14 @@ public class Predictor {
     }
 
     /**
-     * Returns <b>true</b> if the given value is included in the matcher list or the
-     * last-day-of-month setting applies, otherwise <b>false</b>.
+     * Returns {@code true} if the given value is included in the matcher list or the
+     * last-day-of-month setting applies, otherwise {@code false}.
      *
      * @param value the value
      * @param month the month
-     * @param isLeapYear <b>true</b> if this is a leap year <b>false</b> otherwise
-     * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b> ,
-     *     <b>false</b> otherwise
+     * @param isLeapYear {@code true} if this is a leap year {@code false} otherwise
+     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
+     *     false} otherwise
      */
     public boolean match(int value, int month, boolean isLeapYear) {
       return (super.match(value)
@@ -415,7 +415,7 @@ public class Predictor {
   }
 
   /**
-   * The <b>IntArrayValueMatcher</b> class implements a <b>ValueMatcher</b> whose rules are in a
+   * The {@code IntArrayValueMatcher} class implements a <b>ValueMatcher</b> whose rules are in a
    * plain array of integer values.
    *
    * <p>When asked to validate a value, this ValueMatcher checks if it is in the array.
@@ -451,11 +451,11 @@ public class Predictor {
     /**
      * Validate the given integer value against a set of rules.
      *
-     * <p>Returns <b>true</b> if the given value is included in the matcher list.
+     * <p>Returns {@code true} if the given value is included in the matcher list.
      *
      * @param value the value
-     * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b> ,
-     *     <b>false</b> otherwise
+     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
+     *     false} otherwise
      */
     public boolean match(int value) {
       for (int value1 : values) {
@@ -469,7 +469,7 @@ public class Predictor {
   }
 
   /**
-   * The <b>SchedulingPattern</b> class supports a UNIX crontab-like pattern is a string split in
+   * The {@code SchedulingPattern} class supports a UNIX crontab-like pattern is a string split in
    * five space separated parts.
    *
    * <p>Each part is intended as:
@@ -670,8 +670,8 @@ public class Predictor {
      * Validates a string as a scheduling pattern.
      *
      * @param schedulingPattern the pattern to validate
-     * @return <b>true</b> if the given string represents a valid scheduling pattern or <b>false</b>
-     *     otherwise
+     * @return {@code true} if the given string represents a valid scheduling pattern or {@code
+     *     false} otherwise
      */
     @SuppressWarnings("unused")
     public static boolean validate(String schedulingPattern) {
@@ -703,12 +703,12 @@ public class Predictor {
     }
 
     /**
-     * Returns <b>true</b> if the EPOCH timestamp in milliseconds matches the pattern, according to
+     * Returns {@code true} if the EPOCH timestamp in milliseconds matches the pattern, according to
      * the given time zone.
      *
      * @param timezone the time zone
      * @param timestamp the EPOCH timestamp in milliseconds
-     * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b> otherwise
+     * @return {@code true} if the given timestamp matches the pattern or {@code false} otherwise
      */
     public boolean match(TimeZone timezone, long timestamp) {
       GregorianCalendar gc = new GregorianCalendar();
@@ -748,11 +748,11 @@ public class Predictor {
     }
 
     /**
-     * Returns <b>true</b> if the given EPOCH timestamp in milliseconds matches the pattern,
+     * Returns {@code true} if the given EPOCH timestamp in milliseconds matches the pattern,
      * according to the system default time zone.
      *
      * @param timestamp the EPOCH timestamp in milliseconds
-     * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b> otherwise
+     * @return {@code true} if the given timestamp matches the pattern or {@code false} otherwise
      */
     public boolean match(long timestamp) {
       return match(TimeZone.getDefault(), timestamp);

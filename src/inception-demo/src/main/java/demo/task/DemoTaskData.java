@@ -23,7 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>DemoTaskData</b> class holds the data for the demo task.
+ * The {@code DemoTaskData} class holds the data for the demo task.
  *
  * @author Marcus Portmann
  */
@@ -50,11 +50,11 @@ public class DemoTaskData implements Serializable {
   @JsonProperty(required = true)
   private boolean slowTask;
 
-  /** Constructs a new <b>DemoTaskData</b>. */
+  /** Creates a new {@code DemoTaskData} instance. */
   public DemoTaskData() {}
 
   /**
-   * Constructs a new <b>DemoTaskData</b>.
+   * Creates a new {@code DemoTaskData} instance.
    *
    * @param message the message
    */
@@ -65,7 +65,7 @@ public class DemoTaskData implements Serializable {
   /**
    * Returns whether the task should be failed.
    *
-   * @return <b>true</b> if the task should be failed or <b>false</b> otherwise
+   * @return {@code true} if the task should be failed or {@code false} otherwise
    */
   public boolean getFailTask() {
     return failTask;
@@ -83,7 +83,7 @@ public class DemoTaskData implements Serializable {
   /**
    * Returns whether the task should be retried.
    *
-   * @return <b>true</b> if the task should be retried or <b>false</b> otherwise
+   * @return {@code true} if the task should be retried or {@code false} otherwise
    */
   public boolean getRetryTask() {
     return retryTask;
@@ -92,7 +92,7 @@ public class DemoTaskData implements Serializable {
   /**
    * Returns whether the slow processing of the task should be simulated.
    *
-   * @return <b>true</b> if the slow processing of the task should be simulated or <b>false</b>
+   * @return {@code true} if the slow processing of the task should be simulated or {@code false}
    *     otherwise
    */
   public boolean getSlowTask() {
@@ -102,7 +102,7 @@ public class DemoTaskData implements Serializable {
   /**
    * Set whether the task should be failed.
    *
-   * @param failTask <b>true</b> if the task should be failed or <b>false</b> otherwise
+   * @param failTask {@code true} if the task should be failed or {@code false} otherwise
    */
   public void setFailTask(boolean failTask) {
     this.failTask = failTask;
@@ -120,7 +120,7 @@ public class DemoTaskData implements Serializable {
   /**
    * Set whether the task should be retried.
    *
-   * @param retryTask <b>true</b> if the task should be retried or <b>false</b> otherwise
+   * @param retryTask {@code true} if the task should be retried or {@code false} otherwise
    */
   public void setRetryTask(boolean retryTask) {
     this.retryTask = retryTask;
@@ -129,8 +129,8 @@ public class DemoTaskData implements Serializable {
   /**
    * Set whether the slow processing of the task should be simulated.
    *
-   * @param slowTask <b>true</b> if the slow processing of the task should be simulated or
-   *     <b>false</b> otherwise
+   * @param slowTask {@code true} if the slow processing of the task should be simulated or {@code
+   *     false} otherwise
    */
   public void setSlowTask(boolean slowTask) {
     this.slowTask = slowTask;

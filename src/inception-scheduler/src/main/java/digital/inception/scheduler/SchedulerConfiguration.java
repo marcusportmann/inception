@@ -29,7 +29,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <b>SchedulerConfiguration</b> class provides the Spring configuration for the Scheduler
+ * The {@code SchedulerConfiguration} class provides the Spring configuration for the Scheduler
  * module.
  *
  * @author Marcus Portmann
@@ -42,7 +42,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class SchedulerConfiguration {
 
-  /** Constructs a new <b>SchedulerConfiguration</b>. */
+  /** Creates a new {@code SchedulerConfiguration} instance. */
   public SchedulerConfiguration() {}
 
   /**

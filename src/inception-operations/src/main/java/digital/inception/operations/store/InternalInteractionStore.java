@@ -28,9 +28,9 @@ import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionSummary;
-import digital.inception.operations.persistence.InteractionAttachmentRepository;
-import digital.inception.operations.persistence.InteractionRepository;
-import digital.inception.operations.persistence.InteractionSummaryRepository;
+import digital.inception.operations.persistence.jpa.InteractionAttachmentRepository;
+import digital.inception.operations.persistence.jpa.InteractionRepository;
+import digital.inception.operations.persistence.jpa.InteractionSummaryRepository;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalInteractionStore</b> class provides the internal interaction store implementation.
+ * The {@code InternalInteractionStore} class provides the internal interaction store
+ * implementation.
  *
  * @author Marcus Portmann
  */
@@ -69,7 +70,7 @@ public class InternalInteractionStore implements InteractionStore {
   private final InteractionSummaryRepository interactionSummaryRepository;
 
   /**
-   * Constructs a new <b>InternalInteractionStore</b>.
+   * Constructs a new {@code InternalInteractionStore}.
    *
    * @param interactionAttachmentRepository the Interaction Attachment Repository
    * @param interactionRepository the Interaction Repository

@@ -23,7 +23,7 @@ import jakarta.jws.soap.SOAPBinding;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>AuditWebService</b> class.
+ * The {@code AuditWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ public class AuditWebService extends AbstractWebServiceBase {
   private final AuditService auditService;
 
   /**
-   * Constructs a new <b>AuditWebService</b>.
+   * Creates a new {@code AuditWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param auditService the Audit Service

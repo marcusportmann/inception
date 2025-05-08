@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>TaskExecutionFailedException</b> exception is thrown to indicate an error condition as a
+ * The {@code TaskExecutionFailedException} exception is thrown to indicate an error condition as a
  * result of a failure to execute a task.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -49,7 +49,7 @@ public class TaskExecutionFailedException extends ServiceException {
   private final String originalMessage;
 
   /**
-   * Constructs a new <b>TaskExecutionFailedException</b>.
+   * Creates a new {@code TaskExecutionFailedException} instance.
    *
    * @param taskId the ID for the task
    */
@@ -59,10 +59,10 @@ public class TaskExecutionFailedException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionFailedException</b>.
+   * Creates a new {@code TaskExecutionFailedException} instance.
    *
    * @param taskId the ID for the task
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public TaskExecutionFailedException(UUID taskId, String message) {
     super("Failed to execute the task (" + taskId + "): " + message);
@@ -70,11 +70,11 @@ public class TaskExecutionFailedException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionFailedException</b>.
+   * Creates a new {@code TaskExecutionFailedException} instance.
    *
    * @param taskId the ID for the task
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public TaskExecutionFailedException(UUID taskId, Throwable cause) {
     super("Failed to execute the task (" + taskId + "): " + cause.getMessage(), cause);
@@ -82,12 +82,12 @@ public class TaskExecutionFailedException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionFailedException</b>.
+   * Creates a new {@code TaskExecutionFailedException} instance.
    *
    * @param taskId the ID for the task
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public TaskExecutionFailedException(UUID taskId, String message, Throwable cause) {
     super("Failed to execute the task (" + taskId + "): " + message, cause);

@@ -31,8 +31,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>InteractionStore</b> interface defines the functionality provided by an interaction store,
- * which manages the persistence of interactions and interaction attachments.
+ * The {@code InteractionStore} interface defines the functionality provided by an interaction
+ * store, which manages the persistence of interactions and interaction attachments.
  *
  * @author Marcus Portmann
  */

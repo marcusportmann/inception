@@ -67,7 +67,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>PartyApiController</b> interface.
+ * The {@code PartyApiController} interface.
  *
  * @author Marcus Portmann
  */

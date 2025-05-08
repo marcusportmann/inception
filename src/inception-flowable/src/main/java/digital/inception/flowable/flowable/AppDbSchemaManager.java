@@ -17,7 +17,7 @@
 // package digital.inception.flowable.flowable;
 //
 /// **
-// * The <b>AppDbSchemaManager</b> class provides a no-op database schema manager for the
+// * The {@code AppDbSchemaManager} class provides a no-op database schema manager for the
 // application
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the

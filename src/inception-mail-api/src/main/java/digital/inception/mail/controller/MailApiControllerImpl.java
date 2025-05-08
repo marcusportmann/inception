@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>MailApiControllerImpl</b> class.
+ * The {@code MailApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ public class MailApiControllerImpl extends SecureApiController implements MailAp
   private final MailService mailService;
 
   /**
-   * Constructs a new <b>MailApiControllerImpl</b>.
+   * Creates a new {@code MailApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param mailService the Mail Service

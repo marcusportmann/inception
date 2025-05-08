@@ -40,7 +40,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
- * The <b>TestWorkflow</b> class holds the data for a test workflow.
+ * The {@code TestWorkflow} class holds the data for a test workflow.
  *
  * @author Marcus Portmann
  */
@@ -99,11 +99,11 @@ public class TestWorkflowData implements Serializable {
   @NotNull
   private OffsetDateTime timestamp;
 
-  /** Constructs a new <b>TestWorkflow</b>. */
+  /** Creates a new {@code TestWorkflow} instance. */
   public TestWorkflowData() {}
 
   /**
-   * Constructs a new <b>TestWorkflow</b>.
+   * Creates a new {@code TestWorkflow} instance.
    *
    * @param id the ID
    * @param name the name

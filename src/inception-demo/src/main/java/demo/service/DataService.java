@@ -24,7 +24,7 @@ import java.util.List;
 import reactor.core.publisher.Flux;
 
 /**
- * The <b>DataService</b> interface defines the functionality that must be provided by a Data
+ * The {@code DataService} interface defines the functionality that must be provided by a Data
  * Service implementation.
  *
  * @author Marcus Portmann

@@ -22,7 +22,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The <b>RequestBodyObjectContext</b> class provides a mechanism to store and retrieve the Java
+ * The {@code RequestBodyObjectContext} class provides a mechanism to store and retrieve the Java
  * object populated from the JSON request body of a RESTful API invocation in a thread-local
  * variable.
  *

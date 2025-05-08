@@ -42,7 +42,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>JobParameter</b> class holds the information for a job parameter.
+ * The {@code JobParameter} class holds the information for a job parameter.
  *
  * @author Marcus Portmann
  */
@@ -93,11 +93,11 @@ public class JobParameter implements Serializable {
   @Column(name = "value", length = 2000, nullable = false)
   private String value;
 
-  /** Constructs a new <b>JobParameter</b>. */
+  /** Creates a new {@code JobParameter} instance. */
   public JobParameter() {}
 
   /**
-   * Constructs a new <b>JobParameter</b>.
+   * Creates a new {@code JobParameter} instance.
    *
    * @param name the name of the job parameter
    * @param value the value of the job parameter
@@ -111,7 +111,7 @@ public class JobParameter implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

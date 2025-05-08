@@ -19,7 +19,7 @@ package digital.inception.server.authorization.token;
 import java.io.Serial;
 
 /**
- * The <b>OAuth2AccessTokenException</b> exception is thrown to indicate an error condition when
+ * The {@code OAuth2AccessTokenException} exception is thrown to indicate an error condition when
  * working with an OAuth2 access token.
  *
  * @author Marcus Portmann
@@ -29,11 +29,11 @@ public class OAuth2AccessTokenException extends RuntimeException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>OAuth2AccessTokenException</b> with the specified message and cause.
+   * Creates a new {@code OAuth2AccessTokenException} instance with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   OAuth2AccessTokenException(String message, Throwable cause) {
     super(message, cause);

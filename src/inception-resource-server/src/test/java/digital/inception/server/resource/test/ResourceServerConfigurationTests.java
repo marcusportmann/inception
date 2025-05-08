@@ -31,7 +31,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>ResourceServerConfigurationTests</b> class.
+ * The {@code ResourceServerConfigurationTests} class.
  *
  * @author Marcus Portmann
  */

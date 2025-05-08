@@ -19,7 +19,7 @@ package digital.inception.application.test;
 import java.io.Serial;
 
 /**
- * The <b>TestTransactionalServiceException</b> exception is thrown to indicate an error condition
+ * The {@code TestTransactionalServiceException} exception is thrown to indicate an error condition
  * when working with the Test Transactional Service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -31,20 +31,21 @@ public class TestTransactionalServiceException extends Exception {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>TestTransactionalServiceException</b> with the specified message.
+   * Creates a new {@code TestTransactionalServiceException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public TestTransactionalServiceException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <b>TestTransactionalServiceException</b> with the specified message and cause.
+   * Creates a new {@code TestTransactionalServiceException} instance with the specified message and
+   * cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public TestTransactionalServiceException(String message, Throwable cause) {
     super(message, cause);

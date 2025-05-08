@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>TaxNumberTypeId</b> class implements the ID class for the <b>TaxNumberType</b> class.
+ * The {@code TaxNumberTypeId} class implements the ID class for The {@code TaxNumberType} class.
  *
  * @author Marcus Portmann
  */
@@ -36,14 +36,14 @@ public class TaxNumberTypeId implements Serializable {
   /** The Unicode locale identifier for the tax number type. */
   private String localeId;
 
-  /** Constructs a new <b>TaxNumberTypeId</b>. */
+  /** Creates a new {@code TaxNumberTypeId} instance. */
   public TaxNumberTypeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

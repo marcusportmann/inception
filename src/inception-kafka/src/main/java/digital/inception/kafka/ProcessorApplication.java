@@ -46,7 +46,7 @@ public abstract class ProcessorApplication
   private final List<Processor<?, ?>> processors = new ArrayList<>();
 
   /**
-   * Constructs a new <b>ProcessorApplication</b>.
+   * Creates a new {@code ProcessorApplication} instance.
    *
    * @param applicationContext the Spring application context
    */

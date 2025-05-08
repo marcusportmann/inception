@@ -45,7 +45,7 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 
 /**
- * The <b>ReportingServiceImpl</b> class provides the Reporting Service implementation.
+ * The {@code ReportingServiceImpl} class provides the Reporting Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -66,7 +66,7 @@ public class ReportingServiceImpl extends AbstractServiceBase implements Reporti
   private String localReportFolderPath;
 
   /**
-   * Constructs a new <b>ReportingServiceImpl</b>.
+   * Creates a new {@code ReportingServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

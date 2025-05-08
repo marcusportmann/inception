@@ -17,7 +17,7 @@
 package digital.inception.core.model;
 
 /**
- * The <b>CodeEnum</b> interface must be implemented by all custom Enum types that use snake case
+ * The {@code CodeEnum} interface must be implemented by all custom Enum types that use snake case
  * code values, e.g. task_status, as the String representation for the Enum value.
  *
  * @author Marcus Portmann

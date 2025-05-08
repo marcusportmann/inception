@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>ErrorApiControllerImpl</b> class.
+ * The {@code ErrorApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -47,7 +47,7 @@ public class ErrorApiControllerImpl extends SecureApiController implements Error
   private final ErrorService errorService;
 
   /**
-   * Constructs a new <b>ErrorApiControllerImpl</b>.
+   * Creates a new {@code ErrorApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param errorService the Error Service

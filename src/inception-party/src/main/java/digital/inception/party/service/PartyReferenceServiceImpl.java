@@ -138,7 +138,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PartyReferenceServiceImpl</b> class provides the Party Reference Service implementation.
+ * The {@code PartyReferenceServiceImpl} class provides the Party Reference Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -301,7 +301,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   private final TitleRepository titleRepository;
 
   /**
-   * Constructs a new <b>PartyReferenceServiceImpl</b>.
+   * Creates a new {@code PartyReferenceServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param associationPropertyTypeRepository the Association Property Type Repository

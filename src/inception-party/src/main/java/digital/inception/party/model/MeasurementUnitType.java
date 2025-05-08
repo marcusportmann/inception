@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MeasurementUnitType</b> enumeration defines the measurement unit types.
+ * The {@code MeasurementUnitType} enumeration defines the measurement unit types.
  *
  * @author Marcus Portmann
  */

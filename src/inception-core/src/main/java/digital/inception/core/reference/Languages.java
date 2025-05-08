@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The <b>Languages</b> class provides static reference data for languages.
+ * The {@code Languages} class provides static reference data for languages.
  *
  * @author Marcus Portmann
  */

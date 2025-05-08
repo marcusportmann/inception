@@ -23,14 +23,14 @@ import digital.inception.core.model.CodeEnum;
 import java.io.IOException;
 
 /**
- * The <b>CodeEnumSerializer</b> class implements the Jackson serializer for any Enum that
+ * The {@code CodeEnumSerializer} class implements the Jackson serializer for any Enum that
  * implements {@link CodeEnum}, by invoking {@code * CodeEnum.code(...)}.
  *
  * @author Marcus Portmann
  */
 public class CodeEnumSerializer extends JsonSerializer<CodeEnum> {
 
-  /** Constructs a new <b>CodeEnumSerializer</b>. */
+  /** Creates a new {@code CodeEnumSerializer} instance. */
   public CodeEnumSerializer() {}
 
   @Override

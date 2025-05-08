@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>CarRepository</b> interface declares the persistence for the <b>Car</b> domain type.
+ * The {@code CarRepository} interface declares the persistence for the {@code Car} domain type.
  *
  * @author Marcus Portmann
  */

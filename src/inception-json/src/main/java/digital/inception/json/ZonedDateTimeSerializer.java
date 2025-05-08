@@ -24,14 +24,14 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 
 /**
- * The <b>ZonedDateTimeSerializer</b> class implements the Jackson serializer for the <b>
- * ZonedDateTime</b> type.
+ * The {@code ZonedDateTimeSerializer} class implements the Jackson serializer for the
+ * <b>ZonedDateTime</b> type.
  *
  * @author Marcus Portmann
  */
 public class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
 
-  /** Constructs a new <b>ZonedDateTimeSerializer</b>. */
+  /** Creates a new {@code ZonedDateTimeSerializer} instance. */
   public ZonedDateTimeSerializer() {}
 
   @Override

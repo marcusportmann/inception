@@ -30,14 +30,15 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * The <b>InteractionSourceBase</b> class holds the information common to all types of interaction
+ * The {@code InteractionSourceBase} class holds the information common to all types of interaction
  * sources, and is the base class that the classes for the different interaction source types are
- * derived from, e.g. <b>MailboxInteractionSource</b>.
+ * derived from, e.g. {@code MailboxInteractionSource}.
  *
- * <p>The <b>InteractionSource</b> and <b>InteractionSourceBase</b> classes are both JPA entity
- * classes mapped to the same <b>operations_interaction_sources</b> table.
+ * <p>The {@code InteractionSource} and {@code InteractionSourceBase} classes are both JPA entity
+ * classes mapped to the same {@code operations_interaction_sources} table.
  *
  * <p>This class and its subclasses expose the JSON and XML properties using a property-based
  * approach rather than a field-based approach to support the JPA inheritance model.
@@ -53,8 +54,6 @@ public class InteractionSourceBase implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  ADD TENANT ID
-
   /** The ID for the interaction source. */
   @NotNull
   @Id
@@ -67,16 +66,21 @@ public class InteractionSourceBase implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The unique identifier for the tenant the interaction source is associated with. */
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
+
   /** The type for the interaction source. */
   @NotNull
   @Column(name = "type", length = 50, nullable = false)
   private InteractionSourceType type;
 
-  /** Constructs a new <b>InteractionSourceBase</b>. */
+  /** Creates a new {@code InteractionSourceBase} instance. */
   protected InteractionSourceBase() {}
 
   /**
-   * Constructs a new <b>InteractionSourceBase</b>.
+   * Creates a new {@code InteractionSourceBase} instance.
    *
    * @param type the interaction source type
    */
@@ -85,9 +89,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Constructs a new <b>InteractionSourceBase</b>.
+   * Creates a new {@code InteractionSourceBase} instance.
    *
-   * @param id the ID for the interaction source
+   * @param id the unique identifier for the interaction source
    * @param type the interaction source type
    */
   protected InteractionSourceBase(String id, InteractionSourceType type) {
@@ -96,9 +100,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Constructs a new <b>InteractionSourceBase</b>.
+   * Creates a new {@code InteractionSourceBase} instance.
    *
-   * @param id the ID for the interaction source
+   * @param id the unique identifier for the interaction source
    * @param type the type for the interaction source
    * @param name the name of the interaction source
    */
@@ -112,7 +116,7 @@ public class InteractionSourceBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -134,9 +138,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Returns the ID for the interaction source.
+   * Returns the unique identifier for the interaction source.
    *
-   * @return the ID for the interaction source
+   * @return the unique identifier for the interaction source
    */
   public String getId() {
     return id;
@@ -149,6 +153,15 @@ public class InteractionSourceBase implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the unique identifier for the tenant the interaction source is associated with.
+   *
+   * @return the unique identifier for the tenant the interaction source is associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**
@@ -171,9 +184,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction source.
+   * Set the unique identifier for the interaction source.
    *
-   * @param id the ID for the interaction source
+   * @param id the unique identifier for the interaction source
    */
   public void setId(String id) {
     this.id = id;
@@ -186,6 +199,15 @@ public class InteractionSourceBase implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the unique identifier for the tenant the interaction source is associated with.
+   *
+   * @param tenantId the unique identifier for the tenant the interaction source is associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

@@ -48,7 +48,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Mandatary</b> class holds the information for a mandatary for a mandate.
+ * The {@code Mandatary} class holds the information for a mandatary for a mandate.
  *
  * @author Marcus Portmann
  */
@@ -119,11 +119,11 @@ public class Mandatary implements Serializable {
   @Column(name = "role", length = 50, nullable = false)
   private String role;
 
-  /** Constructs a new <b>Mandatary</b>. */
+  /** Creates a new {@code Mandatary} instance. */
   public Mandatary() {}
 
   /**
-   * Constructs a new <b>Mandatary</b>.
+   * Creates a new {@code Mandatary} instance.
    *
    * @param partyId the ID for the party who is the recipient of the mandate
    * @param role the code for the mandatary role
@@ -137,7 +137,7 @@ public class Mandatary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

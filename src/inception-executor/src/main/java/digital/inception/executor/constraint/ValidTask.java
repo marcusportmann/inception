@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidTask</b> annotation implements the custom constraint annotation used to apply the
+ * The {@code ValidTask} annotation implements the custom constraint annotation used to apply the
  * task validation.
  *
  * @author Marcus Portmann

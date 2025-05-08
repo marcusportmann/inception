@@ -44,7 +44,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ReferenceServiceImpl</b> class provides the Reference Service implementation.
+ * The {@code ReferenceServiceImpl} class provides the Reference Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -70,7 +70,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   private final RegionRepository regionRepository;
 
   /**
-   * Constructs a new <b>ReferenceServiceImpl</b>.
+   * Creates a new {@code ReferenceServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param countryRepository the Country Repository

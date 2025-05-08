@@ -28,8 +28,8 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>TokenClaimListConverter</b> class implements the custom JPA attribute converter for a list
- * of <b>TokenClaim</b> objects.
+ * The {@code TokenClaimListConverter} class implements the custom JPA attribute converter for a
+ * list of <b>TokenClaim</b> objects.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ public class TokenClaimListAttributeConverter
     objectMapper.registerModule(new InceptionModule());
   }
 
-  /** Constructs a new <b>TokenClaimListConverter</b>. */
+  /** Creates a new {@code TokenClaimListConverter} instance. */
   public TokenClaimListAttributeConverter() {}
 
   /**

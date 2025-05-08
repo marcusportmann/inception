@@ -23,7 +23,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>ServiceUnavailableException</b> exception is thrown to indicate an error condition when a
+ * The {@code ServiceUnavailableException} exception is thrown to indicate an error condition when a
  * service is unavailable and a request could not be processed.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -44,9 +44,9 @@ public class ServiceUnavailableException extends ServiceException {
   private final ProblemDetails problemDetails;
 
   /**
-   * Constructs a new <b>ServiceUnavailableException</b> with the specified message.
+   * Creates a new {@code ServiceUnavailableException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public ServiceUnavailableException(String message) {
     super(message);
@@ -55,11 +55,12 @@ public class ServiceUnavailableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>ServiceUnavailableException</b> with the specified message and cause.
+   * Creates a new {@code ServiceUnavailableException} instance with the specified message and
+   * cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public ServiceUnavailableException(String message, Throwable cause) {
     super(message, cause);
@@ -68,13 +69,14 @@ public class ServiceUnavailableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>ServiceUnavailableException</b> with the specified message and cause.
+   * Creates a new {@code ServiceUnavailableException} instance with the specified message and
+   * cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param problemDetails the problem details object, as defined by RFC 7807, associated with the
    *     exception
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public ServiceUnavailableException(
       String message, ProblemDetails problemDetails, Throwable cause) {
@@ -84,9 +86,10 @@ public class ServiceUnavailableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>ServiceUnavailableException</b> with the specified message and cause.
+   * Creates a new {@code ServiceUnavailableException} instance with the specified message and
+   * cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param problemDetails the problem details object, as defined by RFC 7807, associated with the
    *     exception
    */

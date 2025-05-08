@@ -28,7 +28,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>SecurityConfiguration</b> class provides the Spring configuration for the Security module.
+ * The {@code SecurityConfiguration} class provides the Spring configuration for the Security
+ * module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "securityEntityManagerFactory")
 public class SecurityConfiguration {
 
-  /** Constructs a new <b>SecurityConfiguration</b>. */
+  /** Creates a new {@code SecurityConfiguration} instance. */
   public SecurityConfiguration() {}
 
   /**

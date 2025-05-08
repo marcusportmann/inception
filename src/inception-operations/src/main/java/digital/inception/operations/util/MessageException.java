@@ -19,7 +19,7 @@ package digital.inception.operations.util;
 import java.io.Serial;
 
 /**
- * The <b>MessageException</b> exception is thrown to indicate an error when working with messages.
+ * The {@code MessageException} exception is thrown to indicate an error when working with messages.
  *
  * @author Marcus Portmann
  */
@@ -28,26 +28,26 @@ public class MessageException extends RuntimeException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <b>MessageException</b> with <b>null</b> as its message. */
+  /** Constructs a new {@code MessageException} with {@code null} as its message. */
   public MessageException() {
     super();
   }
 
   /**
-   * Constructs a new <b>MessageException</b> with the specified message.
+   * Constructs a new {@code MessageException} with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public MessageException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <b>MessageException</b> with the specified message and cause.
+   * Constructs a new {@code MessageException} with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public MessageException(String message, Throwable cause) {
     super(message, cause);

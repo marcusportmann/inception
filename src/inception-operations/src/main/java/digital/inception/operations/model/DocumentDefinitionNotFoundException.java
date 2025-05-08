@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>DocumentDefinitionNotFoundException</b> exception is thrown to indicate an error condition
- * as a result of a document definition that could not be found.
+ * The {@code DocumentDefinitionNotFoundException} exception is thrown to indicate an error
+ * condition as a result of a document definition that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class DocumentDefinitionNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <b>DocumentDefinitionNotFoundException</b>.
+   * w Constructs a new {@code DocumentDefinitionNotFoundException}.
    *
    * @param documentDefinitionId the ID for the document definition
    */

@@ -20,7 +20,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>CodeProviderConfig</b> class stores the configuration information for a code provider.
+ * The {@code CodeProviderConfig} class stores the configuration information for a code provider.
  * This is the configuration read from the META-INF/code-providers.xml configuration files on the
  * classpath.
  *
@@ -38,7 +38,7 @@ public class CodeProviderConfig implements Serializable {
   private final String name;
 
   /**
-   * Constructs a new <b>CodeProviderConfig</b>.
+   * Creates a new {@code CodeProviderConfig} instance.
    *
    * @param name the name of the code provider
    * @param className fully qualified name of the class that implements the code provider

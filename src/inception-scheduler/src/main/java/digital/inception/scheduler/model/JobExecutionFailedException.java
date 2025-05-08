@@ -23,7 +23,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>JobExecutionFailedException</b> exception is thrown to indicate an error condition when
+ * The {@code JobExecutionFailedException} exception is thrown to indicate an error condition when
  * executing a job.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -44,7 +44,7 @@ public class JobExecutionFailedException extends Exception {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>JobExecutionFailedException</b>.
+   * Creates a new {@code JobExecutionFailedException} instance.
    *
    * @param jobId the ID for the job
    */
@@ -53,21 +53,21 @@ public class JobExecutionFailedException extends Exception {
   }
 
   /**
-   * Constructs a new <b>JobExecutionFailedException</b>.
+   * Creates a new {@code JobExecutionFailedException} instance.
    *
    * @param jobId the ID for the job
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public JobExecutionFailedException(String jobId, String message) {
     super("The job (" + jobId + ") execution failed: " + message);
   }
 
   /**
-   * Constructs a new <b>JobExecutionFailedException</b>.
+   * Creates a new {@code JobExecutionFailedException} instance.
    *
    * @param jobId the ID for the job
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public JobExecutionFailedException(String jobId, Throwable cause) {
     super("The job (" + jobId + ") execution failed: " + cause.getMessage(), cause);

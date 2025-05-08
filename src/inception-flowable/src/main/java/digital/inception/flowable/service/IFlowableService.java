@@ -23,7 +23,7 @@
 // import java.util.List;
 //
 /// **
-// * The <b>IFlowableService</b> interface defines the functionality provided by a Flowable Service
+// * The {@code IFlowableService} interface defines the functionality provided by a Flowable Service
 // * implementation.
 // *
 // * @author Marcus Portmann
@@ -94,7 +94,7 @@
 //  //   * Check whether the process definition exists.
 //  //   *
 //  //   * @param processDefinitionId the ID for the process definition
-//  //   * @return <b>true</b> if the process definition exists or <b>false</b> otherwise
+//  //   * @return {@code true} if the process definition exists or {@code false} otherwise
 //  //   * @throws InvalidArgumentException if an argument is invalid
 //  //   * @throws ServiceUnavailableException if the check for the existing process definition
 // failed

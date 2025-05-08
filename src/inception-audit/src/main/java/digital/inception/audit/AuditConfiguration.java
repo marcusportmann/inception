@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>AuditConfiguration</b> class provides the Spring configuration for the Audit module.
+ * The {@code AuditConfiguration} class provides the Spring configuration for the Audit module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "auditEntityManagerFactory")
 public class AuditConfiguration {
 
-  /** Constructs a new <b>AuditConfiguration</b>. */
+  /** Creates a new {@code AuditConfiguration} instance. */
   public AuditConfiguration() {}
 
   /**

@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PasswordResetStatus</b> enumeration defines the possible statuses for a password reset.
+ * The {@code PasswordResetStatus} enumeration defines the possible statuses for a password reset.
  *
  * @author Marcus Portmann
  */

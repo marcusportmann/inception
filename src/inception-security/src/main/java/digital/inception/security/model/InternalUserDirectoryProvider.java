@@ -44,7 +44,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalUserDirectoryProvider</b> class provides the internal user directory provider
+ * The {@code InternalUserDirectoryProvider} class provides the internal user directory provider
  * implementation.
  *
  * @author Marcus Portmann
@@ -95,7 +95,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
   private final int passwordHistoryMonths;
 
   /**
-   * Constructs a new <b>InternalUserDirectoryProvider</b>.
+   * Creates a new {@code InternalUserDirectoryProvider} instance.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory
@@ -1408,8 +1408,8 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
    *
    * @param userId the ID for the user
    * @param password the password
-   * @return <b>true</b> if the password was previously used and cannot be reused for a period of
-   *     time or <b>false</b> otherwise
+   * @return {@code true} if the password was previously used and cannot be reused for a period of
+   *     time or {@code false} otherwise
    */
   private boolean isPasswordInHistory(UUID userId, String password) {
     ZonedDateTime after = ZonedDateTime.now();

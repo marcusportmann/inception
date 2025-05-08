@@ -21,7 +21,7 @@ import java.io.Serial;
 import java.time.OffsetDateTime;
 
 /**
- * The <b>RichRuntimeException</b> exception is thrown when additional information related to an
+ * The {@code RichRuntimeException} exception is thrown when additional information related to an
  * error condition exists including the time the error occurred and an associated error code.
  * condition.
  *
@@ -40,16 +40,16 @@ public class RichRuntimeException extends RuntimeException {
   /** The error code. */
   private String code;
 
-  /** Constructs a new <b>RichRuntimeException</b> with <b>null</b> as its message. */
+  /** Creates a new {@code RichRuntimeException} instance with {@code null} as its message. */
   public RichRuntimeException() {
     super();
     this.when = OffsetDateTime.now();
   }
 
   /**
-   * Constructs a new <b>RichRuntimeException</b> with the specified message.
+   * Creates a new {@code RichRuntimeException} instance with the specified message.
    *
-   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
+   * @param message the message saved for later retrieval by the {@code getMessage()} method
    */
   public RichRuntimeException(String message) {
     super(message);
@@ -57,12 +57,12 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <b>RichRuntimeException</b> with the specified cause and a message of <b>
-   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message of
-   * cause).
+   * Creates a new {@code RichRuntimeException} instance with the specified cause and a message of
+   * <b> (cause==null ? null : cause.toString())</b> (which typically contains the class and message
+   * of cause).
    *
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public RichRuntimeException(Throwable cause) {
     super(cause);
@@ -70,10 +70,10 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <b>RichRuntimeException</b> with the specified code and message.
+   * Creates a new {@code RichRuntimeException} instance with the specified code and message.
    *
    * @param code the error code
-   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
+   * @param message the message saved for later retrieval by the {@code getMessage()} method
    */
   public RichRuntimeException(String code, String message) {
     super(message);
@@ -82,11 +82,11 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <b>RichRuntimeException</b> with the specified message and cause.
+   * Creates a new {@code RichRuntimeException} instance with the specified message and cause.
    *
-   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message the message saved for later retrieval by the {@code getMessage()} method
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public RichRuntimeException(String message, Throwable cause) {
     super(message, cause);
@@ -94,12 +94,12 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <b>RichRuntimeException</b> with the specified code, message and cause.
+   * Creates a new {@code RichRuntimeException} instance with the specified code, message and cause.
    *
    * @param code the error code
-   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message the message saved for later retrieval by the {@code getMessage()} method
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public RichRuntimeException(String code, String message, Throwable cause) {
     super(message, cause);

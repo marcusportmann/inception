@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ConstraintType</b> enumeration defines the types of constraint that can be applied when
+ * The {@code ConstraintType} enumeration defines the types of constraint that can be applied when
  * validating an attribute or preference for a party.
  *
  * @author Marcus Portmann

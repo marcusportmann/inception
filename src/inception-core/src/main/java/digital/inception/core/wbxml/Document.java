@@ -21,7 +21,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>Document</b> class represents a WBXML document.
+ * The {@code Document} class represents a WBXML document.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ public class Document implements Serializable {
   private int publicId = PUBLIC_ID_UNKNOWN;
 
   /**
-   * Constructs a new <b>Document</b> with the specified root element.
+   * Creates a new {@code Document} instance with the specified root element.
    *
    * @param element the root element for the document
    */
@@ -48,7 +48,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Document</b> with the specified root element and public ID.
+   * Creates a new {@code Document} instance with the specified root element and public ID.
    *
    * @param element the root element for the document
    * @param publicId the public ID for the document

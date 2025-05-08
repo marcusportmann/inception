@@ -55,7 +55,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>MailServiceImpl</b> class provides the Mail Service implementation.
+ * The {@code MailServiceImpl} class provides the Mail Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -76,7 +76,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   private JavaMailSender javaMailSender;
 
   /**
-   * Constructs a new <b>MailServiceImpl</b>.
+   * Creates a new {@code MailServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param mailTemplateRepository the Mail Template Repository
@@ -424,7 +424,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   }
 
   /**
-   * The <b>FreeMarkerTemplateLoader</b> class implements the Apache FreeMarker template loader.
+   * The {@code FreeMarkerTemplateLoader} class implements the Apache FreeMarker template loader.
    *
    * @author Marcus Portmann
    */
@@ -434,7 +434,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
     private final MailService mailService;
 
     /**
-     * Constructs a new <b>FreeMarkerTemplateLoader</b>.
+     * Creates a new {@code FreeMarkerTemplateLoader} instance.
      *
      * @param mailService the Mail Service
      */

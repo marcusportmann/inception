@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.OffsetDateTime;
 
 /**
- * The <b>ServiceError</b> class holds the service error information.
+ * The {@code ServiceError} class holds the service error information.
  *
  * @author Marcus Portmann
  */
@@ -50,11 +50,11 @@ public class ServiceError {
   @XmlSchemaType(name = "dateTime")
   private OffsetDateTime timestamp;
 
-  /** Constructs a new <b>ServiceError</b>. */
+  /** Creates a new {@code ServiceError} instance. */
   public ServiceError() {}
 
   /**
-   * Constructs a new <b>ServiceError</b>.
+   * Creates a new {@code ServiceError} instance.
    *
    * @param message the message for the service error
    */

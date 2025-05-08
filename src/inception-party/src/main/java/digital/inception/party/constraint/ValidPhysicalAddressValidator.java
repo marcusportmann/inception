@@ -29,10 +29,10 @@
 // import org.springframework.util.StringUtils;
 //
 /// **
-// * The <b>ValidPhysicalAddressValidator</b> class implements the custom constraint validator for
+// * The {@code ValidPhysicalAddressValidator} class implements the custom constraint validator for
 // * validating a physical address.
 // *
-// * <p>NOTE: The <b>@Autowired</b> constructor is not used when Spring Boot automatically invokes
+// * <p>NOTE: The {@code @Autowired} constructor is not used when Spring Boot automatically invokes
 // the
 // * JSR 380 validation when persisting an entity. Instead, the default constructor is invoked when
 // * the validator is initialized by Hibernate. As a result the custom validation that requires the

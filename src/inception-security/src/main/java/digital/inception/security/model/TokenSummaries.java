@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>TokenSummaries</b> class holds the results of a request to retrieve a list of token
+ * The {@code TokenSummaries} class holds the results of a request to retrieve a list of token
  * summaries.
  *
  * @author Marcus Portmann
@@ -120,11 +120,11 @@ public class TokenSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>TokenSummaries</b>. */
+  /** Creates a new {@code TokenSummaries} instance. */
   public TokenSummaries() {}
 
   /**
-   * Constructs a new <b>TokenSummaries</b>.
+   * Creates a new {@code TokenSummaries} instance.
    *
    * @param tokenSummaries the token summaries
    * @param total the total number of token summaries

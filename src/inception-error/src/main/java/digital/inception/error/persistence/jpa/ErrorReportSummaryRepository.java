@@ -22,8 +22,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>ErrorReportSummaryRepository</b> interface declares the persistence for the
- * <b>ErrorReportSummary</b> domain type.
+ * The {@code ErrorReportSummaryRepository} interface declares the persistence for the {@code
+ * ErrorReportSummary} domain type.
  *
  * @author Marcus Portmann
  */

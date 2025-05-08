@@ -46,7 +46,7 @@ public class DuplicateTenantException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateTenantException</b>.
+   * Creates a new {@code DuplicateTenantException} instance.
    *
    * @param name the name of the tenant
    */
@@ -55,7 +55,7 @@ public class DuplicateTenantException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>DuplicateTenantException</b>.
+   * Creates a new {@code DuplicateTenantException} instance.
    *
    * @param tenantId the ID for the tenant
    */

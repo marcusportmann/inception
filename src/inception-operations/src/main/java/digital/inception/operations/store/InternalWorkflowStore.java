@@ -25,8 +25,8 @@ import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
-import digital.inception.operations.persistence.WorkflowRepository;
-import digital.inception.operations.persistence.WorkflowSummaryRepository;
+import digital.inception.operations.persistence.jpa.WorkflowRepository;
+import digital.inception.operations.persistence.jpa.WorkflowSummaryRepository;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalWorkflowStore</b> class provides the internal workflow store implementation.
+ * The {@code InternalWorkflowStore} class provides the internal workflow store implementation.
  *
  * @author Marcus Portmann
  */
@@ -62,7 +62,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   private final WorkflowSummaryRepository workflowSummaryRepository;
 
   /**
-   * Constructs a new <b>InternalWorkflowStore</b>.
+   * Constructs a new {@code InternalWorkflowStore}.
    *
    * @param workflowRepository the Workflow Repository
    * @param workflowSummaryRepository the Workflow Summary Repository

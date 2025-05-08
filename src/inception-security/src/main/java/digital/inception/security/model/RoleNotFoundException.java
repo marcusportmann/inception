@@ -45,7 +45,7 @@ public class RoleNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>RoleNotFoundException</b>.
+   * Creates a new {@code RoleNotFoundException} instance.
    *
    * @param roleCode the code for the role
    */

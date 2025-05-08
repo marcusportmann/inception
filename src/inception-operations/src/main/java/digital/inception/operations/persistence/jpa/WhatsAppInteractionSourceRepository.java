@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WhatsAppInteractionSource;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>WhatsAppInteractionSourceRepository</b> interface declares the persistence for the
- * <b>WhatsAppInteractionSource</b> domain type.
+ * The {@code WhatsAppInteractionSourceRepository} interface declares the persistence for the {@code
+ * WhatsAppInteractionSource} domain type.
  *
  * @author Marcus Portmann
  */

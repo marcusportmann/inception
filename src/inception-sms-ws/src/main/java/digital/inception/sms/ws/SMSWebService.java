@@ -23,7 +23,7 @@ import jakarta.jws.soap.SOAPBinding;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>SMSWebService</b> class.
+ * The {@code SMSWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ public class SMSWebService extends AbstractWebServiceBase {
   private final SMSService smsService;
 
   /**
-   * Constructs a new <b>SMSWebService</b>.
+   * Creates a new {@code SMSWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param smsService the SMS Service

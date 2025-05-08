@@ -21,15 +21,15 @@ import digital.inception.scheduler.model.JobStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>JobStatusAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>JobStatus</b> enumeration.
+ * The {@code JobStatusAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code JobStatus} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class JobStatusAttributeConverter extends AbstractCodeEnumAttributeConverter<JobStatus> {
 
-  /** Constructs a new <b>JobStatusAttributeConverter</b>. */
+  /** Creates a new {@code JobStatusAttributeConverter} instance. */
   public JobStatusAttributeConverter() {
     super(JobStatus.class);
   }

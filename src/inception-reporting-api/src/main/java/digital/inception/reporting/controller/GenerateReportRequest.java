@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>GenerateReportRequest</b> class holds the information for a request to generate a report.
+ * The {@code GenerateReportRequest} class holds the information for a request to generate a report.
  *
  * @author Marcus Portmann
  */
@@ -50,11 +50,11 @@ public class GenerateReportRequest implements Serializable {
   @JsonProperty(required = true)
   private List<ReportParameter> reportParameters;
 
-  /** Constructs a new <b>GenerateReportRequest</b>. */
+  /** Creates a new {@code GenerateReportRequest} instance. */
   public GenerateReportRequest() {}
 
   /**
-   * Constructs a new <b>GenerateReportRequest</b>.
+   * Creates a new {@code GenerateReportRequest} instance.
    *
    * @param reportDefinitionId the ID for the report definition
    * @param reportParameters the report parameters

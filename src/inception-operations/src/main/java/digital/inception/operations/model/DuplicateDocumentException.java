@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>DuplicateDocumentException</b> exception is thrown to indicate an error condition as a
+ * The {@code DuplicateDocumentException} exception is thrown to indicate an error condition as a
  * result of an attempt to create a duplicate document, i.e. a document with the specified ID
  * already exists.
  *
@@ -47,7 +47,7 @@ public class DuplicateDocumentException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateDocumentException</b>.
+   * Constructs a new {@code DuplicateDocumentException}.
    *
    * @param documentId the ID for the document
    */

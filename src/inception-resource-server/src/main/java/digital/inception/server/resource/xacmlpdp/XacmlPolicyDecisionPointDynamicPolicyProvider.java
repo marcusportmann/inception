@@ -73,7 +73,7 @@ import org.springframework.web.client.RestTemplate;
 import org.xml.sax.InputSource;
 
 /**
- * The <b>XacmlPolicyDecisionPointDynamicPolicyProvider</b> class provides a custom AuthzForce
+ * The {@code XacmlPolicyDecisionPointDynamicPolicyProvider} class provides a custom AuthzForce
  * dynamic policy provider implementation, which provides the XACML-based policy sets and policies
  * that will be applied by the XACML policy decision point.
  *
@@ -118,7 +118,7 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
   private PolicySet rootPolicySet = null;
 
   /**
-   * Constructs a new <b>XacmlPolicyDecisionPointDynamicPolicyProvider</b>.
+   * Creates a new {@code XacmlPolicyDecisionPointDynamicPolicyProvider} instance.
    *
    * @param xacmlParserFactory the factory used to create XACML parsers
    * @param expressionFactory the expression factory
@@ -480,13 +480,13 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
   private record ExternalPolicy(String id, String version, String name, String type, String data) {}
 
   /**
-   * The <b>Factory</b> class implements the factory that creates
-   * <b>PolicyDecisionPointCloseableDynamicPolicyProvider</b> instances.
+   * The {@code Factory} class implements the factory that creates {@code
+   * PolicyDecisionPointCloseableDynamicPolicyProvider} instances.
    */
   public static class Factory
       extends CloseablePolicyProvider.Factory<XacmlPolicyDecisionPointPolicyProvider> {
 
-    /** Constructs a new <b>Factory</b>. */
+    /** Creates a new {@code Factory} instance. */
     public Factory() {
       int xxx = 0;
       xxx++;

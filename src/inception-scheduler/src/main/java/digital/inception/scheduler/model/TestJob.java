@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <b>TestJob</b> class implements the test job.
+ * The {@code TestJob} class implements the test job.
  *
  * @author Marcus Portmann
  */
@@ -35,7 +35,7 @@ public class TestJob implements JobImplementation {
   /* Scheduler Service */
   @Autowired private SchedulerService schedulerService;
 
-  /** Constructs a new <b>TestJob</b>. */
+  /** Creates a new {@code TestJob} instance. */
   public TestJob() {}
 
   /**

@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidTaskValidator</b> class implements the custom constraint validator for validating a
+ * The {@code ValidTaskValidator} class implements the custom constraint validator for validating a
  * task.
  *
  * <p>NOTE: The <b>@Autowired</b> constructor is not used when Spring Boot automatically invokes the
@@ -44,7 +44,7 @@ public class ValidTaskValidator implements ConstraintValidator<ValidTask, Task> 
   private final ExecutorService executorService;
 
   /**
-   * Constructs a new <b>ValidTaskValidator</b>.
+   * Creates a new {@code ValidTaskValidator} instance.
    *
    * @param executorService the Executor Service
    */
@@ -53,7 +53,7 @@ public class ValidTaskValidator implements ConstraintValidator<ValidTask, Task> 
     this.executorService = executorService;
   }
 
-  /** Constructs a new <b>ValidTaskValidator</b>. */
+  /** Creates a new {@code ValidTaskValidator} instance. */
   public ValidTaskValidator() {
     executorService = null;
   }

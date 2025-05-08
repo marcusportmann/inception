@@ -62,7 +62,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>PartyServiceImpl</b> class provides the Party Service implementation.
+ * The {@code PartyServiceImpl} class provides the Party Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -98,7 +98,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   private int maxSnapshots;
 
   /**
-   * Constructs a new <b>PartyServiceImpl</b>.
+   * Creates a new {@code PartyServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param partyStore the Party Store

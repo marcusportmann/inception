@@ -40,7 +40,7 @@ public final class SamplingRule {
   private final SpanKind spanKind;
 
   /**
-   * Constructs a new <b>SamplingRule</b>>.
+   * Creates a new {@code SamplingRule} instance>.
    *
    * @param spanKind the span kind
    * @param attributeKey the attribute key to match against

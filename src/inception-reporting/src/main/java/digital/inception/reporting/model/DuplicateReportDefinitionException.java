@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>DuplicateReportDefinitionException</b> exception is thrown to indicate an error condition
+ * The {@code DuplicateReportDefinitionException} exception is thrown to indicate an error condition
  * as a result of an attempt to create a duplicate report definition, i.e. a report definition with
  * the specified ID already exists.
  *
@@ -46,7 +46,7 @@ public class DuplicateReportDefinitionException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateReportDefinitionException</b>.
+   * Creates a new {@code DuplicateReportDefinitionException} instance.
    *
    * @param reportDefinitionId the ID for the report definition
    */

@@ -53,7 +53,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * The <b>PartyService</b> interface defines the functionality provided by a Party Service
+ * The {@code PartyService} interface defines the functionality provided by a Party Service
  * implementation.
  *
  * @author Marcus Portmann

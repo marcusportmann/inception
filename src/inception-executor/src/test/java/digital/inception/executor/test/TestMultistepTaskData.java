@@ -23,7 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>TestMultistepTaskData</b> class holds the data for the test multistep task.
+ * The {@code TestMultistepTaskData} class holds the data for the test multistep task.
  *
  * @author Marcus Portmann
  */
@@ -54,13 +54,13 @@ public class TestMultistepTaskData implements Serializable {
   @JsonProperty(required = true)
   private long startTimestamp;
 
-  /** Constructs a new <b>TestMultistepTaskData</b>. */
+  /** Creates a new {@code TestMultistepTaskData} instance. */
   public TestMultistepTaskData() {
     this.startTimestamp = System.currentTimeMillis();
   }
 
   /**
-   * Constructs a new <b>TestMultistepTaskData</b>.
+   * Creates a new {@code TestMultistepTaskData} instance.
    *
    * @param message the message
    */
@@ -72,7 +72,7 @@ public class TestMultistepTaskData implements Serializable {
   /**
    * Returns whether the task should be failed.
    *
-   * @return <b>true</b> if the task should be failed or <b>false</b> otherwise
+   * @return {@code true} if the task should be failed or {@code false} otherwise
    */
   public boolean getFailTask() {
     return failTask;
@@ -99,7 +99,7 @@ public class TestMultistepTaskData implements Serializable {
   /**
    * Returns whether the task should be retried.
    *
-   * @return <b>true</b> if the task should be retried or <b>false</b> otherwise
+   * @return {@code true} if the task should be retried or {@code false} otherwise
    */
   public boolean getRetryTask() {
     return retryTask;
@@ -117,7 +117,7 @@ public class TestMultistepTaskData implements Serializable {
   /**
    * Set whether the task should be failed.
    *
-   * @param failTask <b>true</b> if the task should be failed or <b>false</b> otherwise
+   * @param failTask {@code true} if the task should be failed or {@code false} otherwise
    */
   public void setFailTask(boolean failTask) {
     this.failTask = failTask;
@@ -144,7 +144,7 @@ public class TestMultistepTaskData implements Serializable {
   /**
    * Set whether the task should be retried.
    *
-   * @param retryTask <b>true</b> if the task should be retried or <b>false</b> otherwise
+   * @param retryTask {@code true} if the task should be retried or {@code false} otherwise
    */
   public void setRetryTask(boolean retryTask) {
     this.retryTask = retryTask;

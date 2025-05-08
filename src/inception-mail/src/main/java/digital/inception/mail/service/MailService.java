@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <b>MailService</b> interface defines the functionality provided by a Mail Service
+ * The {@code MailService} interface defines the functionality provided by a Mail Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public interface MailService {
   /**
    * Create the new mail template.
    *
-   * @param mailTemplate the <b>MailTemplate</b> instance containing the information for the new
+   * @param mailTemplate the {@code MailTemplate} instance containing the information for the new
    *     mail template
    * @return the mail template
    * @throws InvalidArgumentException if an argument is invalid
@@ -128,7 +128,7 @@ public interface MailService {
    * Check whether the mail template exists.
    *
    * @param mailTemplateId the ID for the mail template
-   * @return <b>true</b> if the mail template exists or <b>false</b> otherwise
+   * @return {@code true} if the mail template exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the existing mail template failed
    */
@@ -172,8 +172,8 @@ public interface MailService {
   /**
    * Update the mail template.
    *
-   * @param mailTemplate the <b>MailTemplate</b> instance containing the updated information for the
-   *     mail template
+   * @param mailTemplate the {@code MailTemplate} instance containing the updated information for
+   *     the mail template
    * @return the mail template
    * @throws InvalidArgumentException if an argument is invalid
    * @throws MailTemplateNotFoundException if the mail template could not be found

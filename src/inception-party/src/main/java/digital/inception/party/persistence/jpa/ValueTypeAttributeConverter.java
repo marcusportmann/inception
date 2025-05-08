@@ -21,15 +21,15 @@ import digital.inception.party.model.ValueType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>ValueTypeAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>ValueType</b> enumeration.
+ * The {@code ValueTypeAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code ValueType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class ValueTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<ValueType> {
 
-  /** Constructs a new <b>ValueTypeAttributeConverter</b>. */
+  /** Creates a new {@code ValueTypeAttributeConverter} instance. */
   public ValueTypeAttributeConverter() {
     super(ValueType.class);
   }

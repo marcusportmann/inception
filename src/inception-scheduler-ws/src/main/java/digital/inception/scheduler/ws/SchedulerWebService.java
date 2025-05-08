@@ -33,7 +33,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>SchedulerWebService</b> class.
+ * The {@code SchedulerWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +49,7 @@ public class SchedulerWebService extends AbstractWebServiceBase {
   private final SchedulerService schedulerService;
 
   /**
-   * Constructs a new <b>SchedulerWebService</b>.
+   * Creates a new {@code SchedulerWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param schedulerService the Scheduler Service

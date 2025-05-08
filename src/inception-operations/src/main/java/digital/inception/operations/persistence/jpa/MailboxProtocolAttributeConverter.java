@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
+import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
 import digital.inception.operations.model.MailboxProtocol;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>MailboxProtocolAttributeConverter</b> class implements the custom JPA attribute converter
- * for the <b>MailboxProtocol</b> enumeration.
+ * The {@code MailboxProtocolAttributeConverter} class implements the custom JPA attribute converter
+ * for the {@code MailboxProtocol} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -29,7 +30,7 @@ import jakarta.persistence.Converter;
 public class MailboxProtocolAttributeConverter
     extends AbstractCodeEnumAttributeConverter<MailboxProtocol> {
 
-  /** Constructs a new <b>MailboxProtocolAttributeConverter</b>. */
+  /** Creates a new {@code MailboxProtocolAttributeConverter} instance. */
   public MailboxProtocolAttributeConverter() {
     super(MailboxProtocol.class);
   }

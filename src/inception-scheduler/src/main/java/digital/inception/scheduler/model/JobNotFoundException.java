@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>JobNotFoundException</b> exception is thrown to indicate an error condition as a result of
- * a job that could not be found.
+ * The {@code JobNotFoundException} exception is thrown to indicate an error condition as a result
+ * of a job that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class JobNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>JobNotFoundException</b>.
+   * Creates a new {@code JobNotFoundException} instance.
    *
    * @param jobId the ID for the job
    */

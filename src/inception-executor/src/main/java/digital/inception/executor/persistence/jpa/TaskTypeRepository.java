@@ -21,7 +21,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>ErrorRepository</b> interface declares the persistence for the <b>TaskType</b> domain
+ * The {@code ErrorRepository} interface declares the persistence for the {@code TaskType} domain
  * type.
  *
  * @author Marcus Portmann

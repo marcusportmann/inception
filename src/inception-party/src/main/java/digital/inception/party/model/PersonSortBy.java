@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PersonSortBy</b> enumeration defines the possible methods used to sort a list of persons.
+ * The {@code PersonSortBy} enumeration defines the possible methods used to sort a list of persons.
  *
  * @author Marcus Portmann
  */

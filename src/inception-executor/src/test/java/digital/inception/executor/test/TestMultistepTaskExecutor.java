@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>TestMultistepTaskExecutor</b> class.
+ * The {@code TestMultistepTaskExecutor} class.
  *
  * @author Marcus Portmann
  */
@@ -38,7 +38,7 @@ public class TestMultistepTaskExecutor extends MultistepTaskExecutor<TestMultist
   private static final Logger log = LoggerFactory.getLogger(TestMultistepTaskExecutor.class);
 
   /**
-   * Constructs a new <b>TestMultistepTaskExecutor</b>
+   * Creates a new {@code TestMultistepTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

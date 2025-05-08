@@ -23,7 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>GenderRepository</b> interface declares the persistence for the <b>Gender</b> domain type.
+ * The {@code GenderRepository} interface declares the persistence for the {@code Gender} domain
+ * type.
  *
  * @author Marcus Portmann
  */

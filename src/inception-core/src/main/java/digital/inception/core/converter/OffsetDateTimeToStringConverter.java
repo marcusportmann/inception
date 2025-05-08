@@ -22,8 +22,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>OffsetDateTimeToStringConverter</b> class implements the Spring converter that converts a
- * <b>OffsetDateTime</b> type into a <b>String</b> type.
+ * The {@code OffsetDateTimeToStringConverter} class implements the Spring converter that converts a
+ * {@code OffsetDateTime} type into a {@code String} type.
  *
  * @author Marcus Portmann
  */
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class OffsetDateTimeToStringConverter implements Converter<OffsetDateTime, String> {
 
-  /** Constructs a new <b>OffsetDateTimeToStringConverter</b>. */
+  /** Creates a new {@code OffsetDateTimeToStringConverter} instance. */
   public OffsetDateTimeToStringConverter() {}
 
   @Override

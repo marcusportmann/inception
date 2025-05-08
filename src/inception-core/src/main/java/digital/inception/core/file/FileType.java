@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>FileType</b> enumeration defines the possible file types.
+ * The {@code FileType} enumeration defines the possible file types.
  *
  * @author Marcus Portmann
  */

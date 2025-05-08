@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * The <b>Element</b> class stores the data for a WBXML element content type in a WBXML document.
+ * The {@code Element} class stores the data for a WBXML element content type in a WBXML document.
  *
  * <p>This content type represents a node in the WBXML document.
  *
@@ -294,7 +294,7 @@ public class Element implements Serializable, Content {
    * Returns whether the element has an attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return <b>true</b> if the element has an attribute with the specified name or <b>false</b>
+   * @return {@code true} if the element has an attribute with the specified name or {@code false}
    *     otherwise
    */
   public boolean hasAttribute(String name) {
@@ -310,19 +310,19 @@ public class Element implements Serializable, Content {
   /**
    * Returns true if the element has attributes.
    *
-   * @return <b>true</b> if the element has attributes or <b>false</b> otherwise
+   * @return {@code true} if the element has attributes or {@code false} otherwise
    */
   public boolean hasAttributes() {
     return (!attributes.isEmpty());
   }
 
   /**
-   * Returns <b>true</b> if the element has a child element with the specified name or <b>false</b>
-   * otherwise.
+   * Returns {@code true} if the element has a child element with the specified name or {@code
+   * false} otherwise.
    *
    * @param name the name of the child element
-   * @return <b>true</b> if the element has a child element with the specified name or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the element has a child element with the specified name or {@code
+   *     false} otherwise
    */
   public boolean hasChild(String name) {
     for (Content tmpContent : content) {
@@ -339,7 +339,7 @@ public class Element implements Serializable, Content {
   /**
    * Returns true if the element has child elements.
    *
-   * @return <b>true</b> if the element has child elements or <b>false</b> otherwise
+   * @return {@code true} if the element has child elements or {@code false} otherwise
    */
   public boolean hasChildren() {
     for (Content tmpContent : content) {
@@ -354,7 +354,7 @@ public class Element implements Serializable, Content {
   /**
    * Returns true if the element has content.
    *
-   * @return <b>true</b> if the element has content or <b>false</b> otherwise
+   * @return {@code true} if the element has content or {@code false} otherwise
    */
   public boolean hasContent() {
     return (!content.isEmpty());

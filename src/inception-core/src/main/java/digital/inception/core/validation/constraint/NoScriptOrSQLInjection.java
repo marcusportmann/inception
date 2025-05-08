@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>NoScriptOrSQLInjection</b> annotation implements the custom constraint annotation used to
+ * The {@code NoScriptOrSQLInjection} annotation implements the custom constraint annotation used to
  * apply the string validation, which detects whether a <b>String</b> or the <b>String</b>
  * properties of an object contain unsafe script or SQL injection content.
  *

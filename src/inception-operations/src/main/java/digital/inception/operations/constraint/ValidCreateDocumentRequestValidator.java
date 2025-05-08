@@ -25,7 +25,7 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <b>ValidCreateDocumentRequestValidator</b> class implements the custom constraint validator
+ * The {@code ValidCreateDocumentRequestValidator} class implements the custom constraint validator
  * for validating a request to create a document.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public class ValidCreateDocumentRequestValidator
   private final DocumentService documentService;
 
   /**
-   * Constructs a new <b>ValidCreateDocumentRequestValidator</b>.
+   * Constructs a new {@code ValidCreateDocumentRequestValidator}.
    *
    * @param documentService the Document Service
    */
@@ -47,7 +47,7 @@ public class ValidCreateDocumentRequestValidator
     this.documentService = documentService;
   }
 
-  /** Constructs a new <b>ValidCreateDocumentRequestValidator</b>. */
+  /** Constructs a new {@code ValidCreateDocumentRequestValidator}. */
   public ValidCreateDocumentRequestValidator() {
     this.documentService = null;
   }

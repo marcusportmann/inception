@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>TimeZone</b> class holds the information for a time zone.
+ * The {@code TimeZone} class holds the information for a time zone.
  *
  * <p>A time zone is a region of the globe that observes a uniform standard time for legal,
  * commercial, and social purposes. Time zones tend to follow the boundaries of countries and their
@@ -99,11 +99,11 @@ public class TimeZone implements Serializable {
   @NotNull
   private Integer sortIndex;
 
-  /** Constructs a new <b>TimeZone</b>. */
+  /** Creates a new {@code TimeZone} instance. */
   public TimeZone() {}
 
   /**
-   * Constructs a new <b>TimeZone</b>.
+   * Creates a new {@code TimeZone} instance.
    *
    * @param id the ID for the time zone
    * @param localeId the Unicode locale identifier for the time zone
@@ -123,7 +123,7 @@ public class TimeZone implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

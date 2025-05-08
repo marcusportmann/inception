@@ -19,7 +19,7 @@ package digital.inception.server.authorization.oauth;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>InvalidClientErrorResponse</b> class holds the information for an OAuth2 invalid client
+ * The {@code InvalidClientErrorResponse} class holds the information for an OAuth2 invalid client
  * error response.
  *
  * <p>See: <a href="https://tools.ietf.org/html/rfc6749#section-5.2">Error Response</a>
@@ -32,7 +32,7 @@ public class InvalidClientErrorResponse extends ErrorResponse {
   public static final String ERROR_CODE = "invalid_client";
 
   /**
-   * Constructs a new <b>InvalidClientErrorResponse</b>.
+   * Creates a new {@code InvalidClientErrorResponse} instance.
    *
    * @param status the HTTP status that should be returned for the OAuth2 invalid client error
    *     response
@@ -42,7 +42,7 @@ public class InvalidClientErrorResponse extends ErrorResponse {
   }
 
   /**
-   * Constructs a new <b>InvalidClientErrorResponse</b>.
+   * Creates a new {@code InvalidClientErrorResponse} instance.
    *
    * @param status the HTTP status that should be returned for the OAuth2 invalid client error
    *     response

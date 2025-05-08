@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ContactMechanismRole</b> class holds the information for a contact mechanism role.
+ * The {@code ContactMechanismRole} class holds the information for a contact mechanism role.
  *
  * @author Marcus Portmann
  */
@@ -254,14 +254,14 @@ public class ContactMechanismRole implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>ContactMechanismRole</b>. */
+  /** Creates a new {@code ContactMechanismRole} instance. */
   public ContactMechanismRole() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -397,7 +397,7 @@ public class ContactMechanismRole implements Serializable {
    * Returns whether the contact mechanism role is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the contact mechanism role is valid for the party type or <b>false</b>
+   * @return {@code true} if the contact mechanism role is valid for the party type or {@code false}
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {

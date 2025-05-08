@@ -33,7 +33,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>ConfigWebService</b> class.
+ * The {@code ConfigWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +49,7 @@ public class ConfigWebService extends AbstractWebServiceBase {
   private final ConfigService configService;
 
   /**
-   * Constructs a new <b>ConfigWebService</b>.
+   * Creates a new {@code ConfigWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param configService the Config Service

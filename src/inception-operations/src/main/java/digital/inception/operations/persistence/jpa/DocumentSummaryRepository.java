@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.DocumentSummary;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>DocumentSummaryRepository</b> interface declares the persistence for the
- * <b>DocumentSummary</b> domain type.
+ * The {@code DocumentSummaryRepository} interface declares the persistence for the {@code
+ * DocumentSummary} domain type.
  *
  * @author Marcus Portmann
  */

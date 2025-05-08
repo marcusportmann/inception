@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>DuplicateInteractionAttachmentException</b> exception is thrown to indicate an error
+ * The {@code DuplicateInteractionAttachmentException} exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate interaction attachment, i.e. an
  * interaction attachment with the specified ID already exists.
  *
@@ -47,7 +47,7 @@ public class DuplicateInteractionAttachmentException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateInteractionAttachmentException</b>.
+   * Constructs a new {@code DuplicateInteractionAttachmentException}.
    *
    * @param interactionAttachmentId the ID for the interaction attachment
    */

@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>GroupMemberType</b> enumeration defines the possible group member types.
+ * The {@code GroupMemberType} enumeration defines the possible group member types.
  *
  * @author Marcus Portmann
  */

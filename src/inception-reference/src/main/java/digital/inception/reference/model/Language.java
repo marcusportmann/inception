@@ -37,7 +37,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>Language</b> class holds the information for a language.
+ * The {@code Language} class holds the information for a language.
  *
  * <p>See: https://en.wikipedia.org/wiki/List_of_official_languages_by_country_and_territory
  *
@@ -141,14 +141,14 @@ public class Language implements Serializable {
   @Column(name = "sort_index")
   private Integer sortIndex;
 
-  /** Constructs a new <b>Language</b>. */
+  /** Creates a new {@code Language} instance. */
   public Language() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -25,8 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidDocument</b> annotation implements the custom constraint annotation used to apply the
- * document validation.
+ * The {@code ValidDocument} annotation implements the custom constraint annotation used to apply
+ * the document validation.
  *
  * @author Marcus Portmann
  */

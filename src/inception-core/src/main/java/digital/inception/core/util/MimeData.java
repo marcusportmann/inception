@@ -24,7 +24,7 @@ import java.util.Base64;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>MimeData</b> class holds binary data along with the Multipurpose Internet Mail Extensions
+ * The {@code MimeData} class holds binary data along with the Multipurpose Internet Mail Extensions
  * (MIME) type for the data.
  *
  * @author Marcus Portmann
@@ -43,11 +43,11 @@ public final class MimeData implements java.io.Serializable {
   /** The MIME type for the data. */
   private MimeType mimeType;
 
-  /** Constructs a new <b>MimeData</b>. */
+  /** Creates a new {@code MimeData} instance. */
   public MimeData() {}
 
   /**
-   * Constructs a new <b>MimeData</b>.
+   * Creates a new {@code MimeData} instance.
    *
    * @param mimeType the MIME type for the data
    * @param data the data
@@ -66,7 +66,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Constructs a new <b>MimeData</b>.
+   * Creates a new {@code MimeData} instance.
    *
    * @param mimeType the MIME type for the data
    * @param data the data
@@ -77,7 +77,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Constructs a new <b>MimeData</b>.
+   * Creates a new {@code MimeData} instance.
    *
    * @param data the data
    */
@@ -138,7 +138,7 @@ public final class MimeData implements java.io.Serializable {
    * the data, if present.
    *
    * @return the filename for the data extracted from the filename parameter on the MIME type for
-   *     the data, if present, otherwise <b>null</b>
+   *     the data, if present, otherwise {@code null}
    */
   public String getFileName() {
     return mimeType.getParameter("filename");
@@ -176,7 +176,7 @@ public final class MimeData implements java.io.Serializable {
    * for the data, if present.
    *
    * @return the name for the data extracted from the name or filename parameter on the MIME type
-   *     for the data, if present, otherwise <b>null</b>
+   *     for the data, if present, otherwise {@code null}
    */
   public String getName() {
     String name = mimeType.getParameter("name");
@@ -198,9 +198,9 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Is the data <b>null</b> or zero bytes.
+   * Is the data {@code null} or zero bytes.
    *
-   * @return <b>true</b> if the data is <b>null</b> or zero bytes or <b>false</b> otherwise
+   * @return {@code true} if the data is {@code null} or zero bytes or {@code false} otherwise
    */
   public boolean isEmpty() {
     return ((data == null) || (data.length == 0));
@@ -210,7 +210,7 @@ public final class MimeData implements java.io.Serializable {
    * Check whether the data has the specified MIME type.
    *
    * @param mimeTypeToCheck the MIME type to check
-   * @return <b>true</b> if the data has the specified MIME type or <b>false</b> otherwise
+   * @return {@code true} if the data has the specified MIME type or {@code false} otherwise
    */
   public boolean isMimeType(String mimeTypeToCheck) {
     try {

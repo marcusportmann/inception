@@ -19,7 +19,7 @@ package digital.inception.party.generator;
 import java.util.Locale;
 
 /**
- * The <b>Generator</b> class that supports the generation of random party data.
+ * The {@code Generator} class that supports the generation of random party data.
  *
  * @author Marcus Portmann
  */
@@ -28,13 +28,13 @@ public class Generator {
   /** The locale to use when generating random party data. */
   private final Locale locale;
 
-  /** Constructs a new <b>Generator</b>. */
+  /** Creates a new {@code Generator} instance. */
   public Generator() {
     this.locale = Locale.forLanguageTag("en-US");
   }
 
   /**
-   * Constructs a new <b>Generator</b>.
+   * Creates a new {@code Generator} instance.
    *
    * @param locale the locale
    */

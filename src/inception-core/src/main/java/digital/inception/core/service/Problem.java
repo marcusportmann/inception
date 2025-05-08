@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>Problem</b> annotation is applied to an exception thrown by a service to specify how the
+ * The {@code Problem} annotation is applied to an exception thrown by a service to specify how the
  * exception should be returned as a RFC 7807 JSON Problem Details Object during an API invocation.
  *
  * @author Marcus Portmann

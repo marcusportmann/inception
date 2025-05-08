@@ -24,7 +24,7 @@ import org.flowable.common.engine.impl.EngineDeployer;
 import org.flowable.common.engine.impl.interceptor.EngineConfigurationConstants;
 
 /**
- * The <b>FormEngineConfigurator</b> class.
+ * The {@code FormEngineConfigurator} class.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +33,7 @@ public class FormEngineConfigurator implements EngineConfigurator {
 
   private FormEngineConfiguration formEngineConfiguration;
 
-  /** Constructs a new <b>FormEngineConfigurator</b>. */
+  /** Creates a new {@code FormEngineConfigurator} instance. */
   public FormEngineConfigurator() {}
 
   @Override

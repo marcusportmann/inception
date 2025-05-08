@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The <b>TaskType</b> class holds the information for a task type.
+ * The {@code TaskType} class holds the information for a task type.
  *
  * @author Marcus Portmann
  */
@@ -206,7 +206,7 @@ public class TaskType implements Serializable {
   private Integer retryDelay;
 
   /**
-   * Constructs a new <b>TaskType</b>.
+   * Creates a new {@code TaskType} instance.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -243,7 +243,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskType</b>.
+   * Creates a new {@code TaskType} instance.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -270,7 +270,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskType</b>.
+   * Creates a new {@code TaskType} instance.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -300,7 +300,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskType</b>.
+   * Creates a new {@code TaskType} instance.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -333,7 +333,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskType</b>.
+   * Creates a new {@code TaskType} instance.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -352,7 +352,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskType</b>.
+   * Creates a new {@code TaskType} instance.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -378,7 +378,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskType</b>.
+   * Creates a new {@code TaskType} instance.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -406,14 +406,14 @@ public class TaskType implements Serializable {
     this.enabled = true;
   }
 
-  /** Constructs a new <b>TaskType</b>. */
+  /** Creates a new {@code TaskType} instance. */
   public TaskType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -437,7 +437,7 @@ public class TaskType implements Serializable {
   /**
    * Returns whether to archive completed tasks of this type.
    *
-   * @return <b>true</b> if completed tasks of this type should be archived or <b>false</b>
+   * @return {@code true} if completed tasks of this type should be archived or {@code false}
    *     otherwise
    */
   public boolean getArchiveCompleted() {
@@ -447,7 +447,7 @@ public class TaskType implements Serializable {
   /**
    * Returns whether to archive failed tasks of this type.
    *
-   * @return <b>true</b> if failed tasks of this type should be archived or <b>false</b> otherwise
+   * @return {@code true} if failed tasks of this type should be archived or {@code false} otherwise
    */
   public boolean getArchiveFailed() {
     return archiveFailed;
@@ -465,7 +465,7 @@ public class TaskType implements Serializable {
   /**
    * Returns whether the task type is enabled.
    *
-   * @return <b>true</b> if the task type is enabled <b>false</b> otherwise
+   * @return {@code true} if the task type is enabled {@code false} otherwise
    */
   public boolean getEnabled() {
     return enabled;
@@ -559,7 +559,7 @@ public class TaskType implements Serializable {
    * Returns whether the event type is enabled for the task type.
    *
    * @param eventType the task event type
-   * @return <b>true</b> if the event type is enabled for the task type or <b>false</b> otherwise
+   * @return {@code true} if the event type is enabled for the task type or {@code false} otherwise
    */
   public boolean isEventTypeEnabled(TaskEventType eventType) {
     if (eventTypes != null) {
@@ -573,8 +573,8 @@ public class TaskType implements Serializable {
    * Returns whether the event type is enabled for the task type with task data.
    *
    * @param eventType the task event type
-   * @return <b>true</b> if the event type is enabled for the task type with task data or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the event type is enabled for the task type with task data or {@code
+   *     false} otherwise
    */
   public boolean isEventTypeEnabledWithTaskData(TaskEventType eventType) {
     if (eventTypesWithTaskData != null) {
@@ -587,8 +587,8 @@ public class TaskType implements Serializable {
   /**
    * Set whether to archive completed tasks of this type.
    *
-   * @param archiveCompleted <b>true</b> if completed tasks of this type should be archived or
-   *     <b>false</b> otherwise
+   * @param archiveCompleted {@code true} if completed tasks of this type should be archived or
+   *     {@code false} otherwise
    */
   public void setArchiveCompleted(boolean archiveCompleted) {
     this.archiveCompleted = archiveCompleted;
@@ -597,8 +597,8 @@ public class TaskType implements Serializable {
   /**
    * Set whether to archive failed tasks of this type.
    *
-   * @param archiveFailed <b>true</b> if failed tasks of this type should be archived or
-   *     <b>false</b> otherwise
+   * @param archiveFailed {@code true} if failed tasks of this type should be archived or {@code
+   *     false} otherwise
    */
   public void setArchiveFailed(boolean archiveFailed) {
     this.archiveFailed = archiveFailed;
@@ -616,7 +616,7 @@ public class TaskType implements Serializable {
   /**
    * Set whether the task type is enabled.
    *
-   * @param enabled <b>true</b> if the task type is enabled or <b>false</b> otherwise
+   * @param enabled {@code true} if the task type is enabled or {@code false} otherwise
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

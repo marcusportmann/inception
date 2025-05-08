@@ -22,7 +22,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>BusinessException</b> exception is thrown to indicate a business error when invoking a
+ * The {@code BusinessException} exception is thrown to indicate a business error when invoking a
  * service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -43,9 +43,9 @@ public class BusinessException extends ServiceException {
   private final String code;
 
   /**
-   * Constructs a new <b>BusinessException</b> with the specified message.
+   * Creates a new {@code BusinessException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public BusinessException(String message) {
     super(message);
@@ -53,10 +53,10 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>BusinessException</b> with the specified code and message.
+   * Creates a new {@code BusinessException} instance with the specified code and message.
    *
    * @param code The error code identifying the business error.
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public BusinessException(String code, String message) {
     super(message);
@@ -64,12 +64,12 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>BusinessException</b> with the specified code, message and cause.
+   * Creates a new {@code BusinessException} instance with the specified code, message and cause.
    *
    * @param code The error code identifying the business error.
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public BusinessException(String code, String message, Throwable cause) {
     super(message, cause);
@@ -77,11 +77,11 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>BusinessException</b> with the specified code, message and cause.
+   * Creates a new {@code BusinessException} instance with the specified code, message and cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public BusinessException(String message, Throwable cause) {
     super(message, cause);

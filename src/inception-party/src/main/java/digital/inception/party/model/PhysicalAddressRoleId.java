@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>PhysicalAddressRoleId</b> class implements the ID class for the <b>
- * PhysicalAddressRole</b> class.
+ * The {@code PhysicalAddressRoleId} class implements the ID class for the {@code
+ * PhysicalAddressRole} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class PhysicalAddressRoleId implements Serializable {
   /** The Unicode locale identifier for the physical address role. */
   private String localeId;
 
-  /** Constructs a new <b>PhysicalAddressRoleId</b>. */
+  /** Creates a new {@code PhysicalAddressRoleId} instance. */
   public PhysicalAddressRoleId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

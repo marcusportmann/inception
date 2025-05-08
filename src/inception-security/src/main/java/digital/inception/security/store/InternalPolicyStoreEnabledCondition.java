@@ -22,14 +22,14 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.lang.NonNull;
 
 /**
- * The <b>InternalPolicyStoreEnabledCondition</b> class implements the condition that must be
+ * The {@code InternalPolicyStoreEnabledCondition} class implements the condition that must be
  * matched to enable the internal policy store.
  *
  * @author Marcus Portmann
  */
 public class InternalPolicyStoreEnabledCondition implements Condition {
 
-  /** Constructs a new <b>InternalPolicyStoreEnabledCondition</b>. */
+  /** Creates a new {@code InternalPolicyStoreEnabledCondition} instance. */
   public InternalPolicyStoreEnabledCondition() {}
 
   @Override

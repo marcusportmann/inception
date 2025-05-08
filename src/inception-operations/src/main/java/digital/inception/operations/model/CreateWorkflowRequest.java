@@ -32,19 +32,15 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * The <b>CreateWorkflowRequest</b> class holds the information for a request to create a workflow.
- *
- * @author Marcus Portmann
- */
+/** The {@code CreateWorkflowRequest} class represents a request to create a workflow. */
 @Schema(description = "A request to create a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"tenantId", "parentId", "definitionId", "externalReference", "data"})
+@JsonPropertyOrder({"parentId", "definitionId", "externalReference", "data"})
 @XmlRootElement(name = "CreateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "CreateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"tenantId", "parentId", "definitionId", "externalReference", "data"})
+    propOrder = {"parentId", "definitionId", "externalReference", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidCreateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -69,8 +65,8 @@ public class CreateWorkflowRequest implements Serializable {
   @Size(min = 1, max = 50)
   private String definitionId;
 
-  /** The external reference for the workflow. */
-  @Schema(description = "The external reference for the workflow")
+  /** The external reference used to link this workflow to an external system. */
+  @Schema(description = "The external reference used to link this workflow to an external system")
   @JsonProperty
   @XmlElement(name = "ExternalReference")
   @Size(max = 100)
@@ -91,11 +87,11 @@ public class CreateWorkflowRequest implements Serializable {
   @NotNull
   private UUID tenantId;
 
-  /** Constructs a new <b>CreateWorkflowRequest</b>. */
+  /** Creates a new {@code CreateWorkflowRequest} instance. */
   public CreateWorkflowRequest() {}
 
   /**
-   * Constructs a new <b>CreateWorkflowRequest</b>.
+   * Creates a new {@code CreateWorkflowRequest} instance.
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param data the data for the workflow
@@ -106,10 +102,11 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Constructs a new <b>CreateWorkflowRequest</b>.
+   * Creates a new {@code CreateWorkflowRequest} instance.
    *
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param parentId the unique identifier for the parent workflow
+   * @param definitionId the unique identifier for the workflow definition the workflow is
+   *     associated with
    * @param data the data for the workflow
    */
   public CreateWorkflowRequest(UUID parentId, String definitionId, String data) {
@@ -128,36 +125,36 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the ID for the workflow definition the workflow is associated with.
+   * Returns the unique identifier for the workflow definition the workflow is associated with.
    *
-   * @return the ID for the workflow definition the workflow is associated with
+   * @return the unique identifier for the workflow definition the workflow is associated with
    */
   public String getDefinitionId() {
     return definitionId;
   }
 
   /**
-   * Returns the external reference for the workflow.
+   * Returns the external reference used to link this workflow to an external system.
    *
-   * @return the external reference for the workflow
+   * @return the external reference used to link this workflow to an external system
    */
   public String getExternalReference() {
     return externalReference;
   }
 
   /**
-   * Returns the ID for the parent workflow.
+   * Returns the unique identifier for the parent workflow.
    *
-   * @return the ID for the parent workflow
+   * @return the unique identifier for the parent workflow
    */
   public UUID getParentId() {
     return parentId;
   }
 
   /**
-   * Returns the ID for the tenant the workflow is associated with.
+   * Returns the unique identifier for the tenant the workflow is associated with.
    *
-   * @return the ID for the tenant the workflow is associated with
+   * @return the unique identifier for the tenant the workflow is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -173,38 +170,40 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow definition the workflow is associated with.
+   * Set the unique identifier for the workflow definition the workflow is associated with.
    *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param definitionId the unique identifier for the workflow definition the workflow is
+   *     associated with
    */
   public void setDefinitionId(String definitionId) {
     this.definitionId = definitionId;
   }
 
   /**
-   * Set the external reference for the workflow.
+   * Set the external reference used to link this workflow to an external system.
    *
-   * @param externalReference the external reference for the workflow
+   * @param externalReference the external reference used to link this workflow to an external
+   *     system
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;
   }
 
   /**
-   * Set the ID for the parent workflow.
+   * Set the unique identifier for the parent workflow.
    *
-   * @param parentId the ID for the parent workflow
+   * @param parentId the unique identifier for the parent workflow
    */
   public void setParentId(UUID parentId) {
     this.parentId = parentId;
   }
 
   /**
-   * Set the ID for the tenant the workflow is associated with.
+   * Set the unique identifier for the tenant the workflow is associated with.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the unique identifier for the tenant the workflow is associated with
    */
-  public void setTenantId(@NotNull UUID tenantId) {
+  public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
   }
 }

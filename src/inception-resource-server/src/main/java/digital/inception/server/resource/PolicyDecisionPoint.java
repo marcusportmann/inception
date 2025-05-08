@@ -19,7 +19,7 @@ package digital.inception.server.resource;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * The <b>PolicyDecisionPoint</b> interface defines the interface that must be implemented by all
+ * The {@code PolicyDecisionPoint} interface defines the interface that must be implemented by all
  * policy decision points.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ public interface PolicyDecisionPoint {
    *
    * @param authenticationObject the authentication object
    * @param methodInvocation the method invocation
-   * @return <b>true</b> if the policy decision point authorization was successful or <b>false</b>
+   * @return {@code true} if the policy decision point authorization was successful or {@code false}
    */
   boolean authorize(Object authenticationObject, MethodInvocation methodInvocation);
 }

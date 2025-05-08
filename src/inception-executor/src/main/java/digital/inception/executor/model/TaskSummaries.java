@@ -33,7 +33,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>TaskSummaries</b> class holds the results of a request to retrieve a list of task
+ * The {@code TaskSummaries} class holds the results of a request to retrieve a list of task
  * summaries.
  *
  * @author Marcus Portmann
@@ -130,11 +130,11 @@ public class TaskSummaries implements Serializable {
   @Size(min = 1, max = 50)
   private String type;
 
-  /** Constructs a new <b>TaskSummaries</b>. */
+  /** Creates a new {@code TaskSummaries} instance. */
   public TaskSummaries() {}
 
   /**
-   * Constructs a new <b>TaskSummaries</b>.
+   * Creates a new {@code TaskSummaries} instance.
    *
    * @param taskSummaries the task summaries
    * @param total the total number of task summaries

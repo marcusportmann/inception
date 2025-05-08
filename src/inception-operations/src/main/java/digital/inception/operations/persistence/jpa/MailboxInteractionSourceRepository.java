@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.MailboxInteractionSource;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>MailboxInteractionSourceRepository</b> interface declares the persistence for the
- * <b>MailboxInteractionSource</b> domain type.
+ * The {@code MailboxInteractionSourceRepository} interface declares the persistence for the {@code
+ * MailboxInteractionSource} domain type.
  *
  * @author Marcus Portmann
  */

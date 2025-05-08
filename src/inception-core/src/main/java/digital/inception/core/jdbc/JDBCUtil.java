@@ -35,7 +35,7 @@ import javax.sql.DataSource;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>JDBCUtil</b> class provides JDBCUtil utility functions.
+ * The {@code JDBCUtil} class provides JDBCUtil utility functions.
  *
  * @author Marcus Portmann
  */
@@ -193,8 +193,8 @@ public class JDBCUtil {
    * Is the database associated with the specified data source an in-memory H2 database.
    *
    * @param dataSource the data source
-   * @return <b>true</b> if the database associated with the specified data source is an in-memory
-   *     H2 database or <b>false</b> otherwise
+   * @return {@code true} if the database associated with the specified data source is an in-memory
+   *     H2 database or {@code false} otherwise
    * @throws SQLException if the check for an in-memory H2 database failed
    */
   public static boolean isInMemoryH2Database(DataSource dataSource) throws SQLException {
@@ -332,9 +332,9 @@ public class JDBCUtil {
    * connection.
    *
    * @param connection the database connection to use
-   * @param catalog the catalog name or <b>null</b> if a catalog should not be used
+   * @param catalog the catalog name or {@code null} if a catalog should not be used
    * @param schema the schema name
-   * @return <b>true</b> if the schema exists or <b>false</b> otherwise
+   * @return {@code true} if the schema exists or {@code false} otherwise
    * @throws SQLException if the schema check failed
    */
   @SuppressWarnings("resource")
@@ -369,9 +369,9 @@ public class JDBCUtil {
    * data source.
    *
    * @param dataSource the data source to use
-   * @param catalog the catalog name or <b>null</b> if a catalog should not be used
+   * @param catalog the catalog name or {@code null} if a catalog should not be used
    * @param schema the schema name
-   * @return <b>true</b> if the schema exists or <b>false</b> otherwise
+   * @return {@code true} if the schema exists or {@code false} otherwise
    * @throws SQLException if the check for the existing schema failed
    */
   @SuppressWarnings("resource")
@@ -407,10 +407,10 @@ public class JDBCUtil {
    * database referenced by the data source.
    *
    * @param connection the database connection to use
-   * @param catalog the catalog name or <b>null</b> if a catalog should not be used
-   * @param schema the schema name or <b>null</b> if a schema should not be used
+   * @param catalog the catalog name or {@code null} if a catalog should not be used
+   * @param schema the schema name or {@code null} if a schema should not be used
    * @param table the name of the table
-   * @return <b>true</b> if the table exists or <b>false</b> otherwise
+   * @return {@code true} if the table exists or {@code false} otherwise
    * @throws SQLException if the check for the existing table failed
    */
   @SuppressWarnings("resource")
@@ -446,10 +446,10 @@ public class JDBCUtil {
    * database referenced by the data source.
    *
    * @param dataSource the data source to use
-   * @param catalog the catalog name or <b>null</b> if a catalog should not be used
-   * @param schema the schema name or <b>null</b> if a schema should not be used
+   * @param catalog the catalog name or {@code null} if a catalog should not be used
+   * @param schema the schema name or {@code null} if a schema should not be used
    * @param table the name of the table
-   * @return <b>true</b> if the table exists or <b>false</b> otherwise
+   * @return {@code true} if the table exists or {@code false} otherwise
    * @throws SQLException if the check for the existing table failed
    */
   @SuppressWarnings("resource")

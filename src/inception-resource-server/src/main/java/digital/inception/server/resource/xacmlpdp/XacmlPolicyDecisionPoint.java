@@ -65,7 +65,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * The <b>XacmlPolicyDecisionPoint</b> class provides an implementation of a policy decision point
+ * The {@code XacmlPolicyDecisionPoint} class provides an implementation of a policy decision point
  * that leverages the AuthzForce PDP engine to apply decisions based on XACML-based policy sets and
  * policies, which are loaded from the classpath and optionally from a RESTful endpoint.
  *
@@ -138,7 +138,7 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
   private PdpEngine pdpEngine;
 
   /**
-   * Constructs a new <b>XacmlPolicyDecisionPoint</b>.
+   * Creates a new {@code XacmlPolicyDecisionPoint} instance.
    *
    * @param applicationContext the Spring application context
    * @param classpathPoliciesEnabled should policy sets and policies be loaded from the classpath

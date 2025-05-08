@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>IndustryClassificationCategoryId</b> class implements the ID class for the
- * <b>IndustryClassificationCategory</b> class.
+ * The {@code IndustryClassificationCategoryId} class implements the ID class for the {@code
+ * IndustryClassificationCategory} class.
  *
  * @author Marcus Portmann
  */
@@ -40,14 +40,14 @@ public class IndustryClassificationCategoryId implements Serializable {
   /** The code for the industry classification system for the industry classification category. */
   private String system;
 
-  /** Constructs a new <b>IndustryClassificationCategoryId</b>. */
+  /** Creates a new {@code IndustryClassificationCategoryId} instance. */
   public IndustryClassificationCategoryId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

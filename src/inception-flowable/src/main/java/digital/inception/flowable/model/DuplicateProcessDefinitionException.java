@@ -24,7 +24,7 @@
 // import java.io.Serial;
 //
 /// **
-// * The <b>DuplicateProcessDefinitionException</b> exception is thrown to indicate an error
+// * The {@code DuplicateProcessDefinitionException} exception is thrown to indicate an error
 // condition
 // * as a result of an attempt to create a duplicate process definition, i.e. a process definition
 // * with the specified ID already exists.
@@ -48,7 +48,7 @@
 //  @Serial private static final long serialVersionUID = 1000000;
 //
 //  /**
-//   * Constructs a new <b>DuplicateProcessDefinitionException</b>.
+//   * Creates a new {@code DuplicateProcessDefinitionException} instance.
 //   *
 //   * @param processDefinitionId the ID for the process definition
 //   */

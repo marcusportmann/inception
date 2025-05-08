@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>ConfigApiControllerImpl</b> class.
+ * The {@code ConfigApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +43,7 @@ public class ConfigApiControllerImpl extends SecureApiController implements Conf
   private final ConfigService configService;
 
   /**
-   * Constructs a new <b>ConfigApiControllerImpl</b>.
+   * Creates a new {@code ConfigApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param configService the Config Service

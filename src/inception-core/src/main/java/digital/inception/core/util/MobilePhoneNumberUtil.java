@@ -19,8 +19,8 @@ package digital.inception.core.util;
 import java.util.regex.Pattern;
 
 /**
- * The <b>MobilePhoneNumberUtil</b> class is a utility class which provides methods for working with
- * mobile phone numbers and MSISDNs.
+ * The {@code MobilePhoneNumberUtil} class is a utility class which provides methods for working
+ * with mobile phone numbers and MSISDNs.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +41,7 @@ public final class MobilePhoneNumberUtil {
    * Check whether the specified mobile number is valid.
    *
    * @param msisdn the mobile number
-   * @return <b>true</b> if the mobile number is valid or <b>false</b> otherwise
+   * @return {@code true} if the mobile number is valid or {@code false} otherwise
    */
   public static boolean isValidMSISDN(String msisdn) {
     java.util.regex.Matcher matcher = msisdnPattern.matcher(msisdn);

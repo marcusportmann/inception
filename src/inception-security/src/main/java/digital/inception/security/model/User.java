@@ -47,7 +47,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>User</b> class holds the information for a user.
+ * The {@code User} class holds the information for a user.
  *
  * @author Marcus Portmann
  */
@@ -233,14 +233,14 @@ public class User implements Serializable {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Constructs a new <b>User</b>. */
+  /** Creates a new {@code User} instance. */
   public User() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -387,7 +387,7 @@ public class User implements Serializable {
   /**
    * Has the password for the user expired?
    *
-   * @return <b>true</b> if the password for the user has expired or <b>false</b> otherwise
+   * @return {@code true} if the password for the user has expired or {@code false} otherwise
    */
   public boolean hasPasswordExpired() {
     if (passwordExpiry != null) {
@@ -410,7 +410,7 @@ public class User implements Serializable {
   /**
    * Is the user active?
    *
-   * @return <b>true</b> if the user is active or <b>false</b> otherwise
+   * @return {@code true} if the user is active or {@code false} otherwise
    */
   @JsonIgnore
   @XmlTransient
@@ -421,7 +421,7 @@ public class User implements Serializable {
   /**
    * Is the user expired?
    *
-   * @return <b>true</b> if the user is expired or <b>false</b> otherwise
+   * @return {@code true} if the user is expired or {@code false} otherwise
    */
   @JsonIgnore
   @XmlTransient
@@ -432,7 +432,7 @@ public class User implements Serializable {
   /**
    * Is the user locked?
    *
-   * @return <b>true</b> if the user is locked or <b>false</b> otherwise
+   * @return {@code true} if the user is locked or {@code false} otherwise
    */
   @JsonIgnore
   @XmlTransient

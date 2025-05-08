@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>ApplicationExcludedAutoConfiguration</b> class disables specific Spring Boot
+ * The {@code ApplicationExcludedAutoConfiguration} class disables specific Spring Boot
  * auto-configuration.
  *
  * @author Marcus Portmann
@@ -35,6 +35,6 @@ import org.springframework.context.annotation.Configuration;
     })
 public class ApplicationExcludedAutoConfiguration {
 
-  /** Constructs a new <b>ApplicationExcludedAutoConfiguration</b>. */
+  /** Creates a new {@code ApplicationExcludedAutoConfiguration} instance. */
   public ApplicationExcludedAutoConfiguration() {}
 }

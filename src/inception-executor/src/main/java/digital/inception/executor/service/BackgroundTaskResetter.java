@@ -23,7 +23,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>BackgroundTaskResetter</b> class implements the Background Task Resetter, which resets
+ * The {@code BackgroundTaskResetter} class implements the Background Task Resetter, which resets
  * "hung" tasks that have been locked and executing longer than a global or task-type-specific
  * timeout.
  *
@@ -40,7 +40,7 @@ public class BackgroundTaskResetter {
   private final ExecutorService executorService;
 
   /**
-   * Constructs a new <b>BackgroundTaskResetter</b>.
+   * Creates a new {@code BackgroundTaskResetter} instance.
    *
    * @param executorService the Executor Service
    */

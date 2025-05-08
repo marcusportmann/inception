@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>CodesApiControllerImpl</b> class.
+ * The {@code CodesApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +49,7 @@ public class CodesApiControllerImpl extends SecureApiController implements Codes
   private final CodesService codesService;
 
   /**
-   * Constructs a new <b>CodesApiControllerImpl</b>.
+   * Creates a new {@code CodesApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param codesService the Codes Service

@@ -25,7 +25,7 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <b>ValidUpdateWorkflowRequestValidator</b> class implements the custom constraint validator
+ * The {@code ValidUpdateWorkflowRequestValidator} class implements the custom constraint validator
  * for validating a request to update a workflow.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public class ValidUpdateWorkflowRequestValidator
   private final WorkflowService workflowService;
 
   /**
-   * Constructs a new <b>ValidUpdateWorkflowRequestValidator</b>.
+   * Constructs a new {@code ValidUpdateWorkflowRequestValidator}.
    *
    * @param workflowService the Workflow Service
    */
@@ -47,7 +47,7 @@ public class ValidUpdateWorkflowRequestValidator
     this.workflowService = workflowService;
   }
 
-  /** Constructs a new <b>ValidUpdateWorkflowRequestValidator</b>. */
+  /** Constructs a new {@code ValidUpdateWorkflowRequestValidator}. */
   public ValidUpdateWorkflowRequestValidator() {
     this.workflowService = null;
   }

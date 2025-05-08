@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ErrorReportSortBy</b> enumeration defines the possible methods used to sort a list of
+ * The {@code ErrorReportSortBy} enumeration defines the possible methods used to sort a list of
  * error reports.
  *
  * @author Marcus Portmann

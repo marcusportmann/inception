@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>RolePurposeId</b> class implements the ID class for the <b>RolePurpose</b> class.
+ * The {@code RolePurposeId} class implements the ID class for The {@code RolePurpose} class.
  *
  * @author Marcus Portmann
  */
@@ -36,14 +36,14 @@ public class RolePurposeId implements Serializable {
   /** The Unicode locale identifier for the role purpose. */
   private String localeId;
 
-  /** Constructs a new <b>RolePurposeId</b>. */
+  /** Creates a new {@code RolePurposeId} instance. */
   public RolePurposeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

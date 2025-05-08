@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>ErrorApiConfiguration</b> class provides the Spring configuration for the Error API
+ * The {@code ErrorApiConfiguration} class provides the Spring configuration for the Error API
  * module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ErrorApiConfiguration {
 
-  /** Constructs a new <b>ErrorApiConfiguration</b>. */
+  /** Creates a new {@code ErrorApiConfiguration} instance. */
   public ErrorApiConfiguration() {}
 
   /**

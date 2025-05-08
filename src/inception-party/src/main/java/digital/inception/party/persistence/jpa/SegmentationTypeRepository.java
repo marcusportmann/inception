@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>SegmentationTypeRepository</b> interface declares the persistence for the <b>
- * SegmentationType</b> domain type.
+ * The {@code SegmentationTypeRepository} interface declares the persistence for the {@code
+ * SegmentationType} domain type.
  *
  * @author Marcus Portmann
  */

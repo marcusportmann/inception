@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>UserDetailsService</b> class provides the User Details Service implementation that
+ * The {@code UserDetailsService} class provides the User Details Service implementation that
  * provides the details for users.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public class UserDetailsService
   private final SecurityService securityService;
 
   /**
-   * Constructs a new <b>UserDetailsService</b>.
+   * Creates a new {@code UserDetailsService} instance.
    *
    * @param securityService the Security Service
    */
@@ -54,7 +54,7 @@ public class UserDetailsService
    * that is of a different case than what was actually requested.
    *
    * @param username the username for the user whose data is required.
-   * @return a fully populated user record (never <b>null</b>)
+   * @return a fully populated user record (never {@code null})
    */
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

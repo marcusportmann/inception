@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>EmploymentStatusId</b> class implements the ID class for the <b>EmploymentStatus</b>
+ * The {@code EmploymentStatusId} class implements the ID class for the <b>EmploymentStatus</b>
  * class.
  *
  * @author Marcus Portmann
@@ -37,14 +37,14 @@ public class EmploymentStatusId implements Serializable {
   /** The Unicode locale identifier for the employment status. */
   private String localeId;
 
-  /** Constructs a new <b>EmploymentStatusId</b>. */
+  /** Creates a new {@code EmploymentStatusId} instance. */
   public EmploymentStatusId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

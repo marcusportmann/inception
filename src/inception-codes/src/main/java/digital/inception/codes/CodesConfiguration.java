@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>CodesConfiguration</b> class provides the Spring configuration for the Codes module.
+ * The {@code CodesConfiguration} class provides the Spring configuration for the Codes module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "codesEntityManagerFactory")
 public class CodesConfiguration {
 
-  /** Constructs a new <b>CodesConfiguration</b>. */
+  /** Creates a new {@code CodesConfiguration} instance. */
   public CodesConfiguration() {}
 
   /**

@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>WorkflowDefinitionNotFoundException</b> exception is thrown to indicate an error condition
- * as a result of a workflow definition that could not be found.
+ * The {@code WorkflowDefinitionNotFoundException} exception is thrown to indicate an error
+ * condition as a result of a workflow definition that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class WorkflowDefinitionNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <b>WorkflowDefinitionNotFoundException</b>.
+   * w Constructs a new {@code WorkflowDefinitionNotFoundException}.
    *
    * @param workflowDefinitionId the ID for the workflow definition
    */

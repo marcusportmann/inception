@@ -23,7 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>TestRetryableTaskData</b> class holds the data for the test retryable task.
+ * The {@code TestRetryableTaskData} class holds the data for the test retryable task.
  *
  * @author Marcus Portmann
  */
@@ -38,11 +38,11 @@ public class TestRetryableTaskData implements Serializable {
   @JsonProperty(required = true)
   private String message;
 
-  /** Constructs a new <b>TestRetryableTaskData</b>. */
+  /** Creates a new {@code TestRetryableTaskData} instance. */
   public TestRetryableTaskData() {}
 
   /**
-   * Constructs a new <b>TestRetryableTaskData</b>.
+   * Creates a new {@code TestRetryableTaskData} instance.
    *
    * @param message the message
    */

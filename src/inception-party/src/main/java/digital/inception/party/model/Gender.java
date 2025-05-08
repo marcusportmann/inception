@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Gender</b> class holds the information for a gender.
+ * The {@code Gender} class holds the information for a gender.
  *
  * @author Marcus Portmann
  */
@@ -117,14 +117,14 @@ public class Gender implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>Gender</b>. */
+  /** Creates a new {@code Gender} instance. */
   public Gender() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

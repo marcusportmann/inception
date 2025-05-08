@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>EmploymentType</b> class holds the information for an employment type.
+ * The {@code EmploymentType} class holds the information for an employment type.
  *
  * @author Marcus Portmann
  */
@@ -150,14 +150,14 @@ public class EmploymentType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>EmploymentType</b>. */
+  /** Creates a new {@code EmploymentType} instance. */
   public EmploymentType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

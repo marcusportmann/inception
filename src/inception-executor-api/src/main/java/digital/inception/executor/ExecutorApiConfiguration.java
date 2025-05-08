@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>ExecutorApiConfiguration</b> class provides the Spring configuration for the Executor API
+ * The {@code ExecutorApiConfiguration} class provides the Spring configuration for the Executor API
  * module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExecutorApiConfiguration {
 
-  /** Constructs a new <b>ExecutorApiConfiguration</b>. */
+  /** Creates a new {@code ExecutorApiConfiguration} instance. */
   public ExecutorApiConfiguration() {}
 
   /**

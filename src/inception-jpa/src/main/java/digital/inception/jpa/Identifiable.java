@@ -19,7 +19,7 @@ package digital.inception.jpa;
 import java.io.Serializable;
 
 /**
- * The <b>Identifiable</b> interface defines the interface that must be implemented by JPA entity
+ * The {@code Identifiable} interface defines the interface that must be implemented by JPA entity
  * classes that have an ID that can be explicitly specified in place of an automatically generated
  * value for an identity column in the database.
  *

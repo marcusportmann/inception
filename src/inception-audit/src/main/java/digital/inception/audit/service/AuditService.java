@@ -17,7 +17,7 @@
 package digital.inception.audit.service;
 
 /**
- * The <b>AuditService</b> interface defines the functionality provided by an Audit Service
+ * The {@code AuditService} interface defines the functionality provided by an Audit Service
  * implementation.
  *
  * @author Marcus Portmann

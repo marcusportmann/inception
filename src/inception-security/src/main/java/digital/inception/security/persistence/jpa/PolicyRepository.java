@@ -24,7 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>PolicyRepository</b> interface declares the persistence for the <b>Policy</b> domain type.
+ * The {@code PolicyRepository} interface declares the persistence for the {@code Policy} domain
+ * type.
  *
  * @author Marcus Portmann
  */
@@ -34,7 +35,7 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
    * Check whether the policy with the specified name exists.
    *
    * @param name the name of the policy
-   * @return <b>true</b> if a policy with the specified name exists or <b>false</b> otherwise
+   * @return {@code true} if a policy with the specified name exists or {@code false} otherwise
    */
   boolean existsByNameIgnoreCase(String name);
 

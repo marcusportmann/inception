@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
+import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
 import digital.inception.operations.model.WorkflowStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>WorkflowStatusAttributeConverter</b> class implements the custom JPA attribute converter
- * for the <b>WorkflowStatus</b> enumeration.
+ * The {@code WorkflowStatusAttributeConverter} class implements the custom JPA attribute converter
+ * for the {@code WorkflowStatus} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -29,7 +30,7 @@ import jakarta.persistence.Converter;
 public class WorkflowStatusAttributeConverter
     extends AbstractCodeEnumAttributeConverter<WorkflowStatus> {
 
-  /** Constructs a new <b>WorkflowStatusAttributeConverter</b>. */
+  /** Creates a new {@code WorkflowStatusAttributeConverter} instance. */
   public WorkflowStatusAttributeConverter() {
     super(WorkflowStatus.class);
   }

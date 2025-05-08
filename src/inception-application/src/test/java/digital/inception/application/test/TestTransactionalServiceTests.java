@@ -37,8 +37,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
- * The <b>TestTransactionalServiceTests</b> class contains the JUnit tests for the
- * <b>TestTransactionalService</b> class.
+ * The {@code TestTransactionalServiceTests} class contains the JUnit tests for the {@code
+ * TestTransactionalService} class.
  *
  * @author Marcus Portmann
  */

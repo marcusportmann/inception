@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MandataryRoleId</b> class implements the ID class for the <b>MandataryRole</b> class.
+ * The {@code MandataryRoleId} class implements the ID class for The {@code MandataryRole} class.
  *
  * @author Marcus Portmann
  */
@@ -39,14 +39,14 @@ public class MandataryRoleId implements Serializable {
   /** The code for the mandate type the mandatary role is associated with. */
   private String mandateType;
 
-  /** Constructs a new <b>MandataryRoleId</b>. */
+  /** Creates a new {@code MandataryRoleId} instance. */
   public MandataryRoleId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

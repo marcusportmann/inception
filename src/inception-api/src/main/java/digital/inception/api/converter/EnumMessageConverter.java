@@ -36,7 +36,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>EnumMessageConverter</b> class.
+ * The {@code EnumMessageConverter} class.
  *
  * @author Marcus Portmann
  */
@@ -55,7 +55,7 @@ public class EnumMessageConverter extends AbstractHttpMessageConverter<Enum<?>> 
   private static final ConcurrentHashMap<Class<? extends Enum<?>>, Method> enumJsonValueMethods =
       new ConcurrentHashMap<>();
 
-  /** Constructs a new <b>EnumMessageConverter</b>. */
+  /** Creates a new {@code EnumMessageConverter} instance. */
   public EnumMessageConverter() {
     super(MediaType.TEXT_PLAIN);
   }

@@ -23,8 +23,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>RoleTypePreferenceTypeConstraintRepository</b> interface declares the persistence for the
- * <b> RoleTypePreferenceTypeConstraint</b> domain type.
+ * The {@code RoleTypePreferenceTypeConstraintRepository} interface declares the persistence for the
+ * {@code RoleTypePreferenceTypeConstraint} domain type.
  *
  * @author Marcus Portmann
  */

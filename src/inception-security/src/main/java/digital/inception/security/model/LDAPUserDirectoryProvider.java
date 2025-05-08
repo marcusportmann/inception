@@ -51,7 +51,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>LDAPUserDirectoryProvider</b> class provides the LDAP user directory provider
+ * The {@code LDAPUserDirectoryProvider} class provides the LDAP user directory provider
  * implementation.
  *
  * @author Marcus Portmann
@@ -138,7 +138,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
   private String groupDescriptionAttribute;
 
   /**
-   * Constructs a new <b>LDAPUserDirectoryProvider</b>.
+   * Creates a new {@code LDAPUserDirectoryProvider} instance.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory

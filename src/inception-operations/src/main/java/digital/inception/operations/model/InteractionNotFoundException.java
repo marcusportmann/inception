@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>InteractionNotFoundException</b> exception is thrown to indicate an error condition as a
+ * The {@code InteractionNotFoundException} exception is thrown to indicate an error condition as a
  * result of an interaction that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class InteractionNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <b>InteractionNotFoundException</b>.
+   * w Constructs a new {@code InteractionNotFoundException}.
    *
    * @param interactionId the ID for the interaction
    */

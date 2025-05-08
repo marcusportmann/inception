@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>SpringDocOpenApiConfig</b> class provides the customization configuration for the
+ * The {@code SpringDocOpenApiConfig} class provides the customization configuration for the
  * <b>springdoc-openapi</b> library.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringDocOpenApiConfig {
 
-  /** Constructs a new <b>SpringDocOpenApiConfig</b>. */
+  /** Creates a new {@code SpringDocOpenApiConfig} instance. */
   public SpringDocOpenApiConfig() {}
 
   /** Register the model converter. */

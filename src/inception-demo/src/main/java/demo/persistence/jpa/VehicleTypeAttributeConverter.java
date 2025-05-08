@@ -21,15 +21,15 @@ import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>VehicleTypeAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>VehicleType</b> enumeration.
+ * The {@code VehicleTypeAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code VehicleType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class VehicleTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<VehicleType> {
 
-  /** Constructs a new <b>VehicleTypeAttributeConverter</b>. */
+  /** Creates a new {@code VehicleTypeAttributeConverter} instance. */
   public VehicleTypeAttributeConverter() {
     super(VehicleType.class);
   }

@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>OrganizationRepository</b> interface declares the persistence for the <b>Organization</b>
+ * The {@code OrganizationRepository} interface declares the persistence for the <b>Organization</b>
  * domain type.
  *
  * @author Marcus Portmann
@@ -49,7 +49,7 @@ public interface OrganizationRepository
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the organization
-   * @return <b>true</b> if the organization exists or <b>false</b> otherwise
+   * @return {@code true} if the organization exists or {@code false} otherwise
    */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 

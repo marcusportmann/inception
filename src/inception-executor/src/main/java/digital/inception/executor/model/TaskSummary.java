@@ -41,7 +41,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>TaskSummary</b> class holds the information for a task summary.
+ * The {@code TaskSummary} class holds the information for a task summary.
  *
  * @author Marcus Portmann
  */
@@ -169,14 +169,14 @@ public class TaskSummary implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>TaskSummary</b>. */
+  /** Creates a new {@code TaskSummary} instance. */
   public TaskSummary() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

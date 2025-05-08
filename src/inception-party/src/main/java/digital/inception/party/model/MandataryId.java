@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>MandataryId</b> class implements the ID class for the <b>Mandatary</b> class.
+ * The {@code MandataryId} class implements the ID class for The {@code Mandatary} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class MandataryId implements Serializable {
   /** The ID for the party who is the recipient of the mandate. */
   private UUID partyId;
 
-  /** Constructs a new <b>MandataryId</b>. */
+  /** Creates a new {@code MandataryId} instance. */
   public MandataryId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

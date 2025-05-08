@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The <b>ContactMechanism</b> class holds the information for a contact mechanism for an
+ * The {@code ContactMechanism} class holds the information for a contact mechanism for an
  * organization or person.
  *
  * <p>The JPA 2.2 spec (10.6) does not support attribute converter for attributes annotated
@@ -163,11 +163,11 @@ public class ContactMechanism implements Serializable {
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
-  /** Constructs a new <b>ContactMechanism</b>. */
+  /** Creates a new {@code ContactMechanism} instance. */
   public ContactMechanism() {}
 
   /**
-   * Constructs a new <b>ContactMechanism</b>.
+   * Creates a new {@code ContactMechanism} instance.
    *
    * @param type the code for the contact mechanism type
    * @param role the code for the contact mechanism role
@@ -180,7 +180,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Constructs a new <b>ContactMechanism</b>.
+   * Creates a new {@code ContactMechanism} instance.
    *
    * @param type the code for the contact mechanism type
    * @param role the code for the contact mechanism role
@@ -195,7 +195,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Constructs a new <b>ContactMechanism</b>.
+   * Creates a new {@code ContactMechanism} instance.
    *
    * @param type the code for the contact mechanism type
    * @param role the code for the contact mechanism role
@@ -213,7 +213,7 @@ public class ContactMechanism implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -286,8 +286,8 @@ public class ContactMechanism implements Serializable {
    * Returns whether the contact mechanism has the specified purpose.
    *
    * @param purpose the code for the contact mechanism purpose
-   * @return <b>true</b> if the contact mechanism has the specified contact mechanism purpose or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the contact mechanism has the specified contact mechanism purpose or
+   *     {@code false} otherwise
    */
   @JsonIgnore
   public boolean hasPurpose(String purpose) {

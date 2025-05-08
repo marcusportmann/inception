@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>ReportingApiControllerImpl</b> class.
+ * The {@code ReportingApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -62,7 +62,7 @@ public class ReportingApiControllerImpl extends SecureApiController
   private final ReportingService reportingService;
 
   /**
-   * Constructs a new <b>ReportingApiControllerImpl</b>.
+   * Creates a new {@code ReportingApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

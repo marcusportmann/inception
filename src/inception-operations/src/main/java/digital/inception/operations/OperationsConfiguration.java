@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>OperationsConfiguration</b> class provides the Spring configuration for the Operations
+ * The {@code OperationsConfiguration} class provides the Spring configuration for the Operations
  * module.
  *
  * @author Marcus Portmann
@@ -41,7 +41,7 @@ public class OperationsConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Constructs a new <b>OperationsConfiguration</b>.
+   * Constructs a new {@code OperationsConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

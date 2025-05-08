@@ -29,7 +29,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <b>SMSConfiguration</b> class provides the Spring configuration for the SMS module.
+ * The {@code SMSConfiguration} class provides the Spring configuration for the SMS module.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +41,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class SMSConfiguration {
 
-  /** Constructs a new <b>SMSConfiguration</b>. */
+  /** Creates a new {@code SMSConfiguration} instance. */
   public SMSConfiguration() {}
 
   /**

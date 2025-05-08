@@ -23,14 +23,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>SMSApiConfiguration</b> class provides the Spring configuration for the SMS API module.
+ * The {@code SMSApiConfiguration} class provides the Spring configuration for the SMS API module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 public class SMSApiConfiguration {
 
-  /** Constructs a new <b>SMSApiConfiguration</b>. */
+  /** Creates a new {@code SMSApiConfiguration} instance. */
   public SMSApiConfiguration() {}
 
   /**

@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>IndustryClassificationSystemRepository</b> interface declares the persistence for the <b>
- * IndustryClassificationSystem</b> domain type.
+ * The {@code IndustryClassificationSystemRepository} interface declares the persistence for the
+ * {@code IndustryClassificationSystem} domain type.
  *
  * @author Marcus Portmann
  */

@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>ConfigNotFoundException</b> exception is thrown to indicate that the required config could
- * not be found when working with the Config Service.
+ * The {@code ConfigNotFoundException} exception is thrown to indicate that the required config
+ * could not be found when working with the Config Service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class ConfigNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>ConfigNotFoundException</b>.
+   * Creates a new {@code ConfigNotFoundException} instance.
    *
    * @param id the ID for the config
    */

@@ -19,7 +19,7 @@ package digital.inception.application.test;
 import java.util.Optional;
 
 /**
- * The <b>TestJPAService</b> interface defines the functionality provided by a Test JPA Service
+ * The {@code TestJPAService} interface defines the functionality provided by a Test JPA Service
  * implementation.
  *
  * @author Marcus Portmann

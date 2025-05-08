@@ -47,7 +47,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * The <b>SourceOfWealth</b> class holds the information for a source of wealth for a person.
+ * The {@code SourceOfWealth} class holds the information for a source of wealth for a person.
  *
  * @author Marcus Portmann
  */
@@ -115,11 +115,11 @@ public class SourceOfWealth implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>SourceOfWealth</b>. */
+  /** Creates a new {@code SourceOfWealth} instance. */
   public SourceOfWealth() {}
 
   /**
-   * Constructs a new <b>SourceOfWealth</b>.
+   * Creates a new {@code SourceOfWealth} instance.
    *
    * @param type the code for the source of wealth type
    */
@@ -128,7 +128,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfWealth</b>.
+   * Creates a new {@code SourceOfWealth} instance.
    *
    * @param type the code for the source of wealth type
    * @param effectiveFrom the date the source of wealth is effective from
@@ -139,7 +139,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfWealth</b>.
+   * Creates a new {@code SourceOfWealth} instance.
    *
    * @param type the code for the source of wealth type
    * @param effectiveFrom the date the source of wealth is effective from
@@ -152,7 +152,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfWealth</b>.
+   * Creates a new {@code SourceOfWealth} instance.
    *
    * @param type the code for the source of wealth type
    * @param description the description for the source of wealth
@@ -163,7 +163,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfWealth</b>.
+   * Creates a new {@code SourceOfWealth} instance.
    *
    * @param type the code for the source of wealth type
    * @param description the description for the source of wealth
@@ -176,7 +176,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfWealth</b>.
+   * Creates a new {@code SourceOfWealth} instance.
    *
    * @param type the code for the source of wealth type
    * @param description the description for the source of wealth
@@ -195,7 +195,7 @@ public class SourceOfWealth implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

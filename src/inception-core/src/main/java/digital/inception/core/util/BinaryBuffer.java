@@ -19,8 +19,8 @@ package digital.inception.core.util;
 import java.io.Serial;
 
 /**
- * The <b>BinaryBuffer</b> class manages binary data. It provides the capabilities similar to the
- * <b>StringBuffer</b> class when working with binary data (bytes).
+ * The {@code BinaryBuffer} class manages binary data. It provides the capabilities similar to the
+ * {@code StringBuffer} class when working with binary data (bytes).
  *
  * <p>This class is thread-safe.
  *
@@ -35,19 +35,20 @@ public class BinaryBuffer implements java.io.Serializable {
   private byte[] data;
 
   /**
-   * Constructs a new <b>BinaryBuffer</b> and initializes it using the specified binary data.
+   * Creates a new {@code BinaryBuffer} instance and initializes it using the specified binary data.
    *
-   * @param data <b>BinaryBuffer</b> instance containing the binary data that will be copied and
-   *     managed by the <b>BinaryBuffer</b> instance
+   * @param data {@code BinaryBuffer} instance containing the binary data that will be copied and
+   *     managed by the {@code BinaryBuffer} instance
    */
   public BinaryBuffer(BinaryBuffer data) {
     this(data.getData());
   }
 
   /**
-   * Constructs a new <b>BinaryBuffer</b> and initializes it using the specified binary data.
+   * Creates a new {@code BinaryBuffer} instance and initializes it using the specified binary data.
    *
-   * @param data the binary data that will be copied and managed by the <b>BinaryBuffer</b> instance
+   * @param data the binary data that will be copied and managed by the {@code BinaryBuffer}
+   *     instance
    */
   public BinaryBuffer(byte[] data) {
     this.data = new byte[data.length];
@@ -55,7 +56,7 @@ public class BinaryBuffer implements java.io.Serializable {
   }
 
   /**
-   * Append the binary stored in the specified <b>BinaryBuffer</b> instance to this
+   * Append the binary stored in the specified {@code BinaryBuffer} instance to this
    * <b>BinaryBuffer</b>.
    *
    * @param buffer the existing <b>BinaryBuffer</b> containing the binary data to append

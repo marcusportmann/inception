@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The <b>TokenClaim</b> class stores the details for a claim associated with a token.
+ * The {@code TokenClaim} class stores the details for a claim associated with a token.
  *
  * @author Marcus Portmann
  */
@@ -69,11 +69,11 @@ public class TokenClaim implements Serializable {
   @NotNull
   private List<String> values;
 
-  /** Constructs a new <b>TokenClaim</b>. */
+  /** Creates a new {@code TokenClaim} instance. */
   public TokenClaim() {}
 
   /**
-   * Constructs a new <b>TokenClaim</b>.
+   * Creates a new {@code TokenClaim} instance.
    *
    * @param name the name of the token claim
    * @param values the values for the token claim
@@ -84,7 +84,7 @@ public class TokenClaim implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TokenClaim</b>.
+   * Creates a new {@code TokenClaim} instance.
    *
    * @param name the name of the token claim
    * @param values the values for the token claim

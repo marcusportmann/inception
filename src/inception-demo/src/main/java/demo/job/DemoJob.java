@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>DemoJob</b> class.
+ * The {@code DemoJob} class.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ public class DemoJob implements JobImplementation {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(DemoJob.class);
 
-  /** Constructs a new <b>DemoJob</b>. */
+  /** Creates a new {@code DemoJob} instance. */
   public DemoJob() {}
 
   @Override

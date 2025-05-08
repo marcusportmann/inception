@@ -17,7 +17,7 @@
 package digital.inception.server.resource.xacmlpdp;
 
 /**
- * The <b>XacmlPolicyDecisionPointAttributeCategory</b> enumeration defines the custom XACML
+ * The {@code XacmlPolicyDecisionPointAttributeCategory} enumeration defines the custom XACML
  * Attribute Category identifiers for the XACML policy decision point.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public enum XacmlPolicyDecisionPointAttributeCategory {
   private final String value;
 
   /**
-   * Constructs a new <b>XacmlPolicyDecisionPointAttributeCategory</b>
+   * Creates a new {@code XacmlPolicyDecisionPointAttributeCategory} instance
    *
    * @param value the XACML identifier for this category
    */

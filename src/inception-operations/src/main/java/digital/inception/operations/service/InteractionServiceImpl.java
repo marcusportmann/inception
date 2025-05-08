@@ -46,8 +46,8 @@ import digital.inception.operations.model.MailboxInteractionSourceNotFoundExcept
 import digital.inception.operations.model.MailboxProtocol;
 import digital.inception.operations.model.WhatsAppInteractionSource;
 import digital.inception.operations.model.WhatsAppInteractionSourceNotFoundException;
-import digital.inception.operations.persistence.MailboxInteractionSourceRepository;
-import digital.inception.operations.persistence.WhatsAppInteractionSourceRepository;
+import digital.inception.operations.persistence.jpa.MailboxInteractionSourceRepository;
+import digital.inception.operations.persistence.jpa.WhatsAppInteractionSourceRepository;
 import digital.inception.operations.store.InteractionStore;
 import digital.inception.operations.util.HtmlToSimplifiedHtml;
 import digital.inception.operations.util.MessageUtil;
@@ -80,7 +80,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InteractionServiceImpl</b> class provides the Interaction Service implementation.
+ * The {@code InteractionServiceImpl} class provides the Interaction Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -126,7 +126,7 @@ public class InteractionServiceImpl implements InteractionService {
   private int minimumImageAttachmentSize;
 
   /**
-   * Constructs a new <b>InteractionServiceImpl</b>.
+   * Creates a new {@code InteractionServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-380 validator
@@ -711,7 +711,7 @@ public class InteractionServiceImpl implements InteractionService {
    * Extracts the conversation ID from an email subject line.
    *
    * @param emailSubject the email subject line
-   * @return the conversation ID if present, otherwise <b>null</b>
+   * @return the conversation ID if present, otherwise {@code null}
    */
   private String extractConversationId(String emailSubject) {
     // Create a matcher for the subject line

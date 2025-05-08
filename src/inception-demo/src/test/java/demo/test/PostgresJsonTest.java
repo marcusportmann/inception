@@ -25,13 +25,13 @@ import java.sql.Types;
 import java.util.Properties;
 
 /**
- * The <b>PostgresJsonTest</b> class.
+ * The {@code PostgresJsonTest} class.
  *
  * @author Marcus Portmann
  */
 public class PostgresJsonTest {
 
-  /** Constructs a new <b>PostgresJsonTest</b>. */
+  /** Creates a new {@code PostgresJsonTest} instance. */
   public PostgresJsonTest() {}
 
   /**

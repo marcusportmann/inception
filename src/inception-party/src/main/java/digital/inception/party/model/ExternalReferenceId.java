@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ExternalReferenceId</b> class implements the ID class for the <b>ExternalReference</b>
+ * The {@code ExternalReferenceId} class implements the ID class for the <b>ExternalReference</b>
  * class.
  *
  * @author Marcus Portmann
@@ -38,14 +38,14 @@ public class ExternalReferenceId implements Serializable {
   /** The code for the external reference type. */
   private String type;
 
-  /** Constructs a new <b>ExternalReferenceId</b>. */
+  /** Creates a new {@code ExternalReferenceId} instance. */
   public ExternalReferenceId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

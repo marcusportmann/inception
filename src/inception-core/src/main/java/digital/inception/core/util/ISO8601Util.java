@@ -33,7 +33,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
 /**
- * The <b>ISO8601Util</b> class provides a helper class for handling ISO 8601 strings of the
+ * The {@code ISO8601Util} class provides a helper class for handling ISO 8601 strings of the
  * following format: "2008-03-01T13:00:00+01:00". It also supports parsing the "Z" timezone.
  *
  * @author Marcus Portmann
@@ -94,62 +94,62 @@ public final class ISO8601Util {
   private ISO8601Util() {}
 
   /**
-   * Transform the <b>Date</b> instance into an ISO 8601 format string.
+   * Transform the {@code Date} instance into an ISO 8601 format string.
    *
-   * @param date the <b>Date</b> instance to transform into an ISO 8601 format string
-   * @return the ISO 8601 format string for the <b>Date</b> instance
+   * @param date the {@code Date} instance to transform into an ISO 8601 format string
+   * @return the ISO 8601 format string for the {@code Date} instance
    */
   public static String fromDate(Date date) {
     return dateFormatter.get().format(date);
   }
 
   /**
-   * Transform the <b>Date</b> instance into an ISO 8601 format string.
+   * Transform the {@code Date} instance into an ISO 8601 format string.
    *
-   * @param date the <b>Date</b> instance to transform into an ISO 8601 format string
-   * @return the ISO 8601 format string for the <b>Date</b> instance
+   * @param date the {@code Date} instance to transform into an ISO 8601 format string
+   * @return the ISO 8601 format string for the {@code Date} instance
    */
   public static String fromDateTime(Date date) {
     return dateTimeFormatter.get().format(date);
   }
 
   /**
-   * Transform the <b>Instant</b> instance into an ISO 8601 format string.
+   * Transform the {@code Instant} instance into an ISO 8601 format string.
    *
-   * @param instant the <b>Instant</b> instance to transform into an ISO 8601 format string
-   * @return the ISO 8601 format string for the <b>Instant</b> instance
+   * @param instant the {@code Instant} instance to transform into an ISO 8601 format string
+   * @return the ISO 8601 format string for the {@code Instant} instance
    */
   public static String fromInstant(Instant instant) {
     return instant.atZone(ZoneId.systemDefault()).format(localDateTimeFormatter.get());
   }
 
   /**
-   * Transform the <b>LocalDate</b> instance into an ISO 8601 format string.
+   * Transform the {@code LocalDate} instance into an ISO 8601 format string.
    *
-   * @param localDate the <b>LocalDate</b> instance to transform into an ISO 8601 format string
-   * @return the ISO 8601 format string for the <b>LocalDate</b> instance
+   * @param localDate the {@code LocalDate} instance to transform into an ISO 8601 format string
+   * @return the ISO 8601 format string for the {@code LocalDate} instance
    */
   public static String fromLocalDate(LocalDate localDate) {
     return localDate.format(localDateFormatter.get());
   }
 
   /**
-   * Transform the <b>LocalDateTime</b> instance into an ISO 8601 format string.
+   * Transform the {@code LocalDateTime} instance into an ISO 8601 format string.
    *
-   * @param localDateTime the <b>LocalDateTime</b> instance to transform into an ISO 8601 format
+   * @param localDateTime the {@code LocalDateTime} instance to transform into an ISO 8601 format
    *     string
-   * @return the ISO 8601 format string for the <b>LocalDateTime</b> instance
+   * @return the ISO 8601 format string for the {@code LocalDateTime} instance
    */
   public static String fromLocalDateTime(LocalDateTime localDateTime) {
     return localDateTime.format(localDateTimeFormatter.get());
   }
 
   /**
-   * Transform the <b>LocalDateTime</b> instance into an ISO 8601 format string.
+   * Transform the {@code LocalDateTime} instance into an ISO 8601 format string.
    *
-   * @param localDateTime the <b>LocalDateTime</b> instance to transform into an ISO 8601 format
+   * @param localDateTime the {@code LocalDateTime} instance to transform into an ISO 8601 format
    *     string
-   * @return the ISO 8601 format string for the <b>LocalDateTime</b> instance
+   * @return the ISO 8601 format string for the {@code LocalDateTime} instance
    */
   public static String fromLocalDateTimeAsUTC(LocalDateTime localDateTime) {
     return localDateTime
@@ -159,42 +159,42 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform the <b>LocalTime</b> instance into an ISO 8601 format string.
+   * Transform the {@code LocalTime} instance into an ISO 8601 format string.
    *
-   * @param localTime the <b>LocalTime</b> instance to transform into an ISO 8601 format string
-   * @return the ISO 8601 format string for the <b>LocalTime</b> instance
+   * @param localTime the {@code LocalTime} instance to transform into an ISO 8601 format string
+   * @return the ISO 8601 format string for the {@code LocalTime} instance
    */
   public static String fromLocalTime(LocalTime localTime) {
     return localTime.format(localTimeFormatter.get());
   }
 
   /**
-   * Transform the <b>OffsetDateTime</b> instance into an ISO 8601 format string.
+   * Transform the {@code OffsetDateTime} instance into an ISO 8601 format string.
    *
-   * @param offsetDateTime the <b>OffsetDateTime</b> instance to transform into an ISO 8601 format
+   * @param offsetDateTime the {@code OffsetDateTime} instance to transform into an ISO 8601 format
    *     string
-   * @return the ISO 8601 format string for the <b>OffsetDateTime</b> instance
+   * @return the ISO 8601 format string for the {@code OffsetDateTime} instance
    */
   public static String fromOffsetDateTime(OffsetDateTime offsetDateTime) {
     return offsetDateTime.format(localDateTimeFormatter.get());
   }
 
   /**
-   * Transform the <b>OffsetTime</b> instance into an ISO 8601 format string.
+   * Transform the {@code OffsetTime} instance into an ISO 8601 format string.
    *
-   * @param offsetTime the <b>OffsetTime</b> instance to transform into an ISO 8601 format string
-   * @return the ISO 8601 format string for the <b>OffsetTime</b> instance
+   * @param offsetTime the {@code OffsetTime} instance to transform into an ISO 8601 format string
+   * @return the ISO 8601 format string for the {@code OffsetTime} instance
    */
   public static String fromOffsetTime(OffsetTime offsetTime) {
     return offsetTime.format(offsetTimeFormatter.get());
   }
 
   /**
-   * Transform the <b>ZonedDateTime</b> instance into an ISO 8601 format string.
+   * Transform the {@code ZonedDateTime} instance into an ISO 8601 format string.
    *
-   * @param zonedDateTime the <b>ZonedDateTime</b> instance to transform into an ISO 8601 format
+   * @param zonedDateTime the {@code ZonedDateTime} instance to transform into an ISO 8601 format
    *     string
-   * @return the ISO 8601 format string for the <b>ZonedDateTime</b> instance
+   * @return the ISO 8601 format string for the {@code ZonedDateTime} instance
    */
   public static String fromZonedDateTime(ZonedDateTime zonedDateTime) {
     return zonedDateTime.format(localDateTimeFormatter.get());
@@ -305,10 +305,10 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 format string into a <b>LocalDate</b> instance.
+   * Transform an ISO 8601 format string into a {@code LocalDate} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>LocalDate</b> instance for the ISO 8601 format string
+   * @return the {@code LocalDate} instance for the ISO 8601 format string
    */
   public static Date toDate(String iso8601string) {
     TemporalAccessor temporalAccessor = dateInputFormatter.get().parse(iso8601string);
@@ -332,10 +332,10 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 format string into an <b>Instant</b> instance.
+   * Transform an ISO 8601 format string into an {@code Instant} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>Instant</b> instance for the ISO 8601 format string
+   * @return the {@code Instant} instance for the ISO 8601 format string
    */
   public static Instant toInstant(String iso8601string) {
     TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);
@@ -350,10 +350,10 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 string into a <b>LocalDate</b> instance.
+   * Transform an ISO 8601 string into a {@code LocalDate} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>LocalDate</b> instance for the ISO 8601 string
+   * @return the {@code LocalDate} instance for the ISO 8601 string
    */
   public static LocalDate toLocalDate(String iso8601string) {
     if (iso8601string == null) {
@@ -368,10 +368,10 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 string into a <b>LocalDateTime</b> instance.
+   * Transform an ISO 8601 string into a {@code LocalDateTime} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>LocalDateTime</b> instance for the ISO 8601 format string
+   * @return the {@code LocalDateTime} instance for the ISO 8601 format string
    */
   public static LocalDateTime toLocalDateTime(String iso8601string) {
     if (iso8601string == null) {
@@ -390,20 +390,20 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 format string into a <b>LocalTime</b> instance.
+   * Transform an ISO 8601 format string into a {@code LocalTime} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>LocalTime</b> instance for the ISO 8601 format string
+   * @return the {@code LocalTime} instance for the ISO 8601 format string
    */
   public static LocalTime toLocalTime(String iso8601string) {
     return LocalTime.parse(iso8601string, localTimeFormatter.get());
   }
 
   /**
-   * Transform an ISO 8601 format string into an <b>OffsetDateTime</b> instance.
+   * Transform an ISO 8601 format string into an {@code OffsetDateTime} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>OffsetDateTime</b> instance for the ISO 8601 format string
+   * @return the {@code OffsetDateTime} instance for the ISO 8601 format string
    */
   public static OffsetDateTime toOffsetDateTime(String iso8601string) {
     TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);
@@ -418,20 +418,20 @@ public final class ISO8601Util {
   }
 
   /**
-   * Transform an ISO 8601 format string into a <b>OffsetTime</b> instance.
+   * Transform an ISO 8601 format string into a {@code OffsetTime} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>OffsetTime</b> instance for the ISO 8601 format string
+   * @return the {@code OffsetTime} instance for the ISO 8601 format string
    */
   public static OffsetTime toOffsetTime(String iso8601string) {
     return OffsetTime.parse(iso8601string, offsetTimeFormatter.get());
   }
 
   /**
-   * Transform an ISO 8601 format string into a <b>ZonedDateTime</b> instance.
+   * Transform an ISO 8601 format string into a {@code ZonedDateTime} instance.
    *
    * @param iso8601string the ISO 8601 format string to transform
-   * @return the <b>ZonedDateTime</b> instance for the ISO 8601 format string
+   * @return the {@code ZonedDateTime} instance for the ISO 8601 format string
    */
   public static ZonedDateTime toZonedDateTime(String iso8601string) {
     TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);

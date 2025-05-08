@@ -24,7 +24,7 @@
 // import java.io.Serial;
 //
 /// **
-// * The <b>ProcessDefinitionNotFoundException</b> exception is thrown to indicate an error
+// * The {@code ProcessDefinitionNotFoundException} exception is thrown to indicate an error
 // condition
 // * as a result of a process definition that could not be found.
 // *
@@ -47,7 +47,7 @@
 //  @Serial private static final long serialVersionUID = 1000000;
 //
 //  /**
-//   * w Constructs a new <b>ProcessDefinitionNotFoundException</b>.
+//   * w Creates a new {@code ProcessDefinitionNotFoundException} instance.
 //   *
 //   * @param processDefinitionId the ID for the process definition
 //   */

@@ -50,7 +50,7 @@ import java.util.Objects;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>MandateProperty</b> class holds the information for a mandate property for a mandate.
+ * The {@code MandateProperty} class holds the information for a mandate property for a mandate.
  *
  * @author Marcus Portmann
  */
@@ -153,11 +153,11 @@ public class MandateProperty implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>MandateProperty</b>. */
+  /** Creates a new {@code MandateProperty} instance. */
   public MandateProperty() {}
 
   /**
-   * Constructs a new <b>MandateProperty</b>.
+   * Creates a new {@code MandateProperty} instance.
    *
    * @param type the code for the mandate property type
    */
@@ -166,7 +166,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>MandateProperty</b>.
+   * Creates a new {@code MandateProperty} instance.
    *
    * @param type the code for the mandate property type
    * @param stringValue the string value for the mandate property
@@ -177,7 +177,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>MandateProperty</b>.
+   * Creates a new {@code MandateProperty} instance.
    *
    * @param type the code for the mandate property type
    * @param booleanValue the boolean value for the mandate property
@@ -188,7 +188,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>MandateProperty</b>.
+   * Creates a new {@code MandateProperty} instance.
    *
    * @param type the code for the mandate property type
    * @param doubleValue the double value for the mandate property
@@ -199,7 +199,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>MandateProperty</b>.
+   * Creates a new {@code MandateProperty} instance.
    *
    * @param type the code for the mandate property type
    * @param dateValue the date value for the mandate property
@@ -210,7 +210,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>MandateProperty</b>.
+   * Creates a new {@code MandateProperty} instance.
    *
    * @param type the code for the mandate property type
    * @param decimalValue the decimal value for the mandate property
@@ -221,7 +221,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>MandateProperty</b>.
+   * Creates a new {@code MandateProperty} instance.
    *
    * @param type the code for the mandate property type
    * @param integerValue the integer value for the mandate property
@@ -235,7 +235,7 @@ public class MandateProperty implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -333,7 +333,7 @@ public class MandateProperty implements Serializable {
    * Returns whether the mandate property has a valid value.
    *
    * @param valueType the value type
-   * @return <b>true</b> if the mandate property has a valid value or <b>false</b> otherwise
+   * @return {@code true} if the mandate property has a valid value or {@code false} otherwise
    */
   public boolean hasValue(ValueType valueType) {
     return (((valueType == ValueType.STRING) && StringUtils.hasText(stringValue))

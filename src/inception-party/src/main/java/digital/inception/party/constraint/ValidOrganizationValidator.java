@@ -50,7 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidOrganizationValidator</b> class implements the custom constraint validator for
+ * The {@code ValidOrganizationValidator} class implements the custom constraint validator for
  * validating an organization.
  *
  * @author Marcus Portmann
@@ -60,7 +60,7 @@ public class ValidOrganizationValidator extends PartyValidator
     implements ConstraintValidator<ValidOrganization, Organization> {
 
   /**
-   * Constructs a new <b>ValidOrganizationValidator</b>.
+   * Creates a new {@code ValidOrganizationValidator} instance.
    *
    * @param partyReferenceService the Party Reference Service
    * @param referenceService the Reference Service
@@ -71,7 +71,7 @@ public class ValidOrganizationValidator extends PartyValidator
     super(partyReferenceService, referenceService);
   }
 
-  /** Constructs a new <b>ValidOrganizationValidator</b>. */
+  /** Creates a new {@code ValidOrganizationValidator} instance. */
   public ValidOrganizationValidator() {
     super(null, null);
   }

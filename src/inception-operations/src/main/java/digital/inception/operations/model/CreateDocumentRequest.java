@@ -16,43 +16,62 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.file.FileType;
+import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.operations.constraint.ValidCreateDocumentRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.UUID;
 
-/**
- * The <b>CreateDocumentRequest</b> class holds the information for a request to create a document.
- *
- * @author Marcus Portmann
- */
+/** The {@code CreateDocumentRequest} class represents a request to create a document. */
 @Schema(description = "A request to create a document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"tenantId", "parentId", "definitionId", "externalReference", "data"})
+@JsonPropertyOrder({
+  "definitionId",
+  "fileType",
+  "name",
+  "externalReference",
+  "sourceDocumentId",
+  "issueDate",
+  "expiryDate",
+  "data"
+})
 @XmlRootElement(name = "CreateDocumentRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "CreateDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"tenantId", "parentId", "definitionId", "externalReference", "data"})
+    propOrder = {
+      "definitionId",
+      "fileType",
+      "name",
+      "externalReference",
+      "sourceDocumentId",
+      "issueDate",
+      "expiryDate",
+      "data"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidCreateDocumentRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class CreateDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-ADD DOCUMENT
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -79,15 +98,13 @@ ADD DOCUMENT
   @XmlElement(name = "ExpiryDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @Column(name = "expiry_date")
   private LocalDate expiryDate;
 
-  /** The external reference for the document. */
-  @Schema(description = "The external reference for the document")
+  /** The external reference used to link this document to an external system. */
+  @Schema(description = "The external reference used to link this document to an external system")
   @JsonProperty
   @XmlElement(name = "ExternalReference")
   @Size(max = 100)
-  @Column(name = "external_reference", length = 100)
   private String externalReference;
 
   /** The file type for the document. */
@@ -97,45 +114,43 @@ ADD DOCUMENT
   @JsonProperty(required = true)
   @XmlElement(name = "FileType", required = true)
   @NotNull
-  @Column(name = "file_type", nullable = false)
-  private FileType fileType; ATTRIBUTES
+  private FileType fileType;
 
+  /** The issue date for the document. */
+  @Schema(description = "The ISO 8601 format issue date for the document")
+  @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @XmlElement(name = "IssueDate")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @Column(name = "issue_date")
+  private LocalDate issueDate;
 
+  /** The name of the document. */
+  @Schema(description = "The name of the document", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 200)
+  @Column(name = "name", length = 200, nullable = false)
+  private String name;
 
+  /** The ID for the source document that was split to create this document. */
+  @Schema(description = "The ID for the source document that was split to create this document")
+  @JsonProperty
+  @XmlElement(name = "SourceDocumentId")
+  @Column(name = "source_document_id")
+  private UUID sourceDocumentId;
 
-  /** Constructs a new <b>CreateDocumentRequest</b>. */
+  /** Creates a new {@code CreateDocumentRequest} instance. */
   public CreateDocumentRequest() {}
-
-  /**
-   * Constructs a new <b>CreateDocumentRequest</b>.
-   *
-   * @param definitionId the ID for the document definition the document is associated with
-   * @param data the data for the document
-   */
-  public CreateDocumentRequest(String definitionId, String data) {
-    this.definitionId = definitionId;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new <b>CreateDocumentRequest</b>.
-   *
-   * @param parentId the ID for the parent document
-   * @param definitionId the ID for the document definition the document is associated with
-   * @param data the data for the document
-   */
-  public CreateDocumentRequest(UUID parentId, String definitionId, String data) {
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.data = data;
-  }
 
   /**
    * Returns the data for the document.
    *
    * @return the data for the document
    */
-  public String getData() {
+  public byte[] getData() {
     return data;
   }
 
@@ -149,30 +164,57 @@ ADD DOCUMENT
   }
 
   /**
-   * Returns the external reference for the document.
+   * Returns the expiry date for the document.
    *
-   * @return the external reference for the document
+   * @return the expiry date for the document
+   */
+  public LocalDate getExpiryDate() {
+    return expiryDate;
+  }
+
+  /**
+   * Returns the external reference used to link this document to an external system.
+   *
+   * @return the external reference used to link this document to an external system
    */
   public String getExternalReference() {
     return externalReference;
   }
 
   /**
-   * Returns the ID for the parent document.
+   * Returns the file type for the document.
    *
-   * @return the ID for the parent document
+   * @return the file type for the document
    */
-  public UUID getParentId() {
-    return parentId;
+  public FileType getFileType() {
+    return fileType;
   }
 
   /**
-   * Returns the ID for the tenant the document is associated with.
+   * Returns the issue date for the document.
    *
-   * @return the ID for the tenant the document is associated with
+   * @return the issue date for the document
    */
-  public UUID getTenantId() {
-    return tenantId;
+  public LocalDate getIssueDate() {
+    return issueDate;
+  }
+
+  /**
+   * Returns the name of the document.
+   *
+   * @return the name of the document
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the ID for the source document that was split to create this document.
+   *
+   * @return the ID for the source document that was split to create this document
+   */
+  public UUID getSourceDocumentId() {
+    return sourceDocumentId;
   }
 
   /**
@@ -180,7 +222,7 @@ ADD DOCUMENT
    *
    * @param data the data for the document
    */
-  public void setData(String data) {
+  public void setData(byte[] data) {
     this.data = data;
   }
 
@@ -194,31 +236,57 @@ ADD DOCUMENT
   }
 
   /**
-   * Set the external reference for the document.
+   * Set the expiry date for the document.
    *
-   * @param externalReference the external reference for the document
+   * @param expiryDate the expiry date for the document
+   */
+  public void setExpiryDate(LocalDate expiryDate) {
+    this.expiryDate = expiryDate;
+  }
+
+  /**
+   * Set the external reference used to link this document to an external system.
+   *
+   * @param externalReference the external reference used to link this document to an external
+   *     system
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;
   }
 
   /**
-   * Set the ID for the parent document.
+   * Set the file type for the document.
    *
-   * @param parentId the ID for the parent document
+   * @param fileType the file type for the document
    */
-  public void setParentId(UUID parentId) {
-    this.parentId = parentId;
+  public void setFileType(FileType fileType) {
+    this.fileType = fileType;
   }
 
   /**
-   * Set the ID for the tenant the document is associated with.
+   * Set the issue date for the document.
    *
-   * @param tenantId the ID for the tenant the document is associated with
+   * @param issueDate the issue date for the document
    */
-  public void setTenantId(@NotNull UUID tenantId) {
-    this.tenantId = tenantId;
+  public void setIssueDate(LocalDate issueDate) {
+    this.issueDate = issueDate;
+  }
+
+  /**
+   * Set the name of the document.
+   *
+   * @param name the name of the document
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the ID for the source document that was split to create this document.
+   *
+   * @param sourceDocumentId the ID for the source document that was split to create this document
+   */
+  public void setSourceDocumentId(UUID sourceDocumentId) {
+    this.sourceDocumentId = sourceDocumentId;
   }
 }
-
-

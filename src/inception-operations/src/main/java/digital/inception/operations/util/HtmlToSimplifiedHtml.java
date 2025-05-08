@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.HtmlUtils;
 
 /**
- * The <b>HtmlToSimplifiedHtml</b> class converts HTML to simplified HTML using the JSoup library.
+ * The {@code HtmlToSimplifiedHtml} class converts HTML to simplified HTML using the JSoup library.
  *
  * @author Marcus Portmann
  */

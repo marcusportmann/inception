@@ -37,7 +37,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>Region</b> class holds the information for a region.
+ * The {@code Region} class holds the information for a region.
  *
  * @author Marcus Portmann
  */
@@ -122,14 +122,14 @@ public class Region implements Serializable {
   @Column(name = "sort_index")
   private Integer sortIndex;
 
-  /** Constructs a new <b>Region</b>. */
+  /** Creates a new {@code Region} instance. */
   public Region() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

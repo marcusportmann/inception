@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Interaction;
 import java.util.Optional;
@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>InteractionRepository</b> interface declares the persistence for the <b>Interaction</b>
+ * The {@code InteractionRepository} interface declares the persistence for the <b>Interaction</b>
  * domain type.
  *
  * @author Marcus Portmann
@@ -39,8 +39,8 @@ public interface InteractionRepository
    *
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference for the interaction
-   * @return <b>true</b> if an interaction with the specified source reference for the interaction
-   *     source with the specified ID exists or <b>false</b> otherwise
+   * @return {@code true} if an interaction with the specified source reference for the interaction
+   *     source with the specified ID exists or {@code false} otherwise
    */
   boolean existsBySourceIdAndSourceReference(String sourceId, String sourceReference);
 

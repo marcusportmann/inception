@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>ReferenceApiControllerImpl</b> class.
+ * The {@code ReferenceApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +48,7 @@ public class ReferenceApiControllerImpl extends SecureApiController
   private final ReferenceService referenceService;
 
   /**
-   * Constructs a new <b>ReferenceApiControllerImpl</b>.
+   * Creates a new {@code ReferenceApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param referenceService the Reference Service

@@ -22,8 +22,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>LanguageProficiencyId</b> class implements the ID class for the <b>LanguageProficiency</b>
- * class.
+ * The {@code LanguageProficiencyId} class implements the ID class for the {@code
+ * LanguageProficiency} class.
  *
  * @author Marcus Portmann
  */
@@ -38,14 +38,14 @@ public class LanguageProficiencyId implements Serializable {
   /** The ID for the person the language proficiency is associated with. */
   private UUID person;
 
-  /** Constructs a new <b>LanguageProficiencyId</b>. */
+  /** Creates a new {@code LanguageProficiencyId} instance. */
   public LanguageProficiencyId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

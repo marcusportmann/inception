@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-/** The <b>MultiPagePdfTest</b> class. */
+/** The {@code MultiPagePdfTest} class. */
 public class MultiPagePdfTest {
 
   public static void main(String[] args) throws IOException {

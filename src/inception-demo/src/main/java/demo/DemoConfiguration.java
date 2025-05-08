@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 /**
- * The <b>DemoConfiguration</b> class provides the configuration class for the demo application.
+ * The {@code DemoConfiguration} class provides the configuration class for the demo application.
  *
  * @author Marcus Portmann
  */
@@ -40,7 +40,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
     entityOperationsRef = "applicationEntityOperations")
 public class DemoConfiguration {
 
-  /** Constructs a new <b>DemoConfiguration</b>. */
+  /** Creates a new {@code DemoConfiguration} instance. */
   public DemoConfiguration() {}
 
   /**

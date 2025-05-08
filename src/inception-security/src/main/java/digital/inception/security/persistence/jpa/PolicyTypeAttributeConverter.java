@@ -21,15 +21,15 @@ import digital.inception.security.model.PolicyType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>PolicyTypeAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>PolicyType</b> enumeration.
+ * The {@code PolicyTypeAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code PolicyType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class PolicyTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<PolicyType> {
 
-  /** Constructs a new <b>PolicyTypeAttributeConverter</b>. */
+  /** Creates a new {@code PolicyTypeAttributeConverter} instance. */
   public PolicyTypeAttributeConverter() {
     super(PolicyType.class);
   }

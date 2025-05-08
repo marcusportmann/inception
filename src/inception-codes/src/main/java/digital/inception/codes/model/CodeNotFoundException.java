@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>CodeNotFoundException</b> exception is thrown to indicate an error condition as a result
+ * The {@code CodeNotFoundException} exception is thrown to indicate an error condition as a result
  * of a code that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -45,7 +45,7 @@ public class CodeNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>CodeNotFoundException</b>.
+   * Creates a new {@code CodeNotFoundException} instance.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code

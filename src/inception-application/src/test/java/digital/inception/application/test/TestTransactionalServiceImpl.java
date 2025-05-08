@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TestTransactionalServiceImpl</b> class provides the Test Transactional Service
+ * The {@code TestTransactionalServiceImpl} class provides the Test Transactional Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -45,7 +45,7 @@ public class TestTransactionalServiceImpl implements TestTransactionalService {
   private final DataSource dataSource;
 
   /**
-   * Constructs a new <b>TestTransactionalServiceImpl</b>.
+   * Creates a new {@code TestTransactionalServiceImpl} instance.
    *
    * @param dataSource the data source used to provide connections to the application database
    */

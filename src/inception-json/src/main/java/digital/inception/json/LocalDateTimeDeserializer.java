@@ -24,14 +24,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
- * The <b>LocalDateTimeDeserializer</b> class implements the Jackson deserializer for the
- * <b>LocalDateTime</b> type.
+ * The {@code LocalDateTimeDeserializer} class implements the Jackson deserializer for the {@code
+ * LocalDateTime} type.
  *
  * @author Marcus Portmann
  */
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
-  /** Constructs a new <b>LocalDateTimeDeserializer</b>. */
+  /** Creates a new {@code LocalDateTimeDeserializer} instance. */
   public LocalDateTimeDeserializer() {}
 
   @Override

@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>BackgroundSMSSender</b> class implements the Background SMS Sender.
+ * The {@code BackgroundSMSSender} class implements the Background SMS Sender.
  *
  * @author Marcus Portmann
  */
@@ -42,7 +42,7 @@ public class BackgroundSMSSender {
   private final SMSService smsService;
 
   /**
-   * Constructs a new <b>BackgroundSMSSender</b>.
+   * Creates a new {@code BackgroundSMSSender} instance.
    *
    * @param smsService the SMS Service
    */

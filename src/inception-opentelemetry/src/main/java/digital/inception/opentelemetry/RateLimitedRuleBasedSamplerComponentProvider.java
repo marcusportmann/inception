@@ -26,7 +26,7 @@ import io.opentelemetry.sdk.trace.samplers.Sampler;
 import java.util.List;
 
 /**
- * The <b>RateLimitedRuleBasedSamplerComponentProvider</b> class provides a declarative
+ * The {@code RateLimitedRuleBasedSamplerComponentProvider} class provides a declarative
  * configuration SPI implementation for {@link RateLimitedRuleBasedSampler}.
  *
  * <p>This class is internal and is hence not for public use. Its APIs are unstable and can change
@@ -38,7 +38,7 @@ public class RateLimitedRuleBasedSamplerComponentProvider implements ComponentPr
 
   private static final String ACTION_RECORD_AND_SAMPLE = "RECORD_AND_SAMPLE";
 
-  /** Constructs a new <b>RateLimitedRuleBasedSamplerComponentProvider</b>. */
+  /** Creates a new {@code RateLimitedRuleBasedSamplerComponentProvider} instance. */
   public RateLimitedRuleBasedSamplerComponentProvider() {}
 
   @Override

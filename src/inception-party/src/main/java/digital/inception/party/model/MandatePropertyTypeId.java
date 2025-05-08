@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MandatePropertyTypeId</b> class implements the ID class for the <b>MandatePropertyType</b>
- * class.
+ * The {@code MandatePropertyTypeId} class implements the ID class for the {@code
+ * MandatePropertyType} class.
  *
  * @author Marcus Portmann
  */
@@ -40,14 +40,14 @@ public class MandatePropertyTypeId implements Serializable {
   /** The code for the mandate type the mandate property type is associated with. */
   private String mandateType;
 
-  /** Constructs a new <b>MandatePropertyTypeId</b>. */
+  /** Creates a new {@code MandatePropertyTypeId} instance. */
   public MandatePropertyTypeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -23,7 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>Opaque</b> class stores the data for an opaque (binary data) content type in a WBXML
+ * The {@code Opaque} class stores the data for an opaque (binary data) content type in a WBXML
  * document.
  *
  * <p>This content type is used to store binary data.
@@ -43,9 +43,9 @@ public class Opaque implements Serializable, Content {
   }
 
   /**
-   * Constructs a new <b>Opaque</b> containing the specified binary data.
+   * Creates a new {@code Opaque} instance containing the specified binary data.
    *
-   * @param data the binary data to populate the <b>Opaque</b> instance with
+   * @param data the binary data to populate the {@code Opaque} instance with
    */
   public Opaque(byte[] data) {
     buffer = new BinaryBuffer(data);
@@ -62,28 +62,28 @@ public class Opaque implements Serializable, Content {
   }
 
   /**
-   * Append the binary data, in the specified <b>Opaque</b> instance, to the binary data already
-   * contained in the <b>Opaque</b> instance.
+   * Append the binary data, in the specified {@code Opaque} instance, to the binary data already
+   * contained in the {@code Opaque} instance.
    *
-   * @param opaque the existing <b>Opaque</b> instance containing the binary data to add
+   * @param opaque the existing {@code Opaque} instance containing the binary data to add
    */
   public void append(Opaque opaque) {
     buffer.append(opaque.buffer);
   }
 
   /**
-   * Returns the binary data for the <b>Opaque</b> instance.
+   * Returns the binary data for the {@code Opaque} instance.
    *
-   * @return the binary data for the <b>Opaque</b> instance
+   * @return the binary data for the {@code Opaque} instance
    */
   public byte[] getData() {
     return buffer.getData();
   }
 
   /**
-   * Returns the length of the binary data for the <b>Opaque</b> instance.
+   * Returns the length of the binary data for the {@code Opaque} instance.
    *
-   * @return the length of the binary data for the <b>Opaque</b> instance
+   * @return the length of the binary data for the {@code Opaque} instance
    */
   public int getLength() {
     return buffer.getLength();
@@ -114,7 +114,7 @@ public class Opaque implements Serializable, Content {
   }
 
   /**
-   * @return the string representation of the <b>Opaque</b> instance
+   * @return the string representation of the {@code Opaque} instance
    * @see Object#toString()
    */
   @Override

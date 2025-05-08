@@ -16,13 +16,14 @@
 
 package digital.inception.operations.model;
 
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>RequiredDocumentAttribute</b> enumeration defines the possible required document
+ * The {@code RequiredDocumentAttribute} enumeration defines the possible required document
  * attributes.
  *
  * @author Marcus Portmann

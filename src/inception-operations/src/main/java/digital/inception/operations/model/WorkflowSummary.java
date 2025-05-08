@@ -40,11 +40,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The <b>WorkflowSummary</b> class holds the summary information for a workflow.
- *
- * @author Marcus Portmann
- */
+/** The {@code WorkflowSummary} class holds the information for a workflow summary. */
 @Schema(description = "A workflow summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -129,8 +125,8 @@ public class WorkflowSummary implements Serializable {
   @Column(name = "definition_version", nullable = false)
   private int definitionVersion;
 
-  /** The external reference for the workflow. */
-  @Schema(description = "The external reference for the workflow")
+  /** The external reference used to link this workflow to an external system. */
+  @Schema(description = "The external reference used to link this workflow to an external system")
   @JsonProperty
   @XmlElement(name = "ExternalReference")
   @Size(max = 100)
@@ -188,14 +184,14 @@ public class WorkflowSummary implements Serializable {
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** Constructs a new <b>WorkflowSummary</b>. */
+  /** Creates a new {@code WorkflowSummary} instance. */
   public WorkflowSummary() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -323,104 +319,5 @@ public class WorkflowSummary implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
-  }
-
-  /**
-   * Set the date and time the workflow was created.
-   *
-   * @param created the date and time the workflow was created
-   */
-  public void setCreated(OffsetDateTime created) {
-    this.created = created;
-  }
-
-  /**
-   * Set the person or system that created the workflow.
-   *
-   * @param createdBy the person or system that created the workflow
-   */
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  /**
-   * Set the ID for the workflow definition the workflow is associated with.
-   *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   */
-  public void setDefinitionId(String definitionId) {
-    this.definitionId = definitionId;
-  }
-
-  /**
-   * Set the version of the workflow definition the workflow is associated with.
-   *
-   * @param definitionVersion the version of the workflow definition the workflow is associated with
-   */
-  public void setDefinitionVersion(int definitionVersion) {
-    this.definitionVersion = definitionVersion;
-  }
-
-  /**
-   * Set the external reference for the workflow.
-   *
-   * @param externalReference the external reference for the workflow
-   */
-  public void setExternalReference(String externalReference) {
-    this.externalReference = externalReference;
-  }
-
-  /**
-   * Set the ID for the workflow.
-   *
-   * @param id the ID for the workflow
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   * Set the ID for the parent workflow.
-   *
-   * @param parentId the ID for the parent workflow
-   */
-  public void setParentId(UUID parentId) {
-    this.parentId = parentId;
-  }
-
-  /**
-   * Set the status of the workflow.
-   *
-   * @param status the status of the workflow
-   */
-  public void setStatus(WorkflowStatus status) {
-    this.status = status;
-  }
-
-  /**
-   * Set the ID for the tenant the workflow is associated with.
-   *
-   * @param tenantId the ID for the tenant the workflow is associated with
-   */
-  public void setTenantId(UUID tenantId) {
-    this.tenantId = tenantId;
-  }
-
-  /**
-   * Set the date and time the workflow was last updated.
-   *
-   * @param updated the date and time the workflow was last updated
-   */
-  public void setUpdated(OffsetDateTime updated) {
-    this.updated = updated;
-  }
-
-  /**
-   * Set the person or system that last updated the workflow.
-   *
-   * @param updatedBy the person or system that last updated the workflow
-   */
-  public void setUpdatedBy(String updatedBy) {
-    this.updatedBy = updatedBy;
   }
 }

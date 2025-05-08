@@ -30,7 +30,7 @@ import digital.inception.operations.model.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.model.WorkflowDefinitionVersionNotFoundException;
 import digital.inception.operations.model.WorkflowNotFoundException;
 import digital.inception.operations.model.WorkflowStatus;
-import digital.inception.operations.persistence.WorkflowDefinitionRepository;
+import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
 import digital.inception.operations.store.WorkflowStore;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>WorkflowServiceImpl</b> class provides the Workflow Service implementation.
+ * The {@code WorkflowServiceImpl} class provides the Workflow Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -60,7 +60,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   private final WorkflowStore workflowStore;
 
   /**
-   * Constructs a new <b>WorkflowServiceImpl</b>.
+   * Creates a new {@code WorkflowServiceImpl} instance.
    *
    * @param validator the JSR-380 validator
    * @param workflowStore the Workflow Store

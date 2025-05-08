@@ -26,7 +26,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>ConfigRepository</b> interface declares the persistence for the <b>Config</b> domain type.
+ * The {@code ConfigRepository} interface declares the persistence for the {@code Config} domain
+ * type.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +46,7 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
    * Check whether the config exists.
    *
    * @param id the ID for the config
-   * @return <b>true</b> if the config exists or <b>false</b> otherwise
+   * @return {@code true} if the config exists or {@code false} otherwise
    */
   boolean existsByIdIgnoreCase(String id);
 

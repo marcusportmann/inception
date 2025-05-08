@@ -19,7 +19,7 @@
 // import org.flowable.eventregistry.impl.EventRegistryEngineConfiguration;
 //
 /// **
-// * The <b>EventDbSchemaManager</b> class provides a no-op database schema manager for the Event
+// * The {@code EventDbSchemaManager} class provides a no-op database schema manager for the Event
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the
 // * <b>db/flowable-all.changelog.xml</b> Liquibase changelog on the classpath.

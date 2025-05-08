@@ -40,7 +40,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * The <b>MultiIssuerJwtDecoder</b> class provides a JWT decoder implementation that is capable of
+ * The {@code MultiIssuerJwtDecoder} class provides a JWT decoder implementation that is capable of
  * decoding JWTs signed by different issuers using different RSA keys or secret keys.
  *
  * @author Marcus Portmann
@@ -69,7 +69,7 @@ public class MultiIssuerJwtDecoder implements JwtDecoder {
   private List<RevokedToken> revokedTokens = new ArrayList<>();
 
   /**
-   * Constructs a new <b>JwtDecoder</b>.
+   * Creates a new {@code JwtDecoder} instance.
    *
    * @param jwtDecoders the JWT decoders for the different issuers using different RSA keys or
    *     secret keys

@@ -21,7 +21,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>ConfigSummaryRepository</b> interface declares the persistence for the <b>
+ * The {@code ConfigSummaryRepository} interface declares the persistence for the <b>
  * ConfigSummary</b> domain type.
  *
  * @author Marcus Portmann

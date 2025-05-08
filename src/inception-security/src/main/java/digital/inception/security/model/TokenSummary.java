@@ -43,7 +43,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
- * The <b>TokenSummary</b> class holds the summary information for a token.
+ * The {@code TokenSummary} class holds the summary information for a token.
  *
  * @author Marcus Portmann
  */
@@ -159,11 +159,11 @@ public class TokenSummary implements Serializable {
   @Column(name = "valid_from_date")
   private LocalDate validFromDate;
 
-  /** Constructs a new <b>TokenSummary</b>. */
+  /** Creates a new {@code TokenSummary} instance. */
   public TokenSummary() {}
 
   /**
-   * Constructs a new <b>TokenSummary</b>.
+   * Creates a new {@code TokenSummary} instance.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -194,7 +194,7 @@ public class TokenSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

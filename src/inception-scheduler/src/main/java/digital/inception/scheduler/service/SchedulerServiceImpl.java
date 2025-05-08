@@ -50,7 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>SchedulerServiceImpl</b> class provides the Scheduler Service implementation.
+ * The {@code SchedulerServiceImpl} class provides the Scheduler Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -80,7 +80,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
   private int maximumJobExecutionAttempts;
 
   /**
-   * Constructs a new <b>SchedulerServiceImpl</b>.
+   * Creates a new {@code SchedulerServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param jobRepository the Job Repository

@@ -30,7 +30,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * The <b>NoTrustSSLSocketFactory</b> class implements the no-trust SSL socket factory.
+ * The {@code NoTrustSSLSocketFactory} class implements the no-trust SSL socket factory.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
 
   private final SSLSocketFactory socketFactory;
 
-  /** Constructs a new <b>NoTrustSSLSocketFactory</b> */
+  /** Creates a new {@code NoTrustSSLSocketFactory} instance */
   public NoTrustSSLSocketFactory() {
     try {
       // Create a trust manager that does not validate certificate chains

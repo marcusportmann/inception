@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>MandateNotFoundException</b> exception is thrown to indicate an error condition as a
+ * The {@code MandateNotFoundException} exception is thrown to indicate an error condition as a
  * result of a mandate that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class MandateNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>MandateNotFoundException</b>.
+   * Creates a new {@code MandateNotFoundException} instance.
    *
    * @param tenantId the ID for the tenant
    * @param mandateId the ID for the mandate

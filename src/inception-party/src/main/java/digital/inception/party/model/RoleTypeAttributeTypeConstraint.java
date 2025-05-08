@@ -40,7 +40,7 @@ import java.util.Objects;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>RoleTypeAttributeTypeConstraint</b> class holds the information for a constraint that
+ * The {@code RoleTypeAttributeTypeConstraint} class holds the information for a constraint that
  * should be applied to an attribute for a party that is assigned a particular role.
  *
  * @author Marcus Portmann
@@ -122,7 +122,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   private String value;
 
   /**
-   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
+   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -135,7 +135,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   }
 
   /**
-   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
+   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -157,7 +157,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   }
 
   /**
-   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
+   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -170,7 +170,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   }
 
   /**
-   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
+   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -181,14 +181,14 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
     this(roleType, attributeType, "", type, null);
   }
 
-  /** Constructs a new <b>RoleTypeAttributeTypeConstraint</b>. */
+  /** Creates a new {@code RoleTypeAttributeTypeConstraint} instance. */
   public RoleTypeAttributeTypeConstraint() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

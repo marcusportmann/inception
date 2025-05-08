@@ -19,7 +19,7 @@ package digital.inception.server.authorization.oauth;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>InvalidGrantErrorResponse</b> class holds the information for an OAuth2 invalid grant
+ * The {@code InvalidGrantErrorResponse} class holds the information for an OAuth2 invalid grant
  * error response.
  *
  * @author Marcus Portmann
@@ -29,13 +29,13 @@ public class InvalidGrantErrorResponse extends ErrorResponse {
   /** The error code for the OAuth2 invalid grant error response. */
   public static final String ERROR_CODE = "invalid_grant";
 
-  /** Constructs a new <b>InvalidGrantErrorResponse</b>. */
+  /** Creates a new {@code InvalidGrantErrorResponse} instance. */
   public InvalidGrantErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }
 
   /**
-   * Constructs a new <b>InvalidGrantErrorResponse</b>.
+   * Creates a new {@code InvalidGrantErrorResponse} instance.
    *
    * @param errorDescription the human-readable ASCII text description of the error
    */

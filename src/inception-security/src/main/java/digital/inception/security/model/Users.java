@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>Users</b> class holds the results of a request to retrieve a list of users.
+ * The {@code Users} class holds the results of a request to retrieve a list of users.
  *
  * @author Marcus Portmann
  */
@@ -120,11 +120,11 @@ public class Users implements Serializable {
   @XmlElement(name = "User", required = true)
   private List<User> users;
 
-  /** Constructs a new <b>Users</b>. */
+  /** Creates a new {@code Users} instance. */
   public Users() {}
 
   /**
-   * Constructs a new <b>Users</b>.
+   * Creates a new {@code Users} instance.
    *
    * @param userDirectoryId the ID for the user directory the users are associated with
    * @param users the users

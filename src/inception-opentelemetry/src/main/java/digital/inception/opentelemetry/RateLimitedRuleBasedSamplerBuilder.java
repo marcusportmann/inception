@@ -47,12 +47,12 @@ public final class RateLimitedRuleBasedSamplerBuilder {
   private final long spansPerSecondLimit;
 
   /**
-   * Constructs a new <b>RuleBasedSamplerBuilder</b>.
+   * Creates a new {@code RuleBasedSamplerBuilder} instance.
    *
    * @param enableRuleLogging enable additional logging during the processing of rules
    * @param spansPerSecondLimit the spans per second limit
    * @param fallbackSampler the fallback sampler to use when no rules match
-   * @throws NullPointerException if any of the parameters are <b>null</b>
+   * @throws NullPointerException if any of the parameters are {@code null}
    */
   public RateLimitedRuleBasedSamplerBuilder(
       boolean enableRuleLogging, long spansPerSecondLimit, Sampler fallbackSampler) {
@@ -81,7 +81,7 @@ public final class RateLimitedRuleBasedSamplerBuilder {
    * @param pattern the regex pattern to apply
    * @param sampler the sampler to delegate to upon a successful match
    * @return this builder for chaining
-   * @throws NullPointerException if any of the parameters are <b>null</b>>
+   * @throws NullPointerException if any of the parameters are {@code null}>
    */
   public RateLimitedRuleBasedSamplerBuilder customize(
       SpanKind spanKind, AttributeKey<String> attributeKey, String pattern, Sampler sampler) {
@@ -102,7 +102,7 @@ public final class RateLimitedRuleBasedSamplerBuilder {
    * @param attributeKey the attribute key to match against
    * @param pattern the regex pattern to apply
    * @return this builder for chaining
-   * @throws NullPointerException if any of the parameters are <b>null</b>>
+   * @throws NullPointerException if any of the parameters are {@code null}>
    */
   public RateLimitedRuleBasedSamplerBuilder drop(
       SpanKind spanKind, AttributeKey<String> attributeKey, String pattern) {
@@ -132,7 +132,7 @@ public final class RateLimitedRuleBasedSamplerBuilder {
    * @param attributeKey the attribute key to match against
    * @param pattern the regex pattern to apply
    * @return this builder for chaining
-   * @throws NullPointerException if any of the parameters are <b>null</b>>
+   * @throws NullPointerException if any of the parameters are {@code null}>
    */
   public RateLimitedRuleBasedSamplerBuilder recordAndSample(
       SpanKind spanKind, AttributeKey<String> attributeKey, String pattern) {

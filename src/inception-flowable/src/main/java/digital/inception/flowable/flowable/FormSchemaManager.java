@@ -19,13 +19,13 @@ package digital.inception.flowable.flowable;
 import org.flowable.common.engine.impl.db.SchemaManager;
 
 /**
- * The <b>FormSchemaManager</b> class.
+ * The {@code FormSchemaManager} class.
  *
  * @author Marcus Portmann
  */
 public class FormSchemaManager implements SchemaManager {
 
-  /** Constructs a new <b>FormSchemaManager</b>. */
+  /** Creates a new {@code FormSchemaManager} instance. */
   public FormSchemaManager() {}
 
   @Override

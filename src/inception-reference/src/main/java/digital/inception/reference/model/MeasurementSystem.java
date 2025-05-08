@@ -37,7 +37,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MeasurementSystem</b> class holds the information for a system of measurement.
+ * The {@code MeasurementSystem} class holds the information for a system of measurement.
  *
  * <p>A system of measurement is a collection of units of measurement and rules relating them to
  * each other. Systems of measurement have historically been important, regulated and defined for
@@ -116,14 +116,14 @@ public class MeasurementSystem implements Serializable {
   @Column(name = "sort_index")
   private Integer sortIndex;
 
-  /** Constructs a new <b>MeasurementSystem</b>. */
+  /** Creates a new {@code MeasurementSystem} instance. */
   public MeasurementSystem() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>DuplicateInteractionException</b> exception is thrown to indicate an error condition as a
+ * The {@code DuplicateInteractionException} exception is thrown to indicate an error condition as a
  * result of an attempt to create a duplicate interaction, i.e. an interaction with the specified ID
  * already exists.
  *
@@ -47,7 +47,7 @@ public class DuplicateInteractionException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateInteractionException</b>.
+   * Constructs a new {@code DuplicateInteractionException}.
    *
    * @param interactionId the ID for the interaction
    */

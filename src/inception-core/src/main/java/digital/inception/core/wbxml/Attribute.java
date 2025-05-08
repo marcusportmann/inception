@@ -20,7 +20,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>Attribute</b> class stores the name and value of a WBXML attribute.
+ * The {@code Attribute} class stores the name and value of a WBXML attribute.
  *
  * @author Marcus Portmann
  */
@@ -34,14 +34,14 @@ public class Attribute implements Serializable {
   /** The value for the attribute. */
   private String value;
 
-  /** Constructs a new <b>Attribute</b>. */
+  /** Creates a new {@code Attribute} instance. */
   public Attribute() {
     name = "";
     value = "";
   }
 
   /**
-   * Constructs a new <b>Attribute</b> with the specified name and value.
+   * Creates a new {@code Attribute} instance with the specified name and value.
    *
    * @param name the name of the attribute
    * @param value the value for the attribute

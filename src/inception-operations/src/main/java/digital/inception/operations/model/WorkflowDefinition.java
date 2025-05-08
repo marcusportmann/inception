@@ -48,11 +48,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * The <b>WorkflowDefinition</b> class holds the information for a workflow definition.
- *
- * @author Marcus Portmann
- */
+/** The {@code WorkflowDefinition} class holds the information for a workflow definition. */
 @Schema(description = "A workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -158,13 +154,13 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "version", nullable = false)
   private int version;
 
-  /** Constructs a new <b>WorkflowDefinition</b>. */
+  /** Creates a new {@code WorkflowDefinition} instance. */
   public WorkflowDefinition() {}
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
    */
@@ -175,13 +171,13 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
-   * @param validationSchemaType the schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON schema for the workflow definition
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    */
   public WorkflowDefinition(
       String id,
@@ -197,13 +193,13 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
-   * @param validationSchemaType the schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON schema for the workflow definition
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
   public WorkflowDefinition(
@@ -227,9 +223,9 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
    * @param documentDefinitions the document definitions associated with the workflow definition
@@ -251,9 +247,9 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
@@ -266,14 +262,14 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
-   * @param validationSchemaType the schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON schema for the workflow definition
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    */
   public WorkflowDefinition(
       String id,
@@ -291,14 +287,14 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
-   * @param validationSchemaType the schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON schema for the workflow definition
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
   public WorkflowDefinition(
@@ -324,9 +320,9 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDefinition</b>.
+   * Creates a new {@code WorkflowDefinition} instance.
    *
-   * @param id ID for the workflow definition
+   * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
@@ -366,7 +362,7 @@ public class WorkflowDefinition implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -424,18 +420,18 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Returns the XML (XSD) or JSON schema for the workflow definition.
+   * Returns the XML (XSD) or JSON validation schema for the workflow definition.
    *
-   * @return the XML (XSD) or JSON schema for the workflow definition
+   * @return the XML (XSD) or JSON validation schema for the workflow definition
    */
   public String getValidationSchema() {
     return validationSchema;
   }
 
   /**
-   * Returns the schema type for the workflow definition.
+   * Returns the validation schema type for the workflow definition.
    *
-   * @return the schema type for the workflow definition
+   * @return the validation schema type for the workflow definition
    */
   public ValidationSchemaType getValidationSchemaType() {
     return validationSchemaType;
@@ -497,23 +493,23 @@ public class WorkflowDefinition implements Serializable {
    *
    * @param tenantId the ID for the tenant the workflow definition is specific to
    */
-  public void setTenantId(@NotNull UUID tenantId) {
+  public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
   }
 
   /**
    * Set the XML (XSD) or JSON schema for the workflow definition.
    *
-   * @param validationSchema the XML (XSD) or JSON schema for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    */
   public void setValidationSchema(String validationSchema) {
     this.validationSchema = validationSchema;
   }
 
   /**
-   * Set the schema type for the workflow definition.
+   * Set the validation schema type for the workflow definition.
    *
-   * @param validationSchemaType the schema type for the workflow definition
+   * @param validationSchemaType the validation schema type for the workflow definition
    */
   public void setValidationSchemaType(ValidationSchemaType validationSchemaType) {
     this.validationSchemaType = validationSchemaType;

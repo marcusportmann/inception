@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidMandate</b> annotation implements the custom constraint annotation used to apply the
+ * The {@code ValidMandate} annotation implements the custom constraint annotation used to apply the
  * mandate validation.
  *
  * @author Marcus Portmann

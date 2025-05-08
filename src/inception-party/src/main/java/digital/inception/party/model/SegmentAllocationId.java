@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>SegmentAllocationId</b> class implements the ID class for the <b>SegmentAllocation</b>
+ * The {@code SegmentAllocationId} class implements the ID class for the <b>SegmentAllocation</b>
  * class.
  *
  * @author Marcus Portmann
@@ -38,14 +38,14 @@ public class SegmentAllocationId implements Serializable {
   /** The code for the segment. */
   private String segment;
 
-  /** Constructs a new <b>SegmentAllocationId</b>. */
+  /** Creates a new {@code SegmentAllocationId} instance. */
   public SegmentAllocationId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

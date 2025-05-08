@@ -45,7 +45,7 @@ public class ExpiredPasswordException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>ExpiredPasswordException</b>.
+   * Creates a new {@code ExpiredPasswordException} instance.
    *
    * @param username the username for the user
    */

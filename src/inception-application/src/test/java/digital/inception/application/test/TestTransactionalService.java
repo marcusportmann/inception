@@ -19,7 +19,7 @@ package digital.inception.application.test;
 import java.util.Optional;
 
 /**
- * The <b>TestTransactionalService</b> interface defines the functionality provided by a Test
+ * The {@code TestTransactionalService} interface defines the functionality provided by a Test
  * Transactional Service implementation.
  *
  * @author Marcus Portmann

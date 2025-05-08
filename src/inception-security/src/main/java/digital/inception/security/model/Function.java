@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The <b>Function</b> class holds the information for a discrete unit of functionality for an
+ * The {@code Function} class holds the information for a discrete unit of functionality for an
  * application that can be assigned to <b>Role</b>s.
  *
  * @author Marcus Portmann
@@ -96,11 +96,11 @@ public class Function implements java.io.Serializable {
   @ManyToMany(mappedBy = "functions")
   private List<Role> roles = new ArrayList<>();
 
-  /** Constructs a new <b>Function</b>. */
+  /** Creates a new {@code Function} instance. */
   public Function() {}
 
   /**
-   * Constructs a new <b>Function</b>.
+   * Creates a new {@code Function} instance.
    *
    * @param code the code for the function
    * @param name the name of the function
@@ -116,7 +116,7 @@ public class Function implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

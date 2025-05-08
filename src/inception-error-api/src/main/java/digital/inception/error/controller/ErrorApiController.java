@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ErrorApiController</b> interface.
+ * The {@code ErrorApiController} interface.
  *
  * @author Marcus Portmann
  */

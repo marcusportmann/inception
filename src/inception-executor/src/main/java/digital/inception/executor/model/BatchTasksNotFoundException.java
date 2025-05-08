@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>BatchTasksNotFoundException</b> exception is thrown to indicate an error condition as a
+ * The {@code BatchTasksNotFoundException} exception is thrown to indicate an error condition as a
  * result of no tasks being found for a batch.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -45,7 +45,7 @@ public class BatchTasksNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>BatchTasksNotFoundException</b>.
+   * Creates a new {@code BatchTasksNotFoundException} instance.
    *
    * @param batchId the ID for the batch
    */

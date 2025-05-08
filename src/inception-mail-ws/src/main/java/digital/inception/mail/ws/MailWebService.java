@@ -34,7 +34,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>MailWebService</b> class.
+ * The {@code MailWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -50,7 +50,7 @@ public class MailWebService extends AbstractWebServiceBase {
   private final MailService mailService;
 
   /**
-   * Constructs a new <b>MailWebService</b>.
+   * Creates a new {@code MailWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param mailService the Mail Service

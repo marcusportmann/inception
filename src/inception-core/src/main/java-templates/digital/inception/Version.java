@@ -17,7 +17,7 @@
 package digital.inception;
 
 /**
- * The <b>Version</b> class.
+ * The {@code Version} class.
  *
  * @author Marcus Portmann
  */
@@ -26,6 +26,6 @@ public final class Version {
   /** The version of the Inception Framework. */
   public static final String INCEPTION_FRAMEWORK_VERSION = "${project.version}";
 
-  /** Constructs a new <b>Version</b>. */
+  /** Creates a new {@code Version} instance. */
   public Version() {}
 }

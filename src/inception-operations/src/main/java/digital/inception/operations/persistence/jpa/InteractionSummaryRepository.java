@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.InteractionSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>InteractionSummaryRepository</b> interface declares the persistence for the
- * <b>InteractionSummary</b> domain type.
+ * The {@code InteractionSummaryRepository} interface declares the persistence for the {@code
+ * InteractionSummary} domain type.
  *
  * @author Marcus Portmann
  */

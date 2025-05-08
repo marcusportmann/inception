@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>TestMultistepWithDelayTaskExecutor</b> class.
+ * The {@code TestMultistepWithDelayTaskExecutor} class.
  *
  * @author Marcus Portmann
  */
@@ -40,7 +40,7 @@ public class TestMultistepWithDelayTaskExecutor
       LoggerFactory.getLogger(TestMultistepWithDelayTaskExecutor.class);
 
   /**
-   * Constructs a new <b>TestMultistepWithDelayTaskExecutor</b>
+   * Creates a new {@code TestMultistepWithDelayTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

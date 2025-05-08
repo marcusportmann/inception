@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>PartyNotFoundException</b> exception is thrown to indicate an error condition as a result
+ * The {@code PartyNotFoundException} exception is thrown to indicate an error condition as a result
  * of a party that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class PartyNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>PartyNotFoundException</b>.
+   * Creates a new {@code PartyNotFoundException} instance.
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party

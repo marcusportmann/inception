@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>PasswordResetRepository</b> interface declares the persistence for the <b>
+ * The {@code PasswordResetRepository} interface declares the persistence for the <b>
  * PasswordReset</b> domain type.
  *
  * @author Marcus Portmann

@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-/** The <b>InceptionAutoConfigurationCustomizerProvider</b> class. */
+/** The {@code InceptionAutoConfigurationCustomizerProvider} class. */
 public class InceptionAutoConfigurationCustomizerProvider
     implements AutoConfigurationCustomizerProvider {
 
@@ -40,7 +40,7 @@ public class InceptionAutoConfigurationCustomizerProvider
   private static final Logger log =
       Logger.getLogger(InceptionAutoConfigurationCustomizerProvider.class.getName());
 
-  /** Constructs a new <b>InceptionAutoConfigurationCustomizerProvider</b>. */
+  /** Creates a new {@code InceptionAutoConfigurationCustomizerProvider} instance. */
   public InceptionAutoConfigurationCustomizerProvider() {}
 
   @Override

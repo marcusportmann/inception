@@ -27,7 +27,7 @@ import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.HTTPConduit;
 
 /**
- * The <b>CXFNoTrustSecurityProxyConfigurator</b> class provides the capability to configure a CXF
+ * The {@code CXFNoTrustSecurityProxyConfigurator} class provides the capability to configure a CXF
  * web service proxy to disable verification of the remote server's certificate when using an HTTPS
  * connection.
  *

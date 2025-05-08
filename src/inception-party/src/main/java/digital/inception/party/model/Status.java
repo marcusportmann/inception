@@ -47,7 +47,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * The <b>Status</b> class holds the information for a status assigned to an organization or person.
+ * The {@code Status} class holds the information for a status assigned to an organization or
+ * person.
  *
  * @author Marcus Portmann
  */
@@ -106,11 +107,11 @@ public class Status implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Status</b>. */
+  /** Creates a new {@code Status} instance. */
   public Status() {}
 
   /**
-   * Constructs a new <b>Status</b>.
+   * Creates a new {@code Status} instance.
    *
    * @param type the status type
    */
@@ -119,7 +120,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Status</b>.
+   * Creates a new {@code Status} instance.
    *
    * @param type the status type
    * @param effectiveFrom the date the status is effective from
@@ -130,7 +131,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Status</b>.
+   * Creates a new {@code Status} instance.
    *
    * @param type the status type
    * @param effectiveFrom the date the status is effective from
@@ -146,7 +147,7 @@ public class Status implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

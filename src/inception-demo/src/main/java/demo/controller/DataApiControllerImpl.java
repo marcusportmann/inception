@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 /**
- * The <b>DataApiControllerImpl</b> class.
+ * The {@code DataApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +43,7 @@ public class DataApiControllerImpl extends SecureApiController implements DataAp
   private final DataService dataService;
 
   /**
-   * Constructs a new <b>DataApiControllerImpl</b>.
+   * Creates a new {@code DataApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param dataService the Data Service

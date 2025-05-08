@@ -27,7 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>SecureApiController</b> class provides the base class from which all RESTful controllers
+ * The {@code SecureApiController} class provides the base class from which all RESTful controllers
  * that implement secure APIs should be derived.
  *
  * @author Marcus Portmann
@@ -42,7 +42,7 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
   private final boolean isSecurityEnabled;
 
   /**
-   * Constructs a new <b>SecureApiController</b>.
+   * Creates a new {@code SecureApiController} instance.
    *
    * @param applicationContext the Spring application context
    */
@@ -68,11 +68,11 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
   }
 
   /**
-   * Returns the <b>Long</b> value portion of the authorities with the specified prefix.
+   * Returns the {@code Long} value portion of the authorities with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
    * @param prefix the authority prefix
-   * @return the <b>Long</b> value portion of the authorities with the specified prefix
+   * @return the {@code Long} value portion of the authorities with the specified prefix
    */
   protected List<Long> getLongValuesForAuthoritiesWithPrefix(
       Authentication authentication, String prefix) {
@@ -91,11 +91,11 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
   }
 
   /**
-   * Returns the <b>UUID</b> value portion of the authorities with the specified prefix.
+   * Returns the {@code UUID} value portion of the authorities with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
    * @param prefix the authority prefix
-   * @return the <b>UUID</b> value portion of the authorities with the specified prefix
+   * @return the {@code UUID} value portion of the authorities with the specified prefix
    */
   protected List<UUID> getUUIDValuesForAuthoritiesWithPrefix(
       Authentication authentication, String prefix) {
@@ -157,8 +157,8 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
    * function.
    *
    * @param functionCode the code for the function
-   * @return <b>true</b> if the user associated with the authenticated request has access to the
-   *     function identified by the specified function code or <b>false</b> otherwise
+   * @return {@code true} if the user associated with the authenticated request has access to the
+   *     function identified by the specified function code or {@code false} otherwise
    */
   protected boolean hasAccessToFunction(String functionCode) {
     return hasAuthority("FUNCTION_" + functionCode);
@@ -168,8 +168,8 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
    * Confirm that the user associated with the authenticated request has access to the tenant.
    *
    * @param tenantId the ID for the tenant
-   * @return <b>true</b> if the user associated with the authenticated request has access to the
-   *     tenant or <b>false</b> otherwise
+   * @return {@code true} if the user associated with the authenticated request has access to the
+   *     tenant or {@code false} otherwise
    */
   protected boolean hasAccessToTenant(UUID tenantId) {
     if (isSecurityEnabled) {
@@ -206,8 +206,8 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
    * Confirm that the user associated with the authenticated request has the specified authority.
    *
    * @param authority the authority
-   * @return <b>true</b> if the user associated with the authenticated request has the specified
-   *     authority or <b>false</b> otherwise
+   * @return {@code true} if the user associated with the authenticated request has the specified
+   *     authority or {@code false} otherwise
    */
   protected boolean hasAuthority(String authority) {
 
@@ -239,8 +239,8 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
    * Confirm that the user associated with the authenticated request has the specified role.
    *
    * @param roleName the name of the role
-   * @return <b>true</b> if the user associated with the authenticated request has the specified
-   *     role or <b>false</b> otherwise
+   * @return {@code true} if the user associated with the authenticated request has the specified
+   *     role or {@code false} otherwise
    */
   protected boolean hasRole(String roleName) {
     return hasAuthority("ROLE_" + roleName);
@@ -249,7 +249,7 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
   /**
    * Returns whether API security is disabled.
    *
-   * @return <b>true</b> if API security is disabled or <b>false</b> otherwise
+   * @return {@code true} if API security is disabled or {@code false} otherwise
    */
   protected boolean isSecurityDisabled() {
     return !isSecurityEnabled;
@@ -258,7 +258,7 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
   /**
    * Returns whether API security is enabled.
    *
-   * @return <b>true</b> if API security is enabled or <b>false</b> otherwise
+   * @return {@code true} if API security is enabled or {@code false} otherwise
    */
   protected boolean isSecurityEnabled() {
     return isSecurityEnabled;

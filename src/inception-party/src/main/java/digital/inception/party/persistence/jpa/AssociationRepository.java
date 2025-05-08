@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>AssociationRepository</b> interface declares the persistence for the <b>Association</b>
+ * The {@code AssociationRepository} interface declares the persistence for the <b>Association</b>
  * domain type.
  *
  * @author Marcus Portmann
@@ -51,7 +51,7 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the association
-   * @return <b>true</b> if the association exists or <b>false</b> otherwise
+   * @return {@code true} if the association exists or {@code false} otherwise
    */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 

@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TokenRepository</b> interface declares the persistence for the <b>Token</b> domain type.
+ * The {@code TokenRepository} interface declares the persistence for the {@code Token} domain type.
  *
  * @author Marcus Portmann
  */
@@ -38,7 +38,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * Check whether the token with the specified name exists.
    *
    * @param name the name of the token
-   * @return <b>true</b> if a token with the specified name exists or <b>false</b> otherwise
+   * @return {@code true} if a token with the specified name exists or {@code false} otherwise
    */
   boolean existsByNameIgnoreCase(String name);
 

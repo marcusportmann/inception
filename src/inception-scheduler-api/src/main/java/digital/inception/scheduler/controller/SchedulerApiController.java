@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>SchedulerApiController</b> interface.
+ * The {@code SchedulerApiController} interface.
  *
  * @author Marcus Portmann
  */

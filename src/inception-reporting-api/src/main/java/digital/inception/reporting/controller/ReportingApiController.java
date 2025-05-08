@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ReportingApiController</b> interface.
+ * The {@code ReportingApiController} interface.
  *
  * @author Marcus Portmann
  */

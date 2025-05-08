@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>TaskExecutionDelayedException</b> exception is thrown to indicate that the execution of a
+ * The {@code TaskExecutionDelayedException} exception is thrown to indicate that the execution of a
  * task should be delayed.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -52,7 +52,7 @@ public class TaskExecutionDelayedException extends ServiceException {
   private final UUID taskId;
 
   /**
-   * Constructs a new <b>TaskExecutionDelayedException</b>.
+   * Creates a new {@code TaskExecutionDelayedException} instance.
    *
    * @param taskId the ID for the task
    * @param delay the delay in milliseconds

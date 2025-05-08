@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>RoleId</b> class implements the ID class for the <b>Role</b> class.
+ * The {@code RoleId} class implements the ID class for The {@code Role} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class RoleId implements Serializable {
   /** The code for the role type. */
   private String type;
 
-  /** Constructs a new <b>RoleId</b>. */
+  /** Creates a new {@code RoleId} instance. */
   public RoleId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

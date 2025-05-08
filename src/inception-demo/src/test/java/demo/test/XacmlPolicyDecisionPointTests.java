@@ -45,7 +45,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>XacmlPolicyDecisionPointTests</b> class.
+ * The {@code XacmlPolicyDecisionPointTests} class.
  *
  * @author Marcus Portmann
  */

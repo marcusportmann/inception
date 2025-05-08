@@ -90,7 +90,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>PartyReferenceApiController</b> interface.
+ * The {@code PartyReferenceApiController} interface.
  *
  * @author Marcus Portmann
  */

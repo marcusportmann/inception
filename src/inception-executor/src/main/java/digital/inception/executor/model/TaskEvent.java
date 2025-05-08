@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>TaskEvent</b> class holds the information for a task event.
+ * The {@code TaskEvent} class holds the information for a task event.
  *
  * @author Marcus Portmann
  */
@@ -121,16 +121,16 @@ public class TaskEvent implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private TaskEventType type;
 
-  /** Constructs a new <b>TaskEvent</b>. */
+  /** Creates a new {@code TaskEvent} instance. */
   public TaskEvent() {}
 
   /**
-   * Constructs a new <b>TaskEvent</b>.
+   * Creates a new {@code TaskEvent} instance.
    *
    * @param type the task event type
    * @param task the task
-   * @param withData <b>true</b> if the task data should be captured as part of the task event or
-   *     <b>false</b> otherwise
+   * @param withData {@code true} if the task data should be captured as part of the task event or
+   *     {@code false} otherwise
    */
   public TaskEvent(TaskEventType type, Task task, boolean withData) {
     this.id = UuidCreator.getTimeOrderedEpoch();
@@ -146,7 +146,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskEvent</b>.
+   * Creates a new {@code TaskEvent} instance.
    *
    * @param type the task event type
    * @param taskId the ID for the task
@@ -163,7 +163,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskEvent</b>.
+   * Creates a new {@code TaskEvent} instance.
    *
    * @param type the task event type
    * @param taskId the ID for the task
@@ -186,7 +186,7 @@ public class TaskEvent implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

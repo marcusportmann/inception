@@ -46,7 +46,7 @@ public class TenantUserDirectoryNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>TenantUserDirectoryNotFoundException</b>.
+   * Creates a new {@code TenantUserDirectoryNotFoundException} instance.
    *
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory

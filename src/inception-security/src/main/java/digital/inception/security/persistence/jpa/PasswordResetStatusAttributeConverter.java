@@ -21,8 +21,8 @@ import digital.inception.security.model.PasswordResetStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>PasswordResetStatusAttributeConverter</b> class implements the custom JPA attribute
- * converter for the <b>PasswordResetStatus</b> enumeration.
+ * The {@code PasswordResetStatusAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code PasswordResetStatus} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class PasswordResetStatusAttributeConverter
     extends AbstractCodeEnumAttributeConverter<PasswordResetStatus> {
 
-  /** Constructs a new <b>PasswordResetStatusAttributeConverter</b>. */
+  /** Creates a new {@code PasswordResetStatusAttributeConverter} instance. */
   public PasswordResetStatusAttributeConverter() {
     super(PasswordResetStatus.class);
   }

@@ -40,7 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>TokenServiceImpl</b> class provides the Token Service implementation.
+ * The {@code TokenServiceImpl} class provides the Token Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -80,7 +80,7 @@ public class TokenServiceImpl implements TokenService {
   private RSAPublicKey jwtRsaPublicKey;
 
   /**
-   * Constructs a new <b>TokenServiceImpl</b>.
+   * Creates a new {@code TokenServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param resourceLoader the Spring resource loader

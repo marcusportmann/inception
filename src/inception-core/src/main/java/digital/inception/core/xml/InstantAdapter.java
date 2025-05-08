@@ -21,14 +21,14 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.Instant;
 
 /**
- * The <b>InstantAdapter</b> class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and <b>Instant</b> types. <br>
+ * The {@code InstantAdapter} class implements a JAXB 2.0 adapter used to convert between
+ * <b>String</b> and {@code Instant} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class InstantAdapter extends XmlAdapter<String, Instant> {
 
-  /** Constructs a new <b>InstantAdapter</b>. */
+  /** Creates a new {@code InstantAdapter} instance. */
   public InstantAdapter() {}
 
   /**

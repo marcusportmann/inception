@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MeasurementSystem</b> enumeration defines the measurement systems.
+ * The {@code MeasurementSystem} enumeration defines the measurement systems.
  *
  * <p>A system of measurement is a collection of units of measurement and rules relating them to
  * each other. Systems of measurement have historically been important, regulated and defined for

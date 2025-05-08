@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The <b>RateLimitedRuleBasedSampler</b> class provides a sampler that applies rate limiting to
+ * The {@code RateLimitedRuleBasedSampler} class provides a sampler that applies rate limiting to
  * spans evaluated against a list of {@link SamplingRule}s to determine sampling decisions based on
  * span attributes and predefined patterns.
  *

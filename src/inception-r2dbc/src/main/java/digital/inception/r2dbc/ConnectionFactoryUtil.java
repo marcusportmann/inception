@@ -28,7 +28,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ConnectionFactoryUtil</b> class provides R2DBC connection factory utility functions.
+ * The {@code ConnectionFactoryUtil} class provides R2DBC connection factory utility functions.
  *
  * @author Marcus Portmann
  */

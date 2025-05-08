@@ -36,7 +36,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>Config</b> class stores the id, value and description for the config.
+ * The {@code Config} class stores the id, value and description for the config.
  *
  * @author Marcus Portmann
  */
@@ -85,11 +85,11 @@ public class Config implements Serializable {
   @Column(name = "value", length = 16384, nullable = false)
   private String value;
 
-  /** Constructs a new <b>Config</b>. */
+  /** Creates a new {@code Config} instance. */
   public Config() {}
 
   /**
-   * Constructs a new <b>Config</b>.
+   * Creates a new {@code Config} instance.
    *
    * @param id the ID for the config
    * @param value the value for the config
@@ -105,7 +105,7 @@ public class Config implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

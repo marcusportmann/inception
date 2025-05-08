@@ -25,7 +25,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>PersonRepository</b> interface declares the persistence for the <b>Person</b> domain type.
+ * The {@code PersonRepository} interface declares the persistence for the {@code Person} domain
+ * type.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +49,7 @@ public interface PersonRepository
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the person
-   * @return <b>true</b> if the person exists or <b>false</b> otherwise
+   * @return {@code true} if the person exists or {@code false} otherwise
    */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 

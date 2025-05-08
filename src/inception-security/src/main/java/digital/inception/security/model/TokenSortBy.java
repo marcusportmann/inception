@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>TokenSortBy</b> enumeration defines the possible methods used to sort a list of tokens.
+ * The {@code TokenSortBy} enumeration defines the possible methods used to sort a list of tokens.
  *
  * @author Marcus Portmann
  */

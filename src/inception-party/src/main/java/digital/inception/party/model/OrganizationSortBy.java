@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>OrganizationSortBy</b> enumeration defines the possible methods used to sort a list of
+ * The {@code OrganizationSortBy} enumeration defines the possible methods used to sort a list of
  * organizations.
  *
  * @author Marcus Portmann

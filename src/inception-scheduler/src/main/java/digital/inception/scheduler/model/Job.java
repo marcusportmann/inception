@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The <b>Job</b> class holds the information for a job.
+ * The {@code Job} class holds the information for a job.
  *
  * @author Marcus Portmann
  */
@@ -199,11 +199,11 @@ public class Job implements Serializable {
   @Column(name = "status", length = 50, nullable = false)
   private JobStatus status;
 
-  /** Constructs a new <b>Job</b>. */
+  /** Creates a new {@code Job} instance. */
   public Job() {}
 
   /**
-   * Constructs a new <b>Job</b>.
+   * Creates a new {@code Job} instance.
    *
    * @param id the ID for the job
    * @param name the name of the job
@@ -258,7 +258,7 @@ public class Job implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -391,7 +391,7 @@ public class Job implements Serializable {
   /**
    * Returns whether the job is enabled for execution.
    *
-   * @return <b>true</b> if the job is enabled for execution or <b>false</b> otherwise
+   * @return {@code true} if the job is enabled for execution or {@code false} otherwise
    */
   public boolean isEnabled() {
     return enabled;
@@ -415,7 +415,7 @@ public class Job implements Serializable {
   /**
    * Set whether the job is enabled for execution.
    *
-   * @param enabled <b>true</b> if the job is enabled for execution or <b>false</b> otherwise
+   * @param enabled {@code true} if the job is enabled for execution or {@code false} otherwise
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

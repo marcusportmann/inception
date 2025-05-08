@@ -16,13 +16,14 @@
 
 package digital.inception.operations.model;
 
+import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>InteractionSortBy</b> enumeration defines the possible methods used to sort a list of
+ * The {@code InteractionSortBy} enumeration defines the possible methods used to sort a list of
  * interactions.
  *
  * @author Marcus Portmann

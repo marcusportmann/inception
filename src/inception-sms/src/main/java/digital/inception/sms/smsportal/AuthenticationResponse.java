@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * The <b>AuthenticationResponse</b> class.
+ * The {@code AuthenticationResponse} class.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +41,7 @@ public class AuthenticationResponse {
   @JsonProperty(required = true)
   private String token;
 
-  /** Constructs a new <b>AuthenticationResponse</b>. */
+  /** Creates a new {@code AuthenticationResponse} instance. */
   public AuthenticationResponse() {}
 
   /**

@@ -22,8 +22,8 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>BinaryBuffer</b> class provides the capabilities similar to the <b>StringBuffer</b> class
- * when working with binary data (bytes).
+ * The {@code BinaryBuffer} class provides the capabilities similar to The {@code StringBuffer}
+ * class when working with binary data (bytes).
  *
  * @author Marcus Portmann
  */
@@ -38,7 +38,7 @@ public class BinaryBuffer implements Serializable {
   public BinaryBuffer() {}
 
   /**
-   * Constructs a new <b>BinaryBuffer</b> containing the specified binary data.
+   * Creates a new {@code BinaryBuffer} instance containing the specified binary data.
    *
    * @param data the binary data to initialize the <b>BinaryBuffer</b> with
    */
@@ -52,7 +52,7 @@ public class BinaryBuffer implements Serializable {
   }
 
   /**
-   * Append the binary stored in the specified <b>BinaryBuffer</b> instance to this
+   * Append the binary stored in the specified {@code BinaryBuffer} instance to this
    * <b>BinaryBuffer</b>.
    *
    * @param buffer the existing <b>BinaryBuffer</b> containing the binary data to append

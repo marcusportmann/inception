@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * A <b>DuplicateUserDirectoryException</b> is thrown to indicate that a security operation failed
- * as a result of a duplicate user directory.
+ * A <b>DuplicateUserDirectoryException</b> exception is thrown to indicate that a security
+ * operation failed as a result of a duplicate user directory.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class DuplicateUserDirectoryException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateUserDirectoryException</b>.
+   * Creates a new {@code DuplicateUserDirectoryException} instance.
    *
    * @param name the name of the user directory
    */
@@ -55,7 +55,7 @@ public class DuplicateUserDirectoryException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>DuplicateUserDirectoryException</b>.
+   * Creates a new {@code DuplicateUserDirectoryException} instance.
    *
    * @param userDirectoryId the ID for the user directory
    */

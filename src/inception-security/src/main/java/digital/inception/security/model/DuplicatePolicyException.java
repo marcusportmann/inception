@@ -45,7 +45,7 @@ public class DuplicatePolicyException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicatePolicyException</b>.
+   * Creates a new {@code DuplicatePolicyException} instance.
    *
    * @param policyId the ID for the policy
    */

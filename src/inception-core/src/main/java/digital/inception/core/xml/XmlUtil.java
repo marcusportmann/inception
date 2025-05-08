@@ -32,7 +32,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * The <b>XmlUtil</b> class provides utility methods for working with XML documents.
+ * The {@code XmlUtil} class provides utility methods for working with XML documents.
  *
  * @author Marcus Portmann
  */
@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
 public final class XmlUtil {
 
   /**
-   * The <b>DatatypeFactory</b> instance used to convert java.xml.datatype object that map XML
+   * The {@code DatatypeFactory} instance used to convert java.xml.datatype object that map XML
    * to/from Java objects.
    */
   private static final DatatypeFactory datatypeFactory;
@@ -246,13 +246,13 @@ public final class XmlUtil {
   }
 
   /**
-   * Returns <b>true</b> if the specified element has a child with the specified name or
-   * <b>false</b> otherwise.
+   * Returns {@code true} if the specified element has a child with the specified name or {@code
+   * false} otherwise.
    *
    * @param element the parent element
    * @param name the name of the child element
-   * @return <b>true</b> if the specified element has a child with the specified name or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the specified element has a child with the specified name or {@code
+   *     false} otherwise
    */
   public static boolean hasChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();

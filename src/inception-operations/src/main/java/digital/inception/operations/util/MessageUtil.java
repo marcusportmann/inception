@@ -29,8 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The <b>MessageUtil</b> class is a utility class which provides methods for working with Java Mail
- * messages.
+ * The {@code MessageUtil} class is a utility class which provides methods for working with Java
+ * Mail messages.
  *
  * @author Marcus Portmann
  */
@@ -164,7 +164,7 @@ public final class MessageUtil {
    * Returns whether the body part is HTML.
    *
    * @param bodyPart the body part
-   * @return <b>true</b> if the body part is HTML or <b>false</b> otherwise
+   * @return {@code true} if the body part is HTML or {@code false} otherwise
    * @throws MessagingException if an error occurs while checking the body part
    */
   public static boolean isHTML(BodyPart bodyPart) throws MessagingException {
@@ -175,7 +175,7 @@ public final class MessageUtil {
    * Returns whether the body part is an image.
    *
    * @param bodyPart the body part
-   * @return <b>true</b> if the body part is an image or <b>false</b> otherwise
+   * @return {@code true} if the body part is an image or {@code false} otherwise
    * @throws MessagingException if an error occurs while checking the body part
    */
   public static boolean isImage(BodyPart bodyPart) throws MessagingException {
@@ -186,7 +186,7 @@ public final class MessageUtil {
    * Returns whether the body part is a Microsoft Office file.
    *
    * @param bodyPart the body part
-   * @return <b>true</b> if the body part is a Microsoft Office file or <b>false</b> otherwise
+   * @return {@code true} if the body part is a Microsoft Office file or {@code false} otherwise
    * @throws MessagingException if an error occurs while checking the body part
    */
   public static boolean isMicrosoftOfficeFile(BodyPart bodyPart) throws MessagingException {
@@ -198,7 +198,7 @@ public final class MessageUtil {
    * Returns whether the body part is a PDF.
    *
    * @param bodyPart the body part
-   * @return <b>true</b> if the body part is a PDF or <b>false</b> otherwise
+   * @return {@code true} if the body part is a PDF or {@code false} otherwise
    * @throws MessagingException if an error occurs while checking the body part
    */
   public static boolean isPDF(BodyPart bodyPart) throws MessagingException {
@@ -209,7 +209,7 @@ public final class MessageUtil {
    * Returns whether the body part is plain text.
    *
    * @param bodyPart the body part
-   * @return <b>true</b> if the body part is plain text or <b>false</b> otherwise
+   * @return {@code true} if the body part is plain text or {@code false} otherwise
    * @throws MessagingException if an error occurs while checking the body part
    */
   public static boolean isPlainText(BodyPart bodyPart) throws MessagingException {
@@ -220,7 +220,8 @@ public final class MessageUtil {
    * Returns whether the body part is a supported image attachment.
    *
    * @param bodyPart the body part
-   * @return <b>true</b> if the body part is a supported image attachment or <b>false</b> otherwise
+   * @return {@code true} if the body part is a supported image attachment or {@code false}
+   *     otherwise
    * @throws MessagingException if an error occurs while checking the body part
    */
   public static boolean isSupportedImageAttachment(BodyPart bodyPart) throws MessagingException {
@@ -232,7 +233,7 @@ public final class MessageUtil {
    * Returns whether the body part is a supported text attachment.
    *
    * @param bodyPart the body part
-   * @return <b>true</b> if the body part is a supported text attachment or <b>false</b> otherwise
+   * @return {@code true} if the body part is a supported text attachment or {@code false} otherwise
    * @throws MessagingException if an error occurs while checking the body part
    */
   public static boolean isSupportedTextAttachment(BodyPart bodyPart) throws MessagingException {

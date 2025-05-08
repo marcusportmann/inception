@@ -21,8 +21,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>PolicySummaryRepository</b> interface declares the persistence for the
- * <b>PolicySummary</b> domain type.
+ * The {@code PolicySummaryRepository} interface declares the persistence for the {@code
+ * PolicySummary} domain type.
  *
  * @author Marcus Portmann
  */

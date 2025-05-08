@@ -55,7 +55,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>Association</b> class holds the information for an association between two parties.
+ * The {@code Association} class holds the information for an association between two parties.
  *
  * @author Marcus Portmann
  */
@@ -177,11 +177,11 @@ public class Association implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Association</b>. */
+  /** Creates a new {@code Association} instance. */
   public Association() {}
 
   /**
-   * Constructs a new <b>Association</b>.
+   * Creates a new {@code Association} instance.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -197,7 +197,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Association</b>.
+   * Creates a new {@code Association} instance.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -216,7 +216,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Association</b>.
+   * Creates a new {@code Association} instance.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -259,7 +259,7 @@ public class Association implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -369,7 +369,7 @@ public class Association implements Serializable {
    * Returns whether the association has a property with the specified type.
    *
    * @param type the code for the association property type
-   * @return <b>true</b> if the association has a property with the specified type or <b>false</b>
+   * @return {@code true} if the association has a property with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasPropertyWithType(String type) {

@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The <b>GroupRole</b> class holds the information for a group role.
+ * The {@code GroupRole} class holds the information for a group role.
  *
  * @author Marcus Portmann
  */
@@ -75,11 +75,11 @@ public class GroupRole implements Serializable {
   @NotNull
   private UUID userDirectoryId;
 
-  /** Constructs a new <b>GroupRole</b>. */
+  /** Creates a new {@code GroupRole} instance. */
   public GroupRole() {}
 
   /**
-   * Constructs a new <b>GroupRole</b>.
+   * Creates a new {@code GroupRole} instance.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    * @param groupName the name of the group

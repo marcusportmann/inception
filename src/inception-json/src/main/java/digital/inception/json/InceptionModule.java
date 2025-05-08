@@ -29,15 +29,15 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
- * The <b>InceptionModule</b> implements the custom Jackson module that registers the serializer and
- * deserializer extensions that support the Java 8 Date/Time API and enumerations that implement the
- * CodeEnum interface.
+ * The {@code InceptionModule} class implements the custom Jackson module that registers the
+ * serializer and deserializer extensions that support the Java 8 Date/Time API and enumerations
+ * that implement the CodeEnum interface.
  *
  * @author Marcus Portmann
  */
 public class InceptionModule extends SimpleModule {
 
-  /** Constructs a new <b>InceptionModule</b>. */
+  /** Creates a new {@code InceptionModule} instance. */
   public InceptionModule() {
     super("InceptionModule", new Version(1, 0, 0, null, "digital.inception", "inception-json"));
 

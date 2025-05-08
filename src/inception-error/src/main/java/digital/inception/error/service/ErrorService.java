@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>ErrorService</b> interface defines the functionality provided by an Error Service
+ * The {@code ErrorService} interface defines the functionality provided by an Error Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public interface ErrorService {
   /**
    * Create the new entry for the error report in the database.
    *
-   * @param errorReport the <b>ErrorReport</b> instance containing the information for the error
+   * @param errorReport the {@code ErrorReport} instance containing the information for the error
    *     report
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the error report could not be created

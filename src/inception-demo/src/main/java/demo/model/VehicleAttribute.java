@@ -42,7 +42,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>VehicleAttribute</b> class holds the information for a vehicle attribute for a vehicle.
+ * The {@code VehicleAttribute} class holds the information for a vehicle attribute for a vehicle.
  *
  * @author Marcus Portmann
  */
@@ -94,11 +94,11 @@ public class VehicleAttribute implements Serializable {
   @JoinColumn(name = "vehicle_id")
   private VehicleBase vehicle;
 
-  /** Constructs a new <b>VehicleAttribute</b>. */
+  /** Creates a new {@code VehicleAttribute} instance. */
   public VehicleAttribute() {}
 
   /**
-   * Constructs a new <b>VehicleAttribute</b>.
+   * Creates a new {@code VehicleAttribute} instance.
    *
    * @param type the vehicle attribute type
    * @param value the value for the vehicle attribute
@@ -112,7 +112,7 @@ public class VehicleAttribute implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

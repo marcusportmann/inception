@@ -35,7 +35,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>DataSourceUtil</b> class provides data source utility functions.
+ * The {@code DataSourceUtil} class provides data source utility functions.
  *
  * @author Marcus Portmann
  */

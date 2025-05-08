@@ -23,7 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>RegionRepository</b> interface declares the persistence for the <b>Region</b> domain type.
+ * The {@code RegionRepository} interface declares the persistence for the {@code Region} domain
+ * type.
  *
  * @author Marcus Portmann
  */

@@ -42,7 +42,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>Skill</b> class holds the information for a skill possessed by a person.
+ * The {@code Skill} class holds the information for a skill possessed by a person.
  *
  * @author Marcus Portmann
  */
@@ -92,11 +92,11 @@ public class Skill implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Skill</b>. */
+  /** Creates a new {@code Skill} instance. */
   public Skill() {}
 
   /**
-   * Constructs a new <b>Skill</b>.
+   * Creates a new {@code Skill} instance.
    *
    * @param type the skill type
    * @param level the proficiency level for the skill
@@ -110,7 +110,7 @@ public class Skill implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

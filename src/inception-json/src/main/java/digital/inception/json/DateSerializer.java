@@ -24,13 +24,13 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * The <b>DateSerializer</b> class implements the Jackson serializer for the <b>Date</b> type.
+ * The {@code DateSerializer} class implements the Jackson serializer for the {@code Date} type.
  *
  * @author Marcus Portmann
  */
 public class DateSerializer extends JsonSerializer<Date> {
 
-  /** Constructs a new <b>DateSerializer</b>. */
+  /** Creates a new {@code DateSerializer} instance. */
   public DateSerializer() {}
 
   @Override

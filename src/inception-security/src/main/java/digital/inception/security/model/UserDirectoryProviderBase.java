@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>UserDirectoryProviderBase</b> class provides the base class from which all user directory
+ * The {@code UserDirectoryProviderBase} class provides the base class from which all user directory
  * provider classes should be derived.
  *
  * @author Marcus Portmann
@@ -47,7 +47,7 @@ public abstract class UserDirectoryProviderBase implements UserDirectoryProvider
   private final UserRepository userRepository;
 
   /**
-   * Constructs a new <b>UserDirectoryBase</b>.
+   * Creates a new {@code UserDirectoryBase} instance.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory
@@ -114,10 +114,10 @@ public abstract class UserDirectoryProviderBase implements UserDirectoryProvider
   }
 
   /**
-   * Checks whether the specified value is <b>null</b> or blank.
+   * Checks whether the specified value is {@code null} or blank.
    *
    * @param value the value to check
-   * @return true if the value is <b>null</b> or blank
+   * @return true if the value is {@code null} or blank
    */
   protected boolean isNullOrEmpty(Object value) {
     if (value == null) {

@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>DuplicateWorkflowDefinitionException</b> exception is thrown to indicate an error
+ * The {@code DuplicateWorkflowDefinitionException} exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate workflow definition, i.e. a workflow
  * definition with the specified ID already exists.
  *
@@ -46,7 +46,7 @@ public class DuplicateWorkflowDefinitionException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateWorkflowDefinitionException</b>.
+   * Constructs a new {@code DuplicateWorkflowDefinitionException}.
    *
    * @param workflowDefinitionId the ID for the workflow definition
    */

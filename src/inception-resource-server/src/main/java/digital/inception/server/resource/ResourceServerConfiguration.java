@@ -83,7 +83,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- * The <b>ResourceServerConfiguration</b> class provides the Spring configuration for the Inception
+ * The {@code ResourceServerConfiguration} class provides the Spring configuration for the Inception
  * Resource Server module.
  *
  * @author Marcus Portmann
@@ -135,7 +135,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   /** The configuration for the XACML policy decision point. */
   private XacmlPolicyDecisionPointConfiguration xacmlPolicyDecisionPoint;
 
-  /** Constructs a new <b>ResourceServerConfiguration</b>. */
+  /** Creates a new {@code ResourceServerConfiguration} instance. */
   public ResourceServerConfiguration() {}
 
   /**
@@ -584,7 +584,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * The <b>ClasspathPoliciesConfiguration</b> class holds the classpath policies configuration for
+   * The {@code ClasspathPoliciesConfiguration} class holds the classpath policies configuration for
    * the policy decision point.
    *
    * @author Marcus Portmann
@@ -594,14 +594,14 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** Should policy sets and policies be loaded from the classpath. */
     private boolean enabled;
 
-    /** Constructs a new <b>ClasspathPoliciesConfiguration</b>. */
+    /** Creates a new {@code ClasspathPoliciesConfiguration} instance. */
     public ClasspathPoliciesConfiguration() {}
 
     /**
      * Returns whether policy sets and policies should be loaded from the classpath.
      *
-     * @return <b>true</b> if policy sets and policies should be loaded from the classpath or
-     *     <b>false</b> otherwise
+     * @return {@code true} if policy sets and policies should be loaded from the classpath or
+     *     {@code false} otherwise
      */
     public boolean getEnabled() {
       return enabled;
@@ -610,8 +610,8 @@ public class ResourceServerConfiguration implements InitializingBean {
     /**
      * Set whether policy sets and policies should be loaded from the classpath.
      *
-     * @param enabled <b>true</b> if policy sets and policies should be loaded from the classpath or
-     *     <b>false</b> otherwise
+     * @param enabled {@code true} if policy sets and policies should be loaded from the classpath
+     *     or {@code false} otherwise
      */
     public void setEnabled(boolean enabled) {
       this.enabled = enabled;
@@ -619,7 +619,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * The <b>ExternalPoliciesConfiguration</b> class holds the external policies configuration for
+   * The {@code ExternalPoliciesConfiguration} class holds the external policies configuration for
    * the policy decision point.
    *
    * @author Marcus Portmann
@@ -635,14 +635,14 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** The reload period in seconds for external policy sets and policies. */
     private int reloadPeriod = 43200;
 
-    /** Constructs a new <b>ExternalPoliciesConfiguration</b>. */
+    /** Creates a new {@code ExternalPoliciesConfiguration} instance. */
     public ExternalPoliciesConfiguration() {}
 
     /**
      * Returns whether policy sets and policies should be loaded by invoking an external API.
      *
-     * @return <b>true</b> if policy sets and policies should be loaded by invoking an external API
-     *     or <b>false</b> otherwise
+     * @return {@code true} if policy sets and policies should be loaded by invoking an external API
+     *     or {@code false} otherwise
      */
     public boolean getEnabled() {
       return enabled;
@@ -669,8 +669,8 @@ public class ResourceServerConfiguration implements InitializingBean {
     /**
      * Set whether policy sets and policies should be loaded by invoking an external API.
      *
-     * @param enabled <b>true</b> if policy sets and policies should be loaded by invoking an
-     *     external API or <b>false</b> otherwise
+     * @param enabled {@code true} if policy sets and policies should be loaded by invoking an
+     *     external API or {@code false} otherwise
      */
     public void setEnabled(boolean enabled) {
       this.enabled = enabled;
@@ -696,7 +696,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * The <b>JwtConfiguration</b> class holds the JWT-related configuration for a resource server.
+   * The {@code JwtConfiguration} class holds the JWT-related configuration for a resource server.
    *
    * @author Marcus Portmann
    */
@@ -714,7 +714,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /* The secret key used to verify the JWTs. */
     private String secretKey;
 
-    /** Constructs a new <b>JwtConfiguration</b>. */
+    /** Creates a new {@code JwtConfiguration} instance. */
     public JwtConfiguration() {}
 
     /**
@@ -791,7 +791,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * The <b>JwtKeyConfiguration</b> class holds the configuration for a key used to verify JWTs.
+   * The {@code JwtKeyConfiguration} class holds the configuration for a key used to verify JWTs.
    *
    * @author Marcus Portmann
    */
@@ -829,7 +829,7 @@ public class ResourceServerConfiguration implements InitializingBean {
      */
     private String location;
 
-    /** Constructs a new <b>JwtKey</b>. */
+    /** Creates a new {@code JwtKey} instance. */
     public JwtKeyConfiguration() {}
 
     /**
@@ -926,7 +926,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * The <b>JwtRevokedTokens</b> class holds the configuration for managing revoked tokens.
+   * The {@code JwtRevokedTokens} class holds the configuration for managing revoked tokens.
    *
    * @author Marcus Portmann
    */
@@ -941,13 +941,13 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** The reload period in seconds for revoked tokens. */
     private int reloadPeriod = 43200;
 
-    /** Constructs a new <b>JwtRevokedTokensConfiguration</b>. */
+    /** Creates a new {@code JwtRevokedTokensConfiguration} instance. */
     public JwtRevokedTokensConfiguration() {}
 
     /**
      * Returns whether support for revoked tokens is enabled.
      *
-     * @return <b>true</b> if support for revoked tokens is enabled or <b>false</b> otherwise
+     * @return {@code true} if support for revoked tokens is enabled or {@code false} otherwise
      */
     public boolean getEnabled() {
       return enabled;
@@ -974,7 +974,8 @@ public class ResourceServerConfiguration implements InitializingBean {
     /**
      * Set whether support for revoked tokens is enabled.
      *
-     * @param enabled <b>true</b> if support for revoked tokens is enabled or <b>false</b> otherwise
+     * @param enabled {@code true} if support for revoked tokens is enabled or {@code false}
+     *     otherwise
      */
     public void setEnabled(boolean enabled) {
       this.enabled = enabled;
@@ -1000,7 +1001,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * The <b>XacmlPolicyDecisionPointConfiguration</b> class holds the configuration for the policy
+   * The {@code XacmlPolicyDecisionPointConfiguration} class holds the configuration for the policy
    * decision point.
    *
    * @author Marcus Portmann
@@ -1019,7 +1020,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** Is debugging of the rules applied by the policy decision point enabled. */
     private boolean ruleDebuggingEnabled;
 
-    /** Constructs a new <b>XacmlPolicyDecisionPointConfiguration</b>. */
+    /** Creates a new {@code XacmlPolicyDecisionPointConfiguration} instance. */
     public XacmlPolicyDecisionPointConfiguration() {}
 
     /**
@@ -1043,7 +1044,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /**
      * Is the XACML policy decision point is enabled?
      *
-     * @return <b>true</b> if the XACML policy decision point is enabled or <b>false</b> otherwise
+     * @return {@code true} if the XACML policy decision point is enabled or {@code false} otherwise
      */
     public boolean isEnabled() {
       return enabled;
@@ -1052,8 +1053,8 @@ public class ResourceServerConfiguration implements InitializingBean {
     /**
      * Returns whether debugging of the rules applied by the policy decision point is enabled.
      *
-     * @return <b>true</b> if debugging of the rules applied by the policy decision point is enabled
-     *     or <b>false</b> otherwise
+     * @return {@code true} if debugging of the rules applied by the policy decision point is
+     *     enabled or {@code false} otherwise
      */
     public boolean isRuleDebuggingEnabled() {
       return ruleDebuggingEnabled;
@@ -1071,7 +1072,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /**
      * Set whether the XML policy decision point is enabled.
      *
-     * @param enabled <b>true</b> if the XACML policy decision point is enabled or <b>false</b>
+     * @param enabled {@code true} if the XACML policy decision point is enabled or {@code false}
      *     otherwise
      */
     public void setEnabled(boolean enabled) {
@@ -1090,8 +1091,8 @@ public class ResourceServerConfiguration implements InitializingBean {
     /**
      * Set whether debugging of the rules applied by the policy decision point is enabled.
      *
-     * @param ruleDebuggingEnabled <b>true</b> if debugging of the rules applied by the policy
-     *     decision point is enabled or <b>false</b> otherwise
+     * @param ruleDebuggingEnabled {@code true} if debugging of the rules applied by the policy
+     *     decision point is enabled or {@code false} otherwise
      */
     public void setRuleDebuggingEnabled(boolean ruleDebuggingEnabled) {
       this.ruleDebuggingEnabled = ruleDebuggingEnabled;

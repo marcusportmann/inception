@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>TaskTypeNotFoundException</b> exception is thrown to indicate an error condition as a
+ * The {@code TaskTypeNotFoundException} exception is thrown to indicate an error condition as a
  * result of a task type that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -45,7 +45,7 @@ public class TaskTypeNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>TaskTypeNotFoundException</b>.
+   * Creates a new {@code TaskTypeNotFoundException} instance.
    *
    * @param taskTypeCode the code for the task type
    */

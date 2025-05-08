@@ -24,7 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>SnapshotRepository</b> interface declares the persistence for the <b>Snapshot</b> domain
+ * The {@code SnapshotRepository} interface declares the persistence for the {@code Snapshot} domain
  * type.
  *
  * @author Marcus Portmann

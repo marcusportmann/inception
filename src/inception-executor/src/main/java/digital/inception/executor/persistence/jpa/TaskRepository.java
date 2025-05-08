@@ -33,7 +33,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TaskRepository</b> interface declares the persistence for the <b>Task</b> domain type.
+ * The {@code TaskRepository} interface declares the persistence for the {@code Task} domain type.
  *
  * @author Marcus Portmann
  */

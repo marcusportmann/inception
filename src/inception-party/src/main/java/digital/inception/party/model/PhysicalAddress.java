@@ -51,8 +51,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>PhysicalAddress</b> class holds the information for a physical address for an organization
- * or person.
+ * The {@code PhysicalAddress} class holds the information for a physical address for an
+ * organization or person.
  *
  * <p>The primary key for the physical address (ID) is a surrogate key to enable multiple physical
  * addresses with the same type and role for a single organization or person. The surrogate key also
@@ -487,11 +487,11 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>PhysicalAddress</b>. */
+  /** Creates a new {@code PhysicalAddress} instance. */
   public PhysicalAddress() {}
 
   /**
-   * Constructs a new <b>PhysicalAddress</b>.
+   * Creates a new {@code PhysicalAddress} instance.
    *
    * @param type the code for the physical address type
    * @param role the code for the physical address role
@@ -503,7 +503,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Constructs a new <b>PhysicalAddress</b>.
+   * Creates a new {@code PhysicalAddress} instance.
    *
    * @param type the code for the physical address type
    * @param role the code for the physical address role
@@ -517,7 +517,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Constructs a new <b>PhysicalAddress</b>.
+   * Creates a new {@code PhysicalAddress} instance.
    *
    * @param type the code for the physical address type
    * @param role the code for the physical address role
@@ -534,7 +534,7 @@ public class PhysicalAddress implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -812,8 +812,8 @@ public class PhysicalAddress implements Serializable {
    * Returns whether the physical address has the specified purpose.
    *
    * @param purpose the code for the physical address purpose
-   * @return <b>true</b> if the physical address has the specified physical address purpose or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the physical address has the specified physical address purpose or
+   *     {@code false} otherwise
    */
   @JsonIgnore
   public boolean hasPurpose(String purpose) {

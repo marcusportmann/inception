@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>UserDirectories</b> class holds the results of a request to retrieve a list of user
+ * The {@code UserDirectories} class holds the results of a request to retrieve a list of user
  * directories.
  *
  * @author Marcus Portmann
@@ -92,11 +92,11 @@ public class UserDirectories implements Serializable {
   @XmlElement(name = "UserDirectory", required = true)
   private List<UserDirectory> userDirectories;
 
-  /** Constructs a new <b>UserDirectories</b>. */
+  /** Creates a new {@code UserDirectories} instance. */
   public UserDirectories() {}
 
   /**
-   * Constructs a new <b>UserDirectories</b>.
+   * Creates a new {@code UserDirectories} instance.
    *
    * @param userDirectories the user directories
    * @param total the total number of user directories

@@ -22,8 +22,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>LocalDateToStringConverter</b> class implements the Spring converter that converts a
- * <b>LocalDate</b> type into a <b>String</b> type.
+ * The {@code LocalDateToStringConverter} class implements the Spring converter that converts a
+ * {@code LocalDate} type into a {@code String} type.
  *
  * @author Marcus Portmann
  */
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 public final class LocalDateToStringConverter implements Converter<LocalDate, String> {
 
-  /** Constructs a new <b>LocalDateToStringConverter</b>. */
+  /** Creates a new {@code LocalDateToStringConverter} instance. */
   public LocalDateToStringConverter() {}
 
   @Override

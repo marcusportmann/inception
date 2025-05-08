@@ -72,7 +72,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * The <b>TestConfiguration</b> class provides the base Spring configuration for the JUnit test
+ * The {@code TestConfiguration} class provides the base Spring configuration for the JUnit test
  * classes that test the capabilities provided by the <b>Inception</b> framework.
  *
  * <p>This configuration class disables the default application data source and Camunda Process
@@ -114,7 +114,7 @@ public class TestConfiguration {
   private Resource[] liquibaseChangelogResources;
 
   /**
-   * Constructs a new <b>TestConfiguration</b>.
+   * Creates a new {@code TestConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */
@@ -282,11 +282,11 @@ public class TestConfiguration {
   }
 
   /**
-   * The <b>R2dbcEntityOperations</b> instance enabling reactive R2DBC operations with the
+   * The {@code R2dbcEntityOperations} instance enabling reactive R2DBC operations with the
    * application database using entities.
    *
    * @param applicationConnectionFactory the R2DBC connection factory for the application database
-   * @return the <b>R2dbcEntityOperations</b> instance enabling reactive R2DBC operations with the
+   * @return the {@code R2dbcEntityOperations} instance enabling reactive R2DBC operations with the
    *     application database using entities
    */
   @Bean("applicationEntityOperations")
@@ -353,10 +353,10 @@ public class TestConfiguration {
   }
 
   /**
-   * Returns the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   * Returns the {@code Jackson2ObjectMapperBuilder} bean, which configures the Jackson JSON
    * processor package.
    *
-   * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   * @return the {@code Jackson2ObjectMapperBuilder} bean, which configures the Jackson JSON
    *     processor package
    */
   protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {

@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>SegmentRepository</b> interface declares the persistence for the <b>Segment</b> domain
+ * The {@code SegmentRepository} interface declares the persistence for the {@code Segment} domain
  * type.
  *
  * @author Marcus Portmann

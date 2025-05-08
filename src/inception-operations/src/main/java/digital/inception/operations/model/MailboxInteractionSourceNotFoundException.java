@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>MailboxInteractionSourceNotFoundException</b> exception is thrown to indicate an error
+ * The {@code MailboxInteractionSourceNotFoundException} exception is thrown to indicate an error
  * condition as a result of a mailbox interaction source that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -45,7 +45,7 @@ public class MailboxInteractionSourceNotFoundException extends ServiceException 
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>MailboxInteractionSourceNotFoundException</b>.
+   * Constructs a new {@code MailboxInteractionSourceNotFoundException}.
    *
    * @param mailboxInteractionSourceId the ID for the mailbox interaction source
    */

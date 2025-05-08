@@ -32,7 +32,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.xml.namespace.QName;
 
 /**
- * The <b>WebServiceClientSecurityHelper</b> class is a utility class that provides support for
+ * The {@code WebServiceClientSecurityHelper} class is a utility class that provides support for
  * configuring secure web service clients.
  *
  * @author Marcus Portmann
@@ -758,7 +758,7 @@ public final class WebServiceClientSecurityHelper {
   }
 
   /**
-   * The <b>WebServiceClient</b> class holds the information for a web service client.
+   * The {@code WebServiceClient} class holds the information for a web service client.
    *
    * @author Marcus Portmann
    * @param portQName The QName for the port.
@@ -767,7 +767,7 @@ public final class WebServiceClientSecurityHelper {
   public record WebServiceClient(QName portQName, Service service) {
 
     /**
-     * Constructs a new <b>CachedWebServiceClient</b>.
+     * Creates a new {@code CachedWebServiceClient} instance.
      *
      * @param portQName the QName for the port
      * @param service the web service client

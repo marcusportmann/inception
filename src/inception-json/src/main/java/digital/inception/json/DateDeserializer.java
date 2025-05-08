@@ -24,14 +24,14 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * The <b>DateDeserializer</b> class implements the Jackson deserializer for the <b>LocalDate</b>
+ * The {@code DateDeserializer} class implements the Jackson deserializer for the <b>LocalDate</b>
  * type.
  *
  * @author Marcus Portmann
  */
 public class DateDeserializer extends JsonDeserializer<Date> {
 
-  /** Constructs a new <b>DateDeserializer</b>. */
+  /** Creates a new {@code DateDeserializer} instance. */
   public DateDeserializer() {}
 
   @Override

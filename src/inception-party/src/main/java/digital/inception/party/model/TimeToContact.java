@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>TimeToContact</b> class holds the information for a time to contact.
+ * The {@code TimeToContact} class holds the information for a time to contact.
  *
  * @author Marcus Portmann
  */
@@ -121,14 +121,14 @@ public class TimeToContact implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>TimeToContact</b>. */
+  /** Creates a new {@code TimeToContact} instance. */
   public TimeToContact() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

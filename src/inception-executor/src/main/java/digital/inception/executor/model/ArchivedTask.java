@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ArchivedTask</b> class holds the information for an archived task.
+ * The {@code ArchivedTask} class holds the information for an archived task.
  *
  * @author Marcus Portmann
  */
@@ -186,11 +186,11 @@ public class ArchivedTask implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>ArchivedTask</b>. */
+  /** Creates a new {@code ArchivedTask} instance. */
   public ArchivedTask() {}
 
   /**
-   * Constructs a new <b>ArchivedTask</b>.
+   * Creates a new {@code ArchivedTask} instance.
    *
    * @param id the ID for the task
    * @param batchId the ID for the task batch
@@ -230,7 +230,7 @@ public class ArchivedTask implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

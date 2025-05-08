@@ -43,15 +43,12 @@ import java.util.Objects;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-/**
- * The <b>Interaction</b> class holds the summary information for an interaction.
- *
- * @author Marcus Portmann
- */
+/** The {@code InteractionSummary} class holds the information for an interaction summary. */
 @Schema(description = "An interaction summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
+  "tenantId",
   "status",
   "sourceId",
   "conversationId",
@@ -71,6 +68,7 @@ import org.springframework.util.StringUtils;
     namespace = "https://inception.digital/operations",
     propOrder = {
       "id",
+      "tenantId",
       "status",
       "sourceId",
       "conversationId",
@@ -109,15 +107,8 @@ public class InteractionSummary implements Serializable {
   @Column(name = "assigned_to", length = 100)
   private String assignedTo;
 
-  /**
-   * The ID for the conversation the interaction is associated with.
-   *
-   * <p>If a conversation ID is present on the subject line for an email it will be used to populate
-   * this field. If no conversation ID is present for an email interaction and a response email
-   * interaction is sent, then a conversation ID will be generated and used to populate this field
-   * on this original email interaction and the response email interaction.
-   */
-  @Schema(description = "The  ID for the conversation the interaction is associated with")
+  /** The ID for the conversation the interaction is associated with. */
+  @Schema(description = "The ID for the conversation the interaction is associated with")
   @JsonProperty
   @XmlElement(name = "ConversationId")
   @Size(min = 1, max = 30)
@@ -140,7 +131,9 @@ public class InteractionSummary implements Serializable {
   private String from;
 
   /** The ID for the interaction. */
-  @Schema(description = "The ID for the interaction", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(
+      description = "The unique identifier for the interaction",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -158,16 +151,17 @@ public class InteractionSummary implements Serializable {
   @Column(name = "mime_type", nullable = false)
   private InteractionMimeType mimeType;
 
-  /** The ID for the party the interaction is associated with. */
-  @Schema(description = "The  ID for the party the interaction is associated with")
+  /** The unique identifier for the party the interaction is associated with. */
+  @Schema(description = "The unique identifier for the party the interaction is associated with")
   @JsonProperty
   @XmlElement(name = "PartyId")
   @Column(name = "party_id", nullable = false)
   private UUID partyId;
 
-  /** The ID for the interaction source the interaction is associated with. */
+  /** The unique identifier for the interaction source the interaction is associated with. */
   @Schema(
-      description = "The ID for the interaction source the interaction is associated with",
+      description =
+          "The unique identifier for the interaction source the interaction is associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "SourceId", required = true)
@@ -195,6 +189,16 @@ public class InteractionSummary implements Serializable {
   @Size(max = 2000)
   @Column(name = "subject", length = 2000, nullable = false)
   private String subject;
+
+  /** The unique identifier for the tenant the interaction is associated with. */
+  @Schema(
+      description = "The unique identifier for the tenant the interaction is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
 
   /** The date and time the interaction was received or sent. */
   @Schema(
@@ -224,14 +228,14 @@ public class InteractionSummary implements Serializable {
   @Column(name = "type", nullable = false)
   private InteractionType type;
 
-  /** Constructs a new <b>InteractionSummary</b>. */
+  /** Creates a new {@code InteractionSummary} instance. */
   public InteractionSummary() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -291,9 +295,9 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
-   * Returns the ID for the interaction.
+   * Returns the unique identifier for the interaction.
    *
-   * @return the ID for the interaction
+   * @return the unique identifier for the interaction
    */
   public UUID getId() {
     return id;
@@ -309,18 +313,18 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
-   * Returns the ID for the party the interaction is associated with.
+   * Returns the unique identifier for the party the interaction is associated with.
    *
-   * @return the ID for the party the interaction is associated with
+   * @return the unique identifier for the party the interaction is associated with
    */
   public UUID getPartyId() {
     return partyId;
   }
 
   /**
-   * Returns the ID for the interaction source the interaction is associated with.
+   * Returns the unique identifier for the interaction source the interaction is associated with.
    *
-   * @return the ID for the interaction source the interaction is associated with
+   * @return the unique identifier for the interaction source the interaction is associated with
    */
   public String getSourceId() {
     return sourceId;
@@ -342,6 +346,15 @@ public class InteractionSummary implements Serializable {
    */
   public String getSubject() {
     return subject;
+  }
+
+  /**
+   * Returns the unique identifier for the tenant the interaction is associated with.
+   *
+   * @return the unique identifier for the tenant the interaction is associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**
@@ -429,9 +442,9 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction.
+   * Set the unique identifier for the interaction.
    *
-   * @param id the ID for the interaction
+   * @param id the unique identifier for the interaction
    */
   public void setId(UUID id) {
     this.id = id;
@@ -447,9 +460,9 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
-   * Set the ID for the party the interaction is associated with.
+   * Set the unique identifier for the party the interaction is associated with.
    *
-   * @param partyId the ID for the party the interaction is associated with
+   * @param partyId the unique identifier for the party the interaction is associated with
    */
   public void setPartyId(UUID partyId) {
     this.partyId = partyId;

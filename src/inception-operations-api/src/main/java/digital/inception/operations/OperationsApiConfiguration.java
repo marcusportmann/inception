@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>OperationsApiConfiguration</b> class provides the Spring configuration for the Operations
+ * The {@code OperationsApiConfiguration} class provides the Spring configuration for the Operations
  * API module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OperationsApiConfiguration {
 
-  /** Constructs a new <b>OperationsApiConfiguration</b>. */
+  /** Creates a new {@code OperationsApiConfiguration} instance. */
   public OperationsApiConfiguration() {}
 
   /**

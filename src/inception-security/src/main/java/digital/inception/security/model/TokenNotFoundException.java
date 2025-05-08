@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>TokenNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of a token that could not be found.
+ * A {@code TokenNotFoundException} exception is thrown to indicate that a security operation failed
+ * as a result of a token that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class TokenNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>TokenNotFoundException</b>.
+   * Creates a new {@code TokenNotFoundException} instance.
    *
    * @param tokenId the ID for the token
    */

@@ -47,7 +47,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * The <b>Lock</b> class holds the information for a lock applied to an organization or person.
+ * The {@code Lock} class holds the information for a lock applied to an organization or person.
  *
  * @author Marcus Portmann
  */
@@ -106,11 +106,11 @@ public class Lock implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Lock</b>. */
+  /** Creates a new {@code Lock} instance. */
   public Lock() {}
 
   /**
-   * Constructs a new <b>Lock</b>.
+   * Creates a new {@code Lock} instance.
    *
    * @param type the code for the lock type
    */
@@ -119,7 +119,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Lock</b>.
+   * Creates a new {@code Lock} instance.
    *
    * @param type the code for the lock type
    * @param effectiveFrom the date the lock is effective from
@@ -130,7 +130,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Lock</b>.
+   * Creates a new {@code Lock} instance.
    *
    * @param type the code for the lock type
    * @param effectiveFrom the date the lock is effective from
@@ -146,7 +146,7 @@ public class Lock implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

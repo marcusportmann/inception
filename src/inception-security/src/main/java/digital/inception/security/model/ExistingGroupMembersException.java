@@ -45,7 +45,7 @@ public class ExistingGroupMembersException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>ExistingGroupMembersException</b>.
+   * Creates a new {@code ExistingGroupMembersException} instance.
    *
    * @param groupName the name of the group
    */

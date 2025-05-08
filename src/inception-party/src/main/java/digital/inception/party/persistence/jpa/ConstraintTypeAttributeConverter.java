@@ -21,8 +21,8 @@ import digital.inception.party.model.ConstraintType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>ConstraintTypeAttributeConverter</b> class implements the custom JPA attribute converter
- * for the <b>ConstraintType</b> enumeration.
+ * The {@code ConstraintTypeAttributeConverter} class implements the custom JPA attribute converter
+ * for the {@code ConstraintType} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class ConstraintTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<ConstraintType> {
 
-  /** Constructs a new <b>ConstraintTypeAttributeConverter</b>. */
+  /** Creates a new {@code ConstraintTypeAttributeConverter} instance. */
   public ConstraintTypeAttributeConverter() {
     super(ConstraintType.class);
   }

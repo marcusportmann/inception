@@ -33,7 +33,7 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>NarayanaTransactionIntegration</b> class.
+ * The {@code NarayanaTransactionIntegration} class.
  *
  * @author Marcus Portmann
  */
@@ -53,7 +53,7 @@ public class NarayanaTransactionIntegration
   private final TransactionSynchronizationRegistry transactionSynchronizationRegistry;
 
   /**
-   * Constructs a new <b>NarayanaTransactionIntegration</b>.
+   * Creates a new {@code NarayanaTransactionIntegration} instance.
    *
    * @param transactionManager the transaction manager
    * @param transactionSynchronizationRegistry the transaction synchronization registry
@@ -65,7 +65,7 @@ public class NarayanaTransactionIntegration
   }
 
   /**
-   * Constructs a new <b>NarayanaTransactionIntegration</b>.
+   * Creates a new {@code NarayanaTransactionIntegration} instance.
    *
    * @param transactionManager the transaction manager
    * @param transactionSynchronizationRegistry the transaction synchronization registry
@@ -81,7 +81,7 @@ public class NarayanaTransactionIntegration
   }
 
   /**
-   * Constructs a new <b>NarayanaTransactionIntegration</b>.
+   * Creates a new {@code NarayanaTransactionIntegration} instance.
    *
    * @param applicationContext the Spring application context
    */
@@ -206,7 +206,7 @@ public class NarayanaTransactionIntegration
   }
 
   /**
-   * The <b>XAResourceRecoveryImpl</b> class provides an implementation of the
+   * The {@code XAResourceRecoveryImpl} class provides an implementation of the
    * XAResourceRecoveryHelper interface.
    *
    * @author Marcus Portmann

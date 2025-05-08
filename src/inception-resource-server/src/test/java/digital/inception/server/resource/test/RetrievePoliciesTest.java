@@ -32,7 +32,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * The <b>RetrievePoliciesTest</b> class.
+ * The {@code RetrievePoliciesTest} class.
  *
  * @author Marcus Portmann
  */
@@ -42,7 +42,7 @@ public class RetrievePoliciesTest {
   /** The policies API endpoint. */
   public static final String POLICIES_API_ENDPOINT = "http://localhost:8080/api/security/policies";
 
-  /** Constructs a new <b>RetrievePoliciesTest</b>. */
+  /** Creates a new {@code RetrievePoliciesTest} instance. */
   public RetrievePoliciesTest() {}
 
   /**

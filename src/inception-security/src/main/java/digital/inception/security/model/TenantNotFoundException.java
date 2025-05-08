@@ -46,7 +46,7 @@ public class TenantNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>TenantNotFoundException</b>.
+   * Creates a new {@code TenantNotFoundException} instance.
    *
    * @param tenantId the ID for the tenant
    */

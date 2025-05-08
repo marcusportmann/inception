@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>SMS</b> class holds the information for a SMS.
+ * The {@code SMS} class holds the information for a SMS.
  *
  * @author Marcus Portmann
  */
@@ -138,11 +138,11 @@ public class SMS implements Serializable {
   @Column(name = "status", length = 50, nullable = false)
   private SMSStatus status;
 
-  /** Constructs a new <b>SMS</b>. */
+  /** Creates a new {@code SMS} instance. */
   public SMS() {}
 
   /**
-   * Constructs a new <b>SMS</b>.
+   * Creates a new {@code SMS} instance.
    *
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
@@ -154,7 +154,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SMS</b>.
+   * Creates a new {@code SMS} instance.
    *
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
@@ -168,7 +168,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SMS</b>.
+   * Creates a new {@code SMS} instance.
    *
    * @param id the ID for the SMS
    * @param mobileNumber the mobile number to send the SMS to
@@ -199,7 +199,7 @@ public class SMS implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

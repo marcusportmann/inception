@@ -32,7 +32,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>JobRepository</b> interface declares the persistence for the <b>Job</b> domain type.
+ * The {@code JobRepository} interface declares the persistence for the {@code Job} domain type.
  *
  * @author Marcus Portmann
  */

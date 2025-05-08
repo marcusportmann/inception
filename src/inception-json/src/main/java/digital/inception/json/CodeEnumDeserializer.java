@@ -24,7 +24,7 @@ import digital.inception.core.model.CodeEnum;
 import java.io.IOException;
 
 /**
- * The <b>CodeEnumDeserializer</b> class implements the Jackson deserializer that can deserialize a
+ * The {@code CodeEnumDeserializer} class implements the Jackson deserializer that can deserialize a
  * JSON string into any Enum that implements {@link CodeEnum}, by invoking {@code
  * CodeEnum.fromCode(...)}.
  *
@@ -36,7 +36,7 @@ public class CodeEnumDeserializer<E extends Enum<E> & CodeEnum> extends JsonDese
   private final JavaType targetType;
 
   /**
-   * Constructs a new <b>CodeEnumDeserializer</b>.
+   * Creates a new {@code CodeEnumDeserializer} instance.
    *
    * @param targetType the target Enum type
    */

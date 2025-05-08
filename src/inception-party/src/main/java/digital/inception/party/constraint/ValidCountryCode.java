@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidCountryCode</b> annotation implements the custom constraint annotation used to apply
+ * The {@code ValidCountryCode} annotation implements the custom constraint annotation used to apply
  * the country code validation.
  *
  * @author Marcus Portmann

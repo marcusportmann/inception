@@ -50,7 +50,7 @@ import java.util.Objects;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>Attribute</b> class holds the information for an attribute for an organization or person.
+ * The {@code Attribute} class holds the information for an attribute for an organization or person.
  *
  * @author Marcus Portmann
  */
@@ -245,11 +245,11 @@ public class Attribute implements Serializable {
   @Column(name = "unit", length = 50)
   private MeasurementUnit unit;
 
-  /** Constructs a new <b>Attribute</b>. */
+  /** Creates a new {@code Attribute} instance. */
   public Attribute() {}
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    */
@@ -258,7 +258,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param stringValue the string value for the attribute
@@ -269,7 +269,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param booleanValue the boolean value for the attribute
@@ -280,7 +280,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param doubleValue the double value for the attribute
@@ -291,7 +291,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param dateValue the date value for the attribute
@@ -302,7 +302,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param decimalValue the decimal value for the attribute
@@ -313,7 +313,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param decimalValue the decimal value for the attribute
@@ -326,7 +326,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param integerValue the integer value for the attribute
@@ -337,7 +337,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param integerValue the integer value for the attribute
@@ -350,7 +350,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Attribute</b>.
+   * Creates a new {@code Attribute} instance.
    *
    * @param type the attribute type
    * @param doubleValue the double value for the attribute
@@ -384,7 +384,7 @@ public class Attribute implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -491,7 +491,7 @@ public class Attribute implements Serializable {
    * Returns whether the attribute has a valid value.
    *
    * @param valueType the value type
-   * @return <b>true</b> if the attribute has a valid value or <b>false</b> otherwise
+   * @return {@code true} if the attribute has a valid value or {@code false} otherwise
    */
   public boolean hasValue(ValueType valueType) {
     return (((valueType == ValueType.STRING) && StringUtils.hasText(stringValue))

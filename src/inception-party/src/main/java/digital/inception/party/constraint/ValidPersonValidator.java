@@ -58,13 +58,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidPersonValidator</b> class implements the custom constraint validator for validating a
- * person.
+ * The {@code ValidPersonValidator} class implements the custom constraint validator for validating
+ * a person.
  *
- * <p>NOTE: The <b>@Autowired</b> constructor is not used when Spring Boot automatically invokes the
- * JSR 380 validation when persisting an entity. Instead, the default constructor is invoked when
- * the validator is initialized by Hibernate. As a result the custom validation that requires the
- * injected services will not be executed.
+ * <p>NOTE: The {@code @Autowired} constructor is not used when Spring Boot automatically invokes
+ * the JSR 380 validation when persisting an entity. Instead, the default constructor is invoked
+ * when the validator is initialized by Hibernate. As a result the custom validation that requires
+ * the injected services will not be executed.
  *
  * @author Marcus Portmann
  */
@@ -73,7 +73,7 @@ public class ValidPersonValidator extends PartyValidator
     implements ConstraintValidator<ValidPerson, Person> {
 
   /**
-   * Constructs a new <b>ValidPersonValidator</b>.
+   * Creates a new {@code ValidPersonValidator} instance.
    *
    * @param partyReferenceService the Party Reference Service
    * @param referenceService the Reference Service
@@ -84,7 +84,7 @@ public class ValidPersonValidator extends PartyValidator
     super(partyReferenceService, referenceService);
   }
 
-  /** Constructs a new <b>ValidPersonValidator</b>. */
+  /** Creates a new {@code ValidPersonValidator} instance. */
   public ValidPersonValidator() {
     super(null, null);
   }

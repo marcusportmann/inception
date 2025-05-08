@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>TaskExecutionRetryableException</b> exception is thrown to indicate that the execution of
+ * The {@code TaskExecutionRetryableException} exception is thrown to indicate that the execution of
  * a task failed because of a temporary error and can be retried.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class TaskExecutionRetryableException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>TaskExecutionRetryableException</b>.
+   * Creates a new {@code TaskExecutionRetryableException} instance.
    *
    * @param taskId the ID for the task
    */
@@ -58,10 +58,10 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionRetryableException</b>.
+   * Creates a new {@code TaskExecutionRetryableException} instance.
    *
    * @param taskId the ID for the task
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public TaskExecutionRetryableException(UUID taskId, String message) {
     super(
@@ -72,11 +72,11 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionRetryableException</b>.
+   * Creates a new {@code TaskExecutionRetryableException} instance.
    *
    * @param taskId the ID for the task
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public TaskExecutionRetryableException(UUID taskId, Throwable cause) {
     super(
@@ -88,12 +88,12 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskExecutionRetryableException</b>.
+   * Creates a new {@code TaskExecutionRetryableException} instance.
    *
    * @param taskId the ID for the task
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public TaskExecutionRetryableException(UUID taskId, String message, Throwable cause) {
     super(

@@ -25,7 +25,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 
 /**
- * The <b>VehicleService</b> interface defines the functionality that must be provided by a Vehicle
+ * The {@code VehicleService} interface defines the functionality that must be provided by a Vehicle
  * Service implementation.
  *
  * @author Marcus Portmann

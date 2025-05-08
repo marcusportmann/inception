@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import jakarta.persistence.Converter;
 
 /**
- * The <b>InteractionTypeAttributeAttributeConverter</b> class implements the custom JPA attribute
- * converter for the <b>InteractionTypeAttribute</b> enumeration.
+ * The {@code InteractionTypeAttributeConverter} class implements the custom JPA attribute converter
+ * for the {@code InteractionTypeAttribute} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class InteractionTypeAttributeAttributeConverter
+public class InteractionTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<InteractionTypeAttribute> {
 
-  /** Constructs a new <b>InteractionTypeAttributeAttributeConverter</b>. */
-  public InteractionTypeAttributeAttributeConverter() {
+  /** Creates a new {@code InteractionTypeAttributeConverter} instance. */
+  public InteractionTypeAttributeConverter() {
     super(InteractionTypeAttribute.class);
   }
 }

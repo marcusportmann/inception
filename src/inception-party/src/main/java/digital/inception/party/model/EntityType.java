@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>EntityType</b> enumeration defines the possible entity types.
+ * The {@code EntityType} enumeration defines the possible entity types.
  *
  * @author Marcus Portmann
  */

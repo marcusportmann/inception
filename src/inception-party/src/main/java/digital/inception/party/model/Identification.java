@@ -48,8 +48,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Identification</b> class holds the information for a legal form of identification that may
- * be used to verify aspects of a party's identity.
+ * The {@code Identification} class holds the information for a legal form of identification that
+ * may be used to verify aspects of a party's identity.
  *
  * <p>The primary key for the identification entity (ID) is a surrogate key to support the
  * management of related data in one or more external stores, e.g. an image of the identification
@@ -176,11 +176,11 @@ public class Identification implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Identification</b>. */
+  /** Creates a new {@code Identification} instance. */
   public Identification() {}
 
   /**
-   * Constructs a new <b>Identification</b>.
+   * Creates a new {@code Identification} instance.
    *
    * @param type the code for the identification type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the
@@ -197,7 +197,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Identification</b>.
+   * Creates a new {@code Identification} instance.
    *
    * @param type the code for the identification type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the
@@ -224,7 +224,7 @@ public class Identification implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

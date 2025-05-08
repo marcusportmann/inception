@@ -24,7 +24,7 @@
 // import java.io.Serial;
 //
 /// **
-// * The <b>InvalidBPMNException</b> exception is thrown to indicate an error condition as a result
+// * The {@code InvalidBPMNException} exception is thrown to indicate an error condition as a result
 // of
 // * invalid BPMN 2.0 XML data.
 // *
@@ -47,19 +47,19 @@
 //  @Serial private static final long serialVersionUID = 1000000;
 //
 //  /**
-//   * Constructs a new <b>InvalidBPMNException</b> with the specified message.
+//   * Creates a new {@code InvalidBPMNException} instance with the specified message.
 //   *
-//   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+//   * @param message The message saved for later retrieval by the {@code getMessage()} method.
 //   */
 //  public InvalidBPMNException(String message) {
 //    super(message);
 //  }
 //
 //  /**
-//   * Constructs a new <b>InvalidBPMNException</b>.
+//   * Creates a new {@code InvalidBPMNException} instance.
 //   *
-//   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-//   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+//   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A
+//   *     {@code null} value is permitted if the cause is nonexistent or unknown)
 //   */
 //  public InvalidBPMNException(Throwable cause) {
 //    super("The BPMN 2.0 XML data is invalid", cause);

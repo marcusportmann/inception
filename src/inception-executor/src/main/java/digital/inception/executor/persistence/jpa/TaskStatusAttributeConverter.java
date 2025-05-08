@@ -21,15 +21,15 @@ import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>TaskStatusAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>TaskStatus</b> enumeration.
+ * The {@code TaskStatusAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code TaskStatus} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class TaskStatusAttributeConverter extends AbstractCodeEnumAttributeConverter<TaskStatus> {
 
-  /** Constructs a new <b>TaskStatusAttributeConverter</b>. */
+  /** Creates a new {@code TaskStatusAttributeConverter} instance. */
   public TaskStatusAttributeConverter() {
     super(TaskStatus.class);
   }

@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>SchedulerApiControllerImpl</b> class.
+ * The {@code SchedulerApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ public class SchedulerApiControllerImpl extends SecureApiController
   private final SchedulerService schedulerService;
 
   /**
-   * Constructs a new <b>SchedulerApiControllerImpl</b>.
+   * Creates a new {@code SchedulerApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param schedulerService the Scheduler Service

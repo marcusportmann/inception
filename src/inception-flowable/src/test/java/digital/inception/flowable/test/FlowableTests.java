@@ -67,7 +67,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * The <b>FlowableTests</b> class contains the JUnit tests for the embedded Flowable engine.
+ * The {@code FlowableTests} class contains the JUnit tests for the embedded Flowable engine.
  *
  * @author Marcus Portmann
  */

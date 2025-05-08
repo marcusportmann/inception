@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>ConfigConfig</b> class provides the Spring configuration for the Config module.
+ * The {@code ConfigConfig} class provides the Spring configuration for the Config module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "configEntityManagerFactory")
 public class ConfigConfiguration {
 
-  /** Constructs a new <b>ConfigConfiguration</b>. */
+  /** Creates a new {@code ConfigConfiguration} instance. */
   public ConfigConfiguration() {}
 
   /**

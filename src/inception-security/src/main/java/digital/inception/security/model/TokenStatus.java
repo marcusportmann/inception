@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>TokenStatus</b> enumeration defines the possible token statuses.
+ * The {@code TokenStatus} enumeration defines the possible token statuses.
  *
  * @author Marcus Portmann
  */

@@ -28,7 +28,7 @@ import javax.sql.XAConnectionBuilder;
 import javax.sql.XADataSource;
 
 /**
- * The <b>DataSourceProxy</b> class provides a proxy that tracks the JDBC connections associated
+ * The {@code DataSourceProxy} class provides a proxy that tracks the JDBC connections associated
  * with the current thread and managed by a <b>javax.sql.XADataSource</b> implementation.
  *
  * @author Marcus Portmann
@@ -43,7 +43,7 @@ public class XADataSourceProxy implements XADataSource {
   private final XADataSource xaDataSource;
 
   /**
-   * Constructs a new <b>XADataSourceProxy</b>.
+   * Creates a new {@code XADataSourceProxy} instance.
    *
    * @param xaDataSource the XA data source
    */

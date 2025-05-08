@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 /**
- * The <b>EmbeddedMongoTemplateTests</b> class contains the JUnit tests for the default
+ * The {@code EmbeddedMongoTemplateTests} class contains the JUnit tests for the default
  * MongoTemplate using the embedded MongoDB process.
  *
  * @author Marcus Portmann

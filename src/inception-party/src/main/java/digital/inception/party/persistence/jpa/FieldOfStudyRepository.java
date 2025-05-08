@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>FieldOfStudyRepository</b> interface declares the persistence for the <b>FieldOfStudy</b>
+ * The {@code FieldOfStudyRepository} interface declares the persistence for the <b>FieldOfStudy</b>
  * domain type.
  *
  * @author Marcus Portmann

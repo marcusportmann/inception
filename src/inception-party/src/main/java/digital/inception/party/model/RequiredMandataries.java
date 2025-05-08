@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>RequiredMandataries</b> enumeration defining the possible numbers of mandataries required
+ * The {@code RequiredMandataries} enumeration defining the possible numbers of mandataries required
  * to execute mandates.
  *
  * @author Marcus Portmann

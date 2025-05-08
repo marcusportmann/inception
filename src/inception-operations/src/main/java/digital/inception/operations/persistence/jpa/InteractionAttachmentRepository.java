@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.InteractionAttachment;
 import java.util.Optional;
@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>InteractionAttachmentRepository</b> interface declares the persistence for the
- * <b>InteractionAttachment</b> domain type.
+ * The {@code InteractionAttachmentRepository} interface declares the persistence for the {@code
+ * InteractionAttachment} domain type.
  *
  * @author Marcus Portmann
  */

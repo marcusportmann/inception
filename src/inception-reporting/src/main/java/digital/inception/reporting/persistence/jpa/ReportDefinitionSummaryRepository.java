@@ -21,8 +21,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>ReportDefinitionSummaryRepository</b> interface declares the persistence for the
- * <b>ReportDefinitionSummary</b> domain type.
+ * The {@code ReportDefinitionSummaryRepository} interface declares the persistence for the {@code
+ * ReportDefinitionSummary} domain type.
  *
  * @author Marcus Portmann
  */

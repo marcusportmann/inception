@@ -21,14 +21,14 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * The <b>InternalInteractionStoreEnabledCondition</b> class implements the condition that must be
+ * The {@code InternalInteractionStoreEnabledCondition} class implements the condition that must be
  * matched to enable the internal interaction store.
  *
  * @author Marcus Portmann
  */
 public class InternalInteractionStoreEnabledCondition implements Condition {
 
-  /** Constructs a new <b>InternalInteractionStoreEnabledCondition</b>. */
+  /** Constructs a new {@code InternalInteractionStoreEnabledCondition}. */
   public InternalInteractionStoreEnabledCondition() {}
 
   @Override

@@ -37,7 +37,7 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 /**
- * The <b>MongoConfiguration</b> class provides the Spring configuration for the Mongo module.
+ * The {@code MongoConfiguration} class provides the Spring configuration for the Mongo module.
  *
  * <p>This module customizes the default automatic initialization performed by the
  * spring-boot-starter-data-mongodb Spring Boot starter.
@@ -48,7 +48,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 @Import(CoreConfiguration.class)
 public class MongoConfiguration {
 
-  /** Constructs a new <b>MongoConfiguration</b>. */
+  /** Creates a new {@code MongoConfiguration} instance. */
   public MongoConfiguration() {}
 
   /**

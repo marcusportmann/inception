@@ -45,7 +45,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Group</b> class holds the information for a group.
+ * The {@code Group} class holds the information for a group.
  *
  * @author Marcus Portmann
  */
@@ -119,11 +119,11 @@ public class Group implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private List<User> users = new ArrayList<>();
 
-  /** Constructs a new <b>Group</b>. */
+  /** Creates a new {@code Group} instance. */
   public Group() {}
 
   /**
-   * Constructs a new <b>Group</b>.
+   * Creates a new {@code Group} instance.
    *
    * @param name the name of the group
    */
@@ -132,7 +132,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Group</b>.
+   * Creates a new {@code Group} instance.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    * @param name the name of the group
@@ -172,7 +172,7 @@ public class Group implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

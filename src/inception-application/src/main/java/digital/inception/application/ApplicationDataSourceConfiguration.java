@@ -38,7 +38,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ApplicationDataSourceConfiguration</b> class provides access to the application data
+ * The {@code ApplicationDataSourceConfiguration} class provides access to the application data
  * source configuration and initialises the application data source.
  *
  * @author Marcus Portmann
@@ -106,7 +106,7 @@ public class ApplicationDataSourceConfiguration {
   private int validationTimeout;
 
   /**
-   * Constructs a new <b>ApplicationDataSourceConfiguration</b>.
+   * Creates a new {@code ApplicationDataSourceConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */

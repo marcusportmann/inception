@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidAssociationValidator</b> class implements the custom constraint validator for
+ * The {@code ValidAssociationValidator} class implements the custom constraint validator for
  * validating an association.
  *
  * @author Marcus Portmann
@@ -50,7 +50,7 @@ public class ValidAssociationValidator
   private final PartyService partyService;
 
   /**
-   * Constructs a new <b>ValidAssociationValidator</b>.
+   * Creates a new {@code ValidAssociationValidator} instance.
    *
    * @param partyService the Party Service
    * @param partyReferenceService the Party Reference Service
@@ -62,7 +62,7 @@ public class ValidAssociationValidator
     this.partyReferenceService = partyReferenceService;
   }
 
-  /** Constructs a new <b>ValidAssociationValidator</b>. */
+  /** Creates a new {@code ValidAssociationValidator} instance. */
   public ValidAssociationValidator() {
     this.partyService = null;
     this.partyReferenceService = null;

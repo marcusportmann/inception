@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>ResidentialTypeRepository</b> interface declares the persistence for the <b>
- * ResidentialType</b> domain type.
+ * The {@code ResidentialTypeRepository} interface declares the persistence for the {@code
+ * ResidentialType} domain type.
  *
  * @author Marcus Portmann
  */

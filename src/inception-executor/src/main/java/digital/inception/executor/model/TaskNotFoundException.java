@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>TaskNotFoundException</b> exception is thrown to indicate an error condition as a result
+ * The {@code TaskNotFoundException} exception is thrown to indicate an error condition as a result
  * of a task that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class TaskNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>TaskNotFoundException</b>.
+   * Creates a new {@code TaskNotFoundException} instance.
    *
    * @param taskId the ID for the task
    */
@@ -55,7 +55,7 @@ public class TaskNotFoundException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>TaskNotFoundException</b>.
+   * Creates a new {@code TaskNotFoundException} instance.
    *
    * @param externalReference the external reference for the task
    */

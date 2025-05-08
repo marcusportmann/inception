@@ -20,8 +20,8 @@ import demo.model.ReactiveData;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 
 /**
- * The <b>ReactiveDataRepository</b> interface declares the R2DBC persistence for the
- * <b>ReactiveData</b> domain type.
+ * The {@code ReactiveDataRepository} interface declares the R2DBC persistence for the {@code
+ * ReactiveData} domain type.
  *
  * @author Marcus Portmann
  */

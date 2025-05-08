@@ -19,7 +19,7 @@ package digital.inception.core.wbxml;
 import java.io.Serial;
 
 /**
- * The <b>ParserException</b> exception is thrown to indicate an error condition when parsing a
+ * The {@code ParserException} exception is thrown to indicate an error condition when parsing a
  * WBXML document.
  *
  * @author Marcus Portmann
@@ -29,38 +29,38 @@ public class ParserException extends Exception {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <b>ParserException</b> with <b>null</b> as its message. */
+  /** Creates a new {@code ParserException} instance with {@code null} as its message. */
   public ParserException() {
     super();
   }
 
   /**
-   * Constructs a new <b>ParserException</b> with the specified message.
+   * Creates a new {@code ParserException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public ParserException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <b>ParserException</b> with the specified cause and a message of <b>
+   * Creates a new {@code ParserException} instance with the specified cause and a message of <b>
    * (cause==null ? null : cause.toString())</b> (which typically contains the class and message of
    * cause).
    *
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public ParserException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Constructs a new <b>ParserException</b> with the specified message and cause.
+   * Creates a new {@code ParserException} instance with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public ParserException(String message, Throwable cause) {
     super(message, cause);

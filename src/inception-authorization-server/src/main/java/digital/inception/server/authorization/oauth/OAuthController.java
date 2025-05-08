@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * The <b>OAuthController</b> class implements a simple OAuth authorization server that provides
+ * The {@code OAuthController} class implements a simple OAuth authorization server that provides
  * support for the Resource Owner Password Grant.
  */
 @Controller
@@ -68,7 +68,7 @@ public class OAuthController {
   private final Bucket tokensIssuedRateLimitBucket;
 
   /**
-   * Constructs a new <b>OAuthController</b>.
+   * Creates a new {@code OAuthController} instance.
    *
    * @param securityService the Security Service
    * @param tokenService the Token Service

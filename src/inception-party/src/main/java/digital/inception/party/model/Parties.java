@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>Parties</b> class holds the results of a request to retrieve a list of parties.
+ * The {@code Parties} class holds the results of a request to retrieve a list of parties.
  *
  * @author Marcus Portmann
  */
@@ -120,11 +120,11 @@ public class Parties implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>Parties</b>. */
+  /** Creates a new {@code Parties} instance. */
   public Parties() {}
 
   /**
-   * Constructs a new <b>Parties</b>.
+   * Creates a new {@code Parties} instance.
    *
    * @param tenantId the ID for the tenant the parties are associated with
    * @param parties the parties

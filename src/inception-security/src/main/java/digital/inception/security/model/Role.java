@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The <b>Role</b> class holds the information for a role.
+ * The {@code Role} class holds the information for a role.
  *
  * @author Marcus Portmann
  */
@@ -108,7 +108,7 @@ public class Role implements java.io.Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Constructs a new <b>Role</b>. */
+  /** Creates a new {@code Role} instance. */
   public Role() {}
 
   /**
@@ -128,7 +128,7 @@ public class Role implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

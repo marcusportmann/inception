@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>LanguageProficiencyLevel</b> enumeration defines the language proficiency levels.
+ * The {@code LanguageProficiencyLevel} enumeration defines the language proficiency levels.
  *
  * <p>Based on the Common European Framework of Reference for Languages (CEFR) language proficiency
  * levels.

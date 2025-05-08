@@ -27,7 +27,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>CodeRepository</b> interface declares the persistence for the <b>Code</b> domain type.
+ * The {@code CodeRepository} interface declares the persistence for the {@code Code} domain type.
  *
  * @author Marcus Portmann
  */

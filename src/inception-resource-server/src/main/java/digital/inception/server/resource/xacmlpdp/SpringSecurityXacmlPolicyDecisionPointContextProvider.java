@@ -26,9 +26,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>SpringSecurityXacmlPolicyDecisionPointContextProvider</b> class implements a
- * <b>XacmlPolicyDecisionPointContextProvider</b> that adds additional context to the AuthzForce
- * XACML authorization decision request from the Spring Security context.
+ * The {@code SpringSecurityXacmlPolicyDecisionPointContextProvider} class implements a {@code
+ * XacmlPolicyDecisionPointContextProvider} that adds additional context to the AuthzForce XACML
+ * authorization decision request from the Spring Security context.
  *
  * @author Marcus Portmann
  */
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 public class SpringSecurityXacmlPolicyDecisionPointContextProvider
     implements XacmlPolicyDecisionPointContextProvider {
 
-  /** Constructs a new <b>SpringSecurityXacmlPolicyDecisionPointContextProvider</b>. */
+  /** Creates a new {@code SpringSecurityXacmlPolicyDecisionPointContextProvider} instance. */
   public SpringSecurityXacmlPolicyDecisionPointContextProvider() {}
 
   @Override

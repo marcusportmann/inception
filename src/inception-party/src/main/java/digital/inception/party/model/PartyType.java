@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PartyType</b> enumeration defines the possible party types.
+ * The {@code PartyType} enumeration defines the possible party types.
  *
  * @author Marcus Portmann
  */

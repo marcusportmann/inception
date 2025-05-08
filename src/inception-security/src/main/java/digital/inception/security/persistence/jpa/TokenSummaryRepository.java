@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>TokenSummaryRepository</b> interface declares the persistence for the <b>TokenSummary</b>
+ * The {@code TokenSummaryRepository} interface declares the persistence for the <b>TokenSummary</b>
  * domain type.
  *
  * @author Marcus Portmann

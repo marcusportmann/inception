@@ -50,7 +50,7 @@ import java.util.Objects;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AssociationProperty</b> class holds the information for an association property for an
+ * The {@code AssociationProperty} class holds the information for an association property for an
  * association.
  *
  * @author Marcus Portmann
@@ -154,11 +154,11 @@ public class AssociationProperty implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>AssociationProperty</b>. */
+  /** Creates a new {@code AssociationProperty} instance. */
   public AssociationProperty() {}
 
   /**
-   * Constructs a new <b>AssociationProperty</b>.
+   * Creates a new {@code AssociationProperty} instance.
    *
    * @param type the code for the association property type
    */
@@ -167,7 +167,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>AssociationProperty</b>.
+   * Creates a new {@code AssociationProperty} instance.
    *
    * @param type the code for the association property type
    * @param stringValue the string value for the association property
@@ -178,7 +178,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>AssociationProperty</b>.
+   * Creates a new {@code AssociationProperty} instance.
    *
    * @param type the code for the association property type
    * @param booleanValue the boolean value for the association property
@@ -189,7 +189,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>AssociationProperty</b>.
+   * Creates a new {@code AssociationProperty} instance.
    *
    * @param type the code for the association property type
    * @param doubleValue the double value for the association property
@@ -200,7 +200,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>AssociationProperty</b>.
+   * Creates a new {@code AssociationProperty} instance.
    *
    * @param type the code for the association property type
    * @param dateValue the date value for the association property
@@ -211,7 +211,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>AssociationProperty</b>.
+   * Creates a new {@code AssociationProperty} instance.
    *
    * @param type the code for the association property type
    * @param decimalValue the decimal value for the association property
@@ -222,7 +222,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Constructs a new <b>AssociationProperty</b>.
+   * Creates a new {@code AssociationProperty} instance.
    *
    * @param type the code for the association property type
    * @param integerValue the integer value for the association property
@@ -236,7 +236,7 @@ public class AssociationProperty implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -334,7 +334,7 @@ public class AssociationProperty implements Serializable {
    * Returns whether the association property has a valid value.
    *
    * @param valueType the value type
-   * @return <b>true</b> if the association property has a valid value or <b>false</b> otherwise
+   * @return {@code true} if the association property has a valid value or {@code false} otherwise
    */
   public boolean hasValue(ValueType valueType) {
     return (((valueType == ValueType.STRING) && StringUtils.hasText(stringValue))

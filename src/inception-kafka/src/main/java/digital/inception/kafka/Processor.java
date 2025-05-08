@@ -547,7 +547,7 @@ public abstract class Processor<K, V> extends Thread {
   /**
    * Returns whether metrics are enabled.
    *
-   * @return <b>true</b> if metrics are enabled <b>false</b> otherwise
+   * @return {@code true} if metrics are enabled {@code false} otherwise
    */
   protected boolean getMetricsEnabled() {
     return metricsEnabled;

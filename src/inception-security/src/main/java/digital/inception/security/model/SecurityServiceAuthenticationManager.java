@@ -30,7 +30,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>SecurityServiceAuthenticationManager</b> class provides an authentication manager
+ * The {@code SecurityServiceAuthenticationManager} class provides an authentication manager
  * implementation based on the Security Service.
  *
  * @author Marcus Portmann
@@ -46,7 +46,7 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
   private final UserDetailsService userDetailsService;
 
   /**
-   * Constructs a new <b>SecurityServiceAuthenticationManager</b>.
+   * Creates a new {@code SecurityServiceAuthenticationManager} instance.
    *
    * @param securityService the Security Service
    * @param userDetailsService the User Details Service
@@ -59,7 +59,7 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
 
   /**
    * Attempts to authenticate the passed {@link Authentication} object, returning a fully populated
-   * <b>Authentication</b> object (including granted authorities) if successful.
+   * {@code Authentication} object (including granted authorities) if successful.
    *
    * <p>An <b>AuthenticationManager</b> must honour the following contract concerning exceptions:
    *

@@ -23,7 +23,7 @@ import java.io.Reader;
 import org.w3c.dom.ls.LSInput;
 
 /**
- * The <b>XmlSchemaClasspathInputSource</b> class provides an implementation of the <b>
+ * The {@code XmlSchemaClasspathInputSource} class provides an implementation of the <b>
  * org.w3c.dom.ls.LSInput</b> interface that allows resources to be retrieved from the classpath.
  *
  * @author Marcus Portmann
@@ -52,7 +52,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   private String systemId;
 
   /**
-   * Constructs a new <b>XmlSchemaClasspathInputSource</b>.
+   * Creates a new {@code XmlSchemaClasspathInputSource} instance.
    *
    * @param namespaceURI the namespace for this input source
    * @param publicId the public identifier for this input source.
@@ -109,9 +109,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Returns <b>true</b> if the input source is certified or <b>false</b> otherwise.
+   * Returns {@code true} if the input source is certified or {@code false} otherwise.
    *
-   * @return <b>true</b> if the input source is certified or <b>false</b> otherwise
+   * @return {@code true} if the input source is certified or {@code false} otherwise
    */
   @Override
   public boolean getCertifiedText() {
@@ -214,7 +214,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   /**
    * Set whether the input source is certified.
    *
-   * @param certifiedText <b>true</b> if the input source is certified or <b>false</b> otherwise
+   * @param certifiedText {@code true} if the input source is certified or {@code false} otherwise
    */
   @Override
   public void setCertifiedText(boolean certifiedText) {

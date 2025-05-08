@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The <b>Countries</b> class provides static reference data for countries.
+ * The {@code Countries} class provides static reference data for countries.
  *
  * @author Marcus Portmann
  */

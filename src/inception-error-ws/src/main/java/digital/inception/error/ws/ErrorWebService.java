@@ -38,7 +38,7 @@ import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>ErrorWebService</b> class.
+ * The {@code ErrorWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -54,7 +54,7 @@ public class ErrorWebService extends AbstractWebServiceBase {
   private final ErrorService errorService;
 
   /**
-   * Constructs a new <b>ErrorWebService</b>.
+   * Creates a new {@code ErrorWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param errorService the Error Service

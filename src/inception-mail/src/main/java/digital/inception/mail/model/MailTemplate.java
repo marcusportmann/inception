@@ -41,7 +41,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
- * The <b>MailTemplate</b> class holds the information for a mail template.
+ * The {@code MailTemplate} class holds the information for a mail template.
  *
  * @author Marcus Portmann
  */
@@ -109,11 +109,11 @@ public class MailTemplate implements Serializable {
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /** Constructs a new <b>MailTemplate</b>. */
+  /** Creates a new {@code MailTemplate} instance. */
   public MailTemplate() {}
 
   /**
-   * Constructs a new <b>MailTemplate</b>.
+   * Creates a new {@code MailTemplate} instance.
    *
    * @param id the ID for the mail template
    * @param name the name of the mail template
@@ -132,7 +132,7 @@ public class MailTemplate implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

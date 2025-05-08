@@ -43,7 +43,7 @@ import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>LockType</b> class holds the information for a lock type.
+ * The {@code LockType} class holds the information for a lock type.
  *
  * @author Marcus Portmann
  */
@@ -164,14 +164,14 @@ public class LockType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>LockType</b>. */
+  /** Creates a new {@code LockType} instance. */
   public LockType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -278,7 +278,7 @@ public class LockType implements Serializable {
    * Returns whether the lock type is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the lock type is valid for the party type or <b>false</b> otherwise
+   * @return {@code true} if the lock type is valid for the party type or {@code false} otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

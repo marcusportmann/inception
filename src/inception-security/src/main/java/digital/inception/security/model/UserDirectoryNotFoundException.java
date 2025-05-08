@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * An <b>UserDirectoryNotFoundException</b> is thrown to indicate that a security operation failed
- * as a result of a user directory that could not be found.
+ * A <b>UserDirectoryNotFoundException</b> exception is thrown to indicate that a security operation
+ * failed as a result of a user directory that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class UserDirectoryNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>UserDirectoryNotFoundException</b>.
+   * Creates a new {@code UserDirectoryNotFoundException} instance.
    *
    * @param userDirectoryId the ID for the user directory
    */

@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidMandateValidator</b> class implements the custom constraint validator for validating
+ * The {@code ValidMandateValidator} class implements the custom constraint validator for validating
  * a mandate.
  *
  * @author Marcus Portmann
@@ -47,7 +47,7 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
   private final PartyService partyService;
 
   /**
-   * Constructs a new <b>ValidMandateValidator</b>.
+   * Creates a new {@code ValidMandateValidator} instance.
    *
    * @param partyService the Party Service
    * @param partyReferenceService the Party Reference Service
@@ -59,7 +59,7 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
     this.partyReferenceService = partyReferenceService;
   }
 
-  /** Constructs a new <b>ValidMandateValidator</b>. */
+  /** Creates a new {@code ValidMandateValidator} instance. */
   public ValidMandateValidator() {
     this.partyService = null;
     this.partyReferenceService = null;

@@ -24,7 +24,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>DefaultMongoDatabaseFactoryCondition</b> class implements the condition that must be
+ * The {@code DefaultMongoDatabaseFactoryCondition} class implements the condition that must be
  * matched to enable the default MongoDatabaseFactory, which is that the MongoDB configuration is
  * specified under spring.data.mongodb.
  *
@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
  */
 public class DefaultMongoDatabaseFactoryCondition implements Condition {
 
-  /** Constructs a new <b>DefaultMongoDatabaseFactoryCondition</b>. */
+  /** Creates a new {@code DefaultMongoDatabaseFactoryCondition} instance. */
   public DefaultMongoDatabaseFactoryCondition() {}
 
   @Override

@@ -42,7 +42,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>ExternalReference</b> class holds the information for an external reference for an
+ * The {@code ExternalReference} class holds the information for an external reference for an
  * organization or person.
  *
  * @author Marcus Portmann
@@ -95,11 +95,11 @@ public class ExternalReference implements Serializable {
   @Column(name = "value", length = 100, nullable = false)
   private String value;
 
-  /** Constructs a new <b>ExternalReference</b>. */
+  /** Creates a new {@code ExternalReference} instance. */
   public ExternalReference() {}
 
   /**
-   * Constructs a new <b>ExternalReference</b>.
+   * Creates a new {@code ExternalReference} instance.
    *
    * @param type the code for the external reference type
    * @param value the value for the external reference
@@ -113,7 +113,7 @@ public class ExternalReference implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

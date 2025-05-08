@@ -35,7 +35,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>VehicleServiceTests</b> class.
+ * The {@code VehicleServiceTests} class.
  *
  * @author Marcus Portmann
  */

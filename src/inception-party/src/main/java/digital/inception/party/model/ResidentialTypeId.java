@@ -21,7 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>ResidentialTypeId</b> class implements the ID class for the <b>ResidentialType</b> class.
+ * The {@code ResidentialTypeId} class implements the ID class for The {@code ResidentialType}
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -36,14 +37,14 @@ public class ResidentialTypeId implements Serializable {
   /** The Unicode locale identifier for the residential type. */
   private String localeId;
 
-  /** Constructs a new <b>ResidentialTypeId</b>. */
+  /** Creates a new {@code ResidentialTypeId} instance. */
   public ResidentialTypeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

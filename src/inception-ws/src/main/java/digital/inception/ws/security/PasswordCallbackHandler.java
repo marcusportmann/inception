@@ -21,7 +21,7 @@ import javax.security.auth.callback.CallbackHandler;
 import org.apache.wss4j.common.ext.WSPasswordCallback;
 
 /**
- * The <b>PasswordCallbackHandler</b> class implements the password callback handler.
+ * The {@code PasswordCallbackHandler} class implements the password callback handler.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ public class PasswordCallbackHandler implements CallbackHandler {
   private final String username;
 
   /**
-   * Constructs a new <b>PasswordCallbackHandler</b>.
+   * Creates a new {@code PasswordCallbackHandler} instance.
    *
    * @param username the username
    * @param password the password

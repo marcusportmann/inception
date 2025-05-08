@@ -21,7 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/** The <b>CacheConfiguration</b> class provides the Spring configuration for the Cache module. */
+/** The {@code CacheConfiguration} class provides the Spring configuration for the Cache module. */
 @Configuration
 @Import(CoreConfiguration.class)
 public class CacheConfiguration {
@@ -30,7 +30,7 @@ public class CacheConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Constructs a new <b>CacheConfiguration</b>.
+   * Creates a new {@code CacheConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */

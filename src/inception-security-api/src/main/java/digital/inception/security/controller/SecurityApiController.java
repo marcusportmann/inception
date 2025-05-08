@@ -95,7 +95,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>SecurityApiController</b> interface.
+ * The {@code SecurityApiController} interface.
  *
  * @author Marcus Portmann
  */

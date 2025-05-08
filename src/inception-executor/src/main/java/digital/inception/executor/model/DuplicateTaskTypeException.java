@@ -45,7 +45,7 @@ public class DuplicateTaskTypeException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateTaskTypeException</b>.
+   * Creates a new {@code DuplicateTaskTypeException} instance.
    *
    * @param taskTypeCode the code for the task type
    */

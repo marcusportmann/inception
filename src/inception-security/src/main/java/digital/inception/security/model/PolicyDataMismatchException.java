@@ -47,30 +47,31 @@ public class PolicyDataMismatchException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>PolicyDataMismatchException</b> with the specified message.
+   * Creates a new {@code PolicyDataMismatchException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public PolicyDataMismatchException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <b>PolicyDataMismatchException</b> with the specified message and cause.
+   * Creates a new {@code PolicyDataMismatchException} instance with the specified message and
+   * cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public PolicyDataMismatchException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Constructs a new <b>PolicyDataMismatchException</b>.
+   * Creates a new {@code PolicyDataMismatchException} instance.
    *
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public PolicyDataMismatchException(Throwable cause) {
     super("The policy type, policy ID or policy version does not match the policy data", cause);

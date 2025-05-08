@@ -23,7 +23,7 @@ import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
 /**
- * The <b>TransactionAwareXAResource</b> class provides a wrapper for a transactional resource,
+ * The {@code TransactionAwareXAResource} class provides a wrapper for a transactional resource,
  * which is represented as both a XAResource object and an Agroal transaction aware connection
  * resource. The wrapper ensures that transactional behavior, i.e. start, commit, rollback, etc., is
  * propagated to both the underlying XAResource object and the TransactionAware object.
@@ -41,7 +41,7 @@ public class TransactionAwareXAResource implements XAResource {
   private final XAResource xaResource;
 
   /**
-   * Constructs a new <b>TransactionAwareXAResource</b>.
+   * Creates a new {@code TransactionAwareXAResource} instance.
    *
    * @param transactionAware the Agroal transaction aware connection resource
    * @param xaResource the underlying XA resource

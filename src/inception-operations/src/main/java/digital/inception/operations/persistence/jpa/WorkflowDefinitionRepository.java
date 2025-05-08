@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
@@ -26,8 +26,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>WorkflowDefinitionRepository</b> interface declares the persistence for the
- * <b>WorkflowDefinition</b> domain type.
+ * The {@code WorkflowDefinitionRepository} interface declares the persistence for the {@code
+ * WorkflowDefinition} domain type.
  *
  * @author Marcus Portmann
  */
@@ -48,8 +48,8 @@ public interface WorkflowDefinitionRepository
    * Returns whether a version of the workflow definition with the specified ID exists.
    *
    * @param workflowDefinitionId the ID for the workflow definition
-   * @return <b>true</b> if a version of the workflow definition with the specified ID exists or
-   *     <b>false</b> otherwise
+   * @return {@code true} if a version of the workflow definition with the specified ID exists or
+   *     {@code false} otherwise
    */
   @Query("select count(cd) > 0 from WorkflowDefinition cd where cd.id = :workflowDefinitionId")
   boolean existsById(@Param("workflowDefinitionId") String workflowDefinitionId);

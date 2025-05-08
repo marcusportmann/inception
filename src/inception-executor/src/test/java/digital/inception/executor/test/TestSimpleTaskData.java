@@ -23,7 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>TestSimpleTaskData</b> class holds the data for the test simple task.
+ * The {@code TestSimpleTaskData} class holds the data for the test simple task.
  *
  * @author Marcus Portmann
  */
@@ -54,11 +54,11 @@ public class TestSimpleTaskData implements Serializable {
   @JsonProperty(required = true)
   private boolean updateMessage;
 
-  /** Constructs a new <b>TestSimpleTaskData</b>. */
+  /** Creates a new {@code TestSimpleTaskData} instance. */
   public TestSimpleTaskData() {}
 
   /**
-   * Constructs a new <b>TestSimpleTaskData</b>.
+   * Creates a new {@code TestSimpleTaskData} instance.
    *
    * @param message the message
    */
@@ -68,10 +68,10 @@ public class TestSimpleTaskData implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TestSimpleTaskData</b>.
+   * Creates a new {@code TestSimpleTaskData} instance.
    *
    * @param message the message
-   * @param updateMessage <b>true</b> if the message should be updated or <b>false</b> otherwise
+   * @param updateMessage {@code true} if the message should be updated or {@code false} otherwise
    */
   public TestSimpleTaskData(String message, boolean updateMessage) {
     this.message = message;
@@ -81,7 +81,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Returns whether the task should be delayed.
    *
-   * @return <b>true</b> if the task should be delayed or <b>false</b> otherwise
+   * @return {@code true} if the task should be delayed or {@code false} otherwise
    */
   public boolean getDelayTask() {
     return delayTask;
@@ -90,7 +90,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Returns whether the task should be failed.
    *
-   * @return <b>true</b> if the task should be failed or <b>false</b> otherwise
+   * @return {@code true} if the task should be failed or {@code false} otherwise
    */
   public boolean getFailTask() {
     return failTask;
@@ -108,7 +108,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Returns whether the task should be retried.
    *
-   * @return <b>true</b> if the task should be retried or <b>false</b> otherwise
+   * @return {@code true} if the task should be retried or {@code false} otherwise
    */
   public boolean getRetryTask() {
     return retryTask;
@@ -117,7 +117,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Returns whether the message should be updated.
    *
-   * @return <b>true</b> if the message should be updated or <b>false</b> otherwise
+   * @return {@code true} if the message should be updated or {@code false} otherwise
    */
   public boolean getUpdateMessage() {
     return updateMessage;
@@ -126,7 +126,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Set whether the task should be delayed.
    *
-   * @param delayTask <b>true</b> if the task should be delayed or <b>false</b> otherwise
+   * @param delayTask {@code true} if the task should be delayed or {@code false} otherwise
    */
   public void setDelayTask(boolean delayTask) {
     this.delayTask = delayTask;
@@ -135,7 +135,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Set whether the task should be failed.
    *
-   * @param failTask <b>true</b> if the task should be failed or <b>false</b> otherwise
+   * @param failTask {@code true} if the task should be failed or {@code false} otherwise
    */
   public void setFailTask(boolean failTask) {
     this.failTask = failTask;
@@ -153,7 +153,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Set whether the task should be retried.
    *
-   * @param retryTask <b>true</b> if the task should be retried or <b>false</b> otherwise
+   * @param retryTask {@code true} if the task should be retried or {@code false} otherwise
    */
   public void setRetryTask(boolean retryTask) {
     this.retryTask = retryTask;
@@ -162,7 +162,7 @@ public class TestSimpleTaskData implements Serializable {
   /**
    * Set whether the message should be updated.
    *
-   * @param updateMessage <b>true</b> if the message should be updated or <b>false</b> otherwise
+   * @param updateMessage {@code true} if the message should be updated or {@code false} otherwise
    */
   public void setUpdateMessage(boolean updateMessage) {
     this.updateMessage = updateMessage;

@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>SMSService</b> interface defines the functionality provided by an SMS Service
+ * The {@code SMSService} interface defines the functionality provided by an SMS Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -36,7 +36,7 @@ public interface SMSService {
   /**
    * Create the new SMS.
    *
-   * @param sms the <b>SMS</b> instance containing the information for the SMS
+   * @param sms the {@code SMS} instance containing the information for the SMS
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the SMS could not be created
    */
@@ -124,7 +124,7 @@ public interface SMSService {
    * @param smsId the ID of the SMS
    * @param mobileNumber the mobile number
    * @param message the message
-   * @return <b>true</b> if the SMS was sent successfully or <b>false</b> otherwise
+   * @return {@code true} if the SMS was sent successfully or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the SMS could not be sent synchronously
    */

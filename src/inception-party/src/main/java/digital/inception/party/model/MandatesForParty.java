@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>MandatesForParty</b> class holds the results of a request to retrieve a list of mandates
+ * The {@code MandatesForParty} class holds the results of a request to retrieve a list of mandates
  * for a party.
  *
  * @author Marcus Portmann
@@ -123,11 +123,11 @@ public class MandatesForParty implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>MandatesForParty</b>. */
+  /** Creates a new {@code MandatesForParty} instance. */
   public MandatesForParty() {}
 
   /**
-   * Constructs a new <b>MandatesForParty</b>.
+   * Creates a new {@code MandatesForParty} instance.
    *
    * @param tenantId the ID for the tenant the mandates are associated with
    * @param partyId the ID for the party the mandates are associated with

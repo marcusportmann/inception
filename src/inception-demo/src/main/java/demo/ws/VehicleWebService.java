@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>VehicleWebService</b> class.
+ * The {@code VehicleWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ public class VehicleWebService extends AbstractWebServiceBase {
   private final VehicleService vehicleService;
 
   /**
-   * Constructs a new <b>VehicleWebService</b>.
+   * Creates a new {@code VehicleWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param vehicleService the Vehicle Service

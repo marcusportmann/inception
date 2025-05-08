@@ -42,7 +42,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>ExecutorService</b> interface defines the functionality provided by an Executor Service
+ * The {@code ExecutorService} interface defines the functionality provided by an Executor Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -105,7 +105,7 @@ public interface ExecutorService {
   /**
    * Create the new task type.
    *
-   * @param taskType the <b>TaskType</b> instance containing the information for the task type
+   * @param taskType the {@code TaskType} instance containing the information for the task type
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateTaskTypeException if the task type already exists
    * @throws ServiceUnavailableException if the task type could not be created
@@ -305,7 +305,7 @@ public interface ExecutorService {
    * Returns whether a task with the specified task type is currently queued or executing.
    *
    * @param taskTypeCode the code for the task type
-   * @return <b>true</b> if a task with the specified task type is currently queued or executing
+   * @return {@code true} if a task with the specified task type is currently queued or executing
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if existence of a task with the specified task type that is
    *     currently queued or executing could not be verified
@@ -488,7 +488,7 @@ public interface ExecutorService {
    * Returns whether the task type exists.
    *
    * @param taskTypeCode the code for the task type
-   * @return <b>true</b> if the task type exists or <b>false</b> otherwise
+   * @return {@code true} if the task type exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if existence of the task type could not be verified
    */
@@ -542,7 +542,7 @@ public interface ExecutorService {
   /**
    * Update the task type.
    *
-   * @param taskType the <b>TaskType</b> instance containing the updated information for the task
+   * @param taskType the {@code TaskType} instance containing the updated information for the task
    *     type
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TaskTypeNotFoundException if the task type could not be found

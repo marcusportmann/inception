@@ -47,7 +47,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * The <b>IndustryAllocation</b> class holds the information for the allocation of an organization
+ * The {@code IndustryAllocation} class holds the information for the allocation of an organization
  * to an industry.
  *
  * @author Marcus Portmann
@@ -122,11 +122,11 @@ public class IndustryAllocation implements Serializable {
   @Column(name = "system", length = 50, nullable = false)
   private String system;
 
-  /** Constructs a new <b>IndustryAllocation</b>. */
+  /** Creates a new {@code IndustryAllocation} instance. */
   public IndustryAllocation() {}
 
   /**
-   * Constructs a new <b>IndustryAllocation</b>.
+   * Creates a new {@code IndustryAllocation} instance.
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
@@ -137,7 +137,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Constructs a new <b>IndustryAllocation</b>.
+   * Creates a new {@code IndustryAllocation} instance.
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
@@ -150,7 +150,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Constructs a new <b>IndustryAllocation</b>.
+   * Creates a new {@code IndustryAllocation} instance.
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
@@ -169,7 +169,7 @@ public class IndustryAllocation implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>InvalidConfigurationException</b> is thrown to indicate that a security operation failed as
- * a result of invalid configuration.
+ * An {@code InvalidConfigurationException} exception is thrown to indicate that a security
+ * operation failed as a result of invalid configuration.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,20 +46,21 @@ public class InvalidConfigurationException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>InvalidConfigurationException</b> with the specified message.
+   * Creates a new {@code InvalidConfigurationException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public InvalidConfigurationException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <b>InvalidConfigurationException</b> with the specified message and cause.
+   * Creates a new {@code InvalidConfigurationException} instance with the specified message and
+   * cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidConfigurationException(String message, Throwable cause) {
     super(message, cause);

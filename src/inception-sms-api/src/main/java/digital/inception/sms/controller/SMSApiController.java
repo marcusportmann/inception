@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * The <b>SMSApiController</b> interface.
+ * The {@code SMSApiController} interface.
  *
  * @author Marcus Portmann
  */

@@ -54,7 +54,7 @@ import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.test.TestConfiguration;
 
 /**
- * The <b>WorkflowServiceTests</b> class contains the JUnit tests for the <b>WorkflowService</b> class.
+ * The {@code WorkflowServiceTests} class contains the JUnit tests for The {@code WorkflowService} class.
  *
  * @author Marcus Portmann
  */

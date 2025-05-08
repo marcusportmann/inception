@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>ArchivedTaskNotFoundException</b> exception is thrown to indicate an error condition as a
+ * The {@code ArchivedTaskNotFoundException} exception is thrown to indicate an error condition as a
  * result of an archived task that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class ArchivedTaskNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>ArchivedTaskNotFoundException</b>.
+   * Creates a new {@code ArchivedTaskNotFoundException} instance.
    *
    * @param archivedTaskId the ID for the task
    */

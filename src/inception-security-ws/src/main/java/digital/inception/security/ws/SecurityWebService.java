@@ -87,7 +87,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>SecurityWebService</b> class.
+ * The {@code SecurityWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -103,7 +103,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
   private final SecurityService securityService;
 
   /**
-   * Constructs a new <b>SecurityWebService</b>.
+   * Creates a new {@code SecurityWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param securityService the Security Service

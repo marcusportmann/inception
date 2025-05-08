@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 /**
- * The <b>AgroalDataSourceListener</b> class.
+ * The {@code AgroalDataSourceListener} class.
  *
  * @author Marcus Portmann
  */
@@ -35,7 +35,7 @@ public class AgroalDataSourceListener implements io.agroal.api.AgroalDataSourceL
   private final DataSourceConfiguration dataSourceConfiguration;
 
   /**
-   * Constructs a new <b>AgroalDataSourceListener</b>.
+   * Creates a new {@code AgroalDataSourceListener} instance.
    *
    * @param dataSourceConfiguration the data source configuration
    */

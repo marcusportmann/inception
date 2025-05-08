@@ -37,7 +37,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MeasurementUnit</b> class holds the information for a measurement unit.
+ * The {@code MeasurementUnit} class holds the information for a measurement unit.
  *
  * @author Marcus Portmann
  */
@@ -132,14 +132,14 @@ public class MeasurementUnit implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>MeasurementUnit</b>. */
+  /** Creates a new {@code MeasurementUnit} instance. */
   public MeasurementUnit() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

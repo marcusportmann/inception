@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>Persons</b> class holds the results of a request to retrieve a list of persons.
+ * The {@code Persons} class holds the results of a request to retrieve a list of persons.
  *
  * @author Marcus Portmann
  */
@@ -120,11 +120,11 @@ public class Persons implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>Persons</b>. */
+  /** Creates a new {@code Persons} instance. */
   public Persons() {}
 
   /**
-   * Constructs a new <b>Persons</b>.
+   * Creates a new {@code Persons} instance.
    *
    * @param tenantId the ID for the tenant the persons are associated with
    * @param persons the persons

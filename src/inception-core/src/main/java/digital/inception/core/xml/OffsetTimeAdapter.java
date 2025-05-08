@@ -21,14 +21,14 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.OffsetTime;
 
 /**
- * The <b>OffsetTimeAdapter</b> class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and <b>OffsetTime</b> types. <br>
+ * The {@code OffsetTimeAdapter} class implements a JAXB 2.0 adapter used to convert between
+ * <b>String</b> and {@code OffsetTime} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class OffsetTimeAdapter extends XmlAdapter<String, OffsetTime> {
 
-  /** Constructs a new <b>OffsetTimeAdapter</b>. */
+  /** Creates a new {@code OffsetTimeAdapter} instance. */
   public OffsetTimeAdapter() {}
 
   /**

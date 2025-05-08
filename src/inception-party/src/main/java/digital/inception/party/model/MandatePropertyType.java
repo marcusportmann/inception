@@ -40,7 +40,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
- * The <b>MandatePropertyType</b> class holds the information for a mandate property type.
+ * The {@code MandatePropertyType} class holds the information for a mandate property type.
  *
  * @author Marcus Portmann
  */
@@ -180,14 +180,14 @@ public class MandatePropertyType implements Serializable {
   @Column(name = "value_type", length = 10, nullable = false)
   private ValueType valueType;
 
-  /** Constructs a new <b>MandatePropertyType</b>. */
+  /** Creates a new {@code MandatePropertyType} instance. */
   public MandatePropertyType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

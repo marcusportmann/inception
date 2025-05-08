@@ -35,7 +35,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>CryptoUtil</b> class provides a number of cryptography related utility functions.
+ * The {@code CryptoUtil} class provides a number of cryptography related utility functions.
  *
  * @author Marcus Portmann
  */

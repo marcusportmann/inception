@@ -20,8 +20,8 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentNotFoundException;
 import digital.inception.operations.model.DuplicateDocumentException;
-import digital.inception.operations.persistence.DocumentRepository;
-import digital.inception.operations.persistence.DocumentSummaryRepository;
+import digital.inception.operations.persistence.jpa.DocumentRepository;
+import digital.inception.operations.persistence.jpa.DocumentSummaryRepository;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>InternalDocumentStore</b> class provides the internal document store implementation.
+ * The {@code InternalDocumentStore} class provides the internal document store implementation.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +49,7 @@ public class InternalDocumentStore implements DocumentStore {
   private final DocumentSummaryRepository documentSummaryRepository;
 
   /**
-   * Constructs a new <b>InternalDocumentStore</b>.
+   * Constructs a new {@code InternalDocumentStore}.
    *
    * @param documentRepository the Document Repository
    * @param documentSummaryRepository the Document Summary Repository

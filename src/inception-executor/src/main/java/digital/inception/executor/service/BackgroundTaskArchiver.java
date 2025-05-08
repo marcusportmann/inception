@@ -23,7 +23,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>BackgroundTaskArchiver</b> class implements the Background Task Archiver, which archives
+ * The {@code BackgroundTaskArchiver} class implements the Background Task Archiver, which archives
  * and purges historical tasks.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public class BackgroundTaskArchiver {
   private final ExecutorService executorService;
 
   /**
-   * Constructs a new <b>BackgroundTaskArchiver</b>.
+   * Creates a new {@code BackgroundTaskArchiver} instance.
    *
    * @param executorService the Executor Service
    */

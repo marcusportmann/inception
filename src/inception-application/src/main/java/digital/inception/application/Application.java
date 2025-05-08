@@ -32,8 +32,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>Application</b> class provides the class that all application-specific application classes
- * should be derived from.
+ * The {@code Application} class provides the class that all application-specific application
+ * classes should be derived from.
  *
  * @author Marcus Portmann
  */
@@ -53,7 +53,7 @@ public abstract class Application {
   Map<String, Map<?, ?>> caches = new ConcurrentHashMap<>();
 
   /**
-   * Constructs a new <b>Application</b>.
+   * Creates a new {@code Application} instance.
    *
    * @param applicationContext the Spring application context
    */

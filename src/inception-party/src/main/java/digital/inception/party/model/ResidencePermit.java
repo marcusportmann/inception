@@ -48,7 +48,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ResidencePermit</b> class holds the information for a residence permit issued to a person.
+ * The {@code ResidencePermit} class holds the information for a residence permit issued to a
+ * person.
  *
  * <p>The primary key for the residence permit entity (ID) is a surrogate key to support the
  * management of related data in one or more external stores, e.g. an image of the residence permit
@@ -145,11 +146,11 @@ public class ResidencePermit implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>ResidencePermit</b>. */
+  /** Creates a new {@code ResidencePermit} instance. */
   public ResidencePermit() {}
 
   /**
-   * Constructs a new <b>ResidencePermit</b>.
+   * Creates a new {@code ResidencePermit} instance.
    *
    * @param type the code for the residence permit type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the residence
@@ -166,7 +167,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Constructs a new <b>ResidencePermit</b>.
+   * Creates a new {@code ResidencePermit} instance.
    *
    * @param type the code for the residence permit type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the residence
@@ -193,7 +194,7 @@ public class ResidencePermit implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

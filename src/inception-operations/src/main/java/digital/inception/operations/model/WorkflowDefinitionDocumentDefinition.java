@@ -44,10 +44,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>WorkflowDefinitionDocumentDefinition</b> class holds the information for an association of
- * a document definition with a workflow definition.
- *
- * @author Marcus Portmann
+ * The {@code WorkflowDefinitionDocumentDefinition} class holds the information for an association
+ * of a document definition with a workflow definition.
  */
 @Schema(description = "An association of a document definition with a workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -93,7 +91,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   /**
    * Is a document with the document definition ID required for a workflow with the workflow
-   * definition ID and workflow definition version?
+   * definition ID and workflow definition version.
    */
   @Schema(
       description =
@@ -107,7 +105,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   /**
    * Is a workflow with the workflow definition ID and workflow definition version limited to a
-   * single document with the document definition ID?
+   * single document with the document definition ID.
    */
   @Schema(
       description =
@@ -157,11 +155,11 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   })
   private WorkflowDefinition workflowDefinition;
 
-  /** Constructs a new <b>WorkflowDefinitionDocumentDefinition</b>. */
+  /** Creates a new {@code WorkflowDefinitionDocumentDefinition} instance. */
   public WorkflowDefinitionDocumentDefinition() {}
 
   /**
-   * Constructs a new <b>WorkflowDefinitionDocumentDefinition</b>.
+   * Creates a new {@code WorkflowDefinitionDocumentDefinition} instance.
    *
    * @param workflowDefinition the workflow definition the workflow definition document definition
    *     is associated with
@@ -180,7 +178,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -251,8 +249,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * Returns whether a document with the document definition ID is required for a workflow with the
    * workflow definition ID and workflow definition version.
    *
-   * @return <b>true</b> if a document with the document definition ID is required for a workflow
-   *     with the workflow definition ID and workflow definition version or <b>false</b> otherwise
+   * @return {@code true} if a document with the document definition ID is required for a workflow
+   *     with the workflow definition ID and workflow definition version or {@code false} otherwise
    */
   public boolean isRequired() {
     return required;
@@ -262,8 +260,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * Returns whether a workflow with the workflow definition ID and workflow definition version is
    * limited to a single document with the document definition ID.
    *
-   * @return <b>true</b> if a workflow with the workflow definition ID and workflow definition
-   *     version is limited to a single document with the document definition ID or <b>false</b>
+   * @return {@code true} if a workflow with the workflow definition ID and workflow definition
+   *     version is limited to a single document with the document definition ID or {@code false}
    *     otherwise
    */
   public boolean isUnique() {
@@ -283,8 +281,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * Set whether a document with the document definition ID is required for a workflow with the
    * workflow definition ID and workflow definition version.
    *
-   * @param required <b>true</b> if a document with the document definition ID is required for a
-   *     workflow with the workflow definition ID and workflow definition version or <b>false</b>
+   * @param required {@code true} if a document with the document definition ID is required for a
+   *     workflow with the workflow definition ID and workflow definition version or {@code false}
    *     otherwise
    */
   public void setRequired(boolean required) {
@@ -295,9 +293,9 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * Set whether a workflow with the workflow definition ID and workflow definition version is
    * limited to a single document with the document definition ID.
    *
-   * @param unique <b>true</b> if a workflow with the workflow definition ID and workflow definition
-   *     version is limited to a single document with the document definition ID or <b>false</b>
-   *     otherwise
+   * @param unique {@code true} if a workflow with the workflow definition ID and workflow
+   *     definition version is limited to a single document with the document definition ID or
+   *     {@code false} otherwise
    */
   public void setUnique(boolean unique) {
     this.unique = unique;

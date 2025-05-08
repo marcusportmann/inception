@@ -40,7 +40,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
- * The <b>ContactMechanismType</b> class holds the information for a contact mechanism type.
+ * The {@code ContactMechanismType} class holds the information for a contact mechanism type.
  *
  * @author Marcus Portmann
  */
@@ -184,14 +184,14 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>ContactMechanismType</b>. */
+  /** Creates a new {@code ContactMechanismType} instance. */
   public ContactMechanismType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

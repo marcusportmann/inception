@@ -62,7 +62,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * The <b>Organization</b> class holds the information for an organization, which is an organised
+ * The {@code Organization} class holds the information for an organization, which is an organised
  * group of people with a particular purpose, such as a business or government department.
  *
  * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
@@ -71,14 +71,14 @@ import java.util.stream.Collectors;
  * <p>The following steps must be completed when adding a new attribute to the organization entity:
  *
  * <ol>
- *   <li>Add a new column for the new attribute to the <b>party_organizations</b> table using a new
- *       changeset in the <b>inception-party.changelog.xml</b> file.
- *   <li>Add a new property for the new attribute to the <b>Organization</b> class.
- *   <li>Add the appropriate validation for the new attribute to the
- *       <b>ValidOrganizationValidator</b> class.
- *   <li>Add the name of the attribute to the <b>Attribute.RESERVED_ATTRIBUTE_TYPE_CODES</b> array.
- *   <li>Add support for applying validations described by <b>RoleTypeAttributeTypeConstraint</b>s
- *       to the <b>ValidOrganizationValidator</b>.
+ *   <li>Add a new column for the new attribute to the {@code party_organizations} table using a new
+ *       changeset in the {@code inception-party.changelog.xml} file.
+ *   <li>Add a new property for the new attribute to The {@code Organization} class.
+ *   <li>Add the appropriate validation for the new attribute to the {@code
+ *       ValidOrganizationValidator} class.
+ *   <li>Add the name of the attribute to the {@code Attribute.RESERVED_ATTRIBUTE_TYPE_CODES} array.
+ *   <li>Add support for applying validations described by {@code RoleTypeAttributeTypeConstraint}s
+ *       to the @{code ValidOrganizationValidator}.
  * </ol>
  *
  * @author Marcus Portmann
@@ -297,13 +297,13 @@ public class Organization extends PartyBase implements Serializable {
   @Column(name = "identification_type", length = 50)
   private String identificationType;
 
-  /** Constructs a new <b>Organization</b>. */
+  /** Creates a new {@code Organization} instance. */
   public Organization() {
     super(PartyType.ORGANIZATION);
   }
 
   /**
-   * Constructs a new <b>Organization</b>.
+   * Creates a new {@code Organization} instance.
    *
    * @param tenantId the ID for the tenant the organization is associated with
    * @param name the name of the organization
@@ -498,7 +498,7 @@ public class Organization extends PartyBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -1036,8 +1036,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has an attribute with the specified type.
    *
    * @param type the code for the attribute type
-   * @return <b>true</b> if the organization has an attribute with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has an attribute with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasAttributeWithType(String type) {
     return attributes.stream().anyMatch(attribute -> Objects.equals(attribute.getType(), type));
@@ -1047,8 +1047,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a contact mechanism with the specified role.
    *
    * @param role the code for the contact mechanism role
-   * @return <b>true</b> if the organization has a contact mechanism with the specified role or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has a contact mechanism with the specified role or
+   *     {@code false} otherwise
    */
   public boolean hasContactMechanismWithRole(String role) {
     return contactMechanisms.stream()
@@ -1059,8 +1059,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a contact mechanism with the specified type.
    *
    * @param type the code for the contact mechanism type
-   * @return <b>true</b> if the organization has a contact mechanism with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has a contact mechanism with the specified type or
+   *     {@code false} otherwise
    */
   public boolean hasContactMechanismWithType(String type) {
     return contactMechanisms.stream()
@@ -1071,8 +1071,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has an external reference with the specified type.
    *
    * @param type the code for the external reference type
-   * @return <b>true</b> if the organization has an external reference with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has an external reference with the specified type or
+   *     {@code false} otherwise
    */
   public boolean hasExternalReferenceWithType(String type) {
     return externalReferences.stream()
@@ -1083,8 +1083,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has an identification with the specified type.
    *
    * @param type the code for the identification type
-   * @return <b>true</b> if the organization has an identification with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has an identification with the specified type or
+   *     {@code false} otherwise
    */
   public boolean hasIdentificationWithType(String type) {
     return identifications.stream()
@@ -1097,8 +1097,8 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
-   * @return <b>true</b> if the organization has an industry allocation with the specified industry
-   *     classification system and industry classification or <b>false</b> otherwise
+   * @return {@code true} if the organization has an industry allocation with the specified industry
+   *     classification system and industry classification or {@code false} otherwise
    */
   public boolean hasIndustryAllocationWithSystemAndIndustry(String system, String industry) {
     return industryAllocations.stream()
@@ -1112,7 +1112,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a lock with the specified type.
    *
    * @param type the code for the lock type
-   * @return <b>true</b> if the organization has a lock with the specified type or <b>false</b>
+   * @return {@code true} if the organization has a lock with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasLockWithType(String type) {
@@ -1123,8 +1123,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a physical address with the specified role.
    *
    * @param role the code for the physical address role
-   * @return <b>true</b> if the organization has a physical address with the specified role or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has a physical address with the specified role or
+   *     {@code false} otherwise
    */
   public boolean hasPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
@@ -1135,8 +1135,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a physical address with the specified type.
    *
    * @param type the code for the physical address type
-   * @return <b>true</b> if the organization has a physical address with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has a physical address with the specified type or
+   *     {@code false} otherwise
    */
   public boolean hasPhysicalAddressWithType(String type) {
     return physicalAddresses.stream()
@@ -1147,8 +1147,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a preference with the specified type.
    *
    * @param type the code for the preference type
-   * @return <b>true</b> if the organization has a preference with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has a preference with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasPreferenceWithType(String type) {
     return preferences.stream().anyMatch(preference -> Objects.equals(preference.getType(), type));
@@ -1158,7 +1158,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a role with the specified type.
    *
    * @param type the code for the role type
-   * @return <b>true</b> if the organization has a role with the specified type or <b>false</b>
+   * @return {@code true} if the organization has a role with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasRoleWithType(String type) {
@@ -1169,7 +1169,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a status with the specified type.
    *
    * @param type the code for the status type
-   * @return <b>true</b> if the organization has a status with the specified type or <b>false</b>
+   * @return {@code true} if the organization has a status with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasStatusWithType(String type) {
@@ -1180,8 +1180,8 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a tax number with the specified type.
    *
    * @param type the code for the tax number type
-   * @return <b>true</b> if the organization has a tax number with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the organization has a tax number with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasTaxNumberWithType(String type) {
     return taxNumbers.stream().anyMatch(taxNumber -> Objects.equals(taxNumber.getType(), type));

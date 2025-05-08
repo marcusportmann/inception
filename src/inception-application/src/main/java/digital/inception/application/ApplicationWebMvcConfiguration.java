@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * The <b>ApplicationWebMvcConfiguration</b> class customizes the Java-based configuration for
+ * The {@code ApplicationWebMvcConfiguration} class customizes the Java-based configuration for
  * Spring MVC.
  *
  * @author Marcus Portmann
@@ -35,7 +35,7 @@ public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
   private final StringToCodeEnumConverterFactory stringToCodeEnumConverterFactory;
 
   /**
-   * Constructs a new <b>ApplicationWebMvcConfiguration</b>.
+   * Creates a new {@code ApplicationWebMvcConfiguration} instance.
    *
    * @param stringToCodeEnumConverterFactory the String to CodeEnum converter factory
    */

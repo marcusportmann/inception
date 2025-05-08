@@ -22,7 +22,7 @@ import jakarta.transaction.TransactionManager;
 import org.springframework.transaction.TransactionSystemException;
 
 /**
- * The <b>TransactionUtil</b> class provides a helper class for working with transactions.
+ * The {@code TransactionUtil} class provides a helper class for working with transactions.
  *
  * @author Marcus Portmann
  */
@@ -35,7 +35,7 @@ public final class TransactionUtil {
    * Check whether there is an existing JTA transaction.
    *
    * @param transactionManager the JTA transaction manager
-   * @return <b>true</b> if there is an existing JTA transaction or <b>false</b> otherwise
+   * @return {@code true} if there is an existing JTA transaction or {@code false} otherwise
    */
   public static boolean transactionExists(TransactionManager transactionManager) {
     try {

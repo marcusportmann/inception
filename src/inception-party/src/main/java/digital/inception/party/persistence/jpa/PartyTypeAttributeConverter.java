@@ -21,15 +21,15 @@ import digital.inception.party.model.PartyType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>PartyTypeAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>PartyType</b> enumeration.
+ * The {@code PartyTypeAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code PartyType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class PartyTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<PartyType> {
 
-  /** Constructs a new <b>PartyTypeAttributeConverter</b>. */
+  /** Creates a new {@code PartyTypeAttributeConverter} instance. */
   public PartyTypeAttributeConverter() {
     super(PartyType.class);
   }

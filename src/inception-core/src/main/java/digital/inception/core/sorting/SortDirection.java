@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>SortDirection</b> enumeration defines the possible sort directions when retrieving
+ * The {@code SortDirection} enumeration defines the possible sort directions when retrieving
  * security related entities.
  *
  * @author Marcus Portmann

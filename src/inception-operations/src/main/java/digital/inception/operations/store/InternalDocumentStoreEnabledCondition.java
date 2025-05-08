@@ -21,14 +21,14 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * The <b>InternalDocumentStoreEnabledCondition</b> class implements the condition that must be
+ * The {@code InternalDocumentStoreEnabledCondition} class implements the condition that must be
  * matched to enable the internal document store.
  *
  * @author Marcus Portmann
  */
 public class InternalDocumentStoreEnabledCondition implements Condition {
 
-  /** Constructs a new <b>InternalDocumentStoreEnabledCondition</b>. */
+  /** Constructs a new {@code InternalDocumentStoreEnabledCondition}. */
   public InternalDocumentStoreEnabledCondition() {}
 
   @Override

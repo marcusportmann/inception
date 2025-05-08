@@ -48,7 +48,7 @@ import org.ow2.authzforce.core.pdp.api.value.StringValue;
 import org.ow2.authzforce.xacml.identifiers.XacmlStatusCode;
 
 /**
- * The <b>XacmlGetRequestBodyObjectAttributeValueFunctions</b> class provides the custom AuthzForce
+ * The {@code XacmlGetRequestBodyObjectAttributeValueFunctions} class provides the custom AuthzForce
  * functions that allow the retrieval of attribute values from the request body object populated
  * from the JSON request body of a RESTful API invocation. The request body object populated from
  * the JSON request body is stored in a thread-local variable, and these functions use OGNL
@@ -116,7 +116,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     private final Class<ATTRIBUTE_VALUE_TYPE> attributeValueType;
 
     /**
-     * Constructs a new <b>XacmlGetRequestBodyAttributeValueFunction</b>.
+     * Creates a new {@code XacmlGetRequestBodyAttributeValueFunction} instance.
      *
      * @param functionId the function ID
      * @param attributeValueType the required type of the attribute value retrieved from the Java
@@ -262,7 +262,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
   }
 
   /**
-   * The <b>XacmlGetRequestBodyBooleanAttributeValueFunction</b> class provides a custom AuthzForce
+   * The {@code XacmlGetRequestBodyBooleanAttributeValueFunction} class provides a custom AuthzForce
    * function to retrieve a boolean attribute from the request body object populated from the JSON
    * request body of a RESTful API invocation.
    */
@@ -272,7 +272,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "boolean" + FUNCTION_ID_SUFFIX;
 
-    /** Constructs a new <b>XacmlGetRequestBodyBooleanAttributeValueFunction</b>. */
+    /** Creates a new {@code XacmlGetRequestBodyBooleanAttributeValueFunction} instance. */
     public XacmlGetRequestBodyBooleanAttributeValueFunction() {
       super(ID, Boolean.class, StandardDatatypes.BOOLEAN);
     }
@@ -296,7 +296,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
   }
 
   /**
-   * The <b>XacmlGetRequestBodyDateAttributeValueFunction</b> class provides a custom AuthzForce
+   * The {@code XacmlGetRequestBodyDateAttributeValueFunction} class provides a custom AuthzForce
    * function to retrieve a date (LocalDate) attribute from the request body object populated from
    * the JSON request body of a RESTful API invocation.
    */
@@ -306,7 +306,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "date" + FUNCTION_ID_SUFFIX;
 
-    /** Constructs a new <b>XacmlGetRequestBodyDateAttributeValueFunction</b>. */
+    /** Creates a new {@code XacmlGetRequestBodyDateAttributeValueFunction} instance. */
     public XacmlGetRequestBodyDateAttributeValueFunction() {
       super(ID, LocalDate.class, StandardDatatypes.DATE);
     }
@@ -330,9 +330,9 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
   }
 
   /**
-   * The <b>XacmlGetRequestBodyDateTimeAttributeValueFunction</b> class provides a custom AuthzForce
-   * function to retrieve a date time (OffsetDateTime) attribute from the request body object
-   * populated from the JSON request body of a RESTful API invocation.
+   * The {@code XacmlGetRequestBodyDateTimeAttributeValueFunction} class provides a custom
+   * AuthzForce function to retrieve a date time (OffsetDateTime) attribute from the request body
+   * object populated from the JSON request body of a RESTful API invocation.
    */
   public static class XacmlGetRequestBodyDateTimeAttributeValueFunction
       extends XacmlGetRequestBodyAttributeValueFunction<OffsetDateTime, DateTimeValue> {
@@ -340,7 +340,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "date-time" + FUNCTION_ID_SUFFIX;
 
-    /** Constructs a new <b>XacmlGetRequestBodyDateTimeAttributeValueFunction</b>. */
+    /** Creates a new {@code XacmlGetRequestBodyDateTimeAttributeValueFunction} instance. */
     public XacmlGetRequestBodyDateTimeAttributeValueFunction() {
       super(ID, OffsetDateTime.class, StandardDatatypes.DATETIME);
     }
@@ -368,7 +368,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
   }
 
   /**
-   * The <b>XacmlGetRequestBodyDoubleAttributeValueFunction</b> class provides a custom AuthzForce
+   * The {@code XacmlGetRequestBodyDoubleAttributeValueFunction} class provides a custom AuthzForce
    * function to retrieve a double attribute from the request body object populated from the JSON
    * request body of a RESTful API invocation.
    */
@@ -378,7 +378,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "double" + FUNCTION_ID_SUFFIX;
 
-    /** Constructs a new <b>XacmlGetRequestBodyDoubleAttributeValueFunction</b>. */
+    /** Creates a new {@code XacmlGetRequestBodyDoubleAttributeValueFunction} instance. */
     public XacmlGetRequestBodyDoubleAttributeValueFunction() {
       super(ID, Double.class, StandardDatatypes.DOUBLE);
     }
@@ -402,7 +402,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
   }
 
   /**
-   * The <b>XacmlGetRequestBodyIntegerAttributeValueFunction</b> class provides a custom AuthzForce
+   * The {@code XacmlGetRequestBodyIntegerAttributeValueFunction} class provides a custom AuthzForce
    * function to retrieve a integer attribute from the request body object populated from the JSON
    * request body of a RESTful API invocation.
    */
@@ -412,7 +412,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "integer" + FUNCTION_ID_SUFFIX;
 
-    /** Constructs a new <b>XacmlGetRequestBodyIntegerAttributeValueFunction</b>. */
+    /** Creates a new {@code XacmlGetRequestBodyIntegerAttributeValueFunction} instance. */
     public XacmlGetRequestBodyIntegerAttributeValueFunction() {
       super(ID, Integer.class, StandardDatatypes.INTEGER);
     }
@@ -436,7 +436,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
   }
 
   /**
-   * The <b>XacmlGetRequestBodyStringAttributeValueFunction</b> class provides a custom AuthzForce
+   * The {@code XacmlGetRequestBodyStringAttributeValueFunction} class provides a custom AuthzForce
    * function to retrieve a string attribute from the request body object populated from the JSON
    * request body of a RESTful API invocation.
    */
@@ -446,7 +446,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "string" + FUNCTION_ID_SUFFIX;
 
-    /** Constructs a new <b>XacmlGetRequestBodyStringAttributeValueFunction</b>. */
+    /** Creates a new {@code XacmlGetRequestBodyStringAttributeValueFunction} instance. */
     public XacmlGetRequestBodyStringAttributeValueFunction() {
       super(ID, String.class, StandardDatatypes.STRING);
     }

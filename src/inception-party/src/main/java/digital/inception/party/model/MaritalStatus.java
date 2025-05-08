@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>MaritalStatus</b> class holds the information for a marital status.
+ * The {@code MaritalStatus} class holds the information for a marital status.
  *
  * @author Marcus Portmann
  */
@@ -121,14 +121,14 @@ public class MaritalStatus implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>MaritalStatus</b>. */
+  /** Creates a new {@code MaritalStatus} instance. */
   public MaritalStatus() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

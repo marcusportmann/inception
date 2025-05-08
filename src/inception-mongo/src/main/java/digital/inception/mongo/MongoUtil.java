@@ -25,7 +25,7 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 /**
- * The <b>MongoUtil</b> class provides mongo-related utility methods.
+ * The {@code MongoUtil} class provides mongo-related utility methods.
  *
  * @author Marcus Portmann
  */

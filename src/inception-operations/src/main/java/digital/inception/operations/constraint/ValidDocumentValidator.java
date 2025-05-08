@@ -28,8 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidDocumentValidator</b> class implements the custom constraint validator for validating
- * a document.
+ * The {@code ValidDocumentValidator} class implements the custom constraint validator for
+ * validating a document.
  *
  * @author Marcus Portmann
  */
@@ -40,7 +40,7 @@ public class ValidDocumentValidator implements ConstraintValidator<ValidDocument
   private final DocumentService documentService;
 
   /**
-   * Constructs a new <b>ValidDocumentValidator</b>.
+   * Constructs a new {@code ValidDocumentValidator}.
    *
    * @param documentService the Document Service
    */
@@ -49,7 +49,7 @@ public class ValidDocumentValidator implements ConstraintValidator<ValidDocument
     this.documentService = documentService;
   }
 
-  /** Constructs a new <b>ValidDocumentValidator</b>. */
+  /** Constructs a new {@code ValidDocumentValidator}. */
   public ValidDocumentValidator() {
     this.documentService = null;
   }
@@ -121,8 +121,7 @@ public class ValidDocumentValidator implements ConstraintValidator<ValidDocument
                   isValid = false;
                 }
               }
-              case null, default -> {
-              }
+              case null, default -> {}
             }
           }
         }

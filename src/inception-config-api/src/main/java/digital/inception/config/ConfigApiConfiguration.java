@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>ConfigApiConfiguration</b> class provides the Spring configuration for the Config API
+ * The {@code ConfigApiConfiguration} class provides the Spring configuration for the Config API
  * module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConfigApiConfiguration {
 
-  /** Constructs a new <b>ConfigApiConfiguration</b>. */
+  /** Creates a new {@code ConfigApiConfiguration} instance. */
   public ConfigApiConfiguration() {}
 
   /**

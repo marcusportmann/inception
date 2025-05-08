@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>LockId</b> class implements the ID class for the <b>Lock</b> class.
+ * The {@code LockId} class implements the ID class for The {@code Lock} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class LockId implements Serializable {
   /** The code for the lock type. */
   private String type;
 
-  /** Constructs a new <b>LockId</b>. */
+  /** Creates a new {@code LockId} instance. */
   public LockId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

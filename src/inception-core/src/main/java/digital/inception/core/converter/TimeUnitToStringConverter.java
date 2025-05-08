@@ -21,8 +21,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>TimeUnitToStringConverter</b> class implements the Spring converter that converts a
- * <b>TimeUnit</b> type into a <b>String</b> type.
+ * The {@code TimeUnitToStringConverter} class implements the Spring converter that converts a
+ * {@code TimeUnit} type into a {@code String} type.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class TimeUnitToStringConverter implements Converter<TimeUnit, String> {
 
-  /** Constructs a new <b>TimeUnitToStringConverter</b>. */
+  /** Creates a new {@code TimeUnitToStringConverter} instance. */
   public TimeUnitToStringConverter() {}
 
   @Override

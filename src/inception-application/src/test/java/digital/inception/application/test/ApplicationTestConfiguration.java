@@ -27,7 +27,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>ApplicationTestConfiguration</b> class.
+ * The {@code ApplicationTestConfiguration} class.
  *
  * @author Marcus Portmann
  */
@@ -42,7 +42,7 @@ public class ApplicationTestConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Constructs a new <b>ApplicationTestConfiguration</b>.
+   * Creates a new {@code ApplicationTestConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */

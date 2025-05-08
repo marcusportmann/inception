@@ -47,7 +47,7 @@ public class UserLockedException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>UserLockedException</b>.
+   * Creates a new {@code UserLockedException} instance.
    *
    * @param username the username for the user
    */

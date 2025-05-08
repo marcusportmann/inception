@@ -88,8 +88,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>PartyReferenceServiceTests</b> class contains the JUnit tests for the
- * <b>PartyReferenceService</b> class.
+ * The {@code PartyReferenceServiceTests} class contains the JUnit tests for the {@code
+ * PartyReferenceService} class.
  *
  * @author Marcus Portmann
  */

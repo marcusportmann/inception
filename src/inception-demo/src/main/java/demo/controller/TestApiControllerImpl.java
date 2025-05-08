@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * The <b>TestApiControllerImpl</b> class.
+ * The {@code TestApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +51,7 @@ public class TestApiControllerImpl extends SecureApiController implements TestAp
   private final WebClient.Builder webClientBuilder;
 
   /**
-   * Constructs a new <b>TestApiControllerImpl</b>.
+   * Creates a new {@code TestApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param webClientBuilder the web client builder

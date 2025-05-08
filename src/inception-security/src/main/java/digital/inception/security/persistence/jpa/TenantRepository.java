@@ -28,7 +28,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TenantRepository</b> interface declares the persistence for the <b>Tenant</b> domain type.
+ * The {@code TenantRepository} interface declares the persistence for the {@code Tenant} domain
+ * type.
  *
  * @author Marcus Portmann
  */
@@ -55,7 +56,7 @@ public interface TenantRepository
    * Check whether the tenant with the specified name exists.
    *
    * @param name the name of the tenant
-   * @return <b>true</b> if a tenant with the specified name exists or <b>false</b> otherwise
+   * @return {@code true} if a tenant with the specified name exists or {@code false} otherwise
    */
   boolean existsByNameIgnoreCase(String name);
 

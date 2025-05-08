@@ -29,7 +29,7 @@ import digital.inception.operations.model.WorkflowNotFoundException;
 import java.util.UUID;
 
 /**
- * The <b>WorkflowService</b> interface defines the functionality provided by a Workflow Service
+ * The {@code WorkflowService} interface defines the functionality provided by a Workflow Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -186,7 +186,7 @@ public interface WorkflowService {
    * Check whether the workflow definition exists.
    *
    * @param workflowDefinitionId the ID for the workflow definition
-   * @return <b>true</b> if the workflow definition exists or <b>false</b> otherwise
+   * @return {@code true} if the workflow definition exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the workflow definition failed
    */
@@ -198,7 +198,7 @@ public interface WorkflowService {
    *
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version for the workflow definition
-   * @return <b>true</b> if the workflow definition version exists or <b>false</b> otherwise
+   * @return {@code true} if the workflow definition version exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the workflow definition version failed
    */

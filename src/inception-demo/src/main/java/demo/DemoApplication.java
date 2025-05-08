@@ -44,7 +44,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>DemoApplication</b> class provides the implementation of the Inception Framework
+ * The {@code DemoApplication} class provides the implementation of the Inception Framework
  * application class for the demo application.
  *
  * @author Marcus Portmann
@@ -66,7 +66,7 @@ public class DemoApplication extends Application {
   private final SecurityService securityService;
 
   /**
-   * Constructs a new <b>DemoApplication</b>.
+   * Creates a new {@code DemoApplication} instance.
    *
    * @param applicationContext the Spring application context
    * @param executorService the Executor Service

@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>PartyApiConfiguration</b> class provides the Spring configuration for the Party API
+ * The {@code PartyApiConfiguration} class provides the Spring configuration for the Party API
  * module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PartyApiConfiguration {
 
-  /** Constructs a new <b>PartyApiConfiguration</b>. */
+  /** Creates a new {@code PartyApiConfiguration} instance. */
   public PartyApiConfiguration() {}
 
   /**

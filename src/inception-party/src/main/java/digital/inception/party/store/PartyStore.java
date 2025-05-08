@@ -51,7 +51,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>PartyStore</b> interface defines the functionality provided by a party store, which
+ * The {@code PartyStore} interface defines the functionality provided by a party store, which
  * manages structured and unstructured information for parties.
  *
  * @author Marcus Portmann

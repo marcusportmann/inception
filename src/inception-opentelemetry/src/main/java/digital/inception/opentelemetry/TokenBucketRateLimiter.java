@@ -18,7 +18,7 @@ package digital.inception.opentelemetry;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * The <b>TokenBucketRateLimiter</b> class implements a rate-limiting mechanism using the token
+ * The {@code TokenBucketRateLimiter} class implements a rate-limiting mechanism using the token
  * bucket algorithm. This is a thread-safe implementation that ensures requests are processed at a
  * controlled rate.
  *
@@ -45,7 +45,7 @@ public class TokenBucketRateLimiter {
   private final long tokensPerSecond;
 
   /**
-   * Constructs a new <b>TokenBucketRateLimiter</b>.
+   * Creates a new {@code TokenBucketRateLimiter} instance.
    *
    * @param capacity the maximum number of tokens the bucket can hold
    * @param tokensPerSecond the number of tokens added to the bucket per second
@@ -63,9 +63,9 @@ public class TokenBucketRateLimiter {
 
   /**
    * Attempts to acquire a token from the bucket. If a token is available, it is consumed and the
-   * method returns <b>true</b>. If no tokens are available, the method returns <b>false</b>.
+   * method returns {@code true}. If no tokens are available, the method returns {@code false}.
    *
-   * @return <b>true</b> if a token was successfully acquired, otherwise <b>false</b>
+   * @return {@code true} if a token was successfully acquired, otherwise {@code false}
    */
   public boolean tryAcquire() {
     refill();

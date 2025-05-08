@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>AttributeTypeCategoryRepository</b> interface declares the persistence for the <b>
- * AttributeTypeCategory</b> domain type.
+ * The {@code AttributeTypeCategoryRepository} interface declares the persistence for the {@code
+ * AttributeTypeCategory} domain type.
  *
  * @author Marcus Portmann
  */

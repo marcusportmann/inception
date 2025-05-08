@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>TitleRepository</b> interface declares the persistence for the <b>Title</b> domain type.
+ * The {@code TitleRepository} interface declares the persistence for the {@code Title} domain type.
  *
  * @author Marcus Portmann
  */

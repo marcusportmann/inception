@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.DocumentDefinition;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>DocumentDefinitionRepository</b> interface declares the persistence for the
- * <b>DocumentDefinition</b> domain type.
+ * The {@code DocumentDefinitionRepository} interface declares the persistence for the {@code
+ * DocumentDefinition} domain type.
  *
  * @author Marcus Portmann
  */

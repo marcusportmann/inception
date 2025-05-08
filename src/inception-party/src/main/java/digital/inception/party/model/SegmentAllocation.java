@@ -47,8 +47,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * The <b>SegmentAllocation</b> class holds the information for the allocation of an organization or
- * person to a segment.
+ * The {@code SegmentAllocation} class holds the information for the allocation of an organization
+ * or person to a segment.
  *
  * @author Marcus Portmann
  */
@@ -107,11 +107,11 @@ public class SegmentAllocation implements Serializable {
   @Column(name = "segment", length = 50, nullable = false)
   private String segment;
 
-  /** Constructs a new <b>SegmentAllocation</b>. */
+  /** Creates a new {@code SegmentAllocation} instance. */
   public SegmentAllocation() {}
 
   /**
-   * Constructs a new <b>SegmentAllocation</b>.
+   * Creates a new {@code SegmentAllocation} instance.
    *
    * @param segment the segment
    */
@@ -120,7 +120,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SegmentAllocation</b>.
+   * Creates a new {@code SegmentAllocation} instance.
    *
    * @param segment the segment
    * @param effectiveFrom the date the segment allocation is effective from
@@ -131,7 +131,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SegmentAllocation</b>.
+   * Creates a new {@code SegmentAllocation} instance.
    *
    * @param segment the segment
    * @param effectiveFrom the date the segment allocation is effective from
@@ -147,7 +147,7 @@ public class SegmentAllocation implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

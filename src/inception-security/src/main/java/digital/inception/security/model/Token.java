@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The <b>Token</b> class holds the information for a token.
+ * The {@code Token} class holds the information for a token.
  *
  * @author Marcus Portmann
  */
@@ -184,11 +184,11 @@ public class Token implements Serializable {
   @Column(name = "valid_from_date")
   private LocalDate validFromDate;
 
-  /** Constructs a new <b>Token</b>. */
+  /** Creates a new {@code Token} instance. */
   public Token() {}
 
   /**
-   * Constructs a new <b>Token</b>.
+   * Creates a new {@code Token} instance.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -222,7 +222,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Token</b>.
+   * Creates a new {@code Token} instance.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -253,7 +253,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Token</b>.
+   * Creates a new {@code Token} instance.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -281,7 +281,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Token</b>.
+   * Creates a new {@code Token} instance.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -321,7 +321,7 @@ public class Token implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -21,7 +21,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 /**
- * The <b>MarkovTextGeneratorTests</b> class.
+ * The {@code MarkovTextGeneratorTests} class.
  *
  * @author Marcus Portmann
  */

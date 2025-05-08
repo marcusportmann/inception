@@ -44,7 +44,7 @@ import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>ExecutorWebService</b> class.
+ * The {@code ExecutorWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -60,7 +60,7 @@ public class ExecutorWebService extends AbstractWebServiceBase {
   private final ExecutorService executorService;
 
   /**
-   * Constructs a new <b>ExecutorWebService</b>.
+   * Creates a new {@code ExecutorWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param executorService the Executor Service

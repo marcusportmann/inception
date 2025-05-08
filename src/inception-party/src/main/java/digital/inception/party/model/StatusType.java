@@ -43,7 +43,7 @@ import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>StatusType</b> class holds the information for a status type.
+ * The {@code StatusType} class holds the information for a status type.
  *
  * @author Marcus Portmann
  */
@@ -164,14 +164,14 @@ public class StatusType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>StatusType</b>. */
+  /** Creates a new {@code StatusType} instance. */
   public StatusType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -278,7 +278,7 @@ public class StatusType implements Serializable {
    * Returns whether the status type is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the status type is valid for the party type or <b>false</b> otherwise
+   * @return {@code true} if the status type is valid for the party type or {@code false} otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

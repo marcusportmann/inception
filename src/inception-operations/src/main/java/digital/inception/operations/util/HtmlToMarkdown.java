@@ -30,7 +30,7 @@ import org.jsoup.select.NodeVisitor;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>HtmlToMarkdown</b> class converts HTML to Markdown using the JSoup library.
+ * The {@code HtmlToMarkdown} class converts HTML to Markdown using the JSoup library.
  *
  * @author Marcus Portmann
  */
@@ -323,12 +323,12 @@ public final class HtmlToMarkdown {
     System.out.println(markdown);
   }
 
-  /** The <b>MarkdownLine</b> class holds a line of markdown content. */
+  /** The {@code MarkdownLine} class holds a line of markdown content. */
   private static class MarkdownLine {
 
     private final StringBuilder buffer;
 
-    /** Constructs a new <b>MarkdownLine</b>. */
+    /** Constructs a new {@code MarkdownLine}. */
     public MarkdownLine() {
       buffer = new StringBuilder();
     }
@@ -352,7 +352,7 @@ public final class HtmlToMarkdown {
      * Returns whether the markdown line ends with the specified suffix.
      *
      * @param suffix the suffix
-     * @return <b>true</b> if the markdown line ends with the specified suffix <b></b>
+     * @return {@code true} if the markdown line ends with the specified suffix {@code false}
      */
     public boolean endsWith(String suffix) {
       int lastIndexOf = buffer.lastIndexOf(suffix);
@@ -386,7 +386,7 @@ public final class HtmlToMarkdown {
     /**
      * Returns whether the markdown line is empty.
      *
-     * @return <b>true</b> if the markdown line empty or <b>false</b> otherwise
+     * @return {@code true} if the markdown line empty or {@code false} otherwise
      */
     public boolean isEmpty() {
       return buffer.isEmpty();

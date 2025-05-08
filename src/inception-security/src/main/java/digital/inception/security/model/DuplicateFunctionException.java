@@ -45,7 +45,7 @@ public class DuplicateFunctionException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateFunctionException</b>.
+   * Creates a new {@code DuplicateFunctionException} instance.
    *
    * @param functionCode the code for the function
    */

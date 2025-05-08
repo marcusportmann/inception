@@ -41,7 +41,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 /**
- * The <b>GenerateLiquibaseChangelog</b> class.
+ * The {@code GenerateLiquibaseChangelog} class.
  *
  * @author Marcus Portmann
  */
@@ -75,7 +75,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
   private final ReferenceService referenceService;
 
   /**
-   * Constructs a new <b>GenerateLiquibaseDataChangelog</b>.
+   * Creates a new {@code GenerateLiquibaseDataChangelog} instance.
    *
    * @param applicationContext the Spring application context
    * @param referenceService the Reference Service

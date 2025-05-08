@@ -74,7 +74,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ExecutorServiceImpl</b> class provides the Executor Service implementation.
+ * The {@code ExecutorServiceImpl} class provides the Executor Service implementation.
  *
  * <p>NOTE: The completeTask method, queueTask methods, requeueTask method, and unsuspendTask method
  * are explicitly not annotated with the @Transactional annotation to prevent a race condition
@@ -150,7 +150,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   private volatile ConcurrentHashMap<String, TaskType> taskTypes;
 
   /**
-   * Constructs a new <b>ExecutorServiceImpl</b>.
+   * Creates a new {@code ExecutorServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param archivedTaskRepository the Archived Task Repository

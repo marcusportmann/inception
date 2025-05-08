@@ -20,8 +20,8 @@ import digital.inception.core.validation.ValidationSchemaType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>ValidationSchemaTypeAttributeConverter</b> class implements the custom JPA attribute
- * converter for the <b>ValidationSchemaType</b> enumeration.
+ * The {@code ValidationSchemaTypeAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code ValidationSchemaType} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 public class ValidationSchemaTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<ValidationSchemaType> {
 
-  /** Constructs a new <b>ValidationSchemaTypeConverter</b>. */
+  /** Creates a new {@code ValidationSchemaTypeConverter} instance. */
   public ValidationSchemaTypeAttributeConverter() {
     super(ValidationSchemaType.class);
   }

@@ -20,7 +20,7 @@ import java.io.StringWriter;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ApiUtil</b> class provides utility methods that are useful when working with APIs
+ * The {@code ApiUtil} class provides utility methods that are useful when working with APIs
  * implemented as RESTful web services.
  *
  * @author Marcus Portmann

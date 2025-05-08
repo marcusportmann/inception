@@ -17,7 +17,7 @@
 package digital.inception.executor.model;
 
 /**
- * The <b>TaskExecutor</b> interface defines the functionality that must be provided by all task
+ * The {@code TaskExecutor} interface defines the functionality that must be provided by all task
  * executors.
  *
  * @author Marcus Portmann
@@ -41,10 +41,10 @@ public interface TaskExecutor {
           TaskExecutionDelayedException;
 
   /**
-   * Returns the code for the initial task step for a multistep task or <b>null</b> for a
+   * Returns the code for the initial task step for a multistep task or {@code null} for a
    * single-step task.
    *
-   * @return the code for the initial task step for a multistep task or <b>null</b> for a
+   * @return the code for the initial task step for a multistep task or {@code null} for a
    *     single-step task
    */
   String getInitialTaskStep();

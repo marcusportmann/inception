@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The <b>SchedulerService</b> interface defines the functionality provided by a Scheduler Service
+ * The {@code SchedulerService} interface defines the functionality provided by a Scheduler Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public interface SchedulerService {
   /**
    * Create the new job.
    *
-   * @param job the <b>Job</b> instance containing the information for the job
+   * @param job the {@code Job} instance containing the information for the job
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateJobException if the job already exists
    * @throws ServiceUnavailableException if the job could not be created
@@ -163,7 +163,8 @@ public interface SchedulerService {
   /**
    * Schedule the next unscheduled job for execution.
    *
-   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false</b> otherwise
+   * @return {@code true} if a job was successfully scheduled for execution or {@code false}
+   *     otherwise
    * @throws ServiceUnavailableException if the next unscheduled job could not be scheduled for
    *     execution
    */
@@ -196,7 +197,7 @@ public interface SchedulerService {
   /**
    * Update the job.
    *
-   * @param job the <b>Job</b> instance containing the updated information for the job
+   * @param job the {@code Job} instance containing the updated information for the job
    * @throws InvalidArgumentException if an argument is invalid
    * @throws JobNotFoundException if the job could not be found
    * @throws ServiceUnavailableException if the job could not be updated

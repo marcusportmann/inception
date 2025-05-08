@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
+import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
 import digital.inception.operations.model.InteractionMimeType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>InteractionMimeTypeAttributeConverter</b> class implements the custom JPA attribute
- * converter for the <b>InteractionMimeType</b> enumeration.
+ * The {@code InteractionMimeTypeAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code InteractionMimeType} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -29,7 +30,7 @@ import jakarta.persistence.Converter;
 public class InteractionMimeTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<InteractionMimeType> {
 
-  /** Constructs a new <b>InteractionMimeTypeAttributeConverter</b>. */
+  /** Creates a new {@code InteractionMimeTypeAttributeConverter} instance. */
   public InteractionMimeTypeAttributeConverter() {
     super(InteractionMimeType.class);
   }

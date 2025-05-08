@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>VehicleRepository</b> interface declares the persistence for the <b>Vehicle</b> domain
+ * The {@code VehicleRepository} interface declares the persistence for the {@code Vehicle} domain
  * type.
  *
  * @author Marcus Portmann

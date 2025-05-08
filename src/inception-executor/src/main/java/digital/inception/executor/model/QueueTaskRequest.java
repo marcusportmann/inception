@@ -31,7 +31,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>QueueTaskRequest</b> class holds the information for a request to queue a task for
+ * The {@code QueueTaskRequest} class holds the information for a request to queue a task for
  * execution.
  *
  * @author Marcus Portmann
@@ -86,11 +86,11 @@ public class QueueTaskRequest implements Serializable {
   @Size(min = 1, max = 50)
   private String type;
 
-  /** Constructs a new <b>QueueTaskRequest</b>. */
+  /** Creates a new {@code QueueTaskRequest} instance. */
   public QueueTaskRequest() {}
 
   /**
-   * Constructs a new <b>QueueTaskRequest</b>.
+   * Creates a new {@code QueueTaskRequest} instance.
    *
    * @param type the code for the task type
    * @param data the task data
@@ -101,7 +101,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Constructs a new <b>QueueTaskRequest</b>.
+   * Creates a new {@code QueueTaskRequest} instance.
    *
    * @param type the code for the task type
    * @param batchId the ID for the task batch

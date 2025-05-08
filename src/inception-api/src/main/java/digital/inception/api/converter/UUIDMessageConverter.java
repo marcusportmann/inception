@@ -31,14 +31,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 /**
- * The <b>UUIDMessageConverter</b> class.
+ * The {@code UUIDMessageConverter} class.
  *
  * @author Marcus Portmann
  */
 @Component
 public class UUIDMessageConverter extends AbstractHttpMessageConverter<UUID> {
 
-  /** Constructs a new <b>UUIDMessageConverter</b>. */
+  /** Creates a new {@code UUIDMessageConverter} instance. */
   public UUIDMessageConverter() {
     super(MediaType.TEXT_PLAIN);
   }

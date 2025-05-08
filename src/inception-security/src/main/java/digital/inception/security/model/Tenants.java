@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>Tenants</b> class holds the results of a request to retrieve a list of tenants.
+ * The {@code Tenants} class holds the results of a request to retrieve a list of tenants.
  *
  * @author Marcus Portmann
  */
@@ -89,11 +89,11 @@ public class Tenants implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>Tenants</b>. */
+  /** Creates a new {@code Tenants} instance. */
   public Tenants() {}
 
   /**
-   * Constructs a new <b>Tenants</b>.
+   * Creates a new {@code Tenants} instance.
    *
    * @param tenants the tenants
    * @param total the total number of tenants

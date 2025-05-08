@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>WorkflowNotFoundException</b> exception is thrown to indicate an error condition as a
+ * The {@code WorkflowNotFoundException} exception is thrown to indicate an error condition as a
  * result of a workflow that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class WorkflowNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <b>WorkflowNotFoundException</b>.
+   * w Constructs a new {@code WorkflowNotFoundException}.
    *
    * @param workflowId the ID for the workflow
    */

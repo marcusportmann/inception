@@ -36,7 +36,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>DataWebService</b> class.
+ * The {@code DataWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +48,7 @@ public class DataWebService extends AbstractWebServiceBase {
   private final DataService dataService;
 
   /**
-   * Constructs a new <b>DataWebService</b>.
+   * Creates a new {@code DataWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param dataService the Data Service

@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>Person</b> class holds the information for a person.
+ * The {@code Person} class holds the information for a person.
  *
  * <p>This entity may be used under different circumstances when more or less information is
  * available for a person. As a result, most of the attributes are and the particular application
@@ -75,14 +75,14 @@ import org.springframework.util.StringUtils;
  * <p>The following steps must be completed when adding a new attribute to the person entity:
  *
  * <ol>
- *   <li>Add a new column for the new attribute to the <b>party_persons</b> table using a new
- *       changeset in the <b>inception-party.changelog.xml</b> file.
- *   <li>Add a new property for the new attribute to the <b>Person</b> class.
+ *   <li>Add a new column for the new attribute to the {@code party_persons} table using a new
+ *       changeset in the {@code inception-party.changelog.xml} file.
+ *   <li>Add a new property for the new attribute to The {@code Person} class.
  *   <li>Add the appropriate validation for the new attribute to the <b>ValidPersonValidator</b>
  *       class.
- *   <li>Add the name of the attribute to the <b>Attribute.RESERVED_ATTRIBUTE_TYPE_CODES</b> array.
- *   <li>Add support for applying validations described by <b>RoleTypeAttributeTypeConstraint</b>s
- *       to the <b>ValidPersonValidator</b>.
+ *   <li>Add the name of the attribute to the {@code Attribute.RESERVED_ATTRIBUTE_TYPE_CODES} array.
+ *   <li>Add support for applying validations described by {@code RoleTypeAttributeTypeConstraint}s
+ *       to the {@code ValidPersonValidator}.
  * </ol>
  *
  * @author Marcus Portmann
@@ -582,13 +582,13 @@ public class Person extends PartyBase implements Serializable {
   @Column(name = "title", length = 50)
   private String title;
 
-  /** Constructs a new <b>Person</b>. */
+  /** Creates a new {@code Person} instance. */
   public Person() {
     super(PartyType.PERSON);
   }
 
   /**
-   * Constructs a new <b>Person</b>.
+   * Creates a new {@code Person} instance.
    *
    * @param tenantId the ID for the tenant the person is associated with
    * @param name the name of the person
@@ -905,7 +905,7 @@ public class Person extends PartyBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -1980,7 +1980,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has an attribute with the specified type.
    *
    * @param type the code for the attribute type
-   * @return <b>true</b> if the person has an attribute with the specified type or <b>false</b>
+   * @return {@code true} if the person has an attribute with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasAttributeWithType(String type) {
@@ -1991,7 +1991,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a consent with the specified type.
    *
    * @param type the code for the consent type
-   * @return <b>true</b> if the person has a consent with the specified type or <b>false</b>
+   * @return {@code true} if the person has a consent with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasConsentWithType(String type) {
@@ -2002,8 +2002,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a contact mechanism with the specified role.
    *
    * @param role the code for the contact mechanism role
-   * @return <b>true</b> if the person has a contact mechanism with the specified role or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a contact mechanism with the specified role or {@code
+   *     false} otherwise
    */
   public boolean hasContactMechanismWithRole(String role) {
     return contactMechanisms.stream()
@@ -2014,8 +2014,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a contact mechanism with the specified type.
    *
    * @param type the code for the contact mechanism type
-   * @return <b>true</b> if the person has a contact mechanism with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a contact mechanism with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasContactMechanismWithType(String type) {
     return contactMechanisms.stream()
@@ -2026,8 +2026,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has an external reference with the specified type.
    *
    * @param type the code for the external reference type
-   * @return <b>true</b> if the person has an external reference with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has an external reference with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasExternalReferenceWithType(String type) {
     return externalReferences.stream()
@@ -2038,8 +2038,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has an identification with the specified type.
    *
    * @param type the code for the identification type
-   * @return <b>true</b> if the person has an identification with the specified type or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the person has an identification with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasIdentificationWithType(String type) {
     return identifications.stream()
@@ -2050,8 +2050,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a language proficiency with the specified language.
    *
    * @param language the ISO 639-1 alpha-2 code for the language
-   * @return <b>true</b> if the person has a language proficiency with the specified language or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a language proficiency with the specified language or
+   *     {@code false} otherwise
    */
   public boolean hasLanguageProficiencyWithLanguage(String language) {
     return languageProficiencies.stream()
@@ -2063,7 +2063,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a lock with the specified type.
    *
    * @param type the code for the lock type
-   * @return <b>true</b> if the person has a lock with the specified type or <b>false</b> otherwise
+   * @return {@code true} if the person has a lock with the specified type or {@code false}
+   *     otherwise
    */
   public boolean hasLockWithType(String type) {
     return locks.stream().anyMatch(lock -> Objects.equals(lock.getType(), type));
@@ -2073,7 +2074,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a next of kin with the specified type.
    *
    * @param type the code for the next of kin type
-   * @return <b>true</b> if the person has a next of kin with the specified type or <b>false</b>
+   * @return {@code true} if the person has a next of kin with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasNextOfKinWithType(String type) {
@@ -2085,8 +2086,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a physical address with the specified role.
    *
    * @param role the code for the physical address role
-   * @return <b>true</b> if the person has a physical address with the specified role or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a physical address with the specified role or {@code
+   *     false} otherwise
    */
   public boolean hasPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
@@ -2097,8 +2098,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a physical address with the specified type.
    *
    * @param type the code for the physical address type
-   * @return <b>true</b> if the person has a physical address with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a physical address with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasPhysicalAddressWithType(String type) {
     return physicalAddresses.stream()
@@ -2109,7 +2110,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a preference with the specified type.
    *
    * @param type the code for the preference type
-   * @return <b>true</b> if the person has a preference with the specified type or <b>false</b>
+   * @return {@code true} if the person has a preference with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasPreferenceWithType(String type) {
@@ -2120,8 +2121,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a residence permit with the specified type.
    *
    * @param type the code for the residence permit type
-   * @return <b>true</b> if the person has a residence permit with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a residence permit with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasResidencePermitWithType(String type) {
     return residencePermits.stream()
@@ -2132,7 +2133,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a role with the specified type.
    *
    * @param type the code for the role type
-   * @return <b>true</b> if the person has a role with the specified type or <b>false</b> otherwise
+   * @return {@code true} if the person has a role with the specified type or {@code false}
+   *     otherwise
    */
   public boolean hasRoleWithType(String type) {
     return roles.stream().anyMatch(role -> Objects.equals(role.getType(), type));
@@ -2142,8 +2144,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a segment allocation with the specified segment.
    *
    * @param segment the code for the segment
-   * @return <b>true</b> if the person has a segment allocation with the specified segment or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a segment allocation with the specified segment or
+   *     {@code false} otherwise
    */
   public boolean hasSegmentAllocationWithSegment(String segment) {
     return segmentAllocations.stream()
@@ -2154,7 +2156,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a skill with the specified type.
    *
    * @param type the code for the skill type
-   * @return <b>true</b> if the person has a skill with the specified type or <b>false</b> otherwise
+   * @return {@code true} if the person has a skill with the specified type or {@code false}
+   *     otherwise
    */
   public boolean hasSkillWithType(String type) {
     return skills.stream().anyMatch(skill -> Objects.equals(skill.getType(), type));
@@ -2164,8 +2167,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a source of funds with the specified type.
    *
    * @param type the code for the source of funds type
-   * @return <b>true</b> if the person has a source of funds with the specified type or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the person has a source of funds with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasSourceOfFundsWithType(String type) {
     return sourcesOfFunds.stream()
@@ -2176,8 +2179,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a source of wealth with the specified type.
    *
    * @param type the code for the source of wealth type
-   * @return <b>true</b> if the person has a source of wealth with the specified type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the person has a source of wealth with the specified type or {@code
+   *     false} otherwise
    */
   public boolean hasSourceOfWealthWithType(String type) {
     return sourcesOfWealth.stream()
@@ -2188,7 +2191,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a status with the specified type.
    *
    * @param type the code for the status type
-   * @return <b>true</b> if the person has a status with the specified type or <b>false</b>
+   * @return {@code true} if the person has a status with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasStatusWithType(String type) {
@@ -2199,7 +2202,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a tax number with the specified type.
    *
    * @param type the code for the tax number type
-   * @return <b>true</b> if the person has a tax number with the specified type or <b>false</b>
+   * @return {@code true} if the person has a tax number with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasTaxNumberWithType(String type) {

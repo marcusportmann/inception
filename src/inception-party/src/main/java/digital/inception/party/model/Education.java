@@ -44,7 +44,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Education</b> class holds the information for an education obtained by a person.
+ * The {@code Education} class holds the information for an education obtained by a person.
  *
  * <p>The primary key for the education entity (ID) is a surrogate key to support the management of
  * related data in one or more external stores, e.g. an image of a person's higher certificate
@@ -184,11 +184,11 @@ public class Education implements Serializable {
   @Column(name = "qualification_year", nullable = false)
   private Integer qualificationYear;
 
-  /** Constructs a new <b>Education</b>. */
+  /** Creates a new {@code Education} instance. */
   public Education() {}
 
   /**
-   * Constructs a new <b>Education</b>.
+   * Creates a new {@code Education} instance.
    *
    * @param institutionCountry the ISO 3166-1 alpha-2 code for the country the educational
    *     institution is located in
@@ -221,7 +221,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Education</b>.
+   * Creates a new {@code Education} instance.
    *
    * @param institutionName the name of the educational institution
    * @param qualificationType the code for the qualification type
@@ -236,7 +236,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Education</b>.
+   * Creates a new {@code Education} instance.
    *
    * @param institutionName the name of the educational institution
    * @param qualificationType the code for the qualification type
@@ -259,7 +259,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Education</b>.
+   * Creates a new {@code Education} instance.
    *
    * @param institutionCountry the ISO 3166-1 alpha-2 code for the country the educational
    *     institution is located in
@@ -289,7 +289,7 @@ public class Education implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

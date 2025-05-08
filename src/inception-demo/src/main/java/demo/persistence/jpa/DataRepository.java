@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>DataRepository</b> interface declares the persistence for the <b>Data</b> domain type.
+ * The {@code DataRepository} interface declares the persistence for the {@code Data} domain type.
  *
  * @author Marcus Portmann
  */

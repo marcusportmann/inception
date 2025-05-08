@@ -15,7 +15,7 @@
  */
 
 /**
- * The <b>AnotherTestEnum</b> enumeration.
+ * The {@code AnotherTestEnum} enumeration.
  *
  * @author Marcus Portmann
  */

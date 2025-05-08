@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
- * The <b>ApplicationJacksonConfiguration</b> class initialises the Jackson components for the
+ * The {@code ApplicationJacksonConfiguration} class initialises the Jackson components for the
  * application.
  *
  * @author Marcus Portmann
@@ -33,7 +33,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 @Configuration
 public class ApplicationJacksonConfiguration {
 
-  /** Constructs a new <b>ApplicationJacksonConfiguration</b>. */
+  /** Creates a new {@code ApplicationJacksonConfiguration} instance. */
   public ApplicationJacksonConfiguration() {}
 
   /**
@@ -50,10 +50,10 @@ public class ApplicationJacksonConfiguration {
   }
 
   /**
-   * Returns the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   * Returns the {@code Jackson2ObjectMapperBuilder} bean, which configures the Jackson JSON
    * processor package.
    *
-   * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   * @return the {@code Jackson2ObjectMapperBuilder} bean, which configures the Jackson JSON
    *     processor package
    */
   protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {

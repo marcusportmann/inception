@@ -28,7 +28,7 @@ import digital.inception.reference.model.TimeZone;
 import java.util.List;
 
 /**
- * The <b>ReferenceService</b> interface defines the functionality provided by a Reference Service
+ * The {@code ReferenceService} interface defines the functionality provided by a Reference Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -201,7 +201,7 @@ public interface ReferenceService {
    * Check whether the code is a valid code for a country.
    *
    * @param countryCode the code for the country
-   * @return <b>true</b> if the code is a valid code for a country or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a country or {@code false} otherwise
    * @throws ServiceUnavailableException if the country code check failed
    */
   boolean isValidCountry(String countryCode) throws ServiceUnavailableException;
@@ -210,8 +210,8 @@ public interface ReferenceService {
    * Check whether the code is a valid ISO 639-1 alpha-2 code for a language.
    *
    * @param languageCode the code for the language
-   * @return <b>true</b> if the code is a valid ISO 639-1 alpha-2 code for a language or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the code is a valid ISO 639-1 alpha-2 code for a language or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the language code check failed
    */
   boolean isValidLanguage(String languageCode) throws ServiceUnavailableException;
@@ -220,7 +220,7 @@ public interface ReferenceService {
    * Check whether the code is a valid code for a measurement system.
    *
    * @param measurementSystemCode the code for the measurement system
-   * @return <b>true</b> if the code is a valid code for a measurement system or <b>false</b>
+   * @return {@code true} if the code is a valid code for a measurement system or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the measurement system code check failed
    */
@@ -230,7 +230,7 @@ public interface ReferenceService {
    * Check whether the code is a valid code for a measurement unit.
    *
    * @param measurementUnitCode the code for the measurement unit
-   * @return <b>true</b> if the code is a valid code for a measurement unit or <b>false</b>
+   * @return {@code true} if the code is a valid code for a measurement unit or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the measurement unit code check failed
    */
@@ -240,7 +240,7 @@ public interface ReferenceService {
    * Check whether the code is a valid code for a measurement unit type.
    *
    * @param measurementUnitTypeCode the code for the measurement unit type
-   * @return <b>true</b> if the code is a valid code for a measurement unit type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a measurement unit type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the measurement unit type code check failed
    */
@@ -251,7 +251,7 @@ public interface ReferenceService {
    * Check whether the code is a valid code for a region.
    *
    * @param regionCode the code for the region
-   * @return <b>true</b> if the code is a valid code for a region or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a region or {@code false} otherwise
    * @throws ServiceUnavailableException if the region code check failed
    */
   boolean isValidRegion(String regionCode) throws ServiceUnavailableException;
@@ -260,7 +260,7 @@ public interface ReferenceService {
    * Check whether the code is a valid code for a time zone.
    *
    * @param timeZoneCode the code for the time zone
-   * @return <b>true</b> if the code is a valid code for a time zone or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a time zone or {@code false} otherwise
    * @throws ServiceUnavailableException if the time zone code check failed
    */
   boolean isValidTimeZone(String timeZoneCode) throws ServiceUnavailableException;

@@ -25,7 +25,7 @@
 // import jakarta.validation.Payload;
 //
 /// **
-// * The <b>ValidPhysicalAddress</b> annotation implements the custom constraint annotation used to
+// * The {@code ValidPhysicalAddress} annotation implements the custom constraint annotation used to
 // * apply the physical address validation.
 // *
 // * @author Marcus Portmann

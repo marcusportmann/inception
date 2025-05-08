@@ -24,7 +24,7 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>StringListAttributeConverter</b> class implements the custom JPA attribute converter to
+ * The {@code StringListAttributeConverter} class implements the custom JPA attribute converter to
  * store a list of strings as a comma-delimited string.
  *
  * @author Marcus Portmann
@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
 @Converter(autoApply = true)
 public class StringListAttributeConverter implements AttributeConverter<List<String>, String> {
 
-  /** Constructs a new <b>StringListAttributeConverter</b>. */
+  /** Creates a new {@code StringListAttributeConverter} instance. */
   public StringListAttributeConverter() {}
 
   /**

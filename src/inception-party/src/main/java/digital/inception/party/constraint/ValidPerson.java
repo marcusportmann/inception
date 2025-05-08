@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidPerson</b> annotation implements the custom constraint annotation used to apply the
+ * The {@code ValidPerson} annotation implements the custom constraint annotation used to apply the
  * person validation.
  *
  * @author Marcus Portmann

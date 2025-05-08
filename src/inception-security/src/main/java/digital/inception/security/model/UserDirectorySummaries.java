@@ -32,8 +32,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>UserDirectorySummaries</b> class holds the results of a request to retrieve a list of user
- * directory summaries.
+ * The {@code UserDirectorySummaries} class holds the results of a request to retrieve a list of
+ * user directory summaries.
  *
  * @author Marcus Portmann
  */
@@ -106,11 +106,11 @@ public class UserDirectorySummaries implements Serializable {
   @XmlElement(name = "UserDirectorySummary", required = true)
   private List<UserDirectorySummary> userDirectorySummaries;
 
-  /** Constructs a new <b>UserDirectorySummaries</b>. */
+  /** Creates a new {@code UserDirectorySummaries} instance. */
   public UserDirectorySummaries() {}
 
   /**
-   * Constructs a new <b>UserDirectorySummaries</b>.
+   * Creates a new {@code UserDirectorySummaries} instance.
    *
    * @param userDirectorySummaries the user directory summaries
    * @param total the total number of user directory summaries

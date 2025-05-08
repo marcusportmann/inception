@@ -23,7 +23,7 @@ import digital.inception.core.util.MobilePhoneNumberUtil;
 import org.junit.jupiter.api.Test;
 
 /**
- * The <b>MobilePhoneNumberUtilTests</b> class.
+ * The {@code MobilePhoneNumberUtilTests} class.
  *
  * @author Marcus Portmann
  */

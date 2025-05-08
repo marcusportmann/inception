@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>DuplicateWorkflowException</b> exception is thrown to indicate an error condition as a
+ * The {@code DuplicateWorkflowException} exception is thrown to indicate an error condition as a
  * result of an attempt to create a duplicate workflow, i.e. a workflow with the specified ID
  * already exists.
  *
@@ -35,7 +35,7 @@ import java.util.UUID;
  */
 @Problem(
     type = "https://inception.digital/problems/operations/duplicate-workflow",
-    title = "A workflow with the specified ID already exists.",
+    title = "A workflow with the specified ID already exists",
     status = 409)
 @WebFault(
     name = "DuplicateWorkflowException",
@@ -47,7 +47,7 @@ public class DuplicateWorkflowException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateWorkflowException</b>.
+   * Constructs a new {@code DuplicateWorkflowException}.
    *
    * @param workflowId the ID for the workflow
    */

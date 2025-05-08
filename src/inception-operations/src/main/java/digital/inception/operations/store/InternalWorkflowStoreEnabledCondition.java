@@ -21,14 +21,14 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * The <b>InternalWorkflowStoreEnabledCondition</b> class implements the condition that must be
+ * The {@code InternalWorkflowStoreEnabledCondition} class implements the condition that must be
  * matched to enable the internal workflow store.
  *
  * @author Marcus Portmann
  */
 public class InternalWorkflowStoreEnabledCondition implements Condition {
 
-  /** Constructs a new <b>InternalWorkflowStoreEnabledCondition</b>. */
+  /** Constructs a new {@code InternalWorkflowStoreEnabledCondition}. */
   public InternalWorkflowStoreEnabledCondition() {}
 
   @Override

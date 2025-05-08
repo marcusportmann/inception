@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PasswordChangeReason</b> enumeration defines the possible reasons for why a user's
+ * The {@code PasswordChangeReason} enumeration defines the possible reasons for why a user's
  * password was changed.
  *
  * @author Marcus Portmann

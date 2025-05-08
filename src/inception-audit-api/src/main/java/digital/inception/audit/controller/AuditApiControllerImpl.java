@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>AuditApiControllerImpl</b> class.
+ * The {@code AuditApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -36,7 +36,7 @@ public class AuditApiControllerImpl extends SecureApiController implements Audit
   private final AuditService auditService;
 
   /**
-   * Constructs a new <b>AuditApiControllerImpl</b>.
+   * Creates a new {@code AuditApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param auditService the Audit Service

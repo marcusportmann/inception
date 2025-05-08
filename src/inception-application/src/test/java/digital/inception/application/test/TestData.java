@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>TestData</b> class.
+ * The {@code TestData} class.
  *
  * @author Marcus Portmann
  */
@@ -48,12 +48,12 @@ public class TestData implements Serializable {
   @Column(name = "value", nullable = false)
   private String value;
 
-  /** Constructs a new <b>TestData</b>. */
+  /** Creates a new {@code TestData} instance. */
   @SuppressWarnings("unused")
   TestData() {}
 
   /**
-   * Constructs a new <b>TestData</b>.
+   * Creates a new {@code TestData} instance.
    *
    * @param id the ID
    * @param name the name
@@ -69,7 +69,7 @@ public class TestData implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

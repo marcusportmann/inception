@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>WorkflowDefinitionVersionNotFoundException</b> exception is thrown to indicate an error
+ * The {@code WorkflowDefinitionVersionNotFoundException} exception is thrown to indicate an error
  * condition as a result of a workflow definition version that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -33,7 +33,7 @@ import java.io.Serial;
  */
 @Problem(
     type = "https://inception.digital/problems/operations/workflow-definition-version-not-found",
-    title = "The workflow definition version could not be found.",
+    title = "The workflow definition version could not be found",
     status = 404)
 @WebFault(
     name = "WorkflowDefinitionVersionNotFoundException",
@@ -45,7 +45,7 @@ public class WorkflowDefinitionVersionNotFoundException extends ServiceException
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <b>WorkflowDefinitionVersionNotFoundException</b>.
+   * w Constructs a new {@code WorkflowDefinitionVersionNotFoundException}.
    *
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version of the workflow definition

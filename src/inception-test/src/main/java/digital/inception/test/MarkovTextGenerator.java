@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The <b>MarkovTextGenerator</b> class generates random text using Markov chains.
+ * The {@code MarkovTextGenerator} class generates random text using Markov chains.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ public class MarkovTextGenerator {
   private final Map<String, Chain<String>> chainsMap = new ConcurrentHashMap<>();
   private final Random random = new Random();
 
-  /** Constructs a new <b>MarkovTextGenerator</b>. */
+  /** Creates a new {@code MarkovTextGenerator} instance. */
   public MarkovTextGenerator() {}
 
   /**
@@ -161,7 +161,7 @@ public class MarkovTextGenerator {
   }
 
   /**
-   * The <b>Chain</b> class holds the information for A Markov chain with the original input and a
+   * The {@code Chain} class holds the information for A Markov chain with the original input and a
    * weight map with the other inputs and the number of times they come after the original input.
    */
   private static class Chain<T> {
@@ -173,7 +173,7 @@ public class MarkovTextGenerator {
     private final Map<T, Integer> weightMap = new ConcurrentHashMap<>();
 
     /**
-     * Constructs a new <b>Chain</b>.
+     * Creates a new {@code Chain} instance.
      *
      * @param input the input
      */
@@ -193,7 +193,7 @@ public class MarkovTextGenerator {
     /**
      * Choose an input from the weight map based on total weight and randomness.
      *
-     * @return the input value or <b>null</b> if there is an error.
+     * @return the input value or {@code null} if there is an error.
      */
     public Optional<T> choose() {
       int totalWeight = weightMap.values().stream().mapToInt(Integer::intValue).sum();

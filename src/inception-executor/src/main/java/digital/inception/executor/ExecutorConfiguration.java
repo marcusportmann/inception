@@ -28,7 +28,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>ExecutorConfiguration</b> class provides the Spring configuration for the Executor module.
+ * The {@code ExecutorConfiguration} class provides the Spring configuration for the Executor
+ * module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "executorEntityManagerFactory")
 public class ExecutorConfiguration {
 
-  /** Constructs a new <b>ExecutorConfiguration</b>. */
+  /** Creates a new {@code ExecutorConfiguration} instance. */
   public ExecutorConfiguration() {}
 
   /**

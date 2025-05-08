@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * The <b>AuthorizationServerConfiguration</b> class provides the Spring configuration for the
+ * The {@code AuthorizationServerConfiguration} class provides the Spring configuration for the
  * Inception Authorization Server module.
  *
  * @author Marcus Portmann
@@ -30,6 +30,6 @@ import org.springframework.context.annotation.Import;
 @Import(CoreConfiguration.class)
 public class AuthorizationServerConfiguration {
 
-  /** Constructs a new <b>AuthorizationServerConfiguration</b>. */
+  /** Creates a new {@code AuthorizationServerConfiguration} instance. */
   public AuthorizationServerConfiguration() {}
 }

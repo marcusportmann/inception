@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>QualificationTypeRepository</b> interface declares the persistence for the <b>
- * QualificationType</b> domain type.
+ * The {@code QualificationTypeRepository} interface declares the persistence for the {@code
+ * QualificationType} domain type.
  *
  * @author Marcus Portmann
  */

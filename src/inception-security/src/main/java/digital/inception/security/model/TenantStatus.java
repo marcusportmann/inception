@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>TenantStatus</b> enumeration defines the possible statuses for a tenant.
+ * The {@code TenantStatus} enumeration defines the possible statuses for a tenant.
  *
  * @author Marcus Portmann
  */

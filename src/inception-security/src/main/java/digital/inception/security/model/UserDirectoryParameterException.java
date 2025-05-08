@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * An <b>UserDirectoryParameterException</b> is thrown to indicate an invalid operation was
- * performed on a <b>UserDirectoryParameter</b> instance.
+ * performed on a {@code UserDirectoryParameter} instance.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -44,9 +44,9 @@ public class UserDirectoryParameterException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>UserDirectoryParameterException</b> with the specified message.
+   * Creates a new {@code UserDirectoryParameterException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public UserDirectoryParameterException(String message) {
     super(message);

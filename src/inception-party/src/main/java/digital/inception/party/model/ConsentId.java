@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ConsentId</b> class implements the ID class for the <b>Consent</b> class.
+ * The {@code ConsentId} class implements the ID class for The {@code Consent} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class ConsentId implements Serializable {
   /** The code for the consent type. */
   private String type;
 
-  /** Constructs a new <b>ConsentId</b>. */
+  /** Creates a new {@code ConsentId} instance. */
   public ConsentId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

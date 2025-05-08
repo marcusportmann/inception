@@ -36,8 +36,8 @@ import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ApplicationR2dbcConfiguration</b> class initialises the R2DBC connection factory and R2DBC
- * entity operations for the application database.
+ * The {@code ApplicationR2dbcConfiguration} class initialises the R2DBC connection factory and
+ * R2DBC entity operations for the application database.
  *
  * @author Marcus Portmann
  */
@@ -86,7 +86,7 @@ public class ApplicationR2dbcConfiguration {
   private String username;
 
   /**
-   * Constructs a new <b>ApplicationR2dbcConfiguration</b>.
+   * Creates a new {@code ApplicationR2dbcConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */
@@ -118,11 +118,11 @@ public class ApplicationR2dbcConfiguration {
   }
 
   /**
-   * The <b>R2dbcEntityOperations</b> instance enabling reactive R2DBC operations with the
+   * The {@code R2dbcEntityOperations} instance enabling reactive R2DBC operations with the
    * application database using entities.
    *
    * @param applicationConnectionFactory the R2DBC connection factory for the application database
-   * @return the <b>R2dbcEntityOperations</b> instance enabling reactive R2DBC operations with the
+   * @return the {@code R2dbcEntityOperations} instance enabling reactive R2DBC operations with the
    *     application database using entities
    */
   @Bean("applicationEntityOperations")

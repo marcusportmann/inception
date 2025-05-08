@@ -29,7 +29,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AbstractApiControllerBase</b> class provides an abstract base class that Spring API
+ * The {@code AbstractApiControllerBase} class provides an abstract base class that Spring API
  * controller implementations can extend to access common functionality.
  *
  * @author Marcus Portmann
@@ -57,7 +57,7 @@ public abstract class AbstractApiControllerBase {
   private final Validator validator;
 
   /**
-   * Constructs a <b>AbstractApiControllerBase</b>.
+   * Constructs a new <b>AbstractApiControllerBase</b>.
    *
    * @param applicationContext the Spring application context
    */
@@ -157,7 +157,7 @@ public abstract class AbstractApiControllerBase {
   /**
    * Returns whether debugging is enabled for the Inception Framework.
    *
-   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b>
+   * @return {@code true} if debugging is enabled for the Inception Framework or {@code false}
    *     otherwise
    */
   protected boolean inDebugMode() {

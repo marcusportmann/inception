@@ -36,7 +36,7 @@ import java.util.Set;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidationError</b> class represents a validation error.
+ * The {@code ValidationError} class represents a validation error.
  *
  * @author Marcus Portmann
  */
@@ -71,11 +71,11 @@ public class ValidationError implements Serializable, Cloneable {
   @NotNull
   private String property;
 
-  /** Constructs a new <b>ValidationError</b>. */
+  /** Creates a new {@code ValidationError} instance. */
   public ValidationError() {}
 
   /**
-   * Constructs a new <b>ValidationError</b>.
+   * Creates a new {@code ValidationError} instance.
    *
    * @param constraintViolation the constraint violation
    */
@@ -87,7 +87,7 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Constructs a new <b>ValidationError</b>.
+   * Creates a new {@code ValidationError} instance.
    *
    * @param property the path for the property that resulted in the validation error
    * @param message the error message for the validation error

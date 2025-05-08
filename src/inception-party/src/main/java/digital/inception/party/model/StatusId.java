@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>StatusId</b> class implements the ID class for the <b>Status</b> class.
+ * The {@code StatusId} class implements the ID class for The {@code Status} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class StatusId implements Serializable {
   /** The code for the status type. */
   private String type;
 
-  /** Constructs a new <b>StatusId</b>. */
+  /** Creates a new {@code StatusId} instance. */
   public StatusId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -25,7 +25,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>TestProcessor</b> class.
+ * The {@code TestProcessor} class.
  *
  * @author Marcus Portmann
  */

@@ -36,7 +36,7 @@ import java.util.Base64;
 import java.util.List;
 
 /**
- * The <b>UserDirectoryParameter</b> class stores a parameter for a user directory as a name-value
+ * The {@code UserDirectoryParameter} class stores a parameter for a user directory as a name-value
  * pair.
  *
  * @author Marcus Portmann
@@ -75,11 +75,11 @@ public class UserDirectoryParameter implements Serializable {
   @Size(max = 2000)
   private String value;
 
-  /** Constructs a new <b>UserDirectoryParameter</b>. */
+  /** Creates a new {@code UserDirectoryParameter} instance. */
   public UserDirectoryParameter() {}
 
   /**
-   * Constructs a new <b>UserDirectoryParameter</b>.
+   * Creates a new {@code UserDirectoryParameter} instance.
    *
    * @param name the name of the user directory parameter
    * @param value the <b>BigDecimal</b> value for the user directory parameter
@@ -90,7 +90,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserDirectoryParameter</b>.
+   * Creates a new {@code UserDirectoryParameter} instance.
    *
    * @param name the name of the user directory parameter
    * @param value the binary value for the user directory parameter
@@ -101,7 +101,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserDirectoryParameter</b>.
+   * Creates a new {@code UserDirectoryParameter} instance.
    *
    * @param name the name of the user directory parameter
    * @param value the binary value for the user directory parameter
@@ -112,7 +112,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserDirectoryParameter</b>.
+   * Creates a new {@code UserDirectoryParameter} instance.
    *
    * @param name the name of the user directory parameter
    * @param value the <b>double</b> value for the user directory parameter
@@ -123,7 +123,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserDirectoryParameter</b>.
+   * Creates a new {@code UserDirectoryParameter} instance.
    *
    * @param name the name of the user directory parameter
    * @param value the <b>long</b> value for the user directory parameter
@@ -134,7 +134,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UserDirectoryParameter</b>.
+   * Creates a new {@code UserDirectoryParameter} instance.
    *
    * @param name the name of the user directory parameter
    * @param value the <b>String</b> value for the user directory parameter
@@ -150,8 +150,8 @@ public class UserDirectoryParameter implements Serializable {
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return <b>true</b> if the list of user directory parameters contains a user directory
-   *     parameter whose name matches the specified name or <b>false</b> otherwise
+   * @return {@code true} if the list of user directory parameters contains a user directory
+   *     parameter whose name matches the specified name or {@code false} otherwise
    */
   public static boolean contains(List<UserDirectoryParameter> parameters, String name) {
     for (UserDirectoryParameter parameter : parameters) {

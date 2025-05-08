@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ValidationSchemaType</b> enumeration defines the possible validation schema types.
+ * The {@code ValidationSchemaType} enumeration defines the possible validation schema types.
  *
  * @author Marcus Portmann
  */

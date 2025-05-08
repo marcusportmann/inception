@@ -41,7 +41,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ErrorReportSummary</b> class holds the summary information for an error report.
+ * The {@code ErrorReportSummary} class holds the summary information for an error report.
  *
  * @author Marcus Portmann
  */
@@ -145,11 +145,11 @@ public class ErrorReportSummary implements Serializable {
   @Column(name = "who", length = 100)
   private String who;
 
-  /** Constructs a new <b>ErrorReportSummary</b>. */
+  /** Creates a new {@code ErrorReportSummary} instance. */
   public ErrorReportSummary() {}
 
   /**
-   * Constructs a new <b>ErrorReportSummary</b>.
+   * Creates a new {@code ErrorReportSummary} instance.
    *
    * @param id the ID for the error report
    * @param applicationId the ID for the application that generated the error report
@@ -180,7 +180,7 @@ public class ErrorReportSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -23,7 +23,7 @@ import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
 /**
- * The <b>LocalXAResource</b> class provides an XAResource implementation that supports local
+ * The {@code LocalXAResource} class provides an XAResource implementation that supports local
  * transaction behavior for an Agroal transaction aware connection resource associated with a non-XA
  * data source.
  *
@@ -38,7 +38,7 @@ public class LocalXAResource implements XAResource {
   private Xid currentXid;
 
   /**
-   * Constructs a new <b>LocalXAResource</b>.
+   * Creates a new {@code LocalXAResource} instance.
    *
    * @param transactionAware the Agroal transaction aware connection resource
    */

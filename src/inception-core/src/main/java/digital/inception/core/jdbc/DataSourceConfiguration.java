@@ -20,7 +20,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>DataSourceConfiguration</b> class provides access to the configuration properties for a
+ * The {@code DataSourceConfiguration} class provides access to the configuration properties for a
  * data source.
  *
  * @author Marcus Portmann
@@ -51,11 +51,11 @@ public class DataSourceConfiguration implements Serializable {
   /** The timeout in seconds when validating a connection in the database connection pool. */
   private int validationTimeout = 30;
 
-  /** Constructs a new <b>DataSourceConfiguration</b>. */
+  /** Creates a new {@code DataSourceConfiguration} instance. */
   public DataSourceConfiguration() {}
 
   /**
-   * Constructs a new <b>DataSourceConfiguration</b>.
+   * Creates a new {@code DataSourceConfiguration} instance.
    *
    * @param className the fully qualified name of the data source class used to connect to the
    *     database
@@ -83,7 +83,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Constructs a new <b>DataSourceConfiguration</b>.
+   * Creates a new {@code DataSourceConfiguration} instance.
    *
    * @param className the fully qualified name of the data source class used to connect to the
    *     database

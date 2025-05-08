@@ -31,13 +31,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The <b>SpringDocOpenApiModelConverter</b> class.
+ * The {@code SpringDocOpenApiModelConverter} class.
  *
  * @author Marcus Portmann
  */
 public class SpringDocOpenApiModelConverter implements ModelConverter {
 
-  /** Constructs a new <b>SpringDocOpenApiModelConverter</b>. */
+  /** Creates a new {@code SpringDocOpenApiModelConverter} instance. */
   public SpringDocOpenApiModelConverter() {}
 
   @Override

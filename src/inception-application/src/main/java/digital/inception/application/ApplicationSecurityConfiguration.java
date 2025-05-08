@@ -36,7 +36,7 @@ import org.springframework.web.reactive.function.client.WebClient.Builder;
 import reactor.netty.http.client.HttpClient;
 
 /**
- * The <b>ApplicationSecurityConfiguration</b> class provides access to the application security
+ * The {@code ApplicationSecurityConfiguration} class provides access to the application security
  * configuration and initialises the application key store and trust store.
  *
  * @author Marcus Portmann
@@ -81,7 +81,7 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   @Value("${inception.application.security.trust-store-type:#{null}}")
   private String trustStoreType;
 
-  /** Constructs a new <b>ApplicationSecurityConfiguration</b>. */
+  /** Creates a new {@code ApplicationSecurityConfiguration} instance. */
   public ApplicationSecurityConfiguration() {}
 
   @Override
@@ -141,7 +141,8 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   /**
    * Returns whether the key store configuration has been specified.
    *
-   * @return <b>true</b> if the key store configuration has been specified or <b>false</b> otherwise
+   * @return {@code true} if the key store configuration has been specified or {@code false}
+   *     otherwise
    */
   public boolean hasKeyStoreConfiguration() {
     return ((StringUtils.hasText(keyStoreType))
@@ -152,7 +153,7 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   /**
    * Returns whether the trust store configuration has been specified.
    *
-   * @return <b>true</b> if the trust store configuration has been specified or <b>false</b>
+   * @return {@code true} if the trust store configuration has been specified or {@code false}
    *     otherwise
    */
   public boolean hasTrustStoreConfiguration() {

@@ -25,8 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidOrganization</b> annotation implements the custom constraint annotation used to apply
- * the organization validation.
+ * The {@code ValidOrganization} annotation implements the custom constraint annotation used to
+ * apply the organization validation.
  *
  * @author Marcus Portmann
  */

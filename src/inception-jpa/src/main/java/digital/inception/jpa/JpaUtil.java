@@ -45,7 +45,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>JpaUtil</b> class provides JPA-related utility methods.
+ * The {@code JpaUtil} class provides JPA-related utility methods.
  *
  * @author Marcus Portmann
  */

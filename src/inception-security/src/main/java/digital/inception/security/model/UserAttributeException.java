@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * An <b>UserAttributeException</b> is thrown to indicate an invalid operation was performed on a
- * <b>UserAttribute</b> instance.
+ * {@code UserAttribute} instance.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -44,9 +44,9 @@ public class UserAttributeException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>UserAttributeException</b> with the specified message.
+   * Creates a new {@code UserAttributeException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public UserAttributeException(String message) {
     super(message);

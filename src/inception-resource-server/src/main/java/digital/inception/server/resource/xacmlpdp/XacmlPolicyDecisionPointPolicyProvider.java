@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractPolicyProvider;
 
 /**
- * The <b>XacmlPolicyDecisionPointPolicyProvider</b> class holds the configuration information for
+ * The {@code XacmlPolicyDecisionPointPolicyProvider} class holds the configuration information for
  * the custom AuthzForce dynamic policy provider implementation, which provides the XACML-based
  * policy sets and policies that will be applied by the policy decision point.
  *
@@ -44,11 +44,11 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
   /** The reload period in seconds for external policies. */
   private int externalPoliciesReloadPeriod;
 
-  /** Constructs a new <b>XacmlPolicyDecisionPointPolicyProvider</b>. */
+  /** Creates a new {@code XacmlPolicyDecisionPointPolicyProvider} instance. */
   public XacmlPolicyDecisionPointPolicyProvider() {}
 
   /**
-   * Constructs a new <b>XacmlPolicyDecisionPointPolicyProvider</b>.
+   * Creates a new {@code XacmlPolicyDecisionPointPolicyProvider} instance.
    *
    * @param classpathPoliciesEnabled should policy sets and policies be loaded from the classpath
    *     under pdp/policies
@@ -72,8 +72,8 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
   /**
    * Returns whether policy sets and policies be loaded from the classpath under pdp/policies.
    *
-   * @return <b>true</b> if policy sets and policies should be loaded from the classpath under
-   *     pdp/policies or <b>false</b> otherwise
+   * @return {@code true} if policy sets and policies should be loaded from the classpath under
+   *     pdp/policies or {@code false} otherwise
    */
   public boolean getClasspathPoliciesEnabled() {
     if (classpathPoliciesEnabled == null) {
@@ -86,8 +86,8 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
   /**
    * Returns whether policy sets and policies be loaded by invoking an external API.
    *
-   * @return <b>true</b> if policy sets and policies be loaded by invoking an external API or
-   *     <b>false</b> otherwise
+   * @return {@code true} if policy sets and policies be loaded by invoking an external API or
+   *     {@code false} otherwise
    */
   public Boolean getExternalPoliciesEnabled() {
     return externalPoliciesEnabled;
@@ -115,8 +115,8 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
    * Set whether the policy sets and policies should be loaded from the classpath under
    * pdp/policies.
    *
-   * @param classpathPoliciesEnabled <b>true</b> if the policy sets and policies be loaded from the
-   *     classpath under pdp/policies or <b>false</b> otherwise
+   * @param classpathPoliciesEnabled {@code true} if the policy sets and policies be loaded from the
+   *     classpath under pdp/policies or {@code false} otherwise
    */
   public void setClasspathPoliciesEnabled(Boolean classpathPoliciesEnabled) {
     this.classpathPoliciesEnabled = classpathPoliciesEnabled;
@@ -125,8 +125,8 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
   /**
    * Set whether policy sets and policies be loaded by invoking an external API.
    *
-   * @param externalPoliciesEnabled <b>true</b> if policy sets and policies be loaded by invoking an
-   *     external API or <b>false</b> otherwise
+   * @param externalPoliciesEnabled {@code true} if policy sets and policies be loaded by invoking
+   *     an external API or {@code false} otherwise
    */
   public void setExternalPoliciesEnabled(Boolean externalPoliciesEnabled) {
     this.externalPoliciesEnabled = externalPoliciesEnabled;

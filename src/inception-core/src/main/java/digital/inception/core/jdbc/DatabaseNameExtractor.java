@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>DatabaseNameExtractor</b> class provides the ability to extract the database name or SID
+ * The {@code DatabaseNameExtractor} class provides the ability to extract the database name or SID
  * from a JDBC URL for H2, SQL Server, PostgreSQL, or Oracle.
  *
  * @author Marcus Portmann

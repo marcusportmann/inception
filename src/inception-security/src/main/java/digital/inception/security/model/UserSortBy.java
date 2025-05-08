@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>UserSortBy</b> enumeration defines the possible methods used to sort a list of users.
+ * The {@code UserSortBy} enumeration defines the possible methods used to sort a list of users.
  *
  * @author Marcus Portmann
  */

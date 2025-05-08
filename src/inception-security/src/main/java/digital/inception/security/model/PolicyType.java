@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PolicyType</b> enumeration defines the possible policy types.
+ * The {@code PolicyType} enumeration defines the possible policy types.
  *
  * @author Marcus Portmann
  */

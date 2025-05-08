@@ -46,8 +46,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>WebServiceConfiguration</b> class provides the configuration for the <b>inception-ws</b>
- * library.
+ * The {@code WebServiceConfiguration} class provides the configuration for the {@code
+ * inception-ws}</b> library.
  *
  * @author Marcus Portmann
  */
@@ -94,7 +94,7 @@ public class WebServiceConfiguration {
   private String wssX509CertificateTokenProfileTrustStoreType;
 
   /**
-   * Constructs a new <b>WebServiceConfiguration</b>.
+   * Creates a new {@code WebServiceConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */

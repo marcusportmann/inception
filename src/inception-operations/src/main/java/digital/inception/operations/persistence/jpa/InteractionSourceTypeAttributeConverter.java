@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
+import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
 import digital.inception.operations.model.InteractionSourceType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>InteractionSourceTypeAttributeConverter</b> class implements the custom JPA attribute
- * converter for the <b>InteractionSourceType</b> enumeration.
+ * The {@code InteractionSourceTypeAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code InteractionSourceType} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -29,7 +30,7 @@ import jakarta.persistence.Converter;
 public class InteractionSourceTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<InteractionSourceType> {
 
-  /** Constructs a new <b>InteractionSourceTypeAttributeConverter</b>. */
+  /** Creates a new {@code InteractionSourceTypeAttributeConverter} instance. */
   public InteractionSourceTypeAttributeConverter() {
     super(InteractionSourceType.class);
   }

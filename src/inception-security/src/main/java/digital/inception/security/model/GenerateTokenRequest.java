@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <b>GenerateTokenRequest</b> class holds the information for a request to generate a token.
+ * The {@code GenerateTokenRequest} class holds the information for a request to generate a token.
  *
  * @author Marcus Portmann
  */
@@ -103,11 +103,11 @@ public class GenerateTokenRequest implements Serializable {
   @XmlSchemaType(name = "date")
   private LocalDate validFromDate;
 
-  /** Constructs a new <b>GenerateTokenRequest</b>. */
+  /** Creates a new {@code GenerateTokenRequest} instance. */
   public GenerateTokenRequest() {}
 
   /**
-   * Constructs a new <b>GenerateTokenRequest</b>.
+   * Creates a new {@code GenerateTokenRequest} instance.
    *
    * @param type the token type
    * @param name the name of the token
@@ -132,7 +132,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Constructs a new <b>GenerateTokenRequest</b>.
+   * Creates a new {@code GenerateTokenRequest} instance.
    *
    * @param type the token type
    * @param name the name of the token
@@ -154,7 +154,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Constructs a new <b>GenerateTokenRequest</b>.
+   * Creates a new {@code GenerateTokenRequest} instance.
    *
    * @param type the token type
    * @param name the name of the token

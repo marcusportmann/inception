@@ -29,13 +29,13 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>InceptionExtension</b> class.
+ * The {@code InceptionExtension} class.
  *
  * @author Marcus Portmann
  */
 public class InceptionExtension implements AfterEachCallback {
 
-  /** Constructs a new <b>InceptionExtension</b>. */
+  /** Creates a new {@code InceptionExtension} instance. */
   public InceptionExtension() {}
 
   @Override

@@ -39,7 +39,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>ConfigServiceTests</b> class contains the JUnit tests for the <b>ConfigService</b> class.
+ * The {@code ConfigServiceTests} class contains the JUnit tests for The {@code ConfigService}
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -354,7 +355,7 @@ public class ConfigServiceTests {
             + ")");
   }
 
-  /** Test the <b>Long</b> config. */
+  /** Test the {@code Long} config. */
   @Test
   public void longConfigTest() throws Exception {
     if (configService.idExists(TEST_LONG_ID)) {

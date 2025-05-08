@@ -24,7 +24,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 
 /**
- * The <b>ConfigService</b> interface defines the functionality provided by a Config Service
+ * The {@code ConfigService} interface defines the functionality provided by a Config Service
  * implementation, which manages the config information for an application or service.
  *
  * @author Marcus Portmann
@@ -185,10 +185,10 @@ public interface ConfigService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Long</b> config.
+   * Retrieve the {@code Long} config.
    *
    * @param id the ID for the config
-   * @return the <b>Long</b> config
+   * @return the {@code Long} config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
    * @throws ServiceUnavailableException if the long config value could not be retrieved
@@ -197,11 +197,11 @@ public interface ConfigService {
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Long</b> config.
+   * Retrieve the {@code Long} config.
    *
    * @param id the ID for the config
    * @param defaultValue the default value to return if the config does not exist
-   * @return the <b>Long</b> config or the default value if the config entry does not exist
+   * @return the {@code Long} config or the default value if the config entry does not exist
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the long config value could not be retrieved
    */
@@ -237,7 +237,7 @@ public interface ConfigService {
    * Check if a config with the specified ID exists.
    *
    * @param id the ID for the config
-   * @return <b>true</b> if the config with the specified ID exists or <b>false</b> otherwise
+   * @return {@code true} if the config with the specified ID exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the existing ID failed
    */

@@ -45,7 +45,7 @@
 //  private final PlatformTransactionManager transactionManager;
 //
 //  /**
-//   * Constructs a new <b>FlowableServiceTestConfiguration</b>.
+//   * Creates a new {@code FlowableServiceTestConfiguration} instance.
 //   *
 //   * @param applicationContext the Spring application context
 //   * @param dataSource the data source used to provide connections to the application database

@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>PhysicalAddressType</b> class holds the information for a physical address type.
+ * The {@code PhysicalAddressType} class holds the information for a physical address type.
  *
  * @author Marcus Portmann
  */
@@ -145,14 +145,14 @@ public class PhysicalAddressType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>PhysicalAddressType</b>. */
+  /** Creates a new {@code PhysicalAddressType} instance. */
   public PhysicalAddressType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>Organizations</b> class holds the results of a request to retrieve a list of
+ * The {@code Organizations} class holds the results of a request to retrieve a list of
  * organizations.
  *
  * @author Marcus Portmann
@@ -123,11 +123,11 @@ public class Organizations implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>Organizations</b>. */
+  /** Creates a new {@code Organizations} instance. */
   public Organizations() {}
 
   /**
-   * Constructs a new <b>Organizations</b>.
+   * Creates a new {@code Organizations} instance.
    *
    * @param tenantId the ID for the tenant the organizations are associated with
    * @param organizations the organizations

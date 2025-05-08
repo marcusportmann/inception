@@ -43,7 +43,7 @@ public class DuplicateGroupException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateGroupException</b>.
+   * Creates a new {@code DuplicateGroupException} instance.
    *
    * @param groupName the name of the group
    */

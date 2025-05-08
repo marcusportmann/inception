@@ -17,7 +17,7 @@
 // package digital.inception.flowable.flowable;
 //
 /// **
-// * The <b>EventDbSchemaManager</b> class provides a no-op database schema manager for the Event
+// * The {@code EventDbSchemaManager} class provides a no-op database schema manager for the Event
 // Subscription
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the

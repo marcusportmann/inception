@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AttributeType</b> class holds the information for an attribute type.
+ * The {@code AttributeType} class holds the information for an attribute type.
  *
  * @author Marcus Portmann
  */
@@ -207,14 +207,14 @@ public class AttributeType implements Serializable {
   @Column(name = "value_type", length = 10, nullable = false)
   private ValueType valueType;
 
-  /** Constructs a new <b>AttributeType</b>. */
+  /** Creates a new {@code AttributeType} instance. */
   public AttributeType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -362,7 +362,8 @@ public class AttributeType implements Serializable {
    * Returns whether the attribute type is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the attribute type is valid for the party type or <b>false</b> otherwise
+   * @return {@code true} if the attribute type is valid for the party type or {@code false}
+   *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

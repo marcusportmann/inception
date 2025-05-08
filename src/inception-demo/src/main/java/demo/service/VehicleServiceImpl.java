@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>VehicleServiceImpl</b> class provides the Vehicle Service implementation.
+ * The {@code VehicleServiceImpl} class provides the Vehicle Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -63,7 +63,7 @@ public class VehicleServiceImpl extends AbstractServiceBase implements VehicleSe
   private EntityManager entityManager;
 
   /**
-   * Constructs a new <b>VehicleServiceImpl</b>.
+   * Creates a new {@code VehicleServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param carRepository the Car Repository

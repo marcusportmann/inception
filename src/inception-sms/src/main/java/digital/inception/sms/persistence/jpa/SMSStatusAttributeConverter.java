@@ -21,15 +21,15 @@ import digital.inception.sms.model.SMSStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>SMSStatusAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>SMSStatus</b> enumeration.
+ * The {@code SMSStatusAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code SMSStatus} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class SMSStatusAttributeConverter extends AbstractCodeEnumAttributeConverter<SMSStatus> {
 
-  /** Constructs a new <b>SMSStatusAttributeConverter</b>. */
+  /** Creates a new {@code SMSStatusAttributeConverter} instance. */
   public SMSStatusAttributeConverter() {
     super(SMSStatus.class);
   }

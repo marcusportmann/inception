@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * The <b>ProblemDetails</b> class holds the information for a Problem Details Object as defined in
+ * The {@code ProblemDetails} class holds the information for a Problem Details Object as defined in
  * RFC 7807.
  *
  * <p>It contains a number of additional members, beyond those defined by the specification, which
@@ -120,7 +120,7 @@ public class ProblemDetails {
   @JsonProperty
   private List<ValidationError> validationErrors;
 
-  /** Constructs a new <b>ProblemDetails</b>. */
+  /** Creates a new {@code ProblemDetails} instance. */
   public ProblemDetails() {}
 
   /**
@@ -128,8 +128,8 @@ public class ProblemDetails {
    *
    * @param problemDetails the Problem Details Object
    * @param type the URI reference that identifies the problem type
-   * @return <b>true</b> if the Problem Details Object that matches the problem type or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the Problem Details Object that matches the problem type or {@code
+   *     false} otherwise
    */
   public static boolean isProblemDetails(ProblemDetails problemDetails, String type) {
 

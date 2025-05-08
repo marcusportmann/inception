@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>UserStatus</b> enumeration defines the possible statuses for a user.
+ * The {@code UserStatus} enumeration defines the possible statuses for a user.
  *
  * @author Marcus Portmann
  */

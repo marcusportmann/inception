@@ -21,7 +21,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <b>XmlParserErrorHandler</b> class handles warnings and errors that arise while parsing an
+ * The {@code XmlParserErrorHandler} class handles warnings and errors that arise while parsing an
  * XML document.
  *
  * @author Marcus Portmann
@@ -30,11 +30,11 @@ public class XmlParserErrorHandler implements ErrorHandler {
 
   private Logger logger = null;
 
-  /** Constructs a new <b>XmlParserErrorHandler</b>. */
+  /** Creates a new {@code XmlParserErrorHandler} instance. */
   public XmlParserErrorHandler() {}
 
   /**
-   * Constructs a new <b>XmlParserErrorHandler</b> using the specified <b>Logger</b>.
+   * Creates a new {@code XmlParserErrorHandler} instance using the specified <b>Logger</b>.
    *
    * @param logger the logger to use to log errors and warnings
    */

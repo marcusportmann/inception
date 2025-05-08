@@ -36,7 +36,7 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * The <b>ConnectionProxy</b> class implements a proxy for JDBC connections.
+ * The {@code ConnectionProxy} class implements a proxy for JDBC connections.
  *
  * @author Marcus Portmann
  */

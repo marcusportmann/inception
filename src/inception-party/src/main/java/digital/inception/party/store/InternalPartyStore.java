@@ -70,7 +70,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalPartyStore</b> class provides the internal party store implementation.
+ * The {@code InternalPartyStore} class provides the internal party store implementation.
  *
  * @author Marcus Portmann
  */
@@ -101,7 +101,7 @@ public class InternalPartyStore implements PartyStore {
   private final SnapshotRepository snapshotRepository;
 
   /**
-   * Constructs a new <b>InternalPartyDataStore</b>.
+   * Creates a new {@code InternalPartyDataStore} instance.
    *
    * @param objectMapper the Jackson2 object mapper
    * @param mandateRepository the Mandate Repository

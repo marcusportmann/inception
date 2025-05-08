@@ -21,7 +21,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>RoleRepository</b> interface declares the persistence for the <b>Role</b> domain type.
+ * The {@code RoleRepository} interface declares the persistence for the {@code Role} domain type.
  *
  * @author Marcus Portmann
  */

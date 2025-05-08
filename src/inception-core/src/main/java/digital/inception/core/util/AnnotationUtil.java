@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * The <b>AnnotationUtil</b> class is a utility class that supports working with annotations.
+ * The {@code AnnotationUtil} class is a utility class that supports working with annotations.
  *
  * @author Marcus Portmann
  */
@@ -43,8 +43,8 @@ public final class AnnotationUtil {
    * @param methodInvocation the method invocation
    * @param methodParameter the method parameter to check
    * @param annotationType the annotation type to check for
-   * @return <b>true</b> if the parameter is annotated with the specified annotation or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the parameter is annotated with the specified annotation or {@code
+   *     false} otherwise
    */
   public static boolean isMethodParameterAnnotatedWithAnnotation(
       MethodInvocation methodInvocation,

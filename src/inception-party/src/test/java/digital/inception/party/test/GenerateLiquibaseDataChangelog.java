@@ -76,7 +76,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>GenerateLiquibaseChangelog</b> class.
+ * The {@code GenerateLiquibaseChangelog} class.
  *
  * @author Marcus Portmann
  */
@@ -110,7 +110,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
   private final PartyReferenceService partyReferenceService;
 
   /**
-   * Constructs a new <b>GenerateLiquibaseDataChangelog</b>.
+   * Creates a new {@code GenerateLiquibaseDataChangelog} instance.
    *
    * @param applicationContext the Spring application context
    * @param partyReferenceService the Party Reference Service

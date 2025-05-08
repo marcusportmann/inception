@@ -25,8 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidWorkflow</b> annotation implements the custom constraint annotation used to apply the
- * workflow validation.
+ * The {@code ValidWorkflow} annotation implements the custom constraint annotation used to apply
+ * the workflow validation.
  *
  * @author Marcus Portmann
  */

@@ -20,7 +20,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import java.util.Set;
 
 /**
- * The <b>TokenService</b> interface defines the functionality provided by a Token Service
+ * The {@code TokenService} interface defines the functionality provided by a Token Service
  * implementation, which manages the OAuth2 tokens for an application.
  *
  * @author Marcus Portmann

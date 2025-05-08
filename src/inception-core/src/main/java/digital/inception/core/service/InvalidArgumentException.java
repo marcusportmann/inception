@@ -23,7 +23,7 @@ import java.io.Serial;
 import java.util.List;
 
 /**
- * The <b>InvalidArgumentException</b> exception is thrown to indicate an error condition as a
+ * The {@code InvalidArgumentException} exception is thrown to indicate an error condition as a
  * result of an invalid argument.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -44,7 +44,7 @@ public class InvalidArgumentException extends ServiceException {
   private final InvalidArgumentError invalidArgumentError;
 
   /**
-   * Constructs a new <b>InvalidArgumentException</b>.
+   * Creates a new {@code InvalidArgumentException} instance.
    *
    * @param parameter the name of the parameter associated with the invalid argument
    */
@@ -53,7 +53,7 @@ public class InvalidArgumentException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>InvalidArgumentException</b>.
+   * Creates a new {@code InvalidArgumentException} instance.
    *
    * @param parameter the name of the parameter associated with the invalid argument
    * @param validationErrors the validation errors associated with the invalid argument

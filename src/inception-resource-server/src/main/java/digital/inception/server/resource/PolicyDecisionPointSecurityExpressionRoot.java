@@ -28,8 +28,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PolicyDecisionPointSecurityExpressionRoot</b> class implements the custom methods, which
- * can be used in conjunction with the <b>@PreAuthorize</b> annotation.
+ * The {@code PolicyDecisionPointSecurityExpressionRoot} class implements the custom methods, which
+ * can be used in conjunction with the {@code @PreAuthorize} annotation.
  *
  * @author Marcus Portmann
  */
@@ -59,7 +59,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
   private Object returnObject;
 
   /**
-   * Constructs a new <b>PolicyDecisionPointSecurityExpressionRoot</b>.
+   * Creates a new {@code PolicyDecisionPointSecurityExpressionRoot} instance.
    *
    * @param policyDecisionPoints the policy decision points
    * @param authentication the authentication supplier
@@ -81,7 +81,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
   }
 
   /**
-   * Constructs a new <b>PolicyDecisionPointSecurityExpressionRoot</b>.
+   * Creates a new {@code PolicyDecisionPointSecurityExpressionRoot} instance.
    *
    * @param policyDecisionPoints the policy decision points
    * @param authentication the authentication
@@ -106,7 +106,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
   /**
    * Authorize using the policy decision point(s).
    *
-   * @return <b>true</b> if the policy decision point authorization was successful or <b>false</b>
+   * @return {@code true} if the policy decision point authorization was successful or {@code false}
    */
   public boolean authorize() {
     if (isSecurityEnabled) {
@@ -159,8 +159,8 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
    * function.
    *
    * @param functionCode the code for the function
-   * @return <b>true</b> if the user associated with the authenticated request has access to the
-   *     function identified by the specified function code or <b>false</b> otherwise
+   * @return {@code true} if the user associated with the authenticated request has access to the
+   *     function identified by the specified function code or {@code false} otherwise
    */
   public boolean hasAccessToFunction(String functionCode) {
     if (isSecurityEnabled) {
@@ -194,7 +194,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
   /**
    * Returns whether security is disabled.
    *
-   * @return <b>true</b> if security is disabled or <b>false</b> otherwise
+   * @return {@code true} if security is disabled or {@code false} otherwise
    */
   public boolean isSecurityDisabled() {
     return (inDebugMode || (!isSecurityEnabled));

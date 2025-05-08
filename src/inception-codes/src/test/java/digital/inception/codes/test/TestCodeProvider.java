@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <b>TestCodeProvider</b> class.
+ * The {@code TestCodeProvider} class.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +41,7 @@ public class TestCodeProvider implements CodeProvider {
   private final List<Code> codes;
 
   /**
-   * Constructs a new <b>TestCodeProvider</b>.
+   * Creates a new {@code TestCodeProvider} instance.
    *
    * @param codeProviderConfig the configuration for the code provider
    */

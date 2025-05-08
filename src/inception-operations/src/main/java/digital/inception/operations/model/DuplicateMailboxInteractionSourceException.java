@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>DuplicateMailboxInteractionSourceException</b> exception is thrown to indicate an error
+ * The {@code DuplicateMailboxInteractionSourceException} exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate mailbox interaction source, i.e. a
  * mailbox interaction source with the specified ID already exists.
  *
@@ -34,7 +34,7 @@ import java.io.Serial;
  */
 @Problem(
     type = "https://inception.digital/problems/operations/duplicate-mailbox-interaction-source",
-    title = "A mailbox interaction source with the specified ID already exists.",
+    title = "A mailbox interaction source with the specified ID already exists",
     status = 409)
 @WebFault(
     name = "DuplicateMailboxInteractionSourceException",
@@ -46,7 +46,7 @@ public class DuplicateMailboxInteractionSourceException extends ServiceException
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateMailboxInteractionSourceException</b>.
+   * Constructs a new {@code DuplicateMailboxInteractionSourceException}.
    *
    * @param mailboxInteractionSourceId the ID for the mailbox interaction source
    */

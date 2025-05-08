@@ -21,15 +21,15 @@ import digital.inception.security.model.TokenType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>TokenTypeAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>TokenType</b> enumeration.
+ * The {@code TokenTypeAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code TokenType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class TokenTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<TokenType> {
 
-  /** Constructs a new <b>TokenTypeAttributeConverter</b>. */
+  /** Creates a new {@code TokenTypeAttributeConverter} instance. */
   public TokenTypeAttributeConverter() {
     super(TokenType.class);
   }

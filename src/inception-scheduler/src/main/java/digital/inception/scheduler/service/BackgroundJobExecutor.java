@@ -30,7 +30,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>BackgroundJobExecutor</b> class implements the Background Job Executor.
+ * The {@code BackgroundJobExecutor} class implements the Background Job Executor.
  *
  * @author Marcus Portmann
  */
@@ -68,7 +68,7 @@ public class BackgroundJobExecutor {
   private int maximumJobExecutionThreads;
 
   /**
-   * Constructs a new <b>BackgroundJobExecutor</b>.
+   * Creates a new {@code BackgroundJobExecutor} instance.
    *
    * @param schedulerService the Scheduler Service
    */
@@ -166,7 +166,7 @@ public class BackgroundJobExecutor {
   }
 
   /**
-   * The <b>JobExecutor</b> class.
+   * The {@code JobExecutor} class.
    *
    * @author Marcus Portmann
    */
@@ -177,7 +177,7 @@ public class BackgroundJobExecutor {
     private final SchedulerService schedulerService;
 
     /**
-     * Constructs a new <b>JobExecutorThread</b>.
+     * Creates a new {@code JobExecutorThread} instance.
      *
      * @param schedulerService the Scheduler Service
      * @param job the job

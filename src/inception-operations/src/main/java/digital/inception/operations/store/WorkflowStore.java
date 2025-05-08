@@ -28,7 +28,7 @@ import digital.inception.operations.model.WorkflowSummaries;
 import java.util.UUID;
 
 /**
- * The <b>WorkflowStore</b> interface defines the functionality provided by a workflow store, which
+ * The {@code WorkflowStore} interface defines the functionality provided by a workflow store, which
  * manages the persistence of workflows.
  *
  * @author Marcus Portmann

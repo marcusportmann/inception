@@ -45,7 +45,7 @@ public class GroupRoleNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>GroupRoleNotFoundException</b>.
+   * Creates a new {@code GroupRoleNotFoundException} instance.
    *
    * @param groupName the name of the group
    * @param roleCode the code for the role

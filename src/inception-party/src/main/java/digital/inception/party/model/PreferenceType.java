@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PreferenceType</b> class holds the information for a preference type.
+ * The {@code PreferenceType} class holds the information for a preference type.
  *
  * @author Marcus Portmann
  */
@@ -186,14 +186,14 @@ public class PreferenceType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>PreferenceType</b>. */
+  /** Creates a new {@code PreferenceType} instance. */
   public PreferenceType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -323,7 +323,7 @@ public class PreferenceType implements Serializable {
    * Returns whether the preference type is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the preference type is valid for the party type or <b>false</b>
+   * @return {@code true} if the preference type is valid for the party type or {@code false}
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {

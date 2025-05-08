@@ -27,13 +27,13 @@ import org.flowable.form.api.NativeFormDefinitionQuery;
 import org.flowable.form.api.NativeFormDeploymentQuery;
 
 /**
- * The <b>FormRepositoryService</b> class.
+ * The {@code FormRepositoryService} class.
  *
  * @author Marcus Portmann
  */
 public class FormRepositoryService implements org.flowable.form.api.FormRepositoryService {
 
-  /** Constructs a new <b>FormRepositoryService</b>. */
+  /** Creates a new {@code FormRepositoryService} instance. */
   public FormRepositoryService() {}
 
   @Override

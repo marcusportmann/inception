@@ -47,7 +47,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * The <b>SourceOfFunds</b> class holds the information for a source of funds for a person.
+ * The {@code SourceOfFunds} class holds the information for a source of funds for a person.
  *
  * @author Marcus Portmann
  */
@@ -124,11 +124,11 @@ public class SourceOfFunds implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>SourceOfFunds</b>. */
+  /** Creates a new {@code SourceOfFunds} instance. */
   public SourceOfFunds() {}
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    */
@@ -137,7 +137,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param percentage the percentage of the total of all sources of funds attributed to this source
@@ -149,7 +149,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -160,7 +160,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -174,7 +174,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -187,7 +187,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -204,7 +204,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -215,7 +215,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -229,7 +229,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -242,7 +242,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -258,7 +258,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -274,7 +274,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Constructs a new <b>SourceOfFunds</b>.
+   * Creates a new {@code SourceOfFunds} instance.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -300,7 +300,7 @@ public class SourceOfFunds implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

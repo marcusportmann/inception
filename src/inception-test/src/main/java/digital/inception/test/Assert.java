@@ -24,7 +24,7 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
- * The <b>Assert</b> class provides additional assertions for JUnit tests.
+ * The {@code Assert} class provides additional assertions for JUnit tests.
  *
  * @author Marcus Portmann
  */

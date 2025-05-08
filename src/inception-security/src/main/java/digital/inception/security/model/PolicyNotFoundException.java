@@ -45,7 +45,7 @@ public class PolicyNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>PolicyNotFoundException</b>.
+   * Creates a new {@code PolicyNotFoundException} instance.
    *
    * @param policyId the ID for the policy
    */

@@ -24,7 +24,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * The <b>TestDocument</b> class.
+ * The {@code TestDocument} class.
  *
  * @author Marcus Portmann
  */
@@ -44,7 +44,7 @@ public class TestDocument implements Serializable {
   /** The name for the test document. */
   private String name;
 
-  /** Constructs a new <b>TestDocument</b>. */
+  /** Creates a new {@code TestDocument} instance. */
   public TestDocument() {}
 
   @Override

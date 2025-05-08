@@ -38,7 +38,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * The <b>WorkflowConfiguration</b> class provides the Spring configuration for the Workflow module.
+ * The {@code WorkflowConfiguration} class provides the Spring configuration for the Workflow
+ * module.
  *
  * @author Marcus Portmann
  */
@@ -70,7 +71,7 @@ public class FlowableConfiguration {
   private ObjectMapper objectMapper;
 
   /**
-   * Constructs a new <b>FlowableConfiguration</b>.
+   * Creates a new {@code FlowableConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

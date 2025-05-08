@@ -27,9 +27,9 @@ import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
 /**
- * The <b>CXFWSSUsernameTokenProfileProxyConfigurator</b> class provides the capability to configure
- * a CXF web service proxy to support authentication using the Web Services Security Username Token
- * profile.
+ * The {@code CXFWSSUsernameTokenProfileProxyConfigurator} class provides the capability to
+ * configure a CXF web service proxy to support authentication using the Web Services Security
+ * Username Token profile.
  *
  * @author Marcus Portmann
  */

@@ -37,9 +37,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MailboxInteractionSource</b> class holds the information for a mailbox interaction source.
- *
- * @author Marcus Portmann
+ * The {@code MailboxInteractionSource} class holds the information for a mailbox interaction
+ * source.
  */
 @Schema(description = "A mailbox interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -197,13 +196,13 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   @Column(name = "protocol", length = 50, nullable = false)
   private MailboxProtocol protocol;
 
-  /** Constructs a new <b>MailboxInteractionSource</b>. */
+  /** Creates a new {@code MailboxInteractionSource} instance. */
   public MailboxInteractionSource() {
     super(InteractionSourceType.MAILBOX);
   }
 
   /**
-   * Constructs a new <b>MailboxInteractionSource</b>.
+   * Creates a new {@code MailboxInteractionSource} instance.
    *
    * @param id the ID for the mailbox interaction source
    * @param name the name of the mailbox interaction source
@@ -244,7 +243,7 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   }
 
   /**
-   * Constructs a new <b>MailboxInteractionSource</b>.
+   * Creates a new {@code MailboxInteractionSource} instance.
    *
    * @param id the ID for the mailbox interaction source
    * @param name the name of the mailbox interaction source
@@ -292,7 +291,7 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -316,7 +315,7 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   /**
    * Returns whether mail retrieved from the mailbox should be archived.
    *
-   * @return <b>true</b> if mail retrieved from the mailbox should be archived or <b>false</b>
+   * @return {@code true} if mail retrieved from the mailbox should be archived or {@code false}
    *     otherwise
    */
   @Schema(
@@ -362,7 +361,7 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   /**
    * Returns whether debugging is enabled for the mailbox interaction source.
    *
-   * @return <b>true</b> if debugging enabled for the mailbox interaction source or <b>false</b>
+   * @return {@code true} if debugging enabled for the mailbox interaction source or {@code false}
    *     otherwise
    */
   @Schema(
@@ -377,7 +376,7 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   /**
    * Returns whether mail retrieved from the mailbox should be deleted.
    *
-   * @return <b>true</b> if mail retrieved from the mailbox should be deleted or <b>false</b>
+   * @return {@code true} if mail retrieved from the mailbox should be deleted or {@code false}
    *     otherwise
    */
   @Schema(
@@ -514,8 +513,8 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   /**
    * Set whether mail retrieved from the mailbox should be archived.
    *
-   * @param archiveMail <b>true</b> if mail retrieved from the mailbox should be archived or
-   *     <b>false</b> otherwise
+   * @param archiveMail {@code true} if mail retrieved from the mailbox should be archived or {@code
+   *     false} otherwise
    */
   public void setArchiveMail(boolean archiveMail) {
     this.archiveMail = archiveMail;
@@ -545,8 +544,8 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   /**
    * Set whether debugging is enabled for the mailbox interaction source.
    *
-   * @param debug <b>true</b> if debugging is enabled for the mailbox interaction source or
-   *     <b>false</b> otherwise
+   * @param debug {@code true} if debugging is enabled for the mailbox interaction source or {@code
+   *     false} otherwise
    */
   public void setDebug(boolean debug) {
     this.debug = debug;
@@ -555,8 +554,8 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   /**
    * Set whether mail retrieved from the mailbox should be deleted.
    *
-   * @param deleteMail <b>true</b> if mail retrieved from the mailbox should be deleted or
-   *     <b>false</b> otherwise
+   * @param deleteMail {@code true} if mail retrieved from the mailbox should be deleted or {@code
+   *     false} otherwise
    */
   public void setDeleteMail(boolean deleteMail) {
     this.deleteMail = deleteMail;

@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>PolicySummaries</b> class holds the results of a request to retrieve a list of policy
+ * The {@code PolicySummaries} class holds the results of a request to retrieve a list of policy
  * summaries.
  *
  * @author Marcus Portmann
@@ -112,11 +112,11 @@ public class PolicySummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>PolicySummaries</b>. */
+  /** Creates a new {@code PolicySummaries} instance. */
   public PolicySummaries() {}
 
   /**
-   * Constructs a new <b>PolicySummaries</b>.
+   * Creates a new {@code PolicySummaries} instance.
    *
    * @param policySummaries the policy summaries
    * @param total the total number of policy summaries

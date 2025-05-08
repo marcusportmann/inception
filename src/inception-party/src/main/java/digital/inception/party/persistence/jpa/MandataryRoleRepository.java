@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>MandataryRoleRepository</b> interface declares the persistence for the
- * <b>MandataryRole</b> domain type.
+ * The {@code MandataryRoleRepository} interface declares the persistence for the {@code
+ * MandataryRole} domain type.
  *
  * @author Marcus Portmann
  */

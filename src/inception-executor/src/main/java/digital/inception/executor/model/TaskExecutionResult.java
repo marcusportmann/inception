@@ -32,7 +32,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>TaskExecutionResult</b> class holds the result of executing a task.
+ * The {@code TaskExecutionResult} class holds the result of executing a task.
  *
  * @author Marcus Portmann
  */
@@ -76,11 +76,11 @@ public class TaskExecutionResult implements Serializable {
   @Size(min = 1, max = 10485760)
   private String updatedTaskData;
 
-  /** Constructs a new <b>TaskExecutionResult</b>. */
+  /** Creates a new {@code TaskExecutionResult} instance. */
   public TaskExecutionResult() {}
 
   /**
-   * Constructs a new <b>TestExecutionResult</b>.
+   * Creates a new {@code TestExecutionResult} instance.
    *
    * @param nextTaskStep the next task step for a multistep task
    */
@@ -89,7 +89,7 @@ public class TaskExecutionResult implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TestExecutionResult</b>.
+   * Creates a new {@code TestExecutionResult} instance.
    *
    * @param nextTaskStep the next task step for a multistep task
    * @param updatedTaskData the updated task data
@@ -100,7 +100,7 @@ public class TaskExecutionResult implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TestExecutionResult</b>.
+   * Creates a new {@code TestExecutionResult} instance.
    *
    * @param nextTaskStep the next task step for a multistep task
    * @param nextTaskStepDelay the delay in milliseconds before the next task step for a multistep
@@ -117,7 +117,7 @@ public class TaskExecutionResult implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TestExecutionResult</b>.
+   * Creates a new {@code TestExecutionResult} instance.
    *
    * @param nextTaskStep the next task step for a multistep task
    * @param nextTaskStepDelay the delay in milliseconds before the next task step for a multistep

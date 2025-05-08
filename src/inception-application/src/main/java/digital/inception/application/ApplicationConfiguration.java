@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * The <b>ApplicationConfiguration</b> class provides the Spring configuration for the Application
+ * The {@code ApplicationConfiguration} class provides the Spring configuration for the Application
  * module.
  */
 @Configuration
@@ -33,7 +33,7 @@ public class ApplicationConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Constructs a new <b>ApplicationConfiguration</b>.
+   * Creates a new {@code ApplicationConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */

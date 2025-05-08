@@ -39,7 +39,7 @@ import java.util.List;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
- * The <b>SimpleDemoClient</b> class.
+ * The {@code SimpleDemoClient} class.
  *
  * @author Marcus Portmann
  */

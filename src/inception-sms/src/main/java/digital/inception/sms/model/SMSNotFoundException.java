@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>SMSNotFoundException</b> exception is thrown to indicate an error condition as a result of
- * a SMS that could not be found.
+ * The {@code SMSNotFoundException} exception is thrown to indicate an error condition as a result
+ * of a SMS that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class SMSNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>SMSNotFoundException</b>.
+   * Creates a new {@code SMSNotFoundException} instance.
    *
    * @param smsId the ID for the SMS
    */

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 
 /**
- * The <b>MultistepTaskExecutor</b> class provides a templatized abstract base class that executors
+ * The {@code MultistepTaskExecutor} class provides a templatized abstract base class that executors
  * for multistep tasks can extend. It provides capabilities for serializing and deserializing a task
  * data object to and from JSON.
  *
@@ -37,7 +37,7 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements TaskExecuto
   private final List<TaskStep> taskSteps;
 
   /**
-   * Constructs a new <b>MultistepTaskExecutor</b>
+   * Creates a new {@code MultistepTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    * @param taskDataTypeClass the class for the task data type
@@ -94,7 +94,7 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements TaskExecuto
    * @param task the task
    * @param taskStep the task step
    * @param taskData the task data
-   * @return <b>true</b> if the task data has been updated and should be persisted or <b>false</b>
+   * @return {@code true} if the task data has been updated and should be persisted or {@code false}
    *     otherwise
    * @throws TaskExecutionFailedException if the task execution failed
    * @throws TaskExecutionRetryableException if the task execution failed because of temporary error

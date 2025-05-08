@@ -34,7 +34,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ResourceUtil</b> class is a utility class which provides methods for working with
+ * The {@code ResourceUtil} class is a utility class which provides methods for working with
  * resources.
  *
  * @author Marcus Portmann
@@ -49,8 +49,8 @@ public final class ResourceUtil {
    * class loader.
    *
    * @param path the classpath path for the resource
-   * @return <b>true</b> if the resource with the specified path exists on the classpath or
-   *     <b>false</b> otherwise.
+   * @return {@code true} if the resource with the specified path exists on the classpath or {@code
+   *     false} otherwise.
    */
   public static boolean classpathResourceExists(String path) {
     try {

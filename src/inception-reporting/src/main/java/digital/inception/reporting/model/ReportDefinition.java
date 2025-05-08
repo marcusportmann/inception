@@ -36,7 +36,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>ReportDefinition</b> class holds the information for a report definition.
+ * The {@code ReportDefinition} class holds the information for a report definition.
  *
  * @author Marcus Portmann
  */
@@ -90,11 +90,11 @@ public class ReportDefinition implements Serializable {
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /** Constructs a new <b>ReportDefinition</b>. */
+  /** Creates a new {@code ReportDefinition} instance. */
   public ReportDefinition() {}
 
   /**
-   * Constructs a new <b>ReportDefinition</b>.
+   * Creates a new {@code ReportDefinition} instance.
    *
    * @param id the ID for the report definition
    * @param name the name of the report definition
@@ -110,7 +110,7 @@ public class ReportDefinition implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

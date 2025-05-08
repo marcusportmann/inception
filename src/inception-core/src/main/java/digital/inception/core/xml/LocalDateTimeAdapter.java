@@ -21,14 +21,14 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDateTime;
 
 /**
- * The <b>LocalDateTimeAdapter</b> class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and <b>LocalDateTime</b> types. <br>
+ * The {@code LocalDateTimeAdapter} class implements a JAXB 2.0 adapter used to convert between
+ * <b>String</b> and {@code LocalDateTime} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 
-  /** Constructs a new <b>LocalDateTimeAdapter</b>. */
+  /** Creates a new {@code LocalDateTimeAdapter} instance. */
   public LocalDateTimeAdapter() {}
 
   /**

@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>ReferenceConfiguration</b> class provides the Spring configuration for the Reference
+ * The {@code ReferenceConfiguration} class provides the Spring configuration for the Reference
  * module.
  *
  * @author Marcus Portmann
@@ -40,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "referenceEntityManagerFactory")
 public class ReferenceConfiguration {
 
-  /** Constructs a new <b>ReferenceConfiguration</b>. */
+  /** Creates a new {@code ReferenceConfiguration} instance. */
   public ReferenceConfiguration() {}
 
   /**

@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>SourceOfFundsTypeRepository</b> interface declares the persistence for the <b>
- * SourceOfFundsType</b> domain type.
+ * The {@code SourceOfFundsTypeRepository} interface declares the persistence for the {@code
+ * SourceOfFundsType} domain type.
  *
  * @author Marcus Portmann
  */

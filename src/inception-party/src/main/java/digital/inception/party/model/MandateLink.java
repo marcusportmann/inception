@@ -42,7 +42,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MandateLink</b> class holds the information for a mandate link identifying an entity a
+ * The {@code MandateLink} class holds the information for a mandate link identifying an entity a
  * mandate applies to.
  *
  * @author Marcus Portmann
@@ -96,11 +96,11 @@ public class MandateLink implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>MandateLink</b>. */
+  /** Creates a new {@code MandateLink} instance. */
   public MandateLink() {}
 
   /**
-   * Constructs a new <b>MandateLink</b>.
+   * Creates a new {@code MandateLink} instance.
    *
    * @param type the code for the link type
    * @param target the target for the mandate link
@@ -114,7 +114,7 @@ public class MandateLink implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

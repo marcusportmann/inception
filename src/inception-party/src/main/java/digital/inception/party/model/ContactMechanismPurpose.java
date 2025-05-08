@@ -43,7 +43,7 @@ import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ContactMechanismPurpose</b> class holds the information for a contact mechanism purpose.
+ * The {@code ContactMechanismPurpose} class holds the information for a contact mechanism purpose.
  *
  * @author Marcus Portmann
  */
@@ -182,14 +182,14 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>ContactMechanismPurpose</b>. */
+  /** Creates a new {@code ContactMechanismPurpose} instance. */
   public ContactMechanismPurpose() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -298,8 +298,8 @@ public class ContactMechanismPurpose implements Serializable {
    * Returns whether the contact mechanism purpose is valid for the contact mechanism type.
    *
    * @param contactMechanismTypeCode the code for the contact mechanism type
-   * @return <b>true</b> if the contact mechanism purpose is valid for the contact mechanism, type
-   *     or <b>false</b> otherwise
+   * @return {@code true} if the contact mechanism purpose is valid for the contact mechanism, type
+   *     or {@code false} otherwise
    */
   public boolean isValidForContactMechanismType(String contactMechanismTypeCode) {
     if (!StringUtils.hasText(contactMechanismTypeCode)) {
@@ -313,8 +313,8 @@ public class ContactMechanismPurpose implements Serializable {
    * Returns whether the contact mechanism purpose is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the contact mechanism purpose is valid for the party type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the contact mechanism purpose is valid for the party type or {@code
+   *     false} otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

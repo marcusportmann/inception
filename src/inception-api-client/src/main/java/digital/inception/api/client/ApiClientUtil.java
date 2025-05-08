@@ -38,7 +38,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.netty.http.client.HttpClient;
 
 /**
- * The <b>ApiClientUtil</b> class provides API client related utility methods.
+ * The {@code ApiClientUtil} class provides API client related utility methods.
  *
  * @author Marcus Portmann
  */
@@ -223,8 +223,8 @@ public final class ApiClientUtil {
    * Extract the problem details object from the web client response exception.
    *
    * @param webClientResponseException the web client response exception
-   * @return the problem details object extracted from the web client response exception or
-   *     <b>null</b> if the problem details object could not be extracted
+   * @return the problem details object extracted from the web client response exception or {@code
+   *     null} if the problem details object could not be extracted
    */
   public static ProblemDetails getProblemDetails(
       WebClientResponseException webClientResponseException) {
@@ -244,9 +244,9 @@ public final class ApiClientUtil {
    *
    * @param webClientResponseException the web client response exception
    * @param annotatedClass the Java class annotated with the @Problem annotation
-   * @return <b>true</b> if the web client response exception holds the information for a Problem
-   *     Details Object that matches the type annotated with the @Problem annotation or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the web client response exception holds the information for a Problem
+   *     Details Object that matches the type annotated with the @Problem annotation or {@code
+   *     false} otherwise
    */
   public static boolean problemMatches(
       WebClientResponseException webClientResponseException, Class<?> annotatedClass) {
@@ -275,8 +275,8 @@ public final class ApiClientUtil {
    *
    * @param problemDetails the Problem Details Object
    * @param type the URI reference that identifies the problem type
-   * @return <b>true</b> if the Problem Details Object that matches the problem type or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the Problem Details Object that matches the problem type or {@code
+   *     false} otherwise
    */
   public static boolean problemMatches(ProblemDetails problemDetails, String type) {
 
@@ -293,7 +293,7 @@ public final class ApiClientUtil {
    *
    * @param webClientResponseException the web client response exception
    * @param type the URI reference that identifies the problem type
-   * @return <b>true</b> if the web client response exception holds the information for a Problem
+   * @return {@code true} if the web client response exception holds the information for a Problem
    *     Details Object that matches the problem type
    */
   public static boolean problemMatches(
@@ -318,8 +318,8 @@ public final class ApiClientUtil {
    *
    * @param problemDetails the Problem Details Object
    * @param annotatedClass the Java class annotated with the @Problem annotation
-   * @return <b>true</b> if the Problem Details Object matches the type annotated with the @Problem
-   *     annotation or <b>false</b> otherwise
+   * @return {@code true} if the Problem Details Object matches the type annotated with the @Problem
+   *     annotation or {@code false} otherwise
    */
   public static boolean problemMatches(ProblemDetails problemDetails, Class<?> annotatedClass) {
 
@@ -342,7 +342,8 @@ public final class ApiClientUtil {
    * @param keyStoreType the key store type when invoking an API using mutual TLS
    * @param keyStorePath the key store path when invoking an API using mutual TLS
    * @param keyStorePassword the key store password when invoking an API using mutual TLS
-   * @return <b>true</b> if the key store configuration has been specified or <b>false</b> otherwise
+   * @return {@code true} if the key store configuration has been specified or {@code false}
+   *     otherwise
    */
   private static boolean hasKeyStoreConfiguration(
       String keyStoreType, String keyStorePath, String keyStorePassword) {
@@ -356,7 +357,7 @@ public final class ApiClientUtil {
    *
    * @param trustStoreType the trust store type when invoking an API over TLS
    * @param trustStorePath the trust store path when invoking an API over TLS
-   * @return <b>true</b> if the trust store configuration has been specified or <b>false</b>
+   * @return {@code true} if the trust store configuration has been specified or {@code false}
    *     otherwise
    */
   private static boolean hasTrustStoreConfiguration(String trustStoreType, String trustStorePath) {

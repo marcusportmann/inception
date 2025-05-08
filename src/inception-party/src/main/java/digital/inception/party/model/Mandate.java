@@ -55,8 +55,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>Mandate</b> class holds the information for a mandate, which is an assignment of authority
- * to act on behalf of a party (the mandator), which is given to another party (the mandatary).
+ * The {@code Mandate} class holds the information for a mandate, which is an assignment of
+ * authority to act on behalf of a party (the mandator), which is given to another party (the
+ * mandatary).
  *
  * @author Marcus Portmann
  */
@@ -196,11 +197,11 @@ public class Mandate implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Mandate</b>. */
+  /** Creates a new {@code Mandate} instance. */
   public Mandate() {}
 
   /**
-   * Constructs a new <b>Mandate</b>.
+   * Creates a new {@code Mandate} instance.
    *
    * @param tenantId the ID for the tenant the mandate is associated with
    * @param type the code for the mandate type
@@ -214,7 +215,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Mandate</b>.
+   * Creates a new {@code Mandate} instance.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -234,7 +235,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Mandate</b>.
+   * Creates a new {@code Mandate} instance.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -305,7 +306,7 @@ public class Mandate implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -434,7 +435,7 @@ public class Mandate implements Serializable {
    * Returns whether the mandate has a property with the specified type.
    *
    * @param type the code for the mandate property type
-   * @return <b>true</b> if the mandate has a property with the specified type or <b>false</b>
+   * @return {@code true} if the mandate has a property with the specified type or {@code false}
    *     otherwise
    */
   public boolean hasPropertyWithType(String type) {

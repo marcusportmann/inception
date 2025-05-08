@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>SMSApiControllerImpl</b> class.
+ * The {@code SMSApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -37,7 +37,7 @@ public class SMSApiControllerImpl extends SecureApiController implements SMSApiC
   private final SMSService smsService;
 
   /**
-   * Constructs a new <b>SMSApiControllerImpl</b>.
+   * Creates a new {@code SMSApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param smsService the SMS Service

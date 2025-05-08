@@ -29,14 +29,14 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
- * The <b>InceptionModuleDeserializers</b> class dynamically provides a CodeEnumDeserializer for an
+ * The {@code InceptionModuleDeserializers} class dynamically provides a CodeEnumDeserializer for an
  * Enum implementing the CodeEnum interface.
  *
  * @author Marcus Portmann
  */
 public class InceptionModuleDeserializers extends SimpleDeserializers {
 
-  /** Constructs a new <b>InceptionModuleDeserializers</b>>. */
+  /** Creates a new {@code InceptionModuleDeserializers} instance>. */
   public InceptionModuleDeserializers() {
 
     addDeserializer(Date.class, new DateDeserializer());

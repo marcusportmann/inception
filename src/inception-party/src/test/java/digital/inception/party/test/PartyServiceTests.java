@@ -104,7 +104,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PartyServiceTests</b> class contains the JUnit tests for the <b>PartyService</b> class.
+ * The {@code PartyServiceTests} class contains the JUnit tests for The {@code PartyService} class.
  *
  * @author Marcus Portmann
  */

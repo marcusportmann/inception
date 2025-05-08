@@ -59,7 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>Crypto</b> class.
+ * The {@code Crypto} class.
  *
  * @author Marcus Portmann
  */
@@ -82,7 +82,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   private final KeyStore trustStore;
 
   /**
-   * Constructs a new <b>Crypto</b>.
+   * Creates a new {@code Crypto} instance.
    *
    * @param keyStore the key store
    * @param keyStorePassword the key store password
@@ -96,7 +96,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   }
 
   /**
-   * Constructs a new <b>Crypto</b>.
+   * Creates a new {@code Crypto} instance.
    *
    * @param keyStore the key store
    * @param keyStorePassword the key store password
@@ -281,15 +281,15 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * <p>The supported types are as follows:
    *
    * <ul>
-   *   <li><b>TYPE.ISSUER_SERIAL</b><br>
+   *   <li>{@code TYPE.ISSUER_SERIAL}<br>
    *       The X.509 certificate (chain) is identified by the issuer name and serial number.
-   *   <li><b>TYPE.THUMBPRINT_SHA1</b><br>
+   *   <li>{@code TYPE.THUMBPRINT_SHA1}<br>
    *       The X.509 certificate (chain) is identified by the SHA1 of the (root) certificate.
-   *   <li><b>TYPE.SKI_BYTES</b><br>
+   *   <li>{@code TYPE.SKI_BYTES}<br>
    *       The X.509 certificate (chain) is identified by the SKI bytes of the (root) certificate.
-   *   <li><b>TYPE.SUBJECT_DN</b><br>
+   *   <li>{@code TYPE.SUBJECT_DN}<br>
    *       The X.509 certificate (chain) is identified by the subject DN of the (root) certificate.
-   *   <li><b>TYPE.ALIAS</b><br>
+   *   <li>{@code TYPE.ALIAS}<br>
    *       The X.509 certificate (chain) is identified by an alias, which for this implementation
    *       means an alias of the key store or trust store.
    * </ul>
@@ -344,8 +344,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the identifier for the X.509 certificate i.e. the key store alias.
    *
    * @param certificate the X.509 certificate
-   * @return the identifier for the X.509 certificate i.e. the key store alias or <b>null</b> if the
-   *     X.509 certificate could not be found
+   * @return the identifier for the X.509 certificate i.e. the key store alias or {@code null} if
+   *     the X.509 certificate could not be found
    */
   @Override
   public String getX509Identifier(X509Certificate certificate) throws WSSecurityException {
@@ -604,7 +604,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param skiBytes the subject key identifier bytes
    * @param keyStore the key store
-   * @return the certificate or certificate chain or <b>null</b> if the certificate or certificate
+   * @return the certificate or certificate chain or {@code null} if the certificate or certificate
    *     chain identified by the subject key identifier could not be found in the key store
    */
   private Certificate[] getCertificateChainForSKI(byte[] skiBytes, KeyStore keyStore)
@@ -789,8 +789,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * key store or trust store.
    *
    * @param alias the key store alias
-   * @return the X.509 certificate or certificate chain that corresponds to the identifier or <b>
-   *     null</b> if no X.509 certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain that corresponds to the identifier or {@code
+   *     null} if no X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForAlias(String alias)
       throws WSSecurityException {
@@ -838,7 +838,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param issuer the issuer
    * @param serialNumber the serial number
-   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509 certificate or
+   * @return the X.509 certificate or certificate chain or {@code null} if the X.509 certificate or
    *     certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForIssuerAndSerialNumber(
@@ -883,7 +883,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * the key store or trust store.
    *
    * @param skiBytes the subject key identifier bytes
-   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509 certificate or
+   * @return the X.509 certificate or certificate chain or {@code null} if the X.509 certificate or
    *     certificate chain identified by the subject key identifier could not be found
    */
   private X509Certificate[] getX509CertificateChainForSKI(byte[] skiBytes)
@@ -910,7 +910,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * or trust store.
    *
    * @param subjectDN the subject DN
-   * @return the X.509 certificate or certificate chain identified by the subject DN or <b>null</b>
+   * @return the X.509 certificate or certificate chain identified by the subject DN or {@code null}
    *     if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForSubject(String subjectDN)
@@ -941,7 +941,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * trust store.
    *
    * @param thumbprint the SHA1 thumbprint
-   * @return the X.509 certificate or certificate chain matching the thumbprint or <b>null</b> if
+   * @return the X.509 certificate or certificate chain matching the thumbprint or {@code null} if
    *     the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForThumbprint(byte[] thumbprint)
@@ -977,7 +977,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param publicKey the public key to search for
    * @param keyStoreToSearch the key store to search
-   * @return <b>true</b> if the public key is in the key store or <b>false</b> otherwise
+   * @return {@code true} if the public key is in the key store or {@code false} otherwise
    */
   private boolean isPublicKeyInKeyStore(PublicKey publicKey, KeyStore keyStoreToSearch) {
     if (keyStoreToSearch == null) {

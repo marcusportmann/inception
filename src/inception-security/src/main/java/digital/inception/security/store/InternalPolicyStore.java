@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>InternalPolicyStore</b> class provides the internal policy store implementation.
+ * The {@code InternalPolicyStore} class provides the internal policy store implementation.
  *
  * @author Marcus Portmann
  */
@@ -55,7 +55,7 @@ public class InternalPolicyStore implements PolicyStore {
   private final PolicySummaryRepository policySummaryRepository;
 
   /**
-   * * Constructs a new <b>InternalPolicyDataStore</b>.
+   * * Creates a new {@code InternalPolicyDataStore} instance.
    *
    * @param policyRepository the Policy Repository
    * @param policySummaryRepository the Policy Summary Repository

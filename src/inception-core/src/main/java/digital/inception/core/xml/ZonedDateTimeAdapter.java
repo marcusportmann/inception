@@ -21,14 +21,14 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.ZonedDateTime;
 
 /**
- * The <b>ZonedDateTimeAdapter</b> class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and <b>ZonedDateTime</b> types. <br>
+ * The {@code ZonedDateTimeAdapter} class implements a JAXB 2.0 adapter used to convert between
+ * <b>String</b> and {@code ZonedDateTime} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
 
-  /** Constructs a new <b>ZonedDateTimeAdapter</b>. */
+  /** Creates a new {@code ZonedDateTimeAdapter} instance. */
   public ZonedDateTimeAdapter() {}
 
   /**

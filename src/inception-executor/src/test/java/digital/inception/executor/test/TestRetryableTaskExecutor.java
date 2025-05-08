@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>TestRetryableTaskExecutor</b> class.
+ * The {@code TestRetryableTaskExecutor} class.
  *
  * @author Marcus Portmann
  */
@@ -36,7 +36,7 @@ public class TestRetryableTaskExecutor extends SimpleTaskExecutor<TestRetryableT
   private static final Logger log = LoggerFactory.getLogger(TestRetryableTaskExecutor.class);
 
   /**
-   * Constructs a new <b>TestRetryableTaskExecutor</b>
+   * Creates a new {@code TestRetryableTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

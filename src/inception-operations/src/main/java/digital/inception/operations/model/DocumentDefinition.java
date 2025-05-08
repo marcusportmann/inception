@@ -19,7 +19,7 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.operations.persistence.RequiredDocumentAttributesConverter;
+import digital.inception.operations.persistence.jpa.RequiredDocumentAttributeListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -40,11 +40,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The <b>DocumentDefinition</b> class holds the information for document definition.
- *
- * @author Marcus Portmann
- */
+/** The {@code DocumentDefinition} class holds the information for document definition. */
 @Schema(description = "A document definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "tenantId", "name", "requiredDocumentAttributes"})
@@ -93,7 +89,7 @@ public class DocumentDefinition implements Serializable {
   @XmlElement(name = "RequiredDocumentAttribute", required = true)
   @NotNull
   @Size(max = 10)
-  @Convert(converter = RequiredDocumentAttributesConverter.class)
+  @Convert(converter = RequiredDocumentAttributeListAttributeConverter.class)
   @Column(name = "required_document_attributes", length = 510)
   private List<RequiredDocumentAttribute> requiredDocumentAttributes;
 
@@ -104,14 +100,14 @@ public class DocumentDefinition implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>DocumentDefinition</b>. */
+  /** Creates a new {@code DocumentDefinition} instance. */
   public DocumentDefinition() {}
 
   /**
-   * Constructs a new <b>DocumentDefinition</b>.
+   * Creates a new {@code DocumentDefinition} instance.
    *
    * @param id ID for the document definition
-   * @param name the name of the document definition
+   * @param name name of the document definition
    */
   public DocumentDefinition(String id, String name) {
     this.id = id;
@@ -119,11 +115,11 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Constructs a new <b>DocumentDefinition</b>.
+   * Creates a new {@code DocumentDefinition} instance.
    *
    * @param id ID for the document definition
-   * @param tenantId the ID for the tenant the document definition is specific to
-   * @param name the name of the document definition
+   * @param tenantId ID for the tenant the document definition is specific to
+   * @param name name of the document definition
    */
   public DocumentDefinition(String id, UUID tenantId, String name) {
     this.id = id;
@@ -135,7 +131,7 @@ public class DocumentDefinition implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

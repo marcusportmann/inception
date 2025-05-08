@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
- * The <b>ValidationConfiguration</b> class provides access to the JSR-380 validation configuration
+ * The {@code ValidationConfiguration} class provides access to the JSR-380 validation configuration
  * and initialises the JSR-380 validator.
  *
  * @author Marcus Portmann
@@ -32,7 +32,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @Configuration
 public class ValidationConfiguration {
 
-  /** Constructs a new <b>ValidationConfiguration</b>. */
+  /** Creates a new {@code ValidationConfiguration} instance. */
   public ValidationConfiguration() {}
 
   /**

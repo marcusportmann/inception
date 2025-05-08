@@ -21,14 +21,14 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>CodeEnumToStringConverter</b> class implements the Spring converter that converts a
- * <b>CodeEnum</b> type into a <b>String</b> type.
+ * The {@code CodeEnumToStringConverter} class implements the Spring converter that converts a
+ * {@code CodeEnum} type into a {@code String} type.
  */
 @SuppressWarnings("unused")
 @Component
 public final class CodeEnumToStringConverter implements Converter<CodeEnum, String> {
 
-  /** Constructs a new <b>CodeEnumToStringConverter</b>. */
+  /** Creates a new {@code CodeEnumToStringConverter} instance. */
   public CodeEnumToStringConverter() {}
 
   @Override

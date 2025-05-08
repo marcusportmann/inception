@@ -39,7 +39,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
- * The <b>RevokedToken</b> class holds the information for a revoked token.
+ * The {@code RevokedToken} class holds the information for a revoked token.
  *
  * @author Marcus Portmann
  */
@@ -125,11 +125,11 @@ public class RevokedToken implements Serializable {
   @XmlSchemaType(name = "date")
   private LocalDate validFromDate;
 
-  /** Constructs a new <b>RevokedToken</b>. */
+  /** Creates a new {@code RevokedToken} instance. */
   public RevokedToken() {}
 
   /**
-   * Constructs a new <b>Token</b>.
+   * Creates a new {@code Token} instance.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -160,7 +160,7 @@ public class RevokedToken implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

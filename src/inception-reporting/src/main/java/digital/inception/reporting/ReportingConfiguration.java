@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>ReportingConfiguration</b> class provides the Spring configuration for the Reporting
+ * The {@code ReportingConfiguration} class provides the Spring configuration for the Reporting
  * module.
  *
  * @author Marcus Portmann
@@ -40,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "reportingEntityManagerFactory")
 public class ReportingConfiguration {
 
-  /** Constructs a new <b>ReportingConfiguration</b>. */
+  /** Creates a new {@code ReportingConfiguration} instance. */
   public ReportingConfiguration() {}
 
   /**

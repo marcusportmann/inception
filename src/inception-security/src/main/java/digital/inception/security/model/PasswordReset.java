@@ -44,7 +44,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>PasswordReset</b> class holds the information for a password rest.
+ * The {@code PasswordReset} class holds the information for a password rest.
  *
  * @author Marcus Portmann
  */
@@ -146,11 +146,11 @@ public class PasswordReset implements Serializable {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Constructs a new <b>PasswordReset</b>. */
+  /** Creates a new {@code PasswordReset} instance. */
   public PasswordReset() {}
 
   /**
-   * Constructs a new <b>PasswordReset</b>.
+   * Creates a new {@code PasswordReset} instance.
    *
    * @param username the username for the user associated with the password reset
    * @param securityCodeHash the security code hash
@@ -167,7 +167,7 @@ public class PasswordReset implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -21,8 +21,8 @@ import digital.inception.party.model.MeasurementUnit;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>MeasurementUnitAttributeConverter</b> class implements the custom JPA attribute converter
- * for the <b>MeasurementUnitAttribute</b> enumeration.
+ * The {@code MeasurementUnitAttributeConverter} class implements the custom JPA attribute converter
+ * for the {@code MeasurementUnitAttribute} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class MeasurementUnitAttributeConverter
     extends AbstractCodeEnumAttributeConverter<MeasurementUnit> {
 
-  /** Constructs a new <b>MeasurementUnitAttributeConverter</b>. */
+  /** Creates a new {@code MeasurementUnitAttributeConverter} instance. */
   public MeasurementUnitAttributeConverter() {
     super(MeasurementUnit.class);
   }

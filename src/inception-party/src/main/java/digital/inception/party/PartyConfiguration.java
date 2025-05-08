@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>PartyConfiguration</b> class provides the Spring configuration for the Party module.
+ * The {@code PartyConfiguration} class provides the Spring configuration for the Party module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "partyEntityManagerFactory")
 public class PartyConfiguration {
 
-  /** Constructs a new <b>PartyConfiguration</b>. */
+  /** Creates a new {@code PartyConfiguration} instance. */
   public PartyConfiguration() {}
 
   /**

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WorkflowSummary;
 import java.util.UUID;
@@ -22,8 +22,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The <b>WorkflowSummaryRepository</b> interface declares the persistence for the
- * <b>WorkflowSummary</b> domain type.
+ * The {@code WorkflowSummaryRepository} interface declares the persistence for the {@code
+ * WorkflowSummary} domain type.
  *
  * @author Marcus Portmann
  */

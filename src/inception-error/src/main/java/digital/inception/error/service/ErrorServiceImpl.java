@@ -45,7 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ErrorServiceImpl</b> class provides the Error Service implementation.
+ * The {@code ErrorServiceImpl} class provides the Error Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -63,7 +63,7 @@ public class ErrorServiceImpl extends AbstractServiceBase implements ErrorServic
   private final ErrorReportSummaryRepository errorReportSummaryRepository;
 
   /**
-   * Constructs a new <b>ErrorServiceImpl</b>.
+   * Creates a new {@code ErrorServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param errorReportRepository the Error Report Repository

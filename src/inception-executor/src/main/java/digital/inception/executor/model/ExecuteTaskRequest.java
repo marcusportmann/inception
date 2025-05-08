@@ -31,7 +31,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>ExecuteTaskRequest</b> class holds the information for a request to execute a task
+ * The {@code ExecuteTaskRequest} class holds the information for a request to execute a task
  * synchronously.
  *
  * @author Marcus Portmann
@@ -66,11 +66,11 @@ public class ExecuteTaskRequest implements Serializable {
   @Size(min = 1, max = 50)
   private String taskType;
 
-  /** Constructs a new <b>ExecuteTaskRequest</b>. */
+  /** Creates a new {@code ExecuteTaskRequest} instance. */
   public ExecuteTaskRequest() {}
 
   /**
-   * Constructs a new <b>ExecuteTaskRequest</b>.
+   * Creates a new {@code ExecuteTaskRequest} instance.
    *
    * @param taskType the code for the task type
    * @param taskData the task data

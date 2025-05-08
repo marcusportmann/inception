@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>ErrorReportNotFoundException</b> exception is thrown to indicate that the required error
+ * The {@code ErrorReportNotFoundException} exception is thrown to indicate that the required error
  * report could not be found when working with the Error Service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class ErrorReportNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>ErrorReportNotFoundException</b>.
+   * Creates a new {@code ErrorReportNotFoundException} instance.
    *
    * @param errorReportId the ID for the error report
    */

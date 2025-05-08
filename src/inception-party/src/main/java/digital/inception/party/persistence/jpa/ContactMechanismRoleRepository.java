@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>ContactMechanismRoleRepository</b> interface declares the persistence for the <b>
- * ContactMechanismRole</b> domain type.
+ * The {@code ContactMechanismRoleRepository} interface declares the persistence for the {@code
+ * ContactMechanismRole} domain type.
  *
  * @author Marcus Portmann
  */

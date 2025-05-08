@@ -23,14 +23,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>MailApiConfiguration</b> class provides the Spring configuration for the Mail API module.
+ * The {@code MailApiConfiguration} class provides the Spring configuration for the Mail API module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 public class MailApiConfiguration {
 
-  /** Constructs a new <b>MailApiConfiguration</b>. */
+  /** Creates a new {@code MailApiConfiguration} instance. */
   public MailApiConfiguration() {}
 
   /**

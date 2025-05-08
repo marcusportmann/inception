@@ -25,8 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidUpdateDocumentRequest</b> annotation implements the custom constraint annotation used
- * to apply the validation to a request to update a document.
+ * The {@code ValidUpdateDocumentRequest} annotation implements the custom constraint annotation
+ * used to apply the validation to a request to update a document.
  *
  * @author Marcus Portmann
  */

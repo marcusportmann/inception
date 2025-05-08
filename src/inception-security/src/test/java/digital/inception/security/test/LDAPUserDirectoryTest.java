@@ -54,9 +54,9 @@
 // import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 //
 /// **
-// * The <b>SecurityServiceTest</b> class contains the JUnit tests for
+// * The {@code SecurityServiceTest} class contains the JUnit tests for
 // the
-// * <b>SecurityService</b> class.
+// * {@code SecurityService} class.
 // *
 // * @author Marcus Portmann
 // */

@@ -38,7 +38,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ReferenceWebService</b> class.
+ * The {@code ReferenceWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -54,7 +54,7 @@ public class ReferenceWebService extends AbstractWebServiceBase {
   private final ReferenceService referenceService;
 
   /**
-   * Constructs a new <b>ReferenceWebService</b>.
+   * Creates a new {@code ReferenceWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param referenceService the Reference Service

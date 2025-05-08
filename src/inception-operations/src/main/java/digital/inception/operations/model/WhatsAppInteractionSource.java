@@ -35,10 +35,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>WhatsAppInteractionSource</b> class holds the information for a WhatsApp interaction
+ * The {@code WhatsAppInteractionSource} class holds the information for a WhatsApp interaction
  * source.
- *
- * @author Marcus Portmann
  */
 @Schema(description = "A WhatsApp interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -58,13 +56,13 @@ public class WhatsAppInteractionSource extends InteractionSourceBase implements 
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <b>WhatsAppInteractionSource</b>. */
+  /** Creates a new {@code WhatsAppInteractionSource} instance. */
   public WhatsAppInteractionSource() {
     super(InteractionSourceType.MAILBOX);
   }
 
   /**
-   * Constructs a new <b>WhatsAppInteractionSource</b>.
+   * Creates a new {@code WhatsAppInteractionSource} instance.
    *
    * @param id the ID for the WhatsApp interaction source
    * @param name the name of the WhatsApp interaction source
@@ -77,7 +75,7 @@ public class WhatsAppInteractionSource extends InteractionSourceBase implements 
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

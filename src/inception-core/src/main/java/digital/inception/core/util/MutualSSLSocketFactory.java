@@ -34,7 +34,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * The <b>MutualSSLSocketFactory</b> class implements the custom SSL socket factory that supports
+ * The {@code MutualSSLSocketFactory} class implements the custom SSL socket factory that supports
  * Mutual SSL authentication.
  *
  * @author Marcus Portmann
@@ -45,7 +45,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory {
   private final SSLSocketFactory socketFactory;
 
   /**
-   * Constructs a new <b>MutualSSLSocketFactory</b>
+   * Creates a new {@code MutualSSLSocketFactory} instance
    *
    * @param keyStore the key store containing the client certificate and private key
    * @param keyStorePassword the password required to access the key store
@@ -116,9 +116,9 @@ public class MutualSSLSocketFactory extends SSLSocketFactory {
   }
 
   /**
-   * Returns <b>true</b> if we are running under the IBM JDK or <b>false</b> otherwise.
+   * Returns {@code true} if we are running under the IBM JDK or {@code false} otherwise.
    *
-   * @return <b>true</b> if we are running under the IBM JDK or <b>false</b> otherwise
+   * @return {@code true} if we are running under the IBM JDK or {@code false} otherwise
    */
   public static boolean isIBMJDK() {
     for (Provider provider : Security.getProviders()) {

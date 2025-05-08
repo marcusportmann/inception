@@ -29,7 +29,7 @@ import org.flowable.form.api.FormRepositoryService;
 import org.flowable.form.api.FormService;
 
 /**
- * The <b>FormEngineConfiguration</b> class.
+ * The {@code FormEngineConfiguration} class.
  *
  * @author Marcus Portmann
  */
@@ -46,7 +46,7 @@ public class FormEngineConfiguration extends AbstractEngineConfiguration
 
   private AppEngines FormEngines;
 
-  /** Constructs a new <b>FormEngineConfiguration</b>. */
+  /** Creates a new {@code FormEngineConfiguration} instance. */
   public FormEngineConfiguration() {
     this.formManagementService = new digital.inception.flowable.flowable.FormManagementService();
     this.formRepositoryService = new digital.inception.flowable.flowable.FormRepositoryService();

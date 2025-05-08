@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>InvalidTaskStatusException</b> exception is thrown to indicate that the status of the task
- * is invalid for the requested operation.
+ * The {@code InvalidTaskStatusException} exception is thrown to indicate that the status of the
+ * task is invalid for the requested operation.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class InvalidTaskStatusException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>InvalidTaskStatusException</b>.
+   * Creates a new {@code InvalidTaskStatusException} instance.
    *
    * @param taskId the ID for the task
    */

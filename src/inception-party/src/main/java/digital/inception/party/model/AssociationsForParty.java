@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>AssociationsForParty</b> class holds the results of a request to retrieve a list of
+ * The {@code AssociationsForParty} class holds the results of a request to retrieve a list of
  * associations for a party.
  *
  * @author Marcus Portmann
@@ -125,11 +125,11 @@ public class AssociationsForParty implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>AssociationsForParty</b>. */
+  /** Creates a new {@code AssociationsForParty} instance. */
   public AssociationsForParty() {}
 
   /**
-   * Constructs a new <b>AssociationsForParty</b>.
+   * Creates a new {@code AssociationsForParty} instance.
    *
    * @param tenantId the ID for the tenant the associations are associated with
    * @param partyId the ID for the party the associations are associated with

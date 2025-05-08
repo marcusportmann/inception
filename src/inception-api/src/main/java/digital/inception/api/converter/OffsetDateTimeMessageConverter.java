@@ -32,14 +32,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 /**
- * The <b>OffsetDateTimeMessageConverter</b> class.
+ * The {@code OffsetDateTimeMessageConverter} class.
  *
  * @author Marcus Portmann
  */
 @Component
 public class OffsetDateTimeMessageConverter extends AbstractHttpMessageConverter<OffsetDateTime> {
 
-  /** Constructs a new <b>OffsetDateTimeMessageConverter</b>. */
+  /** Creates a new {@code OffsetDateTimeMessageConverter} instance. */
   public OffsetDateTimeMessageConverter() {
     super(MediaType.TEXT_PLAIN);
   }

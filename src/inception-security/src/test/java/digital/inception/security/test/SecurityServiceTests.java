@@ -106,7 +106,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>SecurityServiceTests</b> class contains the JUnit tests for the <b>SecurityService</b>
+ * The {@code SecurityServiceTests} class contains the JUnit tests for the <b>SecurityService</b>
  * class.
  *
  * @author Marcus Portmann

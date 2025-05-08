@@ -29,7 +29,7 @@ import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
 /**
- * The <b>CXFWSSX509CertificateTokenProfileProxyConfigurator</b> class provides the capability to
+ * The {@code CXFWSSX509CertificateTokenProfileProxyConfigurator} class provides the capability to
  * configure a CXF web service proxy to support authentication using the Web Services Security X.509
  * Certificate Token profile.
  *

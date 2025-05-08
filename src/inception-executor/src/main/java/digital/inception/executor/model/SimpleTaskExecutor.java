@@ -20,9 +20,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * The <b>SimpleTaskExecutor</b> class provides a templatized abstract base class that executors for
- * simple single-step tasks can extend. It provides capabilities for serializing and deserializing a
- * task data object to and from JSON.
+ * The {@code SimpleTaskExecutor} class provides a templatized abstract base class that executors
+ * for simple single-step tasks can extend. It provides capabilities for serializing and
+ * deserializing a task data object to and from JSON.
  *
  * @param <TaskDataType> the task data type
  * @author Marcus Portmann
@@ -34,7 +34,7 @@ public abstract class SimpleTaskExecutor<TaskDataType> implements TaskExecutor {
   private final Class<TaskDataType> taskDataTypeClass;
 
   /**
-   * Constructs a new <b>SimpleTaskExecutor</b>
+   * Creates a new {@code SimpleTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    * @param taskDataTypeClass the class for the task data type
@@ -71,7 +71,7 @@ public abstract class SimpleTaskExecutor<TaskDataType> implements TaskExecutor {
    *
    * @param task the task
    * @param taskData the task data
-   * @return <b>true</b> if the task data has been updated and should be persisted or <b>false</b>
+   * @return {@code true} if the task data has been updated and should be persisted or {@code false}
    *     otherwise
    * @throws TaskExecutionFailedException if the task execution failed
    * @throws TaskExecutionRetryableException if the task execution failed because of temporary error

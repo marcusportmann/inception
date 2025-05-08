@@ -26,7 +26,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>JwtGrantedAuthoritiesConverter</b> class extracts the granted authorities from a JWT.
+ * The {@code JwtGrantedAuthoritiesConverter} class extracts the granted authorities from a JWT.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ public class JwtGrantedAuthoritiesConverter
   /** The name of the roles claim that provides the roles assigned to the user. */
   private static final String ROLES_CLAIM = "roles";
 
-  /** Constructs a new <b>JwtGrantedAuthoritiesConverter</b>. */
+  /** Creates a new {@code JwtGrantedAuthoritiesConverter} instance. */
   public JwtGrantedAuthoritiesConverter() {}
 
   /**

@@ -21,7 +21,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>UserDirectoryTypeRepository</b> interface declares the persistence for the <b>
+ * The {@code UserDirectoryTypeRepository} interface declares the persistence for the <b>
  * UserDirectoryType</b> domain type.
  *
  * @author Marcus Portmann

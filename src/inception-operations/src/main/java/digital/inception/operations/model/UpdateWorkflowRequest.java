@@ -32,11 +32,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * The <b>UpdateWorkflowRequest</b> class holds the information for a request to update a workflow.
- *
- * @author Marcus Portmann
- */
+/** The {@code UpdateWorkflowRequest} class represents a request to update a workflow. */
 @Schema(description = "A request to update a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "status", "data"})
@@ -72,11 +68,11 @@ public class UpdateWorkflowRequest implements Serializable {
   @XmlElement(name = "Status")
   private WorkflowStatus status;
 
-  /** Constructs a new <b>UpdateWorkflowRequest</b>. */
+  /** Creates a new {@code UpdateWorkflowRequest} instance. */
   public UpdateWorkflowRequest() {}
 
   /**
-   * Constructs a new <b>UpdateWorkflowRequest</b>.
+   * Creates a new {@code UpdateWorkflowRequest} instance.
    *
    * @param id the ID for the workflow
    * @param data the updated data for the workflow
@@ -87,7 +83,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UpdateWorkflowRequest</b>.
+   * Creates a new {@code UpdateWorkflowRequest} instance.
    *
    * @param id the ID for the workflow
    * @param status the updated status of the workflow
@@ -98,7 +94,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Constructs a new <b>UpdateWorkflowRequest</b>.
+   * Creates a new {@code UpdateWorkflowRequest} instance.
    *
    * @param id the ID for the workflow
    * @param status the updated status of the workflow

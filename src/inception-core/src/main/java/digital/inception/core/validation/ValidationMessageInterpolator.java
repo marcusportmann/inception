@@ -38,7 +38,7 @@ public class ValidationMessageInterpolator extends AbstractMessageInterpolator {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(ValidationMessageInterpolator.class);
 
-  /** Constructs a new <b>ValidationMessageInterpolator</b>. */
+  /** Creates a new {@code ValidationMessageInterpolator} instance. */
   public ValidationMessageInterpolator() {
     super(
         new PlatformResourceBundleLocator(

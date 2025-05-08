@@ -27,8 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidTaskTypeValidator</b> class implements the custom constraint validator for validating
- * a task type.
+ * The {@code ValidTaskTypeValidator} class implements the custom constraint validator for
+ * validating a task type.
  *
  * <p>NOTE: The <b>@Autowired</b> constructor is not used when Spring Boot automatically invokes the
  * JSR 380 validation when persisting an entity. Instead, the default constructor is invoked when
@@ -44,7 +44,7 @@ public class ValidTaskTypeValidator implements ConstraintValidator<ValidTaskType
   private final ExecutorService executorService;
 
   /**
-   * Constructs a new <b>ValidTaskTypeValidator</b>.
+   * Creates a new {@code ValidTaskTypeValidator} instance.
    *
    * @param executorService the Executor Service
    */
@@ -53,7 +53,7 @@ public class ValidTaskTypeValidator implements ConstraintValidator<ValidTaskType
     this.executorService = executorService;
   }
 
-  /** Constructs a new <b>ValidTaskTypeValidator</b>. */
+  /** Creates a new {@code ValidTaskTypeValidator} instance. */
   public ValidTaskTypeValidator() {
     executorService = null;
   }

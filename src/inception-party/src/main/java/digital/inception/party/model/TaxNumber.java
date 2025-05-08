@@ -42,8 +42,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>TaxNumber</b> class holds the information for a tax number associated with an organization
- * or person.
+ * The {@code TaxNumber} class holds the information for a tax number associated with an
+ * organization or person.
  *
  * <p>Even though the country of issue is specified as part of the reference data for a tax number
  * type, it is included here to eliminate the additional join. The additional join will also be
@@ -107,11 +107,11 @@ public class TaxNumber implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>TaxNumber</b>. */
+  /** Creates a new {@code TaxNumber} instance. */
   public TaxNumber() {}
 
   /**
-   * Constructs a new <b>TaxNumber</b>.
+   * Creates a new {@code TaxNumber} instance.
    *
    * @param type the code for the tax number type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
@@ -124,7 +124,7 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaxNumber</b>.
+   * Creates a new {@code TaxNumber} instance.
    *
    * @param type the code for the tax number type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
@@ -138,7 +138,7 @@ public class TaxNumber implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

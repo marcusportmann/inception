@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>LockTypeCategoryId</b> class implements the ID class for the <b>LockTypeCategory</b>
+ * The {@code LockTypeCategoryId} class implements the ID class for the <b>LockTypeCategory</b>
  * class.
  *
  * @author Marcus Portmann
@@ -37,14 +37,14 @@ public class LockTypeCategoryId implements Serializable {
   /** The Unicode locale identifier for the lock type category. */
   private String localeId;
 
-  /** Constructs a new <b>LockTypeCategoryId</b>. */
+  /** Creates a new {@code LockTypeCategoryId} instance. */
   public LockTypeCategoryId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

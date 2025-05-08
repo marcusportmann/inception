@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>ExecutorApiControllerImpl</b> class.
+ * The {@code ExecutorApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -55,7 +55,7 @@ public class ExecutorApiControllerImpl extends SecureApiController
   private final ExecutorService executorService;
 
   /**
-   * Constructs a new <b>ExecutorApiControllerImpl</b>.
+   * Creates a new {@code ExecutorApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param executorService the Executor Service

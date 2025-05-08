@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The <b>TenantUserDirectory</b> class holds the information for a tenant user directory.
+ * The {@code TenantUserDirectory} class holds the information for a tenant user directory.
  *
  * @author Marcus Portmann
  */
@@ -52,11 +52,11 @@ public class TenantUserDirectory implements Serializable {
   @Column(name = "userDirectoryId", nullable = false)
   private UUID userDirectoryId;
 
-  /** Constructs a new <b>TenantUserDirectory</b>. */
+  /** Creates a new {@code TenantUserDirectory} instance. */
   public TenantUserDirectory() {}
 
   /**
-   * Constructs a new <b>TenantUserDirectory</b>.
+   * Creates a new {@code TenantUserDirectory} instance.
    *
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory

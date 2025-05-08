@@ -21,8 +21,8 @@ import digital.inception.party.model.RequiredMandataries;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>RequiredMandatariesAttributeConverter</b> class implements the custom JPA attribute
- * converter for the <b>RequiredMandataries</b> enumeration.
+ * The {@code RequiredMandatariesAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code RequiredMandataries} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class RequiredMandatariesAttributeConverter
     extends AbstractCodeEnumAttributeConverter<RequiredMandataries> {
 
-  /** Constructs a new <b>RequiredMandatariesAttributeConverter</b>. */
+  /** Creates a new {@code RequiredMandatariesAttributeConverter} instance. */
   public RequiredMandatariesAttributeConverter() {
     super(RequiredMandataries.class);
   }

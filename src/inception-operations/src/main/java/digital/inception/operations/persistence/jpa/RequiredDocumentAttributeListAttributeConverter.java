@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import jakarta.persistence.AttributeConverter;
@@ -26,7 +26,7 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
- * The <b>RequiredDocumentAttributeListAttributeConverter</b> class implements the custom JPA
+ * The {@code RequiredDocumentAttributeListAttributeConverter} class implements the custom JPA
  * converter used to store a list of <b>RequiredDocumentAttribute</b>s as a String.
  *
  * @author Marcus Portmann
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class RequiredDocumentAttributeListAttributeConverter
     implements AttributeConverter<List<RequiredDocumentAttribute>, String> {
 
-  /** Constructs a new <b>RequiredDocumentAttributeListAttributeConverter</b>. */
+  /** Creates a new {@code RequiredDocumentAttributeListAttributeConverter} instance. */
   public RequiredDocumentAttributeListAttributeConverter() {}
 
   /**

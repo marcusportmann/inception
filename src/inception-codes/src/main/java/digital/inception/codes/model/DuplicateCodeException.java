@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>DuplicateCodeException</b> exception is thrown to indicate an error condition as a result
+ * The {@code DuplicateCodeException} exception is thrown to indicate an error condition as a result
  * of an attempt to create a duplicate code, i.e. a code with the specified ID already exists for
  * the code category.
  *
@@ -46,7 +46,7 @@ public class DuplicateCodeException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateCodeException</b>.
+   * Creates a new {@code DuplicateCodeException} instance.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code

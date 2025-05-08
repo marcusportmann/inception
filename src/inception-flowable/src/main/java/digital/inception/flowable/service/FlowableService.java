@@ -51,7 +51,7 @@
 // import org.xml.sax.SAXParseException;
 //
 /// **
-// * The <b>ProcessService</b> class provides the Process Service implementation.
+// * The {@code ProcessService} class provides the Process Service implementation.
 // *
 // * @author Marcus Portmann
 // */
@@ -63,7 +63,7 @@
 //  private final ProcessEngine processEngine;
 //
 //  /**
-//   * Constructs a new <b>ProcessService</b>.
+//   * Creates a new {@code ProcessService} instance.
 //   *
 //   * @param processEngine the Camunda Process Engine
 //   */

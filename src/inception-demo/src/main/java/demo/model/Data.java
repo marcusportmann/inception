@@ -52,7 +52,7 @@ import java.time.OffsetTime;
 import java.util.Objects;
 
 /**
- * The <b>Data</b> class.
+ * The {@code Data} class.
  *
  * @author Marcus Portmann
  */
@@ -219,14 +219,14 @@ public class Data implements Serializable {
   @Column(name = "timestamp_with_time_zone_value")
   private OffsetDateTime timestampWithTimeZoneValue;
 
-  /** Constructs a new <b>Data</b>. */
+  /** Creates a new {@code Data} instance. */
   public Data() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -432,7 +432,7 @@ public class Data implements Serializable {
    *
    * @param id the ID for the data.
    */
-  public void setId(@NotNull long id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -450,7 +450,7 @@ public class Data implements Serializable {
    *
    * @param language the ISO 639-1 language code value for the data
    */
-  public void setLanguage(@NotNull @Size(min = 2, max = 2) String language) {
+  public void setLanguage(String language) {
     this.language = language;
   }
 

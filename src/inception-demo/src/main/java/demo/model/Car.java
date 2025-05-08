@@ -37,7 +37,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Car</b> class.
+ * The {@code Car} class.
  *
  * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
  * field-based approach to support the JPA inheritance model.
@@ -64,13 +64,13 @@ public class Car extends VehicleBase implements Serializable {
   @Column(name = "number_of_doors", nullable = false)
   private int numberOfDoors;
 
-  /** Constructs a new <b>Car</b>. */
+  /** Creates a new {@code Car} instance. */
   public Car() {
     super(VehicleType.CAR);
   }
 
   /**
-   * Constructs a new <b>Car</b>.
+   * Creates a new {@code Car} instance.
    *
    * @param name the name of the car
    * @param numberOfDoors the number of doors
@@ -85,7 +85,7 @@ public class Car extends VehicleBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

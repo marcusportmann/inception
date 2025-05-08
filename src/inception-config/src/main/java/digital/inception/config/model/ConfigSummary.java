@@ -36,7 +36,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>Config</b> class stores the summary for a config.
+ * The {@code Config} class stores the summary for a config.
  *
  * @author Marcus Portmann
  */
@@ -76,11 +76,11 @@ public class ConfigSummary implements Serializable {
   @Column(name = "id", length = 100, nullable = false)
   private String id;
 
-  /** Constructs a new <b>ConfigSummary</b>. */
+  /** Creates a new {@code ConfigSummary} instance. */
   public ConfigSummary() {}
 
   /**
-   * Constructs a new <b>ConfigSummary</b>.
+   * Creates a new {@code ConfigSummary} instance.
    *
    * @param id the ID for the config
    * @param description the description for the config
@@ -94,7 +94,7 @@ public class ConfigSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

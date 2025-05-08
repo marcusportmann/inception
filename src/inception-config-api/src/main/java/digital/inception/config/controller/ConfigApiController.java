@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ConfigApiController</b> interface.
+ * The {@code ConfigApiController} interface.
  *
  * @author Marcus Portmann
  */

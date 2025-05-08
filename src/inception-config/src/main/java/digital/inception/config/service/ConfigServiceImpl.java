@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ConfigServiceImpl</b> class provides the Config Service implementation.
+ * The {@code ConfigServiceImpl} class provides the Config Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -47,7 +47,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
   private final ConfigSummaryRepository configSummaryRepository;
 
   /**
-   * Constructs a new <b>ConfigServiceImpl</b>.
+   * Creates a new {@code ConfigServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param configRepository the Config Repository

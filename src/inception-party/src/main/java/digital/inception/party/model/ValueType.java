@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ValueType</b> enumeration defines the possible value types.
+ * The {@code ValueType} enumeration defines the possible value types.
  *
  * @author Marcus Portmann
  */

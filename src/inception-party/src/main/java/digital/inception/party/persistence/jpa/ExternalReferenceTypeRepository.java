@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>ExternalReferenceTypeRepository</b> interface declares the persistence for the <b>
- * ExternalReferenceType</b> domain type.
+ * The {@code ExternalReferenceTypeRepository} interface declares the persistence for the {@code
+ * ExternalReferenceType} domain type.
  *
  * @author Marcus Portmann
  */

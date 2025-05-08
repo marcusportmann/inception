@@ -45,7 +45,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Tenant</b> class holds the information for a tenant.
+ * The {@code Tenant} class holds the information for a tenant.
  *
  * @author Marcus Portmann
  */
@@ -103,11 +103,11 @@ public class Tenant implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
   private List<UserDirectory> userDirectories = new ArrayList<>();
 
-  /** Constructs a new <b>Tenant</b>. */
+  /** Creates a new {@code Tenant} instance. */
   public Tenant() {}
 
   /**
-   * Constructs a new <b>Tenant</b>.
+   * Creates a new {@code Tenant} instance.
    *
    * @param name the name of the tenant
    * @param status the status for the tenant
@@ -118,7 +118,7 @@ public class Tenant implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Tenant</b>.
+   * Creates a new {@code Tenant} instance.
    *
    * @param id the ID for the tenant
    * @param name the name of the tenant
@@ -134,7 +134,7 @@ public class Tenant implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

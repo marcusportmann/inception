@@ -37,19 +37,15 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The <b>InteractionAttachment</b> class holds the information for an interaction attachment.
- *
- * @author Marcus Portmann
- */
+/** The {@code InteractionAttachment} class holds the information for an interaction attachment. */
 @Schema(description = "An interaction attachment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "interactionId", "fileType", "name", "hash", "data"})
+@JsonPropertyOrder({"id", "tenantId", "interactionId", "fileType", "name", "hash", "data"})
 @XmlRootElement(name = "InteractionAttachment", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionAttachment",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "interactionId", "fileType", "name", "hash", "data"})
+    propOrder = {"id", "tenantId", "interactionId", "fileType", "name", "hash", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_attachments")
@@ -122,14 +118,24 @@ public class InteractionAttachment implements Serializable {
   @Column(name = "name", length = 200, nullable = false)
   private String name;
 
-  /** Constructs a new <b>InteractionAttachment</b>. */
+  /** The ID for the tenant the interaction attachment is associated with. */
+  @Schema(
+      description = "The ID for the tenant the interaction attachment is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
+
+  /** Creates a new {@code InteractionAttachment} instance. */
   public InteractionAttachment() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -187,9 +193,11 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Returns the ID for the interaction that the interaction attachment is associated with.
+   * Returns the unique identifier for the interaction that the interaction attachment is associated
+   * with.
    *
-   * @return the ID for the interaction that the interaction attachment is associated with
+   * @return the unique identifier for the interaction that the interaction attachment is associated
+   *     with
    */
   public UUID getInteractionId() {
     return interactionId;
@@ -202,6 +210,15 @@ public class InteractionAttachment implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the unique identifier for the tenant the interaction attachment is associated with.
+   *
+   * @return the unique identifier for the tenant the interaction attachment is associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**
@@ -242,19 +259,20 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction attachment.
+   * Set the unique identifier for the interaction attachment.
    *
-   * @param id the ID for the interaction attachment
+   * @param id the unique identifier for the interaction attachment
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the ID for the interaction that the interaction attachment is associated with.
+   * Set the unique identifier for the interaction that the interaction attachment is associated
+   * with.
    *
-   * @param interactionId the ID for the interaction that the interaction attachment is associated
-   *     with
+   * @param interactionId the unique identifier for the interaction that the interaction attachment
+   *     is associated with
    */
   public void setInteractionId(UUID interactionId) {
     this.interactionId = interactionId;
@@ -267,5 +285,15 @@ public class InteractionAttachment implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the unique identifier for the tenant the interaction attachment is associated with.
+   *
+   * @param tenantId the unique identifier for the tenant the interaction attachment is associated
+   *     with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

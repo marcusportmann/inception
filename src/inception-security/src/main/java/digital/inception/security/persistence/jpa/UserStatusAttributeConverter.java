@@ -21,15 +21,15 @@ import digital.inception.security.model.UserStatus;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>UserStatusAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>UserStatus</b> enumeration.
+ * The {@code UserStatusAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code UserStatus} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class UserStatusAttributeConverter extends AbstractCodeEnumAttributeConverter<UserStatus> {
 
-  /** Constructs a new <b>UserStatusAttributeConverter</b>. */
+  /** Creates a new {@code UserStatusAttributeConverter} instance. */
   public UserStatusAttributeConverter() {
     super(UserStatus.class);
   }

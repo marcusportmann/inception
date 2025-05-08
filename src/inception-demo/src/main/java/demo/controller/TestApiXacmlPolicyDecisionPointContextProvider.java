@@ -27,7 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>TestApiXacmlPolicyDecisionPointContextProvider</b> class.
+ * The {@code TestApiXacmlPolicyDecisionPointContextProvider} class.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ public class TestApiXacmlPolicyDecisionPointContextProvider
   private static final Logger log =
       LoggerFactory.getLogger(TestApiXacmlPolicyDecisionPointContextProvider.class);
 
-  /** Constructs a new <b>TestApiXmlPolicyDecisionPointContextProvider</b>. */
+  /** Creates a new {@code TestApiXmlPolicyDecisionPointContextProvider} instance. */
   public TestApiXacmlPolicyDecisionPointContextProvider() {}
 
   @Override

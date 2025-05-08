@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * The <b>JobExecutionContext</b> class provides access to context information associated with the
+ * The {@code JobExecutionContext} class provides access to context information associated with the
  * execution of a job.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public class JobExecutionContext {
   private final Map<String, String> parameters;
 
   /**
-   * Constructs a new <b>JobExecutionContext</b>.
+   * Creates a new {@code JobExecutionContext} instance.
    *
    * @param jobId the ID for the job
    * @param executionDate the date and time that the job was scheduled to be executed

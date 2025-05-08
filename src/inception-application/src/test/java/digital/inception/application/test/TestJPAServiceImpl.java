@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>TestJPAServiceImpl</b> class provides the Test JPA Service implementation.
+ * The {@code TestJPAServiceImpl} class provides the Test JPA Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +43,7 @@ public class TestJPAServiceImpl implements TestJPAService {
   private EntityManager entityManager;
 
   /**
-   * Constructs a new <b>TestJPAServiceImpl</b>.
+   * Creates a new {@code TestJPAServiceImpl} instance.
    *
    * @param platformTransactionManager the Spring platform transaction manager
    */

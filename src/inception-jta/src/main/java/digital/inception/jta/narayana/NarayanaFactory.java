@@ -30,7 +30,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
- * The <b>NarayanaFactory</b> class produces the JTA transaction management beans for the Narayana
+ * The {@code NarayanaFactory} class produces the JTA transaction management beans for the Narayana
  * transactions toolkit.
  *
  * @author Marcus Portmann
@@ -44,7 +44,7 @@ public class NarayanaFactory {
     TxControl.setXANodeName(nodeName());
   }
 
-  /** Constructs a new <b>NarayanaFactory</b>. */
+  /** Creates a new {@code NarayanaFactory} instance. */
   public NarayanaFactory() {}
 
   /**
@@ -134,7 +134,7 @@ public class NarayanaFactory {
     }
   }
 
-  /** The <b>FNV1aHash</b> class. */
+  /** The {@code FNV1aHash} class. */
   private static final class FNV1aHash {
 
     private static final long FNV_64_INIT = 0xcbf29ce484222325L;

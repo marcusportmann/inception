@@ -47,7 +47,7 @@ public class ExistingUsersException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>ExistingUsersException</b>.
+   * Creates a new {@code ExistingUsersException} instance.
    *
    * @param userDirectoryId the ID for the user directory
    */

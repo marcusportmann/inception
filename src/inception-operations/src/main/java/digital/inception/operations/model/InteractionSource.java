@@ -34,30 +34,17 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
-/**
- * The <b>InteractionSource</b> class holds the information for an interaction source.
- *
- * <p>The <b>InteractionSource</b> and <b>InteractionSourceBase</b> classes are both JPA entity
- * classes mapped to the same <b>operations_interaction_sources</b> table. The
- * <b>InteractionSourceBase</b> class provides the common base class for all JPA entity classes that
- * form part of the interaction source inheritance model, e.g. <b>MailboxInteractionSource</b>.
- *
- * <p>The <b>InteractionSource</b> class provides a mechanism to retrieve the minimum amount of
- * interaction source information without executing the polymorphic query that would result from
- * retrieving the same entities using a query that specifies the <b>InteractionSourceBase</b> class
- * as the result type.
- *
- * @author Marcus Portmann
- */
+/** The {@code InteractionSource} class holds the information for an interaction source. */
 @Schema(description = "An interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "name"})
+@JsonPropertyOrder({"id", "tenantId", "type", "name"})
 @XmlRootElement(name = "InteractionSource", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionSource",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "type", "name"})
+    propOrder = {"id", "tenantId", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_sources")
@@ -87,9 +74,15 @@ public class InteractionSource implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  // TODO: ADD ROLE MAPPING LIKE GROUP IN SECURITY MODEL
-
-  // TODO: ADD AUDIT CAPABILIGTIES For all interaction-related operations
+  /** The ID for the tenant the interaction source is associated with. */
+  @Schema(
+      description = "The ID for the tenant the interaction source is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
 
   /** The interaction source type. */
   @Schema(description = "The interaction source type", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -99,11 +92,15 @@ public class InteractionSource implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private InteractionSourceType type;
 
-  /** Constructs a new <b>InteractionSource</b>. */
+  /** Creates a new {@code InteractionSource} instance. */
   public InteractionSource() {}
 
+  // TODO: ADD ROLE MAPPING LIKE GROUP IN SECURITY MODEL
+
+  // TODO: ADD AUDIT CAPABILIGTIES For all interaction-related operations
+
   /**
-   * Constructs a new <b>InteractionSource</b>.
+   * Creates a new {@code InteractionSource} instance.
    *
    * @param id the ID for the interaction source
    * @param type the interaction source type
@@ -119,7 +116,7 @@ public class InteractionSource implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -159,6 +156,15 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Returns the ID for the tenant the interaction source is associated with.
+   *
+   * @return the ID for the tenant the interaction source is associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns the interaction source type.
    *
    * @return the interaction source type
@@ -193,6 +199,15 @@ public class InteractionSource implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the ID for the tenant the interaction source is associated with.
+   *
+   * @param tenantId the ID for the tenant the interaction source is associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

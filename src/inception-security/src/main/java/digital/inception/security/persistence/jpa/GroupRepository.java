@@ -30,7 +30,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>GroupRepository</b> interface declares the persistence for the <b>Group</b> domain type.
+ * The {@code GroupRepository} interface declares the persistence for the {@code Group} domain type.
  *
  * @author Marcus Portmann
  */
@@ -69,7 +69,7 @@ public interface GroupRepository
    * Check whether the user directory has existing groups.
    *
    * @param userDirectoryId the ID for the user directory
-   * @return <b>true</b> if the user directory has existing groups or <b>false</b> otherwise
+   * @return {@code true} if the user directory has existing groups or {@code false} otherwise
    */
   boolean existsByUserDirectoryId(UUID userDirectoryId);
 
@@ -78,7 +78,7 @@ public interface GroupRepository
    *
    * @param userDirectoryId the ID for the user directory
    * @param name the name of the group
-   * @return <b>true</b> if the group exists or <b>false</b> otherwise
+   * @return {@code true} if the group exists or {@code false} otherwise
    */
   @Transactional
   boolean existsByUserDirectoryIdAndNameIgnoreCase(UUID userDirectoryId, String name);

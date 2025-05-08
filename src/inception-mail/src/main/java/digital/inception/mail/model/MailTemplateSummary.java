@@ -36,7 +36,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MailTemplateSummary</b> class holds the summary information for a mail template.
+ * The {@code MailTemplateSummary} class holds the summary information for a mail template.
  *
  * @author Marcus Portmann
  */
@@ -87,11 +87,11 @@ public class MailTemplateSummary implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Constructs a new <b>MailTemplateSummary</b>. */
+  /** Creates a new {@code MailTemplateSummary} instance. */
   public MailTemplateSummary() {}
 
   /**
-   * Constructs a new <b>MailTemplateSummary</b>.
+   * Creates a new {@code MailTemplateSummary} instance.
    *
    * @param id the ID for the mail template
    * @param name the name of the mail template
@@ -107,7 +107,7 @@ public class MailTemplateSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

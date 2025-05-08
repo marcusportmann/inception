@@ -46,19 +46,17 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The <b>Document</b> class holds the information for a document.
- *
- * @author Marcus Portmann
- */
+/** The {@code Document} class holds the information for a document. */
 @Schema(description = "A document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
+  "tenantId",
   "definitionId",
   "fileType",
   "name",
   "hash",
+  "externalReference",
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
@@ -74,10 +72,12 @@ import java.util.UUID;
     namespace = "https://inception.digital/operations",
     propOrder = {
       "id",
+      "tenantId",
       "definitionId",
       "fileType",
       "name",
       "hash",
+      "externalReference",
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
@@ -149,8 +149,8 @@ public class Document implements Serializable {
   @Column(name = "expiry_date")
   private LocalDate expiryDate;
 
-  /** The external reference for the document. */
-  @Schema(description = "The external reference for the document")
+  /** The external reference used to link this document to an external system. */
+  @Schema(description = "The external reference used to link this document to an external system")
   @JsonProperty
   @XmlElement(name = "ExternalReference")
   @Size(max = 100)
@@ -210,6 +210,16 @@ public class Document implements Serializable {
   @Column(name = "source_document_id")
   private UUID sourceDocumentId;
 
+  /** The ID for the tenant the document is associated with. */
+  @Schema(
+      description = "The ID for the tenant the document is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
+
   /** The date and time the document was last updated. */
   @Schema(description = "The date and time the document was last updated")
   @JsonProperty
@@ -227,11 +237,11 @@ public class Document implements Serializable {
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** Constructs a new <b>Document</b>. */
+  /** Creates a new {@code Document} instance. */
   public Document() {}
 
   /**
-   * Constructs a new <b>Document</b>.
+   * Creates a new {@code Document} instance.
    *
    * @param definitionId the ID for the document definition the document is associated with
    */
@@ -244,7 +254,7 @@ public class Document implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -311,9 +321,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Returns the external reference for the document.
+   * Returns the external reference used to link this document to an external system.
    *
-   * @return the external reference for the document
+   * @return the external reference used to link this document to an external system
    */
   public String getExternalReference() {
     return externalReference;
@@ -340,7 +350,7 @@ public class Document implements Serializable {
   /**
    * Returns the ID for the document.
    *
-   * @return the ID for the document
+   * @return the unique identifier for the document
    */
   public UUID getId() {
     return id;
@@ -365,12 +375,21 @@ public class Document implements Serializable {
   }
 
   /**
-   * Returns the ID for the source document that was split to create this document.
+   * Returns the unique identifier for the source document that was split to create this document.
    *
-   * @return the ID for the source document that was split to create this document
+   * @return the unique identifier for the source document that was split to create this document
    */
   public UUID getSourceDocumentId() {
     return sourceDocumentId;
+  }
+
+  /**
+   * Returns the unique identifier for the tenant the document is associated with.
+   *
+   * @return the unique identifier for the tenant the document is associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**
@@ -419,9 +438,10 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition the document is associated with.
+   * Set the unique identifier for the document definition the document is associated with.
    *
-   * @param definitionId the ID for the document definition the document is associated with
+   * @param definitionId the unique identifier for the document definition the document is
+   *     associated with
    */
   public void setDefinitionId(String definitionId) {
     this.definitionId = definitionId;
@@ -437,9 +457,10 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the external reference for the document.
+   * Set the external reference used to link this document to an external system.
    *
-   * @param externalReference the external reference for the document
+   * @param externalReference the external reference used to link this document to an external
+   *     system
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;
@@ -464,9 +485,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the ID for the document.
+   * Set the unique identifier for the document.
    *
-   * @param id the ID for the document
+   * @param id the unique identifier for the document
    */
   public void setId(UUID id) {
     this.id = id;
@@ -491,12 +512,22 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the ID for the source document that was split to create this document.
+   * Set the unique identifier for the source document that was split to create this document.
    *
-   * @param sourceDocumentId the ID for the source document that was split to create this document
+   * @param sourceDocumentId the unique identifier for the source document that was split to create
+   *     this document
    */
   public void setSourceDocumentId(UUID sourceDocumentId) {
     this.sourceDocumentId = sourceDocumentId;
+  }
+
+  /**
+   * Set the unique identifier for the tenant the document is associated with.
+   *
+   * @param tenantId the unique identifier for the tenant the document is associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.time.Duration;
 
 /**
- * The <b>ConnectionFactoryConfiguration</b> class provides access to the configuration properties
+ * The {@code ConnectionFactoryConfiguration} class provides access to the configuration properties
  * for a R2DBC connection factory.
  *
  * @author Marcus Portmann
@@ -55,11 +55,11 @@ public class ConnectionFactoryConfiguration implements Serializable {
   /** The username used to create R2DBC connections to the database. */
   private String username;
 
-  /** Constructs a new <b>ConnectionFactoryConfiguration</b>. */
+  /** Creates a new {@code ConnectionFactoryConfiguration} instance. */
   public ConnectionFactoryConfiguration() {}
 
   /**
-   * Constructs a new <b>ConnectionFactoryConfiguration</b>.
+   * Creates a new {@code ConnectionFactoryConfiguration} instance.
    *
    * @param url the URL used to create R2DBC connections to the database
    * @param username the username used to create R2DBC connections to the database
@@ -87,7 +87,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Constructs a new <b>ConnectionFactoryConfiguration</b>.
+   * Creates a new {@code ConnectionFactoryConfiguration} instance.
    *
    * @param url the URL used to create R2DBC connections to the database
    * @param initialPoolSize the initial size of the R2DBC connection pool holding R2DBC connections
@@ -106,7 +106,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Constructs a new <b>ConnectionFactoryConfiguration</b>.
+   * Creates a new {@code ConnectionFactoryConfiguration} instance.
    *
    * @param url the URL used to create R2DBC connections to the database
    * @param username the username used to create R2DBC connections to the database

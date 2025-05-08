@@ -43,7 +43,7 @@ import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AssociationType</b> class holds the information for an association type.
+ * The {@code AssociationType} class holds the information for an association type.
  *
  * @author Marcus Portmann
  */
@@ -197,14 +197,14 @@ public class AssociationType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>AssociationType</b>. */
+  /** Creates a new {@code AssociationType} instance. */
   public AssociationType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -329,7 +329,7 @@ public class AssociationType implements Serializable {
    * Returns whether the party type is valid for the first party.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the party type is valid for the first party or <b>false</b> otherwise
+   * @return {@code true} if the party type is valid for the first party or {@code false} otherwise
    */
   public boolean isValidFirstPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {
@@ -343,7 +343,7 @@ public class AssociationType implements Serializable {
    * Returns whether the party type is valid for the second party.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the party type is valid for the second party or <b>false</b> otherwise
+   * @return {@code true} if the party type is valid for the second party or {@code false} otherwise
    */
   public boolean isValidSecondPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

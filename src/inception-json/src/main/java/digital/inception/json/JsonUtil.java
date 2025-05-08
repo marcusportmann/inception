@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
- * The <b>JsonUtil</b> class provides JSON-related and Jackson-related utility methods.
+ * The {@code JsonUtil} class provides JSON-related and Jackson-related utility methods.
  *
  * @author Marcus Portmann
  */

@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
 /**
- * The <b>MimeDataTests</b> class.
+ * The {@code MimeDataTests} class.
  *
  * @author Marcus Portmann
  */

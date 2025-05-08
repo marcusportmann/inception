@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>SkillProficiencyLevel</b> enumeration defines the skill proficiency levels.
+ * The {@code SkillProficiencyLevel} enumeration defines the skill proficiency levels.
  *
  * @author Marcus Portmann
  */

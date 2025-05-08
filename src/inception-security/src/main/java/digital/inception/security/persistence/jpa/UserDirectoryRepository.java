@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>UserDirectoryRepository</b> interface declares the persistence for the <b>
+ * The {@code UserDirectoryRepository} interface declares the persistence for the <b>
  * UserDirectory</b> domain type.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public interface UserDirectoryRepository
    * Check whether the user directory with the specified name exists.
    *
    * @param name the name of the user directory
-   * @return <b>true</b> if a user directory with the specified name exists or <b>false</b>
+   * @return {@code true} if a user directory with the specified name exists or {@code false}
    *     otherwise
    */
   boolean existsByNameIgnoreCase(String name);

@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>SchedulerApiConfiguration</b> class provides the Spring configuration for the Scheduler
+ * The {@code SchedulerApiConfiguration} class provides the Spring configuration for the Scheduler
  * API module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SchedulerApiConfiguration {
 
-  /** Constructs a new <b>SchedulerApiConfiguration</b>. */
+  /** Creates a new {@code SchedulerApiConfiguration} instance. */
   public SchedulerApiConfiguration() {}
 
   /**

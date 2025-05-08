@@ -45,7 +45,7 @@ public class UserNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>UserNotFoundException</b>.
+   * Creates a new {@code UserNotFoundException} instance.
    *
    * @param username the username for the user
    */

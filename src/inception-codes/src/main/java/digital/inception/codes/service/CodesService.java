@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <b>CodesService</b> interface defines the functionality provided by a Codes Service
+ * The {@code CodesService} interface defines the functionality provided by a Codes Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -41,7 +41,7 @@ public interface CodesService {
    * Check whether the code category exists.
    *
    * @param codeCategoryId the ID for the code category
-   * @return <b>true</b> if the code category exists or <b>false</b> otherwise
+   * @return {@code true} if the code category exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the existing code category failed
    */
@@ -53,7 +53,7 @@ public interface CodesService {
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
-   * @return <b>true</b> if the code exists or <b>false</b> otherwise
+   * @return {@code true} if the code exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the existing code failed
    */
@@ -63,7 +63,7 @@ public interface CodesService {
   /**
    * Create the new code.
    *
-   * @param code the <b>Code</b> instance containing the information for the new code
+   * @param code the {@code Code} instance containing the information for the new code
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateCodeException if the code already exists
    * @throws CodeCategoryNotFoundException if the code category could not be found
@@ -78,7 +78,7 @@ public interface CodesService {
   /**
    * Create the new code category.
    *
-   * @param codeCategory the <b>CodeCategory</b> instance containing the information for the new
+   * @param codeCategory the {@code CodeCategory} instance containing the information for the new
    *     code category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateCodeCategoryException if the code category already exists
@@ -257,7 +257,7 @@ public interface CodesService {
   /**
    * Update the existing code.
    *
-   * @param code the <b>Code</b> instance containing the updated information for the code
+   * @param code the {@code Code} instance containing the updated information for the code
    * @throws InvalidArgumentException if an argument is invalid
    * @throws CodeNotFoundException if the code could not be found
    * @throws ServiceUnavailableException if the code could not be updated
@@ -268,8 +268,8 @@ public interface CodesService {
   /**
    * Update the existing code category.
    *
-   * @param codeCategory the <b>CodeCategory</b> instance containing the updated information for the
-   *     code category
+   * @param codeCategory the {@code CodeCategory} instance containing the updated information for
+   *     the code category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws CodeCategoryNotFoundException if the code category could not be found
    * @throws ServiceUnavailableException if the code category could not be updated

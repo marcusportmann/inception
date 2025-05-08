@@ -83,7 +83,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>SecurityService</b> interface defines the functionality provided by a Security Service
+ * The {@code SecurityService} interface defines the functionality provided by a Security Service
  * implementation, which manages the security related information for an application.
  *
  * @author Marcus Portmann
@@ -1171,7 +1171,7 @@ public interface SecurityService {
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username for the user
-   * @return <b>true</b> if a user with specified username exists or <b>false</b> otherwise
+   * @return {@code true} if a user with specified username exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
    * @throws ServiceUnavailableException if the check for the existing user failed
@@ -1185,7 +1185,7 @@ public interface SecurityService {
    * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @param username the username for the user
-   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
+   * @return {@code true} if the user is a member of the group or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
    * @throws UserNotFoundException if the user could not be found

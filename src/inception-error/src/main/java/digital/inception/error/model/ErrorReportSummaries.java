@@ -37,7 +37,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * The <b>ErrorReportSummaries</b> class holds the results of a request to retrieve the summaries
+ * The {@code ErrorReportSummaries} class holds the results of a request to retrieve the summaries
  * for a list of error reports.
  *
  * @author Marcus Portmann
@@ -150,11 +150,11 @@ public class ErrorReportSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>ErrorReportSummaries</b>. */
+  /** Creates a new {@code ErrorReportSummaries} instance. */
   public ErrorReportSummaries() {}
 
   /**
-   * Constructs a new <b>ErrorReportSummaries</b>.
+   * Creates a new {@code ErrorReportSummaries} instance.
    *
    * @param errorReportSummaries the error report summaries
    * @param total the total number of error report summaries

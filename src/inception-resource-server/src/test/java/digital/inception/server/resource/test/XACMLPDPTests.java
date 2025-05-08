@@ -46,7 +46,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>XACMLPDPTests</b> class.
+ * The {@code XACMLPDPTests} class.
  *
  * @author Marcus Portmann
  */
@@ -205,11 +205,11 @@ public class XACMLPDPTests {
     }
   }
 
-  /** The <b>XACMLTestConfiguration</b> class. */
+  /** The {@code XACMLTestConfiguration} class. */
   @Configuration
   public static class XACMLTestConfiguration {
 
-    /** Constructs a new <b>XACMLTestConfiguration</b>. */
+    /** Creates a new {@code XACMLTestConfiguration} instance. */
     public XACMLTestConfiguration() {}
 
     /**

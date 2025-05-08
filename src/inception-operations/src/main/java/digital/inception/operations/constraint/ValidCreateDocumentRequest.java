@@ -25,8 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidCreateDocumentRequest</b> annotation implements the custom constraint annotation used
- * to apply the validation to a request to create a document.
+ * The {@code ValidCreateDocumentRequest} annotation implements the custom constraint annotation
+ * used to apply the validation to a request to create a document.
  *
  * @author Marcus Portmann
  */

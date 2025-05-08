@@ -44,7 +44,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>NextOfKin</b> class holds the information for a next of kin for a person.
+ * The {@code NextOfKin} class holds the information for a next of kin for a person.
  *
  * <p>The primary key for the next of kin entity (ID) is a surrogate key to support the management
  * of related data in one or more external stores, e.g. a copy of an identification for the next of
@@ -309,11 +309,11 @@ public class NextOfKin implements Serializable {
   @Column(name = "work_number", length = 50)
   private String workNumber;
 
-  /** Constructs a new <b>NextOfKin</b>. */
+  /** Creates a new {@code NextOfKin} instance. */
   public NextOfKin() {}
 
   /**
-   * Constructs a new <b>NextOfKin</b>.
+   * Creates a new {@code NextOfKin} instance.
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
@@ -372,7 +372,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Constructs a new <b>NextOfKin</b>.
+   * Creates a new {@code NextOfKin} instance.
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
@@ -391,7 +391,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Constructs a new <b>NextOfKin</b>.
+   * Creates a new {@code NextOfKin} instance.
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
@@ -406,7 +406,7 @@ public class NextOfKin implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

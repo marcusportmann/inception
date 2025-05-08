@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ExternalReferenceType</b> class holds the information for an external reference type.
+ * The {@code ExternalReferenceType} class holds the information for an external reference type.
  *
  * @author Marcus Portmann
  */
@@ -172,14 +172,14 @@ public class ExternalReferenceType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>ExternalReferenceType</b>. */
+  /** Creates a new {@code ExternalReferenceType} instance. */
   public ExternalReferenceType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -301,8 +301,8 @@ public class ExternalReferenceType implements Serializable {
    * Returns whether the external reference type is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the external reference type is valid for the party type or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the external reference type is valid for the party type or {@code
+   *     false} otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

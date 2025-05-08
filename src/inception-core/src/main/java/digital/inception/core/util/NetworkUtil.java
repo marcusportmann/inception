@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**
- * The <b>NetworkUtil</b> class is a utility class which provides network-related utility methods.
+ * The {@code NetworkUtil} class is a utility class which provides network-related utility methods.
  *
  * @author Marcus Portmann
  */

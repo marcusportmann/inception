@@ -17,7 +17,7 @@
 import digital.inception.core.model.CodeEnum;
 
 /**
- * The <b>TestEnum</b> enumeration.
+ * The {@code TestEnum} enumeration.
  *
  * @author Marcus Portmann
  */

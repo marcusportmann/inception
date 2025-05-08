@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>PersonNotFoundException</b> exception is thrown to indicate an error condition as a result
- * of a person that could not be found.
+ * The {@code PersonNotFoundException} exception is thrown to indicate an error condition as a
+ * result of a person that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class PersonNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>PersonNotFoundException</b>.
+   * Creates a new {@code PersonNotFoundException} instance.
    *
    * @param tenantId the ID for the tenant
    * @param personId the ID for the person

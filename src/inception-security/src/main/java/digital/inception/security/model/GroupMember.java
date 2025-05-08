@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The <b>GroupMember</b> class holds the information for a group member.
+ * The {@code GroupMember} class holds the information for a group member.
  *
  * @author Marcus Portmann
  */
@@ -82,11 +82,11 @@ public class GroupMember implements Serializable {
   @NotNull
   private UUID userDirectoryId;
 
-  /** Constructs a new <b>GroupMember</b>. */
+  /** Creates a new {@code GroupMember} instance. */
   public GroupMember() {}
 
   /**
-   * Constructs a new <b>GroupMember</b>.
+   * Creates a new {@code GroupMember} instance.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    * @param groupName the name of the group

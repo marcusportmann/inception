@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>OperationsApiControllerImpl</b> class.
+ * The {@code OperationsApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -37,7 +37,7 @@ public class OperationsApiControllerImpl extends SecureApiController
   private final IOperationsService operationsService;
 
   /**
-   * Constructs a new <b>OperationsApiControllerImpl</b>.
+   * Creates a new {@code OperationsApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param operationsService the Operations Service

@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>DuplicatePersonException</b> exception is thrown to indicate an error condition as a
+ * The {@code DuplicatePersonException} exception is thrown to indicate an error condition as a
  * result of an attempt to create a duplicate person.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class DuplicatePersonException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicatePersonException</b>.
+   * Creates a new {@code DuplicatePersonException} instance.
    *
    * @param id the ID for the person
    */

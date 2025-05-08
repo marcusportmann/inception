@@ -39,7 +39,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>CodesWebService</b> class.
+ * The {@code CodesWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -55,7 +55,7 @@ public class CodesWebService extends AbstractWebServiceBase {
   private final CodesService codesService;
 
   /**
-   * Constructs a new <b>CodesWebService</b>.
+   * Creates a new {@code CodesWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param codesService the Codes Service

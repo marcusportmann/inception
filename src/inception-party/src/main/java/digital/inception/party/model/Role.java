@@ -47,7 +47,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * The <b>Role</b> class holds the information for a role assigned directly to an organization or
+ * The {@code Role} class holds the information for a role assigned directly to an organization or
  * person, which may or may not be time based.
  *
  * @author Marcus Portmann
@@ -117,11 +117,11 @@ public class Role implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Role</b>. */
+  /** Creates a new {@code Role} instance. */
   public Role() {}
 
   /**
-   * Constructs a new <b>Role</b>.
+   * Creates a new {@code Role} instance.
    *
    * @param type the role type
    */
@@ -130,7 +130,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Role</b>.
+   * Creates a new {@code Role} instance.
    *
    * @param type the role type
    * @param effectiveFrom the date the role is effective from
@@ -141,7 +141,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Role</b>.
+   * Creates a new {@code Role} instance.
    *
    * @param type the role type
    * @param effectiveFrom the date the role is effective from
@@ -154,7 +154,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Role</b>.
+   * Creates a new {@code Role} instance.
    *
    * @param type the role type
    * @param purpose the code for the role purpose
@@ -165,7 +165,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Role</b>.
+   * Creates a new {@code Role} instance.
    *
    * @param type the role type
    * @param purpose the code for the role purpose
@@ -178,7 +178,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Role</b>.
+   * Creates a new {@code Role} instance.
    *
    * @param type the role type
    * @param purpose the code for the role purpose
@@ -196,7 +196,7 @@ public class Role implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

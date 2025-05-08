@@ -20,7 +20,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.ow2.authzforce.core.pdp.api.DecisionRequestBuilder;
 
 /**
- * The <b>XacmlPolicyDecisionPointContextProvider</b> interface defines the interface that must be
+ * The {@code XacmlPolicyDecisionPointContextProvider} interface defines the interface that must be
  * implemented by a XACML policy decision point context provider, which is used to add additional
  * attributes to the XACML decision request that will be authorized by the XACML policy decision
  * point using AuthzForce PDP engine.

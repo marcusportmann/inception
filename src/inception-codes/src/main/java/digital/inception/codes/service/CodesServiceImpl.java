@@ -54,7 +54,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 /**
- * The <b>CodesServiceImpl</b> class provides the Codes Service implementation.
+ * The {@code CodesServiceImpl} class provides the Codes Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -87,7 +87,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
   private List<CodeProvider> codeProviders;
 
   /**
-   * Constructs a new <b>CodesServiceImpl</b>.
+   * Creates a new {@code CodesServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param codeCategoryRepository the Code Category Repository
@@ -604,7 +604,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
   /**
    * Update the existing code.
    *
-   * @param code the <b>Code</b> instance containing the updated information for the code
+   * @param code the {@code Code} instance containing the updated information for the code
    */
   @Override
   public void updateCode(Code code)
@@ -627,8 +627,8 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
   /**
    * Update the existing code category.
    *
-   * @param codeCategory the <b>CodeCategory</b> instance containing the updated information for the
-   *     code category
+   * @param codeCategory the {@code CodeCategory} instance containing the updated information for
+   *     the code category
    */
   @Override
   public void updateCodeCategory(CodeCategory codeCategory)

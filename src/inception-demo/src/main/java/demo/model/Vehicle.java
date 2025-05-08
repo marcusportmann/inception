@@ -38,18 +38,18 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Vehicle</b> class.
+ * The {@code Vehicle} class.
  *
- * <p>The <b>Vehicle</b> and <b>VehicleBase</b> classes are both JPA entity classes mapped to the
- * same <b>demo.vehicles</b> table. The <b>VehicleBase</b> class provides the common base class for
+ * <p>The <b>Vehicle</b> and {@code VehicleBase} classes are both JPA entity classes mapped to the
+ * same <b>demo.vehicles</b> table. The {@code VehicleBase} class provides the common base class for
  * all JPA entity classes that form part of the vehicle inheritance model, e.g. <b>Car</b>,
  * <b>Motorbike</b>, etc. This inheritance model is required to allow the same child classes to be
  * mapped to the different parent classes for the different vehicle types, e.g. to support the
- * one-to-many mappings for both the <b>Car</b> and <b>Motorbike</b> classes to the
- * <b>VehicleAttribute</b> class. The <b>Vehicle</b> class provides a mechanism to retrieve the
- * minimum amount of vehicle information without executing the polymorphic query that would result
- * from retrieving the same entities using a query that specifies the <b>VehicleBase</b> class as
- * the result type.
+ * one-to-many mappings for both the <b>Car</b> and {@code Motorbike} classes to the {@code
+ * VehicleAttribute} class. The {@code Vehicle} class provides a mechanism to retrieve the minimum
+ * amount of vehicle information without executing the polymorphic query that would result from
+ * retrieving the same entities using a query that specifies The {@code VehicleBase} class as the
+ * result type.
  *
  * @author Marcus Portmann
  */
@@ -94,11 +94,11 @@ public class Vehicle implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private VehicleType type;
 
-  /** Constructs a new <b>Vehicle</b>. */
+  /** Creates a new {@code Vehicle} instance. */
   public Vehicle() {}
 
   /**
-   * Constructs a new <b>Vehicle</b>.
+   * Creates a new {@code Vehicle} instance.
    *
    * @param type the vehicle type
    * @param name the name of the vehicle
@@ -113,7 +113,7 @@ public class Vehicle implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

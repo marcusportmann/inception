@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>ReportingApiConfiguration</b> class provides the Spring configuration for the Reporting
+ * The {@code ReportingApiConfiguration} class provides the Spring configuration for the Reporting
  * API module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ReportingApiConfiguration {
 
-  /** Constructs a new <b>ReportingApiConfiguration</b>. */
+  /** Creates a new {@code ReportingApiConfiguration} instance. */
   public ReportingApiConfiguration() {}
 
   /**

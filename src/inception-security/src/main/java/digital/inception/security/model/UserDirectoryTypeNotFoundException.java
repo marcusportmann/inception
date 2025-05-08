@@ -45,7 +45,7 @@ public class UserDirectoryTypeNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>UserDirectoryTypeNotFoundException</b>.
+   * Creates a new {@code UserDirectoryTypeNotFoundException} instance.
    *
    * @param userDirectoryTypeCode the code for the user directory type
    */

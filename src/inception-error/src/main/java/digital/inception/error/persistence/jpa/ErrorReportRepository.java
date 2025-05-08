@@ -21,7 +21,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>ErrorRepository</b> interface declares the persistence for the <b>ErrorReport</b> domain
+ * The {@code ErrorRepository} interface declares the persistence for the {@code ErrorReport} domain
  * type.
  *
  * @author Marcus Portmann

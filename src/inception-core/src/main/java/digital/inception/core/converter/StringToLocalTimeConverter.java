@@ -24,8 +24,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>StringToLocalTimeConverter</b> class implements the Spring converter that converts a
- * <b>String</b> type into a <b>LocalTime</b> type.
+ * The {@code StringToLocalTimeConverter} class implements the Spring converter that converts a
+ * {@code String} type into a {@code LocalTime} type.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 @Component
 public final class StringToLocalTimeConverter implements Converter<String, LocalTime> {
 
-  /** Constructs a new <b>StringToLocalTimeConverter</b>. */
+  /** Creates a new {@code StringToLocalTimeConverter} instance. */
   public StringToLocalTimeConverter() {}
 
   @Override

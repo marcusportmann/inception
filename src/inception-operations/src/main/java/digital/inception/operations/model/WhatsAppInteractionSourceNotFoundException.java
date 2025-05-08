@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>WhatsAppInteractionSourceNotFoundException</b> exception is thrown to indicate an error
+ * The {@code WhatsAppInteractionSourceNotFoundException} exception is thrown to indicate an error
  * condition as a result of a WhatsApp interaction source that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -33,7 +33,7 @@ import java.io.Serial;
  */
 @Problem(
     type = "https://inception.digital/problems/operations/whatsapp-interaction-source-not-found",
-    title = "The WhatsApp interaction source could not be found.",
+    title = "The WhatsApp interaction source could not be found",
     status = 404)
 @WebFault(
     name = "WhatsAppInteractionSourceNotFoundException",
@@ -45,7 +45,7 @@ public class WhatsAppInteractionSourceNotFoundException extends ServiceException
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>WhatsAppInteractionSourceNotFoundException</b>.
+   * Constructs a new {@code WhatsAppInteractionSourceNotFoundException}.
    *
    * @param whatsAppInteractionSourceId the ID for the WhatsApp interaction source
    */

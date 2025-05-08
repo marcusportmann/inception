@@ -43,7 +43,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Task</b> class holds the information for a task.
+ * The {@code Task} class holds the information for a task.
  *
  * @author Marcus Portmann
  */
@@ -235,11 +235,11 @@ public class Task implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Task</b>. */
+  /** Creates a new {@code Task} instance. */
   public Task() {}
 
   /**
-   * Constructs a new <b>Task</b>.
+   * Creates a new {@code Task} instance.
    *
    * @param type the code for the task type
    * @param data the task data
@@ -255,7 +255,7 @@ public class Task implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Task</b>.
+   * Creates a new {@code Task} instance.
    *
    * @param type the code for the task type
    * @param step the code for the current task step for a multistep task
@@ -276,7 +276,7 @@ public class Task implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

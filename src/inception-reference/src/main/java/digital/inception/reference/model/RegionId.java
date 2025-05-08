@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>RegionId</b> class implements the ID class for the <b>Region</b> class.
+ * The {@code RegionId} class implements the ID class for The {@code Region} class.
  *
  * @author Marcus Portmann
  */
@@ -39,14 +39,14 @@ public class RegionId implements Serializable {
   /** The Unicode locale identifier for the region. */
   private String localeId;
 
-  /** Constructs a new <b>RegionId</b>. */
+  /** Creates a new {@code RegionId} instance. */
   public RegionId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

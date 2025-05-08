@@ -42,7 +42,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>LanguageProficiency</b> class holds the information for a language proficiency for a
+ * The {@code LanguageProficiency} class holds the information for a language proficiency for a
  * person.
  *
  * @author Marcus Portmann
@@ -129,11 +129,11 @@ public class LanguageProficiency implements Serializable {
   @Column(name = "write_level", length = 15, nullable = false)
   private LanguageProficiencyLevel writeLevel;
 
-  /** Constructs a new <b>LanguageProficiency</b>. */
+  /** Creates a new {@code LanguageProficiency} instance. */
   public LanguageProficiency() {}
 
   /**
-   * Constructs a new <b>LanguageProficiency</b>.
+   * Creates a new {@code LanguageProficiency} instance.
    *
    * @param language the ISO 639-1 alpha-2 code for the language
    * @param listenLevel the listen proficiency level for the language.
@@ -158,7 +158,7 @@ public class LanguageProficiency implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

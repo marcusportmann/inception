@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>PartyRepository</b> interface declares the persistence for the <b>Party</b> domain type.
+ * The {@code PartyRepository} interface declares the persistence for the {@code Party} domain type.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +51,7 @@ public interface PartyRepository
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the party
-   * @return <b>true</b> if the party exists or <b>false</b> otherwise
+   * @return {@code true} if the party exists or {@code false} otherwise
    */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 

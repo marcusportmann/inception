@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>TestSimpleTaskExecutor</b> class.
+ * The {@code TestSimpleTaskExecutor} class.
  *
  * @author Marcus Portmann
  */
@@ -36,7 +36,7 @@ public class TestSimpleTaskExecutor extends SimpleTaskExecutor<TestSimpleTaskDat
   private static final Logger log = LoggerFactory.getLogger(TestSimpleTaskExecutor.class);
 
   /**
-   * Constructs a new <b>SimpleTaskExecutor</b>
+   * Creates a new {@code SimpleTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

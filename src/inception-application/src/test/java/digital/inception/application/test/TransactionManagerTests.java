@@ -33,7 +33,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-/** The <b>TransactionManagerTests</b> class. */
+/** The {@code TransactionManagerTests} class. */
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(

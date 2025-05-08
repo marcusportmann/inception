@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>AssociationNotFoundException</b> exception is thrown to indicate an error condition as a
+ * The {@code AssociationNotFoundException} exception is thrown to indicate an error condition as a
  * result of an association that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class AssociationNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>AssociationNotFoundException</b>.
+   * Creates a new {@code AssociationNotFoundException} instance.
    *
    * @param tenantId the ID for the tenant
    * @param associationId the ID for the association

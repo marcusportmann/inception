@@ -22,7 +22,7 @@ import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToCodeEnumConverterFactory</b> class provides a Spring converter factory that
+ * The {@code StringToCodeEnumConverterFactory} class provides a Spring converter factory that
  * creates converters for Enum types that implement the CodeEnum interface.
  *
  * @author Marcus Portmann
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class StringToCodeEnumConverterFactory implements ConverterFactory<String, CodeEnum> {
 
-  /** Constructs a new <b>StringToCodeEnumConverterFactory</b>. */
+  /** Creates a new {@code StringToCodeEnumConverterFactory} instance. */
   public StringToCodeEnumConverterFactory() {}
 
   @Override
@@ -57,7 +57,7 @@ public final class StringToCodeEnumConverterFactory implements ConverterFactory<
     private final Class<E> enumType;
 
     /**
-     * Constructs a new <b>StringToCodeEnumConverter</b>.
+     * Creates a new {@code StringToCodeEnumConverter} instance.
      *
      * @param enumType the enum type
      */

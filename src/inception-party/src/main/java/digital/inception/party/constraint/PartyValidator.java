@@ -33,7 +33,7 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PartyValidator</b> class implements the base class that all party validators are derived
+ * The {@code PartyValidator} class implements the base class that all party validators are derived
  * from, which provides common party validation functionality.
  *
  * @author Marcus Portmann
@@ -73,7 +73,7 @@ public abstract class PartyValidator {
   private final ReferenceService referenceService;
 
   /**
-   * Constructs a new <b>ValidPersonValidator</b>.
+   * Creates a new {@code ValidPersonValidator} instance.
    *
    * @param partyReferenceService the Party Reference Service
    * @param referenceService the Reference Service
@@ -106,7 +106,7 @@ public abstract class PartyValidator {
    * Check whether the email address is valid.
    *
    * @param emailAddress the email address to validate
-   * @return <b>true</b> if the email address is valid or <b>false</b> otherwise
+   * @return {@code true} if the email address is valid or {@code false} otherwise
    */
   protected boolean isValidEmailAddress(String emailAddress) {
     if (StringUtils.hasText(emailAddress)) {
@@ -120,7 +120,7 @@ public abstract class PartyValidator {
    * Check whether the mobile number is valid.
    *
    * @param mobileNumber the mobile number to validate
-   * @return <b>true</b> if the mobile number is valid or <b>false</b> otherwise
+   * @return {@code true} if the mobile number is valid or {@code false} otherwise
    */
   protected boolean isValidMobileNumber(String mobileNumber) {
     if (StringUtils.hasText(mobileNumber)) {
@@ -136,7 +136,7 @@ public abstract class PartyValidator {
    * @param maximumSize the maximum size
    * @param attribute the attribute
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   * @return {@code true} if the attribute is valid or {@code false} otherwise
    */
   protected boolean validateMaximumSizeAttributeConstraint(
       int maximumSize,
@@ -170,7 +170,7 @@ public abstract class PartyValidator {
    * @param maximumSize the maximum size
    * @param preference the preference
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   * @return {@code true} if the preference is valid or {@code false} otherwise
    */
   protected boolean validateMaximumSizePreferenceConstraint(
       int maximumSize,
@@ -203,7 +203,7 @@ public abstract class PartyValidator {
    * @param minimumSize the minimum size
    * @param attribute the attribute
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   * @return {@code true} if the attribute is valid or {@code false} otherwise
    */
   protected boolean validateMinimumSizeAttributeConstraint(
       int minimumSize,
@@ -237,7 +237,7 @@ public abstract class PartyValidator {
    * @param minimumSize the minimum size
    * @param preference the preference
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   * @return {@code true} if the preference is valid or {@code false} otherwise
    */
   protected boolean validateMinimumSizePreferenceConstraint(
       int minimumSize,
@@ -270,7 +270,7 @@ public abstract class PartyValidator {
    * @param pattern the pattern
    * @param attribute the attribute
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   * @return {@code true} if the attribute is valid or {@code false} otherwise
    */
   protected boolean validatePatternAttributeConstraint(
       String pattern,
@@ -307,7 +307,7 @@ public abstract class PartyValidator {
    * @param pattern the pattern
    * @param preference the preference
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   * @return {@code true} if the preference is valid or {@code false} otherwise
    */
   protected boolean validatePatternPreferenceConstraint(
       String pattern,
@@ -344,7 +344,7 @@ public abstract class PartyValidator {
    * @param partyType the code for the party type
    * @param physicalAddress the physical address
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the physical address is valid or <b>false</b> otherwise
+   * @return {@code true} if the physical address is valid or {@code false} otherwise
    */
   protected boolean validatePhysicalAddress(
       UUID tenantId,
@@ -396,7 +396,7 @@ public abstract class PartyValidator {
         isValid = false;
       } else {
         switch (physicalAddress.getType()) {
-            // Validate a building address
+          // Validate a building address
           case PhysicalAddressType.BUILDING:
             if (!StringUtils.hasText(physicalAddress.getBuildingName())) {
               hibernateConstraintValidatorContext
@@ -431,7 +431,7 @@ public abstract class PartyValidator {
               isValid = false;
             }
             break;
-            // Validate a complex address
+          // Validate a complex address
           case PhysicalAddressType.COMPLEX:
             if (!StringUtils.hasText(physicalAddress.getCity())) {
               hibernateConstraintValidatorContext
@@ -477,7 +477,7 @@ public abstract class PartyValidator {
               isValid = false;
             }
             break;
-            // Validate a farm address
+          // Validate a farm address
           case PhysicalAddressType.FARM:
             if (!StringUtils.hasText(physicalAddress.getFarmNumber())) {
               hibernateConstraintValidatorContext
@@ -490,7 +490,7 @@ public abstract class PartyValidator {
               isValid = false;
             }
             break;
-            // Validate an international address
+          // Validate an international address
           case PhysicalAddressType.INTERNATIONAL:
             if (!StringUtils.hasText(physicalAddress.getLine1())) {
               hibernateConstraintValidatorContext
@@ -536,7 +536,7 @@ public abstract class PartyValidator {
               isValid = false;
             }
             break;
-            // Validate a postal address
+          // Validate a postal address
           case PhysicalAddressType.POSTAL:
             if (!StringUtils.hasText(physicalAddress.getLine1())) {
               hibernateConstraintValidatorContext
@@ -571,7 +571,7 @@ public abstract class PartyValidator {
               isValid = false;
             }
             break;
-            // Validate a site address
+          // Validate a site address
           case PhysicalAddressType.SITE:
             if (!StringUtils.hasText(physicalAddress.getCity())) {
               hibernateConstraintValidatorContext
@@ -606,7 +606,7 @@ public abstract class PartyValidator {
               isValid = false;
             }
             break;
-            // Validate a street address
+          // Validate a street address
           case PhysicalAddressType.STREET:
             if (!StringUtils.hasText(physicalAddress.getCity())) {
               hibernateConstraintValidatorContext
@@ -639,7 +639,7 @@ public abstract class PartyValidator {
             //        isValid = false;
             //      }
             break;
-            // Validate an unstructured address
+          // Validate an unstructured address
           case PhysicalAddressType.UNSTRUCTURED:
             if (!StringUtils.hasText(physicalAddress.getLine1())) {
               hibernateConstraintValidatorContext
@@ -971,7 +971,7 @@ public abstract class PartyValidator {
    * @param referenceType the type of reference
    * @param attribute the attribute
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   * @return {@code true} if the attribute is valid or {@code false} otherwise
    */
   protected boolean validateReferenceAttributeConstraint(
       UUID tenantId,
@@ -1063,7 +1063,7 @@ public abstract class PartyValidator {
    * @param referenceType the type of reference
    * @param preference the preference
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   * @return {@code true} if the preference is valid or {@code false} otherwise
    */
   protected boolean validateReferencePreferenceConstraint(
       UUID tenantId,
@@ -1155,7 +1155,7 @@ public abstract class PartyValidator {
    * @param propertyNodeName the property node name
    * @param messageTemplate the message template
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the attribute value is valid or <b>false</b> otherwise
+   * @return {@code true} if the attribute value is valid or {@code false} otherwise
    */
   protected boolean validateRequiredAttributeConstraint(
       String roleType,
@@ -1211,7 +1211,7 @@ public abstract class PartyValidator {
    * @param propertyNodeName the property node name
    * @param messageTemplate the message template
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the preference value is valid or <b>false</b> otherwise
+   * @return {@code true} if the preference value is valid or {@code false} otherwise
    */
   protected boolean validateRequiredPreferenceConstraint(
       String roleType,
@@ -1259,7 +1259,7 @@ public abstract class PartyValidator {
    * @param size the size
    * @param attribute the attribute
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   * @return {@code true} if the attribute is valid or {@code false} otherwise
    */
   protected boolean validateSizeAttributeConstraint(
       int size,
@@ -1293,7 +1293,7 @@ public abstract class PartyValidator {
    * @param size the size
    * @param preference the preference
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   * @return {@code true} if the preference is valid or {@code false} otherwise
    */
   protected boolean validateSizePreferenceConstraint(
       int size,

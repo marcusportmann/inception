@@ -41,10 +41,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>WorkflowDocument</b> class holds the information for an association of a document with a
+ * The {@code WorkflowDocument} class holds the information for an association of a document with a
  * workflow.
- *
- * @author Marcus Portmann
  */
 @Schema(description = "An association of a document with a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -189,11 +187,11 @@ public class WorkflowDocument implements Serializable {
   @Column(name = "workflow_id", nullable = false)
   private UUID workflowId;
 
-  /** Constructs a new <b>WorkflowDocument</b>. */
+  /** Creates a new {@code WorkflowDocument} instance. */
   public WorkflowDocument() {}
 
   /**
-   * Constructs a new <b>WorkflowDocument</b>.
+   * Creates a new {@code WorkflowDocument} instance.
    *
    * @param id the ID for the workflow document
    * @param workflowId the ID for the workflow
@@ -228,7 +226,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Constructs a new <b>WorkflowDocument</b>.
+   * Creates a new {@code WorkflowDocument} instance.
    *
    * @param id the ID for the workflow document
    * @param workflowId the ID for the workflow
@@ -250,7 +248,7 @@ public class WorkflowDocument implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -395,7 +393,7 @@ public class WorkflowDocument implements Serializable {
    *
    * @param id the ID for the workflow document
    */
-  public void setId(@NotNull UUID id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

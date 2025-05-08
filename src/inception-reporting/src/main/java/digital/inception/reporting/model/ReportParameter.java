@@ -31,7 +31,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>ReportParameter</b> class holds the information for a report parameter.
+ * The {@code ReportParameter} class holds the information for a report parameter.
  *
  * @author Marcus Portmann
  */
@@ -68,11 +68,11 @@ public class ReportParameter implements Serializable {
   @NotNull
   private String value;
 
-  /** Constructs a new <b>ReportParameter</b>. */
+  /** Creates a new {@code ReportParameter} instance. */
   public ReportParameter() {}
 
   /**
-   * Constructs a new <b>ReportParameter</b>.
+   * Creates a new {@code ReportParameter} instance.
    *
    * @param name the name of the report parameter
    * @param value the value for the report parameter

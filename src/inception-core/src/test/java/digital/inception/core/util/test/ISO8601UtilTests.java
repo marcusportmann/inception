@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 /**
- * The <b>ISO8601UtilTests</b> class.
+ * The {@code ISO8601UtilTests} class.
  *
  * @author Marcus Portmann
  */

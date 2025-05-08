@@ -28,7 +28,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 
 /**
- * The <b>JNDIUtil</b> class provides JNDI utility functions.
+ * The {@code JNDIUtil} class provides JNDI utility functions.
  *
  * @author Marcus Portmann
  */

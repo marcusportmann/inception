@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>ErrorConfiguration</b> class provides the Spring configuration for the Error module.
+ * The {@code ErrorConfiguration} class provides the Spring configuration for the Error module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "errorEntityManagerFactory")
 public class ErrorConfiguration {
 
-  /** Constructs a new <b>ErrorConfiguration</b>. */
+  /** Creates a new {@code ErrorConfiguration} instance. */
   public ErrorConfiguration() {}
 
   /**

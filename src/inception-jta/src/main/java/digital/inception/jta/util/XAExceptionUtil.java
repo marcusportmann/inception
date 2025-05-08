@@ -19,7 +19,7 @@ package digital.inception.jta.util;
 import javax.transaction.xa.XAException;
 
 /**
- * The <b>XAExceptionUtil</b> class provides a helper class for handling XAExceptions.
+ * The {@code XAExceptionUtil} class provides a helper class for handling XAExceptions.
  *
  * @author Marcus Portmann
  */
@@ -29,7 +29,7 @@ public class XAExceptionUtil {
   private XAExceptionUtil() {}
 
   /**
-   * Constructs a new <b>XAException</b> object.
+   * Creates a new {@code XAException} instance object.
    *
    * @param errorCode the error code
    * @param message the message
@@ -43,7 +43,7 @@ public class XAExceptionUtil {
   }
 
   /**
-   * Constructs a new <b>XAException</b> object.
+   * Creates a new {@code XAException} instance object.
    *
    * @param errorCode the error code
    * @param message the message

@@ -76,7 +76,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The <b>PartyReferenceService</b> interface defines the functionality provided by a Party
+ * The {@code PartyReferenceService} interface defines the functionality provided by a Party
  * Reference Service implementation.
  *
  * @author Marcus Portmann
@@ -1989,8 +1989,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param associationTypeCode the code for the association type
    * @param associationPropertyTypeCode the code for the association property type
-   * @return <b>true</b> if the code is a valid code for an association property type or
-   *     <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for an association property type or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the association property type check failed
    */
   boolean isValidAssociationPropertyType(
@@ -2002,7 +2002,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param associationTypeCode the code for the association type
-   * @return <b>true</b> if the code is a valid code for an association type or <b>false</b>
+   * @return {@code true} if the code is a valid code for an association type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the association type check failed
    */
@@ -2015,7 +2015,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param attributeTypeCode the code for the attribute type
-   * @return <b>true</b> if the code is a valid code for an attribute type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for an attribute type or {@code false}
+   *     otherwise
    * @throws ServiceUnavailableException if the attribute type check failed
    */
   boolean isValidAttributeType(UUID tenantId, String partyTypeCode, String attributeTypeCode)
@@ -2026,8 +2027,8 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param attributeTypeCategoryCode the code for the attribute type category
-   * @return <b>true</b> if the code is a valid code for an attribute type category or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the code is a valid code for an attribute type category or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the attribute type category check failed
    */
   boolean isValidAttributeTypeCategory(UUID tenantId, String attributeTypeCategoryCode)
@@ -2038,7 +2039,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param consentTypeCode the code for the consent type
-   * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a consent type or {@code false} otherwise
    * @throws ServiceUnavailableException if the consent type check failed
    */
   boolean isValidConsentType(UUID tenantId, String consentTypeCode)
@@ -2051,8 +2052,8 @@ public interface PartyReferenceService {
    * @param partyTypeCode the code for the party type
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismPurposeCode the code for the contact mechanism purpose
-   * @return <b>true</b> if the code is a valid code for a contact mechanism purpose or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the code is a valid code for a contact mechanism purpose or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the contact mechanism purpose check failed
    */
   boolean isValidContactMechanismPurpose(
@@ -2069,7 +2070,7 @@ public interface PartyReferenceService {
    * @param partyTypeCode the code for the party type
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismRoleCode the code for the contact mechanism role
-   * @return <b>true</b> if the code is a valid code for a contact mechanism role or <b>false</b>
+   * @return {@code true} if the code is a valid code for a contact mechanism role or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the contact mechanism role check failed
    */
@@ -2085,7 +2086,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param contactMechanismTypeCode the code for the contact mechanism type
-   * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a contact mechanism type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the contact mechanism type check failed
    */
@@ -2097,7 +2098,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param employmentStatusCode the code for the employment status
-   * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
+   * @return {@code true} if the code is a valid code for an employment status or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the employment status check failed
    */
@@ -2110,7 +2111,7 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param employmentStatusCode the code for the employment status
    * @param employmentTypeCode the code for the employment type
-   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
+   * @return {@code true} if the code is a valid code for an employment type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the employment type check failed
    */
@@ -2123,7 +2124,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param employmentTypeCode the code for the employment type
-   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
+   * @return {@code true} if the code is a valid code for an employment type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the employment type check failed
    */
@@ -2137,7 +2138,7 @@ public interface PartyReferenceService {
    * @param partyTypeCode the code for the party type
    * @param externalReferenceTypeCode the code for the external reference type
    * @param value the value for the external reference
-   * @return <b>true</b> if the external reference is valid or <b>false</b> otherwise
+   * @return {@code true} if the external reference is valid or {@code false} otherwise
    * @throws ServiceUnavailableException if the external reference check failed
    */
   boolean isValidExternalReference(
@@ -2150,8 +2151,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param externalReferenceTypeCode the code for the external reference type
-   * @return <b>true</b> if the code is a valid code for an external reference type or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the code is a valid code for an external reference type or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the external reference type check failed
    */
   boolean isValidExternalReferenceType(
@@ -2163,7 +2164,8 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param fieldOfStudyCode the code for the field of study
-   * @return <b>true</b> if the code is a valid code for a field of study or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a field of study or {@code false}
+   *     otherwise
    * @throws ServiceUnavailableException if the field of study check failed
    */
   boolean isValidFieldOfStudy(UUID tenantId, String fieldOfStudyCode)
@@ -2174,7 +2176,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param genderCode the code for the gender
-   * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a gender or {@code false} otherwise
    * @throws ServiceUnavailableException if the gender check failed
    */
   boolean isValidGender(UUID tenantId, String genderCode) throws ServiceUnavailableException;
@@ -2186,7 +2188,7 @@ public interface PartyReferenceService {
    * @param partyTypeCode the code for the party type
    * @param identificationTypeCode the code for the identification type
    * @param number the number for the identification
-   * @return <b>true</b> if the identification is valid or <b>false</b> otherwise
+   * @return {@code true} if the identification is valid or {@code false} otherwise
    * @throws ServiceUnavailableException if the identification check failed
    */
   boolean isValidIdentification(
@@ -2199,7 +2201,7 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param identificationTypeCode the code for the identification type
-   * @return <b>true</b> if the code is a valid code for an identification type or <b>false</b>
+   * @return {@code true} if the code is a valid code for an identification type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the identification type check failed
    */
@@ -2213,8 +2215,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param industryClassificationSystemCode the code for the industry classification system
    * @param industryClassificationCode the code for the industry classification
-   * @return <b>true</b> if the code is a valid code for an industry classification or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the code is a valid code for an industry classification or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the industry classification check failed
    */
   boolean isValidIndustryClassification(
@@ -2227,7 +2229,7 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param lockTypeCode the code for the lock type
-   * @return <b>true</b> if the code is a valid code for a lock type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a lock type or {@code false} otherwise
    * @throws ServiceUnavailableException if the lock type check failed
    */
   boolean isValidLockType(UUID tenantId, String partyTypeCode, String lockTypeCode)
@@ -2238,7 +2240,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param lockTypeCategoryCode the code for the lock type category
-   * @return <b>true</b> if the code is a valid code for a lock type category or <b>false</b>
+   * @return {@code true} if the code is a valid code for a lock type category or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the lock type category check failed
    */
@@ -2250,7 +2252,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param mandateTypeCode the code for the mandate type
-   * @return <b>true</b> if the code is a valid code for a mandate type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a mandate type or {@code false} otherwise
    * @throws ServiceUnavailableException if the mandate type check failed
    */
   boolean isValidMandateType(UUID tenantId, String mandateTypeCode)
@@ -2261,7 +2263,8 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param maritalStatusCode the code for the marital status
-   * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a marital status or {@code false}
+   *     otherwise
    * @throws ServiceUnavailableException if the marital status check failed
    */
   boolean isValidMaritalStatus(UUID tenantId, String maritalStatusCode)
@@ -2273,7 +2276,7 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param maritalStatusCode the code for the marital status
    * @param marriageTypeCode the code for the marriage type
-   * @return <b>true</b> if the code is a valid code for a marriage type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a marriage type or {@code false} otherwise
    * @throws ServiceUnavailableException if the marriage type check failed
    */
   boolean isValidMarriageType(UUID tenantId, String maritalStatusCode, String marriageTypeCode)
@@ -2285,8 +2288,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param attributeTypeCode the code for the attribute type
    * @param measurementUnit the measurement unit
-   * @return <b>true</b> if the measurement unit is valid for the attribute type with the specified
-   *     code or <b>false</b> otherwise
+   * @return {@code true} if the measurement unit is valid for the attribute type with the specified
+   *     code or {@code false} otherwise
    * @throws ServiceUnavailableException if the measurement unit for attribute type check failed
    */
   boolean isValidMeasurementUnitForAttributeType(
@@ -2298,7 +2301,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param nextOfKinTypeCode the code for the next of kin type
-   * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a next of kin type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the next of kin type check failed
    */
@@ -2310,7 +2313,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param occupationCode the code for the occupation
-   * @return <b>true</b> if the code is a valid code for an occupation or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for an occupation or {@code false} otherwise
    * @throws ServiceUnavailableException if the occupation check failed
    */
   boolean isValidOccupation(UUID tenantId, String occupationCode)
@@ -2322,8 +2325,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param physicalAddressPurposeCode the code for the physical address purpose
-   * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the code is a valid code for a physical address purpose or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the physical address purpose check failed
    */
   boolean isValidPhysicalAddressPurpose(
@@ -2335,8 +2338,8 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param physicalAddressPurposeCode the code for the physical address purpose
-   * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the code is a valid code for a physical address purpose or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the physical address purpose check failed
    */
   boolean isValidPhysicalAddressPurpose(UUID tenantId, String physicalAddressPurposeCode)
@@ -2348,7 +2351,7 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param physicalAddressRoleCode the code for the physical address role
-   * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
+   * @return {@code true} if the code is a valid code for a physical address role or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the physical address role check failed
    */
@@ -2361,7 +2364,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param physicalAddressRoleCode the code for the physical address role
-   * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
+   * @return {@code true} if the code is a valid code for a physical address role or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the physical address role check failed
    */
@@ -2373,7 +2376,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param physicalAddressTypeCode the code for the physical address type
-   * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a physical address type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the physical address type check failed
    */
@@ -2386,7 +2389,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param preferenceTypeCode the code for the preference type
-   * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a preference type or {@code false}
+   *     otherwise
    * @throws ServiceUnavailableException if the preference type check failed
    */
   boolean isValidPreferenceType(UUID tenantId, String partyTypeCode, String preferenceTypeCode)
@@ -2397,8 +2401,8 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param preferenceTypeCategoryCode the code for the preference type category
-   * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the code is a valid code for a preference type category or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the preference type category check failed
    */
   boolean isValidPreferenceTypeCategory(UUID tenantId, String preferenceTypeCategoryCode)
@@ -2409,7 +2413,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param qualificationTypeCode the code for the qualification type
-   * @return <b>true</b> if the code is a valid code for a qualification type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a qualification type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the qualification type check failed
    */
@@ -2421,7 +2425,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param raceCode the code for the race
-   * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a race or {@code false} otherwise
    * @throws ServiceUnavailableException if the race check failed
    */
   boolean isValidRace(UUID tenantId, String raceCode) throws ServiceUnavailableException;
@@ -2433,7 +2437,7 @@ public interface PartyReferenceService {
    * @param partyTypeCode the code for the party type
    * @param residencePermitTypeCode the code for the residence permit type
    * @param number the number for the residence permit
-   * @return <b>true</b> if the residence permit is valid or <b>false</b> otherwise
+   * @return {@code true} if the residence permit is valid or {@code false} otherwise
    * @throws ServiceUnavailableException if the residence permit check failed
    */
   boolean isValidResidencePermit(
@@ -2445,7 +2449,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param residencePermitTypeCode the code for the residence permit type
-   * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a residence permit type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the residence permit type check failed
    */
@@ -2457,7 +2461,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param residencyStatusCode the code for the residency status
-   * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
+   * @return {@code true} if the code is a valid code for a residency status or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the residency status check failed
    */
@@ -2469,7 +2473,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param residentialTypeCode the code for the residential type
-   * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a residential type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the residential type check failed
    */
@@ -2481,7 +2485,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param rolePurposeCode the code for the role purpose
-   * @return <b>true</b> if the code is a valid code for a role purpose or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a role purpose or {@code false} otherwise
    * @throws ServiceUnavailableException if the role purpose check failed
    */
   boolean isValidRolePurpose(UUID tenantId, String rolePurposeCode)
@@ -2493,7 +2497,7 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param roleTypeCode the code for the role type
-   * @return <b>true</b> if the code is a valid code for a role type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a role type or {@code false} otherwise
    * @throws ServiceUnavailableException if the role type check failed
    */
   boolean isValidRoleType(UUID tenantId, String partyTypeCode, String roleTypeCode)
@@ -2504,7 +2508,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param segmentCode the code for the segment
-   * @return <b>true</b> if the code is a valid code for a segment or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a segment or {@code false} otherwise
    * @throws ServiceUnavailableException if the segment check failed
    */
   boolean isValidSegment(UUID tenantId, String segmentCode) throws ServiceUnavailableException;
@@ -2514,7 +2518,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param skillTypeCode the code for the skill type
-   * @return <b>true</b> if the code is a valid code for a skill type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a skill type or {@code false} otherwise
    * @throws ServiceUnavailableException if the skill type check failed
    */
   boolean isValidSkillType(UUID tenantId, String skillTypeCode) throws ServiceUnavailableException;
@@ -2524,7 +2528,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param sourceOfFundsTypeCode the code for the source of funds type
-   * @return <b>true</b> if the code is a valid code for a source of funds type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a source of funds type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the source of funds type check failed
    */
@@ -2536,7 +2540,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param sourceOfWealthTypeCode the code for the source of wealth type
-   * @return <b>true</b> if the code is a valid code for a source of wealth type or <b>false</b>
+   * @return {@code true} if the code is a valid code for a source of wealth type or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the source of wealth type check failed
    */
@@ -2549,7 +2553,7 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param statusTypeCode the code for the status type
-   * @return <b>true</b> if the code is a valid code for a status type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a status type or {@code false} otherwise
    * @throws ServiceUnavailableException if the status type check failed
    */
   boolean isValidStatusType(UUID tenantId, String partyTypeCode, String statusTypeCode)
@@ -2560,7 +2564,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param statusTypeCategoryCode the code for the status type category
-   * @return <b>true</b> if the code is a valid code for a status type category or <b>false</b>
+   * @return {@code true} if the code is a valid code for a status type category or {@code false}
    *     otherwise
    * @throws ServiceUnavailableException if the status type category check failed
    */
@@ -2574,7 +2578,7 @@ public interface PartyReferenceService {
    * @param partyTypeCode the code for the party type
    * @param taxNumberTypeCode the code for the tax number type
    * @param number the number for the tax number
-   * @return <b>true</b> if the tax number is valid or <b>false</b> otherwise
+   * @return {@code true} if the tax number is valid or {@code false} otherwise
    * @throws ServiceUnavailableException if the tax number check failed
    */
   boolean isValidTaxNumber(
@@ -2587,7 +2591,8 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant
    * @param partyTypeCode the code for the party type
    * @param taxNumberTypeCode the code for the tax number type
-   * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a tax number type or {@code false}
+   *     otherwise
    * @throws ServiceUnavailableException if the tax number type check failed
    */
   boolean isValidTaxNumberType(UUID tenantId, String partyTypeCode, String taxNumberTypeCode)
@@ -2598,7 +2603,8 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param timeToContactCode the code for the time to contact
-   * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a time to contact or {@code false}
+   *     otherwise
    * @throws ServiceUnavailableException if the time to contact check failed
    */
   boolean isValidTimeToContact(UUID tenantId, String timeToContactCode)
@@ -2609,7 +2615,7 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param titleCode the code for the title
-   * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
+   * @return {@code true} if the code is a valid code for a title or {@code false} otherwise
    * @throws ServiceUnavailableException if the title check failed
    */
   boolean isValidTitle(UUID tenantId, String titleCode) throws ServiceUnavailableException;

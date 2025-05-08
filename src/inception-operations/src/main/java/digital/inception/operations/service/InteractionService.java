@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>InteractionService</b> interface defines the functionality provided by an Interaction
+ * The {@code InteractionService} interface defines the functionality provided by an Interaction
  * Service implementation.
  *
  * @author Marcus Portmann
@@ -283,8 +283,8 @@ public interface InteractionService {
    * @param interactionId the ID for the interaction that the interaction attachment is associated
    *     with
    * @param hash the hash for the interaction attachment
-   * @return <b>true</b> if an interaction attachment with the specified hash exists for the
-   *     interaction with the specified ID or <b>false</b> otherwise
+   * @return {@code true} if an interaction attachment with the specified hash exists for the
+   *     interaction with the specified ID or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the interaction attachment failed
    */
@@ -299,8 +299,8 @@ public interface InteractionService {
    * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference for the interaction
-   * @return <b>true</b> if an interaction with the specified source reference for the interaction
-   *     source with the specified ID exists or <b>false</b> otherwise
+   * @return {@code true} if an interaction with the specified source reference for the interaction
+   *     source with the specified ID exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the interaction failed
    */

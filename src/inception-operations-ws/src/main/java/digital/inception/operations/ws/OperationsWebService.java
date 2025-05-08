@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>OperationsWebService</b> class.
+ * The {@code OperationsWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -58,7 +58,7 @@ public class OperationsWebService extends AbstractWebServiceBase {
   private final IOperationsService operationsService;
 
   /**
-   * Constructs a new <b>OperationsWebService</b>.
+   * Creates a new {@code OperationsWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param operationsService the Operations Service

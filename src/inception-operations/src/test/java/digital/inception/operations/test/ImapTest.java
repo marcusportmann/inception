@@ -56,7 +56,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-/** The <b>ImapTest</b> class. */
+/** The {@code ImapTest} class. */
 public class ImapTest {
   /** The Application ID (Client ID) of the Azure Enterprise Application */
   private static final String CLIENT_ID = "REPLACE_WITH_AZURE_ENTERPRISE_APPLICATION_ID";

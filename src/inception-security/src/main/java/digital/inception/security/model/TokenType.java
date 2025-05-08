@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>TokenType</b> enumeration defines the possible token types.
+ * The {@code TokenType} enumeration defines the possible token types.
  *
  * @author Marcus Portmann
  */

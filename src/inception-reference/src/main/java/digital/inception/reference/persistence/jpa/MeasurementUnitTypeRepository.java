@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>MeasurementUnitTypeRepository</b> interface declares the persistence for the
- * <b>MeasurementUnitType</b> domain type.
+ * The {@code MeasurementUnitTypeRepository} interface declares the persistence for the {@code
+ * MeasurementUnitType} domain type.
  *
  * @author Marcus Portmann
  */

@@ -22,8 +22,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>InstantToStringConverter</b> class implements the Spring converter that converts a
- * <b>Instant</b> type into a <b>String</b> type.
+ * The {@code InstantToStringConverter} class implements the Spring converter that converts a {@code
+ * Instant} type into a {@code String} type.
  *
  * @author Marcus Portmann
  */
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class InstantToStringConverter implements Converter<Instant, String> {
 
-  /** Constructs a new <b>InstantToStringConverter</b>. */
+  /** Creates a new {@code InstantToStringConverter} instance. */
   public InstantToStringConverter() {}
 
   @Override

@@ -53,7 +53,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 /**
- * The <b>SMSServiceImpl</b> class provides the SMS Service implementation.
+ * The {@code SMSServiceImpl} class provides the SMS Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -108,7 +108,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
   private String useProvider;
 
   /**
-   * Constructs a new <b>SMSServiceImpl</b>.
+   * Creates a new {@code SMSServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param webClientBuilder the web client builder

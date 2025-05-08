@@ -25,7 +25,7 @@ import liquibase.datatype.core.TimestampType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>H2TimestampType</b> class overrides the default timestamp mapping for Liquibase when
+ * The {@code H2TimestampType} class overrides the default timestamp mapping for Liquibase when
  * working with an H2 database to increase the timestamp precision to include nanoseconds. This is
  * required when using Java 15+ on Linux and Windows where nanosecond date-time values are used.
  *
@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
     priority = LiquibaseDataType.PRIORITY_DEFAULT + 1)
 public class H2TimestampType extends TimestampType {
 
-  /** Constructs a new <b>H2TimestampType</b>. */
+  /** Creates a new {@code H2TimestampType} instance. */
   public H2TimestampType() {}
 
   @Override

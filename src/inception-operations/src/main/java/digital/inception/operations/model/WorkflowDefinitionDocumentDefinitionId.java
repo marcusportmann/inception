@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>WorkflowDefinitionDocumentDefinitionId</b> class implements the ID class for the
- * <b>WorkflowDefinitionDocumentDefinition</b> class.
+ * The {@code WorkflowDefinitionDocumentDefinitionId} class implements the ID class for the {@code
+ * WorkflowDefinitionDocumentDefinition} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class WorkflowDefinitionDocumentDefinitionId implements Serializable {
   /** The workflow definition the workflow definition document definition is associated with. */
   private WorkflowDefinition workflowDefinition;
 
-  /** Constructs a new <b>WorkflowDefinitionDocumentDefinitionId</b>. */
+  /** Constructs a new {@code WorkflowDefinitionDocumentDefinitionId}. */
   public WorkflowDefinitionDocumentDefinitionId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

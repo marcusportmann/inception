@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>PartyReferenceApiControllerImpl</b> class.
+ * The {@code PartyReferenceApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +41,7 @@ public class PartyReferenceApiControllerImpl extends SecureApiController
   private final PartyReferenceService partyReferenceService;
 
   /**
-   * Constructs a new <b>PartyReferenceApiControllerImpl</b>.
+   * Creates a new {@code PartyReferenceApiControllerImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param partyReferenceService the Party Reference Service

@@ -20,7 +20,7 @@ import digital.inception.core.model.CodeEnum;
 import jakarta.persistence.AttributeConverter;
 
 /**
- * The <b>CodeEnumAttributeConverter</b> class provides a base class that implements a generic JPA
+ * The {@code CodeEnumAttributeConverter} class provides a base class that implements a generic JPA
  * AttributeConverter for any enum that implements {@link CodeEnum}.
  *
  * @param <E> the enumeration type
@@ -32,7 +32,7 @@ public abstract class AbstractCodeEnumAttributeConverter<E extends Enum<E> & Cod
   private final Class<E> enumType;
 
   /**
-   * Constructs a new <b>CodeEnumAttributeConverter</b>.
+   * Creates a new {@code CodeEnumAttributeConverter} instance.
    *
    * @param enumType the Enum type
    */

@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>QualificationType</b> class holds the information for a qualification type.
+ * The {@code QualificationType} class holds the information for a qualification type.
  *
  * @see <a
  *     href="https://www.mastersportal.com/articles/1953/should-i-study-a-postgraduate-certificate-or-a-graduate-diploma-abroad.html">Should
@@ -157,14 +157,14 @@ public class QualificationType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>QualificationType</b>. */
+  /** Creates a new {@code QualificationType} instance. */
   public QualificationType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

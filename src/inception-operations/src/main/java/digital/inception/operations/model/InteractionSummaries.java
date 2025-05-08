@@ -33,10 +33,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>InteractionSummaries</b> class holds the results of a request to retrieve a list of
+ * The {@code InteractionSummaries} class represents the results of a request to retrieve a list of
  * interaction summaries.
- *
- * @author Marcus Portmann
  */
 @Schema(description = "The results of a request to retrieve a list of interaction summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -131,11 +129,11 @@ public class InteractionSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>InteractionSummaries</b>. */
+  /** Creates a new {@code InteractionSummaries} instance. */
   public InteractionSummaries() {}
 
   /**
-   * Constructs a new <b>InteractionSummaries</b>.
+   * Creates a new {@code InteractionSummaries} instance.
    *
    * @param tenantId the ID for the tenant the interaction summaries are associated with
    * @param interactionSummaries the interaction summaries

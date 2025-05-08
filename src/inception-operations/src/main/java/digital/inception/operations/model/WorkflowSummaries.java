@@ -33,10 +33,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>WorkflowSummaries</b> class holds the results of a request to retrieve a list of workflow
+ * The {@code WorkflowSummaries} class holds the results of a request to retrieve a list of workflow
  * summaries.
- *
- * @author Marcus Portmann
  */
 @Schema(description = "The results of a request to retrieve a list of workflow summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -131,11 +129,11 @@ public class WorkflowSummaries implements Serializable {
   @XmlElement(name = "WorkflowSummary", required = true)
   private List<WorkflowSummary> workflowSummaries;
 
-  /** Constructs a new <b>WorkflowSummaries</b>. */
+  /** Creates a new {@code WorkflowSummaries} instance. */
   public WorkflowSummaries() {}
 
   /**
-   * Constructs a new <b>WorkflowSummaries</b>.
+   * Creates a new {@code WorkflowSummaries} instance.
    *
    * @param tenantId the ID for the tenant the workflow summaries are associated with
    * @param workflowSummaries the workflow summaries

@@ -25,9 +25,9 @@ import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
 /**
- * The <b>RecoveryXAResource</b> class provides a closeable wrapper around the XAResource associated
- * with an XAConnection that keeps track of the lifecycle of the XAResource and closes the
- * connection when required.
+ * The {@code RecoveryXAResource} class provides a closeable wrapper around the XAResource
+ * associated with an XAConnection that keeps track of the lifecycle of the XAResource and closes
+ * the connection when required.
  *
  * @author Marcus Portmann
  */
@@ -40,7 +40,7 @@ public class RecoveryXAResource implements AutoCloseable, XAResource {
   private XAResource xaResource;
 
   /**
-   * Constructs a new <b>RecoveryXAResource</b>.
+   * Creates a new {@code RecoveryXAResource} instance.
    *
    * @param resourceRecoveryFactory the resource recovery factory
    */

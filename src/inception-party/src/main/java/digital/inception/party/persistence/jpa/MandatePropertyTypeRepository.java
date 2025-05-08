@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>MandatePropertyTypeRepository</b> interface declares the persistence for the <b>
- * MandatePropertyType</b> domain type.
+ * The {@code MandatePropertyTypeRepository} interface declares the persistence for the {@code
+ * MandatePropertyType} domain type.
  *
  * @author Marcus Portmann
  */

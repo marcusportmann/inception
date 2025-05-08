@@ -23,7 +23,7 @@ import digital.inception.operations.model.DuplicateDocumentException;
 import java.util.UUID;
 
 /**
- * The <b>DocumentStore</b> interface defines the functionality provided by a case store, which
+ * The {@code DocumentStore} interface defines the functionality provided by a case store, which
  * manages the persistence of documents.
  *
  * @author Marcus Portmann

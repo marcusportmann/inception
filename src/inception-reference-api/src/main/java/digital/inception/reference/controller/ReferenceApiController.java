@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ReferenceApiController</b> interface.
+ * The {@code ReferenceApiController} interface.
  *
  * @author Marcus Portmann
  */

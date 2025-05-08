@@ -23,8 +23,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>DateToLocalDateTimeConverter</b> class implements the Spring converter that converts a
- * <b>Date</b> type into a <b>LocalDateTime</b> type.
+ * The {@code DateToLocalDateTimeConverter} class implements the Spring converter that converts a
+ * {@code Date} type into a {@code LocalDateTime} type.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class DateToLocalDateTimeConverter implements Converter<Date, LocalDateTime> {
 
-  /** Constructs a new <b>DateToLocalDateTimeConverter</b>. */
+  /** Creates a new {@code DateToLocalDateTimeConverter} instance. */
   public DateToLocalDateTimeConverter() {}
 
   @Override

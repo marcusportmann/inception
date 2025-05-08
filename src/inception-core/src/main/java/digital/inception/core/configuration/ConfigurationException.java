@@ -19,7 +19,7 @@ package digital.inception.core.configuration;
 import java.io.Serial;
 
 /**
- * The <b>ConfigurationException</b> exception is thrown to indicate a configuration error.
+ * The {@code ConfigurationException} exception is thrown to indicate a configuration error.
  *
  * @author Marcus Portmann
  */
@@ -28,26 +28,26 @@ public class ConfigurationException extends RuntimeException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <b>ConfigurationException</b> with <b>null</b> as its message. */
+  /** Creates a new {@code ConfigurationException} instance with {@code null} as its message. */
   public ConfigurationException() {
     super();
   }
 
   /**
-   * Constructs a new <b>ConfigurationException</b> with the specified message.
+   * Creates a new {@code ConfigurationException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public ConfigurationException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <b>ConfigurationException</b> with the specified message and cause.
+   * Creates a new {@code ConfigurationException} instance with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public ConfigurationException(String message, Throwable cause) {
     super(message, cause);

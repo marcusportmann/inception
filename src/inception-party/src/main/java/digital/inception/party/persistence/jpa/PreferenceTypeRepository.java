@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>PreferenceTypeRepository</b> interface declares the persistence for the <b>
- * PreferenceType</b> domain type.
+ * The {@code PreferenceTypeRepository} interface declares the persistence for the {@code
+ * PreferenceType} domain type.
  *
  * @author Marcus Portmann
  */

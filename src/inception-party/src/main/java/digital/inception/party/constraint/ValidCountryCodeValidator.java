@@ -21,14 +21,14 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidCountryCodeValidator</b> class implements the custom constraint validator for
+ * The {@code ValidCountryCodeValidator} class implements the custom constraint validator for
  * validating a country code.
  *
  * @author Marcus Portmann
  */
 public class ValidCountryCodeValidator implements ConstraintValidator<ValidCountryCode, String> {
 
-  /** Constructs a new <b>ValidCountryCodeValidator</b>. */
+  /** Creates a new {@code ValidCountryCodeValidator} instance. */
   public ValidCountryCodeValidator() {}
 
   @Override

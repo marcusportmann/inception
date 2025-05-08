@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>SourceOfFundsId</b> class implements the ID class for the <b>SourceOfFunds</b> class.
+ * The {@code SourceOfFundsId} class implements the ID class for The {@code SourceOfFunds} class.
  *
  * @author Marcus Portmann
  */
@@ -37,14 +37,14 @@ public class SourceOfFundsId implements Serializable {
   /** The code for the source of funds type. */
   private String type;
 
-  /** Constructs a new <b>SourceOfFundsId</b>. */
+  /** Creates a new {@code SourceOfFundsId} instance. */
   public SourceOfFundsId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

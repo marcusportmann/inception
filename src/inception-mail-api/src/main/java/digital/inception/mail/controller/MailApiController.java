@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>MailApiController</b> interface.
+ * The {@code MailApiController} interface.
  *
  * @author Marcus Portmann
  */

@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>Vehicles</b> class holds the results of a request to retrieve a list of vehicles.
+ * The {@code Vehicles} class holds the results of a request to retrieve a list of vehicles.
  *
  * @author Marcus Portmann
  */
@@ -89,11 +89,11 @@ public class Vehicles implements Serializable {
   @XmlElement(name = "Vehicle", required = true)
   private List<Vehicle> vehicles;
 
-  /** Constructs a new <b>Vehicles</b>. */
+  /** Creates a new {@code Vehicles} instance. */
   public Vehicles() {}
 
   /**
-   * Constructs a new <b>Vehicles</b>.
+   * Creates a new {@code Vehicles} instance.
    *
    * @param vehicles the vehicles
    * @param total the total number of vehicles

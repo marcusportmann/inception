@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MandateSortBy</b> enumeration defines the possible methods used to sort a list of
+ * The {@code MandateSortBy} enumeration defines the possible methods used to sort a list of
  * mandates.
  *
  * @author Marcus Portmann

@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidISOCountryCode</b> annotation implements the custom constraint annotation used to
+ * The {@code ValidISOCountryCode} annotation implements the custom constraint annotation used to
  * validate whether a <b>String</b> contains a valid ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3
  * country code.
  *

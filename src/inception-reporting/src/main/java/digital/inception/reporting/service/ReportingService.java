@@ -28,7 +28,7 @@ import java.util.Map;
 import org.w3c.dom.Document;
 
 /**
- * The <b>ReportingService</b> interface defines the functionality provided by a Reporting Service
+ * The {@code ReportingService} interface defines the functionality provided by a Reporting Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -42,8 +42,8 @@ public interface ReportingService {
   /**
    * Create the new report definition.
    *
-   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information for the
-   *     new report definition
+   * @param reportDefinition the {@code ReportDefinition} instance containing the information for
+   *     the new report definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateReportDefinitionException if the report definition already exists
    * @throws ServiceUnavailableException if the report definition could not be created
@@ -184,7 +184,7 @@ public interface ReportingService {
    * Check whether the report definition exists.
    *
    * @param reportDefinitionId the ID for the report definition
-   * @return <b>true</b> if the report definition exists or <b>false</b> otherwise
+   * @return {@code true} if the report definition exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the existing report definition failed
    */
@@ -202,8 +202,8 @@ public interface ReportingService {
   /**
    * Update the report definition.
    *
-   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated information
-   *     for the report definition
+   * @param reportDefinition the {@code ReportDefinition} instance containing the updated
+   *     information for the report definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ReportDefinitionNotFoundException if the report definition could not be found
    * @throws ServiceUnavailableException if the report definition could not be updated

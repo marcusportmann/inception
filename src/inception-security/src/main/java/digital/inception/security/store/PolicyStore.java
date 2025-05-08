@@ -26,7 +26,7 @@ import digital.inception.security.model.PolicySummaries;
 import java.util.List;
 
 /**
- * The <b>PolicyStore</b> interface defines the functionality provided by a policy store, which
+ * The {@code PolicyStore} interface defines the functionality provided by a policy store, which
  * manages the storage of structured and unstructured information for polices.
  *
  * @author Marcus Portmann

@@ -25,7 +25,7 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>DuplicateVehicleException</b> exception is thrown to indicate an error condition as a
+ * The {@code DuplicateVehicleException} exception is thrown to indicate an error condition as a
  * result of an attempt to create a duplicate vehicle.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -46,7 +46,7 @@ public class DuplicateVehicleException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateVehicleException</b>.
+   * Creates a new {@code DuplicateVehicleException} instance.
    *
    * @param id the ID for the vehicle
    */

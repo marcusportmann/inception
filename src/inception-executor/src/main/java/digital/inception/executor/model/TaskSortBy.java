@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>TaskSortBy</b> enumeration defines the possible methods used to sort a list of tasks.
+ * The {@code TaskSortBy} enumeration defines the possible methods used to sort a list of tasks.
  *
  * @author Marcus Portmann
  */

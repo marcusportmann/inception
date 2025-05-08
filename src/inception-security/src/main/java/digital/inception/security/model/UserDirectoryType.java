@@ -37,7 +37,7 @@ import java.io.Serial;
 import java.util.Objects;
 
 /**
- * The <b>UserDirectoryType</b> class holds the information for a user directory type.
+ * The {@code UserDirectoryType} class holds the information for a user directory type.
  *
  * @author Marcus Portmann
  */
@@ -98,11 +98,11 @@ public class UserDirectoryType implements java.io.Serializable {
   @Column(name = "provider_class", length = 1000, nullable = false)
   private String providerClassName;
 
-  /** Constructs a new <b>UserDirectoryType</b>. */
+  /** Creates a new {@code UserDirectoryType} instance. */
   public UserDirectoryType() {}
 
   /**
-   * Constructs a new <b>UserDirectoryType</b>.
+   * Creates a new {@code UserDirectoryType} instance.
    *
    * @param code the code for the user directory type
    * @param name the name of the user directory type
@@ -119,7 +119,7 @@ public class UserDirectoryType implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

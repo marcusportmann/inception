@@ -45,7 +45,7 @@ public class FunctionNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>FunctionNotFoundException</b>.
+   * Creates a new {@code FunctionNotFoundException} instance.
    *
    * @param functionCode the code for the function
    */

@@ -32,9 +32,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The <b>AssignInteractionRequest</b> class.
- *
- * @author Marcus Portmann
+ * The {@code AssignInteractionRequest} class represents a request to assign an interaction to a
+ * user.
  */
 @Schema(description = "A request to assign an interaction to a user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -53,7 +52,9 @@ public class AssignInteractionRequest implements Serializable {
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The ID for the interaction. */
-  @Schema(description = "The ID for the interaction", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(
+      description = "The unique identifier for the interaction",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "InteractionId", required = true)
   @NotNull
@@ -69,13 +70,13 @@ public class AssignInteractionRequest implements Serializable {
   @Size(min = 1, max = 100)
   private String username;
 
-  /** Constructs a new <b>AssignInteractionRequest</b>. */
+  /** Creates a new {@code AssignInteractionRequest} instance. */
   public AssignInteractionRequest() {}
 
   /**
-   * Constructs a new <b>AssignInteractionRequest</b>.
+   * Creates a new {@code AssignInteractionRequest} instance.
    *
-   * @param interactionId the ID for the interaction
+   * @param interactionId the unique identifier for the interaction
    * @param username the username for the user the interaction should be assigned to
    */
   public AssignInteractionRequest(UUID interactionId, String username) {
@@ -84,9 +85,9 @@ public class AssignInteractionRequest implements Serializable {
   }
 
   /**
-   * Returns the ID for the interaction.
+   * Returns the unique identifier for the interaction.
    *
-   * @return the ID for the interaction
+   * @return the unique identifier for the interaction
    */
   public UUID getInteractionId() {
     return interactionId;
@@ -102,16 +103,16 @@ public class AssignInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction.
+   * Set the unique identifier for the interaction.
    *
-   * @param interactionId the ID for the interaction
+   * @param interactionId the unique identifier for the interaction
    */
   public void setInteractionId(UUID interactionId) {
     this.interactionId = interactionId;
   }
 
   /**
-   * Set the username for the user the interaction should be assigned to
+   * Set the username for the user the interaction should be assigned to.
    *
    * @param username the username for the user the interaction should be assigned to
    */

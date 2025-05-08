@@ -28,7 +28,7 @@ import digital.inception.operations.model.UpdateDocumentRequest;
 import java.util.UUID;
 
 /**
- * The <b>DocumentService</b> interface defines the functionality provided by a Document Service
+ * The {@code DocumentService} interface defines the functionality provided by a Document Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -97,7 +97,7 @@ public interface DocumentService {
    * Check whether the document definition exists.
    *
    * @param documentDefinitionId the ID for the document definition
-   * @return <b>true</b> if the document definition exists or <b>false</b> otherwise
+   * @return {@code true} if the document definition exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the document definition failed
    */

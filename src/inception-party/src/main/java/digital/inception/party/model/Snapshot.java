@@ -40,7 +40,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Snapshot</b> class holds the information for a snapshot, which is a view of the data for
+ * The {@code Snapshot} class holds the information for a snapshot, which is a view of the data for
  * an entity at a specific point in time.
  *
  * <p>Changes to entities are recorded as snapshots, which include all the data for the entity
@@ -115,11 +115,11 @@ public class Snapshot implements Serializable {
   @Column(name = "timestamp", nullable = false)
   private OffsetDateTime timestamp;
 
-  /** Constructs a new <b>Snapshot</b>. */
+  /** Creates a new {@code Snapshot} instance. */
   public Snapshot() {}
 
   /**
-   * Constructs a new <b>Snapshot</b>.
+   * Creates a new {@code Snapshot} instance.
    *
    * @param tenantId the ID for the tenant the snapshot is associated with
    * @param entityType the type of entity the snapshot is associated with
@@ -139,7 +139,7 @@ public class Snapshot implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -23,7 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>CDATA</b> class stores the data for a CDATA (Character Data) content type in a WBXML
+ * The {@code CDATA} class stores the data for a CDATA (Character Data) content type in a WBXML
  * document.
  *
  * <p>This content type is used to store a text string.
@@ -43,7 +43,7 @@ public class CDATA implements Serializable, Content {
   }
 
   /**
-   * Constructs a new <b>CDATA</b> containing the specified text.
+   * Creates a new {@code CDATA} instance containing the specified text.
    *
    * @param text the text content
    */
@@ -52,9 +52,9 @@ public class CDATA implements Serializable, Content {
   }
 
   /**
-   * Returns the text content for the <b>CDATA</b> instance.
+   * Returns the text content for the {@code CDATA} instance.
    *
-   * @return the text content for the <b>CDATA</b> instance
+   * @return the text content for the {@code CDATA} instance
    */
   public String getText() {
     return text;
@@ -87,16 +87,16 @@ public class CDATA implements Serializable, Content {
   }
 
   /**
-   * Set the text content for the <b>CDATA</b> instance.
+   * Set the text content for the {@code CDATA} instance.
    *
-   * @param text the text content for the <b>CDATA</b> instance
+   * @param text the text content for the {@code CDATA} instance
    */
   public void setText(String text) {
     this.text = text;
   }
 
   /**
-   * @return the string representation of the <b>CDATA</b> instance
+   * @return the string representation of the {@code CDATA} instance
    * @see Object#toString()
    */
   @Override

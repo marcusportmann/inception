@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>SMSStatus</b> enumeration defines the possible statuses for a SMS.
+ * The {@code SMSStatus} enumeration defines the possible statuses for a SMS.
  *
  * @author Marcus Portmann
  */

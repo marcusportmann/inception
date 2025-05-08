@@ -24,9 +24,9 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>DuplicateMailTemplateException</b> exception is thrown to indicate an error condition as a
- * result of an attempt to create a duplicate mail template, i.e. a mail template with the specified
- * ID already exists.
+ * The {@code DuplicateMailTemplateException} exception is thrown to indicate an error condition as
+ * a result of an attempt to create a duplicate mail template, i.e. a mail template with the
+ * specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class DuplicateMailTemplateException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateMailTemplateException</b>.
+   * Creates a new {@code DuplicateMailTemplateException} instance.
    *
    * @param mailTemplateId the ID for the mail template
    */

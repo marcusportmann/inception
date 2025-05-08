@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import reactor.core.publisher.Flux;
 
 /**
- * The <b>DataApiController</b> interface.
+ * The {@code DataApiController} interface.
  *
  * @author Marcus Portmann
  */

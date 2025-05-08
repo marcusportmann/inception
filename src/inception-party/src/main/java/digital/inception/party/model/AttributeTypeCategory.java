@@ -43,7 +43,7 @@ import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AttributeTypeCategory</b> class holds the information for an attribute type category.
+ * The {@code AttributeTypeCategory} class holds the information for an attribute type category.
  *
  * @author Marcus Portmann
  */
@@ -147,14 +147,14 @@ public class AttributeTypeCategory implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>AttributeTypeCategory</b>. */
+  /** Creates a new {@code AttributeTypeCategory} instance. */
   public AttributeTypeCategory() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -252,8 +252,8 @@ public class AttributeTypeCategory implements Serializable {
    * Returns whether the attribute type category is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the attribute type category is valid for the party type or <b>false</b>
-   *     otherwise
+   * @return {@code true} if the attribute type category is valid for the party type or {@code
+   *     false} otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

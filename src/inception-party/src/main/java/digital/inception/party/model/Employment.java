@@ -49,7 +49,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Employment</b> class holds the information for an employment obtained by a person.
+ * The {@code Employment} class holds the information for an employment obtained by a person.
  *
  * <p>The primary key for the employment entity (ID) is a surrogate key to support the management of
  * related data in one or more external stores, e.g. a record of the person's employment stored in
@@ -310,11 +310,11 @@ public class Employment implements Serializable {
   @Column(name = "type", length = 50)
   private String type;
 
-  /** Constructs a new <b>Employment</b>. */
+  /** Creates a new {@code Employment} instance. */
   public Employment() {}
 
   /**
-   * Constructs a new <b>Employment</b>.
+   * Creates a new {@code Employment} instance.
    *
    * @param employerName the employer name
    * @param employerPhoneNumber the employer phone number
@@ -373,7 +373,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Employment</b>.
+   * Creates a new {@code Employment} instance.
    *
    * @param employerName the employer name
    * @param employerPhoneNumber the employer phone number
@@ -429,7 +429,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Employment</b>.
+   * Creates a new {@code Employment} instance.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
@@ -443,7 +443,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Employment</b>.
+   * Creates a new {@code Employment} instance.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
@@ -455,7 +455,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Employment</b>.
+   * Creates a new {@code Employment} instance.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
@@ -474,7 +474,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Employment</b>.
+   * Creates a new {@code Employment} instance.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
@@ -493,7 +493,7 @@ public class Employment implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

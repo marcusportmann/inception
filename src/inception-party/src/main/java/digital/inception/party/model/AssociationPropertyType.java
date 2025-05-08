@@ -40,7 +40,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
- * The <b>AssociationPropertyType</b> class holds the information for an association property type.
+ * The {@code AssociationPropertyType} class holds the information for an association property type.
  *
  * @author Marcus Portmann
  */
@@ -181,14 +181,14 @@ public class AssociationPropertyType implements Serializable {
   @Column(name = "value_type", length = 10, nullable = false)
   private ValueType valueType;
 
-  /** Constructs a new <b>AssociationPropertyType</b>. */
+  /** Creates a new {@code AssociationPropertyType} instance. */
   public AssociationPropertyType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

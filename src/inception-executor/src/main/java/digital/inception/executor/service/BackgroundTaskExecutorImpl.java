@@ -35,7 +35,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>BackgroundTaskExecutorImpl</b> class implements the Background Task Executor.
+ * The {@code BackgroundTaskExecutorImpl} class implements the Background Task Executor.
  *
  * @author Marcus Portmann
  */
@@ -80,7 +80,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   private ThreadPoolExecutor taskExecutor;
 
   /**
-   * Constructs a new <b>BackgroundTaskExecutorImpl</b>.
+   * Creates a new {@code BackgroundTaskExecutorImpl} instance.
    *
    * @param executorService the Executor Service
    */
@@ -210,7 +210,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   }
 
   /**
-   * The <b>TaskExecutor</b> class.
+   * The {@code TaskExecutor} class.
    *
    * @author Marcus Portmann
    */
@@ -223,7 +223,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
     private final Task task;
 
     /**
-     * Constructs a new <b>TaskExecutorThread</b>.
+     * Creates a new {@code TaskExecutorThread} instance.
      *
      * @param executorService the Executor Service
      * @param task the task

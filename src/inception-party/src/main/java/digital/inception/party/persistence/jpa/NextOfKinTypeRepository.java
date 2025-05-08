@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>NextOfKinTypeRepository</b> interface declares the persistence for the <b>
- * NextOfKinType</b> domain type.
+ * The {@code NextOfKinTypeRepository} interface declares the persistence for the {@code
+ * NextOfKinType} domain type.
  *
  * @author Marcus Portmann
  */

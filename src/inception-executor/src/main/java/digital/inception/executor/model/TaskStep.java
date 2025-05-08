@@ -30,7 +30,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The <b>TaskStep</b> class holds the information for a task step.
+ * The {@code TaskStep} class holds the information for a task step.
  *
  * @author Marcus Portmann
  */
@@ -72,7 +72,7 @@ public class TaskStep implements Serializable {
   private long postExecutionDelay;
 
   /**
-   * Constructs a new <b>TaskStep</b>.
+   * Creates a new {@code TaskStep} instance.
    *
    * @param code the code for the task step
    * @param name the name of the task step
@@ -83,7 +83,7 @@ public class TaskStep implements Serializable {
   }
 
   /**
-   * Constructs a new <b>TaskStep</b>.
+   * Creates a new {@code TaskStep} instance.
    *
    * @param code the code for the task step
    * @param name the name of the task step

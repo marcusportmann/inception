@@ -21,8 +21,8 @@ import digital.inception.party.model.LanguageProficiencyLevel;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>LanguageProficiencyLevelAttributeConverter</b> class implements the custom JPA attribute
- * converter for the <b>LanguageProficiencyLevel</b> enumeration.
+ * The {@code LanguageProficiencyLevelAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code LanguageProficiencyLevel} enumeration.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class LanguageProficiencyLevelAttributeConverter
     extends AbstractCodeEnumAttributeConverter<LanguageProficiencyLevel> {
 
-  /** Constructs a new <b>LanguageProficiencyLevelAttributeConverter</b>. */
+  /** Creates a new {@code LanguageProficiencyLevelAttributeConverter} instance. */
   public LanguageProficiencyLevelAttributeConverter() {
     super(LanguageProficiencyLevel.class);
   }

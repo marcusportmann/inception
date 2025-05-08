@@ -21,7 +21,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>FunctionRepository</b> interface declares the persistence for the <b>Function</b> domain
+ * The {@code FunctionRepository} interface declares the persistence for the {@code Function} domain
  * type.
  *
  * @author Marcus Portmann

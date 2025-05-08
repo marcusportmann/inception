@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>DemoTaskExecutor</b> class.
+ * The {@code DemoTaskExecutor} class.
  *
  * @author Marcus Portmann
  */
@@ -37,7 +37,7 @@ public class DemoTaskExecutor extends MultistepTaskExecutor<DemoTaskData> {
   private static final Logger log = LoggerFactory.getLogger(DemoTaskExecutor.class);
 
   /**
-   * Constructs a new <b>DemoTaskExecutor</b>
+   * Creates a new {@code DemoTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

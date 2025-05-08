@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>IdentificationType</b> class holds the information for an identification type.
+ * The {@code IdentificationType} class holds the information for an identification type.
  *
  * @author Marcus Portmann
  */
@@ -186,14 +186,14 @@ public class IdentificationType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>IdentificationType</b>. */
+  /** Creates a new {@code IdentificationType} instance. */
   public IdentificationType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -323,7 +323,7 @@ public class IdentificationType implements Serializable {
    * Returns whether the identification type is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the identification type is valid for the party type or <b>false</b>
+   * @return {@code true} if the identification type is valid for the party type or {@code false}
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {

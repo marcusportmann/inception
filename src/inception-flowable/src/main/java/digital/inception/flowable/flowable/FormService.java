@@ -24,14 +24,14 @@ import org.flowable.form.api.FormInstanceQuery;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>FormService</b> class.
+ * The {@code FormService} class.
  *
  * @author Marcus Portmann
  */
 @Service
 public class FormService implements org.flowable.form.api.FormService {
 
-  /** Constructs a new <b>FormService</b>. */
+  /** Creates a new {@code FormService} instance. */
   public FormService() {}
 
   @Override

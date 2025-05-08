@@ -31,8 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>UserTransactionProxy</b> class provides a proxy that tracks the Java Transaction (JTA) API
- * transactions associated with the current thread and managed by a <b>
+ * The {@code UserTransactionProxy} class provides a proxy that tracks the Java Transaction (JTA)
+ * API transactions associated with the current thread and managed by a <b>
  * javax.transaction.UserTransaction</b> implementation.
  *
  * @author Marcus Portmann
@@ -54,7 +54,7 @@ public class UserTransactionProxy implements UserTransaction {
   private final UserTransaction userTransaction;
 
   /**
-   * Constructs a new <b>UserTransactionProxy</b>.
+   * Creates a new {@code UserTransactionProxy} instance.
    *
    * @param userTransaction the JTA user transaction
    * @param transactionManager the JTA transaction manager

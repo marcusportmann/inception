@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>RoleTypeAttributeTypeConstraintId</b> class implements the ID class for the
- * <b>RoleTypeAttributeTypeConstraint</b> class.
+ * The {@code RoleTypeAttributeTypeConstraintId} class implements the ID class for the {@code
+ * RoleTypeAttributeTypeConstraint} class.
  *
  * @author Marcus Portmann
  */
@@ -43,14 +43,14 @@ public class RoleTypeAttributeTypeConstraintId implements Serializable {
   /** The constraint type. */
   private ConstraintType type;
 
-  /** Constructs a new <b>RoleTypeAttributeTypeConstraintId</b>. */
+  /** Creates a new {@code RoleTypeAttributeTypeConstraintId} instance. */
   public RoleTypeAttributeTypeConstraintId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

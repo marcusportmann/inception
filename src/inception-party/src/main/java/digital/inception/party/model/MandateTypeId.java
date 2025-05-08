@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MandateTypeId</b> class implements the ID class for the <b>MandateType</b> class.
+ * The {@code MandateTypeId} class implements the ID class for The {@code MandateType} class.
  *
  * @author Marcus Portmann
  */
@@ -36,14 +36,14 @@ public class MandateTypeId implements Serializable {
   /** The Unicode locale identifier for the mandate type. */
   private String localeId;
 
-  /** Constructs a new <b>MandateTypeId</b>. */
+  /** Creates a new {@code MandateTypeId} instance. */
   public MandateTypeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <b>ValidAssociation</b> annotation implements the custom constraint annotation used to apply
+ * The {@code ValidAssociation} annotation implements the custom constraint annotation used to apply
  * the association validation.
  *
  * @author Marcus Portmann

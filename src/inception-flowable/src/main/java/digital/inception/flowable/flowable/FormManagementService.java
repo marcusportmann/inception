@@ -22,13 +22,13 @@ import org.flowable.common.engine.api.management.TablePageQuery;
 import org.flowable.common.engine.api.tenant.ChangeTenantIdBuilder;
 
 /**
- * The <b>FormManagementService</b> class.
+ * The {@code FormManagementService} class.
  *
  * @author Marcus Portmann
  */
 public class FormManagementService implements org.flowable.form.api.FormManagementService {
 
-  /** Constructs a new <b>FormManagementService</b>. */
+  /** Creates a new {@code FormManagementService} instance. */
   public FormManagementService() {}
 
   @Override

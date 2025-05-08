@@ -22,14 +22,14 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.lang.NonNull;
 
 /**
- * The <b>WebServiceConfigurationEnabledCondition</b> class implements the condition that must be
+ * The {@code WebServiceConfigurationEnabledCondition} class implements the condition that must be
  * matched to enable the web service configuration.
  *
  * @author Marcus Portmann
  */
 public class WebServiceConfigurationEnabledCondition implements Condition {
 
-  /** Constructs a new <b>WebServiceConfigurationEnabledCondition</b>. */
+  /** Creates a new {@code WebServiceConfigurationEnabledCondition} instance. */
   public WebServiceConfigurationEnabledCondition() {}
 
   @Override

@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>VehicleType</b> enumeration defines the possible vehicle types.
+ * The {@code VehicleType} enumeration defines the possible vehicle types.
  *
  * @author Marcus Portmann
  */

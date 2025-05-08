@@ -38,17 +38,17 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>Party</b> class holds the information for a party.
+ * The {@code Party} class holds the information for a party.
  *
- * <p>The <b>Party</b> and <b>PartyBase</b> classes are both JPA entity classes mapped to the same
- * <b>party_parties</b> table. The <b>PartyBase</b> class provides the common base class for all JPA
- * entity classes that form part of the party inheritance model, e.g. <b>Organization</b>,
- * <b>Person</b>, etc. This inheritance model is required to allow the same child classes to be
+ * <p>The {@code Party} class and {@code PartyBase} class are both JPA entity classes mapped to the
+ * same {@code party_parties} table. The {@code PartyBase} class provides the common base class for
+ * all JPA entity classes that form part of the party inheritance model, e.g. {@code Organization},
+ * {@code Person}, etc. This inheritance model is required to allow the same child classes to be
  * mapped to the different parent classes for the different party types, e.g. to support the
- * one-to-many mappings for both the <b>Organization</b> and <b>Person</b> classes to the
- * <b>PhysicalAddress</b> class. The <b>Party</b> class provides a mechanism to retrieve the minimum
+ * one-to-many mappings for both the {@code Organization} and {@code Person} classes to the {@code
+ * PhysicalAddress} class. The {@code Party} class provides a mechanism to retrieve the minimum
  * amount of party information without executing the polymorphic query that would result from
- * retrieving the same entities using a query that specifies the <b>PartyBase</b> class as the
+ * retrieving the same entities using a query that specifies The {@code PartyBase} class as the
  * result type.
  *
  * @author Marcus Portmann
@@ -107,11 +107,11 @@ public class Party implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private PartyType type;
 
-  /** Constructs a new <b>Party</b>. */
+  /** Creates a new {@code Party} instance. */
   public Party() {}
 
   /**
-   * Constructs a new <b>Party</b>.
+   * Creates a new {@code Party} instance.
    *
    * @param type the party type
    */
@@ -120,7 +120,7 @@ public class Party implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Party</b>.
+   * Creates a new {@code Party} instance.
    *
    * @param tenantId the ID for the tenant the party is associated with
    * @param type the party type
@@ -137,7 +137,7 @@ public class Party implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

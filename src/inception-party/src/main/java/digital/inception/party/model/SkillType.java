@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>SkillType</b> class holds the information for a skill type.
+ * The {@code SkillType} class holds the information for a skill type.
  *
  * @author Marcus Portmann
  */
@@ -125,14 +125,14 @@ public class SkillType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>SkillType</b>. */
+  /** Creates a new {@code SkillType} instance. */
   public SkillType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

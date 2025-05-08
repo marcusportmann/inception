@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>SecurityApiConfiguration</b> class provides the Spring configuration for the Security API
+ * The {@code SecurityApiConfiguration} class provides the Spring configuration for the Security API
  * module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SecurityApiConfiguration {
 
-  /** Constructs a new <b>SecurityApiConfiguration</b>. */
+  /** Creates a new {@code SecurityApiConfiguration} instance. */
   public SecurityApiConfiguration() {}
 
   /**

@@ -21,8 +21,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>UUIDToStringConverter</b> class implements the Spring converter that converts a
- * <b>UUID</b> type into a <b>String</b> type.
+ * The {@code UUIDToStringConverter} class implements the Spring converter that converts a {@code
+ * UUID} type into a {@code String} type.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class UUIDToStringConverter implements Converter<UUID, String> {
 
-  /** Constructs a new <b>UUIDToStringConverter</b>. */
+  /** Creates a new {@code UUIDToStringConverter} instance. */
   public UUIDToStringConverter() {}
 
   @Override

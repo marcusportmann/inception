@@ -32,7 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PolicyDecisionPointMethodSecurityExpressionHandler</b> class.
+ * The {@code PolicyDecisionPointMethodSecurityExpressionHandler} class.
  *
  * @author Marcus Portmann
  */
@@ -53,7 +53,7 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
   private boolean isSecurityEnabled;
 
   /**
-   * Constructs a new <b>PolicyDecisionPointMethodSecurityExpressionHandler</b>.
+   * Creates a new {@code PolicyDecisionPointMethodSecurityExpressionHandler} instance.
    *
    * @param applicationContext the Spring application context
    */

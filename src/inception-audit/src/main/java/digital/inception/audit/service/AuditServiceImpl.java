@@ -21,7 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 /**
- * The <b>AuditServiceImpl</b> class provides the Audit Service implementation.
+ * The {@code AuditServiceImpl} class provides the Audit Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 public class AuditServiceImpl extends AbstractServiceBase implements AuditService {
 
   /**
-   * Constructs a new <b>AuditServiceImpl</b>.
+   * Creates a new {@code AuditServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    */

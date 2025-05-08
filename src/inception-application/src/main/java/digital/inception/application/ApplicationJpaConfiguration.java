@@ -32,7 +32,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ApplicationJpaConfiguration</b> class initialises the JPA EntityManagerFactory for the
+ * The {@code ApplicationJpaConfiguration} class initialises the JPA EntityManagerFactory for the
  * application.
  *
  * @author Marcus Portmann
@@ -54,7 +54,7 @@ public class ApplicationJpaConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Constructs a new <b>ApplicationJpaConfiguration</b>.
+   * Creates a new {@code ApplicationJpaConfiguration} instance.
    *
    * @param applicationContext the Spring application context
    */

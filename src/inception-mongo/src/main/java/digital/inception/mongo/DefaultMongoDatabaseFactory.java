@@ -47,7 +47,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>DefaultMongoDatabaseFactory</b> class.
+ * The {@code DefaultMongoDatabaseFactory} class.
  *
  * @author Marcus Portmann
  */
@@ -68,7 +68,7 @@ public class DefaultMongoDatabaseFactory
   private WriteConcern writeConcern;
 
   /**
-   * Constructs a new <b>DefaultMongoDatabaseFactory</b>.
+   * Creates a new {@code DefaultMongoDatabaseFactory} instance.
    *
    * @param applicationContext the Spring application context
    * @param uri the MongoDB URI
@@ -92,7 +92,7 @@ public class DefaultMongoDatabaseFactory
   }
 
   /**
-   * Constructs a new <b>DefaultMongoDatabaseFactory</b>.
+   * Creates a new {@code DefaultMongoDatabaseFactory} instance.
    *
    * @param applicationContext the Spring application context
    * @param databaseName the MongoDB database name
@@ -123,7 +123,7 @@ public class DefaultMongoDatabaseFactory
   }
 
   /**
-   * Constructs a new <b>DefaultMongoDatabaseFactory</b>.
+   * Creates a new {@code DefaultMongoDatabaseFactory} instance.
    *
    * @param applicationContext the Spring application context
    */

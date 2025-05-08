@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * The <b>OperationsApiController</b> interface.
+ * The {@code OperationsApiController} interface.
  *
  * @author Marcus Portmann
  */

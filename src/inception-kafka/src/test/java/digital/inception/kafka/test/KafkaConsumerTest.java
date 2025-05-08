@@ -26,7 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>KafkaConsumerTest</b> class.
+ * The {@code KafkaConsumerTest} class.
  *
  * @author Marcus Portmann
  */
@@ -34,7 +34,7 @@ import org.springframework.context.ApplicationContext;
 public class KafkaConsumerTest extends ProcessorApplication {
 
   /**
-   * Constructs a new <b>KafkaConsumerTest</b>.
+   * Creates a new {@code KafkaConsumerTest} instance.
    *
    * @param applicationContext the Spring application context
    */

@@ -21,15 +21,15 @@ import digital.inception.party.model.EntityType;
 import jakarta.persistence.Converter;
 
 /**
- * The <b>EntityTypeAttributeConverter</b> class implements the custom JPA attribute converter for
- * the <b>EntityType</b> enumeration.
+ * The {@code EntityTypeAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code EntityType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 public class EntityTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<EntityType> {
 
-  /** Constructs a new <b>EntityTypeAttributeConverter</b>. */
+  /** Creates a new {@code EntityTypeAttributeConverter} instance. */
   public EntityTypeAttributeConverter() {
     super(EntityType.class);
   }

@@ -41,7 +41,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ReportingWebService</b> class.
+ * The {@code ReportingWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -60,7 +60,7 @@ public class ReportingWebService extends AbstractWebServiceBase {
   private final ReportingService reportingService;
 
   /**
-   * Constructs a new <b>ReportingWebService</b>.
+   * Creates a new {@code ReportingWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

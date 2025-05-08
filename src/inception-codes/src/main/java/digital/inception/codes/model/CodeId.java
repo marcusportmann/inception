@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>CodeId</b> class implements the ID class for the <b>Code</b> class.
+ * The {@code CodeId} class implements the ID class for The {@code Code} class.
  *
  * @author Marcus Portmann
  */
@@ -36,11 +36,11 @@ public class CodeId implements Serializable {
   /** The ID for the code. */
   private String id;
 
-  /** Constructs a new <b>CodeId</b>. */
+  /** Creates a new {@code CodeId} instance. */
   public CodeId() {}
 
   /**
-   * Constructs a new <b>CodeId</b>.
+   * Creates a new {@code CodeId} instance.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param id the ID for the code
@@ -54,7 +54,7 @@ public class CodeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {

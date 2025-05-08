@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <b>CodeProvider</b> interface defines the interface that must be implemented by all custom
+ * The {@code CodeProvider} interface defines the interface that must be implemented by all custom
  * code providers.
  *
  * @author Marcus Portmann
@@ -32,7 +32,7 @@ public interface CodeProvider {
    * Returns whether the code provider supports the code category.
    *
    * @param codeCategoryId the ID for the code category
-   * @return <b>true</b> if the code provider supports the code category or <b>false</b> otherwise
+   * @return {@code true} if the code provider supports the code category or {@code false} otherwise
    * @throws CodeProviderException if the check for the existing code category failed
    */
   boolean codeCategoryExists(String codeCategoryId) throws CodeProviderException;
@@ -42,7 +42,7 @@ public interface CodeProvider {
    *
    * @param codeCategoryId the ID for the code category
    * @param codeId the ID for the code
-   * @return <b>true</b> if the code exists or <b>false</b> otherwise
+   * @return {@code true} if the code exists or {@code false} otherwise
    * @throws CodeProviderException if the check for the existing code failed
    */
   boolean codeExists(String codeCategoryId, String codeId) throws CodeProviderException;

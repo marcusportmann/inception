@@ -45,7 +45,7 @@ public class GroupNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>GroupNotFoundException</b>.
+   * Creates a new {@code GroupNotFoundException} instance.
    *
    * @param groupName the name of the group
    */

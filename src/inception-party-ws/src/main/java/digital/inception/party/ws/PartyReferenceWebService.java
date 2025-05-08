@@ -32,7 +32,7 @@ import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The <b>PartyReferenceWebService</b> class.
+ * The {@code PartyReferenceWebService} class.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +48,7 @@ public class PartyReferenceWebService extends AbstractWebServiceBase {
   private final PartyReferenceService partyReferenceService;
 
   /**
-   * Constructs a new <b>PartyReferenceWebService</b>.
+   * Creates a new {@code PartyReferenceWebService} instance.
    *
    * @param applicationContext the Spring application context
    * @param partyReferenceService the Party Reference Service

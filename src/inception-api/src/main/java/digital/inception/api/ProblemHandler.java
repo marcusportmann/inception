@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * The <b>ProblemHandler</b> class implements the error handler that returns errors raised by
+ * The {@code ProblemHandler} class implements the error handler that returns errors raised by
  * RESTful controllers as RFC 7807 JSON problem details objects.
  *
  * @author Marcus Portmann
@@ -60,7 +60,7 @@ public class ProblemHandler {
   @Value("${inception.api.verbose-error-handling:#{false}}")
   private boolean verboseErrorHandling;
 
-  /** Constructs a new <b>ProblemHandler</b>. */
+  /** Creates a new {@code ProblemHandler} instance. */
   public ProblemHandler() {}
 
   /**

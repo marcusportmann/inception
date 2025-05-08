@@ -45,20 +45,21 @@ public class AuthenticationFailedException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>AuthenticationFailedException</b> with the specified message.
+   * Creates a new {@code AuthenticationFailedException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public AuthenticationFailedException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <b>AuthenticationFailedException</b> with the specified message and cause.
+   * Creates a new {@code AuthenticationFailedException} instance with the specified message and
+   * cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public AuthenticationFailedException(String message, Throwable cause) {
     super(message, cause);

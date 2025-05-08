@@ -23,7 +23,8 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PolicySortBy</b> enumeration defines the possible methods used to sort a list of policies.
+ * The {@code PolicySortBy} enumeration defines the possible methods used to sort a list of
+ * policies.
  *
  * @author Marcus Portmann
  */

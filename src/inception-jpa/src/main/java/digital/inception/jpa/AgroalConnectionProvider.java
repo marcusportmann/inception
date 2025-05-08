@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 
 /**
- * The <b>AgroalConnectionProvider</b> class provides connections to Hibernate using an Agroal data
+ * The {@code AgroalConnectionProvider} class provides connections to Hibernate using an Agroal data
  * source.
  *
  * @author Marcus Portmann
@@ -56,7 +56,7 @@ public class AgroalConnectionProvider implements ConnectionProvider, Stoppable, 
   private AgroalDatabaseConnectionInfo agroalDatabaseConnectionInfo;
 
   /**
-   * Constructs a new <b>AgroalConnectionProvider</b>.
+   * Creates a new {@code AgroalConnectionProvider} instance.
    *
    * @param agroalDataSource the Agroal data source
    */
@@ -124,7 +124,7 @@ public class AgroalConnectionProvider implements ConnectionProvider, Stoppable, 
   }
 
   /**
-   * The <b>AgroalDatabaseConnectionInfo</b> class.
+   * The {@code AgroalDatabaseConnectionInfo} class.
    *
    * @author Marcus Portmann
    */

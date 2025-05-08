@@ -41,11 +41,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The <b>Workflow</b> class holds the information for a workflow.
- *
- * @author Marcus Portmann
- */
+/** The {@code Workflow} class holds the information for a workflow. */
 @Schema(description = "A workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -141,8 +137,8 @@ public class Workflow implements Serializable {
   @Column(name = "definition_version", nullable = false)
   private int definitionVersion;
 
-  /** The external reference for the workflow. */
-  @Schema(description = "The external reference for the workflow")
+  /** The external reference used to link this workflow to an external system. */
+  @Schema(description = "The external reference used to link this workflow to an external system")
   @JsonProperty
   @XmlElement(name = "ExternalReference")
   @Size(max = 100)
@@ -200,11 +196,11 @@ public class Workflow implements Serializable {
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** Constructs a new <b>Workflow</b>. */
+  /** Creates a new {@code Workflow} instance. */
   public Workflow() {}
 
   /**
-   * Constructs a new <b>Workflow</b>.
+   * Creates a new {@code Workflow} instance.
    *
    * @param id the ID for the workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
@@ -230,7 +226,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Workflow</b>.
+   * Creates a new {@code Workflow} instance.
    *
    * @param id the ID for the workflow
    * @param parentId the ID for the parent workflow
@@ -262,7 +258,7 @@ public class Workflow implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -329,9 +325,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the external reference for the workflow.
+   * Returns the external reference used to link this workflow to an external system.
    *
-   * @return the external reference for the workflow
+   * @return the external reference used to link this workflow to an external system
    */
   public String getExternalReference() {
     return externalReference;
@@ -447,9 +443,10 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the external reference for the workflow.
+   * Set the external reference used to link this workflow to an external system.
    *
-   * @param externalReference the external reference for the workflow
+   * @param externalReference the external reference used to link this workflow to an external
+   *     system
    */
   public void setExternalReference(String externalReference) {
     this.externalReference = externalReference;

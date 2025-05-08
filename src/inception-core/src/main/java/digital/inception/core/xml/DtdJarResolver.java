@@ -34,7 +34,7 @@ public class DtdJarResolver implements EntityResolver {
   private String publicId;
 
   /**
-   * Constructs a new <b>DTDJarResolver</b>.
+   * Creates a new {@code DTDJarResolver} instance.
    *
    * @param systemId the system ID for the DTD
    * @param dtdPath the path on the classpath to the DTD
@@ -45,7 +45,7 @@ public class DtdJarResolver implements EntityResolver {
   }
 
   /**
-   * Constructs a new <b>DTDJarResolver</b>.
+   * Creates a new {@code DTDJarResolver} instance.
    *
    * @param publicId the public ID for the DTD
    * @param systemId the system ID for the DTD

@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>LockTypeRepository</b> interface declares the persistence for the <b> LockType</b> domain
+ * The {@code LockTypeRepository} interface declares the persistence for the {@code LockType} domain
  * type.
  *
  * @author Marcus Portmann

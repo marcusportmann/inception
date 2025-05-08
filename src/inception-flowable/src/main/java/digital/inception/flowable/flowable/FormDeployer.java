@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>FormDeployer</b> class.
+ * The {@code FormDeployer} class.
  *
  * @author Marcus Portmann
  */
@@ -37,7 +37,7 @@ public class FormDeployer implements EngineDeployer {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(FormDeployer.class);
 
-  /** Constructs a new <b>FormDeployer</b>. */
+  /** Creates a new {@code FormDeployer} instance. */
   public FormDeployer() {}
 
   @Override
@@ -69,7 +69,7 @@ public class FormDeployer implements EngineDeployer {
    * Check whether the resource with the specified name is a form.
    *
    * @param resourceName the name of the resource
-   * @return <b>true</b> if the resource is a form resource or <b>false</b> otherwise
+   * @return {@code true} if the resource is a form resource or {@code false} otherwise
    */
   protected boolean isFormResource(String resourceName) {
     for (String suffix : FORM_RESOURCE_SUFFIXES) {

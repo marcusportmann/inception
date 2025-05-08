@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>ReferenceApiConfiguration</b> class provides the Spring configuration for the Reference
+ * The {@code ReferenceApiConfiguration} class provides the Spring configuration for the Reference
  * API module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ReferenceApiConfiguration {
 
-  /** Constructs a new <b>ReferenceApiConfiguration</b>. */
+  /** Creates a new {@code ReferenceApiConfiguration} instance. */
   public ReferenceApiConfiguration() {}
 
   /**

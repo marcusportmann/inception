@@ -20,13 +20,13 @@ import org.flowable.engine.form.StartFormData;
 import org.flowable.engine.form.TaskFormData;
 
 /**
- * The <b>FormEngine</b> class.
+ * The {@code FormEngine} class.
  *
  * @author Marcus Portmann
  */
 public class FormEngine implements org.flowable.engine.impl.form.FormEngine {
 
-  /** Constructs a new <b>FormEngine</b>. */
+  /** Creates a new {@code FormEngine} instance. */
   public FormEngine() {}
 
   @Override

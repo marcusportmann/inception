@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.InteractionSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>InteractionSourceRepository</b> interface declares the persistence for the
- * <b>InteractionSource</b> domain type.
+ * The {@code InteractionSourceRepository} interface declares the persistence for the
+ * {@code InteractionSource} domain type.
  *
  * @author Marcus Portmann
  */

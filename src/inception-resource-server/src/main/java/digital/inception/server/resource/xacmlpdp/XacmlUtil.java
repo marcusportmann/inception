@@ -44,7 +44,7 @@ import org.ow2.authzforce.core.pdp.api.value.StandardDatatypes;
 import org.ow2.authzforce.core.pdp.api.value.StringValue;
 
 /**
- * The <b>XacmlUtil</b> class provides utility methods that are useful when working with XACML.
+ * The {@code XacmlUtil} class provides utility methods that are useful when working with XACML.
  *
  * @author Marcus Portmann
  */
@@ -494,8 +494,8 @@ public final class XacmlUtil {
    * Is the specified attribute value a valid value that can be added to a XACML attribute bag.
    *
    * @param value the value
-   * @return <b>true</b> if the specified attribute value is a valid value that can be added to a
-   *     XACML attribute bag or <b>false</b> otherwise
+   * @return {@code true} if the specified attribute value is a valid value that can be added to a
+   *     XACML attribute bag or {@code false} otherwise
    */
   public static boolean isValidAttributeValue(Object value) {
     return switch (value) {

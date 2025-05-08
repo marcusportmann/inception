@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MailTemplateContentType</b> enumeration defines the possible content types for mail
+ * The {@code MailTemplateContentType} enumeration defines the possible content types for mail
  * templates.
  *
  * @author Marcus Portmann

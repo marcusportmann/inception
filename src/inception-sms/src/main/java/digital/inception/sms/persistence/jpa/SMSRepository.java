@@ -31,7 +31,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>SMSRepository</b> interface declares the persistence for the <b>SMS</b> domain type.`
+ * The {@code SMSRepository} interface declares the persistence for the {@code SMS} domain type.`
  *
  * @author Marcus Portmann
  */

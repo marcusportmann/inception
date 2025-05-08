@@ -31,7 +31,7 @@ import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 
-/** The <b>EnumMessageConverterTests</b> class. */
+/** The {@code EnumMessageConverterTests} class. */
 public class EnumMessageConverterTests {
 
   /** Test the conversion of an enum implementing the CodeEnum interface. */

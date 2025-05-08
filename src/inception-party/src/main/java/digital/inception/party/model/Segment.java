@@ -43,7 +43,7 @@ import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>Segment</b> class holds the information for a segment.
+ * The {@code Segment} class holds the information for a segment.
  *
  * <p>A segment is a subdivision of the total population of organizations or persons based on a
  * specific attribute or attributes.
@@ -167,14 +167,14 @@ public class Segment implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Constructs a new <b>Segment</b>. */
+  /** Creates a new {@code Segment} instance. */
   public Segment() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+   * @return {@code true} if this object is the same as the object argument, otherwise {@code false}
    */
   @Override
   public boolean equals(Object object) {
@@ -281,7 +281,7 @@ public class Segment implements Serializable {
    * Returns whether the segment is valid for the party type.
    *
    * @param partyTypeCode the code for the party type
-   * @return <b>true</b> if the segment is valid for the party type or <b>false</b> otherwise
+   * @return {@code true} if the segment is valid for the party type or {@code false} otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     if (!StringUtils.hasText(partyTypeCode)) {

@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>MarriageTypeRepository</b> interface declares the persistence for the <b>MarriageType</b>
+ * The {@code MarriageTypeRepository} interface declares the persistence for the <b>MarriageType</b>
  * domain type.
  *
  * @author Marcus Portmann

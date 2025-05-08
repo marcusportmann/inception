@@ -20,7 +20,7 @@ import java.io.Serial;
 import java.time.OffsetDateTime;
 
 /**
- * The <b>ServiceException</b> exception is the base class that all service exceptions should be
+ * The {@code ServiceException} exception is the base class that all service exceptions should be
  * derived from.
  *
  * @author Marcus Portmann
@@ -34,20 +34,20 @@ public abstract class ServiceException extends Exception {
   private final ServiceError serviceError;
 
   /**
-   * Constructs a new <b>ServiceException</b> with the specified message.
+   * Creates a new {@code ServiceException} instance with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
   public ServiceException(String message) {
     this(message, null);
   }
 
   /**
-   * Constructs a new <b>ServiceException</b> with the specified message and cause.
+   * Creates a new {@code ServiceException} instance with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
+   *     null} value is permitted if the cause is nonexistent or unknown)
    */
   public ServiceException(String message, Throwable cause) {
     super(message, cause);

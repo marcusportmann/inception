@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import java.io.IOException;
 
 /**
- * The <b>EmptyStringDeserializer</b> class implements the Jackson deserializer that deserializes
+ * The {@code EmptyStringDeserializer} class implements the Jackson deserializer that deserializes
  * null values as empty strings.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import java.io.IOException;
 @SuppressWarnings("unused")
 public class EmptyStringDeserializer extends JsonDeserializer<String> {
 
-  /** Constructs a new <b>EmptyStringDeserializer</b>. */
+  /** Creates a new {@code EmptyStringDeserializer} instance. */
   public EmptyStringDeserializer() {}
 
   @Override

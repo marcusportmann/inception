@@ -29,7 +29,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AbstractWebServiceBase</b> class provides an abstract base class that web service
+ * The {@code AbstractWebServiceBase} class provides an abstract base class that web service
  * implementations can extend to access common functionality.
  *
  * @author Marcus Portmann
@@ -57,7 +57,7 @@ public abstract class AbstractWebServiceBase {
   private final Validator validator;
 
   /**
-   * Constructs a <b>AbstractWebServiceBase</b>.
+   * Constructs a new <b>AbstractWebServiceBase</b>.
    *
    * @param applicationContext the Spring application context
    */
@@ -157,7 +157,7 @@ public abstract class AbstractWebServiceBase {
   /**
    * Returns whether debugging is enabled for the Inception Framework.
    *
-   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b>
+   * @return {@code true} if debugging is enabled for the Inception Framework or {@code false}
    *     otherwise
    */
   protected boolean inDebugMode() {

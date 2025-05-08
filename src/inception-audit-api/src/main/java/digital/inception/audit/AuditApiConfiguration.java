@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>AuditApiConfiguration</b> class provides the Spring configuration for the Audit API
+ * The {@code AuditApiConfiguration} class provides the Spring configuration for the Audit API
  * module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AuditApiConfiguration {
 
-  /** Constructs a new <b>AuditApiConfiguration</b>. */
+  /** Creates a new {@code AuditApiConfiguration} instance. */
   public AuditApiConfiguration() {}
 
   /**

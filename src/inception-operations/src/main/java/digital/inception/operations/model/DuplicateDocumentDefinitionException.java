@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The <b>DuplicateDocumentDefinitionException</b> exception is thrown to indicate an error
+ * The {@code DuplicateDocumentDefinitionException} exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate document definition, i.e. a document
  * definition with the specified ID already exists.
  *
@@ -46,7 +46,7 @@ public class DuplicateDocumentDefinitionException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateDocumentDefinitionException</b>.
+   * Constructs a new {@code DuplicateDocumentDefinitionException}.
    *
    * @param documentDefinitionId the ID for the document definition
    */

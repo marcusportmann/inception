@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
- * The <b>MailConfiguration</b> class provides the Spring configuration for the Mail module.
+ * The {@code MailConfiguration} class provides the Spring configuration for the Mail module.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "mailEntityManagerFactory")
 public class MailConfiguration {
 
-  /** Constructs a new <b>MailConfiguration</b>. */
+  /** Creates a new {@code MailConfiguration} instance. */
   public MailConfiguration() {}
 
   /**

@@ -19,8 +19,8 @@ package digital.inception.server.authorization.oauth;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>UnauthorizedClientErrorResponse</b> class holds the information for an OAuth2 unauthorized
- * client error response.
+ * The {@code UnauthorizedClientErrorResponse} class holds the information for an OAuth2
+ * unauthorized client error response.
  *
  * @author Marcus Portmann
  */
@@ -29,13 +29,13 @@ public class UnauthorizedClientErrorResponse extends ErrorResponse {
   /** The error code for the OAuth2 unauthorized client error response. */
   public static final String ERROR_CODE = "unauthorized_client";
 
-  /** Constructs a new <b>UnauthorizedClientErrorResponse</b>. */
+  /** Creates a new {@code UnauthorizedClientErrorResponse} instance. */
   public UnauthorizedClientErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }
 
   /**
-   * Constructs a new <b>UnauthorizedClientErrorResponse</b>.
+   * Creates a new {@code UnauthorizedClientErrorResponse} instance.
    *
    * @param errorDescription the human-readable ASCII text description of the error
    */

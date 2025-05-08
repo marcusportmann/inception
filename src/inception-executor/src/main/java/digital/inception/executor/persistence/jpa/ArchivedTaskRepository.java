@@ -21,7 +21,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>ArchivedTaskRepository</b> interface declares the persistence for the <b>ArchivedTask</b>
+ * The {@code ArchivedTaskRepository} interface declares the persistence for the <b>ArchivedTask</b>
  * domain type.
  *
  * @author Marcus Portmann

@@ -19,7 +19,7 @@ package digital.inception.server.authorization.oauth;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>InvalidScopeErrorResponse</b> class holds the information for an OAuth2 invalid scope
+ * The {@code InvalidScopeErrorResponse} class holds the information for an OAuth2 invalid scope
  * error response.
  *
  * @author Marcus Portmann
@@ -29,13 +29,13 @@ public class InvalidScopeErrorResponse extends ErrorResponse {
   /** The error code for the OAuth2 invalid scope error response. */
   public static final String ERROR_CODE = "invalid_request";
 
-  /** Constructs a new <b>InvalidScopeErrorResponse</b>. */
+  /** Creates a new {@code InvalidScopeErrorResponse} instance. */
   public InvalidScopeErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }
 
   /**
-   * Constructs a new <b>InvalidScopeErrorResponse</b>.
+   * Creates a new {@code InvalidScopeErrorResponse} instance.
    *
    * @param errorDescription the human-readable ASCII text description of the error
    */

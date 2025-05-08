@@ -33,7 +33,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>GroupMembers</b> class holds the results of a request to retrieve a list of group members.
+ * The {@code GroupMembers} class holds the results of a request to retrieve a list of group
+ * members.
  *
  * @author Marcus Portmann
  */
@@ -126,11 +127,11 @@ public class GroupMembers implements Serializable {
   @XmlElement(name = "UserDirectoryId", required = true)
   private UUID userDirectoryId;
 
-  /** Constructs a new <b>GroupMembers</b>. */
+  /** Creates a new {@code GroupMembers} instance. */
   public GroupMembers() {}
 
   /**
-   * Constructs a new <b>GroupMembers</b>.
+   * Creates a new {@code GroupMembers} instance.
    *
    * @param userDirectoryId the ID for the user directory the group members are associated with
    * @param groupName the name of the group the group members are associated with

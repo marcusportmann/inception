@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>LanguageRepository</b> interface declares the persistence for the <b>Language</b> domain
+ * The {@code LanguageRepository} interface declares the persistence for the {@code Language} domain
  * type.
  *
  * @author Marcus Portmann

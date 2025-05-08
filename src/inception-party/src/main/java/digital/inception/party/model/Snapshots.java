@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>Snapshots</b> class holds the results of a request to retrieve a list of snapshots for a
+ * The {@code Snapshots} class holds the results of a request to retrieve a list of snapshots for a
  * particular entity.
  *
  * @author Marcus Portmann
@@ -152,11 +152,11 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>Snapshots</b>. */
+  /** Creates a new {@code Snapshots} instance. */
   public Snapshots() {}
 
   /**
-   * Constructs a new <b>Snapshots</b>.
+   * Creates a new {@code Snapshots} instance.
    *
    * @param tenantId the ID for the tenant
    * @param snapshots the snapshots

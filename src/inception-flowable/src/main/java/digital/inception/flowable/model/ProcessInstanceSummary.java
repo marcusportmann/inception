@@ -31,7 +31,7 @@
 // import java.util.Objects;
 //
 /// **
-// * The <b>ProcessInstanceSummary</b> class holds the summary information for a process§ instance.
+// * The {@code ProcessInstanceSummary} class holds the summary information for a process§ instance.
 // *
 // * @author Marcus Portmann
 // */
@@ -80,11 +80,11 @@
 //  @Size(min = 1, max = 100)
 //  private String version;
 //
-//  /** Constructs a new <b>ProcessInstanceSummary</b>. */
+//  /** Creates a new {@code ProcessInstanceSummary} instance. */
 //  public ProcessInstanceSummary() {}
 //
 //  /**
-//   * Constructs a new <b>ProcessInstanceSummary</b>.
+//   * Creates a new {@code ProcessInstanceSummary} instance.
 //   *
 //   * @param id the ID for the process definition
 //   * @param name the name of the process definition
@@ -100,7 +100,8 @@
 //   * Indicates whether some other object is "equal to" this one.
 //   *
 //   * @param object the reference object with which to compare
-//   * @return <b>true</b> if this object is the same as the object argument, otherwise <b>false</b>
+//   * @return {@code true} if this object is the same as the object argument, otherwise
+// {@code false}
 //   */
 //  @Override
 //  public boolean equals(Object object) {

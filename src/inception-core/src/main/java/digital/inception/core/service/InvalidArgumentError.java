@@ -27,7 +27,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <b>InvalidArgumentError</b> class holds the invalid argument error information.
+ * The {@code InvalidArgumentError} class holds the invalid argument error information.
  *
  * @author Marcus Portmann
  */
@@ -51,11 +51,11 @@ public class InvalidArgumentError extends ServiceError implements Serializable {
   @XmlElement(name = "ValidationError")
   private List<ValidationError> validationErrors;
 
-  /** Constructs a new <b>InvalidArgumentError</b>. */
+  /** Creates a new {@code InvalidArgumentError} instance. */
   public InvalidArgumentError() {}
 
   /**
-   * Constructs a new <b>InvalidArgumentError</b>.
+   * Creates a new {@code InvalidArgumentError} instance.
    *
    * @param message the message for the invalid argument error
    * @param parameter the name of the parameter associated with the invalid argument error

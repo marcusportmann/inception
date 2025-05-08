@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
 /**
- * The <b>DataServiceImpl</b> class provides the Demo Service implementation.
+ * The {@code DataServiceImpl} class provides the Demo Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +51,7 @@ public class DataServiceImpl extends AbstractServiceBase implements DataService 
   private EntityManager entityManager;
 
   /**
-   * Constructs a new <b>DataServiceImpl</b>.
+   * Creates a new {@code DataServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param reactiveDataRepository the Reactive Data Repository

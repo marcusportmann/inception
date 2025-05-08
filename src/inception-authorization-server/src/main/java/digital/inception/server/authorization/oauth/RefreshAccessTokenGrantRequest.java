@@ -20,7 +20,7 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>RefreshAccessTokenGrantRequest</b> class holds the information for a Refresh Access Token
+ * The {@code RefreshAccessTokenGrantRequest} class holds the information for a Refresh Access Token
  * Grant request.
  *
  * <p>See <a href="https://tools.ietf.org/html/rfc6749#section-6">Refreshing an Access Token</a>
@@ -43,7 +43,7 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
   private final String refreshToken;
 
   /**
-   * Constructs a new <b>RefreshAccessTokenGrantRequest</b>.
+   * Creates a new {@code RefreshAccessTokenGrantRequest} instance.
    *
    * @param parameters the request parameters
    */
@@ -58,8 +58,8 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
    * provided as part of the HTTP servlet request.
    *
    * @param parameters the request parameters
-   * @return <b>true</b> if the HTTP servlet request contains the required information for the
-   *     Resource Owner Password Credentials Grant or <b>false</b> otherwise
+   * @return {@code true} if the HTTP servlet request contains the required information for the
+   *     Resource Owner Password Credentials Grant or {@code false} otherwise
    */
   public static boolean isValid(Map<String, String> parameters) {
 

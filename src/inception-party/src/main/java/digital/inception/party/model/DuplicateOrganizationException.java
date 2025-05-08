@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The <b>DuplicateOrganizationException</b> exception is thrown to indicate an error condition as a
- * result of an attempt to create a duplicate organization.
+ * The {@code DuplicateOrganizationException} exception is thrown to indicate an error condition as
+ * a result of an attempt to create a duplicate organization.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class DuplicateOrganizationException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateOrganizationException</b>.
+   * Creates a new {@code DuplicateOrganizationException} instance.
    *
    * @param id the ID for the organization
    */

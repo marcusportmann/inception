@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>PhysicalAddressTypeRepository</b> interface declares the persistence for the <b>
- * PhysicalAddressType</b> domain type.
+ * The {@code PhysicalAddressTypeRepository} interface declares the persistence for the {@code
+ * PhysicalAddressType} domain type.
  *
  * @author Marcus Portmann
  */

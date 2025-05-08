@@ -31,7 +31,7 @@ import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>UserRepository</b> interface declares the persistence for the <b>User</b> domain type.
+ * The {@code UserRepository} interface declares the persistence for the {@code User} domain type.
  *
  * @author Marcus Portmann
  */
@@ -63,7 +63,7 @@ public interface UserRepository
    * Check whether the user directory has existing users.
    *
    * @param userDirectoryId the ID for the user directory
-   * @return <b>true</b> if the user directory has existing users or <b>false</b> otherwise
+   * @return {@code true} if the user directory has existing users or {@code false} otherwise
    */
   boolean existsByUserDirectoryId(UUID userDirectoryId);
 
@@ -72,7 +72,7 @@ public interface UserRepository
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username
-   * @return <b>true</b> if the user exists or <b>false</b> otherwise
+   * @return {@code true} if the user exists or {@code false} otherwise
    */
   boolean existsByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
@@ -199,7 +199,7 @@ public interface UserRepository
    *
    * @param userId the ID for the user
    * @param groupId the ID for the group
-   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
+   * @return {@code true} if the user is a member of the group or {@code false} otherwise
    */
   @Query(
       "select case when (count(u.id) > 0) then true else false end from User u join u.groups "

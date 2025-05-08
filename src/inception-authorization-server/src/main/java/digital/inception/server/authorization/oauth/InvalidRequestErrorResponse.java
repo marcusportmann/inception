@@ -19,7 +19,7 @@ package digital.inception.server.authorization.oauth;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>InvalidRequestErrorResponse</b> class holds the information for an OAuth2 invalid request
+ * The {@code InvalidRequestErrorResponse} class holds the information for an OAuth2 invalid request
  * error response.
  *
  * @author Marcus Portmann
@@ -29,13 +29,13 @@ public class InvalidRequestErrorResponse extends ErrorResponse {
   /** The error code for the OAuth2 invalid request error response. */
   public static final String ERROR_CODE = "invalid_request";
 
-  /** Constructs a new <b>InvalidRequestErrorResponse</b>. */
+  /** Creates a new {@code InvalidRequestErrorResponse} instance. */
   public InvalidRequestErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }
 
   /**
-   * Constructs a new <b>InvalidRequestErrorResponse</b>.
+   * Creates a new {@code InvalidRequestErrorResponse} instance.
    *
    * @param errorDescription the human-readable ASCII text description of the error
    */

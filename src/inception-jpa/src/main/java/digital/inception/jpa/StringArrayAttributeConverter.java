@@ -21,7 +21,7 @@ import jakarta.persistence.Converter;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>StringArrayAttributeConverter</b> class implements the custom JPA attribute converter to
+ * The {@code StringArrayAttributeConverter} class implements the custom JPA attribute converter to
  * store an array of strings as a comma-delimited string.
  *
  * @author Marcus Portmann
@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 @Converter(autoApply = true)
 public class StringArrayAttributeConverter implements AttributeConverter<String[], String> {
 
-  /** Constructs a new <b>StringArrayAttributeConverter</b>. */
+  /** Creates a new {@code StringArrayAttributeConverter} instance. */
   public StringArrayAttributeConverter() {}
 
   /**

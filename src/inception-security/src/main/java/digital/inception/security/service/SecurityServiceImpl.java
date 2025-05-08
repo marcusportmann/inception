@@ -158,7 +158,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <b>SecurityServiceImpl</b> class provides the Security Service implementation.
+ * The {@code SecurityServiceImpl} class provides the Security Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -239,7 +239,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   private Map<UUID, UserDirectoryProvider> userDirectories = new ConcurrentHashMap<>();
 
   /**
-   * Constructs a new <b>SecurityServiceImpl</b>.
+   * Creates a new {@code SecurityServiceImpl} instance.
    *
    * @param applicationContext the Spring application context
    * @param resourceLoader the Spring resource loader
@@ -2843,10 +2843,10 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   }
 
   /**
-   * Checks whether the specified value is <b>null</b> or blank.
+   * Checks whether the specified value is {@code null} or blank.
    *
    * @param value the value to check
-   * @return true if the value is <b>null</b> or blank
+   * @return true if the value is {@code null} or blank
    */
   private boolean isNullOrEmpty(Object value) {
     if (value == null) {

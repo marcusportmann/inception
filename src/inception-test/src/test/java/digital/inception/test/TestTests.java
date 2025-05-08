@@ -32,7 +32,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * The <b>TestTests</b> class.
+ * The {@code TestTests} class.
  *
  * @author Marcus Portmann
  */

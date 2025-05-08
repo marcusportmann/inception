@@ -24,7 +24,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.lang.Nullable;
 
 /**
- * The <b>MergedMessageSource</b> class implements the merged message source that provides support
+ * The {@code MergedMessageSource} class implements the merged message source that provides support
  * for merging multiple message property files with the .properties suffix.
  *
  * @author Marcus Portmann
@@ -36,7 +36,7 @@ public class MergedMessageSource extends ReloadableResourceBundleMessageSource {
   private final PathMatchingResourcePatternResolver resolver =
       new PathMatchingResourcePatternResolver();
 
-  /** Constructs a new <b>MergedMessageSource</b>. */
+  /** Creates a new {@code MergedMessageSource} instance. */
   public MergedMessageSource() {}
 
   @Override

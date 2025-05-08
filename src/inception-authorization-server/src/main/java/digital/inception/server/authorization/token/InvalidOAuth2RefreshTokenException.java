@@ -21,7 +21,7 @@ import digital.inception.core.service.ServiceException;
 import java.io.Serial;
 
 /**
- * The <b>InvalidOAuth2RefreshTokenException</b> exception is thrown to indicate an error condition
+ * The {@code InvalidOAuth2RefreshTokenException} exception is thrown to indicate an error condition
  * as a result of an invalid OAuth2 refresh token.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -36,7 +36,9 @@ public class InvalidOAuth2RefreshTokenException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <b>InvalidOAuth2RefreshTokenException</b> with the specified message. */
+  /**
+   * Creates a new {@code InvalidOAuth2RefreshTokenException} instance with the specified message.
+   */
   public InvalidOAuth2RefreshTokenException() {
     super("The OAuth2 refresh token is invalid");
   }

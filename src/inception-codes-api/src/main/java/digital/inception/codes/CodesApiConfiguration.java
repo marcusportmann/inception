@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>CodesApiConfiguration</b> class provides the Spring configuration for the Codes API
+ * The {@code CodesApiConfiguration} class provides the Spring configuration for the Codes API
  * module.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CodesApiConfiguration {
 
-  /** Constructs a new <b>CodesApiConfiguration</b>. */
+  /** Creates a new {@code CodesApiConfiguration} instance. */
   public CodesApiConfiguration() {}
 
   /**

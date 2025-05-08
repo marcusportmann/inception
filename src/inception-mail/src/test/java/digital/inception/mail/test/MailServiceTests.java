@@ -45,7 +45,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>MailServiceTests</b> class contains the JUnit tests for the <b>MailService</b> class.
+ * The {@code MailServiceTests} class contains the JUnit tests for The {@code MailService} class.
  *
  * @author Marcus Portmann
  */

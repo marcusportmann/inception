@@ -19,42 +19,30 @@ package digital.inception.operations.service;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.operations.model.CreateDocumentRequest;
-import digital.inception.operations.model.UpdateDocumentRequest;
-import digital.inception.operations.model.Workflow;
-import digital.inception.operations.model.WorkflowDefinition;
-import digital.inception.operations.model.WorkflowNotFoundException;
-import digital.inception.operations.model.CreateWorkflowRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionNotFoundException;
 import digital.inception.operations.model.DocumentNotFoundException;
 import digital.inception.operations.model.DuplicateDocumentDefinitionException;
-import digital.inception.operations.model.DuplicateDocumentException;
-import digital.inception.operations.persistence.DocumentDefinitionRepository;
+import digital.inception.operations.model.UpdateDocumentRequest;
+import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
 import digital.inception.operations.store.DocumentStore;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-
-// TODO: Change this to work the same as the Workflow Service where we use CreateDocumentRequest and UpdateDocumentRequest
+// TODO: Change this to work the same as the Workflow Service where we use CreateDocumentRequest and
+// UpdateDocumentRequest
 //
 // TODO: Figure out how to do this with WorkflowDocument???
 
-
 /**
- * The <b>DocumentServiceImpl</b> class provides the Document Service implementation.
+ * The {@code DocumentServiceImpl} class provides the Document Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -68,7 +56,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   private final DocumentStore documentStore;
 
   /**
-   * Constructs a new <b>DocumentServiceImpl</b>.
+   * Constructs a new {@code DocumentServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param documentStore the Document Store
@@ -84,24 +72,26 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     this.documentDefinitionRepository = documentDefinitionRepository;
   }
 
-//  @Override
-//  public Document createDocument(Document document, String createdBy)
-//      throws InvalidArgumentException,
-//      DuplicateDocumentException,
-//      ServiceUnavailableException {
-//    XXX
-//
-//    validateDocument(document);
-//
-//    calculateDocumentHash(document);
-//
-//    return documentStore.createDocument(document);
-//  }
+  //  @Override
+  //  public Document createDocument(Document document, String createdBy)
+  //      throws InvalidArgumentException,
+  //      DuplicateDocumentException,
+  //      ServiceUnavailableException {
+  //    XXX
+  //
+  //    validateDocument(document);
+  //
+  //    calculateDocumentHash(document);
+  //
+  //    return documentStore.createDocument(document);
+  //  }
 
   @Override
-  public Document createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest,
-      String createdBy)
-      throws InvalidArgumentException, DocumentDefinitionNotFoundException, ServiceUnavailableException {
+  public Document createDocument(
+      UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
+      throws InvalidArgumentException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -119,21 +109,25 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
       Document document = new Document();
 
-
-    return documentStore.createDocument(tenantId, document);
+      return documentStore.createDocument(tenantId, document);
     } catch (DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the document with the document definition ID (" + createDocumentRequest.getDefinitionId() + ") for the tenant (" + tenantId + ")", e);
+          "Failed to create the document with the document definition ID ("
+              + createDocumentRequest.getDefinitionId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
   @Override
   public void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
-      DuplicateDocumentDefinitionException,
-      ServiceUnavailableException {
+          DuplicateDocumentDefinitionException,
+          ServiceUnavailableException {
     validateArgument("documentDefinition", documentDefinition);
 
     try {
@@ -167,8 +161,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public void deleteDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
-      DocumentDefinitionNotFoundException,
-      ServiceUnavailableException {
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
     if (!StringUtils.hasText(documentDefinitionId)) {
       throw new InvalidArgumentException("documentDefinitionId");
     }
@@ -220,8 +214,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public DocumentDefinition getDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
-      DocumentDefinitionNotFoundException,
-      ServiceUnavailableException {
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
     if (!StringUtils.hasText(documentDefinitionId)) {
       throw new InvalidArgumentException("documentDefinitionId");
     }
@@ -244,33 +238,33 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest,
-      String updatedBy)
+  public Document updateDocument(
+      UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
 
-    USE CREATE DOCUMENT AS A BASIS
+    // USE CREATE DOCUMENT AS A BASIS
 
     return null;
   }
 
-//  @Override
-//  public Document updateDocument(Document document, String updatedBy)
-//      throws InvalidArgumentException,
-//      WorkflowNotFoundException,
-//      DocumentNotFoundException,
-//      ServiceUnavailableException {
-//    validateDocument(document);
-//
-//    calculateDocumentHash(document);
-//
-//    return caseStore.updateDocument(document);
-//  }
+  //  @Override
+  //  public Document updateDocument(Document document, String updatedBy)
+  //      throws InvalidArgumentException,
+  //      WorkflowNotFoundException,
+  //      DocumentNotFoundException,
+  //      ServiceUnavailableException {
+  //    validateDocument(document);
+  //
+  //    calculateDocumentHash(document);
+  //
+  //    return caseStore.updateDocument(document);
+  //  }
 
   @Override
   public void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
-      DocumentDefinitionNotFoundException,
-      ServiceUnavailableException {
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
     validateArgument("documentDefinition", documentDefinition);
 
     try {
@@ -295,14 +289,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
       return Base64.getEncoder().encodeToString(digest.digest());
     } catch (Throwable e) {
-      throw new RuntimeException(
-          "Failed to calculate the SHA-256 hash for the document data",
-          e);
+      throw new RuntimeException("Failed to calculate the SHA-256 hash for the document data", e);
     }
   }
-
-
-
-
-
 }
