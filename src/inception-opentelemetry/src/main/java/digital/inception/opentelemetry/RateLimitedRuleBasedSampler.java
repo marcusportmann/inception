@@ -128,7 +128,7 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
       String attributeValue = getAttributeValue(rule.getAttributeKey(), attributes);
       if (rule.getSpanKind().equals(spanKind)
           && attributeValue != null
-          && rule.getPattern().matcher(attributeValue).find()) {
+          && rule.getPattern().matcher(attributeValue).matches()) {
 
         if (enableRuleLogging || log.isLoggable(Level.FINE)) {
           log.log(
@@ -190,8 +190,25 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
     }
 
     // Fallback sampling decision
-    return fallbackSampler.shouldSample(
+    SamplingResult fallbackSamplingResult = fallbackSampler.shouldSample(
         parentContext, traceId, name, spanKind, attributes, parentLinks);
+
+    if (enableRuleLogging || log.isLoggable(Level.FINE)) {
+
+      log.log(
+          enableRuleLogging ? Level.INFO : Level.FINE,
+          "Fallback sampling result for the span with trace ID ("
+              + traceId
+              + "), kind ("
+              + spanKind.name()
+              + "), name ("
+              + name
+              + ") and attributes ("
+              + getAttributesAsString(attributes)
+              + "): " + fallbackSamplingResult.getDecision());
+    }
+
+    return fallbackSamplingResult;
   }
 
   @Override
