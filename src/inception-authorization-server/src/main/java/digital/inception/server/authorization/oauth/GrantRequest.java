@@ -79,7 +79,7 @@ public abstract class GrantRequest {
   private final String state;
 
   /**
-   * Creates a new {@code GrantRequest} instance.
+   * Constructs a new {@code GrantRequest}.
    *
    * @param parameters the request parameters
    */

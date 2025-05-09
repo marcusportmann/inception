@@ -44,11 +44,11 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
   /** The reload period in seconds for external policies. */
   private int externalPoliciesReloadPeriod;
 
-  /** Creates a new {@code XacmlPolicyDecisionPointPolicyProvider} instance. */
+  /** Constructs a new {@code XacmlPolicyDecisionPointPolicyProvider}. */
   public XacmlPolicyDecisionPointPolicyProvider() {}
 
   /**
-   * Creates a new {@code XacmlPolicyDecisionPointPolicyProvider} instance.
+   * Constructs a new {@code XacmlPolicyDecisionPointPolicyProvider}.
    *
    * @param classpathPoliciesEnabled should policy sets and policies be loaded from the classpath
    *     under pdp/policies

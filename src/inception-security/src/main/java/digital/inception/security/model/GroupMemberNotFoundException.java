@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>GroupMemberNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of a group member that could not be found.
+ * A {@code GroupMemberNotFoundException} exception is thrown to indicate that a security operation
+ * failed as a result of a group member that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class GroupMemberNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code GroupMemberNotFoundException} instance.
+   * Constructs a new {@code GroupMemberNotFoundException}.
    *
    * @param memberType the group member type
    * @param memberName the group member name

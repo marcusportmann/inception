@@ -37,7 +37,7 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements TaskExecuto
   private final List<TaskStep> taskSteps;
 
   /**
-   * Creates a new {@code MultistepTaskExecutor} instance
+   * Constructs a new {@code MultistepTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    * @param taskDataTypeClass the class for the task data type

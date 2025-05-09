@@ -117,11 +117,11 @@ public class Role implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Role} instance. */
+  /** Constructs a new {@code Role}. */
   public Role() {}
 
   /**
-   * Creates a new {@code Role} instance.
+   * Constructs a new {@code Role}.
    *
    * @param type the role type
    */
@@ -130,7 +130,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Creates a new {@code Role} instance.
+   * Constructs a new {@code Role}.
    *
    * @param type the role type
    * @param effectiveFrom the date the role is effective from
@@ -141,7 +141,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Creates a new {@code Role} instance.
+   * Constructs a new {@code Role}.
    *
    * @param type the role type
    * @param effectiveFrom the date the role is effective from
@@ -154,7 +154,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Creates a new {@code Role} instance.
+   * Constructs a new {@code Role}.
    *
    * @param type the role type
    * @param purpose the code for the role purpose
@@ -165,7 +165,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Creates a new {@code Role} instance.
+   * Constructs a new {@code Role}.
    *
    * @param type the role type
    * @param purpose the code for the role purpose
@@ -178,7 +178,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Creates a new {@code Role} instance.
+   * Constructs a new {@code Role}.
    *
    * @param type the role type
    * @param purpose the code for the role purpose

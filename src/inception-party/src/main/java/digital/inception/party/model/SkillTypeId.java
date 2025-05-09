@@ -36,7 +36,7 @@ public class SkillTypeId implements Serializable {
   /** The Unicode locale identifier for the skill type. */
   private String localeId;
 
-  /** Creates a new {@code SkillTypeId} instance. */
+  /** Constructs a new {@code SkillTypeId}. */
   public SkillTypeId() {}
 
   /**

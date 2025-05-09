@@ -29,7 +29,8 @@ public class OAuth2AccessTokenException extends RuntimeException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code OAuth2AccessTokenException} instance with the specified message and cause.
+   * Constructs a new {@code OAuth2AccessTokenException} instance with the specified message and
+   * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code

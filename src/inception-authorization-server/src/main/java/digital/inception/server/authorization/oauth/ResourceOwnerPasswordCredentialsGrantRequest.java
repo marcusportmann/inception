@@ -53,7 +53,7 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
   private final String username;
 
   /**
-   * Creates a new {@code ResourceOwnerPasswordCredentialsGrantRequest} instance.
+   * Constructs a new {@code ResourceOwnerPasswordCredentialsGrantRequest}.
    *
    * @param parameters the request parameters
    */

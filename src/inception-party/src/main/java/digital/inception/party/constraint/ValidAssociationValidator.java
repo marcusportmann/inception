@@ -50,7 +50,7 @@ public class ValidAssociationValidator
   private final PartyService partyService;
 
   /**
-   * Creates a new {@code ValidAssociationValidator} instance.
+   * Constructs a new {@code ValidAssociationValidator}.
    *
    * @param partyService the Party Service
    * @param partyReferenceService the Party Reference Service
@@ -62,7 +62,7 @@ public class ValidAssociationValidator
     this.partyReferenceService = partyReferenceService;
   }
 
-  /** Creates a new {@code ValidAssociationValidator} instance. */
+  /** Constructs a new {@code ValidAssociationValidator}. */
   public ValidAssociationValidator() {
     this.partyService = null;
     this.partyReferenceService = null;

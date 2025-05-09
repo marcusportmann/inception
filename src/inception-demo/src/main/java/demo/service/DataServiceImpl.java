@@ -51,7 +51,7 @@ public class DataServiceImpl extends AbstractServiceBase implements DataService 
   private EntityManager entityManager;
 
   /**
-   * Creates a new {@code DataServiceImpl} instance.
+   * Constructs a new {@code DataServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param reactiveDataRepository the Reactive Data Repository

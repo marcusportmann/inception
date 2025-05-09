@@ -767,7 +767,7 @@ public final class WebServiceClientSecurityHelper {
   public record WebServiceClient(QName portQName, Service service) {
 
     /**
-     * Creates a new {@code CachedWebServiceClient} instance.
+     * Constructs a new {@code CachedWebServiceClient}.
      *
      * @param portQName the QName for the port
      * @param service the web service client

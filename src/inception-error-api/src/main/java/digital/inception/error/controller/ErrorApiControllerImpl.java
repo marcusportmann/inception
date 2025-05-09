@@ -47,7 +47,7 @@ public class ErrorApiControllerImpl extends SecureApiController implements Error
   private final ErrorService errorService;
 
   /**
-   * Creates a new {@code ErrorApiControllerImpl} instance.
+   * Constructs a new {@code ErrorApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param errorService the Error Service

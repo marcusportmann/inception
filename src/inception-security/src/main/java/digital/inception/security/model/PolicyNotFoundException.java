@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>PolicyNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of a policy that could not be found.
+ * A {@code PolicyNotFoundException} exception is thrown to indicate that a security operation
+ * failed as a result of a policy that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class PolicyNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code PolicyNotFoundException} instance.
+   * Constructs a new {@code PolicyNotFoundException}.
    *
    * @param policyId the ID for the policy
    */

@@ -63,7 +63,7 @@ public class VehicleServiceImpl extends AbstractServiceBase implements VehicleSe
   private EntityManager entityManager;
 
   /**
-   * Creates a new {@code VehicleServiceImpl} instance.
+   * Constructs a new {@code VehicleServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param carRepository the Car Repository

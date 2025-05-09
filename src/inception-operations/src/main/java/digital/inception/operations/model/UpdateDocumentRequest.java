@@ -141,7 +141,7 @@ public class UpdateDocumentRequest implements Serializable {
   @Column(name = "source_document_id")
   private UUID sourceDocumentId;
 
-  /** Creates a new {@code UpdateDocumentRequest} instance. */
+  /** Constructs a new {@code UpdateDocumentRequest}. */
   public UpdateDocumentRequest() {}
 
   /**

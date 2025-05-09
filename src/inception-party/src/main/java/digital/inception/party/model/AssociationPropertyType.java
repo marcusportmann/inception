@@ -181,7 +181,7 @@ public class AssociationPropertyType implements Serializable {
   @Column(name = "value_type", length = 10, nullable = false)
   private ValueType valueType;
 
-  /** Creates a new {@code AssociationPropertyType} instance. */
+  /** Constructs a new {@code AssociationPropertyType}. */
   public AssociationPropertyType() {}
 
   /**

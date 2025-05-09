@@ -40,7 +40,7 @@ public class MandatePropertyTypeId implements Serializable {
   /** The code for the mandate type the mandate property type is associated with. */
   private String mandateType;
 
-  /** Creates a new {@code MandatePropertyTypeId} instance. */
+  /** Constructs a new {@code MandatePropertyTypeId}. */
   public MandatePropertyTypeId() {}
 
   /**

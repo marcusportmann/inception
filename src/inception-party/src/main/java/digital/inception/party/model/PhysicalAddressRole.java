@@ -181,7 +181,7 @@ public class PhysicalAddressRole implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code PhysicalAddressRole} instance. */
+  /** Constructs a new {@code PhysicalAddressRole}. */
   public PhysicalAddressRole() {}
 
   /**

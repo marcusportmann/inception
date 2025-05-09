@@ -159,11 +159,11 @@ public class TokenSummary implements Serializable {
   @Column(name = "valid_from_date")
   private LocalDate validFromDate;
 
-  /** Creates a new {@code TokenSummary} instance. */
+  /** Constructs a new {@code TokenSummary}. */
   public TokenSummary() {}
 
   /**
-   * Creates a new {@code TokenSummary} instance.
+   * Constructs a new {@code TokenSummary}.
    *
    * @param id the ID for the token
    * @param type the token type

@@ -31,7 +31,7 @@ import java.io.IOException;
 @SuppressWarnings("unused")
 public class EmptyStringDeserializer extends JsonDeserializer<String> {
 
-  /** Creates a new {@code EmptyStringDeserializer} instance. */
+  /** Constructs a new {@code EmptyStringDeserializer}. */
   public EmptyStringDeserializer() {}
 
   @Override

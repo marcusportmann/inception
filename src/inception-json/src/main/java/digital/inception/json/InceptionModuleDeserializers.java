@@ -36,7 +36,7 @@ import java.util.Date;
  */
 public class InceptionModuleDeserializers extends SimpleDeserializers {
 
-  /** Creates a new {@code InceptionModuleDeserializers} instance>. */
+  /** Constructs a new {@code InceptionModuleDeserializers} instance>. */
   public InceptionModuleDeserializers() {
 
     addDeserializer(Date.class, new DateDeserializer());

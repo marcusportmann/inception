@@ -45,7 +45,7 @@ public class ConfigNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ConfigNotFoundException} instance.
+   * Constructs a new {@code ConfigNotFoundException}.
    *
    * @param id the ID for the config
    */

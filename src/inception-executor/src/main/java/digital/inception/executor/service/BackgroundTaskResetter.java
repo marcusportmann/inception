@@ -40,7 +40,7 @@ public class BackgroundTaskResetter {
   private final ExecutorService executorService;
 
   /**
-   * Creates a new {@code BackgroundTaskResetter} instance.
+   * Constructs a new {@code BackgroundTaskResetter}.
    *
    * @param executorService the Executor Service
    */

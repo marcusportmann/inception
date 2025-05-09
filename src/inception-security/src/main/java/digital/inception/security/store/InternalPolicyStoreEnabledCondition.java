@@ -29,7 +29,7 @@ import org.springframework.lang.NonNull;
  */
 public class InternalPolicyStoreEnabledCondition implements Condition {
 
-  /** Creates a new {@code InternalPolicyStoreEnabledCondition} instance. */
+  /** Constructs a new {@code InternalPolicyStoreEnabledCondition}. */
   public InternalPolicyStoreEnabledCondition() {}
 
   @Override

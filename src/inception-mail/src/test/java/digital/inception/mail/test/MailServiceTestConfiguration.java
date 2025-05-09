@@ -22,7 +22,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
- * The <b>MailServiceTestConfiguration/code> class.
+ * The {@code MailServiceTestConfiguration} class.
  *
  * @author Marcus Portmann
  */

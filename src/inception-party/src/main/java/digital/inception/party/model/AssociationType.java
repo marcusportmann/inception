@@ -197,7 +197,7 @@ public class AssociationType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code AssociationType} instance. */
+  /** Constructs a new {@code AssociationType}. */
   public AssociationType() {}
 
   /**

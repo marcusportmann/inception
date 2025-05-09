@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class TokenTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<TokenType> {
 
-  /** Creates a new {@code TokenTypeAttributeConverter} instance. */
+  /** Constructs a new {@code TokenTypeAttributeConverter}. */
   public TokenTypeAttributeConverter() {
     super(TokenType.class);
   }

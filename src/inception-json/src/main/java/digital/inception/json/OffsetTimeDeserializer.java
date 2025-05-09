@@ -31,7 +31,7 @@ import java.time.OffsetTime;
  */
 public class OffsetTimeDeserializer extends JsonDeserializer<OffsetTime> {
 
-  /** Creates a new {@code OffsetTimeDeserializer} instance. */
+  /** Constructs a new {@code OffsetTimeDeserializer}. */
   public OffsetTimeDeserializer() {}
 
   @Override

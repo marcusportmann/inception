@@ -184,7 +184,7 @@ public class WorkflowSummary implements Serializable {
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** Creates a new {@code WorkflowSummary} instance. */
+  /** Constructs a new {@code WorkflowSummary}. */
   public WorkflowSummary() {}
 
   /**

@@ -160,7 +160,7 @@ public class Title implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code Title} instance. */
+  /** Constructs a new {@code Title}. */
   public Title() {}
 
   /**

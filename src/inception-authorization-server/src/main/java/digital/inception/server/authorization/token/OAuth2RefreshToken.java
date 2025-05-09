@@ -44,7 +44,7 @@ public class OAuth2RefreshToken
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code OAuth2RefreshToken} instance.
+   * Constructs a new {@code OAuth2RefreshToken}.
    *
    * @param tokenValue the token value
    * @param issuedAt the time at which the token was issued

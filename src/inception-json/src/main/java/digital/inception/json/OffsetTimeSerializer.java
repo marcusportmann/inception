@@ -24,14 +24,14 @@ import java.io.IOException;
 import java.time.OffsetTime;
 
 /**
- * The {@code OffsetTimeSerializer} class implements the Jackson serializer for the
- * <b>OffsetTime</b> type.
+ * The {@code OffsetTimeSerializer} class implements the Jackson serializer for the {@code
+ * OffsetTime} type.
  *
  * @author Marcus Portmann
  */
 public class OffsetTimeSerializer extends JsonSerializer<OffsetTime> {
 
-  /** Creates a new {@code OffsetTimeSerializer} instance. */
+  /** Constructs a new {@code OffsetTimeSerializer}. */
   public OffsetTimeSerializer() {}
 
   @Override

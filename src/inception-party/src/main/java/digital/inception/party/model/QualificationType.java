@@ -157,7 +157,7 @@ public class QualificationType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code QualificationType} instance. */
+  /** Constructs a new {@code QualificationType}. */
   public QualificationType() {}
 
   /**

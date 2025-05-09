@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public class SpringDocOpenApiModelConverter implements ModelConverter {
 
-  /** Creates a new {@code SpringDocOpenApiModelConverter} instance. */
+  /** Constructs a new {@code SpringDocOpenApiModelConverter}. */
   public SpringDocOpenApiModelConverter() {}
 
   @Override

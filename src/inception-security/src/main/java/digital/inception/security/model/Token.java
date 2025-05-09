@@ -184,11 +184,11 @@ public class Token implements Serializable {
   @Column(name = "valid_from_date")
   private LocalDate validFromDate;
 
-  /** Creates a new {@code Token} instance. */
+  /** Constructs a new {@code Token}. */
   public Token() {}
 
   /**
-   * Creates a new {@code Token} instance.
+   * Constructs a new {@code Token}.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -222,7 +222,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Creates a new {@code Token} instance.
+   * Constructs a new {@code Token}.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -253,7 +253,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Creates a new {@code Token} instance.
+   * Constructs a new {@code Token}.
    *
    * @param id the ID for the token
    * @param type the token type
@@ -281,7 +281,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Creates a new {@code Token} instance.
+   * Constructs a new {@code Token}.
    *
    * @param id the ID for the token
    * @param type the token type

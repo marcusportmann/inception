@@ -28,7 +28,7 @@ import org.springframework.util.StringUtils;
  */
 public class ValidCountryCodeValidator implements ConstraintValidator<ValidCountryCode, String> {
 
-  /** Creates a new {@code ValidCountryCodeValidator} instance. */
+  /** Constructs a new {@code ValidCountryCodeValidator}. */
   public ValidCountryCodeValidator() {}
 
   @Override

@@ -76,7 +76,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   private JavaMailSender javaMailSender;
 
   /**
-   * Creates a new {@code MailServiceImpl} instance.
+   * Constructs a new {@code MailServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param mailTemplateRepository the Mail Template Repository
@@ -434,7 +434,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
     private final MailService mailService;
 
     /**
-     * Creates a new {@code FreeMarkerTemplateLoader} instance.
+     * Constructs a new {@code FreeMarkerTemplateLoader}.
      *
      * @param mailService the Mail Service
      */
@@ -481,7 +481,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
 
     /**
      * Returns the time of last modification of the specified template source. This method is called
-     * after <b>findTemplateSource()</b>.
+     * after {@code findTemplateSource()}.
      *
      * @param templateSource an object representing a template source, obtained through a prior call
      *     to {@link #findTemplateSource(String)}

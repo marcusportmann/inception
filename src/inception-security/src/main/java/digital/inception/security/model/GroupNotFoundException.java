@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>GroupNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of a group that could not be found.
+ * A {@code GroupNotFoundException} exception is thrown to indicate that a security operation failed
+ * as a result of a group that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class GroupNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code GroupNotFoundException} instance.
+   * Constructs a new {@code GroupNotFoundException}.
    *
    * @param groupName the name of the group
    */

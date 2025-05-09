@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 /**
  * The {@code NoScriptOrSQLInjectionValidator} class implements the custom constraint validator for
- * applying the string validation, which detects whether a <b>String</b> or the <b>String</b>
+ * applying the string validation, which detects whether a {@code String} or the {@code String}
  * properties of an object contain unsafe script or SQL injection content.
  *
  * @author Marcus Portmann
@@ -40,7 +40,7 @@ public class NoScriptOrSQLInjectionValidator
           ".*('.+--)|(--)|(\\|)|(%7C)|('.*--)|(--)|(;)|(\\*)|(\\b(select|insert|delete|update|union|drop|create|alter|exec|execute|grant|revoke)\\b).*",
           Pattern.CASE_INSENSITIVE);
 
-  /** Creates a new {@code NoScriptOrSQLInjectionValidator} instance. */
+  /** Constructs a new {@code NoScriptOrSQLInjectionValidator}. */
   public NoScriptOrSQLInjectionValidator() {}
 
   @Override

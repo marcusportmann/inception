@@ -17,7 +17,7 @@
 package digital.inception.operations.controller;
 
 import digital.inception.api.SecureApiController;
-import digital.inception.operations.service.IOperationsService;
+import digital.inception.operations.service.WorkflowService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,19 +33,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class OperationsApiControllerImpl extends SecureApiController
     implements OperationsApiController {
 
-  /** The Operations Service. */
-  private final IOperationsService operationsService;
+  /** The Workflow Service. */
+  private final WorkflowService workflowService;
 
   /**
-   * Creates a new {@code OperationsApiControllerImpl} instance.
+   * Constructs a new {@code OperationsApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
-   * @param operationsService the Operations Service
+   * @param workflowService the Workflow Service
    */
   public OperationsApiControllerImpl(
-      ApplicationContext applicationContext, IOperationsService operationsService) {
+      ApplicationContext applicationContext, WorkflowService workflowService) {
     super(applicationContext);
 
-    this.operationsService = operationsService;
+    this.workflowService = workflowService;
   }
 }

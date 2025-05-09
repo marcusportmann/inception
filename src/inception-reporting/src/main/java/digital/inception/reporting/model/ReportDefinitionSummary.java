@@ -79,12 +79,12 @@ public class ReportDefinitionSummary implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Creates a new {@code ReportDefinitionSummary} instance. */
+  /** Constructs a new {@code ReportDefinitionSummary}. */
   @SuppressWarnings("unused")
   public ReportDefinitionSummary() {}
 
   /**
-   * Creates a new {@code ReportDefinitionSummary} instance.
+   * Constructs a new {@code ReportDefinitionSummary}.
    *
    * @param id the ID for the report definition
    * @param name the name of the report definition

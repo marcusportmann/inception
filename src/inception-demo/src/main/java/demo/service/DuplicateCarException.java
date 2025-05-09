@@ -46,7 +46,7 @@ public class DuplicateCarException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateCarException} instance.
+   * Constructs a new {@code DuplicateCarException}.
    *
    * @param id the ID for the car
    */

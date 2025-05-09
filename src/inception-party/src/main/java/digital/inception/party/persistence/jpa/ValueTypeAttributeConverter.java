@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class ValueTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<ValueType> {
 
-  /** Creates a new {@code ValueTypeAttributeConverter} instance. */
+  /** Constructs a new {@code ValueTypeAttributeConverter}. */
   public ValueTypeAttributeConverter() {
     super(ValueType.class);
   }

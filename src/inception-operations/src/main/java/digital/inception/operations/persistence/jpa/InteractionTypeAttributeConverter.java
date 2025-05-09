@@ -28,7 +28,7 @@ import jakarta.persistence.Converter;
 public class InteractionTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<InteractionTypeAttribute> {
 
-  /** Creates a new {@code InteractionTypeAttributeConverter} instance. */
+  /** Constructs a new {@code InteractionTypeAttributeConverter}. */
   public InteractionTypeAttributeConverter() {
     super(InteractionTypeAttribute.class);
   }

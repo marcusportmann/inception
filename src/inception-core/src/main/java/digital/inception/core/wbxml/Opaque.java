@@ -37,13 +37,13 @@ public class Opaque implements Serializable, Content {
   /** The binary data. */
   private final BinaryBuffer buffer;
 
-  /** Constructs a new empty <b>Opaque</b>. */
+  /** Constructs a new empty {@code Opaque}. */
   public Opaque() {
     buffer = new BinaryBuffer();
   }
 
   /**
-   * Creates a new {@code Opaque} instance containing the specified binary data.
+   * Constructs a new {@code Opaque} instance containing the specified binary data.
    *
    * @param data the binary data to populate the {@code Opaque} instance with
    */
@@ -52,7 +52,7 @@ public class Opaque implements Serializable, Content {
   }
 
   /**
-   * Append the specified binary data to the binary data already contained in the <b>Opaque</b>
+   * Append the specified binary data to the binary data already contained in the {@code Opaque}
    * instance.
    *
    * @param data the binary data to add to the opaque instance
@@ -99,9 +99,9 @@ public class Opaque implements Serializable, Content {
   }
 
   /**
-   * Print the content to the specified <b>OutputStream</b> using the specified indent level.
+   * Print the content to the specified {@code OutputStream} using the specified indent level.
    *
-   * @param out the <b>OuputStream</b> to output the content to
+   * @param out the {@code OuputStream} to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {

@@ -239,7 +239,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   private Map<UUID, UserDirectoryProvider> userDirectories = new ConcurrentHashMap<>();
 
   /**
-   * Creates a new {@code SecurityServiceImpl} instance.
+   * Constructs a new {@code SecurityServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param resourceLoader the Spring resource loader

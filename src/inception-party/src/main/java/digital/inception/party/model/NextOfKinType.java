@@ -121,7 +121,7 @@ public class NextOfKinType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code NextOfKinType} instance. */
+  /** Constructs a new {@code NextOfKinType}. */
   public NextOfKinType() {}
 
   /**

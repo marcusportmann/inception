@@ -21,7 +21,7 @@
 // Subscription
 // * component of the Flowable platform, which defers the Flowable database schema initialization to
 // * the standard Inception Framework database initialization capabilities using the
-// * <b>db/flowable-all.changelog.xml</b> Liquibase changelog on the classpath.
+// * {@code db/flowable-all.changelog.xml} Liquibase changelog on the classpath.
 // *
 // * @author Marcus Portmann
 // */

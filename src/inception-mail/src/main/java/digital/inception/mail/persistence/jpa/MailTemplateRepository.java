@@ -25,8 +25,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The {@code MailTemplateRepository} interface declares the persistence for the <b>MailTemplate</b>
- * domain type.
+ * The {@code MailTemplateRepository} interface declares the persistence for the {@code
+ * MailTemplate} domain type.
  *
  * @author Marcus Portmann
  */

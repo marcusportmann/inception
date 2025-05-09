@@ -36,7 +36,7 @@ public class TaxNumberTypeId implements Serializable {
   /** The Unicode locale identifier for the tax number type. */
   private String localeId;
 
-  /** Creates a new {@code TaxNumberTypeId} instance. */
+  /** Constructs a new {@code TaxNumberTypeId}. */
   public TaxNumberTypeId() {}
 
   /**

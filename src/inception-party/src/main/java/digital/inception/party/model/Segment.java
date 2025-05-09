@@ -167,7 +167,7 @@ public class Segment implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Segment} instance. */
+  /** Constructs a new {@code Segment}. */
   public Segment() {}
 
   /**

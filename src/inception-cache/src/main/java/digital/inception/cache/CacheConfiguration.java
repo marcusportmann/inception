@@ -30,7 +30,7 @@ public class CacheConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Creates a new {@code CacheConfiguration} instance.
+   * Constructs a new {@code CacheConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

@@ -46,7 +46,7 @@ public class SMSNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code SMSNotFoundException} instance.
+   * Constructs a new {@code SMSNotFoundException}.
    *
    * @param smsId the ID for the SMS
    */

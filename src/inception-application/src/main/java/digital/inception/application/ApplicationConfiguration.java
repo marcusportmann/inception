@@ -33,7 +33,7 @@ public class ApplicationConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Creates a new {@code ApplicationConfiguration} instance.
+   * Constructs a new {@code ApplicationConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

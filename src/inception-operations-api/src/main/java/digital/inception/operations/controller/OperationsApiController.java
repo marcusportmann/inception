@@ -28,4 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/api/operations")
 // @el (isSecurityDisabled:
 // digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
-public interface OperationsApiController {}
+public interface OperationsApiController {
+
+
+
+
+
+
+}

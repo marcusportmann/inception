@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>DuplicateUserException</b> is thrown to indicate that a security operation failed as a
- * result of a duplicate user.
+ * A {@code DuplicateUserException} exception is thrown to indicate that a security operation failed
+ * as a result of a duplicate user.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class DuplicateUserException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateUserException} instance.
+   * Constructs a new {@code DuplicateUserException}.
    *
    * @param username the username for the user
    */

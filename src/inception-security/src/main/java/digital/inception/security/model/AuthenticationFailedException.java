@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>AuthenticationFailedException</b> is thrown to indicate that a security operation failed as
- * a result of an authentication failure.
+ * An {@code AuthenticationFailedException} exception is thrown to indicate that a security
+ * operation failed as a result of an authentication failure.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class AuthenticationFailedException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code AuthenticationFailedException} instance with the specified message.
+   * Constructs a new {@code AuthenticationFailedException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -54,7 +54,7 @@ public class AuthenticationFailedException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code AuthenticationFailedException} instance with the specified message and
+   * Constructs a new {@code AuthenticationFailedException} instance with the specified message and
    * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.

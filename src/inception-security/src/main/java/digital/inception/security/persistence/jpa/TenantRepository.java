@@ -116,7 +116,7 @@ public interface TenantRepository
    *
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory
-   * @return <b>1</b> if the user directory to tenant mapping exists or <b>0</b> otherwise
+   * @return {@code 1} if the user directory to tenant mapping exists or {@code 0} otherwise
    */
   @Query(
       value =

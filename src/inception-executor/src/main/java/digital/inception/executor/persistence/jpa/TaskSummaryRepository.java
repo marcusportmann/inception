@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The {@code TaskSummaryRepository} interface declares the persistence for the <b>TaskSummary</b>
+ * The {@code TaskSummaryRepository} interface declares the persistence for the {@code TaskSummary}
  * domain type.
  *
  * @author Marcus Portmann

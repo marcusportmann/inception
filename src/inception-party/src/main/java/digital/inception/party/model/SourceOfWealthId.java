@@ -37,7 +37,7 @@ public class SourceOfWealthId implements Serializable {
   /** The code for the source of wealth type. */
   private String type;
 
-  /** Creates a new {@code SourceOfWealthId} instance. */
+  /** Constructs a new {@code SourceOfWealthId}. */
   public SourceOfWealthId() {}
 
   /**

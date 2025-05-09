@@ -41,7 +41,7 @@ public class TransactionAwareXAResource implements XAResource {
   private final XAResource xaResource;
 
   /**
-   * Creates a new {@code TransactionAwareXAResource} instance.
+   * Constructs a new {@code TransactionAwareXAResource}.
    *
    * @param transactionAware the Agroal transaction aware connection resource
    * @param xaResource the underlying XA resource

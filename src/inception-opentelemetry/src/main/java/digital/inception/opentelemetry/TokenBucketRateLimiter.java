@@ -45,7 +45,7 @@ public class TokenBucketRateLimiter {
   private final long tokensPerSecond;
 
   /**
-   * Creates a new {@code TokenBucketRateLimiter} instance.
+   * Constructs a new {@code TokenBucketRateLimiter}.
    *
    * @param capacity the maximum number of tokens the bucket can hold
    * @param tokensPerSecond the number of tokens added to the bucket per second

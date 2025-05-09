@@ -28,7 +28,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class FileTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<FileType> {
 
-  /** Creates a new {@code FileTypeConverter} instance. */
+  /** Constructs a new {@code FileTypeConverter}. */
   public FileTypeAttributeConverter() {
     super(FileType.class);
   }

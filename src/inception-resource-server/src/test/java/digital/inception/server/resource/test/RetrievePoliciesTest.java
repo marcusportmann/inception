@@ -42,7 +42,7 @@ public class RetrievePoliciesTest {
   /** The policies API endpoint. */
   public static final String POLICIES_API_ENDPOINT = "http://localhost:8080/api/security/policies";
 
-  /** Creates a new {@code RetrievePoliciesTest} instance. */
+  /** Constructs a new {@code RetrievePoliciesTest}. */
   public RetrievePoliciesTest() {}
 
   /**

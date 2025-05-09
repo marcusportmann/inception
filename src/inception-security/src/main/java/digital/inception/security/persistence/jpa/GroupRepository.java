@@ -255,7 +255,7 @@ public interface GroupRepository
    *
    * @param groupId the ID for the group
    * @param roleCode the code for the role
-   * @return <b>1</b> if the role to group mapping exists or <b>0</b> otherwise
+   * @return {code 1} if the role to group mapping exists or {code 0} otherwise
    */
   @Query(
       value =

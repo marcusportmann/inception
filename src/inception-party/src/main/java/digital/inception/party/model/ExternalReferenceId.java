@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code ExternalReferenceId} class implements the ID class for the <b>ExternalReference</b>
+ * The {@code ExternalReferenceId} class implements the ID class for the {@code ExternalReference}
  * class.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public class ExternalReferenceId implements Serializable {
   /** The code for the external reference type. */
   private String type;
 
-  /** Creates a new {@code ExternalReferenceId} instance. */
+  /** Constructs a new {@code ExternalReferenceId}. */
   public ExternalReferenceId() {}
 
   /**

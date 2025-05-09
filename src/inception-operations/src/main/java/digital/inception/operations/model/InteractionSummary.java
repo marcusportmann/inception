@@ -228,7 +228,7 @@ public class InteractionSummary implements Serializable {
   @Column(name = "type", nullable = false)
   private InteractionType type;
 
-  /** Creates a new {@code InteractionSummary} instance. */
+  /** Constructs a new {@code InteractionSummary}. */
   public InteractionSummary() {}
 
   /**

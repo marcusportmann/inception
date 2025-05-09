@@ -37,7 +37,7 @@ public class PreferenceId implements Serializable {
   /** The code for the preference type. */
   private String type;
 
-  /** Creates a new {@code PreferenceId} instance. */
+  /** Constructs a new {@code PreferenceId}. */
   public PreferenceId() {}
 
   /**

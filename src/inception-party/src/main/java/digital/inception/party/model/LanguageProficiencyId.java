@@ -38,7 +38,7 @@ public class LanguageProficiencyId implements Serializable {
   /** The ID for the person the language proficiency is associated with. */
   private UUID person;
 
-  /** Creates a new {@code LanguageProficiencyId} instance. */
+  /** Constructs a new {@code LanguageProficiencyId}. */
   public LanguageProficiencyId() {}
 
   /**

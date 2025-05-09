@@ -54,7 +54,7 @@ public class SystemUnavailableResponse extends Response {
   @JsonProperty private String uri;
 
   /**
-   * Creates a new {@code SystemUnavailableResponse} instance.
+   * Constructs a new {@code SystemUnavailableResponse}.
    *
    * @param message the message
    */
@@ -63,7 +63,7 @@ public class SystemUnavailableResponse extends Response {
   }
 
   /**
-   * Creates a new {@code SystemUnavailableResponse} instance.
+   * Constructs a new {@code SystemUnavailableResponse}.
    *
    * @param message the message
    * @param cause the cause

@@ -65,6 +65,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -126,7 +127,7 @@ public class InteractionServiceImpl implements InteractionService {
   private int minimumImageAttachmentSize;
 
   /**
-   * Creates a new {@code InteractionServiceImpl} instance.
+   * Constructs a new {@code InteractionServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-380 validator
@@ -149,33 +150,39 @@ public class InteractionServiceImpl implements InteractionService {
 
   @Override
   @Transactional
-  public Interaction createInteraction(Interaction interaction)
+  public Interaction createInteraction(UUID tenantId, Interaction interaction)
       throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException {
     validateInteraction(interaction);
 
-    return interactionStore.createInteraction(interaction);
+    return interactionStore.createInteraction(tenantId, interaction);
   }
 
   @Override
   @Transactional
   public InteractionAttachment createInteractionAttachment(
+      UUID tenantId,
       InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           DuplicateInteractionAttachmentException,
           ServiceUnavailableException {
     validateInteractionAttachment(interactionAttachment);
 
-    return interactionStore.createInteractionAttachment(interactionAttachment);
+    return interactionStore.createInteractionAttachment(tenantId, interactionAttachment);
   }
 
   @Override
   @Transactional
   public MailboxInteractionSource createMailboxInteractionSource(
+      UUID tenantId,
       MailboxInteractionSource mailboxInteractionSource)
       throws InvalidArgumentException,
           DuplicateMailboxInteractionSourceException,
           ServiceUnavailableException {
     validateMailboxInteractionSource(mailboxInteractionSource);
+
+    if (!Objects.equals(tenantId, mailboxInteractionSource.getTenantId())) {
+      XXX
+    }
 
     try {
       if (mailboxInteractionSourceRepository.existsById(mailboxInteractionSource.getId())) {

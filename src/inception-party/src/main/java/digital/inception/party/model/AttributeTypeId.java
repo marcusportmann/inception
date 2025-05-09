@@ -36,7 +36,7 @@ public class AttributeTypeId implements Serializable {
   /** The Unicode locale identifier for the attribute type. */
   private String localeId;
 
-  /** Creates a new {@code AttributeTypeId} instance. */
+  /** Constructs a new {@code AttributeTypeId}. */
   public AttributeTypeId() {}
 
   /**

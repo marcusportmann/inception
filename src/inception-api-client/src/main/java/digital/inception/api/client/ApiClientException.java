@@ -28,13 +28,13 @@ public class ApiClientException extends RuntimeException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Creates a new {@code ApiClientException} instance with {@code null} as its message. */
+  /** Constructs a new {@code ApiClientException} instance with {@code null} as its message. */
   public ApiClientException() {
     super();
   }
 
   /**
-   * Creates a new {@code ApiClientException} instance with the specified message.
+   * Constructs a new {@code ApiClientException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -43,7 +43,7 @@ public class ApiClientException extends RuntimeException {
   }
 
   /**
-   * Creates a new {@code ApiClientException} instance with the specified message and cause.
+   * Constructs a new {@code ApiClientException} instance with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code

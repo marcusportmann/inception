@@ -113,7 +113,7 @@ public class SecurityApiControllerImpl extends SecureApiController
   private final SecurityService securityService;
 
   /**
-   * Creates a new {@code SecurityApiControllerImpl} instance.
+   * Constructs a new {@code SecurityApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param securityService the Security Service

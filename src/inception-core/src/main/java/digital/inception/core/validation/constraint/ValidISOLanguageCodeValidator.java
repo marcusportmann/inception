@@ -24,7 +24,7 @@ import java.util.Optional;
 
 /**
  * The {@code ValidISOLanguageCodeValidator} class implements the custom constraint validator that
- * validates whether a <b>String</b> contains a valid ISO 639-1 alpha-2 or ISO 639-1 alpha-3
+ * validates whether a {@code String} contains a valid ISO 639-1 alpha-2 or ISO 639-1 alpha-3
  * language code.
  *
  * @author Marcus Portmann
@@ -32,7 +32,7 @@ import java.util.Optional;
 public class ValidISOLanguageCodeValidator
     implements ConstraintValidator<ValidISOLanguageCode, Object> {
 
-  /** Creates a new {@code ValidISOLanguageCodeValidator} instance. */
+  /** Constructs a new {@code ValidISOLanguageCodeValidator}. */
   public ValidISOLanguageCodeValidator() {}
 
   @Override

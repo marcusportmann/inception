@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>DuplicateFunctionException</b> is thrown to indicate that a security operation failed as a
- * result of a duplicate function.
+ * A {@code DuplicateFunctionException} exception is thrown to indicate that a security operation
+ * failed as a result of a duplicate function.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class DuplicateFunctionException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateFunctionException} instance.
+   * Constructs a new {@code DuplicateFunctionException}.
    *
    * @param functionCode the code for the function
    */

@@ -36,7 +36,7 @@ public class RolePurposeId implements Serializable {
   /** The Unicode locale identifier for the role purpose. */
   private String localeId;
 
-  /** Creates a new {@code RolePurposeId} instance. */
+  /** Constructs a new {@code RolePurposeId}. */
   public RolePurposeId() {}
 
   /**

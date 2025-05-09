@@ -23,8 +23,8 @@ import java.io.Reader;
 import org.w3c.dom.ls.LSInput;
 
 /**
- * The {@code XmlSchemaClasspathInputSource} class provides an implementation of the <b>
- * org.w3c.dom.ls.LSInput</b> interface that allows resources to be retrieved from the classpath.
+ * The {@code XmlSchemaClasspathInputSource} class provides an implementation of the {@code
+ * org.w3c.dom.ls.LSInput} interface that allows resources to be retrieved from the classpath.
  *
  * @author Marcus Portmann
  */
@@ -52,7 +52,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   private String systemId;
 
   /**
-   * Creates a new {@code XmlSchemaClasspathInputSource} instance.
+   * Constructs a new {@code XmlSchemaClasspathInputSource}.
    *
    * @param namespaceURI the namespace for this input source
    * @param publicId the public identifier for this input source.
@@ -99,9 +99,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Returns the <b>InputStream</b> for the input source.
+   * Returns the {@code InputStream} for the input source.
    *
-   * @return the <b>InputStream</b> for the input source
+   * @return the {@code InputStream} for the input source
    */
   @Override
   public InputStream getByteStream() {
@@ -158,9 +158,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Returns the <b>String</b> data for the input source
+   * Returns the {@code String} data for the input source
    *
-   * @return the <b>String</b> data for the input source
+   * @return the {@code String} data for the input source
    */
   @Override
   public String getStringData() {
@@ -253,9 +253,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the <b>String</b> data for the input source.
+   * Set the {@code String} data for the input source.
    *
-   * @param stringData the <b>String</b> data for the input source
+   * @param stringData the {@code String} data for the input source
    */
   @Override
   public void setStringData(String stringData) {

@@ -143,7 +143,7 @@ public class RoleType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code RoleType} instance. */
+  /** Constructs a new {@code RoleType}. */
   public RoleType() {}
 
   /**

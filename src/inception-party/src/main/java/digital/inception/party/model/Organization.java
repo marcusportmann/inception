@@ -297,13 +297,13 @@ public class Organization extends PartyBase implements Serializable {
   @Column(name = "identification_type", length = 50)
   private String identificationType;
 
-  /** Creates a new {@code Organization} instance. */
+  /** Constructs a new {@code Organization}. */
   public Organization() {
     super(PartyType.ORGANIZATION);
   }
 
   /**
-   * Creates a new {@code Organization} instance.
+   * Constructs a new {@code Organization}.
    *
    * @param tenantId the ID for the tenant the organization is associated with
    * @param name the name of the organization

@@ -37,7 +37,7 @@ public class FormDeployer implements EngineDeployer {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(FormDeployer.class);
 
-  /** Creates a new {@code FormDeployer} instance. */
+  /** Constructs a new {@code FormDeployer}. */
   public FormDeployer() {}
 
   @Override

@@ -90,11 +90,11 @@ public class ReportDefinition implements Serializable {
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /** Creates a new {@code ReportDefinition} instance. */
+  /** Constructs a new {@code ReportDefinition}. */
   public ReportDefinition() {}
 
   /**
-   * Creates a new {@code ReportDefinition} instance.
+   * Constructs a new {@code ReportDefinition}.
    *
    * @param id the ID for the report definition
    * @param name the name of the report definition

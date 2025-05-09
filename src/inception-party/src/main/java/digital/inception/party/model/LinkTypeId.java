@@ -36,7 +36,7 @@ public class LinkTypeId implements Serializable {
   /** The Unicode locale identifier for the link type. */
   private String localeId;
 
-  /** Creates a new {@code LinkTypeId} instance. */
+  /** Constructs a new {@code LinkTypeId}. */
   public LinkTypeId() {}
 
   /**

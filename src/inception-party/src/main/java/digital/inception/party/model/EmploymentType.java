@@ -150,7 +150,7 @@ public class EmploymentType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code EmploymentType} instance. */
+  /** Constructs a new {@code EmploymentType}. */
   public EmploymentType() {}
 
   /**

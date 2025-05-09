@@ -42,7 +42,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class SchedulerConfiguration {
 
-  /** Creates a new {@code SchedulerConfiguration} instance. */
+  /** Constructs a new {@code SchedulerConfiguration}. */
   public SchedulerConfiguration() {}
 
   /**

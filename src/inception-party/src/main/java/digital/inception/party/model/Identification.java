@@ -176,11 +176,11 @@ public class Identification implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Identification} instance. */
+  /** Constructs a new {@code Identification}. */
   public Identification() {}
 
   /**
-   * Creates a new {@code Identification} instance.
+   * Constructs a new {@code Identification}.
    *
    * @param type the code for the identification type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the
@@ -197,7 +197,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Creates a new {@code Identification} instance.
+   * Constructs a new {@code Identification}.
    *
    * @param type the code for the identification type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the

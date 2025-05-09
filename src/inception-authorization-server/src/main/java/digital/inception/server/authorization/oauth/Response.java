@@ -30,7 +30,7 @@ public abstract class Response {
   private final HttpStatus status;
 
   /**
-   * Creates a new {@code Response} instance.
+   * Constructs a new {@code Response}.
    *
    * @param status the HTTP status that should be returned for the OAuth2 response
    */

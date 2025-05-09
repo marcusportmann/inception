@@ -145,7 +145,7 @@ public class PhysicalAddressType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code PhysicalAddressType} instance. */
+  /** Constructs a new {@code PhysicalAddressType}. */
   public PhysicalAddressType() {}
 
   /**

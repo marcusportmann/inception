@@ -42,7 +42,7 @@ public class BackgroundSMSSender {
   private final SMSService smsService;
 
   /**
-   * Creates a new {@code BackgroundSMSSender} instance.
+   * Constructs a new {@code BackgroundSMSSender}.
    *
    * @param smsService the SMS Service
    */

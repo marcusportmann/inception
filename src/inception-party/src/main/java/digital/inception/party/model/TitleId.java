@@ -36,7 +36,7 @@ public class TitleId implements Serializable {
   /** The Unicode locale identifier for the title. */
   private String localeId;
 
-  /** Creates a new {@code TitleId} instance. */
+  /** Constructs a new {@code TitleId}. */
   public TitleId() {}
 
   /**

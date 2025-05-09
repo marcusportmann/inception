@@ -92,11 +92,11 @@ public class Skill implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Skill} instance. */
+  /** Constructs a new {@code Skill}. */
   public Skill() {}
 
   /**
-   * Creates a new {@code Skill} instance.
+   * Constructs a new {@code Skill}.
    *
    * @param type the skill type
    * @param level the proficiency level for the skill

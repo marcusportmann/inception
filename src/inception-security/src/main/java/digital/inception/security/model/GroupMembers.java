@@ -127,11 +127,11 @@ public class GroupMembers implements Serializable {
   @XmlElement(name = "UserDirectoryId", required = true)
   private UUID userDirectoryId;
 
-  /** Creates a new {@code GroupMembers} instance. */
+  /** Constructs a new {@code GroupMembers}. */
   public GroupMembers() {}
 
   /**
-   * Creates a new {@code GroupMembers} instance.
+   * Constructs a new {@code GroupMembers}.
    *
    * @param userDirectoryId the ID for the user directory the group members are associated with
    * @param groupName the name of the group the group members are associated with

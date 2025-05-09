@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 public class SpringSecurityXacmlPolicyDecisionPointContextProvider
     implements XacmlPolicyDecisionPointContextProvider {
 
-  /** Creates a new {@code SpringSecurityXacmlPolicyDecisionPointContextProvider} instance. */
+  /** Constructs a new {@code SpringSecurityXacmlPolicyDecisionPointContextProvider}. */
   public SpringSecurityXacmlPolicyDecisionPointContextProvider() {}
 
   @Override

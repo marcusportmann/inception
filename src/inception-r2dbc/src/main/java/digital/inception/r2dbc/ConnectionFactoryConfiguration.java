@@ -55,11 +55,11 @@ public class ConnectionFactoryConfiguration implements Serializable {
   /** The username used to create R2DBC connections to the database. */
   private String username;
 
-  /** Creates a new {@code ConnectionFactoryConfiguration} instance. */
+  /** Constructs a new {@code ConnectionFactoryConfiguration}. */
   public ConnectionFactoryConfiguration() {}
 
   /**
-   * Creates a new {@code ConnectionFactoryConfiguration} instance.
+   * Constructs a new {@code ConnectionFactoryConfiguration}.
    *
    * @param url the URL used to create R2DBC connections to the database
    * @param username the username used to create R2DBC connections to the database
@@ -87,7 +87,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Creates a new {@code ConnectionFactoryConfiguration} instance.
+   * Constructs a new {@code ConnectionFactoryConfiguration}.
    *
    * @param url the URL used to create R2DBC connections to the database
    * @param initialPoolSize the initial size of the R2DBC connection pool holding R2DBC connections
@@ -106,7 +106,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Creates a new {@code ConnectionFactoryConfiguration} instance.
+   * Constructs a new {@code ConnectionFactoryConfiguration}.
    *
    * @param url the URL used to create R2DBC connections to the database
    * @param username the username used to create R2DBC connections to the database

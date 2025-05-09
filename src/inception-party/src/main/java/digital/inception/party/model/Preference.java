@@ -93,11 +93,11 @@ public class Preference implements Serializable {
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
-  /** Creates a new {@code Preference} instance. */
+  /** Constructs a new {@code Preference}. */
   public Preference() {}
 
   /**
-   * Creates a new {@code Preference} instance.
+   * Constructs a new {@code Preference}.
    *
    * @param type the preference type
    * @param value the value for the preference

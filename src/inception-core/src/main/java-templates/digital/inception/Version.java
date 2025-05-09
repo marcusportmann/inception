@@ -26,6 +26,6 @@ public final class Version {
   /** The version of the Inception Framework. */
   public static final String INCEPTION_FRAMEWORK_VERSION = "${project.version}";
 
-  /** Creates a new {@code Version} instance. */
+  /** Constructs a new {@code Version}. */
   public Version() {}
 }

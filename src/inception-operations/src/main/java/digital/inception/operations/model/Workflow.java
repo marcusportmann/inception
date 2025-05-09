@@ -196,11 +196,11 @@ public class Workflow implements Serializable {
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** Creates a new {@code Workflow} instance. */
+  /** Constructs a new {@code Workflow}. */
   public Workflow() {}
 
   /**
-   * Creates a new {@code Workflow} instance.
+   * Constructs a new {@code Workflow}.
    *
    * @param id the ID for the workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
@@ -226,7 +226,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Creates a new {@code Workflow} instance.
+   * Constructs a new {@code Workflow}.
    *
    * @param id the ID for the workflow
    * @param parentId the ID for the parent workflow

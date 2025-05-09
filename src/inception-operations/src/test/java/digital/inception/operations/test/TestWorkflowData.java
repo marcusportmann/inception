@@ -99,11 +99,11 @@ public class TestWorkflowData implements Serializable {
   @NotNull
   private OffsetDateTime timestamp;
 
-  /** Creates a new {@code TestWorkflow} instance. */
+  /** Constructs a new {@code TestWorkflow}. */
   public TestWorkflowData() {}
 
   /**
-   * Creates a new {@code TestWorkflow} instance.
+   * Constructs a new {@code TestWorkflow}.
    *
    * @param id the ID
    * @param name the name

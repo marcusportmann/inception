@@ -107,7 +107,7 @@ public class UserDirectorySummary implements java.io.Serializable {
   @Column(name = "type", length = 100, nullable = false)
   private String type;
 
-  /** Creates a new {@code UserDirectorySummary} instance. */
+  /** Constructs a new {@code UserDirectorySummary}. */
   public UserDirectorySummary() {}
 
   /**

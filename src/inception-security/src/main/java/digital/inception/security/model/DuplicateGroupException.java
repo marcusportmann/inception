@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>DuplicateGroupException</b> is thrown to indicate that a security operation failed as a
- * result of a duplicate group.
+ * A {@code DuplicateGroupException} exception is thrown to indicate that a security operation
+ * failed as a result of a duplicate group.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +43,7 @@ public class DuplicateGroupException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateGroupException} instance.
+   * Constructs a new {@code DuplicateGroupException}.
    *
    * @param groupName the name of the group
    */

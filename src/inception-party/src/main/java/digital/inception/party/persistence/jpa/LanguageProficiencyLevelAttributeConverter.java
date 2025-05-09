@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class LanguageProficiencyLevelAttributeConverter
     extends AbstractCodeEnumAttributeConverter<LanguageProficiencyLevel> {
 
-  /** Creates a new {@code LanguageProficiencyLevelAttributeConverter} instance. */
+  /** Constructs a new {@code LanguageProficiencyLevelAttributeConverter}. */
   public LanguageProficiencyLevelAttributeConverter() {
     super(LanguageProficiencyLevel.class);
   }

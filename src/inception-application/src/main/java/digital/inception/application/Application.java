@@ -53,7 +53,7 @@ public abstract class Application {
   Map<String, Map<?, ?>> caches = new ConcurrentHashMap<>();
 
   /**
-   * Creates a new {@code Application} instance.
+   * Constructs a new {@code Application}.
    *
    * @param applicationContext the Spring application context
    */

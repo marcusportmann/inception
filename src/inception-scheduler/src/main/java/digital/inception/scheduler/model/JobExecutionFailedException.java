@@ -44,7 +44,7 @@ public class JobExecutionFailedException extends Exception {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code JobExecutionFailedException} instance.
+   * Constructs a new {@code JobExecutionFailedException}.
    *
    * @param jobId the ID for the job
    */
@@ -53,7 +53,7 @@ public class JobExecutionFailedException extends Exception {
   }
 
   /**
-   * Creates a new {@code JobExecutionFailedException} instance.
+   * Constructs a new {@code JobExecutionFailedException}.
    *
    * @param jobId the ID for the job
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -63,7 +63,7 @@ public class JobExecutionFailedException extends Exception {
   }
 
   /**
-   * Creates a new {@code JobExecutionFailedException} instance.
+   * Constructs a new {@code JobExecutionFailedException}.
    *
    * @param jobId the ID for the job
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code

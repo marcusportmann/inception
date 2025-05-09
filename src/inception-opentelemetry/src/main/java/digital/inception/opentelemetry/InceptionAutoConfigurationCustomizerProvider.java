@@ -40,7 +40,7 @@ public class InceptionAutoConfigurationCustomizerProvider
   private static final Logger log =
       Logger.getLogger(InceptionAutoConfigurationCustomizerProvider.class.getName());
 
-  /** Creates a new {@code InceptionAutoConfigurationCustomizerProvider} instance. */
+  /** Constructs a new {@code InceptionAutoConfigurationCustomizerProvider}. */
   public InceptionAutoConfigurationCustomizerProvider() {}
 
   @Override

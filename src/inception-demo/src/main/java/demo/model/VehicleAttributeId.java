@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code VehicleAttributeId} class implements the ID class for the <b>VehicleAttribute</b>
+ * The {@code VehicleAttributeId} class implements the ID class for the {@code VehicleAttribute}
  * class.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public class VehicleAttributeId implements Serializable {
   /** The ID for the vehicle the vehicle attribute is associated with. */
   private UUID vehicle;
 
-  /** Creates a new {@code VehicleAttributeId} instance. */
+  /** Constructs a new {@code VehicleAttributeId}. */
   public VehicleAttributeId() {}
 
   /**

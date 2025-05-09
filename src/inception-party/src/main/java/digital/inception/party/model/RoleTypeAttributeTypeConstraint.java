@@ -122,7 +122,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   private String value;
 
   /**
-   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
+   * Constructs a new {@code RoleTypeAttributeTypeConstraint}.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -135,7 +135,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   }
 
   /**
-   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
+   * Constructs a new {@code RoleTypeAttributeTypeConstraint}.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -157,7 +157,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   }
 
   /**
-   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
+   * Constructs a new {@code RoleTypeAttributeTypeConstraint}.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -170,7 +170,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   }
 
   /**
-   * Creates a new {@code RoleTypeAttributeTypeConstraint} instance.
+   * Constructs a new {@code RoleTypeAttributeTypeConstraint}.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -181,7 +181,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
     this(roleType, attributeType, "", type, null);
   }
 
-  /** Creates a new {@code RoleTypeAttributeTypeConstraint} instance. */
+  /** Constructs a new {@code RoleTypeAttributeTypeConstraint}. */
   public RoleTypeAttributeTypeConstraint() {}
 
   /**

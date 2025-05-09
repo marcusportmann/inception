@@ -29,8 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The {@code TransactionManagerProxy} class provides a proxy that tracks the Java Transaction (JTA)
- * API transactions associated with the current thread and managed by a <b>
- * javax.transaction.TransactionManager</b> implementation.
+ * API transactions associated with the current thread and managed by a {@code
+ * javax.transaction.TransactionManager} implementation.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ public class TransactionManagerProxy implements TransactionManager {
   private final TransactionManager transactionManager;
 
   /**
-   * Creates a new {@code TransactionManagerProxy} instance.
+   * Constructs a new {@code TransactionManagerProxy}.
    *
    * @param transactionManager the JTA transaction manager
    */

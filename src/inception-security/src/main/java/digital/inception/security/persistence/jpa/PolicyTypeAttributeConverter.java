@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class PolicyTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<PolicyType> {
 
-  /** Creates a new {@code PolicyTypeAttributeConverter} instance. */
+  /** Constructs a new {@code PolicyTypeAttributeConverter}. */
   public PolicyTypeAttributeConverter() {
     super(PolicyType.class);
   }

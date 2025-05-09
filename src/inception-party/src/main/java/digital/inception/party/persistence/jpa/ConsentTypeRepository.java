@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The {@code ConsentTypeRepository} interface declares the persistence for the <b>ConsentType</b>
+ * The {@code ConsentTypeRepository} interface declares the persistence for the {@code ConsentType}
  * domain type.
  *
  * @author Marcus Portmann

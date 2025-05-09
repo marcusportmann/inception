@@ -184,11 +184,11 @@ public class Education implements Serializable {
   @Column(name = "qualification_year", nullable = false)
   private Integer qualificationYear;
 
-  /** Creates a new {@code Education} instance. */
+  /** Constructs a new {@code Education}. */
   public Education() {}
 
   /**
-   * Creates a new {@code Education} instance.
+   * Constructs a new {@code Education}.
    *
    * @param institutionCountry the ISO 3166-1 alpha-2 code for the country the educational
    *     institution is located in
@@ -221,7 +221,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Creates a new {@code Education} instance.
+   * Constructs a new {@code Education}.
    *
    * @param institutionName the name of the educational institution
    * @param qualificationType the code for the qualification type
@@ -236,7 +236,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Creates a new {@code Education} instance.
+   * Constructs a new {@code Education}.
    *
    * @param institutionName the name of the educational institution
    * @param qualificationType the code for the qualification type
@@ -259,7 +259,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Creates a new {@code Education} instance.
+   * Constructs a new {@code Education}.
    *
    * @param institutionCountry the ISO 3166-1 alpha-2 code for the country the educational
    *     institution is located in

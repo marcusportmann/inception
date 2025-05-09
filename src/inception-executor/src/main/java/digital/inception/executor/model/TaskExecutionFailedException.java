@@ -49,7 +49,7 @@ public class TaskExecutionFailedException extends ServiceException {
   private final String originalMessage;
 
   /**
-   * Creates a new {@code TaskExecutionFailedException} instance.
+   * Constructs a new {@code TaskExecutionFailedException}.
    *
    * @param taskId the ID for the task
    */
@@ -59,7 +59,7 @@ public class TaskExecutionFailedException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code TaskExecutionFailedException} instance.
+   * Constructs a new {@code TaskExecutionFailedException}.
    *
    * @param taskId the ID for the task
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -70,7 +70,7 @@ public class TaskExecutionFailedException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code TaskExecutionFailedException} instance.
+   * Constructs a new {@code TaskExecutionFailedException}.
    *
    * @param taskId the ID for the task
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
@@ -82,7 +82,7 @@ public class TaskExecutionFailedException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code TaskExecutionFailedException} instance.
+   * Constructs a new {@code TaskExecutionFailedException}.
    *
    * @param taskId the ID for the task
    * @param message The message saved for later retrieval by the {@code getMessage()} method.

@@ -39,7 +39,7 @@ public class TestApiXacmlPolicyDecisionPointContextProvider
   private static final Logger log =
       LoggerFactory.getLogger(TestApiXacmlPolicyDecisionPointContextProvider.class);
 
-  /** Creates a new {@code TestApiXmlPolicyDecisionPointContextProvider} instance. */
+  /** Constructs a new {@code TestApiXmlPolicyDecisionPointContextProvider}. */
   public TestApiXacmlPolicyDecisionPointContextProvider() {}
 
   @Override

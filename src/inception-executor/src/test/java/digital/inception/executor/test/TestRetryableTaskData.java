@@ -38,11 +38,11 @@ public class TestRetryableTaskData implements Serializable {
   @JsonProperty(required = true)
   private String message;
 
-  /** Creates a new {@code TestRetryableTaskData} instance. */
+  /** Constructs a new {@code TestRetryableTaskData}. */
   public TestRetryableTaskData() {}
 
   /**
-   * Creates a new {@code TestRetryableTaskData} instance.
+   * Constructs a new {@code TestRetryableTaskData}.
    *
    * @param message the message
    */

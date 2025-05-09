@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class OffsetTimeToStringConverter implements Converter<OffsetDateTime, String> {
 
-  /** Creates a new {@code OffsetTimeToStringConverter} instance. */
+  /** Constructs a new {@code OffsetTimeToStringConverter}. */
   public OffsetTimeToStringConverter() {}
 
   @Override

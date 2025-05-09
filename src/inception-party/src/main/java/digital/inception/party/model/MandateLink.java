@@ -96,11 +96,11 @@ public class MandateLink implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code MandateLink} instance. */
+  /** Constructs a new {@code MandateLink}. */
   public MandateLink() {}
 
   /**
-   * Creates a new {@code MandateLink} instance.
+   * Constructs a new {@code MandateLink}.
    *
    * @param type the code for the link type
    * @param target the target for the mandate link

@@ -24,9 +24,9 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>PolicyDataMismatchException</b> is thrown to indicate that a security operation failed as a
- * result of a policy data mismatch error, i.e. where the policy ID or version does not match the
- * policy data.
+ * A {@code PolicyDataMismatchException} exception is thrown to indicate that a security operation
+ * failed as a result of a policy data mismatch error, i.e. where the policy ID or version does not
+ * match the policy data.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -47,7 +47,7 @@ public class PolicyDataMismatchException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code PolicyDataMismatchException} instance with the specified message.
+   * Constructs a new {@code PolicyDataMismatchException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -56,7 +56,7 @@ public class PolicyDataMismatchException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code PolicyDataMismatchException} instance with the specified message and
+   * Constructs a new {@code PolicyDataMismatchException} instance with the specified message and
    * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -68,7 +68,7 @@ public class PolicyDataMismatchException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code PolicyDataMismatchException} instance.
+   * Constructs a new {@code PolicyDataMismatchException}.
    *
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
    *     null} value is permitted if the cause is nonexistent or unknown)

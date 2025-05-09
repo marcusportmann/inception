@@ -89,11 +89,11 @@ public class Cars implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code Cars} instance. */
+  /** Constructs a new {@code Cars}. */
   public Cars() {}
 
   /**
-   * Creates a new {@code Cars} instance.
+   * Constructs a new {@code Cars}.
    *
    * @param cars the cars
    * @param total the total number of cars

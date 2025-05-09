@@ -163,11 +163,11 @@ public class ContactMechanism implements Serializable {
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
-  /** Creates a new {@code ContactMechanism} instance. */
+  /** Constructs a new {@code ContactMechanism}. */
   public ContactMechanism() {}
 
   /**
-   * Creates a new {@code ContactMechanism} instance.
+   * Constructs a new {@code ContactMechanism}.
    *
    * @param type the code for the contact mechanism type
    * @param role the code for the contact mechanism role
@@ -180,7 +180,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Creates a new {@code ContactMechanism} instance.
+   * Constructs a new {@code ContactMechanism}.
    *
    * @param type the code for the contact mechanism type
    * @param role the code for the contact mechanism role
@@ -195,7 +195,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Creates a new {@code ContactMechanism} instance.
+   * Constructs a new {@code ContactMechanism}.
    *
    * @param type the code for the contact mechanism type
    * @param role the code for the contact mechanism role

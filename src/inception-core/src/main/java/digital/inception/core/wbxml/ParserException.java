@@ -29,13 +29,13 @@ public class ParserException extends Exception {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Creates a new {@code ParserException} instance with {@code null} as its message. */
+  /** Constructs a new {@code ParserException} instance with {@code null} as its message. */
   public ParserException() {
     super();
   }
 
   /**
-   * Creates a new {@code ParserException} instance with the specified message.
+   * Constructs a new {@code ParserException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -44,9 +44,9 @@ public class ParserException extends Exception {
   }
 
   /**
-   * Creates a new {@code ParserException} instance with the specified cause and a message of <b>
-   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message of
-   * cause).
+   * Constructs a new {@code ParserException} instance with the specified cause and a message of
+   * {@code (cause==null ? null : cause.toString())} (which typically contains the class and message
+   * of cause).
    *
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
    *     null} value is permitted if the cause is nonexistent or unknown)
@@ -56,7 +56,7 @@ public class ParserException extends Exception {
   }
 
   /**
-   * Creates a new {@code ParserException} instance with the specified message and cause.
+   * Constructs a new {@code ParserException} instance with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code

@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code SegmentAllocationId} class implements the ID class for the <b>SegmentAllocation</b>
+ * The {@code SegmentAllocationId} class implements the ID class for the {@code SegmentAllocation}
  * class.
  *
  * @author Marcus Portmann
@@ -38,7 +38,7 @@ public class SegmentAllocationId implements Serializable {
   /** The code for the segment. */
   private String segment;
 
-  /** Creates a new {@code SegmentAllocationId} instance. */
+  /** Constructs a new {@code SegmentAllocationId}. */
   public SegmentAllocationId() {}
 
   /**

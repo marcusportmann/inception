@@ -24,15 +24,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The <b>RateLimitedRuleBasedSamplerBuilder</b> provides a builder for {@link
+ * The {@code RateLimitedRuleBasedSamplerBuilder} class provides a builder for {@link
  * RateLimitedRuleBasedSampler}. Allows configuration of sampling rules based on span attributes and
  * patterns.
  *
- * <p>This is based on the <b>io.opentelemetry.contrib.sampler.RuleBasedSamplerBuilder</b> class,
- * which forms part of the OpenTelemetry <b>opentelemetry-java-contrib</b> project.
+ * <p>This is based on the {@code io.opentelemetry.contrib.sampler.RuleBasedSamplerBuilder} class,
+ * which forms part of the OpenTelemetry {@code opentelemetry-java-contrib} project.
  *
- * <p>This is based on the <b>io.opentelemetry.contrib.sampler.RuleBasedSamplerBuilder</b> class,
- * which forms part of the OpenTelemetry <b>opentelemetry-java-contrib</b> project.
+ * <p>This is based on the {@code io.opentelemetry.contrib.sampler.RuleBasedSamplerBuilder} class,
+ * which forms part of the OpenTelemetry {@code opentelemetry-java-contrib} project.
  *
  * @author Marcus Portmann
  */
@@ -47,7 +47,7 @@ public final class RateLimitedRuleBasedSamplerBuilder {
   private final long spansPerSecondLimit;
 
   /**
-   * Creates a new {@code RuleBasedSamplerBuilder} instance.
+   * Constructs a new {@code RuleBasedSamplerBuilder}.
    *
    * @param enableRuleLogging enable additional logging during the processing of rules
    * @param spansPerSecondLimit the spans per second limit

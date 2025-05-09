@@ -37,7 +37,7 @@ public class PhysicalAddressRoleId implements Serializable {
   /** The Unicode locale identifier for the physical address role. */
   private String localeId;
 
-  /** Creates a new {@code PhysicalAddressRoleId} instance. */
+  /** Constructs a new {@code PhysicalAddressRoleId}. */
   public PhysicalAddressRoleId() {}
 
   /**

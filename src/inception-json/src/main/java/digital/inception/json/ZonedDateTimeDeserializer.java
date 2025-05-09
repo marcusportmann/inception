@@ -31,7 +31,7 @@ import java.time.ZonedDateTime;
  */
 public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
 
-  /** Creates a new {@code ZonedDateTimeDeserializer} instance. */
+  /** Constructs a new {@code ZonedDateTimeDeserializer}. */
   public ZonedDateTimeDeserializer() {}
 
   @Override

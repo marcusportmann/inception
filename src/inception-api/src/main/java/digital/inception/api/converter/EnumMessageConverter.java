@@ -55,7 +55,7 @@ public class EnumMessageConverter extends AbstractHttpMessageConverter<Enum<?>> 
   private static final ConcurrentHashMap<Class<? extends Enum<?>>, Method> enumJsonValueMethods =
       new ConcurrentHashMap<>();
 
-  /** Creates a new {@code EnumMessageConverter} instance. */
+  /** Constructs a new {@code EnumMessageConverter}. */
   public EnumMessageConverter() {
     super(MediaType.TEXT_PLAIN);
   }

@@ -197,11 +197,11 @@ public class Mandate implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Mandate} instance. */
+  /** Constructs a new {@code Mandate}. */
   public Mandate() {}
 
   /**
-   * Creates a new {@code Mandate} instance.
+   * Constructs a new {@code Mandate}.
    *
    * @param tenantId the ID for the tenant the mandate is associated with
    * @param type the code for the mandate type
@@ -215,7 +215,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Creates a new {@code Mandate} instance.
+   * Constructs a new {@code Mandate}.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -235,7 +235,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Creates a new {@code Mandate} instance.
+   * Constructs a new {@code Mandate}.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type

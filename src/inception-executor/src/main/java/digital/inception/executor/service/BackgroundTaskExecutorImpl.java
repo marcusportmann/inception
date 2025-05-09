@@ -80,7 +80,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   private ThreadPoolExecutor taskExecutor;
 
   /**
-   * Creates a new {@code BackgroundTaskExecutorImpl} instance.
+   * Constructs a new {@code BackgroundTaskExecutorImpl}.
    *
    * @param executorService the Executor Service
    */
@@ -223,7 +223,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
     private final Task task;
 
     /**
-     * Creates a new {@code TaskExecutorThread} instance.
+     * Constructs a new {@code TaskExecutorThread}.
      *
      * @param executorService the Executor Service
      * @param task the task

@@ -36,7 +36,7 @@ public class ConsentTypeId implements Serializable {
   /** The Unicode locale identifier for the consent type. */
   private String localeId;
 
-  /** Creates a new {@code ConsentTypeId} instance. */
+  /** Constructs a new {@code ConsentTypeId}. */
   public ConsentTypeId() {}
 
   /**

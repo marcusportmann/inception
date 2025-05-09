@@ -69,11 +69,11 @@ public class TokenClaim implements Serializable {
   @NotNull
   private List<String> values;
 
-  /** Creates a new {@code TokenClaim} instance. */
+  /** Constructs a new {@code TokenClaim}. */
   public TokenClaim() {}
 
   /**
-   * Creates a new {@code TokenClaim} instance.
+   * Constructs a new {@code TokenClaim}.
    *
    * @param name the name of the token claim
    * @param values the values for the token claim
@@ -84,7 +84,7 @@ public class TokenClaim implements Serializable {
   }
 
   /**
-   * Creates a new {@code TokenClaim} instance.
+   * Constructs a new {@code TokenClaim}.
    *
    * @param name the name of the token claim
    * @param values the values for the token claim

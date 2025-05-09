@@ -32,13 +32,13 @@ public class MarkovTextGenerator {
   private final Map<String, Chain<String>> chainsMap = new ConcurrentHashMap<>();
   private final Random random = new Random();
 
-  /** Creates a new {@code MarkovTextGenerator} instance. */
+  /** Constructs a new {@code MarkovTextGenerator}. */
   public MarkovTextGenerator() {}
 
   /**
-   * Returns a new <b>MarkovTextGenerator</b> populated using the Jules Verne text.
+   * Returns a new {@code MarkovTextGenerator} populated using the Jules Verne text.
    *
-   * @return a new <b>MarkovTextGenerator</b> populated using the Jules Verne text
+   * @return a new {@code MarkovTextGenerator} populated using the Jules Verne text
    */
   public static MarkovTextGenerator getJulesVerneGenerator() {
     try (InputStream is =
@@ -60,9 +60,9 @@ public class MarkovTextGenerator {
   }
 
   /**
-   * Returns a new <b>MarkovTextGenerator</b> populated using the Lorem Ipsum text.
+   * Returns a new {@code MarkovTextGenerator} populated using the Lorem Ipsum text.
    *
-   * @return a new <b>MarkovTextGenerator</b> populated using the Lorem Ipsum text
+   * @return a new {@code MarkovTextGenerator} populated using the Lorem Ipsum text
    */
   public static MarkovTextGenerator getLoremIpsumGenerator() {
     try (InputStream is =
@@ -173,7 +173,7 @@ public class MarkovTextGenerator {
     private final Map<T, Integer> weightMap = new ConcurrentHashMap<>();
 
     /**
-     * Creates a new {@code Chain} instance.
+     * Constructs a new {@code Chain}.
      *
      * @param input the input
      */

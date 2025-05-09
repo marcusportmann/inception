@@ -40,7 +40,7 @@ public class AssociationPropertyTypeId implements Serializable {
   /** The Unicode locale identifier for the association property type. */
   private String localeId;
 
-  /** Creates a new {@code AssociationPropertyTypeId} instance. */
+  /** Constructs a new {@code AssociationPropertyTypeId}. */
   public AssociationPropertyTypeId() {}
 
   /**

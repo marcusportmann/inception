@@ -120,7 +120,7 @@ public class ProblemDetails {
   @JsonProperty
   private List<ValidationError> validationErrors;
 
-  /** Creates a new {@code ProblemDetails} instance. */
+  /** Constructs a new {@code ProblemDetails}. */
   public ProblemDetails() {}
 
   /**

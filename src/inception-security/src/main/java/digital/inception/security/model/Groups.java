@@ -114,11 +114,11 @@ public class Groups implements Serializable {
   @XmlElement(name = "UserDirectoryId", required = true)
   private UUID userDirectoryId;
 
-  /** Creates a new {@code Groups} instance. */
+  /** Constructs a new {@code Groups}. */
   public Groups() {}
 
   /**
-   * Creates a new {@code Groups} instance.
+   * Constructs a new {@code Groups}.
    *
    * @param userDirectoryId the ID for the user directory the groups are associated with
    * @param groups the groups

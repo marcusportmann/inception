@@ -46,7 +46,7 @@ public class DuplicateCodeCategoryException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateCodeCategoryException} instance.
+   * Constructs a new {@code DuplicateCodeCategoryException}.
    *
    * @param codeCategoryId the ID for the code category
    */

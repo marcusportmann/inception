@@ -186,11 +186,11 @@ public class ArchivedTask implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code ArchivedTask} instance. */
+  /** Constructs a new {@code ArchivedTask}. */
   public ArchivedTask() {}
 
   /**
-   * Creates a new {@code ArchivedTask} instance.
+   * Constructs a new {@code ArchivedTask}.
    *
    * @param id the ID for the task
    * @param batchId the ID for the task batch

@@ -36,7 +36,7 @@ public class MergedMessageSource extends ReloadableResourceBundleMessageSource {
   private final PathMatchingResourcePatternResolver resolver =
       new PathMatchingResourcePatternResolver();
 
-  /** Creates a new {@code MergedMessageSource} instance. */
+  /** Constructs a new {@code MergedMessageSource}. */
   public MergedMessageSource() {}
 
   @Override

@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ErrorApiConfiguration {
 
-  /** Creates a new {@code ErrorApiConfiguration} instance. */
+  /** Constructs a new {@code ErrorApiConfiguration}. */
   public ErrorApiConfiguration() {}
 
   /**

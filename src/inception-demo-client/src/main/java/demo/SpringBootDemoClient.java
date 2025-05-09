@@ -59,7 +59,7 @@ public class SpringBootDemoClient {
   /** The keystore type for the demo client. */
   private static final String DEMO_CLIENT_KEYSTORE_TYPE = "pkcs12";
 
-  /** Creates a new {@code DemoClient} instance. */
+  /** Constructs a new {@code DemoClient}. */
   public SpringBootDemoClient() {}
 
   /**

@@ -43,7 +43,7 @@ public class RoleTypeAttributeTypeConstraintId implements Serializable {
   /** The constraint type. */
   private ConstraintType type;
 
-  /** Creates a new {@code RoleTypeAttributeTypeConstraintId} instance. */
+  /** Constructs a new {@code RoleTypeAttributeTypeConstraintId}. */
   public RoleTypeAttributeTypeConstraintId() {}
 
   /**

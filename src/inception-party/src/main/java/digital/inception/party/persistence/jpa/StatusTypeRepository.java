@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The {@code StatusTypeRepository} interface declares the persistence for the <b>StatusType</b>
+ * The {@code StatusTypeRepository} interface declares the persistence for the {@code StatusType}
  * domain type.
  *
  * @author Marcus Portmann

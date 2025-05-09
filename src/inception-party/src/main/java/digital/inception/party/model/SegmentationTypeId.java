@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code SegmentationTypeId} class implements the ID class for the <b>SegmentationType</b>
+ * The {@code SegmentationTypeId} class implements the ID class for the {@code SegmentationType}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class SegmentationTypeId implements Serializable {
   /** The Unicode locale identifier for the segmentation type. */
   private String localeId;
 
-  /** Creates a new {@code SegmentationTypeId} instance. */
+  /** Constructs a new {@code SegmentationTypeId}. */
   public SegmentationTypeId() {}
 
   /**

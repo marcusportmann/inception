@@ -138,11 +138,11 @@ public class SMS implements Serializable {
   @Column(name = "status", length = 50, nullable = false)
   private SMSStatus status;
 
-  /** Creates a new {@code SMS} instance. */
+  /** Constructs a new {@code SMS}. */
   public SMS() {}
 
   /**
-   * Creates a new {@code SMS} instance.
+   * Constructs a new {@code SMS}.
    *
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
@@ -154,7 +154,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Creates a new {@code SMS} instance.
+   * Constructs a new {@code SMS}.
    *
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
@@ -168,7 +168,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Creates a new {@code SMS} instance.
+   * Constructs a new {@code SMS}.
    *
    * @param id the ID for the SMS
    * @param mobileNumber the mobile number to send the SMS to

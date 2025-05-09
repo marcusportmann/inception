@@ -40,7 +40,7 @@ public class RoleTypePreferenceTypeConstraintId implements Serializable {
   /** The constraint type. */
   private ConstraintType type;
 
-  /** Creates a new {@code RoleTypePreferenceTypeConstraintId} instance. */
+  /** Constructs a new {@code RoleTypePreferenceTypeConstraintId}. */
   public RoleTypePreferenceTypeConstraintId() {}
 
   /**

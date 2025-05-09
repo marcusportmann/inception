@@ -21,8 +21,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The {@code MailTemplateSummaryRepository} interface declares the persistence for the <b>
- * MailTemplateSummary</b> domain type.
+ * The {@code MailTemplateSummaryRepository} interface declares the persistence for the {@code
+ * MailTemplateSummary} domain type.
  *
  * @author Marcus Portmann
  */

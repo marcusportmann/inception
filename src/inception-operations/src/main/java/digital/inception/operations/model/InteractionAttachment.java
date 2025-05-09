@@ -52,6 +52,8 @@ import java.util.UUID;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class InteractionAttachment implements Serializable {
 
+  ADD SOURCE ID FOR SPLITTING
+
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The data for the interaction attachment. */
@@ -128,7 +130,7 @@ public class InteractionAttachment implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** Creates a new {@code InteractionAttachment} instance. */
+  /** Constructs a new {@code InteractionAttachment}. */
   public InteractionAttachment() {}
 
   /**

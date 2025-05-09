@@ -54,11 +54,11 @@ public class TestSimpleTaskData implements Serializable {
   @JsonProperty(required = true)
   private boolean updateMessage;
 
-  /** Creates a new {@code TestSimpleTaskData} instance. */
+  /** Constructs a new {@code TestSimpleTaskData}. */
   public TestSimpleTaskData() {}
 
   /**
-   * Creates a new {@code TestSimpleTaskData} instance.
+   * Constructs a new {@code TestSimpleTaskData}.
    *
    * @param message the message
    */
@@ -68,7 +68,7 @@ public class TestSimpleTaskData implements Serializable {
   }
 
   /**
-   * Creates a new {@code TestSimpleTaskData} instance.
+   * Constructs a new {@code TestSimpleTaskData}.
    *
    * @param message the message
    * @param updateMessage {@code true} if the message should be updated or {@code false} otherwise

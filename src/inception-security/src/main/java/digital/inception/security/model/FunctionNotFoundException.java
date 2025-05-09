@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>FunctionNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of a function that could not be found.
+ * A {@code FunctionNotFoundException} exception is thrown to indicate that a security operation
+ * failed as a result of a function that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class FunctionNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code FunctionNotFoundException} instance.
+   * Constructs a new {@code FunctionNotFoundException}.
    *
    * @param functionCode the code for the function
    */

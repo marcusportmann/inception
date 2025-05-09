@@ -32,7 +32,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @Configuration
 public class ValidationConfiguration {
 
-  /** Creates a new {@code ValidationConfiguration} instance. */
+  /** Constructs a new {@code ValidationConfiguration}. */
   public ValidationConfiguration() {}
 
   /**

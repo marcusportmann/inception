@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code SourceOfFundsTypeId} class implements the ID class for the <b>SourceOfFundsType</b>
+ * The {@code SourceOfFundsTypeId} class implements the ID class for the {@code SourceOfFundsType}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class SourceOfFundsTypeId implements Serializable {
   /** The Unicode locale identifier for the source of funds type. */
   private String localeId;
 
-  /** Creates a new {@code SourceOfFundsTypeId} instance. */
+  /** Constructs a new {@code SourceOfFundsTypeId}. */
   public SourceOfFundsTypeId() {}
 
   /**

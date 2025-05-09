@@ -120,11 +120,11 @@ public class Users implements Serializable {
   @XmlElement(name = "User", required = true)
   private List<User> users;
 
-  /** Creates a new {@code Users} instance. */
+  /** Constructs a new {@code Users}. */
   public Users() {}
 
   /**
-   * Creates a new {@code Users} instance.
+   * Constructs a new {@code Users}.
    *
    * @param userDirectoryId the ID for the user directory the users are associated with
    * @param users the users

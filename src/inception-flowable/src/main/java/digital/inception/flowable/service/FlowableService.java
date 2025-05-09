@@ -63,7 +63,7 @@
 //  private final ProcessEngine processEngine;
 //
 //  /**
-//   * Creates a new {@code ProcessService} instance.
+//   * Constructs a new {@code ProcessService}.
 //   *
 //   * @param processEngine the Camunda Process Engine
 //   */

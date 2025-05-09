@@ -41,7 +41,7 @@ public class PartyReferenceApiControllerImpl extends SecureApiController
   private final PartyReferenceService partyReferenceService;
 
   /**
-   * Creates a new {@code PartyReferenceApiControllerImpl} instance.
+   * Constructs a new {@code PartyReferenceApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param partyReferenceService the Party Reference Service

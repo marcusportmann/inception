@@ -117,7 +117,7 @@ public class Gender implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code Gender} instance. */
+  /** Constructs a new {@code Gender}. */
   public Gender() {}
 
   /**

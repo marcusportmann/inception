@@ -37,7 +37,7 @@ public class SourceOfFundsId implements Serializable {
   /** The code for the source of funds type. */
   private String type;
 
-  /** Creates a new {@code SourceOfFundsId} instance. */
+  /** Constructs a new {@code SourceOfFundsId}. */
   public SourceOfFundsId() {}
 
   /**

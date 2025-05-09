@@ -36,7 +36,7 @@ public class RaceId implements Serializable {
   /** The Unicode locale identifier for the race. */
   private String localeId;
 
-  /** Creates a new {@code RaceId} instance. */
+  /** Constructs a new {@code RaceId}. */
   public RaceId() {}
 
   /**

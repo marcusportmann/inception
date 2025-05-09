@@ -142,7 +142,7 @@ public class MandataryRole implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code MandataryRole} instance. */
+  /** Constructs a new {@code MandataryRole}. */
   public MandataryRole() {}
 
   /**

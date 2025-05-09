@@ -119,7 +119,7 @@ public class RolePurpose implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code RolePurpose} instance. */
+  /** Constructs a new {@code RolePurpose}. */
   public RolePurpose() {}
 
   /**

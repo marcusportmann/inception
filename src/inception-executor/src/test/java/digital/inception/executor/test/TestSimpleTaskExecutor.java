@@ -36,7 +36,7 @@ public class TestSimpleTaskExecutor extends SimpleTaskExecutor<TestSimpleTaskDat
   private static final Logger log = LoggerFactory.getLogger(TestSimpleTaskExecutor.class);
 
   /**
-   * Creates a new {@code SimpleTaskExecutor} instance
+   * Constructs a new {@code SimpleTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

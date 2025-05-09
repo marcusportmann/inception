@@ -45,7 +45,7 @@ public class TokenNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code TokenNotFoundException} instance.
+   * Constructs a new {@code TokenNotFoundException}.
    *
    * @param tokenId the ID for the token
    */

@@ -200,7 +200,7 @@ public class DocumentSummary implements Serializable {
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** Creates a new {@code DocumentSummary} instance. */
+  /** Constructs a new {@code DocumentSummary}. */
   public DocumentSummary() {}
 
   /**

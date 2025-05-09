@@ -37,7 +37,7 @@ import java.util.Date;
  */
 public class InceptionModule extends SimpleModule {
 
-  /** Creates a new {@code InceptionModule} instance. */
+  /** Constructs a new {@code InceptionModule}. */
   public InceptionModule() {
     super("InceptionModule", new Version(1, 0, 0, null, "digital.inception", "inception-json"));
 

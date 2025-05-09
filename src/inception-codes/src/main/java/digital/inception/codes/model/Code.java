@@ -99,11 +99,11 @@ public class Code implements Serializable {
   @Column(name = "value", length = 2000, nullable = false)
   private String value;
 
-  /** Creates a new {@code Code} instance. */
+  /** Constructs a new {@code Code}. */
   public Code() {}
 
   /**
-   * Creates a new {@code Code} instance.
+   * Constructs a new {@code Code}.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    */
@@ -112,7 +112,7 @@ public class Code implements Serializable {
   }
 
   /**
-   * Creates a new {@code Code} instance.
+   * Constructs a new {@code Code}.
    *
    * @param id the ID for the code
    * @param codeCategoryId the ID for the code category the code is associated with

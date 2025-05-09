@@ -118,7 +118,7 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
   private PolicySet rootPolicySet = null;
 
   /**
-   * Creates a new {@code XacmlPolicyDecisionPointDynamicPolicyProvider} instance.
+   * Constructs a new {@code XacmlPolicyDecisionPointDynamicPolicyProvider}.
    *
    * @param xacmlParserFactory the factory used to create XACML parsers
    * @param expressionFactory the expression factory
@@ -486,7 +486,7 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
   public static class Factory
       extends CloseablePolicyProvider.Factory<XacmlPolicyDecisionPointPolicyProvider> {
 
-    /** Creates a new {@code Factory} instance. */
+    /** Constructs a new {@code Factory}. */
     public Factory() {
       int xxx = 0;
       xxx++;

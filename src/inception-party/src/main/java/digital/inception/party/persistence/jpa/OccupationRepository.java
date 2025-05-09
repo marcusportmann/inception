@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The {@code OccupationRepository} interface declares the persistence for the <b>Occupation</b>
+ * The {@code OccupationRepository} interface declares the persistence for the {@code Occupation}
  * domain type.
  *
  * @author Marcus Portmann

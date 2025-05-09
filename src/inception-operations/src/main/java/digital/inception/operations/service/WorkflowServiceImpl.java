@@ -60,7 +60,7 @@ public class WorkflowServiceImpl implements WorkflowService {
   private final WorkflowStore workflowStore;
 
   /**
-   * Creates a new {@code WorkflowServiceImpl} instance.
+   * Constructs a new {@code WorkflowServiceImpl}.
    *
    * @param validator the JSR-380 validator
    * @param workflowStore the Workflow Store

@@ -51,7 +51,7 @@ public class TestApiControllerImpl extends SecureApiController implements TestAp
   private final WebClient.Builder webClientBuilder;
 
   /**
-   * Creates a new {@code TestApiControllerImpl} instance.
+   * Constructs a new {@code TestApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param webClientBuilder the web client builder

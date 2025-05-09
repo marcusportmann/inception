@@ -80,7 +80,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
   private int maximumJobExecutionAttempts;
 
   /**
-   * Creates a new {@code SchedulerServiceImpl} instance.
+   * Constructs a new {@code SchedulerServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param jobRepository the Job Repository

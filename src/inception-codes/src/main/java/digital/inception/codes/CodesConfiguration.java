@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "codesEntityManagerFactory")
 public class CodesConfiguration {
 
-  /** Creates a new {@code CodesConfiguration} instance. */
+  /** Constructs a new {@code CodesConfiguration}. */
   public CodesConfiguration() {}
 
   /**

@@ -68,11 +68,11 @@ public class UpdateWorkflowRequest implements Serializable {
   @XmlElement(name = "Status")
   private WorkflowStatus status;
 
-  /** Creates a new {@code UpdateWorkflowRequest} instance. */
+  /** Constructs a new {@code UpdateWorkflowRequest}. */
   public UpdateWorkflowRequest() {}
 
   /**
-   * Creates a new {@code UpdateWorkflowRequest} instance.
+   * Constructs a new {@code UpdateWorkflowRequest}.
    *
    * @param id the ID for the workflow
    * @param data the updated data for the workflow
@@ -83,7 +83,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Creates a new {@code UpdateWorkflowRequest} instance.
+   * Constructs a new {@code UpdateWorkflowRequest}.
    *
    * @param id the ID for the workflow
    * @param status the updated status of the workflow
@@ -94,7 +94,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Creates a new {@code UpdateWorkflowRequest} instance.
+   * Constructs a new {@code UpdateWorkflowRequest}.
    *
    * @param id the ID for the workflow
    * @param status the updated status of the workflow

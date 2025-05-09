@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class StringToCodeEnumConverterFactory implements ConverterFactory<String, CodeEnum> {
 
-  /** Creates a new {@code StringToCodeEnumConverterFactory} instance. */
+  /** Constructs a new {@code StringToCodeEnumConverterFactory}. */
   public StringToCodeEnumConverterFactory() {}
 
   @Override
@@ -57,7 +57,7 @@ public final class StringToCodeEnumConverterFactory implements ConverterFactory<
     private final Class<E> enumType;
 
     /**
-     * Creates a new {@code StringToCodeEnumConverter} instance.
+     * Constructs a new {@code StringToCodeEnumConverter}.
      *
      * @param enumType the enum type
      */

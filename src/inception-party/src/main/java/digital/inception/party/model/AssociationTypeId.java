@@ -37,7 +37,7 @@ public class AssociationTypeId implements Serializable {
   /** The Unicode locale identifier for the association type. */
   private String localeId;
 
-  /** Creates a new {@code AssociationTypeId} instance. */
+  /** Constructs a new {@code AssociationTypeId}. */
   public AssociationTypeId() {}
 
   /**

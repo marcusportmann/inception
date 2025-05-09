@@ -76,11 +76,11 @@ public class InteractionSourceBase implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private InteractionSourceType type;
 
-  /** Creates a new {@code InteractionSourceBase} instance. */
+  /** Constructs a new {@code InteractionSourceBase}. */
   protected InteractionSourceBase() {}
 
   /**
-   * Creates a new {@code InteractionSourceBase} instance.
+   * Constructs a new {@code InteractionSourceBase}.
    *
    * @param type the interaction source type
    */
@@ -89,7 +89,7 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Creates a new {@code InteractionSourceBase} instance.
+   * Constructs a new {@code InteractionSourceBase}.
    *
    * @param id the unique identifier for the interaction source
    * @param type the interaction source type
@@ -100,7 +100,7 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Creates a new {@code InteractionSourceBase} instance.
+   * Constructs a new {@code InteractionSourceBase}.
    *
    * @param id the unique identifier for the interaction source
    * @param type the type for the interaction source

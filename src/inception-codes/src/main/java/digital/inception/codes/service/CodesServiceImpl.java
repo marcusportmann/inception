@@ -87,7 +87,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
   private List<CodeProvider> codeProviders;
 
   /**
-   * Creates a new {@code CodesServiceImpl} instance.
+   * Constructs a new {@code CodesServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param codeCategoryRepository the Code Category Repository
@@ -509,7 +509,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
    * Retrieve the codes for the code category.
    *
    * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * been registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
    * file.
    *
    * @param codeCategoryId the ID for the code category
@@ -547,7 +547,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
    * Retrieve the codes for the code category using the specified parameters.
    *
    * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * been registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
    * file.
    *
    * @param codeCategoryId the ID for the code category

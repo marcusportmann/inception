@@ -107,11 +107,11 @@ public class TaxNumber implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code TaxNumber} instance. */
+  /** Constructs a new {@code TaxNumber}. */
   public TaxNumber() {}
 
   /**
-   * Creates a new {@code TaxNumber} instance.
+   * Constructs a new {@code TaxNumber}.
    *
    * @param type the code for the tax number type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
@@ -124,7 +124,7 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaxNumber} instance.
+   * Constructs a new {@code TaxNumber}.
    *
    * @param type the code for the tax number type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number

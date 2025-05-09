@@ -106,7 +106,7 @@ public class ApplicationDataSourceConfiguration {
   private int validationTimeout;
 
   /**
-   * Creates a new {@code ApplicationDataSourceConfiguration} instance.
+   * Constructs a new {@code ApplicationDataSourceConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

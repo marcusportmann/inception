@@ -55,7 +55,7 @@ public class ExecutorApiControllerImpl extends SecureApiController
   private final ExecutorService executorService;
 
   /**
-   * Creates a new {@code ExecutorApiControllerImpl} instance.
+   * Constructs a new {@code ExecutorApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param executorService the Executor Service

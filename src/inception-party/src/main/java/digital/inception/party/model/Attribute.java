@@ -245,11 +245,11 @@ public class Attribute implements Serializable {
   @Column(name = "unit", length = 50)
   private MeasurementUnit unit;
 
-  /** Creates a new {@code Attribute} instance. */
+  /** Constructs a new {@code Attribute}. */
   public Attribute() {}
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    */
@@ -258,7 +258,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param stringValue the string value for the attribute
@@ -269,7 +269,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param booleanValue the boolean value for the attribute
@@ -280,7 +280,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param doubleValue the double value for the attribute
@@ -291,7 +291,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param dateValue the date value for the attribute
@@ -302,7 +302,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param decimalValue the decimal value for the attribute
@@ -313,7 +313,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param decimalValue the decimal value for the attribute
@@ -326,7 +326,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param integerValue the integer value for the attribute
@@ -337,7 +337,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param integerValue the integer value for the attribute
@@ -350,7 +350,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Creates a new {@code Attribute} instance.
+   * Constructs a new {@code Attribute}.
    *
    * @param type the attribute type
    * @param doubleValue the double value for the attribute

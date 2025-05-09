@@ -154,11 +154,11 @@ public class AssociationProperty implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code AssociationProperty} instance. */
+  /** Constructs a new {@code AssociationProperty}. */
   public AssociationProperty() {}
 
   /**
-   * Creates a new {@code AssociationProperty} instance.
+   * Constructs a new {@code AssociationProperty}.
    *
    * @param type the code for the association property type
    */
@@ -167,7 +167,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code AssociationProperty} instance.
+   * Constructs a new {@code AssociationProperty}.
    *
    * @param type the code for the association property type
    * @param stringValue the string value for the association property
@@ -178,7 +178,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code AssociationProperty} instance.
+   * Constructs a new {@code AssociationProperty}.
    *
    * @param type the code for the association property type
    * @param booleanValue the boolean value for the association property
@@ -189,7 +189,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code AssociationProperty} instance.
+   * Constructs a new {@code AssociationProperty}.
    *
    * @param type the code for the association property type
    * @param doubleValue the double value for the association property
@@ -200,7 +200,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code AssociationProperty} instance.
+   * Constructs a new {@code AssociationProperty}.
    *
    * @param type the code for the association property type
    * @param dateValue the date value for the association property
@@ -211,7 +211,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code AssociationProperty} instance.
+   * Constructs a new {@code AssociationProperty}.
    *
    * @param type the code for the association property type
    * @param decimalValue the decimal value for the association property
@@ -222,7 +222,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code AssociationProperty} instance.
+   * Constructs a new {@code AssociationProperty}.
    *
    * @param type the code for the association property type
    * @param integerValue the integer value for the association property

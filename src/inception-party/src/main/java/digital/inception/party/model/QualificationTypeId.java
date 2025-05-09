@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code QualificationTypeId} class implements the ID class for the <b>QualificationType</b>
+ * The {@code QualificationTypeId} class implements the ID class for the {@code QualificationType}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class QualificationTypeId implements Serializable {
   /** The Unicode locale identifier for the qualification type. */
   private String localeId;
 
-  /** Creates a new {@code QualificationTypeId} instance. */
+  /** Constructs a new {@code QualificationTypeId}. */
   public QualificationTypeId() {}
 
   /**

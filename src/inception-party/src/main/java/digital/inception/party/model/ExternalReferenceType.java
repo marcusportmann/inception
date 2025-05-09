@@ -172,7 +172,7 @@ public class ExternalReferenceType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code ExternalReferenceType} instance. */
+  /** Constructs a new {@code ExternalReferenceType}. */
   public ExternalReferenceType() {}
 
   /**

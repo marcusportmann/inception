@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code IndustryAllocationId} class implements the ID class for the <b>IndustryAllocation</b>
+ * The {@code IndustryAllocationId} class implements the ID class for the {@code IndustryAllocation}
  * class.
  *
  * @author Marcus Portmann
@@ -41,7 +41,7 @@ public class IndustryAllocationId implements Serializable {
   /** The code for the industry classification system. */
   private String system;
 
-  /** Creates a new {@code IndustryAllocationId} instance. */
+  /** Constructs a new {@code IndustryAllocationId}. */
   public IndustryAllocationId() {}
 
   /**

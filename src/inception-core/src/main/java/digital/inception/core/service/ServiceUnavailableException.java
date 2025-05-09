@@ -44,7 +44,7 @@ public class ServiceUnavailableException extends ServiceException {
   private final ProblemDetails problemDetails;
 
   /**
-   * Creates a new {@code ServiceUnavailableException} instance with the specified message.
+   * Constructs a new {@code ServiceUnavailableException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -55,7 +55,7 @@ public class ServiceUnavailableException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code ServiceUnavailableException} instance with the specified message and
+   * Constructs a new {@code ServiceUnavailableException} instance with the specified message and
    * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -69,7 +69,7 @@ public class ServiceUnavailableException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code ServiceUnavailableException} instance with the specified message and
+   * Constructs a new {@code ServiceUnavailableException} instance with the specified message and
    * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -86,7 +86,7 @@ public class ServiceUnavailableException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code ServiceUnavailableException} instance with the specified message and
+   * Constructs a new {@code ServiceUnavailableException} instance with the specified message and
    * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.

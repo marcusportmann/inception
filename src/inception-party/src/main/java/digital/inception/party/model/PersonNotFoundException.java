@@ -46,7 +46,7 @@ public class PersonNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code PersonNotFoundException} instance.
+   * Constructs a new {@code PersonNotFoundException}.
    *
    * @param tenantId the ID for the tenant
    * @param personId the ID for the person

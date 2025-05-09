@@ -46,7 +46,7 @@ public class DuplicateMailTemplateException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateMailTemplateException} instance.
+   * Constructs a new {@code DuplicateMailTemplateException}.
    *
    * @param mailTemplateId the ID for the mail template
    */

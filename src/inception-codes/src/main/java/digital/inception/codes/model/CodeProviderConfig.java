@@ -38,7 +38,7 @@ public class CodeProviderConfig implements Serializable {
   private final String name;
 
   /**
-   * Creates a new {@code CodeProviderConfig} instance.
+   * Constructs a new {@code CodeProviderConfig}.
    *
    * @param name the name of the code provider
    * @param className fully qualified name of the class that implements the code provider

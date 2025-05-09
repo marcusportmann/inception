@@ -50,11 +50,11 @@ public class ServiceError {
   @XmlSchemaType(name = "dateTime")
   private OffsetDateTime timestamp;
 
-  /** Creates a new {@code ServiceError} instance. */
+  /** Constructs a new {@code ServiceError}. */
   public ServiceError() {}
 
   /**
-   * Creates a new {@code ServiceError} instance.
+   * Constructs a new {@code ServiceError}.
    *
    * @param message the message for the service error
    */

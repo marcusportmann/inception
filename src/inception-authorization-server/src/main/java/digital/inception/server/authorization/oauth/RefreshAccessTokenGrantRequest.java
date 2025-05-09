@@ -43,7 +43,7 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
   private final String refreshToken;
 
   /**
-   * Creates a new {@code RefreshAccessTokenGrantRequest} instance.
+   * Constructs a new {@code RefreshAccessTokenGrantRequest}.
    *
    * @param parameters the request parameters
    */

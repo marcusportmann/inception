@@ -24,9 +24,9 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>ExistingPasswordException</b> is thrown to indicate that a security operation failed as a
- * result of an existing password e.g. when attempting to change a user's password using a password
- * that forms part of the user's password history.
+ * An {@code ExistingPasswordException} exception is thrown to indicate that a security operation
+ * failed as a result of an existing password e.g. when attempting to change a user's password using
+ * a password that forms part of the user's password history.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class ExistingPasswordException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ExistingPasswordException} instance.
+   * Constructs a new {@code ExistingPasswordException}.
    *
    * @param username the username for the user
    */

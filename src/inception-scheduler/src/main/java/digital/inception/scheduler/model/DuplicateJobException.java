@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>DuplicateJobException</b> is thrown to indicate that a scheduler operation failed as a
- * result of a duplicate job.
+ * A {@code DuplicateJobException} exception is thrown to indicate that a scheduler operation failed
+ * as a result of a duplicate job.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class DuplicateJobException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateJobException} instance.
+   * Constructs a new {@code DuplicateJobException}.
    *
    * @param jobId the ID for the job
    */

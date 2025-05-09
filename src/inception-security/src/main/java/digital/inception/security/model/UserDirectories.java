@@ -92,11 +92,11 @@ public class UserDirectories implements Serializable {
   @XmlElement(name = "UserDirectory", required = true)
   private List<UserDirectory> userDirectories;
 
-  /** Creates a new {@code UserDirectories} instance. */
+  /** Constructs a new {@code UserDirectories}. */
   public UserDirectories() {}
 
   /**
-   * Creates a new {@code UserDirectories} instance.
+   * Constructs a new {@code UserDirectories}.
    *
    * @param userDirectories the user directories
    * @param total the total number of user directories

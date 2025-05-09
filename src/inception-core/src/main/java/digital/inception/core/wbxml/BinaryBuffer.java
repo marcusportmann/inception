@@ -34,13 +34,13 @@ public class BinaryBuffer implements Serializable {
   /** The ByteArrayOutputStream instance that holds the data for the BinaryBuffer. */
   private ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-  /** Constructs a new empty <b>BinaryBuffer</b>. */
+  /** Constructs a new empty {@code BinaryBuffer}. */
   public BinaryBuffer() {}
 
   /**
-   * Creates a new {@code BinaryBuffer} instance containing the specified binary data.
+   * Constructs a new {@code BinaryBuffer} instance containing the specified binary data.
    *
-   * @param data the binary data to initialize the <b>BinaryBuffer</b> with
+   * @param data the binary data to initialize the {@code BinaryBuffer} with
    */
   public BinaryBuffer(byte[] data) {
     stream = new ByteArrayOutputStream(data.length);
@@ -52,17 +52,17 @@ public class BinaryBuffer implements Serializable {
   }
 
   /**
-   * Append the binary stored in the specified {@code BinaryBuffer} instance to this
-   * <b>BinaryBuffer</b>.
+   * Append the binary stored in the specified {@code BinaryBuffer} instance to this {@code
+   * BinaryBuffer}.
    *
-   * @param buffer the existing <b>BinaryBuffer</b> containing the binary data to append
+   * @param buffer the existing {@code BinaryBuffer} containing the binary data to append
    */
   public void append(BinaryBuffer buffer) {
     append(buffer.getData());
   }
 
   /**
-   * Append the specified binary data to the binary data already stored in the <b>BinaryBuffer</b>.
+   * Append the specified binary data to the binary data already stored in the {@code BinaryBuffer}.
    *
    * @param data the binary data to append
    */
@@ -73,31 +73,31 @@ public class BinaryBuffer implements Serializable {
     }
   }
 
-  /** Empty the <b>BinaryBuffer</b> removing any binary stored by the buffer. */
+  /** Empty the {@code BinaryBuffer} removing any binary stored by the buffer. */
   public void empty() {
     stream.reset();
   }
 
   /**
-   * Returns the binary stored by the <b>BinaryBuffer</b>.
+   * Returns the binary stored by the {@code BinaryBuffer}.
    *
-   * @return the binary stored by the <b>BinaryBuffer</b>
+   * @return the binary stored by the {@code BinaryBuffer}
    */
   public byte[] getData() {
     return stream.toByteArray();
   }
 
   /**
-   * Returns the length of the binary stored by the <b>BinaryBuffer</b>.
+   * Returns the length of the binary stored by the {@code BinaryBuffer}.
    *
-   * @return the length of the binary stored by the <b>BinaryBuffer</b>
+   * @return the length of the binary stored by the {@code BinaryBuffer}
    */
   public int getLength() {
     return stream.size();
   }
 
   /**
-   * Append the specified byte to the binary data already stored in the <b>BinaryBuffer</b>.
+   * Append the specified byte to the binary data already stored in the {@code BinaryBuffer}.
    *
    * @param b the byte to append
    */

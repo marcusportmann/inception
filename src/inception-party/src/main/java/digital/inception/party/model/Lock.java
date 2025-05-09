@@ -106,11 +106,11 @@ public class Lock implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Lock} instance. */
+  /** Constructs a new {@code Lock}. */
   public Lock() {}
 
   /**
-   * Creates a new {@code Lock} instance.
+   * Constructs a new {@code Lock}.
    *
    * @param type the code for the lock type
    */
@@ -119,7 +119,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Creates a new {@code Lock} instance.
+   * Constructs a new {@code Lock}.
    *
    * @param type the code for the lock type
    * @param effectiveFrom the date the lock is effective from
@@ -130,7 +130,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Creates a new {@code Lock} instance.
+   * Constructs a new {@code Lock}.
    *
    * @param type the code for the lock type
    * @param effectiveFrom the date the lock is effective from

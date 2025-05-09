@@ -32,7 +32,7 @@ public class InvalidClientErrorResponse extends ErrorResponse {
   public static final String ERROR_CODE = "invalid_client";
 
   /**
-   * Creates a new {@code InvalidClientErrorResponse} instance.
+   * Constructs a new {@code InvalidClientErrorResponse}.
    *
    * @param status the HTTP status that should be returned for the OAuth2 invalid client error
    *     response
@@ -42,7 +42,7 @@ public class InvalidClientErrorResponse extends ErrorResponse {
   }
 
   /**
-   * Creates a new {@code InvalidClientErrorResponse} instance.
+   * Constructs a new {@code InvalidClientErrorResponse}.
    *
    * @param status the HTTP status that should be returned for the OAuth2 invalid client error
    *     response

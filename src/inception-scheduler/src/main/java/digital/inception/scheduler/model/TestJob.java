@@ -35,7 +35,7 @@ public class TestJob implements JobImplementation {
   /* Scheduler Service */
   @Autowired private SchedulerService schedulerService;
 
-  /** Creates a new {@code TestJob} instance. */
+  /** Constructs a new {@code TestJob}. */
   public TestJob() {}
 
   /**

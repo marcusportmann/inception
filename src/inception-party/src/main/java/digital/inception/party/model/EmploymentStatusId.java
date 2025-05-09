@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code EmploymentStatusId} class implements the ID class for the <b>EmploymentStatus</b>
+ * The {@code EmploymentStatusId} class implements the ID class for the {@code EmploymentStatus}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class EmploymentStatusId implements Serializable {
   /** The Unicode locale identifier for the employment status. */
   private String localeId;
 
-  /** Creates a new {@code EmploymentStatusId} instance. */
+  /** Constructs a new {@code EmploymentStatusId}. */
   public EmploymentStatusId() {}
 
   /**

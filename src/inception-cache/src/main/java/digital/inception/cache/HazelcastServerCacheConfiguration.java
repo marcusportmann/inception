@@ -58,7 +58,7 @@ public class HazelcastServerCacheConfiguration {
   /** Is port auto increment enabled? */
   private boolean portAutoIncrement;
 
-  /** Creates a new {@code HazelcastServerCacheConfiguration} instance. */
+  /** Constructs a new {@code HazelcastServerCacheConfiguration}. */
   public HazelcastServerCacheConfiguration() {}
 
   /**
@@ -246,7 +246,7 @@ public class HazelcastServerCacheConfiguration {
     /** Is read-backup-data enabled for the distributed in-memory cache. */
     private boolean readBackupData;
 
-    /** Creates a new {@code CacheConfig} instance. */
+    /** Constructs a new {@code CacheConfig}. */
     public CacheConfig() {}
 
     /**
@@ -456,7 +456,7 @@ public class HazelcastServerCacheConfiguration {
     /** The port for the distributed in-memory cache cluster. */
     private int port;
 
-    /** Creates a new {@code ClusterConfig} instance. */
+    /** Constructs a new {@code ClusterConfig}. */
     public ClusterConfig() {}
 
     /**

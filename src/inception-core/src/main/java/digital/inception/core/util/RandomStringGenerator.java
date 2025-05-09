@@ -43,7 +43,7 @@ public class RandomStringGenerator {
   private final char[] symbols;
 
   /**
-   * Creates a new {@code RandomStringGenerator} instance that can be used to generate session
+   * Constructs a new {@code RandomStringGenerator} instance that can be used to generate session
    * identifiers.
    */
   public RandomStringGenerator() {
@@ -51,7 +51,7 @@ public class RandomStringGenerator {
   }
 
   /**
-   * Creates a new {@code RandomStringGenerator} instance.
+   * Constructs a new {@code RandomStringGenerator}.
    *
    * @param length the length of the random strings that should be generated
    */
@@ -60,7 +60,7 @@ public class RandomStringGenerator {
   }
 
   /**
-   * Creates a new {@code RandomStringGenerator} instance.
+   * Constructs a new {@code RandomStringGenerator}.
    *
    * @param length the length of the random strings that should be generated
    * @param random the random number generator
@@ -70,7 +70,7 @@ public class RandomStringGenerator {
   }
 
   /**
-   * Creates a new {@code RandomStringGenerator} instance.
+   * Constructs a new {@code RandomStringGenerator}.
    *
    * @param length the length of the random strings that should be generated
    * @param random the random number generator

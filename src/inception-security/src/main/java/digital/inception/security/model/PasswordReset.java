@@ -146,11 +146,11 @@ public class PasswordReset implements Serializable {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Creates a new {@code PasswordReset} instance. */
+  /** Constructs a new {@code PasswordReset}. */
   public PasswordReset() {}
 
   /**
-   * Creates a new {@code PasswordReset} instance.
+   * Constructs a new {@code PasswordReset}.
    *
    * @param username the username for the user associated with the password reset
    * @param securityCodeHash the security code hash

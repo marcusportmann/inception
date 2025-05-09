@@ -100,9 +100,9 @@ public enum TimeUnit implements CodeEnum {
   }
 
   /**
-   * Returns the <b>java.util.concurrent.TimeUnit</b> enumeration value for the time unit.
+   * Returns the {@code java.util.concurrent.TimeUnit} enumeration value for the time unit.
    *
-   * @return the <b>java.util.concurrent.TimeUnit</b> enumeration value for the time unit
+   * @return the {@code java.util.concurrent.TimeUnit} enumeration value for the time unit
    */
   public java.util.concurrent.TimeUnit getTimeUnit() {
     return switch (this) {

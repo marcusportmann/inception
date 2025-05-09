@@ -31,7 +31,7 @@ public class RefreshedOAuth2Tokens {
   private final OAuth2RefreshToken refreshToken;
 
   /**
-   * Creates a new {@code RefreshedOAuth2Tokens} instance.
+   * Constructs a new {@code RefreshedOAuth2Tokens}.
    *
    * @param accessToken the OAuth2 access token
    * @param refreshToken the OAuth2 refresh token

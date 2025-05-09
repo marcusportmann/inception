@@ -110,7 +110,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   private String value;
 
   /**
-   * Creates a new {@code RoleTypePreferenceTypeConstraint} instance.
+   * Constructs a new {@code RoleTypePreferenceTypeConstraint}.
    *
    * @param roleType the code for the role type
    * @param preferenceType the code for the preference type
@@ -126,7 +126,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   }
 
   /**
-   * Creates a new {@code RoleTypePreferenceTypeConstraint} instance.
+   * Constructs a new {@code RoleTypePreferenceTypeConstraint}.
    *
    * @param roleType the code for the role type
    * @param preferenceType the code for the preference type
@@ -137,7 +137,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
     this(roleType, preferenceType, type, null);
   }
 
-  /** Creates a new {@code RoleTypePreferenceTypeConstraint} instance. */
+  /** Constructs a new {@code RoleTypePreferenceTypeConstraint}. */
   public RoleTypePreferenceTypeConstraint() {}
 
   /**

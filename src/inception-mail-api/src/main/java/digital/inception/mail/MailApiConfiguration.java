@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MailApiConfiguration {
 
-  /** Creates a new {@code MailApiConfiguration} instance. */
+  /** Constructs a new {@code MailApiConfiguration}. */
   public MailApiConfiguration() {}
 
   /**

@@ -46,7 +46,7 @@ public class TaskNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code TaskNotFoundException} instance.
+   * Constructs a new {@code TaskNotFoundException}.
    *
    * @param taskId the ID for the task
    */
@@ -55,7 +55,7 @@ public class TaskNotFoundException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code TaskNotFoundException} instance.
+   * Constructs a new {@code TaskNotFoundException}.
    *
    * @param externalReference the external reference for the task
    */

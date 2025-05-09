@@ -51,11 +51,11 @@ public class DataSourceConfiguration implements Serializable {
   /** The timeout in seconds when validating a connection in the database connection pool. */
   private int validationTimeout = 30;
 
-  /** Creates a new {@code DataSourceConfiguration} instance. */
+  /** Constructs a new {@code DataSourceConfiguration}. */
   public DataSourceConfiguration() {}
 
   /**
-   * Creates a new {@code DataSourceConfiguration} instance.
+   * Constructs a new {@code DataSourceConfiguration}.
    *
    * @param className the fully qualified name of the data source class used to connect to the
    *     database
@@ -83,7 +83,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Creates a new {@code DataSourceConfiguration} instance.
+   * Constructs a new {@code DataSourceConfiguration}.
    *
    * @param className the fully qualified name of the data source class used to connect to the
    *     database

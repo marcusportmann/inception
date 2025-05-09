@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The {@code InteractionRepository} interface declares the persistence for the <b>Interaction</b>
+ * The {@code InteractionRepository} interface declares the persistence for the {@code Interaction}
  * domain type.
  *
  * @author Marcus Portmann

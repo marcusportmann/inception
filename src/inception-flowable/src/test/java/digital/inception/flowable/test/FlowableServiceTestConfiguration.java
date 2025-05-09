@@ -26,7 +26,7 @@
 // import org.springframework.transaction.PlatformTransactionManager;
 //
 /// **
-// * The <b>FlowableServiceTestConfiguration/code> class.
+// * The {@code FlowableServiceTestConfiguration} class.
 // *
 // * @author Marcus Portmann
 // */
@@ -45,7 +45,7 @@
 //  private final PlatformTransactionManager transactionManager;
 //
 //  /**
-//   * Creates a new {@code FlowableServiceTestConfiguration} instance.
+//   * Constructs a new {@code FlowableServiceTestConfiguration}.
 //   *
 //   * @param applicationContext the Spring application context
 //   * @param dataSource the data source used to provide connections to the application database

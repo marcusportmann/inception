@@ -22,20 +22,20 @@ import java.time.ZonedDateTime;
 
 /**
  * The {@code ZonedDateTimeAdapter} class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and {@code ZonedDateTime} types. <br>
+ * {@code String} and {@code ZonedDateTime} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
 
-  /** Creates a new {@code ZonedDateTimeAdapter} instance. */
+  /** Constructs a new {@code ZonedDateTimeAdapter}. */
   public ZonedDateTimeAdapter() {}
 
   /**
-   * Marshals the <b>java.time.ZonedDateTime</b> value as an ISO8601 string.
+   * Marshals the {@code java.time.ZonedDateTime} value as an ISO8601 string.
    *
    * @param value the value to marshal
-   * @return the <b>java.time.ZonedDateTime</b> value as an ISO8601 string
+   * @return the {@code java.time.ZonedDateTime} value as an ISO8601 string
    */
   @Override
   public String marshal(ZonedDateTime value) {
@@ -47,10 +47,10 @@ public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <b>java.time.ZonedDateTime</b>.
+   * Unmarshals the ISO8601 string value as a {@code java.time.ZonedDateTime}.
    *
    * @param value the ISO8601 string value
-   * @return the ISO8601 string value as a <b>java.time.ZonedDateTime</b>
+   * @return the ISO8601 string value as a {@code java.time.ZonedDateTime}
    */
   @Override
   public ZonedDateTime unmarshal(String value) {

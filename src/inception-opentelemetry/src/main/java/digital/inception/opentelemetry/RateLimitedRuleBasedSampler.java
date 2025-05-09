@@ -41,8 +41,8 @@ import java.util.logging.Logger;
  * <p>Note: Only attributes set on {@link io.opentelemetry.api.trace.SpanBuilder} are considered;
  * attributes added after span creation are ignored.
  *
- * <p>This is based on the <b>io.opentelemetry.contrib.sampler.RuleBasedSampler</b> class, which is
- * part of the OpenTelemetry <b>opentelemetry-java-contrib</b> project.
+ * <p>This is based on the {@code io.opentelemetry.contrib.sampler.RuleBasedSampler} class, which is
+ * part of the OpenTelemetry {@code opentelemetry-java-contrib} project.
  *
  * @author Marcus Portmann
  */
@@ -65,7 +65,7 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
   private final long spansPerSecondLimit;
 
   /**
-   * Constructs a <b>RateLimitedRuleBasedSampler</b> with the specified spans per second limit,
+   * Constructs a {@code RateLimitedRuleBasedSampler} with the specified spans per second limit,
    * rules, span kind, and fallback sampler.
    *
    * @param enableRuleLogging enable additional logging during the processing of rules
@@ -94,7 +94,7 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
   }
 
   /**
-   * Creates a builder for <b>RateLimitedRuleBasedSampler</b>.
+   * Creates a builder for {@code RateLimitedRuleBasedSampler}.
    *
    * @param enableRuleLogging enable additional logging during the processing of rules
    * @param spansPerSecondLimit the maximum number of spans to sample per second
@@ -190,8 +190,9 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
     }
 
     // Fallback sampling decision
-    SamplingResult fallbackSamplingResult = fallbackSampler.shouldSample(
-        parentContext, traceId, name, spanKind, attributes, parentLinks);
+    SamplingResult fallbackSamplingResult =
+        fallbackSampler.shouldSample(
+            parentContext, traceId, name, spanKind, attributes, parentLinks);
 
     if (enableRuleLogging || log.isLoggable(Level.FINE)) {
 
@@ -205,7 +206,8 @@ public final class RateLimitedRuleBasedSampler implements Sampler {
               + name
               + ") and attributes ("
               + getAttributesAsString(attributes)
-              + "): " + fallbackSamplingResult.getDecision());
+              + "): "
+              + fallbackSamplingResult.getDecision());
     }
 
     return fallbackSamplingResult;

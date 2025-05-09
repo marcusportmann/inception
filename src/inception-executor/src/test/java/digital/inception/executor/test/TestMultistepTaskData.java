@@ -54,13 +54,13 @@ public class TestMultistepTaskData implements Serializable {
   @JsonProperty(required = true)
   private long startTimestamp;
 
-  /** Creates a new {@code TestMultistepTaskData} instance. */
+  /** Constructs a new {@code TestMultistepTaskData}. */
   public TestMultistepTaskData() {
     this.startTimestamp = System.currentTimeMillis();
   }
 
   /**
-   * Creates a new {@code TestMultistepTaskData} instance.
+   * Constructs a new {@code TestMultistepTaskData}.
    *
    * @param message the message
    */

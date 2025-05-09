@@ -109,11 +109,11 @@ public class MailTemplate implements Serializable {
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /** Creates a new {@code MailTemplate} instance. */
+  /** Constructs a new {@code MailTemplate}. */
   public MailTemplate() {}
 
   /**
-   * Creates a new {@code MailTemplate} instance.
+   * Constructs a new {@code MailTemplate}.
    *
    * @param id the ID for the mail template
    * @param name the name of the mail template

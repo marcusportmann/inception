@@ -68,7 +68,7 @@ public class OAuthController {
   private final Bucket tokensIssuedRateLimitBucket;
 
   /**
-   * Creates a new {@code OAuthController} instance.
+   * Constructs a new {@code OAuthController}.
    *
    * @param securityService the Security Service
    * @param tokenService the Token Service

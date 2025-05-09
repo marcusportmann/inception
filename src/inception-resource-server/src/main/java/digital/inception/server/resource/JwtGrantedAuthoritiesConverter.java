@@ -45,7 +45,7 @@ public class JwtGrantedAuthoritiesConverter
   /** The name of the roles claim that provides the roles assigned to the user. */
   private static final String ROLES_CLAIM = "roles";
 
-  /** Creates a new {@code JwtGrantedAuthoritiesConverter} instance. */
+  /** Constructs a new {@code JwtGrantedAuthoritiesConverter}. */
   public JwtGrantedAuthoritiesConverter() {}
 
   /**

@@ -19,7 +19,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class TaskPriorityAttributeConverter implements AttributeConverter<TaskPriority, Integer> {
 
-  /** Creates a new {@code TaskPriorityAttributeConverter} instance. */
+  /** Constructs a new {@code TaskPriorityAttributeConverter}. */
   public TaskPriorityAttributeConverter() {}
 
   /**

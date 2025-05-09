@@ -40,7 +40,7 @@ public class ContactMechanismRoleId implements Serializable {
   /** The Unicode locale identifier for the contact mechanism role. */
   private String localeId;
 
-  /** Creates a new {@code ContactMechanismRoleId} instance. */
+  /** Constructs a new {@code ContactMechanismRoleId}. */
   public ContactMechanismRoleId() {}
 
   /**

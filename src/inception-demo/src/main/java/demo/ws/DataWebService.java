@@ -48,7 +48,7 @@ public class DataWebService extends AbstractWebServiceBase {
   private final DataService dataService;
 
   /**
-   * Creates a new {@code DataWebService} instance.
+   * Constructs a new {@code DataWebService}.
    *
    * @param applicationContext the Spring application context
    * @param dataService the Data Service

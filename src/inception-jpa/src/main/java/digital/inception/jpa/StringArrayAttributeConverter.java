@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 @Converter(autoApply = true)
 public class StringArrayAttributeConverter implements AttributeConverter<String[], String> {
 
-  /** Creates a new {@code StringArrayAttributeConverter} instance. */
+  /** Constructs a new {@code StringArrayAttributeConverter}. */
   public StringArrayAttributeConverter() {}
 
   /**

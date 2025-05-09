@@ -39,7 +39,7 @@ public class Encoder {
   private final List<String> stringTable;
 
   /**
-   * Creates a new {@code Encoder} instance to WBXML encode the specified document.
+   * Constructs a new {@code Encoder} instance to WBXML encode the specified document.
    *
    * @param document the document to encode
    */

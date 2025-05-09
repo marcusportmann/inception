@@ -50,11 +50,11 @@ public class Language implements Serializable {
   /** The sort index for the language. */
   private Integer sortIndex;
 
-  /** Creates a new {@code Language} instance. */
+  /** Constructs a new {@code Language}. */
   public Language() {}
 
   /**
-   * Creates a new {@code Language} instance.
+   * Constructs a new {@code Language}.
    *
    * @param code the ISO 639-1 alpha-2 code for the language
    * @param iso3Code the ISO 639-2 alpha-3 code for the language

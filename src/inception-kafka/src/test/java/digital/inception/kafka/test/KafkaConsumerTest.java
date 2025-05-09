@@ -34,7 +34,7 @@ import org.springframework.context.ApplicationContext;
 public class KafkaConsumerTest extends ProcessorApplication {
 
   /**
-   * Creates a new {@code KafkaConsumerTest} instance.
+   * Constructs a new {@code KafkaConsumerTest}.
    *
    * @param applicationContext the Spring application context
    */

@@ -85,11 +85,11 @@ public class Config implements Serializable {
   @Column(name = "value", length = 16384, nullable = false)
   private String value;
 
-  /** Creates a new {@code Config} instance. */
+  /** Constructs a new {@code Config}. */
   public Config() {}
 
   /**
-   * Creates a new {@code Config} instance.
+   * Constructs a new {@code Config}.
    *
    * @param id the ID for the config
    * @param value the value for the config

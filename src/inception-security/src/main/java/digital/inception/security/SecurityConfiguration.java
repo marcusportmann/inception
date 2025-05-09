@@ -40,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "securityEntityManagerFactory")
 public class SecurityConfiguration {
 
-  /** Creates a new {@code SecurityConfiguration} instance. */
+  /** Constructs a new {@code SecurityConfiguration}. */
   public SecurityConfiguration() {}
 
   /**

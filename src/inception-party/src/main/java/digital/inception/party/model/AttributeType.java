@@ -207,7 +207,7 @@ public class AttributeType implements Serializable {
   @Column(name = "value_type", length = 10, nullable = false)
   private ValueType valueType;
 
-  /** Creates a new {@code AttributeType} instance. */
+  /** Constructs a new {@code AttributeType}. */
   public AttributeType() {}
 
   /**

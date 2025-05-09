@@ -86,7 +86,7 @@ public class ApplicationR2dbcConfiguration {
   private String username;
 
   /**
-   * Creates a new {@code ApplicationR2dbcConfiguration} instance.
+   * Constructs a new {@code ApplicationR2dbcConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

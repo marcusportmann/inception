@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public final class StringToLocalDateConverter implements Converter<String, LocalDate> {
 
-  /** Creates a new {@code StringToLocalDateConverter} instance. */
+  /** Constructs a new {@code StringToLocalDateConverter}. */
   public StringToLocalDateConverter() {}
 
   @Override

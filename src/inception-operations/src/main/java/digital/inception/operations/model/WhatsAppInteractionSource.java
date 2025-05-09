@@ -56,13 +56,13 @@ public class WhatsAppInteractionSource extends InteractionSourceBase implements 
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Creates a new {@code WhatsAppInteractionSource} instance. */
+  /** Constructs a new {@code WhatsAppInteractionSource}. */
   public WhatsAppInteractionSource() {
     super(InteractionSourceType.MAILBOX);
   }
 
   /**
-   * Creates a new {@code WhatsAppInteractionSource} instance.
+   * Constructs a new {@code WhatsAppInteractionSource}.
    *
    * @param id the ID for the WhatsApp interaction source
    * @param name the name of the WhatsApp interaction source

@@ -152,11 +152,11 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code Snapshots} instance. */
+  /** Constructs a new {@code Snapshots}. */
   public Snapshots() {}
 
   /**
-   * Creates a new {@code Snapshots} instance.
+   * Constructs a new {@code Snapshots}.
    *
    * @param tenantId the ID for the tenant
    * @param snapshots the snapshots

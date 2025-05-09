@@ -40,7 +40,7 @@ public class TestMultistepWithDelayTaskExecutor
       LoggerFactory.getLogger(TestMultistepWithDelayTaskExecutor.class);
 
   /**
-   * Creates a new {@code TestMultistepWithDelayTaskExecutor} instance
+   * Constructs a new {@code TestMultistepWithDelayTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

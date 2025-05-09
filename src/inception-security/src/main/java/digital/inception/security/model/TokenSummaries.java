@@ -120,11 +120,11 @@ public class TokenSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code TokenSummaries} instance. */
+  /** Constructs a new {@code TokenSummaries}. */
   public TokenSummaries() {}
 
   /**
-   * Creates a new {@code TokenSummaries} instance.
+   * Constructs a new {@code TokenSummaries}.
    *
    * @param tokenSummaries the token summaries
    * @param total the total number of token summaries

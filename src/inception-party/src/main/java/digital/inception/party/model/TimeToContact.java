@@ -121,7 +121,7 @@ public class TimeToContact implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code TimeToContact} instance. */
+  /** Constructs a new {@code TimeToContact}. */
   public TimeToContact() {}
 
   /**

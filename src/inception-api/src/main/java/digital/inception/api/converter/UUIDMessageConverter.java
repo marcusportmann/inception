@@ -38,7 +38,7 @@ import org.springframework.util.StreamUtils;
 @Component
 public class UUIDMessageConverter extends AbstractHttpMessageConverter<UUID> {
 
-  /** Creates a new {@code UUIDMessageConverter} instance. */
+  /** Constructs a new {@code UUIDMessageConverter}. */
   public UUIDMessageConverter() {
     super(MediaType.TEXT_PLAIN);
   }

@@ -46,7 +46,7 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
   private final UserDetailsService userDetailsService;
 
   /**
-   * Creates a new {@code SecurityServiceAuthenticationManager} instance.
+   * Constructs a new {@code SecurityServiceAuthenticationManager}.
    *
    * @param securityService the Security Service
    * @param userDetailsService the User Details Service
@@ -61,16 +61,16 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
    * Attempts to authenticate the passed {@link Authentication} object, returning a fully populated
    * {@code Authentication} object (including granted authorities) if successful.
    *
-   * <p>An <b>AuthenticationManager</b> must honour the following contract concerning exceptions:
+   * <p>An {@code AuthenticationManager} must honour the following contract concerning exceptions:
    *
    * <ul>
-   *   <li>A {@link DisabledException} must be thrown if an account is disabled and the <b>
-   *       AuthenticationManager</b> can test for this state.
-   *   <li>A {@link LockedException} must be thrown if an account is locked and the <b>
-   *       AuthenticationManager</b> can test for account locking.
+   *   <li>A {@link DisabledException} must be thrown if an account is disabled and the {@code
+   *       AuthenticationManager} can test for this state.
+   *   <li>A {@link LockedException} must be thrown if an account is locked and the {@code
+   *       AuthenticationManager} can test for account locking.
    *   <li>A {@link BadCredentialsException} must be thrown if incorrect credentials are presented.
-   *       Whilst the above exceptions are optional, an <b>AuthenticationManager</b> must
-   *       <B>always</B> test credentials.
+   *       Whilst the above exceptions are optional, an {@code AuthenticationManager} must always
+   *       test credentials.
    * </ul>
    *
    * <p>Exceptions should be tested for and if applicable thrown in the order expressed above (i.e.

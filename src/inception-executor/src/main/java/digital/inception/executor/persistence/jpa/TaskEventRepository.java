@@ -22,7 +22,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The {@code TaskEventRepository} interface declares the persistence for the <b>TaskEvent</b>
+ * The {@code TaskEventRepository} interface declares the persistence for the {@code TaskEvent}
  * domain type.
  *
  * @author Marcus Portmann

@@ -68,11 +68,11 @@ public class ReportParameter implements Serializable {
   @NotNull
   private String value;
 
-  /** Creates a new {@code ReportParameter} instance. */
+  /** Constructs a new {@code ReportParameter}. */
   public ReportParameter() {}
 
   /**
-   * Creates a new {@code ReportParameter} instance.
+   * Constructs a new {@code ReportParameter}.
    *
    * @param name the name of the report parameter
    * @param value the value for the report parameter

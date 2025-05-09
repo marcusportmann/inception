@@ -33,7 +33,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 @Configuration
 public class ApplicationJacksonConfiguration {
 
-  /** Creates a new {@code ApplicationJacksonConfiguration} instance. */
+  /** Constructs a new {@code ApplicationJacksonConfiguration}. */
   public ApplicationJacksonConfiguration() {}
 
   /**

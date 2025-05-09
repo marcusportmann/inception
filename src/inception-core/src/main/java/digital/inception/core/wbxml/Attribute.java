@@ -34,14 +34,14 @@ public class Attribute implements Serializable {
   /** The value for the attribute. */
   private String value;
 
-  /** Creates a new {@code Attribute} instance. */
+  /** Constructs a new {@code Attribute}. */
   public Attribute() {
     name = "";
     value = "";
   }
 
   /**
-   * Creates a new {@code Attribute} instance with the specified name and value.
+   * Constructs a new {@code Attribute} instance with the specified name and value.
    *
    * @param name the name of the attribute
    * @param value the value for the attribute

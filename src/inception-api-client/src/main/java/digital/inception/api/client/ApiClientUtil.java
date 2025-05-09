@@ -239,8 +239,8 @@ public final class ApiClientUtil {
    * Verify whether the web client response exception holds the information for a Problem Details
    * Object, as defined in RFC 7807, which matches the type annotated with the @Problem annotation.
    *
-   * <p>The <b>type</b> attribute for the Problem Details Object is checked against the <b>type</b>
-   * and <b>typeAlias</b> attributes on the @Problem annotation.
+   * <p>The {@code type} attribute for the Problem Details Object is checked against the {@code
+   * type} and {@code typeAlias} attributes on the @Problem annotation.
    *
    * @param webClientResponseException the web client response exception
    * @param annotatedClass the Java class annotated with the @Problem annotation

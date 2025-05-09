@@ -219,7 +219,7 @@ public class Data implements Serializable {
   @Column(name = "timestamp_with_time_zone_value")
   private OffsetDateTime timestampWithTimeZoneValue;
 
-  /** Creates a new {@code Data} instance. */
+  /** Constructs a new {@code Data}. */
   public Data() {}
 
   /**

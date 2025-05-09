@@ -235,11 +235,11 @@ public class Task implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Task} instance. */
+  /** Constructs a new {@code Task}. */
   public Task() {}
 
   /**
-   * Creates a new {@code Task} instance.
+   * Constructs a new {@code Task}.
    *
    * @param type the code for the task type
    * @param data the task data
@@ -255,7 +255,7 @@ public class Task implements Serializable {
   }
 
   /**
-   * Creates a new {@code Task} instance.
+   * Constructs a new {@code Task}.
    *
    * @param type the code for the task type
    * @param step the code for the current task step for a multistep task

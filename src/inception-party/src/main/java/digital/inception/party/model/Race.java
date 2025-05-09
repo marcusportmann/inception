@@ -115,7 +115,7 @@ public class Race implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code Race} instance. */
+  /** Constructs a new {@code Race}. */
   public Race() {}
 
   /**

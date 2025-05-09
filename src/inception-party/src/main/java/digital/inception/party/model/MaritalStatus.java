@@ -121,7 +121,7 @@ public class MaritalStatus implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code MaritalStatus} instance. */
+  /** Constructs a new {@code MaritalStatus}. */
   public MaritalStatus() {}
 
   /**

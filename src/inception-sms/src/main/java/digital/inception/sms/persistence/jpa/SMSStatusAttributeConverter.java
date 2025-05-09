@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class SMSStatusAttributeConverter extends AbstractCodeEnumAttributeConverter<SMSStatus> {
 
-  /** Creates a new {@code SMSStatusAttributeConverter} instance. */
+  /** Constructs a new {@code SMSStatusAttributeConverter}. */
   public SMSStatusAttributeConverter() {
     super(SMSStatus.class);
   }

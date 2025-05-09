@@ -89,11 +89,11 @@ public class Vehicles implements Serializable {
   @XmlElement(name = "Vehicle", required = true)
   private List<Vehicle> vehicles;
 
-  /** Creates a new {@code Vehicles} instance. */
+  /** Constructs a new {@code Vehicles}. */
   public Vehicles() {}
 
   /**
-   * Creates a new {@code Vehicles} instance.
+   * Constructs a new {@code Vehicles}.
    *
    * @param vehicles the vehicles
    * @param total the total number of vehicles

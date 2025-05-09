@@ -45,7 +45,7 @@ public class TestTransactionalServiceImpl implements TestTransactionalService {
   private final DataSource dataSource;
 
   /**
-   * Creates a new {@code TestTransactionalServiceImpl} instance.
+   * Constructs a new {@code TestTransactionalServiceImpl}.
    *
    * @param dataSource the data source used to provide connections to the application database
    */

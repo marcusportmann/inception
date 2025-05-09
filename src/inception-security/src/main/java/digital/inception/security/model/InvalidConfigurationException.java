@@ -46,7 +46,7 @@ public class InvalidConfigurationException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code InvalidConfigurationException} instance with the specified message.
+   * Constructs a new {@code InvalidConfigurationException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -55,7 +55,7 @@ public class InvalidConfigurationException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code InvalidConfigurationException} instance with the specified message and
+   * Constructs a new {@code InvalidConfigurationException} instance with the specified message and
    * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.

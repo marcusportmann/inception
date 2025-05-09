@@ -40,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "executorEntityManagerFactory")
 public class ExecutorConfiguration {
 
-  /** Creates a new {@code ExecutorConfiguration} instance. */
+  /** Constructs a new {@code ExecutorConfiguration}. */
   public ExecutorConfiguration() {}
 
   /**

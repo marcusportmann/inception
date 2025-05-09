@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "auditEntityManagerFactory")
 public class AuditConfiguration {
 
-  /** Creates a new {@code AuditConfiguration} instance. */
+  /** Constructs a new {@code AuditConfiguration}. */
   public AuditConfiguration() {}
 
   /**

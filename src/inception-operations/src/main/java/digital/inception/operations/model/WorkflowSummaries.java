@@ -129,11 +129,11 @@ public class WorkflowSummaries implements Serializable {
   @XmlElement(name = "WorkflowSummary", required = true)
   private List<WorkflowSummary> workflowSummaries;
 
-  /** Creates a new {@code WorkflowSummaries} instance. */
+  /** Constructs a new {@code WorkflowSummaries}. */
   public WorkflowSummaries() {}
 
   /**
-   * Creates a new {@code WorkflowSummaries} instance.
+   * Constructs a new {@code WorkflowSummaries}.
    *
    * @param tenantId the ID for the tenant the workflow summaries are associated with
    * @param workflowSummaries the workflow summaries

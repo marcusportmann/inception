@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 @Component
 public final class StringToLocalTimeConverter implements Converter<String, LocalTime> {
 
-  /** Creates a new {@code StringToLocalTimeConverter} instance. */
+  /** Constructs a new {@code StringToLocalTimeConverter}. */
   public StringToLocalTimeConverter() {}
 
   @Override

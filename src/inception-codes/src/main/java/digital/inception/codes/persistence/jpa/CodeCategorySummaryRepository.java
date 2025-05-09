@@ -21,8 +21,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The {@code CodeCategorySummaryRepository} interface declares the persistence for the <b>
- * CodeCategorySummary</b> domain type.
+ * The {@code CodeCategorySummaryRepository} interface declares the persistence for the {@code
+ * CodeCategorySummary} domain type.
  *
  * @author Marcus Portmann
  */

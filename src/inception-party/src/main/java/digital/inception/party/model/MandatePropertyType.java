@@ -180,7 +180,7 @@ public class MandatePropertyType implements Serializable {
   @Column(name = "value_type", length = 10, nullable = false)
   private ValueType valueType;
 
-  /** Creates a new {@code MandatePropertyType} instance. */
+  /** Constructs a new {@code MandatePropertyType}. */
   public MandatePropertyType() {}
 
   /**

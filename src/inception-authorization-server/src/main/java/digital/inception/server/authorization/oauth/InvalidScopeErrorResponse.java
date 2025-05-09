@@ -29,13 +29,13 @@ public class InvalidScopeErrorResponse extends ErrorResponse {
   /** The error code for the OAuth2 invalid scope error response. */
   public static final String ERROR_CODE = "invalid_request";
 
-  /** Creates a new {@code InvalidScopeErrorResponse} instance. */
+  /** Constructs a new {@code InvalidScopeErrorResponse}. */
   public InvalidScopeErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }
 
   /**
-   * Creates a new {@code InvalidScopeErrorResponse} instance.
+   * Constructs a new {@code InvalidScopeErrorResponse}.
    *
    * @param errorDescription the human-readable ASCII text description of the error
    */

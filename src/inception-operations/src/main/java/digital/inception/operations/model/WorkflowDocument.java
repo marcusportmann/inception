@@ -187,11 +187,11 @@ public class WorkflowDocument implements Serializable {
   @Column(name = "workflow_id", nullable = false)
   private UUID workflowId;
 
-  /** Creates a new {@code WorkflowDocument} instance. */
+  /** Constructs a new {@code WorkflowDocument}. */
   public WorkflowDocument() {}
 
   /**
-   * Creates a new {@code WorkflowDocument} instance.
+   * Constructs a new {@code WorkflowDocument}.
    *
    * @param id the ID for the workflow document
    * @param workflowId the ID for the workflow
@@ -226,7 +226,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDocument} instance.
+   * Constructs a new {@code WorkflowDocument}.
    *
    * @param id the ID for the workflow document
    * @param workflowId the ID for the workflow

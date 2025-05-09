@@ -43,7 +43,7 @@ public class ConfigApiControllerImpl extends SecureApiController implements Conf
   private final ConfigService configService;
 
   /**
-   * Creates a new {@code ConfigApiControllerImpl} instance.
+   * Constructs a new {@code ConfigApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param configService the Config Service

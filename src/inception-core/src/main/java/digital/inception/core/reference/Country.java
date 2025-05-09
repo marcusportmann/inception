@@ -54,11 +54,11 @@ public class Country implements Serializable {
   /** The ISO 3166-1 alpha-2 code for the sovereign state the country is associated with. */
   private String sovereignState;
 
-  /** Creates a new {@code Country} instance. */
+  /** Constructs a new {@code Country}. */
   public Country() {}
 
   /**
-   * Creates a new {@code Country} instance.
+   * Constructs a new {@code Country}.
    *
    * @param code the ISO 3166-1 alpha-2 code for the country
    * @param iso3Code the ISO 3166-1 alpha-3 code for the country

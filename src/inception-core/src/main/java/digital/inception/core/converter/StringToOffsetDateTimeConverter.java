@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 @Component
 public final class StringToOffsetDateTimeConverter implements Converter<String, OffsetDateTime> {
 
-  /** Creates a new {@code StringToOffsetDateTimeConverter} instance. */
+  /** Constructs a new {@code StringToOffsetDateTimeConverter}. */
   public StringToOffsetDateTimeConverter() {}
 
   @Override

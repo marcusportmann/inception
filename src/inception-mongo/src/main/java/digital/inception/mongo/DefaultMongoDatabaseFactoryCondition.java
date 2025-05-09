@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
  */
 public class DefaultMongoDatabaseFactoryCondition implements Condition {
 
-  /** Creates a new {@code DefaultMongoDatabaseFactoryCondition} instance. */
+  /** Constructs a new {@code DefaultMongoDatabaseFactoryCondition}. */
   public DefaultMongoDatabaseFactoryCondition() {}
 
   @Override

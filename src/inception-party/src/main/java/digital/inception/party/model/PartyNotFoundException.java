@@ -46,7 +46,7 @@ public class PartyNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code PartyNotFoundException} instance.
+   * Constructs a new {@code PartyNotFoundException}.
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party

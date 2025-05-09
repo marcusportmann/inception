@@ -33,7 +33,7 @@ import org.flowable.form.api.NativeFormDeploymentQuery;
  */
 public class FormRepositoryService implements org.flowable.form.api.FormRepositoryService {
 
-  /** Creates a new {@code FormRepositoryService} instance. */
+  /** Constructs a new {@code FormRepositoryService}. */
   public FormRepositoryService() {}
 
   @Override

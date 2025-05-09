@@ -31,16 +31,16 @@ public class XmlParserException extends RichRuntimeException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Creates a new {@code XmlParserException} instance with {@code null} as its message. */
+  /** Constructs a new {@code XmlParserException} instance with {@code null} as its message. */
   public XmlParserException() {
     super();
   }
 
   /**
-   * Creates a new {@code XmlParserException} instance using the information contained in the
-   * specified <b>SAXParseException</b>.
+   * Constructs a new {@code XmlParserException} instance using the information contained in the
+   * specified {@code SAXParseException}.
    *
-   * @param cause the <b>SAXParseException</b> giving the cause of the exception
+   * @param cause the {@code SAXParseException} giving the cause of the exception
    */
   public XmlParserException(SAXParseException cause) {
     super(
@@ -57,7 +57,7 @@ public class XmlParserException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code XmlParserException} instance with the specified message.
+   * Constructs a new {@code XmlParserException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -66,7 +66,7 @@ public class XmlParserException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code XmlParserException} instance with the specified cause and a message of
+   * Constructs a new {@code XmlParserException} instance with the specified cause and a message of
    * {@code (cause==null ? null : cause.toString())} (which typically contains the class and message
    * of cause).
    *
@@ -78,7 +78,7 @@ public class XmlParserException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code XmlParserException} instance with the specified code and message.
+   * Constructs a new {@code XmlParserException} instance with the specified code and message.
    *
    * @param code the error code
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -88,7 +88,7 @@ public class XmlParserException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code XmlParserException} instance with the specified message and cause.
+   * Constructs a new {@code XmlParserException} instance with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
@@ -99,7 +99,8 @@ public class XmlParserException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code XmlParserException} instance with the specified code, message and cause.
+   * Constructs a new {@code XmlParserException} instance with the specified code, message and
+   * cause.
    *
    * @param code the error code
    * @param message The message saved for later retrieval by the {@code getMessage()} method.

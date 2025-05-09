@@ -46,7 +46,7 @@ public class ErrorReportNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ErrorReportNotFoundException} instance.
+   * Constructs a new {@code ErrorReportNotFoundException}.
    *
    * @param errorReportId the ID for the error report
    */

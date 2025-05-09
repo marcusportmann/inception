@@ -80,7 +80,7 @@ public class TokenServiceImpl implements TokenService {
   private RSAPublicKey jwtRsaPublicKey;
 
   /**
-   * Creates a new {@code TokenServiceImpl} instance.
+   * Constructs a new {@code TokenServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param resourceLoader the Spring resource loader

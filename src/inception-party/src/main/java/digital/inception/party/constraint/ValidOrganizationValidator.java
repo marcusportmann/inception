@@ -60,7 +60,7 @@ public class ValidOrganizationValidator extends PartyValidator
     implements ConstraintValidator<ValidOrganization, Organization> {
 
   /**
-   * Creates a new {@code ValidOrganizationValidator} instance.
+   * Constructs a new {@code ValidOrganizationValidator}.
    *
    * @param partyReferenceService the Party Reference Service
    * @param referenceService the Reference Service
@@ -71,7 +71,7 @@ public class ValidOrganizationValidator extends PartyValidator
     super(partyReferenceService, referenceService);
   }
 
-  /** Creates a new {@code ValidOrganizationValidator} instance. */
+  /** Constructs a new {@code ValidOrganizationValidator}. */
   public ValidOrganizationValidator() {
     super(null, null);
   }

@@ -214,7 +214,7 @@ public class ReactiveData implements Serializable {
   @Column("timestamp_with_time_zone_value")
   private OffsetDateTime timestampWithTimeZoneValue;
 
-  /** Creates a new {@code ReactiveData} instance. */
+  /** Constructs a new {@code ReactiveData}. */
   public ReactiveData() {}
 
   /**

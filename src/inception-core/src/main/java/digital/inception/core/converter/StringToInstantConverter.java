@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 @Component
 public final class StringToInstantConverter implements Converter<String, Instant> {
 
-  /** Creates a new {@code StringToInstantConverter} instance. */
+  /** Constructs a new {@code StringToInstantConverter}. */
   public StringToInstantConverter() {}
 
   @Override

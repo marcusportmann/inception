@@ -125,11 +125,11 @@ public class RevokedToken implements Serializable {
   @XmlSchemaType(name = "date")
   private LocalDate validFromDate;
 
-  /** Creates a new {@code RevokedToken} instance. */
+  /** Constructs a new {@code RevokedToken}. */
   public RevokedToken() {}
 
   /**
-   * Creates a new {@code Token} instance.
+   * Constructs a new {@code Token}.
    *
    * @param id the ID for the token
    * @param type the token type

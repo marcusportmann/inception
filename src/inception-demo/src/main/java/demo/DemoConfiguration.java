@@ -40,7 +40,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
     entityOperationsRef = "applicationEntityOperations")
 public class DemoConfiguration {
 
-  /** Creates a new {@code DemoConfiguration} instance. */
+  /** Constructs a new {@code DemoConfiguration}. */
   public DemoConfiguration() {}
 
   /**

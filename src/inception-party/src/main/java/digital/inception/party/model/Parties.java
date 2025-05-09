@@ -120,11 +120,11 @@ public class Parties implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code Parties} instance. */
+  /** Constructs a new {@code Parties}. */
   public Parties() {}
 
   /**
-   * Creates a new {@code Parties} instance.
+   * Constructs a new {@code Parties}.
    *
    * @param tenantId the ID for the tenant the parties are associated with
    * @param parties the parties

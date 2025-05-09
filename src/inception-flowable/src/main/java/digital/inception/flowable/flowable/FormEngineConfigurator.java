@@ -33,7 +33,7 @@ public class FormEngineConfigurator implements EngineConfigurator {
 
   private FormEngineConfiguration formEngineConfiguration;
 
-  /** Creates a new {@code FormEngineConfigurator} instance. */
+  /** Constructs a new {@code FormEngineConfigurator}. */
   public FormEngineConfigurator() {}
 
   @Override

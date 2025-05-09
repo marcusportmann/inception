@@ -41,7 +41,7 @@ import java.util.Objects;
 
 /**
  * The {@code Function} class holds the information for a discrete unit of functionality for an
- * application that can be assigned to <b>Role</b>s.
+ * application that can be assigned to {@code Role}s.
  *
  * @author Marcus Portmann
  */
@@ -96,11 +96,11 @@ public class Function implements java.io.Serializable {
   @ManyToMany(mappedBy = "functions")
   private List<Role> roles = new ArrayList<>();
 
-  /** Creates a new {@code Function} instance. */
+  /** Constructs a new {@code Function}. */
   public Function() {}
 
   /**
-   * Creates a new {@code Function} instance.
+   * Constructs a new {@code Function}.
    *
    * @param code the code for the function
    * @param name the name of the function

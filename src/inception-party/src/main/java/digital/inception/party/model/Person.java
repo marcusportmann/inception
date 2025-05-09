@@ -78,7 +78,7 @@ import org.springframework.util.StringUtils;
  *   <li>Add a new column for the new attribute to the {@code party_persons} table using a new
  *       changeset in the {@code inception-party.changelog.xml} file.
  *   <li>Add a new property for the new attribute to The {@code Person} class.
- *   <li>Add the appropriate validation for the new attribute to the <b>ValidPersonValidator</b>
+ *   <li>Add the appropriate validation for the new attribute to the {@code ValidPersonValidator}
  *       class.
  *   <li>Add the name of the attribute to the {@code Attribute.RESERVED_ATTRIBUTE_TYPE_CODES} array.
  *   <li>Add support for applying validations described by {@code RoleTypeAttributeTypeConstraint}s
@@ -582,13 +582,13 @@ public class Person extends PartyBase implements Serializable {
   @Column(name = "title", length = 50)
   private String title;
 
-  /** Creates a new {@code Person} instance. */
+  /** Constructs a new {@code Person}. */
   public Person() {
     super(PartyType.PERSON);
   }
 
   /**
-   * Creates a new {@code Person} instance.
+   * Constructs a new {@code Person}.
    *
    * @param tenantId the ID for the tenant the person is associated with
    * @param name the name of the person

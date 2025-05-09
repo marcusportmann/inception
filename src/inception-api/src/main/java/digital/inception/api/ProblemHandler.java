@@ -60,7 +60,7 @@ public class ProblemHandler {
   @Value("${inception.api.verbose-error-handling:#{false}}")
   private boolean verboseErrorHandling;
 
-  /** Creates a new {@code ProblemHandler} instance. */
+  /** Constructs a new {@code ProblemHandler}. */
   public ProblemHandler() {}
 
   /**

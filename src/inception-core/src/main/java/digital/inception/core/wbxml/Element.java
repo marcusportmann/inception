@@ -53,7 +53,7 @@ public class Element implements Serializable, Content {
   protected Element() {}
 
   /**
-   * Constructs an <b>Element</b> with the specified name.
+   * Constructs an {@code Element} with the specified name.
    *
    * @param name the name of the element
    */
@@ -62,7 +62,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Constructs an <b>Element</b> with the specified name and content.
+   * Constructs an {@code Element} with the specified name and content.
    *
    * @param name the name of the element
    * @param content the content for the element
@@ -73,7 +73,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Constructs an <b>Element</b> with the specified name and content.
+   * Constructs an {@code Element} with the specified name and content.
    *
    * @param name the name of the element
    * @param content the content for the element
@@ -370,9 +370,9 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Print the content to the specified <b>OutputStream</b> using the specified indent level.
+   * Print the content to the specified {@code OutputStream} using the specified indent level.
    *
-   * @param out the <b>OuputStream</b> to output the content to
+   * @param out the {@code OuputStream} to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {

@@ -164,7 +164,7 @@ public class LockType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code LockType} instance. */
+  /** Constructs a new {@code LockType}. */
   public LockType() {}
 
   /**

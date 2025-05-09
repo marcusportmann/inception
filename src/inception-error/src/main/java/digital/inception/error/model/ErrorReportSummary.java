@@ -145,11 +145,11 @@ public class ErrorReportSummary implements Serializable {
   @Column(name = "who", length = 100)
   private String who;
 
-  /** Creates a new {@code ErrorReportSummary} instance. */
+  /** Constructs a new {@code ErrorReportSummary}. */
   public ErrorReportSummary() {}
 
   /**
-   * Creates a new {@code ErrorReportSummary} instance.
+   * Constructs a new {@code ErrorReportSummary}.
    *
    * @param id the ID for the error report
    * @param applicationId the ID for the application that generated the error report

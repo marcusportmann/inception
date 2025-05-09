@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
     priority = LiquibaseDataType.PRIORITY_DEFAULT + 1)
 public class H2TimestampType extends TimestampType {
 
-  /** Creates a new {@code H2TimestampType} instance. */
+  /** Constructs a new {@code H2TimestampType}. */
   public H2TimestampType() {}
 
   @Override

@@ -100,11 +100,11 @@ public class DocumentDefinition implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code DocumentDefinition} instance. */
+  /** Constructs a new {@code DocumentDefinition}. */
   public DocumentDefinition() {}
 
   /**
-   * Creates a new {@code DocumentDefinition} instance.
+   * Constructs a new {@code DocumentDefinition}.
    *
    * @param id ID for the document definition
    * @param name name of the document definition
@@ -115,7 +115,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code DocumentDefinition} instance.
+   * Constructs a new {@code DocumentDefinition}.
    *
    * @param id ID for the document definition
    * @param tenantId ID for the tenant the document definition is specific to

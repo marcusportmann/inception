@@ -39,7 +39,7 @@ import org.springframework.util.StreamUtils;
 @Component
 public class OffsetDateTimeMessageConverter extends AbstractHttpMessageConverter<OffsetDateTime> {
 
-  /** Creates a new {@code OffsetDateTimeMessageConverter} instance. */
+  /** Constructs a new {@code OffsetDateTimeMessageConverter}. */
   public OffsetDateTimeMessageConverter() {
     super(MediaType.TEXT_PLAIN);
   }

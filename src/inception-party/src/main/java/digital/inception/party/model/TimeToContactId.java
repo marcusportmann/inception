@@ -36,7 +36,7 @@ public class TimeToContactId implements Serializable {
   /** The Unicode locale identifier for the time to contact. */
   private String localeId;
 
-  /** Creates a new {@code TimeToContactId} instance. */
+  /** Constructs a new {@code TimeToContactId}. */
   public TimeToContactId() {}
 
   /**

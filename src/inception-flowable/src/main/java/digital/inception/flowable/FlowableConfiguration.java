@@ -71,7 +71,7 @@ public class FlowableConfiguration {
   private ObjectMapper objectMapper;
 
   /**
-   * Creates a new {@code FlowableConfiguration} instance.
+   * Constructs a new {@code FlowableConfiguration}.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

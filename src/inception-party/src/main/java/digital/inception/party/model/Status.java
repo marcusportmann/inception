@@ -107,11 +107,11 @@ public class Status implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Status} instance. */
+  /** Constructs a new {@code Status}. */
   public Status() {}
 
   /**
-   * Creates a new {@code Status} instance.
+   * Constructs a new {@code Status}.
    *
    * @param type the status type
    */
@@ -120,7 +120,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Creates a new {@code Status} instance.
+   * Constructs a new {@code Status}.
    *
    * @param type the status type
    * @param effectiveFrom the date the status is effective from
@@ -131,7 +131,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Creates a new {@code Status} instance.
+   * Constructs a new {@code Status}.
    *
    * @param type the status type
    * @param effectiveFrom the date the status is effective from

@@ -45,7 +45,7 @@ public class CodeNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code CodeNotFoundException} instance.
+   * Constructs a new {@code CodeNotFoundException}.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code

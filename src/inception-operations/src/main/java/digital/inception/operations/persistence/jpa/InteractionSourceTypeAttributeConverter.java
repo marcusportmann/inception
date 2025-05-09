@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class InteractionSourceTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<InteractionSourceType> {
 
-  /** Creates a new {@code InteractionSourceTypeAttributeConverter} instance. */
+  /** Constructs a new {@code InteractionSourceTypeAttributeConverter}. */
   public InteractionSourceTypeAttributeConverter() {
     super(InteractionSourceType.class);
   }

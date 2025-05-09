@@ -48,7 +48,7 @@ public class ReferenceApiControllerImpl extends SecureApiController
   private final ReferenceService referenceService;
 
   /**
-   * Creates a new {@code ReferenceApiControllerImpl} instance.
+   * Constructs a new {@code ReferenceApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param referenceService the Reference Service

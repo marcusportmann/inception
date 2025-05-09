@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code StatusTypeCategoryId} class implements the ID class for the <b> StatusTypeCategory</b>
+ * The {@code StatusTypeCategoryId} class implements the ID class for the {@code StatusTypeCategory}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class StatusTypeCategoryId implements Serializable {
   /** The Unicode locale identifier for the status type category. */
   private String localeId;
 
-  /** Creates a new {@code StatusTypeCategoryId} instance. */
+  /** Constructs a new {@code StatusTypeCategoryId}. */
   public StatusTypeCategoryId() {}
 
   /**

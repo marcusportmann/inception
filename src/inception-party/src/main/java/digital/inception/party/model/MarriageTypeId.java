@@ -39,7 +39,7 @@ public class MarriageTypeId implements Serializable {
   /** The code for the marital status the marriage type is associated with. */
   private String maritalStatus;
 
-  /** Creates a new {@code MarriageTypeId} instance. */
+  /** Constructs a new {@code MarriageTypeId}. */
   public MarriageTypeId() {}
 
   /**

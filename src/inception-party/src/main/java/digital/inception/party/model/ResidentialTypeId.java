@@ -37,7 +37,7 @@ public class ResidentialTypeId implements Serializable {
   /** The Unicode locale identifier for the residential type. */
   private String localeId;
 
-  /** Creates a new {@code ResidentialTypeId} instance. */
+  /** Constructs a new {@code ResidentialTypeId}. */
   public ResidentialTypeId() {}
 
   /**

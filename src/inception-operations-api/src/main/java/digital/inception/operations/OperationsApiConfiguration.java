@@ -16,7 +16,7 @@
 
 package digital.inception.operations;
 
-import digital.inception.operations.controller.Version;
+import digital.inception.Version;
 import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OperationsApiConfiguration {
 
-  /** Creates a new {@code OperationsApiConfiguration} instance. */
+  /** Constructs a new {@code OperationsApiConfiguration}. */
   public OperationsApiConfiguration() {}
 
   /**

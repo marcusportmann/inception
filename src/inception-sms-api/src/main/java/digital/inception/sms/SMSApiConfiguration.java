@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SMSApiConfiguration {
 
-  /** Creates a new {@code SMSApiConfiguration} instance. */
+  /** Constructs a new {@code SMSApiConfiguration}. */
   public SMSApiConfiguration() {}
 
   /**

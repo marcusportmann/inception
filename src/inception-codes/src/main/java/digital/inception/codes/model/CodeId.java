@@ -36,11 +36,11 @@ public class CodeId implements Serializable {
   /** The ID for the code. */
   private String id;
 
-  /** Creates a new {@code CodeId} instance. */
+  /** Constructs a new {@code CodeId}. */
   public CodeId() {}
 
   /**
-   * Creates a new {@code CodeId} instance.
+   * Constructs a new {@code CodeId}.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param id the ID for the code

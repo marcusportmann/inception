@@ -87,11 +87,11 @@ public class CreateWorkflowRequest implements Serializable {
   @NotNull
   private UUID tenantId;
 
-  /** Creates a new {@code CreateWorkflowRequest} instance. */
+  /** Constructs a new {@code CreateWorkflowRequest}. */
   public CreateWorkflowRequest() {}
 
   /**
-   * Creates a new {@code CreateWorkflowRequest} instance.
+   * Constructs a new {@code CreateWorkflowRequest}.
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param data the data for the workflow
@@ -102,7 +102,7 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Creates a new {@code CreateWorkflowRequest} instance.
+   * Constructs a new {@code CreateWorkflowRequest}.
    *
    * @param parentId the unique identifier for the parent workflow
    * @param definitionId the unique identifier for the workflow definition the workflow is

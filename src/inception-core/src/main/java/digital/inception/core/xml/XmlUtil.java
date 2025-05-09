@@ -57,11 +57,11 @@ public final class XmlUtil {
   private XmlUtil() {}
 
   /**
-   * Converts a <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to a <b>java.util.Date</b>
+   * Converts a {@code javax.xml.datatype.XMLGregorianCalendar} instance to a {@code java.util.Date}
    * instance.
    *
-   * @param calendar the <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to convert
-   * @return the converted <b>java.util.Date</b> instance
+   * @param calendar the {@code javax.xml.datatype.XMLGregorianCalendar} instance to convert
+   * @return the converted {@code java.util.Date} instance
    */
   public static java.util.Date asDate(XMLGregorianCalendar calendar) {
     if (calendar == null) {
@@ -72,11 +72,11 @@ public final class XmlUtil {
   }
 
   /**
-   * Converts a <b>java.util.Date</b> instance to a <b>javax.xml.datatype.XMLGregorianCalendar</b>
+   * Converts a {@code java.util.Date} instance to a {@code javax.xml.datatype.XMLGregorianCalendar}
    * instance.
    *
-   * @param date the <b>java.util.Date</b> instance to convert
-   * @return the converted <b>javax.xml.datatype.XMLGregorianCalendar</b> instance
+   * @param date the {@code java.util.Date} instance to convert
+   * @return the converted {@code javax.xml.datatype.XMLGregorianCalendar} instance
    */
   public static XMLGregorianCalendar asXMLGregorianCalendar(java.util.Date date) {
     if (date == null) {
@@ -201,13 +201,13 @@ public final class XmlUtil {
   }
 
   /**
-   * Returns the <b>javax.xml.namespace.QName</b> instance for the specified QName.
+   * Returns the {@code javax.xml.namespace.QName} instance for the specified QName.
    *
-   * @param document the <b>org.w3c.dom.Document</b> instance used to determine the namespace URI
-   *     for the QName if the namespace is referenced using a prefix as part of the <b>name</b>
+   * @param document the {@code org.w3c.dom.Document} instance used to determine the namespace URI
+   *     for the QName if the namespace is referenced using a prefix as part of the {@code name}
    *     parameter
    * @param qname the QName
-   * @return the <b>javax.xml.namespace.QName</b> instance for the specified QName
+   * @return the {@code javax.xml.namespace.QName} instance for the specified QName
    */
   public static QName getQName(Document document, String qname) {
     qname = StringUtils.hasText(qname) ? qname.trim() : "";
@@ -233,13 +233,13 @@ public final class XmlUtil {
   }
 
   /**
-   * Returns the <b>javax.xml.namespace.QName</b> instance for the specified QName.
+   * Returns the {@code javax.xml.namespace.QName} instance for the specified QName.
    *
-   * @param element the <b>org.w3c.dom.Element</b> instance used to determine the namespace URI for
-   *     the QName if the namespace is referenced using a prefix as part of the <b>name</b>
+   * @param element the {@code org.w3c.dom.Element} instance used to determine the namespace URI for
+   *     the QName if the namespace is referenced using a prefix as part of the {@code name}
    *     parameter
    * @param qname the QName
-   * @return the <b>javax.xml.namespace.QName</b> instance for the specified QName
+   * @return the {@code javax.xml.namespace.QName} instance for the specified QName
    */
   public static QName getQName(Element element, String qname) {
     return getQName(element.getOwnerDocument(), qname);

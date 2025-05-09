@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class VehicleTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<VehicleType> {
 
-  /** Creates a new {@code VehicleTypeAttributeConverter} instance. */
+  /** Constructs a new {@code VehicleTypeAttributeConverter}. */
   public VehicleTypeAttributeConverter() {
     super(VehicleType.class);
   }

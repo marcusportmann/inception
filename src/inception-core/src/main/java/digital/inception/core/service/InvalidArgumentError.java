@@ -51,11 +51,11 @@ public class InvalidArgumentError extends ServiceError implements Serializable {
   @XmlElement(name = "ValidationError")
   private List<ValidationError> validationErrors;
 
-  /** Creates a new {@code InvalidArgumentError} instance. */
+  /** Constructs a new {@code InvalidArgumentError}. */
   public InvalidArgumentError() {}
 
   /**
-   * Creates a new {@code InvalidArgumentError} instance.
+   * Constructs a new {@code InvalidArgumentError}.
    *
    * @param message the message for the invalid argument error
    * @param parameter the name of the parameter associated with the invalid argument error

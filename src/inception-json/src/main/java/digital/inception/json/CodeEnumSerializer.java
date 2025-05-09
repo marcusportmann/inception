@@ -30,7 +30,7 @@ import java.io.IOException;
  */
 public class CodeEnumSerializer extends JsonSerializer<CodeEnum> {
 
-  /** Creates a new {@code CodeEnumSerializer} instance. */
+  /** Constructs a new {@code CodeEnumSerializer}. */
   public CodeEnumSerializer() {}
 
   @Override

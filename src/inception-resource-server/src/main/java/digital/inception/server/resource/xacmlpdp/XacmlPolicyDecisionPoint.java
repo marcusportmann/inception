@@ -138,7 +138,7 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
   private PdpEngine pdpEngine;
 
   /**
-   * Creates a new {@code XacmlPolicyDecisionPoint} instance.
+   * Constructs a new {@code XacmlPolicyDecisionPoint}.
    *
    * @param applicationContext the Spring application context
    * @param classpathPoliciesEnabled should policy sets and policies be loaded from the classpath

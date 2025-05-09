@@ -186,7 +186,7 @@ public class PreferenceType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code PreferenceType} instance. */
+  /** Constructs a new {@code PreferenceType}. */
   public PreferenceType() {}
 
   /**

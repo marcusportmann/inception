@@ -46,7 +46,7 @@ public class OrganizationNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code OrganizationNotFoundException} instance.
+   * Constructs a new {@code OrganizationNotFoundException}.
    *
    * @param tenantId the ID for the tenant
    * @param organizationId the ID for the organization

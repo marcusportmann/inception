@@ -38,7 +38,7 @@ public class LocalXAResource implements XAResource {
   private Xid currentXid;
 
   /**
-   * Creates a new {@code LocalXAResource} instance.
+   * Constructs a new {@code LocalXAResource}.
    *
    * @param transactionAware the Agroal transaction aware connection resource
    */

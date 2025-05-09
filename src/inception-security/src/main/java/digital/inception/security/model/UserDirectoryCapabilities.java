@@ -137,11 +137,11 @@ public class UserDirectoryCapabilities {
   @NotNull
   private boolean supportsUserLocks;
 
-  /** Creates a new {@code UserDirectoryCapabilities} instance. */
+  /** Constructs a new {@code UserDirectoryCapabilities}. */
   public UserDirectoryCapabilities() {}
 
   /**
-   * Creates a new {@code UserDirectoryCapabilities} instance.
+   * Constructs a new {@code UserDirectoryCapabilities}.
    *
    * @param supportsAdminChangePassword the user directory supports the admin change password
    *     capability

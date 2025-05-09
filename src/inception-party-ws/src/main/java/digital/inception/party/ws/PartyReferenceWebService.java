@@ -48,7 +48,7 @@ public class PartyReferenceWebService extends AbstractWebServiceBase {
   private final PartyReferenceService partyReferenceService;
 
   /**
-   * Creates a new {@code PartyReferenceWebService} instance.
+   * Constructs a new {@code PartyReferenceWebService}.
    *
    * @param applicationContext the Spring application context
    * @param partyReferenceService the Party Reference Service

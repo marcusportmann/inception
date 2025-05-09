@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 public class AuditServiceImpl extends AbstractServiceBase implements AuditService {
 
   /**
-   * Creates a new {@code AuditServiceImpl} instance.
+   * Constructs a new {@code AuditServiceImpl}.
    *
    * @param applicationContext the Spring application context
    */

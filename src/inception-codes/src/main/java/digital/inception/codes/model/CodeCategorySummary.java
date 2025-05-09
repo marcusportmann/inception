@@ -89,11 +89,11 @@ public class CodeCategorySummary implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Creates a new {@code CodeCategorySummary} instance. */
+  /** Constructs a new {@code CodeCategorySummary}. */
   public CodeCategorySummary() {}
 
   /**
-   * Creates a new {@code CodeCategorySummary} instance.
+   * Constructs a new {@code CodeCategorySummary}.
    *
    * @param id the ID for the code category
    * @param name the name of the code category

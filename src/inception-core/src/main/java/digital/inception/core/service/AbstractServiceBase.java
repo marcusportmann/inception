@@ -55,7 +55,7 @@ public abstract class AbstractServiceBase {
   private final Validator validator;
 
   /**
-   * Constructs a <b>AbstractServiceBase</b>.
+   * Constructs a {@code AbstractServiceBase}.
    *
    * @param applicationContext the Spring application context
    */

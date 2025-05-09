@@ -24,14 +24,14 @@ import java.io.IOException;
 import java.time.Instant;
 
 /**
- * The {@code InstantDeserializer} class implements the Jackson deserializer for the <b>Instant</b>
+ * The {@code InstantDeserializer} class implements the Jackson deserializer for the {@code Instant}
  * type.
  *
  * @author Marcus Portmann
  */
 public class InstantDeserializer extends JsonDeserializer<Instant> {
 
-  /** Creates a new {@code InstantDeserializer} instance. */
+  /** Constructs a new {@code InstantDeserializer}. */
   public InstantDeserializer() {}
 
   @Override

@@ -32,7 +32,7 @@ public class DemoJob implements JobImplementation {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(DemoJob.class);
 
-  /** Creates a new {@code DemoJob} instance. */
+  /** Constructs a new {@code DemoJob}. */
   public DemoJob() {}
 
   @Override

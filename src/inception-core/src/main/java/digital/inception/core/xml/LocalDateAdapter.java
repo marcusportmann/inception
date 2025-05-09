@@ -21,21 +21,21 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
 
 /**
- * The {@code LocalDateAdapter} class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and {@code LocalDate} types. <br>
+ * The {@code LocalDateAdapter} class implements a JAXB 2.0 adapter used to convert between {@code
+ * String} and {@code LocalDate} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
-  /** Creates a new {@code LocalDateAdapter} instance. */
+  /** Constructs a new {@code LocalDateAdapter}. */
   public LocalDateAdapter() {}
 
   /**
-   * Marshals the <b>java.time.LocalDate</b> value as an ISO8601 string.
+   * Marshals the {@code java.time.LocalDate} value as an ISO8601 string.
    *
    * @param value the value to marshal
-   * @return the <b>java.time.LocalDate</b> value as an ISO8601 string
+   * @return the {@code java.time.LocalDate} value as an ISO8601 string
    */
   @Override
   public String marshal(LocalDate value) {
@@ -47,10 +47,10 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <b>java.time.LocalDate</b>.
+   * Unmarshals the ISO8601 string value as a {@code java.time.LocalDate}.
    *
    * @param value the ISO8601 string value
-   * @return the ISO8601 string value as a <b>java.time.LocalDate</b>
+   * @return the ISO8601 string value as a {@code java.time.LocalDate}
    */
   @Override
   public LocalDate unmarshal(String value) {

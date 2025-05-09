@@ -35,7 +35,7 @@ public final class DatabaseNameExtractor {
    * Extracts the database name or SID from a JDBC URL for H2, SQL Server, PostgreSQL, or Oracle.
    *
    * @param jdbcUrl the JDBC URL
-   * @return the name of the database, or SID for Oracle, or <b>Unknown</b> if the database type is
+   * @return the name of the database, or SID for Oracle, or {@code Unknown} if the database type is
    *     not recognized
    */
   public static String getDatabaseNameFromJdbcUrl(String jdbcUrl) {

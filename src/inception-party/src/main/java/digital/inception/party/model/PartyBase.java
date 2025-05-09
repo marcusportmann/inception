@@ -34,7 +34,7 @@ import java.util.UUID;
 
 /**
  * The {@code PartyBase} class holds the information common to all types of parties, and is the base
- * class that the classes for the different party types are derived from, e.g. the <b>Person</b>
+ * class that the classes for the different party types are derived from, e.g. the {@code Person}
  * class.
  *
  * <p>The {@code Party} class and {@code PartyBase} class are both JPA entity classes mapped to the
@@ -87,11 +87,11 @@ public class PartyBase implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private PartyType type;
 
-  /** Creates a new {@code PartyBase} instance. */
+  /** Constructs a new {@code PartyBase}. */
   protected PartyBase() {}
 
   /**
-   * Creates a new {@code PartyBase} instance.
+   * Constructs a new {@code PartyBase}.
    *
    * @param type the party type
    */
@@ -100,7 +100,7 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Creates a new {@code PartyBase} instance.
+   * Constructs a new {@code PartyBase}.
    *
    * @param id the ID for the party
    * @param tenantId the ID for the tenant the party is associated with
@@ -113,7 +113,7 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Creates a new {@code PartyBase} instance.
+   * Constructs a new {@code PartyBase}.
    *
    * @param id the ID for the party
    * @param tenantId the ID for the tenant the party is associated with

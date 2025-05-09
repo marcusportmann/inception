@@ -30,10 +30,10 @@ import org.springframework.util.StringUtils;
  * The {@code ValidTaskTypeValidator} class implements the custom constraint validator for
  * validating a task type.
  *
- * <p>NOTE: The <b>@Autowired</b> constructor is not used when Spring Boot automatically invokes the
- * JSR 380 validation when persisting an entity. Instead, the default constructor is invoked when
- * the validator is initialized by Hibernate. As a result the custom validation that requires the
- * injected services will not be executed.
+ * <p>NOTE: The {@code @Autowired} constructor is not used when Spring Boot automatically invokes
+ * the JSR 380 validation when persisting an entity. Instead, the default constructor is invoked
+ * when the validator is initialized by Hibernate. As a result the custom validation that requires
+ * the injected services will not be executed.
  *
  * @author Marcus Portmann
  */
@@ -44,7 +44,7 @@ public class ValidTaskTypeValidator implements ConstraintValidator<ValidTaskType
   private final ExecutorService executorService;
 
   /**
-   * Creates a new {@code ValidTaskTypeValidator} instance.
+   * Constructs a new {@code ValidTaskTypeValidator}.
    *
    * @param executorService the Executor Service
    */
@@ -53,7 +53,7 @@ public class ValidTaskTypeValidator implements ConstraintValidator<ValidTaskType
     this.executorService = executorService;
   }
 
-  /** Creates a new {@code ValidTaskTypeValidator} instance. */
+  /** Constructs a new {@code ValidTaskTypeValidator}. */
   public ValidTaskTypeValidator() {
     executorService = null;
   }

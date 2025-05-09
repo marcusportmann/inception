@@ -37,7 +37,7 @@ public class ConsentId implements Serializable {
   /** The code for the consent type. */
   private String type;
 
-  /** Creates a new {@code ConsentId} instance. */
+  /** Constructs a new {@code ConsentId}. */
   public ConsentId() {}
 
   /**

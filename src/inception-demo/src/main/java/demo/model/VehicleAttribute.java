@@ -94,11 +94,11 @@ public class VehicleAttribute implements Serializable {
   @JoinColumn(name = "vehicle_id")
   private VehicleBase vehicle;
 
-  /** Creates a new {@code VehicleAttribute} instance. */
+  /** Constructs a new {@code VehicleAttribute}. */
   public VehicleAttribute() {}
 
   /**
-   * Creates a new {@code VehicleAttribute} instance.
+   * Constructs a new {@code VehicleAttribute}.
    *
    * @param type the vehicle attribute type
    * @param value the value for the vehicle attribute

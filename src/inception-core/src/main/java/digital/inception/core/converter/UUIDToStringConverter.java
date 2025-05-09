@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class UUIDToStringConverter implements Converter<UUID, String> {
 
-  /** Creates a new {@code UUIDToStringConverter} instance. */
+  /** Constructs a new {@code UUIDToStringConverter}. */
   public UUIDToStringConverter() {}
 
   @Override

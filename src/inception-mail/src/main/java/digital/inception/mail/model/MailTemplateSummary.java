@@ -87,11 +87,11 @@ public class MailTemplateSummary implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Creates a new {@code MailTemplateSummary} instance. */
+  /** Constructs a new {@code MailTemplateSummary}. */
   public MailTemplateSummary() {}
 
   /**
-   * Creates a new {@code MailTemplateSummary} instance.
+   * Constructs a new {@code MailTemplateSummary}.
    *
    * @param id the ID for the mail template
    * @param name the name of the mail template

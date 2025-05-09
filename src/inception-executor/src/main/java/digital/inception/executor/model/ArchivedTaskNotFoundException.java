@@ -46,7 +46,7 @@ public class ArchivedTaskNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ArchivedTaskNotFoundException} instance.
+   * Constructs a new {@code ArchivedTaskNotFoundException}.
    *
    * @param archivedTaskId the ID for the task
    */

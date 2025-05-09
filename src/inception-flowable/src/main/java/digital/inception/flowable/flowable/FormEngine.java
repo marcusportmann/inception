@@ -26,7 +26,7 @@ import org.flowable.engine.form.TaskFormData;
  */
 public class FormEngine implements org.flowable.engine.impl.form.FormEngine {
 
-  /** Creates a new {@code FormEngine} instance. */
+  /** Constructs a new {@code FormEngine}. */
   public FormEngine() {}
 
   @Override

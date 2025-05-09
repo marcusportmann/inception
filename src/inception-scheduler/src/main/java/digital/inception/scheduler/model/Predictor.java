@@ -59,7 +59,7 @@ public class Predictor {
   private TimeZone timeZone = TimeZone.getDefault();
 
   /**
-   * Creates a new {@code SchedulingPattern} instance.
+   * Constructs a new {@code SchedulingPattern}.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    */
@@ -68,7 +68,7 @@ public class Predictor {
   }
 
   /**
-   * Creates a new {@code SchedulingPattern} instance.
+   * Constructs a new {@code SchedulingPattern}.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    * @throws InvalidSchedulingPatternException if the scheduling pattern is invalid
@@ -78,7 +78,7 @@ public class Predictor {
   }
 
   /**
-   * Creates a new {@code SchedulingPattern} instance.
+   * Constructs a new {@code SchedulingPattern}.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    * @param start the start time of the prediction
@@ -321,7 +321,7 @@ public class Predictor {
   }
 
   /**
-   * The <b>ValueMatcher</b> describes the behavior that must be implemented by a ValueMatcher.
+   * The {@code ValueMatcher} describes the behavior that must be implemented by a ValueMatcher.
    *
    * <p>A ValueMatcher is an object that validate an integer value against a set of rules.
    *
@@ -334,14 +334,14 @@ public class Predictor {
      * Validate the given integer value against a set of rules.
      *
      * @param value the value
-     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
-     *     false} otherwise
+     * @return {@code true} if the given value matches the rules of the {@code ValueMatcher} ,
+     *     {@code false} otherwise
      */
     boolean match(int value);
   }
 
   /**
-   * The {@code AlwaysTrueValueMatcher} class implements a <b>ValueMatcher</b> that always returns
+   * The {@code AlwaysTrueValueMatcher} class implements a {@code ValueMatcher} that always returns
    * {@code true}.
    *
    * @author Carlo Pelliccia
@@ -349,15 +349,15 @@ public class Predictor {
    */
   public static class AlwaysTrueValueMatcher implements ValueMatcher {
 
-    /** Creates a new {@code AlwaysTrueValueMatcher} instance. */
+    /** Constructs a new {@code AlwaysTrueValueMatcher}. */
     public AlwaysTrueValueMatcher() {}
 
     /**
      * Validate the given integer value against a set of rules.
      *
      * @param value the value
-     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
-     *     false} otherwise
+     * @return {@code true} if the given value matches the rules of the {@code ValueMatcher} ,
+     *     {@code false} otherwise
      */
     public boolean match(int value) {
       return true;
@@ -365,7 +365,7 @@ public class Predictor {
   }
 
   /**
-   * The {@code DayOfMonthValueMatcher} class implements a <b>ValueMatcher</b> whose rules are in a
+   * The {@code DayOfMonthValueMatcher} class implements a {@code ValueMatcher} whose rules are in a
    * plain array of integer values.
    *
    * <p>When asked to validate a value, this ValueMatcher checks if it is in the array and, if not,
@@ -380,7 +380,7 @@ public class Predictor {
     private static final int[] lastDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     /**
-     * Creates a new {@code DayOfMonthValueMatcher} instance.
+     * Constructs a new {@code DayOfMonthValueMatcher}.
      *
      * @param integers The Integer elements, one for every value accepted by the matcher. The
      *     match() method will return {@code true} only if its parameter will be one of this list or
@@ -397,8 +397,8 @@ public class Predictor {
      * @param value the value
      * @param month the month
      * @param isLeapYear {@code true} if this is a leap year {@code false} otherwise
-     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
-     *     false} otherwise
+     * @return {@code true} if the given value matches the rules of the {@code ValueMatcher} ,
+     *     {@code false} otherwise
      */
     public boolean match(int value, int month, boolean isLeapYear) {
       return (super.match(value)
@@ -415,7 +415,7 @@ public class Predictor {
   }
 
   /**
-   * The {@code IntArrayValueMatcher} class implements a <b>ValueMatcher</b> whose rules are in a
+   * The {@code IntArrayValueMatcher} class implements a {@code ValueMatcher} whose rules are in a
    * plain array of integer values.
    *
    * <p>When asked to validate a value, this ValueMatcher checks if it is in the array.
@@ -454,8 +454,8 @@ public class Predictor {
      * <p>Returns {@code true} if the given value is included in the matcher list.
      *
      * @param value the value
-     * @return {@code true} if the given value matches the rules of the <b>ValueMatcher</b> , {@code
-     *     false} otherwise
+     * @return {@code true} if the given value matches the rules of the {@code ValueMatcher} ,
+     *     {@code false} otherwise
      */
     public boolean match(int value) {
       for (int value1 : values) {
@@ -768,11 +768,11 @@ public class Predictor {
     }
 
     /**
-     * A <b>ValueMatcher</b> utility builder.
+     * A {@code ValueMatcher} utility builder.
      *
-     * @param str the pattern part for the <b>ValueMatcher</b> creation
+     * @param str the pattern part for the {@code ValueMatcher} creation
      * @param parser the parser used to parse the values
-     * @return the requested <b>ValueMatcher</b>
+     * @return the requested {@code ValueMatcher}
      */
     private ValueMatcher buildValueMatcher(String str, ValueParser parser) throws Exception {
       if (str.equals("*")) {

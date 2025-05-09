@@ -44,7 +44,7 @@ public class BackgroundPasswordResetExpiry {
   private int passwordResetExpiry;
 
   /**
-   * Creates a new {@code BackgroundPasswordResetExpiry} instance.
+   * Constructs a new {@code BackgroundPasswordResetExpiry}.
    *
    * @param passwordResetRepository the Password Reset Repository
    */

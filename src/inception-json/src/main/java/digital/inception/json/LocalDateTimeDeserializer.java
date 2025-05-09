@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
  */
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
-  /** Creates a new {@code LocalDateTimeDeserializer} instance. */
+  /** Constructs a new {@code LocalDateTimeDeserializer}. */
   public LocalDateTimeDeserializer() {}
 
   @Override

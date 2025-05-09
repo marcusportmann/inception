@@ -115,11 +115,11 @@ public class SourceOfWealth implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code SourceOfWealth} instance. */
+  /** Constructs a new {@code SourceOfWealth}. */
   public SourceOfWealth() {}
 
   /**
-   * Creates a new {@code SourceOfWealth} instance.
+   * Constructs a new {@code SourceOfWealth}.
    *
    * @param type the code for the source of wealth type
    */
@@ -128,7 +128,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfWealth} instance.
+   * Constructs a new {@code SourceOfWealth}.
    *
    * @param type the code for the source of wealth type
    * @param effectiveFrom the date the source of wealth is effective from
@@ -139,7 +139,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfWealth} instance.
+   * Constructs a new {@code SourceOfWealth}.
    *
    * @param type the code for the source of wealth type
    * @param effectiveFrom the date the source of wealth is effective from
@@ -152,7 +152,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfWealth} instance.
+   * Constructs a new {@code SourceOfWealth}.
    *
    * @param type the code for the source of wealth type
    * @param description the description for the source of wealth
@@ -163,7 +163,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfWealth} instance.
+   * Constructs a new {@code SourceOfWealth}.
    *
    * @param type the code for the source of wealth type
    * @param description the description for the source of wealth
@@ -176,7 +176,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfWealth} instance.
+   * Constructs a new {@code SourceOfWealth}.
    *
    * @param type the code for the source of wealth type
    * @param description the description for the source of wealth

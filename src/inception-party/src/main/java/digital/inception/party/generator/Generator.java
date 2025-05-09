@@ -28,13 +28,13 @@ public class Generator {
   /** The locale to use when generating random party data. */
   private final Locale locale;
 
-  /** Creates a new {@code Generator} instance. */
+  /** Constructs a new {@code Generator}. */
   public Generator() {
     this.locale = Locale.forLanguageTag("en-US");
   }
 
   /**
-   * Creates a new {@code Generator} instance.
+   * Constructs a new {@code Generator}.
    *
    * @param locale the locale
    */

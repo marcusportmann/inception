@@ -101,7 +101,7 @@ public class InternalPartyStore implements PartyStore {
   private final SnapshotRepository snapshotRepository;
 
   /**
-   * Creates a new {@code InternalPartyDataStore} instance.
+   * Constructs a new {@code InternalPartyDataStore}.
    *
    * @param objectMapper the Jackson2 object mapper
    * @param mandateRepository the Mandate Repository

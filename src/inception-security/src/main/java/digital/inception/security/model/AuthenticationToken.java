@@ -30,7 +30,7 @@ public class AuthenticationToken extends AbstractAuthenticationToken {
   private final UserDetails userDetails;
 
   /**
-   * Creates a new {@code AuthenticationToken} instance.
+   * Constructs a new {@code AuthenticationToken}.
    *
    * @param userDetails the user details
    */

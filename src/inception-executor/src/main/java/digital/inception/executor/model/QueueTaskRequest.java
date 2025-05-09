@@ -86,11 +86,11 @@ public class QueueTaskRequest implements Serializable {
   @Size(min = 1, max = 50)
   private String type;
 
-  /** Creates a new {@code QueueTaskRequest} instance. */
+  /** Constructs a new {@code QueueTaskRequest}. */
   public QueueTaskRequest() {}
 
   /**
-   * Creates a new {@code QueueTaskRequest} instance.
+   * Constructs a new {@code QueueTaskRequest}.
    *
    * @param type the code for the task type
    * @param data the task data
@@ -101,7 +101,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Creates a new {@code QueueTaskRequest} instance.
+   * Constructs a new {@code QueueTaskRequest}.
    *
    * @param type the code for the task type
    * @param batchId the ID for the task batch

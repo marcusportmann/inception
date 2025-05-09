@@ -28,7 +28,7 @@ import org.flowable.common.engine.api.tenant.ChangeTenantIdBuilder;
  */
 public class FormManagementService implements org.flowable.form.api.FormManagementService {
 
-  /** Creates a new {@code FormManagementService} instance. */
+  /** Constructs a new {@code FormManagementService}. */
   public FormManagementService() {}
 
   @Override

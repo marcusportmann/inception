@@ -119,7 +119,7 @@ public class MandateType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code MandateType} instance. */
+  /** Constructs a new {@code MandateType}. */
   public MandateType() {}
 
   /**

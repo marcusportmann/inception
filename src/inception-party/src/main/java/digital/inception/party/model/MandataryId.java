@@ -37,7 +37,7 @@ public class MandataryId implements Serializable {
   /** The ID for the party who is the recipient of the mandate. */
   private UUID partyId;
 
-  /** Creates a new {@code MandataryId} instance. */
+  /** Constructs a new {@code MandataryId}. */
   public MandataryId() {}
 
   /**

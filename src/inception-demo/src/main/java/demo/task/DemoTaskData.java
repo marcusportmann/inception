@@ -50,11 +50,11 @@ public class DemoTaskData implements Serializable {
   @JsonProperty(required = true)
   private boolean slowTask;
 
-  /** Creates a new {@code DemoTaskData} instance. */
+  /** Constructs a new {@code DemoTaskData}. */
   public DemoTaskData() {}
 
   /**
-   * Creates a new {@code DemoTaskData} instance.
+   * Constructs a new {@code DemoTaskData}.
    *
    * @param message the message
    */

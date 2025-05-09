@@ -155,11 +155,11 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   })
   private WorkflowDefinition workflowDefinition;
 
-  /** Creates a new {@code WorkflowDefinitionDocumentDefinition} instance. */
+  /** Constructs a new {@code WorkflowDefinitionDocumentDefinition}. */
   public WorkflowDefinitionDocumentDefinition() {}
 
   /**
-   * Creates a new {@code WorkflowDefinitionDocumentDefinition} instance.
+   * Constructs a new {@code WorkflowDefinitionDocumentDefinition}.
    *
    * @param workflowDefinition the workflow definition the workflow definition document definition
    *     is associated with

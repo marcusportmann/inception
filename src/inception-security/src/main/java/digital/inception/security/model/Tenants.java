@@ -89,11 +89,11 @@ public class Tenants implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code Tenants} instance. */
+  /** Constructs a new {@code Tenants}. */
   public Tenants() {}
 
   /**
-   * Creates a new {@code Tenants} instance.
+   * Constructs a new {@code Tenants}.
    *
    * @param tenants the tenants
    * @param total the total number of tenants

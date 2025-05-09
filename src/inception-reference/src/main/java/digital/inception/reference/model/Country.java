@@ -173,7 +173,7 @@ public class Country implements Serializable {
   @Column(name = "sovereign_state", length = 2, nullable = false)
   private String sovereignState;
 
-  /** Creates a new {@code Country} instance. */
+  /** Constructs a new {@code Country}. */
   public Country() {}
 
   /**

@@ -39,7 +39,7 @@ public enum XacmlPolicyDecisionPointAttributeCategory {
   private final String value;
 
   /**
-   * Creates a new {@code XacmlPolicyDecisionPointAttributeCategory} instance
+   * Constructs a new {@code XacmlPolicyDecisionPointAttributeCategory} instance
    *
    * @param value the XACML identifier for this category
    */

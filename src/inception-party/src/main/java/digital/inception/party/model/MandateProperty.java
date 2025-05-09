@@ -153,11 +153,11 @@ public class MandateProperty implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code MandateProperty} instance. */
+  /** Constructs a new {@code MandateProperty}. */
   public MandateProperty() {}
 
   /**
-   * Creates a new {@code MandateProperty} instance.
+   * Constructs a new {@code MandateProperty}.
    *
    * @param type the code for the mandate property type
    */
@@ -166,7 +166,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code MandateProperty} instance.
+   * Constructs a new {@code MandateProperty}.
    *
    * @param type the code for the mandate property type
    * @param stringValue the string value for the mandate property
@@ -177,7 +177,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code MandateProperty} instance.
+   * Constructs a new {@code MandateProperty}.
    *
    * @param type the code for the mandate property type
    * @param booleanValue the boolean value for the mandate property
@@ -188,7 +188,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code MandateProperty} instance.
+   * Constructs a new {@code MandateProperty}.
    *
    * @param type the code for the mandate property type
    * @param doubleValue the double value for the mandate property
@@ -199,7 +199,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code MandateProperty} instance.
+   * Constructs a new {@code MandateProperty}.
    *
    * @param type the code for the mandate property type
    * @param dateValue the date value for the mandate property
@@ -210,7 +210,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code MandateProperty} instance.
+   * Constructs a new {@code MandateProperty}.
    *
    * @param type the code for the mandate property type
    * @param decimalValue the decimal value for the mandate property
@@ -221,7 +221,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Creates a new {@code MandateProperty} instance.
+   * Constructs a new {@code MandateProperty}.
    *
    * @param type the code for the mandate property type
    * @param integerValue the integer value for the mandate property

@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * A <b>ExistingUsersException</b> is thrown to indicate that a security operation failed as a
- * result of the existing users associated with a user directory.
+ * An {@code ExistingUsersException} exception is thrown to indicate that a security operation
+ * failed as a result of the existing users associated with a user directory.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -47,7 +47,7 @@ public class ExistingUsersException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ExistingUsersException} instance.
+   * Constructs a new {@code ExistingUsersException}.
    *
    * @param userDirectoryId the ID for the user directory
    */

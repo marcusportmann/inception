@@ -72,7 +72,7 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   private final String subject;
 
   /**
-   * Creates a new {@code OAuth2AccessToken} instance.
+   * Constructs a new {@code OAuth2AccessToken}.
    *
    * @param tokenType the token type
    * @param tokenValue the token value

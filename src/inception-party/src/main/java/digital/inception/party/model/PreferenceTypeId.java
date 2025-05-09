@@ -36,7 +36,7 @@ public class PreferenceTypeId implements Serializable {
   /** The Unicode locale identifier for the preference type. */
   private String localeId;
 
-  /** Creates a new {@code PreferenceTypeId} instance. */
+  /** Constructs a new {@code PreferenceTypeId}. */
   public PreferenceTypeId() {}
 
   /**

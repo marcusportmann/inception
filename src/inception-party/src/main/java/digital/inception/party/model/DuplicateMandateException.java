@@ -46,7 +46,7 @@ public class DuplicateMandateException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateMandateException} instance.
+   * Constructs a new {@code DuplicateMandateException}.
    *
    * @param id the ID for the mandate
    */

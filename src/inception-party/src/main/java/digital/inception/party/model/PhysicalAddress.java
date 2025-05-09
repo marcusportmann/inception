@@ -487,11 +487,11 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code PhysicalAddress} instance. */
+  /** Constructs a new {@code PhysicalAddress}. */
   public PhysicalAddress() {}
 
   /**
-   * Creates a new {@code PhysicalAddress} instance.
+   * Constructs a new {@code PhysicalAddress}.
    *
    * @param type the code for the physical address type
    * @param role the code for the physical address role
@@ -503,7 +503,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Creates a new {@code PhysicalAddress} instance.
+   * Constructs a new {@code PhysicalAddress}.
    *
    * @param type the code for the physical address type
    * @param role the code for the physical address role
@@ -517,7 +517,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Creates a new {@code PhysicalAddress} instance.
+   * Constructs a new {@code PhysicalAddress}.
    *
    * @param type the code for the physical address type
    * @param role the code for the physical address role

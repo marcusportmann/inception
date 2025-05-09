@@ -94,7 +94,7 @@ public class WebServiceConfiguration {
   private String wssX509CertificateTokenProfileTrustStoreType;
 
   /**
-   * Creates a new {@code WebServiceConfiguration} instance.
+   * Constructs a new {@code WebServiceConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

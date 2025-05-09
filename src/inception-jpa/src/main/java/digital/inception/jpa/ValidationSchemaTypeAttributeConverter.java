@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 public class ValidationSchemaTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<ValidationSchemaType> {
 
-  /** Creates a new {@code ValidationSchemaTypeConverter} instance. */
+  /** Constructs a new {@code ValidationSchemaTypeConverter}. */
   public ValidationSchemaTypeAttributeConverter() {
     super(ValidationSchemaType.class);
   }

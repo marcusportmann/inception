@@ -56,7 +56,7 @@ public class AgroalConnectionProvider implements ConnectionProvider, Stoppable, 
   private AgroalDatabaseConnectionInfo agroalDatabaseConnectionInfo;
 
   /**
-   * Creates a new {@code AgroalConnectionProvider} instance.
+   * Constructs a new {@code AgroalConnectionProvider}.
    *
    * @param agroalDataSource the Agroal data source
    */

@@ -52,11 +52,11 @@ public class TenantUserDirectory implements Serializable {
   @Column(name = "userDirectoryId", nullable = false)
   private UUID userDirectoryId;
 
-  /** Creates a new {@code TenantUserDirectory} instance. */
+  /** Constructs a new {@code TenantUserDirectory}. */
   public TenantUserDirectory() {}
 
   /**
-   * Creates a new {@code TenantUserDirectory} instance.
+   * Constructs a new {@code TenantUserDirectory}.
    *
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory

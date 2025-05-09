@@ -68,7 +68,7 @@ public class BackgroundJobExecutor {
   private int maximumJobExecutionThreads;
 
   /**
-   * Creates a new {@code BackgroundJobExecutor} instance.
+   * Constructs a new {@code BackgroundJobExecutor}.
    *
    * @param schedulerService the Scheduler Service
    */
@@ -177,7 +177,7 @@ public class BackgroundJobExecutor {
     private final SchedulerService schedulerService;
 
     /**
-     * Creates a new {@code JobExecutorThread} instance.
+     * Constructs a new {@code JobExecutorThread}.
      *
      * @param schedulerService the Scheduler Service
      * @param job the job

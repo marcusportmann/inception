@@ -25,7 +25,7 @@ import org.flowable.common.engine.impl.db.SchemaManager;
  */
 public class FormSchemaManager implements SchemaManager {
 
-  /** Creates a new {@code FormSchemaManager} instance. */
+  /** Constructs a new {@code FormSchemaManager}. */
   public FormSchemaManager() {}
 
   @Override

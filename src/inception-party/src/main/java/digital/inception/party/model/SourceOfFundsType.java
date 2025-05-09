@@ -121,7 +121,7 @@ public class SourceOfFundsType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code SourceOfFundsType} instance. */
+  /** Constructs a new {@code SourceOfFundsType}. */
   public SourceOfFundsType() {}
 
   /**

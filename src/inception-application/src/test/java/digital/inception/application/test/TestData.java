@@ -48,12 +48,12 @@ public class TestData implements Serializable {
   @Column(name = "value", nullable = false)
   private String value;
 
-  /** Creates a new {@code TestData} instance. */
+  /** Constructs a new {@code TestData}. */
   @SuppressWarnings("unused")
   TestData() {}
 
   /**
-   * Creates a new {@code TestData} instance.
+   * Constructs a new {@code TestData}.
    *
    * @param id the ID
    * @param name the name

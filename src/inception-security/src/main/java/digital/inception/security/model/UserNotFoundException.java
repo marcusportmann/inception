@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>UserNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of a user that could not be found.
+ * A {@code UserNotFoundException} exception is thrown to indicate that a security operation failed
+ * as a result of a user that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class UserNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code UserNotFoundException} instance.
+   * Constructs a new {@code UserNotFoundException}.
    *
    * @param username the username for the user
    */

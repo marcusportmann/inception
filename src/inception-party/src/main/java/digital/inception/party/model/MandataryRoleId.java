@@ -39,7 +39,7 @@ public class MandataryRoleId implements Serializable {
   /** The code for the mandate type the mandatary role is associated with. */
   private String mandateType;
 
-  /** Creates a new {@code MandataryRoleId} instance. */
+  /** Constructs a new {@code MandataryRoleId}. */
   public MandataryRoleId() {}
 
   /**

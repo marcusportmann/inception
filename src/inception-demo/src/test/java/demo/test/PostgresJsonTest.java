@@ -31,7 +31,7 @@ import java.util.Properties;
  */
 public class PostgresJsonTest {
 
-  /** Creates a new {@code PostgresJsonTest} instance. */
+  /** Constructs a new {@code PostgresJsonTest}. */
   public PostgresJsonTest() {}
 
   /**

@@ -98,7 +98,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   private int maxSnapshots;
 
   /**
-   * Creates a new {@code PartyServiceImpl} instance.
+   * Constructs a new {@code PartyServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param partyStore the Party Store

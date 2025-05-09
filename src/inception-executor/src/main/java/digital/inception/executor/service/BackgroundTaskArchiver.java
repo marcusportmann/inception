@@ -39,7 +39,7 @@ public class BackgroundTaskArchiver {
   private final ExecutorService executorService;
 
   /**
-   * Creates a new {@code BackgroundTaskArchiver} instance.
+   * Constructs a new {@code BackgroundTaskArchiver}.
    *
    * @param executorService the Executor Service
    */

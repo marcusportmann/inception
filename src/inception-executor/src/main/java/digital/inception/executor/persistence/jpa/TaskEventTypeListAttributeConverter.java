@@ -36,7 +36,7 @@ import org.springframework.util.StringUtils;
 public class TaskEventTypeListAttributeConverter
     implements AttributeConverter<List<TaskEventType>, String> {
 
-  /** Creates a new {@code TaskEventTypeListAttributeConverter} instance. */
+  /** Constructs a new {@code TaskEventTypeListAttributeConverter}. */
   public TaskEventTypeListAttributeConverter() {}
 
   /**

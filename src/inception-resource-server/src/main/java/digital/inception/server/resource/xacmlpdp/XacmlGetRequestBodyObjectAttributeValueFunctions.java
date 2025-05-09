@@ -116,7 +116,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     private final Class<ATTRIBUTE_VALUE_TYPE> attributeValueType;
 
     /**
-     * Creates a new {@code XacmlGetRequestBodyAttributeValueFunction} instance.
+     * Constructs a new {@code XacmlGetRequestBodyAttributeValueFunction}.
      *
      * @param functionId the function ID
      * @param attributeValueType the required type of the attribute value retrieved from the Java
@@ -272,7 +272,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "boolean" + FUNCTION_ID_SUFFIX;
 
-    /** Creates a new {@code XacmlGetRequestBodyBooleanAttributeValueFunction} instance. */
+    /** Constructs a new {@code XacmlGetRequestBodyBooleanAttributeValueFunction}. */
     public XacmlGetRequestBodyBooleanAttributeValueFunction() {
       super(ID, Boolean.class, StandardDatatypes.BOOLEAN);
     }
@@ -306,7 +306,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "date" + FUNCTION_ID_SUFFIX;
 
-    /** Creates a new {@code XacmlGetRequestBodyDateAttributeValueFunction} instance. */
+    /** Constructs a new {@code XacmlGetRequestBodyDateAttributeValueFunction}. */
     public XacmlGetRequestBodyDateAttributeValueFunction() {
       super(ID, LocalDate.class, StandardDatatypes.DATE);
     }
@@ -340,7 +340,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "date-time" + FUNCTION_ID_SUFFIX;
 
-    /** Creates a new {@code XacmlGetRequestBodyDateTimeAttributeValueFunction} instance. */
+    /** Constructs a new {@code XacmlGetRequestBodyDateTimeAttributeValueFunction}. */
     public XacmlGetRequestBodyDateTimeAttributeValueFunction() {
       super(ID, OffsetDateTime.class, StandardDatatypes.DATETIME);
     }
@@ -378,7 +378,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "double" + FUNCTION_ID_SUFFIX;
 
-    /** Creates a new {@code XacmlGetRequestBodyDoubleAttributeValueFunction} instance. */
+    /** Constructs a new {@code XacmlGetRequestBodyDoubleAttributeValueFunction}. */
     public XacmlGetRequestBodyDoubleAttributeValueFunction() {
       super(ID, Double.class, StandardDatatypes.DOUBLE);
     }
@@ -412,7 +412,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "integer" + FUNCTION_ID_SUFFIX;
 
-    /** Creates a new {@code XacmlGetRequestBodyIntegerAttributeValueFunction} instance. */
+    /** Constructs a new {@code XacmlGetRequestBodyIntegerAttributeValueFunction}. */
     public XacmlGetRequestBodyIntegerAttributeValueFunction() {
       super(ID, Integer.class, StandardDatatypes.INTEGER);
     }
@@ -446,7 +446,7 @@ public class XacmlGetRequestBodyObjectAttributeValueFunctions {
     /** The function ID. */
     public static final String ID = FUNCTION_ID_PREFIX + "string" + FUNCTION_ID_SUFFIX;
 
-    /** Creates a new {@code XacmlGetRequestBodyStringAttributeValueFunction} instance. */
+    /** Constructs a new {@code XacmlGetRequestBodyStringAttributeValueFunction}. */
     public XacmlGetRequestBodyStringAttributeValueFunction() {
       super(ID, String.class, StandardDatatypes.STRING);
     }

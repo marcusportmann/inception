@@ -48,7 +48,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 @Import(CoreConfiguration.class)
 public class MongoConfiguration {
 
-  /** Creates a new {@code MongoConfiguration} instance. */
+  /** Constructs a new {@code MongoConfiguration}. */
   public MongoConfiguration() {}
 
   /**

@@ -36,7 +36,7 @@ public class NextOfKinTypeId implements Serializable {
   /** The Unicode locale identifier for the next of kin type. */
   private String localeId;
 
-  /** Creates a new {@code NextOfKinTypeId} instance. */
+  /** Constructs a new {@code NextOfKinTypeId}. */
   public NextOfKinTypeId() {}
 
   /**

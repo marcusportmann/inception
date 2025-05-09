@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class TaskStatusAttributeConverter extends AbstractCodeEnumAttributeConverter<TaskStatus> {
 
-  /** Creates a new {@code TaskStatusAttributeConverter} instance. */
+  /** Constructs a new {@code TaskStatusAttributeConverter}. */
   public TaskStatusAttributeConverter() {
     super(TaskStatus.class);
   }

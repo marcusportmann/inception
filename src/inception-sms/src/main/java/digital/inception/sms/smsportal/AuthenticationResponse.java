@@ -41,7 +41,7 @@ public class AuthenticationResponse {
   @JsonProperty(required = true)
   private String token;
 
-  /** Creates a new {@code AuthenticationResponse} instance. */
+  /** Constructs a new {@code AuthenticationResponse}. */
   public AuthenticationResponse() {}
 
   /**

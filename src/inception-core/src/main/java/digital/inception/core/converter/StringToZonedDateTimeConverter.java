@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 @Component
 public final class StringToZonedDateTimeConverter implements Converter<String, ZonedDateTime> {
 
-  /** Creates a new {@code StringToZonedDateTimeConverter} instance. */
+  /** Constructs a new {@code StringToZonedDateTimeConverter}. */
   public StringToZonedDateTimeConverter() {}
 
   @Override

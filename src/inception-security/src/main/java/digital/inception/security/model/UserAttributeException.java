@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>UserAttributeException</b> is thrown to indicate an invalid operation was performed on a
- * {@code UserAttribute} instance.
+ * A {@code UserAttributeException} exception is thrown to indicate an invalid operation was
+ * performed on a {@code UserAttribute} instance.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -44,7 +44,7 @@ public class UserAttributeException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code UserAttributeException} instance with the specified message.
+   * Constructs a new {@code UserAttributeException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */

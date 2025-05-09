@@ -76,11 +76,11 @@ public class ConfigSummary implements Serializable {
   @Column(name = "id", length = 100, nullable = false)
   private String id;
 
-  /** Creates a new {@code ConfigSummary} instance. */
+  /** Constructs a new {@code ConfigSummary}. */
   public ConfigSummary() {}
 
   /**
-   * Creates a new {@code ConfigSummary} instance.
+   * Constructs a new {@code ConfigSummary}.
    *
    * @param id the ID for the config
    * @param description the description for the config

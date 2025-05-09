@@ -124,11 +124,11 @@ public class SourceOfFunds implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code SourceOfFunds} instance. */
+  /** Constructs a new {@code SourceOfFunds}. */
   public SourceOfFunds() {}
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    */
@@ -137,7 +137,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param percentage the percentage of the total of all sources of funds attributed to this source
@@ -149,7 +149,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -160,7 +160,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -174,7 +174,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -187,7 +187,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
@@ -204,7 +204,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -215,7 +215,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -229,7 +229,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -242,7 +242,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -258,7 +258,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds
@@ -274,7 +274,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Creates a new {@code SourceOfFunds} instance.
+   * Constructs a new {@code SourceOfFunds}.
    *
    * @param type the source of funds type
    * @param description the description for the source of funds

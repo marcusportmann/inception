@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>ExpiredPasswordException</b> is thrown to indicate that a security operation failed as a
- * result of an expired password.
+ * An {@code ExpiredPasswordException} exception is thrown to indicate that a security operation
+ * failed as a result of an expired password.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class ExpiredPasswordException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ExpiredPasswordException} instance.
+   * Constructs a new {@code ExpiredPasswordException}.
    *
    * @param username the username for the user
    */

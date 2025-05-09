@@ -30,6 +30,6 @@ import org.springframework.context.annotation.Import;
 @Import(CoreConfiguration.class)
 public class AuthorizationServerConfiguration {
 
-  /** Creates a new {@code AuthorizationServerConfiguration} instance. */
+  /** Constructs a new {@code AuthorizationServerConfiguration}. */
   public AuthorizationServerConfiguration() {}
 }

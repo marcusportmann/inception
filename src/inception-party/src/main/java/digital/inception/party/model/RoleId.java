@@ -37,7 +37,7 @@ public class RoleId implements Serializable {
   /** The code for the role type. */
   private String type;
 
-  /** Creates a new {@code RoleId} instance. */
+  /** Constructs a new {@code RoleId}. */
   public RoleId() {}
 
   /**

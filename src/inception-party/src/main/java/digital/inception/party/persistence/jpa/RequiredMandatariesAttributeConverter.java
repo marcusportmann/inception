@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class RequiredMandatariesAttributeConverter
     extends AbstractCodeEnumAttributeConverter<RequiredMandataries> {
 
-  /** Creates a new {@code RequiredMandatariesAttributeConverter} instance. */
+  /** Constructs a new {@code RequiredMandatariesAttributeConverter}. */
   public RequiredMandatariesAttributeConverter() {
     super(RequiredMandataries.class);
   }

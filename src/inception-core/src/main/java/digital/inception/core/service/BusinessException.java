@@ -43,7 +43,7 @@ public class BusinessException extends ServiceException {
   private final String code;
 
   /**
-   * Creates a new {@code BusinessException} instance with the specified message.
+   * Constructs a new {@code BusinessException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -53,7 +53,7 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code BusinessException} instance with the specified code and message.
+   * Constructs a new {@code BusinessException} instance with the specified code and message.
    *
    * @param code The error code identifying the business error.
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -64,7 +64,7 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code BusinessException} instance with the specified code, message and cause.
+   * Constructs a new {@code BusinessException} instance with the specified code, message and cause.
    *
    * @param code The error code identifying the business error.
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -77,7 +77,7 @@ public class BusinessException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code BusinessException} instance with the specified code, message and cause.
+   * Constructs a new {@code BusinessException} instance with the specified code, message and cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code

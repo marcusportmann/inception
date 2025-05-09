@@ -36,7 +36,7 @@ public class GenderId implements Serializable {
   /** The Unicode locale identifier for the gender. */
   private String localeId;
 
-  /** Creates a new {@code GenderId} instance. */
+  /** Constructs a new {@code GenderId}. */
   public GenderId() {}
 
   /**

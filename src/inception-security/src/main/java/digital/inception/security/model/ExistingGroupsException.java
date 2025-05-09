@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * A <b>ExistingGroupsException</b> is thrown to indicate that a security operation failed as a
- * result of the existing groups associated with a user directory.
+ * An {@code ExistingGroupsException} exception is thrown to indicate that a security operation
+ * failed as a result of the existing groups associated with a user directory.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -47,7 +47,7 @@ public class ExistingGroupsException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ExistingGroupsException} instance.
+   * Constructs a new {@code ExistingGroupsException}.
    *
    * @param userDirectoryId the ID for the user directory
    */

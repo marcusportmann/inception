@@ -37,7 +37,7 @@ public class DemoTaskExecutor extends MultistepTaskExecutor<DemoTaskData> {
   private static final Logger log = LoggerFactory.getLogger(DemoTaskExecutor.class);
 
   /**
-   * Creates a new {@code DemoTaskExecutor} instance
+   * Constructs a new {@code DemoTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

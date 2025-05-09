@@ -95,7 +95,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
   private final int passwordHistoryMonths;
 
   /**
-   * Creates a new {@code InternalUserDirectoryProvider} instance.
+   * Constructs a new {@code InternalUserDirectoryProvider}.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory

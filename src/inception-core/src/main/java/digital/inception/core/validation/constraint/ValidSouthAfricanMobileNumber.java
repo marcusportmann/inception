@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 
 /**
  * The {@code ValidSouthAfricanMobileNumber} annotation implements the custom constraint annotation
- * used to validate whether a <b>String</b> contains a valid South African mobile number.
+ * used to validate whether a {@code String} contains a valid South African mobile number.
  *
  * @author Marcus Portmann
  */

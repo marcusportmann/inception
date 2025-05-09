@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "partyEntityManagerFactory")
 public class PartyConfiguration {
 
-  /** Creates a new {@code PartyConfiguration} instance. */
+  /** Constructs a new {@code PartyConfiguration}. */
   public PartyConfiguration() {}
 
   /**

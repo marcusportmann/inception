@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class CodeEnumToStringConverter implements Converter<CodeEnum, String> {
 
-  /** Creates a new {@code CodeEnumToStringConverter} instance. */
+  /** Constructs a new {@code CodeEnumToStringConverter}. */
   public CodeEnumToStringConverter() {}
 
   @Override

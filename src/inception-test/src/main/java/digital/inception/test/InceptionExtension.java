@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class InceptionExtension implements AfterEachCallback {
 
-  /** Creates a new {@code InceptionExtension} instance. */
+  /** Constructs a new {@code InceptionExtension}. */
   public InceptionExtension() {}
 
   @Override

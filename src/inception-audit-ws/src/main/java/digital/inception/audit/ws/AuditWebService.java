@@ -39,7 +39,7 @@ public class AuditWebService extends AbstractWebServiceBase {
   private final AuditService auditService;
 
   /**
-   * Creates a new {@code AuditWebService} instance.
+   * Constructs a new {@code AuditWebService}.
    *
    * @param applicationContext the Spring application context
    * @param auditService the Audit Service

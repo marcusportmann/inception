@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>ExistingGroupMembersException</b> is thrown to indicate that a security operation failed as
- * a result of existing group members.
+ * An {@code ExistingGroupMembersException} exception is thrown to indicate that a security
+ * operation failed as a result of existing group members.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class ExistingGroupMembersException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code ExistingGroupMembersException} instance.
+   * Constructs a new {@code ExistingGroupMembersException}.
    *
    * @param groupName the name of the group
    */

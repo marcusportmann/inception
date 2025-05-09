@@ -37,7 +37,7 @@ public class AttributeId implements Serializable {
   /** The code for the attribute type. */
   private String type;
 
-  /** Creates a new {@code AttributeId} instance. */
+  /** Constructs a new {@code AttributeId}. */
   public AttributeId() {}
 
   /**

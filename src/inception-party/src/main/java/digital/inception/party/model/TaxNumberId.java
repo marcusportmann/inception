@@ -37,7 +37,7 @@ public class TaxNumberId implements Serializable {
   /** The code for the tax number type. */
   private String type;
 
-  /** Creates a new {@code TaxNumberId} instance. */
+  /** Constructs a new {@code TaxNumberId}. */
   public TaxNumberId() {}
 
   /**

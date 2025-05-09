@@ -122,11 +122,11 @@ public class IndustryAllocation implements Serializable {
   @Column(name = "system", length = 50, nullable = false)
   private String system;
 
-  /** Creates a new {@code IndustryAllocation} instance. */
+  /** Constructs a new {@code IndustryAllocation}. */
   public IndustryAllocation() {}
 
   /**
-   * Creates a new {@code IndustryAllocation} instance.
+   * Constructs a new {@code IndustryAllocation}.
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
@@ -137,7 +137,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Creates a new {@code IndustryAllocation} instance.
+   * Constructs a new {@code IndustryAllocation}.
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
@@ -150,7 +150,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Creates a new {@code IndustryAllocation} instance.
+   * Constructs a new {@code IndustryAllocation}.
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification

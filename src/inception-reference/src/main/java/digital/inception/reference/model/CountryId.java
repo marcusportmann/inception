@@ -36,7 +36,7 @@ public class CountryId implements Serializable {
   /** The Unicode locale identifier for the country. */
   private String localeId;
 
-  /** Creates a new {@code CountryId} instance. */
+  /** Constructs a new {@code CountryId}. */
   public CountryId() {}
 
   /**

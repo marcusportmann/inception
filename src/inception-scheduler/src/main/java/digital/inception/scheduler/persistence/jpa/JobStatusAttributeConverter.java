@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class JobStatusAttributeConverter extends AbstractCodeEnumAttributeConverter<JobStatus> {
 
-  /** Creates a new {@code JobStatusAttributeConverter} instance. */
+  /** Constructs a new {@code JobStatusAttributeConverter}. */
   public JobStatusAttributeConverter() {
     super(JobStatus.class);
   }

@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class ZonedDateTimeToStringConverter implements Converter<ZonedDateTime, String> {
 
-  /** Creates a new {@code ZonedDateTimeToStringConverter} instance. */
+  /** Constructs a new {@code ZonedDateTimeToStringConverter}. */
   public ZonedDateTimeToStringConverter() {}
 
   @Override

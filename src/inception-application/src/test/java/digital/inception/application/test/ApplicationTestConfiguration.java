@@ -42,7 +42,7 @@ public class ApplicationTestConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Creates a new {@code ApplicationTestConfiguration} instance.
+   * Constructs a new {@code ApplicationTestConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

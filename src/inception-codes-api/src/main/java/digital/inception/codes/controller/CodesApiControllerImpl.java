@@ -49,7 +49,7 @@ public class CodesApiControllerImpl extends SecureApiController implements Codes
   private final CodesService codesService;
 
   /**
-   * Creates a new {@code CodesApiControllerImpl} instance.
+   * Constructs a new {@code CodesApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param codesService the Codes Service

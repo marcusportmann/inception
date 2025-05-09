@@ -107,11 +107,11 @@ public class Party implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private PartyType type;
 
-  /** Creates a new {@code Party} instance. */
+  /** Constructs a new {@code Party}. */
   public Party() {}
 
   /**
-   * Creates a new {@code Party} instance.
+   * Constructs a new {@code Party}.
    *
    * @param type the party type
    */
@@ -120,7 +120,7 @@ public class Party implements Serializable {
   }
 
   /**
-   * Creates a new {@code Party} instance.
+   * Constructs a new {@code Party}.
    *
    * @param tenantId the ID for the tenant the party is associated with
    * @param type the party type

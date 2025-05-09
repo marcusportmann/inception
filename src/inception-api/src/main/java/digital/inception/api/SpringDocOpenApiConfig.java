@@ -29,15 +29,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The {@code SpringDocOpenApiConfig} class provides the customization configuration for the
- * <b>springdoc-openapi</b> library.
+ * The {@code SpringDocOpenApiConfig} class provides the customization configuration for the {@code
+ * springdoc-openapi} library.
  *
  * @author Marcus Portmann
  */
 @Configuration
 public class SpringDocOpenApiConfig {
 
-  /** Creates a new {@code SpringDocOpenApiConfig} instance. */
+  /** Constructs a new {@code SpringDocOpenApiConfig}. */
   public SpringDocOpenApiConfig() {}
 
   /** Register the model converter. */
@@ -47,11 +47,11 @@ public class SpringDocOpenApiConfig {
   }
 
   /**
-   * Returns the schema property customizer for time-related properties for the
-   * <b>springdoc-openapi</b> library.
+   * Returns the schema property customizer for time-related properties for the {@code
+   * springdoc-openapi} library.
    *
-   * @return the schema property customizer for time-related properties for the
-   *     <b>springdoc-openapi</b> library
+   * @return the schema property customizer for time-related properties for the {@code
+   *     springdoc-openapi} library
    */
   @SuppressWarnings("unchecked")
   @Bean

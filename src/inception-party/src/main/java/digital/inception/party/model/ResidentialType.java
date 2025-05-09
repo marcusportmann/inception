@@ -121,7 +121,7 @@ public class ResidentialType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code ResidentialType} instance. */
+  /** Constructs a new {@code ResidentialType}. */
   public ResidentialType() {}
 
   /**

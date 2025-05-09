@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 
 /**
  * The {@code ValidISOCountryCode} annotation implements the custom constraint annotation used to
- * validate whether a <b>String</b> contains a valid ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3
+ * validate whether a {@code String} contains a valid ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3
  * country code.
  *
  * @author Marcus Portmann

@@ -36,7 +36,7 @@ public class FieldOfStudyId implements Serializable {
   /** The Unicode locale identifier for the field of study. */
   private String localeId;
 
-  /** Creates a new {@code FieldOfStudyId} instance. */
+  /** Constructs a new {@code FieldOfStudyId}. */
   public FieldOfStudyId() {}
 
   /**

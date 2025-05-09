@@ -34,7 +34,7 @@ public abstract class SimpleTaskExecutor<TaskDataType> implements TaskExecutor {
   private final Class<TaskDataType> taskDataTypeClass;
 
   /**
-   * Creates a new {@code SimpleTaskExecutor} instance
+   * Constructs a new {@code SimpleTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    * @param taskDataTypeClass the class for the task data type

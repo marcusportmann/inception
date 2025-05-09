@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * A <b>DuplicateTenantException</b> is thrown to indicate that a security operation failed as a
- * result of a duplicate tenant.
+ * A {@code DuplicateTenantException} exception is thrown to indicate that a security operation
+ * failed as a result of a duplicate tenant.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class DuplicateTenantException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateTenantException} instance.
+   * Constructs a new {@code DuplicateTenantException}.
    *
    * @param name the name of the tenant
    */
@@ -55,7 +55,7 @@ public class DuplicateTenantException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code DuplicateTenantException} instance.
+   * Constructs a new {@code DuplicateTenantException}.
    *
    * @param tenantId the ID for the tenant
    */

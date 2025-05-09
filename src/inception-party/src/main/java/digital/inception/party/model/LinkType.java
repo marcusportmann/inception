@@ -117,7 +117,7 @@ public class LinkType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code LinkType} instance. */
+  /** Constructs a new {@code LinkType}. */
   public LinkType() {}
 
   /**

@@ -46,7 +46,7 @@ public class DuplicateOrganizationException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateOrganizationException} instance.
+   * Constructs a new {@code DuplicateOrganizationException}.
    *
    * @param id the ID for the organization
    */

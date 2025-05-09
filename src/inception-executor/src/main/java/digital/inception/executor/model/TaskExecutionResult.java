@@ -76,11 +76,11 @@ public class TaskExecutionResult implements Serializable {
   @Size(min = 1, max = 10485760)
   private String updatedTaskData;
 
-  /** Creates a new {@code TaskExecutionResult} instance. */
+  /** Constructs a new {@code TaskExecutionResult}. */
   public TaskExecutionResult() {}
 
   /**
-   * Creates a new {@code TestExecutionResult} instance.
+   * Constructs a new {@code TestExecutionResult}.
    *
    * @param nextTaskStep the next task step for a multistep task
    */
@@ -89,7 +89,7 @@ public class TaskExecutionResult implements Serializable {
   }
 
   /**
-   * Creates a new {@code TestExecutionResult} instance.
+   * Constructs a new {@code TestExecutionResult}.
    *
    * @param nextTaskStep the next task step for a multistep task
    * @param updatedTaskData the updated task data
@@ -100,7 +100,7 @@ public class TaskExecutionResult implements Serializable {
   }
 
   /**
-   * Creates a new {@code TestExecutionResult} instance.
+   * Constructs a new {@code TestExecutionResult}.
    *
    * @param nextTaskStep the next task step for a multistep task
    * @param nextTaskStepDelay the delay in milliseconds before the next task step for a multistep
@@ -117,7 +117,7 @@ public class TaskExecutionResult implements Serializable {
   }
 
   /**
-   * Creates a new {@code TestExecutionResult} instance.
+   * Constructs a new {@code TestExecutionResult}.
    *
    * @param nextTaskStep the next task step for a multistep task
    * @param nextTaskStepDelay the delay in milliseconds before the next task step for a multistep

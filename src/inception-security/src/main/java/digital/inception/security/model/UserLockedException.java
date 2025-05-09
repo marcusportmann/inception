@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>UserLockedException</b> is thrown to indicate that a security operation failed as a result
- * of a user being locked.
+ * A {@code UserLockedException} exception is thrown to indicate that a security operation failed as
+ * a result of a user being locked.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -47,7 +47,7 @@ public class UserLockedException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code UserLockedException} instance.
+   * Constructs a new {@code UserLockedException}.
    *
    * @param username the username for the user
    */

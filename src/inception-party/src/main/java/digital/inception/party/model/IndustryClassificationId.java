@@ -40,7 +40,7 @@ public class IndustryClassificationId implements Serializable {
   /** The code for the industry classification system for the industry classification. */
   private String system;
 
-  /** Creates a new {@code IndustryClassificationId} instance. */
+  /** Constructs a new {@code IndustryClassificationId}. */
   public IndustryClassificationId() {}
 
   /**

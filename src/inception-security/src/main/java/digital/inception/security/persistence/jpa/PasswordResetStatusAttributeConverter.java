@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class PasswordResetStatusAttributeConverter
     extends AbstractCodeEnumAttributeConverter<PasswordResetStatus> {
 
-  /** Creates a new {@code PasswordResetStatusAttributeConverter} instance. */
+  /** Constructs a new {@code PasswordResetStatusAttributeConverter}. */
   public PasswordResetStatusAttributeConverter() {
     super(PasswordResetStatus.class);
   }

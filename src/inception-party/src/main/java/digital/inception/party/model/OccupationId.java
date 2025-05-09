@@ -36,7 +36,7 @@ public class OccupationId implements Serializable {
   /** The Unicode locale identifier for the occupation. */
   private String localeId;
 
-  /** Creates a new {@code OccupationId} instance. */
+  /** Constructs a new {@code OccupationId}. */
   public OccupationId() {}
 
   /**

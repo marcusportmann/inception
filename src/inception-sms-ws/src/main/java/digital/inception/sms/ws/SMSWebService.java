@@ -39,7 +39,7 @@ public class SMSWebService extends AbstractWebServiceBase {
   private final SMSService smsService;
 
   /**
-   * Creates a new {@code SMSWebService} instance.
+   * Constructs a new {@code SMSWebService}.
    *
    * @param applicationContext the Spring application context
    * @param smsService the SMS Service

@@ -98,11 +98,11 @@ public class CodeCategory implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Creates a new {@code CodeCategory} instance. */
+  /** Constructs a new {@code CodeCategory}. */
   public CodeCategory() {}
 
   /**
-   * Creates a new {@code CodeCategory} instance.
+   * Constructs a new {@code CodeCategory}.
    *
    * @param id the ID for the code category
    * @param name the name of the code category
@@ -113,7 +113,7 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Creates a new {@code CodeCategory} instance.
+   * Constructs a new {@code CodeCategory}.
    *
    * @param id the ID for the code category
    * @param name the name of the code category

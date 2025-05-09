@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The {@code SkillTypeRepository} interface declares the persistence for the <b>SkillType</b>
+ * The {@code SkillTypeRepository} interface declares the persistence for the {@code SkillType}
  * domain type.
  *
  * @author Marcus Portmann

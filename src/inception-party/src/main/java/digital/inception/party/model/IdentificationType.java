@@ -186,7 +186,7 @@ public class IdentificationType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code IdentificationType} instance. */
+  /** Constructs a new {@code IdentificationType}. */
   public IdentificationType() {}
 
   /**

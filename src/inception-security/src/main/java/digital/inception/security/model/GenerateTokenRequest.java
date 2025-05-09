@@ -103,11 +103,11 @@ public class GenerateTokenRequest implements Serializable {
   @XmlSchemaType(name = "date")
   private LocalDate validFromDate;
 
-  /** Creates a new {@code GenerateTokenRequest} instance. */
+  /** Constructs a new {@code GenerateTokenRequest}. */
   public GenerateTokenRequest() {}
 
   /**
-   * Creates a new {@code GenerateTokenRequest} instance.
+   * Constructs a new {@code GenerateTokenRequest}.
    *
    * @param type the token type
    * @param name the name of the token
@@ -132,7 +132,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Creates a new {@code GenerateTokenRequest} instance.
+   * Constructs a new {@code GenerateTokenRequest}.
    *
    * @param type the token type
    * @param name the name of the token
@@ -154,7 +154,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Creates a new {@code GenerateTokenRequest} instance.
+   * Constructs a new {@code GenerateTokenRequest}.
    *
    * @param type the token type
    * @param name the name of the token

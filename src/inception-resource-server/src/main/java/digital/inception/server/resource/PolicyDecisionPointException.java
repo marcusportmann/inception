@@ -31,14 +31,15 @@ public class PolicyDecisionPointException extends RichRuntimeException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code PolicyDecisionPointException} instance with {@code null} as its message.
+   * Constructs a new {@code PolicyDecisionPointException} instance with {@code null} as its
+   * message.
    */
   public PolicyDecisionPointException() {
     super();
   }
 
   /**
-   * Creates a new {@code PolicyDecisionPointException} instance with the specified message.
+   * Constructs a new {@code PolicyDecisionPointException} instance with the specified message.
    *
    * @param message the message saved for later retrieval by the {@code getMessage()} method
    */
@@ -47,7 +48,7 @@ public class PolicyDecisionPointException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code PolicyDecisionPointException} instance with the specified cause and a
+   * Constructs a new {@code PolicyDecisionPointException} instance with the specified cause and a
    * message of {@code (cause==null ? null : cause.toString())} (which typically contains the class
    * and message of cause).
    *
@@ -59,7 +60,7 @@ public class PolicyDecisionPointException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code PolicyDecisionPointException} instance with the specified code and
+   * Constructs a new {@code PolicyDecisionPointException} instance with the specified code and
    * message.
    *
    * @param code the error code for the error
@@ -70,7 +71,7 @@ public class PolicyDecisionPointException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code PolicyDecisionPointException} instance with the specified message and
+   * Constructs a new {@code PolicyDecisionPointException} instance with the specified message and
    * cause.
    *
    * @param message the message saved for later retrieval by the {@code getMessage()} method
@@ -82,7 +83,7 @@ public class PolicyDecisionPointException extends RichRuntimeException {
   }
 
   /**
-   * Creates a new {@code PolicyDecisionPointException} instance with the specified code, message
+   * Constructs a new {@code PolicyDecisionPointException} instance with the specified code, message
    * and cause.
    *
    * @param code the error code for the error

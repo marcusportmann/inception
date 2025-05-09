@@ -70,11 +70,11 @@ public class AssignInteractionRequest implements Serializable {
   @Size(min = 1, max = 100)
   private String username;
 
-  /** Creates a new {@code AssignInteractionRequest} instance. */
+  /** Constructs a new {@code AssignInteractionRequest}. */
   public AssignInteractionRequest() {}
 
   /**
-   * Creates a new {@code AssignInteractionRequest} instance.
+   * Constructs a new {@code AssignInteractionRequest}.
    *
    * @param interactionId the unique identifier for the interaction
    * @param username the username for the user the interaction should be assigned to

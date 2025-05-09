@@ -103,11 +103,11 @@ public class Tenant implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
   private List<UserDirectory> userDirectories = new ArrayList<>();
 
-  /** Creates a new {@code Tenant} instance. */
+  /** Constructs a new {@code Tenant}. */
   public Tenant() {}
 
   /**
-   * Creates a new {@code Tenant} instance.
+   * Constructs a new {@code Tenant}.
    *
    * @param name the name of the tenant
    * @param status the status for the tenant
@@ -118,7 +118,7 @@ public class Tenant implements Serializable {
   }
 
   /**
-   * Creates a new {@code Tenant} instance.
+   * Constructs a new {@code Tenant}.
    *
    * @param id the ID for the tenant
    * @param name the name of the tenant

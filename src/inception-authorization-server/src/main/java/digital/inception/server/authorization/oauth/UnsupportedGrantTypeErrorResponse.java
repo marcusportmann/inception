@@ -30,7 +30,7 @@ public class UnsupportedGrantTypeErrorResponse extends ErrorResponse {
   public static final String ERROR_CODE = "unsupported_grant_type";
 
   /**
-   * Creates a new {@code UnsupportedGrantTypeErrorResponse} instance.
+   * Constructs a new {@code UnsupportedGrantTypeErrorResponse}.
    *
    * @param grantType the unsupported grant type
    */

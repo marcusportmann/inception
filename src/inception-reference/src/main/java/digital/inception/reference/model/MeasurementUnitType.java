@@ -110,7 +110,7 @@ public class MeasurementUnitType implements Serializable {
   @Column(name = "sort_index")
   private Integer sortIndex;
 
-  /** Creates a new {@code MeasurementUnitType} instance. */
+  /** Constructs a new {@code MeasurementUnitType}. */
   public MeasurementUnitType() {}
 
   /**

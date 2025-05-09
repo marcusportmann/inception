@@ -32,7 +32,7 @@ public class PasswordCallbackHandler implements CallbackHandler {
   private final String username;
 
   /**
-   * Creates a new {@code PasswordCallbackHandler} instance.
+   * Constructs a new {@code PasswordCallbackHandler}.
    *
    * @param username the username
    * @param password the password

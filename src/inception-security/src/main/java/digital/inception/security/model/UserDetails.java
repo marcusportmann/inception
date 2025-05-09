@@ -37,7 +37,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
   private final User user;
 
   /**
-   * Creates a new {@code UserDetails} instance.
+   * Constructs a new {@code UserDetails}.
    *
    * @param user the user
    * @param roleCodes the codes for the roles that the user has been assigned

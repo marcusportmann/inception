@@ -206,7 +206,7 @@ public class TaskType implements Serializable {
   private Integer retryDelay;
 
   /**
-   * Creates a new {@code TaskType} instance.
+   * Constructs a new {@code TaskType}.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -243,7 +243,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskType} instance.
+   * Constructs a new {@code TaskType}.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -270,7 +270,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskType} instance.
+   * Constructs a new {@code TaskType}.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -300,7 +300,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskType} instance.
+   * Constructs a new {@code TaskType}.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -333,7 +333,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskType} instance.
+   * Constructs a new {@code TaskType}.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -352,7 +352,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskType} instance.
+   * Constructs a new {@code TaskType}.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -378,7 +378,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskType} instance.
+   * Constructs a new {@code TaskType}.
    *
    * @param code the code for the task type
    * @param name the name of the task type
@@ -406,7 +406,7 @@ public class TaskType implements Serializable {
     this.enabled = true;
   }
 
-  /** Creates a new {@code TaskType} instance. */
+  /** Constructs a new {@code TaskType}. */
   public TaskType() {}
 
   /**

@@ -119,11 +119,11 @@ public class Mandatary implements Serializable {
   @Column(name = "role", length = 50, nullable = false)
   private String role;
 
-  /** Creates a new {@code Mandatary} instance. */
+  /** Constructs a new {@code Mandatary}. */
   public Mandatary() {}
 
   /**
-   * Creates a new {@code Mandatary} instance.
+   * Constructs a new {@code Mandatary}.
    *
    * @param partyId the ID for the party who is the recipient of the mandate
    * @param role the code for the mandatary role

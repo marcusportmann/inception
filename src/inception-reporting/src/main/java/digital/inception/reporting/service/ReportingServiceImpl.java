@@ -66,7 +66,7 @@ public class ReportingServiceImpl extends AbstractServiceBase implements Reporti
   private String localReportFolderPath;
 
   /**
-   * Creates a new {@code ReportingServiceImpl} instance.
+   * Constructs a new {@code ReportingServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

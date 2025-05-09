@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The {@code AssociationRepository} interface declares the persistence for the <b>Association</b>
+ * The {@code AssociationRepository} interface declares the persistence for the {@code Association}
  * domain type.
  *
  * @author Marcus Portmann

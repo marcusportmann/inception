@@ -40,7 +40,7 @@ public class MandateLinkId implements Serializable {
   /** The code for the link type. */
   private String type;
 
-  /** Creates a new {@code MandateLinkId} instance. */
+  /** Constructs a new {@code MandateLinkId}. */
   public MandateLinkId() {}
 
   /**

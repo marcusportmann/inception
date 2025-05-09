@@ -40,7 +40,7 @@ public class RecoveryXAResource implements AutoCloseable, XAResource {
   private XAResource xaResource;
 
   /**
-   * Creates a new {@code RecoveryXAResource} instance.
+   * Constructs a new {@code RecoveryXAResource}.
    *
    * @param resourceRecoveryFactory the resource recovery factory
    */

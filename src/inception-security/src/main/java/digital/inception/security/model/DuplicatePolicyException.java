@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>DuplicatePolicyException</b> is thrown to indicate that a security operation failed as a
- * result of a duplicate policy.
+ * A {@code DuplicatePolicyException} exception is thrown to indicate that a security operation
+ * failed as a result of a duplicate policy.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class DuplicatePolicyException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicatePolicyException} instance.
+   * Constructs a new {@code DuplicatePolicyException}.
    *
    * @param policyId the ID for the policy
    */

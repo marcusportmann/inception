@@ -28,7 +28,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  */
 public class InternalPartyStoreEnabledCondition implements Condition {
 
-  /** Creates a new {@code InternalPartyStoreEnabledCondition} instance. */
+  /** Constructs a new {@code InternalPartyStoreEnabledCondition}. */
   public InternalPartyStoreEnabledCondition() {}
 
   @Override

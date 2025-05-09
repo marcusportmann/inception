@@ -22,20 +22,20 @@ import java.time.OffsetDateTime;
 
 /**
  * The {@code OffsetDateTimeAdapter} class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and {@code OffsetDateTime} types. <br>
+ * {@code String} and {@code OffsetDateTime} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
 
-  /** Creates a new {@code OffsetDateTimeAdapter} instance. */
+  /** Constructs a new {@code OffsetDateTimeAdapter}. */
   public OffsetDateTimeAdapter() {}
 
   /**
-   * Marshals the <b>java.time.OffsetDateTime</b> value as an ISO8601 string.
+   * Marshals the {@code java.time.OffsetDateTime} value as an ISO8601 string.
    *
    * @param value the value to marshal
-   * @return the <b>java.time.OffsetDateTime</b> value as an ISO8601 string
+   * @return the {@code java.time.OffsetDateTime} value as an ISO8601 string
    */
   public static String toISO8601(OffsetDateTime value) {
     if (value == null) {
@@ -46,10 +46,10 @@ public class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <b>java.time.OffsetDateTime</b>.
+   * Unmarshals the ISO8601 string value as a {@code java.time.OffsetDateTime}.
    *
    * @param value the ISO8601 string value
-   * @return the ISO8601 string value as a <b>java.time.OffsetDateTime</b>
+   * @return the ISO8601 string value as a {@code java.time.OffsetDateTime}
    */
   public static OffsetDateTime toOffsetDateTime(String value) {
     if (value == null) {
@@ -64,10 +64,10 @@ public class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
   }
 
   /**
-   * Marshals the <b>java.time.OffsetDateTime</b> value as an ISO8601 string.
+   * Marshals the {@code java.time.OffsetDateTime} value as an ISO8601 string.
    *
    * @param value the value to marshal
-   * @return the <b>java.time.OffsetDateTime</b> value as an ISO8601 string
+   * @return the {@code java.time.OffsetDateTime} value as an ISO8601 string
    */
   @Override
   public String marshal(OffsetDateTime value) {
@@ -79,10 +79,10 @@ public class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <b>java.time.OffsetDateTime</b>.
+   * Unmarshals the ISO8601 string value as a {@code java.time.OffsetDateTime}.
    *
    * @param value the ISO8601 string value
-   * @return the ISO8601 string value as a <b>java.time.OffsetDateTime</b>
+   * @return the ISO8601 string value as a {@code java.time.OffsetDateTime}
    */
   @Override
   public OffsetDateTime unmarshal(String value) {

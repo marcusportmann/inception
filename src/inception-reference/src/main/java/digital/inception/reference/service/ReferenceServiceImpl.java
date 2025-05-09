@@ -70,7 +70,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   private final RegionRepository regionRepository;
 
   /**
-   * Creates a new {@code ReferenceServiceImpl} instance.
+   * Constructs a new {@code ReferenceServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param countryRepository the Country Repository

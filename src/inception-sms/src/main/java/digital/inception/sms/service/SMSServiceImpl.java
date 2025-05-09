@@ -108,7 +108,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
   private String useProvider;
 
   /**
-   * Creates a new {@code SMSServiceImpl} instance.
+   * Constructs a new {@code SMSServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param webClientBuilder the web client builder

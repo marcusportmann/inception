@@ -44,7 +44,7 @@ public class InvalidArgumentException extends ServiceException {
   private final InvalidArgumentError invalidArgumentError;
 
   /**
-   * Creates a new {@code InvalidArgumentException} instance.
+   * Constructs a new {@code InvalidArgumentException}.
    *
    * @param parameter the name of the parameter associated with the invalid argument
    */
@@ -53,7 +53,7 @@ public class InvalidArgumentException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code InvalidArgumentException} instance.
+   * Constructs a new {@code InvalidArgumentException}.
    *
    * @param parameter the name of the parameter associated with the invalid argument
    * @param validationErrors the validation errors associated with the invalid argument

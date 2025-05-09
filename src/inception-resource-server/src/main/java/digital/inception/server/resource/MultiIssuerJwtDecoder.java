@@ -69,7 +69,7 @@ public class MultiIssuerJwtDecoder implements JwtDecoder {
   private List<RevokedToken> revokedTokens = new ArrayList<>();
 
   /**
-   * Creates a new {@code JwtDecoder} instance.
+   * Constructs a new {@code JwtDecoder}.
    *
    * @param jwtDecoders the JWT decoders for the different issuers using different RSA keys or
    *     secret keys

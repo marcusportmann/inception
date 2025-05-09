@@ -45,7 +45,7 @@ public class BatchTasksNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code BatchTasksNotFoundException} instance.
+   * Constructs a new {@code BatchTasksNotFoundException}.
    *
    * @param batchId the ID for the batch
    */

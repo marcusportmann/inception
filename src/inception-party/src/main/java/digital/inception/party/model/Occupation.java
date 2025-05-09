@@ -117,7 +117,7 @@ public class Occupation implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code Occupation} instance. */
+  /** Constructs a new {@code Occupation}. */
   public Occupation() {}
 
   /**

@@ -129,11 +129,11 @@ public class InteractionSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code InteractionSummaries} instance. */
+  /** Constructs a new {@code InteractionSummaries}. */
   public InteractionSummaries() {}
 
   /**
-   * Creates a new {@code InteractionSummaries} instance.
+   * Constructs a new {@code InteractionSummaries}.
    *
    * @param tenantId the ID for the tenant the interaction summaries are associated with
    * @param interactionSummaries the interaction summaries

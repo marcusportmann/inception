@@ -30,7 +30,7 @@ import java.util.Date;
  */
 public class DateSerializer extends JsonSerializer<Date> {
 
-  /** Creates a new {@code DateSerializer} instance. */
+  /** Constructs a new {@code DateSerializer}. */
   public DateSerializer() {}
 
   @Override

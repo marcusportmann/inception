@@ -21,14 +21,14 @@ import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * The {@code ValidSouthAfricanMobileNumberValidator} class implements the custom constraint
- * validator that validates whether a <b>String</b> contains a valid South African mobile number.
+ * validator that validates whether a {@code String} contains a valid South African mobile number.
  *
  * @author Marcus Portmann
  */
 public class ValidSouthAfricanMobileNumberValidator
     implements ConstraintValidator<ValidSouthAfricanMobileNumber, Object> {
 
-  /** Creates a new {@code ValidSouthAfricanMobileNumberValidator} instance. */
+  /** Constructs a new {@code ValidSouthAfricanMobileNumberValidator}. */
   public ValidSouthAfricanMobileNumberValidator() {}
 
   @Override

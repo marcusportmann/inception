@@ -37,7 +37,8 @@ public class InvalidOAuth2RefreshTokenException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code InvalidOAuth2RefreshTokenException} instance with the specified message.
+   * Constructs a new {@code InvalidOAuth2RefreshTokenException} instance with the specified
+   * message.
    */
   public InvalidOAuth2RefreshTokenException() {
     super("The OAuth2 refresh token is invalid");

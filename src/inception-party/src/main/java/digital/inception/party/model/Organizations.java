@@ -123,11 +123,11 @@ public class Organizations implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code Organizations} instance. */
+  /** Constructs a new {@code Organizations}. */
   public Organizations() {}
 
   /**
-   * Creates a new {@code Organizations} instance.
+   * Constructs a new {@code Organizations}.
    *
    * @param tenantId the ID for the tenant the organizations are associated with
    * @param organizations the organizations

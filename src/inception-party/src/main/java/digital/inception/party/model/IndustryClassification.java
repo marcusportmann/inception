@@ -162,7 +162,7 @@ public class IndustryClassification implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code IndustryClassification} instance. */
+  /** Constructs a new {@code IndustryClassification}. */
   public IndustryClassification() {}
 
   /**

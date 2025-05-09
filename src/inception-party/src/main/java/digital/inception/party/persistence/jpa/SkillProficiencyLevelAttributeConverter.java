@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class SkillProficiencyLevelAttributeConverter
     extends AbstractCodeEnumAttributeConverter<SkillProficiencyLevel> {
 
-  /** Creates a new {@code SkillProficiencyLevelAttributeConverter} instance. */
+  /** Constructs a new {@code SkillProficiencyLevelAttributeConverter}. */
   public SkillProficiencyLevelAttributeConverter() {
     super(SkillProficiencyLevel.class);
   }

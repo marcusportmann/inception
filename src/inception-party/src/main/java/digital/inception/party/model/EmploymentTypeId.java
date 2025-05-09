@@ -39,7 +39,7 @@ public class EmploymentTypeId implements Serializable {
   /** The Unicode locale identifier for the employment status. */
   private String localeId;
 
-  /** Creates a new {@code EmploymentTypeId} instance. */
+  /** Constructs a new {@code EmploymentTypeId}. */
   public EmploymentTypeId() {}
 
   /**

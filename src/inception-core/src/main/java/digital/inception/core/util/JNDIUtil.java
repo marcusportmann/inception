@@ -90,7 +90,7 @@ public final class JNDIUtil {
   /**
    * Dump the contents of the JNDIUtil tree.
    *
-   * @return the contents of the JNDIUtil as a <b>String</b>
+   * @return the contents of the JNDIUtil as a {@code String}
    */
   public static String dumpJNDIToString() {
     StringWriter sw = new StringWriter();

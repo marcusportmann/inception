@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CodesApiConfiguration {
 
-  /** Creates a new {@code CodesApiConfiguration} instance. */
+  /** Constructs a new {@code CodesApiConfiguration}. */
   public CodesApiConfiguration() {}
 
   /**

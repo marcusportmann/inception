@@ -73,7 +73,7 @@ public class ValidPersonValidator extends PartyValidator
     implements ConstraintValidator<ValidPerson, Person> {
 
   /**
-   * Creates a new {@code ValidPersonValidator} instance.
+   * Constructs a new {@code ValidPersonValidator}.
    *
    * @param partyReferenceService the Party Reference Service
    * @param referenceService the Reference Service
@@ -84,7 +84,7 @@ public class ValidPersonValidator extends PartyValidator
     super(partyReferenceService, referenceService);
   }
 
-  /** Creates a new {@code ValidPersonValidator} instance. */
+  /** Constructs a new {@code ValidPersonValidator}. */
   public ValidPersonValidator() {
     super(null, null);
   }

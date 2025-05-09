@@ -119,11 +119,11 @@ public class Group implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private List<User> users = new ArrayList<>();
 
-  /** Creates a new {@code Group} instance. */
+  /** Constructs a new {@code Group}. */
   public Group() {}
 
   /**
-   * Creates a new {@code Group} instance.
+   * Constructs a new {@code Group}.
    *
    * @param name the name of the group
    */
@@ -132,7 +132,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Creates a new {@code Group} instance.
+   * Constructs a new {@code Group}.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    * @param name the name of the group

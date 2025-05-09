@@ -66,11 +66,11 @@ public class ExecuteTaskRequest implements Serializable {
   @Size(min = 1, max = 50)
   private String taskType;
 
-  /** Creates a new {@code ExecuteTaskRequest} instance. */
+  /** Constructs a new {@code ExecuteTaskRequest}. */
   public ExecuteTaskRequest() {}
 
   /**
-   * Creates a new {@code ExecuteTaskRequest} instance.
+   * Constructs a new {@code ExecuteTaskRequest}.
    *
    * @param taskType the code for the task type
    * @param taskData the task data

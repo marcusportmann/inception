@@ -37,13 +37,13 @@ public class CDATA implements Serializable, Content {
   /** The text content. */
   private String text;
 
-  /** Constructs a new empty <b>CDATA</b>. */
+  /** Constructs a new empty {@code CDATA}. */
   public CDATA() {
     text = "";
   }
 
   /**
-   * Creates a new {@code CDATA} instance containing the specified text.
+   * Constructs a new {@code CDATA} instance containing the specified text.
    *
    * @param text the text content
    */
@@ -70,9 +70,9 @@ public class CDATA implements Serializable, Content {
   }
 
   /**
-   * Print the content to the specified <b>OutputStream</b> using the specified indent level.
+   * Print the content to the specified {@code OutputStream} using the specified indent level.
    *
-   * @param out the <b>OuputStream</b> to output the content to
+   * @param out the {@code OuputStream} to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {

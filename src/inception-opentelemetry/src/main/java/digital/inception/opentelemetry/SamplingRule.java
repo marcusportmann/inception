@@ -23,9 +23,9 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * The <b>SamplingRule</b> hold the information for a sampling rule that matches a span's attribute
- * against a regex pattern and delegates the sampling decision to a specified sampler if the match
- * is successful.
+ * The {@code SamplingRule} class holds the information for a sampling rule that matches a span's
+ * attribute against a regex pattern and delegates the sampling decision to a specified sampler if
+ * the match is successful.
  *
  * @author Marcus Portmann
  */
@@ -40,7 +40,7 @@ public final class SamplingRule {
   private final SpanKind spanKind;
 
   /**
-   * Creates a new {@code SamplingRule} instance>.
+   * Constructs a new {@code SamplingRule} instance>.
    *
    * @param spanKind the span kind
    * @param attributeKey the attribute key to match against

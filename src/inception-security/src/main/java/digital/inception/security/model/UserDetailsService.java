@@ -39,7 +39,7 @@ public class UserDetailsService
   private final SecurityService securityService;
 
   /**
-   * Creates a new {@code UserDetailsService} instance.
+   * Constructs a new {@code UserDetailsService}.
    *
    * @param securityService the Security Service
    */
@@ -50,7 +50,7 @@ public class UserDetailsService
   /**
    * Locates the user based on the username. In the actual implementation, the search may possibly
    * be case sensitive, or case insensitive depending on how the implementation instance is
-   * configured. In this case, the <b>UserDetails</b> object that comes back may have a username
+   * configured. In this case, the {@code UserDetails} object that comes back may have a username
    * that is of a different case than what was actually requested.
    *
    * @param username the username for the user whose data is required.

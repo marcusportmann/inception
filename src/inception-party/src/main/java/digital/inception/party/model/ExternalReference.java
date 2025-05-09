@@ -95,11 +95,11 @@ public class ExternalReference implements Serializable {
   @Column(name = "value", length = 100, nullable = false)
   private String value;
 
-  /** Creates a new {@code ExternalReference} instance. */
+  /** Constructs a new {@code ExternalReference}. */
   public ExternalReference() {}
 
   /**
-   * Creates a new {@code ExternalReference} instance.
+   * Constructs a new {@code ExternalReference}.
    *
    * @param type the code for the external reference type
    * @param value the value for the external reference

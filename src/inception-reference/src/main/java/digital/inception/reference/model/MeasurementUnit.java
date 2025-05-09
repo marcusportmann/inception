@@ -132,7 +132,7 @@ public class MeasurementUnit implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code MeasurementUnit} instance. */
+  /** Constructs a new {@code MeasurementUnit}. */
   public MeasurementUnit() {}
 
   /**

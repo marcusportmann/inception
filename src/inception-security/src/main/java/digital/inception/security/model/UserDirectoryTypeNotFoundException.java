@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>UserDirectoryTypeNotFoundException</b> is thrown to indicate that a security operation
- * failed as a result of a user directory type that could not be found.
+ * A {@code UserDirectoryTypeNotFoundException} exception is thrown to indicate that a security
+ * operation failed as a result of a user directory type that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class UserDirectoryTypeNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code UserDirectoryTypeNotFoundException} instance.
+   * Constructs a new {@code UserDirectoryTypeNotFoundException}.
    *
    * @param userDirectoryTypeCode the code for the user directory type
    */

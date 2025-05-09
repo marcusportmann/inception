@@ -142,7 +142,7 @@ public class CreateDocumentRequest implements Serializable {
   @Column(name = "source_document_id")
   private UUID sourceDocumentId;
 
-  /** Creates a new {@code CreateDocumentRequest} instance. */
+  /** Constructs a new {@code CreateDocumentRequest}. */
   public CreateDocumentRequest() {}
 
   /**

@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 @Component
 public final class StringToOffsetTimeConverter implements Converter<String, OffsetTime> {
 
-  /** Creates a new {@code StringToOffsetTimeConverter} instance. */
+  /** Constructs a new {@code StringToOffsetTimeConverter}. */
   public StringToOffsetTimeConverter() {}
 
   @Override

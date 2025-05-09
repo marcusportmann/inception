@@ -257,11 +257,11 @@ public class Interaction implements Serializable {
   @Column(name = "type", nullable = false)
   private InteractionType type;
 
-  /** Creates a new {@code Interaction} instance. */
+  /** Constructs a new {@code Interaction}. */
   public Interaction() {}
 
   /**
-   * Creates a new {@code Interaction} instance.
+   * Constructs a new {@code Interaction}.
    *
    * @param id the unique identifier for the interaction
    * @param sourceId the unique identifier for the interaction source the interaction is associated
@@ -301,7 +301,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Creates a new {@code Interaction} instance.
+   * Constructs a new {@code Interaction}.
    *
    * @param id the unique identifier for the interaction
    * @param tenantId the unique identifier for the tenant the interaction is associated with

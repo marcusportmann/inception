@@ -33,7 +33,7 @@ public class JobParameterId implements Serializable {
   /** The name of the job parameter. */
   private String name;
 
-  /** Creates a new {@code JobParameterId} instance. */
+  /** Constructs a new {@code JobParameterId}. */
   public JobParameterId() {}
 
   /**

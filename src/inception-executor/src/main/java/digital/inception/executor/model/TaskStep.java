@@ -72,7 +72,7 @@ public class TaskStep implements Serializable {
   private long postExecutionDelay;
 
   /**
-   * Creates a new {@code TaskStep} instance.
+   * Constructs a new {@code TaskStep}.
    *
    * @param code the code for the task step
    * @param name the name of the task step
@@ -83,7 +83,7 @@ public class TaskStep implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskStep} instance.
+   * Constructs a new {@code TaskStep}.
    *
    * @param code the code for the task step
    * @param name the name of the task step

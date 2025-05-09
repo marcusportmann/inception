@@ -47,7 +47,7 @@ public abstract class UserDirectoryProviderBase implements UserDirectoryProvider
   private final UserRepository userRepository;
 
   /**
-   * Creates a new {@code UserDirectoryBase} instance.
+   * Constructs a new {@code UserDirectoryBase}.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory

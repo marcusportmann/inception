@@ -53,7 +53,7 @@ public class NarayanaTransactionIntegration
   private final TransactionSynchronizationRegistry transactionSynchronizationRegistry;
 
   /**
-   * Creates a new {@code NarayanaTransactionIntegration} instance.
+   * Constructs a new {@code NarayanaTransactionIntegration}.
    *
    * @param transactionManager the transaction manager
    * @param transactionSynchronizationRegistry the transaction synchronization registry
@@ -65,7 +65,7 @@ public class NarayanaTransactionIntegration
   }
 
   /**
-   * Creates a new {@code NarayanaTransactionIntegration} instance.
+   * Constructs a new {@code NarayanaTransactionIntegration}.
    *
    * @param transactionManager the transaction manager
    * @param transactionSynchronizationRegistry the transaction synchronization registry
@@ -81,7 +81,7 @@ public class NarayanaTransactionIntegration
   }
 
   /**
-   * Creates a new {@code NarayanaTransactionIntegration} instance.
+   * Constructs a new {@code NarayanaTransactionIntegration}.
    *
    * @param applicationContext the Spring application context
    */

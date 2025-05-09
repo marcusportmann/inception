@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 /**
  * The {@code RequiredDocumentAttributeListAttributeConverter} class implements the custom JPA
- * converter used to store a list of <b>RequiredDocumentAttribute</b>s as a String.
+ * converter used to store a list of {@code RequiredDocumentAttribute} instances as a String.
  *
  * @author Marcus Portmann
  */
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class RequiredDocumentAttributeListAttributeConverter
     implements AttributeConverter<List<RequiredDocumentAttribute>, String> {
 
-  /** Creates a new {@code RequiredDocumentAttributeListAttributeConverter} instance. */
+  /** Constructs a new {@code RequiredDocumentAttributeListAttributeConverter}. */
   public RequiredDocumentAttributeListAttributeConverter() {}
 
   /**

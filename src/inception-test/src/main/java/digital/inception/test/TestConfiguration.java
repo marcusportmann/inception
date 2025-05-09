@@ -73,7 +73,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * The {@code TestConfiguration} class provides the base Spring configuration for the JUnit test
- * classes that test the capabilities provided by the <b>Inception</b> framework.
+ * classes that test the capabilities provided by the Inception Framework.
  *
  * <p>This configuration class disables the default application data source and Camunda Process
  * Engine bootstrapping using the component scan filters.
@@ -114,7 +114,7 @@ public class TestConfiguration {
   private Resource[] liquibaseChangelogResources;
 
   /**
-   * Creates a new {@code TestConfiguration} instance.
+   * Constructs a new {@code TestConfiguration}.
    *
    * @param applicationContext the Spring application context
    */
@@ -159,7 +159,7 @@ public class TestConfiguration {
    * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
    *
-   * <p>This data source returned by this method must be closed after use with the <b>close()</b>
+   * <p>This data source returned by this method must be closed after use with the {@code close()}
    * method.
    *
    * @return the data source that can be used to interact with the in-memory database

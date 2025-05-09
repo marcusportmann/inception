@@ -28,7 +28,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class TimeUnitAttributeConverter extends AbstractCodeEnumAttributeConverter<TimeUnit> {
 
-  /** Creates a new {@code TimeUnitConverter} instance. */
+  /** Constructs a new {@code TimeUnitConverter}. */
   public TimeUnitAttributeConverter() {
     super(TimeUnit.class);
   }

@@ -43,7 +43,7 @@ public class TestJPAServiceImpl implements TestJPAService {
   private EntityManager entityManager;
 
   /**
-   * Creates a new {@code TestJPAServiceImpl} instance.
+   * Constructs a new {@code TestJPAServiceImpl}.
    *
    * @param platformTransactionManager the Spring platform transaction manager
    */

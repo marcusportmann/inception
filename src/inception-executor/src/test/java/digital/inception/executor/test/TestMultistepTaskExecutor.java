@@ -38,7 +38,7 @@ public class TestMultistepTaskExecutor extends MultistepTaskExecutor<TestMultist
   private static final Logger log = LoggerFactory.getLogger(TestMultistepTaskExecutor.class);
 
   /**
-   * Creates a new {@code TestMultistepTaskExecutor} instance
+   * Constructs a new {@code TestMultistepTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

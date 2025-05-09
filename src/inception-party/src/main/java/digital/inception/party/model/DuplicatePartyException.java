@@ -46,7 +46,7 @@ public class DuplicatePartyException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicatePartyException} instance.
+   * Constructs a new {@code DuplicatePartyException}.
    *
    * @param id the ID for the party
    */

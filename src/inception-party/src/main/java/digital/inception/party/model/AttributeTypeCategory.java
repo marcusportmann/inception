@@ -147,7 +147,7 @@ public class AttributeTypeCategory implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code AttributeTypeCategory} instance. */
+  /** Constructs a new {@code AttributeTypeCategory}. */
   public AttributeTypeCategory() {}
 
   /**

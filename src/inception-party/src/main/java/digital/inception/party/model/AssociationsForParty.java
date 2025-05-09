@@ -125,11 +125,11 @@ public class AssociationsForParty implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code AssociationsForParty} instance. */
+  /** Constructs a new {@code AssociationsForParty}. */
   public AssociationsForParty() {}
 
   /**
-   * Creates a new {@code AssociationsForParty} instance.
+   * Constructs a new {@code AssociationsForParty}.
    *
    * @param tenantId the ID for the tenant the associations are associated with
    * @param partyId the ID for the party the associations are associated with

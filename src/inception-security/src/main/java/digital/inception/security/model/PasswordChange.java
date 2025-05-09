@@ -121,11 +121,11 @@ public class PasswordChange implements Serializable {
   @XmlElement(name = "SecurityCode")
   private String securityCode;
 
-  /** Creates a new {@code PasswordChange} instance. */
+  /** Constructs a new {@code PasswordChange}. */
   public PasswordChange() {}
 
   /**
-   * Creates a new {@code PasswordChange} instance for a USER password change.
+   * Constructs a new {@code PasswordChange} instance for a USER password change.
    *
    * @param newPassword the new password
    * @param password the password for the user that is used to authorise the operation when
@@ -138,7 +138,7 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Creates a new {@code PasswordChange} instance for an ADMINISTRATIVE password change.
+   * Constructs a new {@code PasswordChange} instance for an ADMINISTRATIVE password change.
    *
    * @param newPassword the new password
    * @param expirePassword expire the user's password when performing the administrative password

@@ -233,7 +233,7 @@ public class User implements Serializable {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Creates a new {@code User} instance. */
+  /** Constructs a new {@code User}. */
   public User() {}
 
   /**

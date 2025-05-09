@@ -36,7 +36,7 @@ public class TestRetryableTaskExecutor extends SimpleTaskExecutor<TestRetryableT
   private static final Logger log = LoggerFactory.getLogger(TestRetryableTaskExecutor.class);
 
   /**
-   * Creates a new {@code TestRetryableTaskExecutor} instance
+   * Constructs a new {@code TestRetryableTaskExecutor} instance
    *
    * @param objectMapper the Jackson ObjectMapper instance
    */

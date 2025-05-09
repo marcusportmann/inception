@@ -62,9 +62,9 @@ public class DocumentServiceTests {
   /** The Jackson Object Mapper. */
   @Autowired private ObjectMapper objectMapper;
 
-  /** Test the workflow definition functionality. */
+  /** Test the document definition functionality. */
   @Test
-  public void workflowDefinitionTest() throws Exception {
+  public void documentDefinitionTest() throws Exception {
     DocumentDefinition documentDefinition =
         new DocumentDefinition(
             "test_document_definition_" + System.currentTimeMillis(), "Test Document Definition");

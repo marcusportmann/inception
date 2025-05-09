@@ -64,13 +64,13 @@ public class Car extends VehicleBase implements Serializable {
   @Column(name = "number_of_doors", nullable = false)
   private int numberOfDoors;
 
-  /** Creates a new {@code Car} instance. */
+  /** Constructs a new {@code Car}. */
   public Car() {
     super(VehicleType.CAR);
   }
 
   /**
-   * Creates a new {@code Car} instance.
+   * Constructs a new {@code Car}.
    *
    * @param name the name of the car
    * @param numberOfDoors the number of doors

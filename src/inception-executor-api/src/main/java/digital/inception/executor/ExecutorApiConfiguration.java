@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExecutorApiConfiguration {
 
-  /** Creates a new {@code ExecutorApiConfiguration} instance. */
+  /** Constructs a new {@code ExecutorApiConfiguration}. */
   public ExecutorApiConfiguration() {}
 
   /**

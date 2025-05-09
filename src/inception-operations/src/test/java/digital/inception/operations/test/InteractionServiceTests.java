@@ -69,8 +69,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The {@code InteractionServiceTests} class contains the JUnit tests for the
- * <b>InteractionService</b> class.
+ * The {@code InteractionServiceTests} class contains the JUnit tests for the {@code
+ * InteractionService} class.
  *
  * @author Marcus Portmann
  */

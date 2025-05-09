@@ -47,7 +47,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The {@code ReportingServiceTests} class contains the JUnit tests for the <b>ReportingService</b>
+ * The {@code ReportingServiceTests} class contains the JUnit tests for the {@code ReportingService}
  * class.
  *
  * @author Marcus Portmann

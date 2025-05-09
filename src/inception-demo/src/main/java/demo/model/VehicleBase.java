@@ -36,12 +36,12 @@ import java.util.UUID;
 /**
  * The {@code VehicleBase} class.
  *
- * <p>The <b>Vehicle</b> and {@code VehicleBase} classes are both JPA entity classes mapped to the
- * same <b>demo.vehicles</b> table. The {@code VehicleBase} class provides the common base class for
- * all JPA entity classes that form part of the vehicle inheritance model, e.g. <b>Car</b>,
- * <b>Motorbike</b>, etc. This inheritance model is required to allow the same child classes to be
+ * <p>The {@code Vehicle} and {@code VehicleBase} classes are both JPA entity classes mapped to the
+ * same {@code demo_vehicles} table. The {@code VehicleBase} class provides the common base class
+ * for all JPA entity classes that form part of the vehicle inheritance model, e.g. {@code Car},
+ * {@code Motorbike}, etc. This inheritance model is required to allow the same child classes to be
  * mapped to the different parent classes for the different vehicle types, e.g. to support the
- * one-to-many mappings for both the <b>Car</b> and {@code Motorbike} classes to the {@code
+ * one-to-many mappings for both the {@code Car} and {@code Motorbike} classes to the {@code
  * VehicleAttribute} class. The {@code Vehicle} class provides a mechanism to retrieve the minimum
  * amount of vehicle information without executing the polymorphic query that would result from
  * retrieving the same entities using a query that specifies The {@code VehicleBase} class as the
@@ -78,11 +78,11 @@ public class VehicleBase implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private VehicleType type;
 
-  /** Creates a new {@code VehicleBase} instance. */
+  /** Constructs a new {@code VehicleBase}. */
   public VehicleBase() {}
 
   /**
-   * Creates a new {@code VehicleBase} instance.
+   * Constructs a new {@code VehicleBase}.
    *
    * @param type the vehicle type
    */
@@ -92,7 +92,7 @@ public class VehicleBase implements Serializable {
   }
 
   /**
-   * Creates a new {@code VehicleBase} instance.
+   * Constructs a new {@code VehicleBase}.
    *
    * @param type the vehicle type
    * @param name the name of the vehicle

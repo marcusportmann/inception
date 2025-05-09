@@ -129,11 +129,11 @@ public class LanguageProficiency implements Serializable {
   @Column(name = "write_level", length = 15, nullable = false)
   private LanguageProficiencyLevel writeLevel;
 
-  /** Creates a new {@code LanguageProficiency} instance. */
+  /** Constructs a new {@code LanguageProficiency}. */
   public LanguageProficiency() {}
 
   /**
-   * Creates a new {@code LanguageProficiency} instance.
+   * Constructs a new {@code LanguageProficiency}.
    *
    * @param language the ISO 639-1 alpha-2 code for the language
    * @param listenLevel the listen proficiency level for the language.

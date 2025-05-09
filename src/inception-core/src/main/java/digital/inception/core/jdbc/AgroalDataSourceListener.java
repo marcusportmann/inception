@@ -35,7 +35,7 @@ public class AgroalDataSourceListener implements io.agroal.api.AgroalDataSourceL
   private final DataSourceConfiguration dataSourceConfiguration;
 
   /**
-   * Creates a new {@code AgroalDataSourceListener} instance.
+   * Constructs a new {@code AgroalDataSourceListener}.
    *
    * @param dataSourceConfiguration the data source configuration
    */

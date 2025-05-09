@@ -37,7 +37,7 @@ public class IndustryClassificationSystemId implements Serializable {
   /** The Unicode locale identifier for the industry classification system. */
   private String localeId;
 
-  /** Creates a new {@code IndustryClassificationSystemId} instance. */
+  /** Constructs a new {@code IndustryClassificationSystemId}. */
   public IndustryClassificationSystemId() {}
 
   /**

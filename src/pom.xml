@@ -735,7 +735,9 @@
     <module>inception-mail-ws</module>
     <module>inception-mongo</module>
     <module>inception-opentelemetry</module>
-     <module>inception-operations</module>
+<!--    <module>inception-operations</module>-->
+<!--    <module>inception-operations-api</module>-->
+<!--    <module>inception-operations-ws</module>-->
     <module>inception-party</module>
     <module>inception-party-api</module>
     <module>inception-party-ws</module>

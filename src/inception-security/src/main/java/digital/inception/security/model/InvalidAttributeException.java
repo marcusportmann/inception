@@ -24,7 +24,7 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>InvalidAttributeException</b> exception is thrown to indicate that a security operation
+ * An {@code InvalidAttributeException} exception is thrown to indicate that a security operation
  * failed as a result of an invalid attribute.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
@@ -45,7 +45,7 @@ public class InvalidAttributeException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code InvalidAttributeException} instance.
+   * Constructs a new {@code InvalidAttributeException}.
    *
    * @param name the name of the attribute
    */

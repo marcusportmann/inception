@@ -138,7 +138,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
   private String groupDescriptionAttribute;
 
   /**
-   * Creates a new {@code LDAPUserDirectoryProvider} instance.
+   * Constructs a new {@code LDAPUserDirectoryProvider}.
    *
    * @param userDirectoryId the ID for the user directory
    * @param parameters the parameters for the user directory

@@ -121,11 +121,11 @@ public class TaskEvent implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private TaskEventType type;
 
-  /** Creates a new {@code TaskEvent} instance. */
+  /** Constructs a new {@code TaskEvent}. */
   public TaskEvent() {}
 
   /**
-   * Creates a new {@code TaskEvent} instance.
+   * Constructs a new {@code TaskEvent}.
    *
    * @param type the task event type
    * @param task the task
@@ -146,7 +146,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskEvent} instance.
+   * Constructs a new {@code TaskEvent}.
    *
    * @param type the task event type
    * @param taskId the ID for the task
@@ -163,7 +163,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Creates a new {@code TaskEvent} instance.
+   * Constructs a new {@code TaskEvent}.
    *
    * @param type the task event type
    * @param taskId the ID for the task

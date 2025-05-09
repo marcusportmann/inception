@@ -41,7 +41,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class SMSConfiguration {
 
-  /** Creates a new {@code SMSConfiguration} instance. */
+  /** Constructs a new {@code SMSConfiguration}. */
   public SMSConfiguration() {}
 
   /**

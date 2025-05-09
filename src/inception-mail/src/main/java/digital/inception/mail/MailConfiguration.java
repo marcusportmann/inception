@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "mailEntityManagerFactory")
 public class MailConfiguration {
 
-  /** Creates a new {@code MailConfiguration} instance. */
+  /** Constructs a new {@code MailConfiguration}. */
   public MailConfiguration() {}
 
   /**

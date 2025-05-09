@@ -36,7 +36,7 @@ public class RoleTypeId implements Serializable {
   /** The Unicode locale identifier for the role type. */
   private String localeId;
 
-  /** Creates a new {@code RoleTypeId} instance. */
+  /** Constructs a new {@code RoleTypeId}. */
   public RoleTypeId() {}
 
   /**

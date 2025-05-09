@@ -129,7 +129,7 @@ public class UserDirectory implements Serializable {
   @Column(name = "type", length = 100, nullable = false)
   private String type;
 
-  /** Creates a new {@code UserDirectory} instance. */
+  /** Constructs a new {@code UserDirectory}. */
   public UserDirectory() {}
 
   /**

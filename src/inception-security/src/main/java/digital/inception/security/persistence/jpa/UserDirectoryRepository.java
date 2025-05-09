@@ -26,8 +26,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The {@code UserDirectoryRepository} interface declares the persistence for the <b>
- * UserDirectory</b> domain type.
+ * The {@code UserDirectoryRepository} interface declares the persistence for the {@code
+ * UserDirectory} domain type.
  *
  * @author Marcus Portmann
  */

@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code ContactMechanismId} class implements the ID class for the <b>ContactMechanism</b>
+ * The {@code ContactMechanismId} class implements the ID class for the {@code ContactMechanism}
  * class.
  *
  * @author Marcus Portmann
@@ -41,7 +41,7 @@ public class ContactMechanismId implements Serializable {
   /** The code for the contact mechanism type. */
   private String type;
 
-  /** Creates a new {@code ContactMechanismId} instance. */
+  /** Constructs a new {@code ContactMechanismId}. */
   public ContactMechanismId() {}
 
   /**

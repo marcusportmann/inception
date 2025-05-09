@@ -43,7 +43,7 @@ public class DataApiControllerImpl extends SecureApiController implements DataAp
   private final DataService dataService;
 
   /**
-   * Creates a new {@code DataApiControllerImpl} instance.
+   * Constructs a new {@code DataApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
    * @param dataService the Data Service

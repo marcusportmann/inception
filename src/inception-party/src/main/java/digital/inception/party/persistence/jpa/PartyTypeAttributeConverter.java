@@ -29,7 +29,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class PartyTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<PartyType> {
 
-  /** Creates a new {@code PartyTypeAttributeConverter} instance. */
+  /** Constructs a new {@code PartyTypeAttributeConverter}. */
   public PartyTypeAttributeConverter() {
     super(PartyType.class);
   }

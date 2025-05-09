@@ -36,7 +36,7 @@ public class LanguageId implements Serializable {
   /** The Unicode locale identifier for the language. */
   private String localeId;
 
-  /** Creates a new {@code LanguageId} instance. */
+  /** Constructs a new {@code LanguageId}. */
   public LanguageId() {}
 
   /**

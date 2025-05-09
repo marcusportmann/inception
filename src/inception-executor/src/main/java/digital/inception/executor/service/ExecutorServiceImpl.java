@@ -150,7 +150,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   private volatile ConcurrentHashMap<String, TaskType> taskTypes;
 
   /**
-   * Creates a new {@code ExecutorServiceImpl} instance.
+   * Constructs a new {@code ExecutorServiceImpl}.
    *
    * @param applicationContext the Spring application context
    * @param archivedTaskRepository the Archived Task Repository

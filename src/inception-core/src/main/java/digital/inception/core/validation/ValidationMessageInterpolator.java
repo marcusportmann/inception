@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>ValidationMessageInterpolator</b> provides a bundle-backed message interpolator, which
- * does not support EL expressions, but does support parameter value expressions.
+ * The {@code ValidationMessageInterpolator} class provides a bundle-backed message interpolator,
+ * which does not support EL expressions, but does support parameter value expressions.
  *
  * @author Marcus Portmann
  */
@@ -38,7 +38,7 @@ public class ValidationMessageInterpolator extends AbstractMessageInterpolator {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(ValidationMessageInterpolator.class);
 
-  /** Creates a new {@code ValidationMessageInterpolator} instance. */
+  /** Constructs a new {@code ValidationMessageInterpolator}. */
   public ValidationMessageInterpolator() {
     super(
         new PlatformResourceBundleLocator(

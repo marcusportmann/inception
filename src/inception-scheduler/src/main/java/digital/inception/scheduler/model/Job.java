@@ -199,11 +199,11 @@ public class Job implements Serializable {
   @Column(name = "status", length = 50, nullable = false)
   private JobStatus status;
 
-  /** Creates a new {@code Job} instance. */
+  /** Constructs a new {@code Job}. */
   public Job() {}
 
   /**
-   * Creates a new {@code Job} instance.
+   * Constructs a new {@code Job}.
    *
    * @param id the ID for the job
    * @param name the name of the job

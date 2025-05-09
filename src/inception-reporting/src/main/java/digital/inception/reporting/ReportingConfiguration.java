@@ -40,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "reportingEntityManagerFactory")
 public class ReportingConfiguration {
 
-  /** Creates a new {@code ReportingConfiguration} instance. */
+  /** Constructs a new {@code ReportingConfiguration}. */
   public ReportingConfiguration() {}
 
   /**

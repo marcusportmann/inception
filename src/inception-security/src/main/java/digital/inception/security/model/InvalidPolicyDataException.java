@@ -24,9 +24,9 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * A <b>InvalidPolicyDataException</b> is thrown to indicate that a security operation failed as a
- * result of invalid policy data, e.g. the ID or version of the policy do not match what was
- * specified in the XACML data.
+ * An {@code InvalidPolicyDataException} exception is thrown to indicate that a security operation
+ * failed as a result of invalid policy data, e.g. the ID or version of the policy do not match what
+ * was specified in the XACML data.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -47,7 +47,7 @@ public class InvalidPolicyDataException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code InvalidPolicyDataException} instance with the specified message.
+   * Constructs a new {@code InvalidPolicyDataException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -56,7 +56,8 @@ public class InvalidPolicyDataException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code InvalidPolicyDataException} instance with the specified message and cause.
+   * Constructs a new {@code InvalidPolicyDataException} instance with the specified message and
+   * cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
@@ -67,7 +68,7 @@ public class InvalidPolicyDataException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code InvalidPolicyDataException} instance.
+   * Constructs a new {@code InvalidPolicyDataException}.
    *
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
    *     null} value is permitted if the cause is nonexistent or unknown)

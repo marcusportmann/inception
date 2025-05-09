@@ -39,7 +39,7 @@ public class RegionId implements Serializable {
   /** The Unicode locale identifier for the region. */
   private String localeId;
 
-  /** Creates a new {@code RegionId} instance. */
+  /** Constructs a new {@code RegionId}. */
   public RegionId() {}
 
   /**

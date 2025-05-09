@@ -46,7 +46,7 @@ public class AssociationNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code AssociationNotFoundException} instance.
+   * Constructs a new {@code AssociationNotFoundException}.
    *
    * @param tenantId the ID for the tenant
    * @param associationId the ID for the association

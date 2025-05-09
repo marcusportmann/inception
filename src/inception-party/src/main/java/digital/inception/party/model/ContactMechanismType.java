@@ -184,7 +184,7 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code ContactMechanismType} instance. */
+  /** Constructs a new {@code ContactMechanismType}. */
   public ContactMechanismType() {}
 
   /**

@@ -25,8 +25,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The {@code OrganizationRepository} interface declares the persistence for the <b>Organization</b>
- * domain type.
+ * The {@code OrganizationRepository} interface declares the persistence for the {@code
+ * Organization} domain type.
  *
  * @author Marcus Portmann
  */

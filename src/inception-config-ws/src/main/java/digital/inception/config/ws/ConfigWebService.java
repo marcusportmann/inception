@@ -49,7 +49,7 @@ public class ConfigWebService extends AbstractWebServiceBase {
   private final ConfigService configService;
 
   /**
-   * Creates a new {@code ConfigWebService} instance.
+   * Constructs a new {@code ConfigWebService}.
    *
    * @param applicationContext the Spring application context
    * @param configService the Config Service

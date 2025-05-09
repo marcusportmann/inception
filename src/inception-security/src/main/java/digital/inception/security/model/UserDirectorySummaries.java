@@ -106,11 +106,11 @@ public class UserDirectorySummaries implements Serializable {
   @XmlElement(name = "UserDirectorySummary", required = true)
   private List<UserDirectorySummary> userDirectorySummaries;
 
-  /** Creates a new {@code UserDirectorySummaries} instance. */
+  /** Constructs a new {@code UserDirectorySummaries}. */
   public UserDirectorySummaries() {}
 
   /**
-   * Creates a new {@code UserDirectorySummaries} instance.
+   * Constructs a new {@code UserDirectorySummaries}.
    *
    * @param userDirectorySummaries the user directory summaries
    * @param total the total number of user directory summaries

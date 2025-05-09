@@ -109,11 +109,11 @@ public class Consent implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Consent} instance. */
+  /** Constructs a new {@code Consent}. */
   public Consent() {}
 
   /**
-   * Creates a new {@code Consent} instance.
+   * Constructs a new {@code Consent}.
    *
    * @param type the code for the consent type
    */
@@ -122,7 +122,7 @@ public class Consent implements Serializable {
   }
 
   /**
-   * Creates a new {@code Consent} instance.
+   * Constructs a new {@code Consent}.
    *
    * @param type the code for the consent type
    * @param effectiveFrom the date the consent is effective from
@@ -133,7 +133,7 @@ public class Consent implements Serializable {
   }
 
   /**
-   * Creates a new {@code Consent} instance.
+   * Constructs a new {@code Consent}.
    *
    * @param type the code for the consent type
    * @param effectiveFrom the date the consent is effective from

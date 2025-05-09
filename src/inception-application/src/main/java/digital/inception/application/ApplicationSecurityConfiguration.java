@@ -81,7 +81,7 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   @Value("${inception.application.security.trust-store-type:#{null}}")
   private String trustStoreType;
 
-  /** Creates a new {@code ApplicationSecurityConfiguration} instance. */
+  /** Constructs a new {@code ApplicationSecurityConfiguration}. */
   public ApplicationSecurityConfiguration() {}
 
   @Override

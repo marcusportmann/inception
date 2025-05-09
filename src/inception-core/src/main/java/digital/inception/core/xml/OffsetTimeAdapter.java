@@ -21,21 +21,21 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.OffsetTime;
 
 /**
- * The {@code OffsetTimeAdapter} class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and {@code OffsetTime} types. <br>
+ * The {@code OffsetTimeAdapter} class implements a JAXB 2.0 adapter used to convert between {@code
+ * String} and {@code OffsetTime} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class OffsetTimeAdapter extends XmlAdapter<String, OffsetTime> {
 
-  /** Creates a new {@code OffsetTimeAdapter} instance. */
+  /** Constructs a new {@code OffsetTimeAdapter}. */
   public OffsetTimeAdapter() {}
 
   /**
-   * Marshals the <b>java.time.OffsetTime</b> value as an ISO8601 string.
+   * Marshals the {@code java.time.OffsetTime} value as an ISO8601 string.
    *
    * @param value the value to marshal
-   * @return the <b>java.time.OffsetTime</b> value as an ISO8601 string
+   * @return the {@code java.time.OffsetTime} value as an ISO8601 string
    */
   @Override
   public String marshal(OffsetTime value) {
@@ -47,10 +47,10 @@ public class OffsetTimeAdapter extends XmlAdapter<String, OffsetTime> {
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <b>java.time.OffsetTime</b>.
+   * Unmarshals the ISO8601 string value as a {@code java.time.OffsetTime}.
    *
    * @param value the ISO8601 string value
-   * @return the ISO8601 string value as a <b>java.time.OffsetTime</b>
+   * @return the ISO8601 string value as a {@code java.time.OffsetTime}
    */
   @Override
   public OffsetTime unmarshal(String value) {

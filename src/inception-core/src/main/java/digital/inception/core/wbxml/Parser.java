@@ -35,7 +35,7 @@ public class Parser {
 
   private byte[] stringTable = null;
 
-  /** Creates a new {@code Parser} instance. */
+  /** Constructs a new {@code Parser}. */
   public Parser() {}
 
   /**

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class TimeUnitToStringConverter implements Converter<TimeUnit, String> {
 
-  /** Creates a new {@code TimeUnitToStringConverter} instance. */
+  /** Constructs a new {@code TimeUnitToStringConverter}. */
   public TimeUnitToStringConverter() {}
 
   @Override

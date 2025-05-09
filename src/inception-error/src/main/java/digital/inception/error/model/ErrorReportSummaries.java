@@ -150,11 +150,11 @@ public class ErrorReportSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code ErrorReportSummaries} instance. */
+  /** Constructs a new {@code ErrorReportSummaries}. */
   public ErrorReportSummaries() {}
 
   /**
-   * Creates a new {@code ErrorReportSummaries} instance.
+   * Constructs a new {@code ErrorReportSummaries}.
    *
    * @param errorReportSummaries the error report summaries
    * @param total the total number of error report summaries

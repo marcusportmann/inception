@@ -55,7 +55,7 @@ public class InternalPolicyStore implements PolicyStore {
   private final PolicySummaryRepository policySummaryRepository;
 
   /**
-   * * Creates a new {@code InternalPolicyDataStore} instance.
+   * * Constructs a new {@code InternalPolicyDataStore}.
    *
    * @param policyRepository the Policy Repository
    * @param policySummaryRepository the Policy Summary Repository

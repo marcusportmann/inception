@@ -115,11 +115,11 @@ public class Snapshot implements Serializable {
   @Column(name = "timestamp", nullable = false)
   private OffsetDateTime timestamp;
 
-  /** Creates a new {@code Snapshot} instance. */
+  /** Constructs a new {@code Snapshot}. */
   public Snapshot() {}
 
   /**
-   * Creates a new {@code Snapshot} instance.
+   * Constructs a new {@code Snapshot}.
    *
    * @param tenantId the ID for the tenant the snapshot is associated with
    * @param entityType the type of entity the snapshot is associated with

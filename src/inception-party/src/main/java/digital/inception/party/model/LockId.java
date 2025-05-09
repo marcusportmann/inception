@@ -37,7 +37,7 @@ public class LockId implements Serializable {
   /** The code for the lock type. */
   private String type;
 
-  /** Creates a new {@code LockId} instance. */
+  /** Constructs a new {@code LockId}. */
   public LockId() {}
 
   /**

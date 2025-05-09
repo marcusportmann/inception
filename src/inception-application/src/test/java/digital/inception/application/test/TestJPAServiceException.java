@@ -31,7 +31,7 @@ public class TestJPAServiceException extends Exception {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code TestJPAServiceException} instance with the specified message.
+   * Constructs a new {@code TestJPAServiceException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -40,7 +40,7 @@ public class TestJPAServiceException extends Exception {
   }
 
   /**
-   * Creates a new {@code TestJPAServiceException} instance with the specified message and cause.
+   * Constructs a new {@code TestJPAServiceException} instance with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code

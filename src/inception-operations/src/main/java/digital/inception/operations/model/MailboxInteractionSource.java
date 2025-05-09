@@ -196,13 +196,13 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   @Column(name = "protocol", length = 50, nullable = false)
   private MailboxProtocol protocol;
 
-  /** Creates a new {@code MailboxInteractionSource} instance. */
+  /** Constructs a new {@code MailboxInteractionSource}. */
   public MailboxInteractionSource() {
     super(InteractionSourceType.MAILBOX);
   }
 
   /**
-   * Creates a new {@code MailboxInteractionSource} instance.
+   * Constructs a new {@code MailboxInteractionSource}.
    *
    * @param id the ID for the mailbox interaction source
    * @param name the name of the mailbox interaction source
@@ -243,7 +243,7 @@ public class MailboxInteractionSource extends InteractionSourceBase implements S
   }
 
   /**
-   * Creates a new {@code MailboxInteractionSource} instance.
+   * Constructs a new {@code MailboxInteractionSource}.
    *
    * @param id the ID for the mailbox interaction source
    * @param name the name of the mailbox interaction source

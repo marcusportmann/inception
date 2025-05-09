@@ -169,7 +169,7 @@ public class TaskSummary implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code TaskSummary} instance. */
+  /** Constructs a new {@code TaskSummary}. */
   public TaskSummary() {}
 
   /**

@@ -20,8 +20,8 @@ import digital.inception.operations.model.InteractionSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The {@code InteractionSourceRepository} interface declares the persistence for the
- * {@code InteractionSource} domain type.
+ * The {@code InteractionSourceRepository} interface declares the persistence for the {@code
+ * InteractionSource} domain type.
  *
  * @author Marcus Portmann
  */

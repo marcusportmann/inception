@@ -71,11 +71,11 @@ public class ValidationError implements Serializable, Cloneable {
   @NotNull
   private String property;
 
-  /** Creates a new {@code ValidationError} instance. */
+  /** Constructs a new {@code ValidationError}. */
   public ValidationError() {}
 
   /**
-   * Creates a new {@code ValidationError} instance.
+   * Constructs a new {@code ValidationError}.
    *
    * @param constraintViolation the constraint violation
    */
@@ -87,7 +87,7 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Creates a new {@code ValidationError} instance.
+   * Constructs a new {@code ValidationError}.
    *
    * @param property the path for the property that resulted in the validation error
    * @param message the error message for the validation error

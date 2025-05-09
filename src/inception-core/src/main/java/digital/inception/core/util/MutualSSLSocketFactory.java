@@ -45,7 +45,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory {
   private final SSLSocketFactory socketFactory;
 
   /**
-   * Creates a new {@code MutualSSLSocketFactory} instance
+   * Constructs a new {@code MutualSSLSocketFactory} instance
    *
    * @param keyStore the key store containing the client certificate and private key
    * @param keyStorePassword the password required to access the key store
@@ -134,8 +134,8 @@ public class MutualSSLSocketFactory extends SSLSocketFactory {
    * Creates a socket and connects it to the specified port number at the specified address.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
-   * its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its {@code checkConnect} method is called with the host address and port as
+   * its arguments. This could result in a {@code SecurityException}.
    *
    * @param host the address of the server host
    * @param port the server port
@@ -150,8 +150,8 @@ public class MutualSSLSocketFactory extends SSLSocketFactory {
    * Creates a socket and connects it to the specified remote host at the specified remote port.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
-   * its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its {@code checkConnect} method is called with the host address and port as
+   * its arguments. This could result in a {@code SecurityException}.
    *
    * @param host the server host
    * @param port the server port
@@ -167,8 +167,8 @@ public class MutualSSLSocketFactory extends SSLSocketFactory {
    * socket will also be bound to the local address and port supplied.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
-   * its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its {@code checkConnect} method is called with the host address and port as
+   * its arguments. This could result in a {@code SecurityException}.
    *
    * @param host the address of the server host
    * @param port the server port
@@ -207,8 +207,8 @@ public class MutualSSLSocketFactory extends SSLSocketFactory {
    * socket will also be bound to the local address and port supplied.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
-   * its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its {@code checkConnect} method is called with the host address and port as
+   * its arguments. This could result in a {@code SecurityException}.
    *
    * @param host the server host
    * @param port the server port

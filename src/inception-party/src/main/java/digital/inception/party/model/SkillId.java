@@ -37,7 +37,7 @@ public class SkillId implements Serializable {
   /** The code for the skill type. */
   private String type;
 
-  /** Creates a new {@code SkillId} instance. */
+  /** Constructs a new {@code SkillId}. */
   public SkillId() {}
 
   /**

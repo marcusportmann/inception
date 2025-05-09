@@ -146,11 +146,11 @@ public class ResidencePermit implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code ResidencePermit} instance. */
+  /** Constructs a new {@code ResidencePermit}. */
   public ResidencePermit() {}
 
   /**
-   * Creates a new {@code ResidencePermit} instance.
+   * Constructs a new {@code ResidencePermit}.
    *
    * @param type the code for the residence permit type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the residence
@@ -167,7 +167,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Creates a new {@code ResidencePermit} instance.
+   * Constructs a new {@code ResidencePermit}.
    *
    * @param type the code for the residence permit type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the residence

@@ -37,7 +37,7 @@ public class MeasurementUnitId implements Serializable {
   /** The Unicode locale identifier for the measurement unit. */
   private String localeId;
 
-  /** Creates a new {@code MeasurementUnitId} instance. */
+  /** Constructs a new {@code MeasurementUnitId}. */
   public MeasurementUnitId() {}
 
   /**

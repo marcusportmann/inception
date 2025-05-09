@@ -107,11 +107,11 @@ public class SegmentAllocation implements Serializable {
   @Column(name = "segment", length = 50, nullable = false)
   private String segment;
 
-  /** Creates a new {@code SegmentAllocation} instance. */
+  /** Constructs a new {@code SegmentAllocation}. */
   public SegmentAllocation() {}
 
   /**
-   * Creates a new {@code SegmentAllocation} instance.
+   * Constructs a new {@code SegmentAllocation}.
    *
    * @param segment the segment
    */
@@ -120,7 +120,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Creates a new {@code SegmentAllocation} instance.
+   * Constructs a new {@code SegmentAllocation}.
    *
    * @param segment the segment
    * @param effectiveFrom the date the segment allocation is effective from
@@ -131,7 +131,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Creates a new {@code SegmentAllocation} instance.
+   * Constructs a new {@code SegmentAllocation}.
    *
    * @param segment the segment
    * @param effectiveFrom the date the segment allocation is effective from

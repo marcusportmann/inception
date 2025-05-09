@@ -92,7 +92,7 @@ public class InteractionSource implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private InteractionSourceType type;
 
-  /** Creates a new {@code InteractionSource} instance. */
+  /** Constructs a new {@code InteractionSource}. */
   public InteractionSource() {}
 
   // TODO: ADD ROLE MAPPING LIKE GROUP IN SECURITY MODEL
@@ -100,7 +100,7 @@ public class InteractionSource implements Serializable {
   // TODO: ADD AUDIT CAPABILIGTIES For all interaction-related operations
 
   /**
-   * Creates a new {@code InteractionSource} instance.
+   * Constructs a new {@code InteractionSource}.
    *
    * @param id the ID for the interaction source
    * @param type the interaction source type

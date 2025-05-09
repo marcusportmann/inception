@@ -37,7 +37,7 @@ public class ContactMechanismPurposeId implements Serializable {
   /** The Unicode locale identifier for the contact mechanism purpose. */
   private String localeId;
 
-  /** Creates a new {@code ContactMechanismPurposeId} instance. */
+  /** Constructs a new {@code ContactMechanismPurposeId}. */
   public ContactMechanismPurposeId() {}
 
   /**

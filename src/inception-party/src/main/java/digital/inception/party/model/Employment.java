@@ -310,11 +310,11 @@ public class Employment implements Serializable {
   @Column(name = "type", length = 50)
   private String type;
 
-  /** Creates a new {@code Employment} instance. */
+  /** Constructs a new {@code Employment}. */
   public Employment() {}
 
   /**
-   * Creates a new {@code Employment} instance.
+   * Constructs a new {@code Employment}.
    *
    * @param employerName the employer name
    * @param employerPhoneNumber the employer phone number
@@ -373,7 +373,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Creates a new {@code Employment} instance.
+   * Constructs a new {@code Employment}.
    *
    * @param employerName the employer name
    * @param employerPhoneNumber the employer phone number
@@ -429,7 +429,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Creates a new {@code Employment} instance.
+   * Constructs a new {@code Employment}.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
@@ -443,7 +443,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Creates a new {@code Employment} instance.
+   * Constructs a new {@code Employment}.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
@@ -455,7 +455,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Creates a new {@code Employment} instance.
+   * Constructs a new {@code Employment}.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
@@ -474,7 +474,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Creates a new {@code Employment} instance.
+   * Constructs a new {@code Employment}.
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment

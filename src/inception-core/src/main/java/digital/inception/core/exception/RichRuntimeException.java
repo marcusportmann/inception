@@ -40,14 +40,14 @@ public class RichRuntimeException extends RuntimeException {
   /** The error code. */
   private String code;
 
-  /** Creates a new {@code RichRuntimeException} instance with {@code null} as its message. */
+  /** Constructs a new {@code RichRuntimeException} instance with {@code null} as its message. */
   public RichRuntimeException() {
     super();
     this.when = OffsetDateTime.now();
   }
 
   /**
-   * Creates a new {@code RichRuntimeException} instance with the specified message.
+   * Constructs a new {@code RichRuntimeException} instance with the specified message.
    *
    * @param message the message saved for later retrieval by the {@code getMessage()} method
    */
@@ -57,9 +57,9 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Creates a new {@code RichRuntimeException} instance with the specified cause and a message of
-   * <b> (cause==null ? null : cause.toString())</b> (which typically contains the class and message
-   * of cause).
+   * Constructs a new {@code RichRuntimeException} instance with the specified cause and a message
+   * of {@code (cause==null ? null : cause.toString())} (which typically contains the class and
+   * message of cause).
    *
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
    *     null} value is permitted if the cause is nonexistent or unknown)
@@ -70,7 +70,7 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Creates a new {@code RichRuntimeException} instance with the specified code and message.
+   * Constructs a new {@code RichRuntimeException} instance with the specified code and message.
    *
    * @param code the error code
    * @param message the message saved for later retrieval by the {@code getMessage()} method
@@ -82,7 +82,7 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Creates a new {@code RichRuntimeException} instance with the specified message and cause.
+   * Constructs a new {@code RichRuntimeException} instance with the specified message and cause.
    *
    * @param message the message saved for later retrieval by the {@code getMessage()} method
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
@@ -94,7 +94,8 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Creates a new {@code RichRuntimeException} instance with the specified code, message and cause.
+   * Constructs a new {@code RichRuntimeException} instance with the specified code, message and
+   * cause.
    *
    * @param code the error code
    * @param message the message saved for later retrieval by the {@code getMessage()} method

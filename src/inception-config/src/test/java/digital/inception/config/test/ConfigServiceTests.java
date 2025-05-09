@@ -94,7 +94,7 @@ public class ConfigServiceTests {
   /** The Config Service. */
   @Autowired private ConfigService configService;
 
-  /** Test the <b>Binary</b> config. */
+  /** Test the {@code Binary} config. */
   @Test
   public void binaryConfigTest() throws Exception {
     if (configService.idExists(TEST_BINARY_ID)) {
@@ -140,7 +140,7 @@ public class ConfigServiceTests {
             + ")");
   }
 
-  /** Test the <b>Boolean</b> config. */
+  /** Test the {@code Boolean} config. */
   @Test
   public void booleanConfigTest() throws Exception {
     if (configService.idExists(TEST_BOOLEAN_ID)) {
@@ -182,7 +182,7 @@ public class ConfigServiceTests {
             + ")");
   }
 
-  /** Test the <b>Config</b> config. */
+  /** Test the {@code Config} config. */
   @Test
   public void configConfigTest() throws Exception {
     if (configService.idExists(TEST_CONFIGURATION_ID)) {
@@ -242,7 +242,7 @@ public class ConfigServiceTests {
     List<Config> configs = configService.getConfigs();
   }
 
-  /** Test the <b>Double</b> config. */
+  /** Test the {@code Double} config. */
   @Test
   public void doubleConfigTest() throws Exception {
     if (configService.idExists(TEST_DOUBLE_ID)) {
@@ -308,7 +308,7 @@ public class ConfigServiceTests {
         "The required filtered configs (" + TEST_STRING_VALUE + ") was not retrieved");
   }
 
-  /** Test the <b>Integer</b> config. */
+  /** Test the {@code Integer} config. */
   @Test
   public void integerConfigTest() throws Exception {
     if (configService.idExists(TEST_INTEGER_ID)) {
@@ -398,7 +398,7 @@ public class ConfigServiceTests {
             + ")");
   }
 
-  /** Test the <b>String</b> config. */
+  /** Test the {@code String} config. */
   @Test
   public void stringConfigTest() throws Exception {
     if (configService.idExists(TEST_STRING_ID)) {

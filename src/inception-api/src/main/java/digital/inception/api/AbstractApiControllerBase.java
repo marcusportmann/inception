@@ -57,7 +57,7 @@ public abstract class AbstractApiControllerBase {
   private final Validator validator;
 
   /**
-   * Constructs a new <b>AbstractApiControllerBase</b>.
+   * Constructs a new {@code AbstractApiControllerBase}.
    *
    * @param applicationContext the Spring application context
    */

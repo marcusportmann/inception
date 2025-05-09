@@ -130,11 +130,11 @@ public class TaskSummaries implements Serializable {
   @Size(min = 1, max = 50)
   private String type;
 
-  /** Creates a new {@code TaskSummaries} instance. */
+  /** Constructs a new {@code TaskSummaries}. */
   public TaskSummaries() {}
 
   /**
-   * Creates a new {@code TaskSummaries} instance.
+   * Constructs a new {@code TaskSummaries}.
    *
    * @param taskSummaries the task summaries
    * @param total the total number of task summaries

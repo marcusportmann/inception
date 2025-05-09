@@ -40,7 +40,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "referenceEntityManagerFactory")
 public class ReferenceConfiguration {
 
-  /** Creates a new {@code ReferenceConfiguration} instance. */
+  /** Constructs a new {@code ReferenceConfiguration}. */
   public ReferenceConfiguration() {}
 
   /**

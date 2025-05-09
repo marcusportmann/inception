@@ -36,7 +36,7 @@ public class SegmentId implements Serializable {
   /** The Unicode locale identifier for the segment. */
   private String localeId;
 
-  /** Creates a new {@code SegmentId} instance. */
+  /** Constructs a new {@code SegmentId}. */
   public SegmentId() {}
 
   /**

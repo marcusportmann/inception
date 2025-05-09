@@ -20,7 +20,7 @@ import java.io.Serial;
 
 /**
  * The {@code MutualSSLSocketFactoryException} exception is thrown to indicate an error when working
- * with the <b>MutualSSLSocketFactory</b>.
+ * with the {@code }MutualSSLSocketFactory}.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ public class MutualSSLSocketFactoryException extends RuntimeException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code MutualSSLSocketFactoryException} instance with {@code null} as its
+   * Constructs a new {@code MutualSSLSocketFactoryException} instance with {@code null} as its
    * message.
    */
   public MutualSSLSocketFactoryException() {
@@ -38,7 +38,7 @@ public class MutualSSLSocketFactoryException extends RuntimeException {
   }
 
   /**
-   * Creates a new {@code MutualSSLSocketFactoryException} instance with the specified message.
+   * Constructs a new {@code MutualSSLSocketFactoryException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
@@ -47,8 +47,8 @@ public class MutualSSLSocketFactoryException extends RuntimeException {
   }
 
   /**
-   * Creates a new {@code MutualSSLSocketFactoryException} instance with the specified message and
-   * cause.
+   * Constructs a new {@code MutualSSLSocketFactoryException} instance with the specified message
+   * and cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code

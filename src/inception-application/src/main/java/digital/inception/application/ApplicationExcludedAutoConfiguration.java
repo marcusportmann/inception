@@ -35,6 +35,6 @@ import org.springframework.context.annotation.Configuration;
     })
 public class ApplicationExcludedAutoConfiguration {
 
-  /** Creates a new {@code ApplicationExcludedAutoConfiguration} instance. */
+  /** Constructs a new {@code ApplicationExcludedAutoConfiguration}. */
   public ApplicationExcludedAutoConfiguration() {}
 }

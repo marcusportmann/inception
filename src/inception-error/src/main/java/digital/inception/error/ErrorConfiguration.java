@@ -39,7 +39,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
     entityManagerFactoryRef = "errorEntityManagerFactory")
 public class ErrorConfiguration {
 
-  /** Creates a new {@code ErrorConfiguration} instance. */
+  /** Constructs a new {@code ErrorConfiguration}. */
   public ErrorConfiguration() {}
 
   /**

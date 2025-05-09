@@ -67,10 +67,10 @@ public interface ConfigService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Boolean</b> config.
+   * Retrieve the {@code Boolean} config.
    *
    * @param id the ID for the config
-   * @return the <b>Boolean</b> config
+   * @return the {@code Boolean} config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
    * @throws ServiceUnavailableException if the boolean config value could not be retrieved
@@ -79,11 +79,11 @@ public interface ConfigService {
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Boolean</b> config.
+   * Retrieve the {@code Boolean} config.
    *
    * @param id the ID for the config
    * @param defaultValue the default value to return if the config does not exist
-   * @return the <b>Boolean</b> config or the default value if the config value does not exist
+   * @return the {@code Boolean} config or the default value if the config value does not exist
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the boolean config value could not be retrieved
    */
@@ -119,10 +119,10 @@ public interface ConfigService {
   List<Config> getConfigs() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Double</b> config.
+   * Retrieve the {@code Double} config.
    *
    * @param id the ID for the config
-   * @return the <b>Double</b> config
+   * @return the {@code Double} config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
    * @throws ServiceUnavailableException if the double config value could not be retrieved
@@ -131,11 +131,11 @@ public interface ConfigService {
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Double</b> config.
+   * Retrieve the {@code Double} config.
    *
    * @param id the ID for the config
    * @param defaultValue the default value to return if the config does not exist
-   * @return the <b>Double</b> config or the default value if the config entry does not exist
+   * @return the {@code Double} config or the default value if the config entry does not exist
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the double config value could not be retrieved
    */
@@ -161,10 +161,10 @@ public interface ConfigService {
   List<Config> getFilteredConfigs(String filter) throws ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Integer</b> config.
+   * Retrieve the {@code Integer} config.
    *
    * @param id the ID for the config
-   * @return the <b>Integer</b> config
+   * @return the {@code Integer} config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
    * @throws ServiceUnavailableException if the integer config value could not be retrieved
@@ -173,11 +173,11 @@ public interface ConfigService {
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the <b>Integer</b> config.
+   * Retrieve the {@code Integer} config.
    *
    * @param id the ID for the config
    * @param defaultValue the default value to return if the config does not exist
-   * @return the <b>Integer</b> config or the default value if the config entry does not exist
+   * @return the {@code Integer} config or the default value if the config entry does not exist
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the integer config value could not be retrieved
    */
@@ -209,10 +209,10 @@ public interface ConfigService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the value for the <b>String</b> config.
+   * Retrieve the value for the {@code String} config.
    *
    * @param id the ID for the config
-   * @return the value for the <b>String</b> config
+   * @return the value for the {@code String} config
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ConfigNotFoundException if the config could not be found
    * @throws ServiceUnavailableException if the string config value could not be retrieved
@@ -221,11 +221,11 @@ public interface ConfigService {
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the value for the <b>String</b> config.
+   * Retrieve the value for the {@code String} config.
    *
    * @param id the ID for the config
    * @param defaultValue the default value to return if the config does not exist
-   * @return the value for the <b>String</b> config or the default value if the config does not
+   * @return the value for the {@code String} config or the default value if the config does not
    *     exist
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the string config value could not be retrieved

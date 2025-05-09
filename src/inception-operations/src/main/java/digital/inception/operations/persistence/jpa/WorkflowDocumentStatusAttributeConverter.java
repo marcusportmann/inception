@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class WorkflowDocumentStatusAttributeConverter
     extends AbstractCodeEnumAttributeConverter<WorkflowDocumentStatus> {
 
-  /** Creates a new {@code WorkflowDocumentStatusAttributeConverter} instance. */
+  /** Constructs a new {@code WorkflowDocumentStatusAttributeConverter}. */
   public WorkflowDocumentStatusAttributeConverter() {
     super(WorkflowDocumentStatus.class);
   }

@@ -44,7 +44,7 @@ public class TestDocument implements Serializable {
   /** The name for the test document. */
   private String name;
 
-  /** Creates a new {@code TestDocument} instance. */
+  /** Constructs a new {@code TestDocument}. */
   public TestDocument() {}
 
   @Override

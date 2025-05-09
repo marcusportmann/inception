@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class ConstraintTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<ConstraintType> {
 
-  /** Creates a new {@code ConstraintTypeAttributeConverter} instance. */
+  /** Constructs a new {@code ConstraintTypeAttributeConverter}. */
   public ConstraintTypeAttributeConverter() {
     super(ConstraintType.class);
   }

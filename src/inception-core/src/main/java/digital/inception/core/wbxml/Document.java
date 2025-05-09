@@ -39,7 +39,7 @@ public class Document implements Serializable {
   private int publicId = PUBLIC_ID_UNKNOWN;
 
   /**
-   * Creates a new {@code Document} instance with the specified root element.
+   * Constructs a new {@code Document} instance with the specified root element.
    *
    * @param element the root element for the document
    */
@@ -48,7 +48,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Creates a new {@code Document} instance with the specified root element and public ID.
+   * Constructs a new {@code Document} instance with the specified root element and public ID.
    *
    * @param element the root element for the document
    * @param publicId the public ID for the document
@@ -82,9 +82,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Print the document to the specified <b>OutputStream</b>.
+   * Print the document to the specified {@code OutputStream}.
    *
-   * @param out the <b>OuputStream</b> to output the document to
+   * @param out the {@code OuputStream} to output the document to
    */
   public void print(OutputStream out) {
     rootElement.print(out, 0);

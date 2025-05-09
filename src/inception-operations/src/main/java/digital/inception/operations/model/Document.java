@@ -237,11 +237,11 @@ public class Document implements Serializable {
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** Creates a new {@code Document} instance. */
+  /** Constructs a new {@code Document}. */
   public Document() {}
 
   /**
-   * Creates a new {@code Document} instance.
+   * Constructs a new {@code Document}.
    *
    * @param definitionId the ID for the document definition the document is associated with
    */

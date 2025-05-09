@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class MeasurementSystemAttributeConverter
     extends AbstractCodeEnumAttributeConverter<MeasurementSystem> {
 
-  /** Creates a new {@code MeasurementSystemAttributeConverter} instance. */
+  /** Constructs a new {@code MeasurementSystemAttributeConverter}. */
   public MeasurementSystemAttributeConverter() {
     super(MeasurementSystem.class);
   }

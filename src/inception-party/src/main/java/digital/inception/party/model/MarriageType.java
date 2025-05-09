@@ -150,7 +150,7 @@ public class MarriageType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code MarriageType} instance. */
+  /** Constructs a new {@code MarriageType}. */
   public MarriageType() {}
 
   /**

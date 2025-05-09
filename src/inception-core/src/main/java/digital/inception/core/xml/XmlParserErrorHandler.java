@@ -30,11 +30,11 @@ public class XmlParserErrorHandler implements ErrorHandler {
 
   private Logger logger = null;
 
-  /** Creates a new {@code XmlParserErrorHandler} instance. */
+  /** Constructs a new {@code XmlParserErrorHandler}. */
   public XmlParserErrorHandler() {}
 
   /**
-   * Creates a new {@code XmlParserErrorHandler} instance using the specified <b>Logger</b>.
+   * Constructs a new {@code XmlParserErrorHandler} instance using the specified {@code Logger}.
    *
    * @param logger the logger to use to log errors and warnings
    */

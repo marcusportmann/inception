@@ -46,7 +46,7 @@ public class TaskExecutionRetryableException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code TaskExecutionRetryableException} instance.
+   * Constructs a new {@code TaskExecutionRetryableException}.
    *
    * @param taskId the ID for the task
    */
@@ -58,7 +58,7 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code TaskExecutionRetryableException} instance.
+   * Constructs a new {@code TaskExecutionRetryableException}.
    *
    * @param taskId the ID for the task
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
@@ -72,7 +72,7 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code TaskExecutionRetryableException} instance.
+   * Constructs a new {@code TaskExecutionRetryableException}.
    *
    * @param taskId the ID for the task
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
@@ -88,7 +88,7 @@ public class TaskExecutionRetryableException extends ServiceException {
   }
 
   /**
-   * Creates a new {@code TaskExecutionRetryableException} instance.
+   * Constructs a new {@code TaskExecutionRetryableException}.
    *
    * @param taskId the ID for the task
    * @param message The message saved for later retrieval by the {@code getMessage()} method.

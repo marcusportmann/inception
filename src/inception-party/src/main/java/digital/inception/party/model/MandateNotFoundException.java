@@ -46,7 +46,7 @@ public class MandateNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code MandateNotFoundException} instance.
+   * Constructs a new {@code MandateNotFoundException}.
    *
    * @param tenantId the ID for the tenant
    * @param mandateId the ID for the mandate

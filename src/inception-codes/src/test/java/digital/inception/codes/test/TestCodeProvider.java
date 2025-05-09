@@ -41,7 +41,7 @@ public class TestCodeProvider implements CodeProvider {
   private final List<Code> codes;
 
   /**
-   * Creates a new {@code TestCodeProvider} instance.
+   * Constructs a new {@code TestCodeProvider}.
    *
    * @param codeProviderConfig the configuration for the code provider
    */

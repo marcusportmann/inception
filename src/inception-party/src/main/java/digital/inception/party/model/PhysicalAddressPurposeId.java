@@ -37,7 +37,7 @@ public class PhysicalAddressPurposeId implements Serializable {
   /** The Unicode locale identifier for the physical address purpose. */
   private String localeId;
 
-  /** Creates a new {@code PhysicalAddressPurposeId} instance. */
+  /** Constructs a new {@code PhysicalAddressPurposeId}. */
   public PhysicalAddressPurposeId() {}
 
   /**

@@ -18,6 +18,37 @@
   <changeSet id="inception-operations-1.0.0" author="Marcus Portmann">
     <comment>inception-operations-1.0.0</comment>
 
+    <createTable tableName="operations_workflow_engines" remarks="Workflow Engines">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the workflow engine">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow engine">
+        <constraints nullable="false"/>
+      </column>
+      <column name="connector_class_name" type="nvarchar(500)" remarks="The fully qualified name of the connector class for the workflow engine">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="operations_workflow_engine_attributes" remarks="Workflow Engine Attributes">
+      <column name="engine_id" type="nvarchar(50)" remarks="The ID for the workflow engine the workflow engine attribute is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(50)" remarks="The name of the workflow engine attribute">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="value" type="nvarchar(1000)" remarks="The value for the workflow engine attribute">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_engine_attributes_workflow_engines_fk"
+      baseTableName="operations_workflow_engine_attributes" baseColumnNames="engine_id"
+      referencedTableName="operations_workflow_engines" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_engine_attributes_engine_id_ix"
+      tableName="operations_workflow_engine_attributes">
+      <column name="engine_id"/>
+    </createIndex>
+
     <createTable tableName="operations_workflow_definitions" remarks="Workflow Definitions">
       <column name="id" type="nvarchar(50)" remarks="The ID for the workflow definition">
         <constraints primaryKey="true" nullable="false"/>
@@ -29,9 +60,15 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the workflow definition">
         <constraints nullable="false"/>
       </column>
+      <column name="engine_id" type="nvarchar(50)" remarks="The ID for the workflow engine the workflow definition is associated with">
+        <constraints nullable="false"/>
+      </column>
       <column name="validation_schema_type" type="nvarchar(50)" remarks="The schema type for the workflow definition"/>
       <column name="validation_schema" type="clob" remarks="The XML (XSD) or JSON schema for the workflow definition"/>
     </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_definitions_workflow_engines_fk"
+      baseTableName="operations_workflow_definitions" baseColumnNames="engine_id"
+      referencedTableName="operations_workflow_engines" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_definitions_tenant_id_ix"
       tableName="operations_workflow_definitions">
       <column name="tenant_id"/>
@@ -430,6 +467,12 @@
       tableName="operations_interaction_attachments">
       <column name="tenant_id"/>
     </createIndex>
+
+    <insert tableName="operations_workflow_engines">
+      <column name="id" value="flowable_embedded"/>
+      <column name="name" value="Flowable Embedded"/>
+      <column name="connector_class_name" value="digital.inception.operations.connector.FlowableEmbeddedConnector"/>
+    </insert>
 
     <rollback>
       <dropAllForeignKeyConstraints baseTableName="operations_interaction_attachments"/>

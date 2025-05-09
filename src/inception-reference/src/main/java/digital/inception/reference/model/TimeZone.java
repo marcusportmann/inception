@@ -99,11 +99,11 @@ public class TimeZone implements Serializable {
   @NotNull
   private Integer sortIndex;
 
-  /** Creates a new {@code TimeZone} instance. */
+  /** Constructs a new {@code TimeZone}. */
   public TimeZone() {}
 
   /**
-   * Creates a new {@code TimeZone} instance.
+   * Constructs a new {@code TimeZone}.
    *
    * @param id the ID for the time zone
    * @param localeId the Unicode locale identifier for the time zone

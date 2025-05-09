@@ -75,7 +75,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
   private final ReferenceService referenceService;
 
   /**
-   * Creates a new {@code GenerateLiquibaseDataChangelog} instance.
+   * Constructs a new {@code GenerateLiquibaseDataChangelog}.
    *
    * @param applicationContext the Spring application context
    * @param referenceService the Reference Service

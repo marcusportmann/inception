@@ -309,11 +309,11 @@ public class NextOfKin implements Serializable {
   @Column(name = "work_number", length = 50)
   private String workNumber;
 
-  /** Creates a new {@code NextOfKin} instance. */
+  /** Constructs a new {@code NextOfKin}. */
   public NextOfKin() {}
 
   /**
-   * Creates a new {@code NextOfKin} instance.
+   * Constructs a new {@code NextOfKin}.
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
@@ -372,7 +372,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Creates a new {@code NextOfKin} instance.
+   * Constructs a new {@code NextOfKin}.
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
@@ -391,7 +391,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Creates a new {@code NextOfKin} instance.
+   * Constructs a new {@code NextOfKin}.
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin

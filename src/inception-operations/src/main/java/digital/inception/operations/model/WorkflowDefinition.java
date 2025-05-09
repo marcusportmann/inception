@@ -79,6 +79,9 @@ import java.util.UUID;
 @IdClass(WorkflowDefinitionId.class)
 public class WorkflowDefinition implements Serializable {
 
+  ADD  WorkflowType E.G. flowable_embedded_bpmn_process, flowable_enterprise_bpmn, flowable_embedded_cmmn, flowable_enterprise_cmmn,
+  paradigm, camunda, sonata,
+
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The document definitions associated with the workflow definition. */
@@ -154,11 +157,11 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "version", nullable = false)
   private int version;
 
-  /** Creates a new {@code WorkflowDefinition} instance. */
+  /** Constructs a new {@code WorkflowDefinition}. */
   public WorkflowDefinition() {}
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
@@ -171,7 +174,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
@@ -193,7 +196,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
@@ -223,7 +226,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
@@ -247,7 +250,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
@@ -262,7 +265,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
@@ -287,7 +290,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
@@ -320,7 +323,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Creates a new {@code WorkflowDefinition} instance.
+   * Constructs a new {@code WorkflowDefinition}.
    *
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition

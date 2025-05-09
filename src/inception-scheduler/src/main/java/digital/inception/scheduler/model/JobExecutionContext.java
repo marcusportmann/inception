@@ -39,7 +39,7 @@ public class JobExecutionContext {
   private final Map<String, String> parameters;
 
   /**
-   * Creates a new {@code JobExecutionContext} instance.
+   * Constructs a new {@code JobExecutionContext}.
    *
    * @param jobId the ID for the job
    * @param executionDate the date and time that the job was scheduled to be executed

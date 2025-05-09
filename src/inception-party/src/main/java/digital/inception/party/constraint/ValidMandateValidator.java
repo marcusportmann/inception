@@ -47,7 +47,7 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
   private final PartyService partyService;
 
   /**
-   * Creates a new {@code ValidMandateValidator} instance.
+   * Constructs a new {@code ValidMandateValidator}.
    *
    * @param partyService the Party Service
    * @param partyReferenceService the Party Reference Service
@@ -59,7 +59,7 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
     this.partyReferenceService = partyReferenceService;
   }
 
-  /** Creates a new {@code ValidMandateValidator} instance. */
+  /** Constructs a new {@code ValidMandateValidator}. */
   public ValidMandateValidator() {
     this.partyService = null;
     this.partyReferenceService = null;

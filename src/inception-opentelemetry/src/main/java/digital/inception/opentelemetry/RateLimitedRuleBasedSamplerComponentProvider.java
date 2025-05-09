@@ -38,7 +38,7 @@ public class RateLimitedRuleBasedSamplerComponentProvider implements ComponentPr
 
   private static final String ACTION_RECORD_AND_SAMPLE = "RECORD_AND_SAMPLE";
 
-  /** Creates a new {@code RateLimitedRuleBasedSamplerComponentProvider} instance. */
+  /** Constructs a new {@code RateLimitedRuleBasedSamplerComponentProvider}. */
   public RateLimitedRuleBasedSamplerComponentProvider() {}
 
   @Override

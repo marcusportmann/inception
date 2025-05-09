@@ -29,7 +29,7 @@ public class XAExceptionUtil {
   private XAExceptionUtil() {}
 
   /**
-   * Creates a new {@code XAException} instance object.
+   * Constructs a new {@code XAException} instance object.
    *
    * @param errorCode the error code
    * @param message the message
@@ -43,7 +43,7 @@ public class XAExceptionUtil {
   }
 
   /**
-   * Creates a new {@code XAException} instance object.
+   * Constructs a new {@code XAException} instance object.
    *
    * @param errorCode the error code
    * @param message the message

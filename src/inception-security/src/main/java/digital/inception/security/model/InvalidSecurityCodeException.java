@@ -24,8 +24,8 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * An <b>InvalidSecurityCodeException</b> is thrown to indicate that a security operation failed as
- * a result of an invalid security code.
+ * An {@code InvalidSecurityCodeException} exception is thrown to indicate that a security operation
+ * failed as a result of an invalid security code.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -45,7 +45,7 @@ public class InvalidSecurityCodeException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code InvalidSecurityCodeException} instance.
+   * Constructs a new {@code InvalidSecurityCodeException}.
    *
    * @param username the username for the user
    */

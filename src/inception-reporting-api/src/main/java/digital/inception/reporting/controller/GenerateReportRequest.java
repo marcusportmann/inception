@@ -50,11 +50,11 @@ public class GenerateReportRequest implements Serializable {
   @JsonProperty(required = true)
   private List<ReportParameter> reportParameters;
 
-  /** Creates a new {@code GenerateReportRequest} instance. */
+  /** Constructs a new {@code GenerateReportRequest}. */
   public GenerateReportRequest() {}
 
   /**
-   * Creates a new {@code GenerateReportRequest} instance.
+   * Constructs a new {@code GenerateReportRequest}.
    *
    * @param reportDefinitionId the ID for the report definition
    * @param reportParameters the report parameters

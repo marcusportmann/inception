@@ -37,7 +37,7 @@ public class StatusId implements Serializable {
   /** The code for the status type. */
   private String type;
 
-  /** Creates a new {@code StatusId} instance. */
+  /** Constructs a new {@code StatusId}. */
   public StatusId() {}
 
   /**

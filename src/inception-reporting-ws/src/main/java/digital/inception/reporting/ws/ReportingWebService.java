@@ -60,7 +60,7 @@ public class ReportingWebService extends AbstractWebServiceBase {
   private final ReportingService reportingService;
 
   /**
-   * Creates a new {@code ReportingWebService} instance.
+   * Constructs a new {@code ReportingWebService}.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

@@ -16,30 +16,11 @@
 
 package digital.inception.operations.ws;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.model.BatchTasksNotFoundException;
-import digital.inception.operations.model.DuplicateTaskTypeException;
-import digital.inception.operations.model.InvalidTaskStatusException;
-import digital.inception.operations.model.QueueTaskRequest;
-import digital.inception.operations.model.Task;
-import digital.inception.operations.model.TaskEvent;
-import digital.inception.operations.model.TaskNotFoundException;
-import digital.inception.operations.model.TaskSortBy;
-import digital.inception.operations.model.TaskStatus;
-import digital.inception.operations.model.TaskSummaries;
-import digital.inception.operations.model.TaskType;
-import digital.inception.operations.model.TaskTypeNotFoundException;
-import digital.inception.operations.service.IOperationsService;
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
-import jakarta.jws.WebResult;
+import digital.inception.operations.service.WorkflowService;
+import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
-import jakarta.xml.bind.annotation.XmlElement;
-import java.util.List;
-import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 
 /**
  * The {@code OperationsWebService} class.
@@ -54,18 +35,19 @@ import java.util.UUID;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class OperationsWebService extends AbstractWebServiceBase {
 
-  /** The Operations Service. */
-  private final IOperationsService operationsService;
+  /** The Workflow Service. */
+  private final WorkflowService workflowService;
 
   /**
-   * Creates a new {@code OperationsWebService} instance.
+   * Constructs a new {@code OperationsWebService}.
    *
    * @param applicationContext the Spring application context
-   * @param operationsService the Operations Service
+   * @param workflowService the Workflow Service
    */
-  public OperationsWebService(ApplicationContext applicationContext,  operationsService) {
+  public OperationsWebService(
+      ApplicationContext applicationContext, WorkflowService workflowService) {
     super(applicationContext);
 
-    this.operationsService = operationsService;
+    this.workflowService = workflowService;
   }
 }

@@ -29,7 +29,7 @@ import org.springframework.lang.NonNull;
  */
 public class WebServiceConfigurationEnabledCondition implements Condition {
 
-  /** Creates a new {@code WebServiceConfigurationEnabledCondition} instance. */
+  /** Constructs a new {@code WebServiceConfigurationEnabledCondition}. */
   public WebServiceConfigurationEnabledCondition() {}
 
   @Override

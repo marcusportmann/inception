@@ -170,7 +170,7 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code ResidencePermitType} instance. */
+  /** Constructs a new {@code ResidencePermitType}. */
   public ResidencePermitType() {}
 
   /**

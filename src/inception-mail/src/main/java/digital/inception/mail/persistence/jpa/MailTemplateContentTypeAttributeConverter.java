@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class MailTemplateContentTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<MailTemplateContentType> {
 
-  /** Creates a new {@code MailTemplateContentTypeAttributeConverter} instance. */
+  /** Constructs a new {@code MailTemplateContentTypeAttributeConverter}. */
   public MailTemplateContentTypeAttributeConverter() {
     super(MailTemplateContentType.class);
   }

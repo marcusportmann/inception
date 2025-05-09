@@ -37,7 +37,7 @@ public class ResidencePermitTypeId implements Serializable {
   /** The Unicode locale identifier for the residence permit type. */
   private String localeId;
 
-  /** Creates a new {@code ResidencePermitTypeId} instance. */
+  /** Constructs a new {@code ResidencePermitTypeId}. */
   public ResidencePermitTypeId() {}
 
   /**

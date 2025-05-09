@@ -46,7 +46,7 @@ public class DuplicatePersonException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicatePersonException} instance.
+   * Constructs a new {@code DuplicatePersonException}.
    *
    * @param id the ID for the person
    */

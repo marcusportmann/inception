@@ -59,7 +59,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
   private Object returnObject;
 
   /**
-   * Creates a new {@code PolicyDecisionPointSecurityExpressionRoot} instance.
+   * Constructs a new {@code PolicyDecisionPointSecurityExpressionRoot}.
    *
    * @param policyDecisionPoints the policy decision points
    * @param authentication the authentication supplier
@@ -81,7 +81,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
   }
 
   /**
-   * Creates a new {@code PolicyDecisionPointSecurityExpressionRoot} instance.
+   * Constructs a new {@code PolicyDecisionPointSecurityExpressionRoot}.
    *
    * @param policyDecisionPoints the policy decision points
    * @param authentication the authentication

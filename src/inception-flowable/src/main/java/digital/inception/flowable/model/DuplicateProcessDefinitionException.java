@@ -48,7 +48,7 @@
 //  @Serial private static final long serialVersionUID = 1000000;
 //
 //  /**
-//   * Creates a new {@code DuplicateProcessDefinitionException} instance.
+//   * Constructs a new {@code DuplicateProcessDefinitionException}.
 //   *
 //   * @param processDefinitionId the ID for the process definition
 //   */

@@ -66,7 +66,7 @@ public class DemoApplication extends Application {
   private final SecurityService securityService;
 
   /**
-   * Creates a new {@code DemoApplication} instance.
+   * Constructs a new {@code DemoApplication}.
    *
    * @param applicationContext the Spring application context
    * @param executorService the Executor Service

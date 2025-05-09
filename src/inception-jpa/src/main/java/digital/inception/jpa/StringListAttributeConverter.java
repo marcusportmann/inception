@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
 @Converter(autoApply = true)
 public class StringListAttributeConverter implements AttributeConverter<List<String>, String> {
 
-  /** Creates a new {@code StringListAttributeConverter} instance. */
+  /** Constructs a new {@code StringListAttributeConverter}. */
   public StringListAttributeConverter() {}
 
   /**

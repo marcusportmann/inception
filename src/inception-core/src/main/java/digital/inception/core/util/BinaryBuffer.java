@@ -35,7 +35,8 @@ public class BinaryBuffer implements java.io.Serializable {
   private byte[] data;
 
   /**
-   * Creates a new {@code BinaryBuffer} instance and initializes it using the specified binary data.
+   * Constructs a new {@code BinaryBuffer} instance and initializes it using the specified binary
+   * data.
    *
    * @param data {@code BinaryBuffer} instance containing the binary data that will be copied and
    *     managed by the {@code BinaryBuffer} instance
@@ -45,7 +46,8 @@ public class BinaryBuffer implements java.io.Serializable {
   }
 
   /**
-   * Creates a new {@code BinaryBuffer} instance and initializes it using the specified binary data.
+   * Constructs a new {@code BinaryBuffer} instance and initializes it using the specified binary
+   * data.
    *
    * @param data the binary data that will be copied and managed by the {@code BinaryBuffer}
    *     instance
@@ -56,17 +58,17 @@ public class BinaryBuffer implements java.io.Serializable {
   }
 
   /**
-   * Append the binary stored in the specified {@code BinaryBuffer} instance to this
-   * <b>BinaryBuffer</b>.
+   * Append the binary stored in the specified {@code BinaryBuffer} instance to this {@code
+   * BinaryBuffer}.
    *
-   * @param buffer the existing <b>BinaryBuffer</b> containing the binary data to append
+   * @param buffer the existing {@code BinaryBuffer} containing the binary data to append
    */
   public void append(BinaryBuffer buffer) {
     append(buffer.getData());
   }
 
   /**
-   * Append the specified binary data to the binary data already stored in the <b>BinaryBuffer</b>.
+   * Append the specified binary data to the binary data already stored in the {@code BinaryBuffer}.
    *
    * @param data the binary data to append
    */
@@ -79,24 +81,24 @@ public class BinaryBuffer implements java.io.Serializable {
     this.data = newData;
   }
 
-  /** Clears the <b>BinaryBuffer</b>. */
+  /** Clears the {@code BinaryBuffer}. */
   public void clear() {
     this.data = new byte[0];
   }
 
   /**
-   * Returns the binary data managed by the <b>BinaryBuffer</b>.
+   * Returns the binary data managed by the {@code BinaryBuffer}.
    *
-   * @return the binary data managed by the <b>BinaryBuffer</b>
+   * @return the binary data managed by the {@code BinaryBuffer}
    */
   public byte[] getData() {
     return data;
   }
 
   /**
-   * Returns the amount of binary data managed by the <b>BinaryBuffer</b>.
+   * Returns the amount of binary data managed by the {@code BinaryBuffer}.
    *
-   * @return the amount of binary data managed by the <b>BinaryBuffer</b>
+   * @return the amount of binary data managed by the {@code BinaryBuffer}
    */
   public int length() {
     return data.length;

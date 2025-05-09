@@ -123,11 +123,11 @@ public class MandatesForParty implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code MandatesForParty} instance. */
+  /** Constructs a new {@code MandatesForParty}. */
   public MandatesForParty() {}
 
   /**
-   * Creates a new {@code MandatesForParty} instance.
+   * Constructs a new {@code MandatesForParty}.
    *
    * @param tenantId the ID for the tenant the mandates are associated with
    * @param partyId the ID for the party the mandates are associated with

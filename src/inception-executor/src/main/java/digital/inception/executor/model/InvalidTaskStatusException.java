@@ -46,7 +46,7 @@ public class InvalidTaskStatusException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code InvalidTaskStatusException} instance.
+   * Constructs a new {@code InvalidTaskStatusException}.
    *
    * @param taskId the ID for the task
    */

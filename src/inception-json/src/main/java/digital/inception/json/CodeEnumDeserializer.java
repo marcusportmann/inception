@@ -36,7 +36,7 @@ public class CodeEnumDeserializer<E extends Enum<E> & CodeEnum> extends JsonDese
   private final JavaType targetType;
 
   /**
-   * Creates a new {@code CodeEnumDeserializer} instance.
+   * Constructs a new {@code CodeEnumDeserializer}.
    *
    * @param targetType the target Enum type
    */

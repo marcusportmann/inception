@@ -52,7 +52,7 @@ public class TaskExecutionDelayedException extends ServiceException {
   private final UUID taskId;
 
   /**
-   * Creates a new {@code TaskExecutionDelayedException} instance.
+   * Constructs a new {@code TaskExecutionDelayedException}.
    *
    * @param taskId the ID for the task
    * @param delay the delay in milliseconds

@@ -37,7 +37,7 @@ public class ExternalReferenceTypeId implements Serializable {
   /** The Unicode locale identifier for the external reference type. */
   private String localeId;
 
-  /** Creates a new {@code ExternalReferenceTypeId} instance. */
+  /** Constructs a new {@code ExternalReferenceTypeId}. */
   public ExternalReferenceTypeId() {}
 
   /**

@@ -116,7 +116,7 @@ public class MeasurementSystem implements Serializable {
   @Column(name = "sort_index")
   private Integer sortIndex;
 
-  /** Creates a new {@code MeasurementSystem} instance. */
+  /** Constructs a new {@code MeasurementSystem}. */
   public MeasurementSystem() {}
 
   /**

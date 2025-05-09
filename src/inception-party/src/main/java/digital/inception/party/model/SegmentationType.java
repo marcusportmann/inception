@@ -146,7 +146,7 @@ public class SegmentationType implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code SegmentationType} instance. */
+  /** Constructs a new {@code SegmentationType}. */
   public SegmentationType() {}
 
   /**

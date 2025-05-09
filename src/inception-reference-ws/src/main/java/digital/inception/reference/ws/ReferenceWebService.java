@@ -54,7 +54,7 @@ public class ReferenceWebService extends AbstractWebServiceBase {
   private final ReferenceService referenceService;
 
   /**
-   * Creates a new {@code ReferenceWebService} instance.
+   * Constructs a new {@code ReferenceWebService}.
    *
    * @param applicationContext the Spring application context
    * @param referenceService the Reference Service

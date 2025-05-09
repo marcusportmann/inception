@@ -36,7 +36,7 @@ public class LockTypeId implements Serializable {
   /** The Unicode locale identifier for the lock type. */
   private String localeId;
 
-  /** Creates a new {@code LockTypeId} instance. */
+  /** Constructs a new {@code LockTypeId}. */
   public LockTypeId() {}
 
   /**

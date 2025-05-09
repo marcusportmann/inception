@@ -29,13 +29,13 @@ public class UnauthorizedClientErrorResponse extends ErrorResponse {
   /** The error code for the OAuth2 unauthorized client error response. */
   public static final String ERROR_CODE = "unauthorized_client";
 
-  /** Creates a new {@code UnauthorizedClientErrorResponse} instance. */
+  /** Constructs a new {@code UnauthorizedClientErrorResponse}. */
   public UnauthorizedClientErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }
 
   /**
-   * Creates a new {@code UnauthorizedClientErrorResponse} instance.
+   * Constructs a new {@code UnauthorizedClientErrorResponse}.
    *
    * @param errorDescription the human-readable ASCII text description of the error
    */

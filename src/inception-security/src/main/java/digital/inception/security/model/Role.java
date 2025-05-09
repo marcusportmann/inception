@@ -108,7 +108,7 @@ public class Role implements java.io.Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Creates a new {@code Role} instance. */
+  /** Constructs a new {@code Role}. */
   public Role() {}
 
   /**

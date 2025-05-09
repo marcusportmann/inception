@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code MeasurementSystemId} class implements the ID class for the <b>MeasurementSystem</b>
+ * The {@code MeasurementSystemId} class implements the ID class for the {@code MeasurementSystem}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class MeasurementSystemId implements Serializable {
   /** The Unicode locale identifier for the measurement system. */
   private String localeId;
 
-  /** Creates a new {@code MeasurementSystemId} instance. */
+  /** Constructs a new {@code MeasurementSystemId}. */
   public MeasurementSystemId() {}
 
   /**

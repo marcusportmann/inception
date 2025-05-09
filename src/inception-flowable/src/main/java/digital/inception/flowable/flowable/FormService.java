@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FormService implements org.flowable.form.api.FormService {
 
-  /** Creates a new {@code FormService} instance. */
+  /** Constructs a new {@code FormService}. */
   public FormService() {}
 
   @Override

@@ -141,7 +141,7 @@ public class Language implements Serializable {
   @Column(name = "sort_index")
   private Integer sortIndex;
 
-  /** Creates a new {@code Language} instance. */
+  /** Constructs a new {@code Language}. */
   public Language() {}
 
   /**

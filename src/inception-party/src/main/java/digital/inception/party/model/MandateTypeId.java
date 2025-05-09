@@ -36,7 +36,7 @@ public class MandateTypeId implements Serializable {
   /** The Unicode locale identifier for the mandate type. */
   private String localeId;
 
-  /** Creates a new {@code MandateTypeId} instance. */
+  /** Constructs a new {@code MandateTypeId}. */
   public MandateTypeId() {}
 
   /**

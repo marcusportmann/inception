@@ -103,11 +103,11 @@ public class PolicySummary implements Serializable {
   @Column(name = "version", length = 50, nullable = false)
   private String version;
 
-  /** Creates a new {@code PolicySummary} instance. */
+  /** Constructs a new {@code PolicySummary}. */
   public PolicySummary() {}
 
   /**
-   * Creates a new {@code PolicySummary} instance.
+   * Constructs a new {@code PolicySummary}.
    *
    * @param id the ID for the policy
    * @param version the version of the policy

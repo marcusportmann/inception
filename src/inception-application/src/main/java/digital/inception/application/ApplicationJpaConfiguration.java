@@ -54,7 +54,7 @@ public class ApplicationJpaConfiguration {
   private final ApplicationContext applicationContext;
 
   /**
-   * Creates a new {@code ApplicationJpaConfiguration} instance.
+   * Constructs a new {@code ApplicationJpaConfiguration}.
    *
    * @param applicationContext the Spring application context
    */

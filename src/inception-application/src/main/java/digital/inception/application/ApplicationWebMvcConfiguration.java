@@ -35,7 +35,7 @@ public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
   private final StringToCodeEnumConverterFactory stringToCodeEnumConverterFactory;
 
   /**
-   * Creates a new {@code ApplicationWebMvcConfiguration} instance.
+   * Constructs a new {@code ApplicationWebMvcConfiguration}.
    *
    * @param stringToCodeEnumConverterFactory the String to CodeEnum converter factory
    */

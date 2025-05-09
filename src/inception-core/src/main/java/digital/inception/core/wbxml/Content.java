@@ -19,8 +19,8 @@ package digital.inception.core.wbxml;
 import java.io.OutputStream;
 
 /**
- * The {@code Content} interface is implemented by all of the WBXML content types e.g. <b>CDATA</b>,
- * <b>Element</b>, <b>Opaque</b>, etc.
+ * The {@code Content} interface is implemented by all of the WBXML content types e.g. {@code
+ * CDATA}, {@code Element}, {@code Opaque}, etc.
  *
  * @author Marcus Portmann
  */
@@ -34,9 +34,9 @@ public interface Content {
   void print(int indent);
 
   /**
-   * Print the content to the specified <b>OutputStream</b> using the specified indent level.
+   * Print the content to the specified {@code OutputStream} using the specified indent level.
    *
-   * @param out the <b>OuputStream</b> to output the content to
+   * @param out the {@code OuputStream} to output the content to
    * @param indent the indent level
    */
   void print(OutputStream out, int indent);

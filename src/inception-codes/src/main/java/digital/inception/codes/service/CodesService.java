@@ -147,7 +147,8 @@ public interface CodesService {
    * Retrieve the XML or JSON data for the code category.
    *
    * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
-   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
+   * registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
@@ -162,7 +163,8 @@ public interface CodesService {
    * Retrieve the XML or JSON data for the code category using the specified parameters.
    *
    * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
-   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
+   * registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters
@@ -224,7 +226,7 @@ public interface CodesService {
    * Retrieve the codes for the code category.
    *
    * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * been registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
    * file.
    *
    * @param codeCategoryId the ID for the code category
@@ -240,7 +242,7 @@ public interface CodesService {
    * Retrieve the codes for the code category using the specified parameters.
    *
    * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * been registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
    * file.
    *
    * @param codeCategoryId the ID for the code category

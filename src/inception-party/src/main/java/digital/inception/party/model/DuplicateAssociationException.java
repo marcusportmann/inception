@@ -46,7 +46,7 @@ public class DuplicateAssociationException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code DuplicateAssociationException} instance.
+   * Constructs a new {@code DuplicateAssociationException}.
    *
    * @param id the ID for the association
    */

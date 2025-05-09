@@ -68,7 +68,7 @@ public class DefaultMongoDatabaseFactory
   private WriteConcern writeConcern;
 
   /**
-   * Creates a new {@code DefaultMongoDatabaseFactory} instance.
+   * Constructs a new {@code DefaultMongoDatabaseFactory}.
    *
    * @param applicationContext the Spring application context
    * @param uri the MongoDB URI
@@ -92,7 +92,7 @@ public class DefaultMongoDatabaseFactory
   }
 
   /**
-   * Creates a new {@code DefaultMongoDatabaseFactory} instance.
+   * Constructs a new {@code DefaultMongoDatabaseFactory}.
    *
    * @param applicationContext the Spring application context
    * @param databaseName the MongoDB database name
@@ -123,7 +123,7 @@ public class DefaultMongoDatabaseFactory
   }
 
   /**
-   * Creates a new {@code DefaultMongoDatabaseFactory} instance.
+   * Constructs a new {@code DefaultMongoDatabaseFactory}.
    *
    * @param applicationContext the Spring application context
    */

@@ -135,7 +135,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   /** The configuration for the XACML policy decision point. */
   private XacmlPolicyDecisionPointConfiguration xacmlPolicyDecisionPoint;
 
-  /** Creates a new {@code ResourceServerConfiguration} instance. */
+  /** Constructs a new {@code ResourceServerConfiguration}. */
   public ResourceServerConfiguration() {}
 
   /**
@@ -594,7 +594,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** Should policy sets and policies be loaded from the classpath. */
     private boolean enabled;
 
-    /** Creates a new {@code ClasspathPoliciesConfiguration} instance. */
+    /** Constructs a new {@code ClasspathPoliciesConfiguration}. */
     public ClasspathPoliciesConfiguration() {}
 
     /**
@@ -635,7 +635,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** The reload period in seconds for external policy sets and policies. */
     private int reloadPeriod = 43200;
 
-    /** Creates a new {@code ExternalPoliciesConfiguration} instance. */
+    /** Constructs a new {@code ExternalPoliciesConfiguration}. */
     public ExternalPoliciesConfiguration() {}
 
     /**
@@ -714,7 +714,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /* The secret key used to verify the JWTs. */
     private String secretKey;
 
-    /** Creates a new {@code JwtConfiguration} instance. */
+    /** Constructs a new {@code JwtConfiguration}. */
     public JwtConfiguration() {}
 
     /**
@@ -829,7 +829,7 @@ public class ResourceServerConfiguration implements InitializingBean {
      */
     private String location;
 
-    /** Creates a new {@code JwtKey} instance. */
+    /** Constructs a new {@code JwtKey}. */
     public JwtKeyConfiguration() {}
 
     /**
@@ -941,7 +941,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** The reload period in seconds for revoked tokens. */
     private int reloadPeriod = 43200;
 
-    /** Creates a new {@code JwtRevokedTokensConfiguration} instance. */
+    /** Constructs a new {@code JwtRevokedTokensConfiguration}. */
     public JwtRevokedTokensConfiguration() {}
 
     /**
@@ -1020,7 +1020,7 @@ public class ResourceServerConfiguration implements InitializingBean {
     /** Is debugging of the rules applied by the policy decision point enabled. */
     private boolean ruleDebuggingEnabled;
 
-    /** Creates a new {@code XacmlPolicyDecisionPointConfiguration} instance. */
+    /** Constructs a new {@code XacmlPolicyDecisionPointConfiguration}. */
     public XacmlPolicyDecisionPointConfiguration() {}
 
     /**

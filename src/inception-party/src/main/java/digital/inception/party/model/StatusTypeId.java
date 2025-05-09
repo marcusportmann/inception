@@ -36,7 +36,7 @@ public class StatusTypeId implements Serializable {
   /** The Unicode locale identifier for the status type. */
   private String localeId;
 
-  /** Creates a new {@code StatusTypeId} instance. */
+  /** Constructs a new {@code StatusTypeId}. */
   public StatusTypeId() {}
 
   /**

@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * An <b>TenantNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of a tenant that could not be found.
+ * A {@code TenantNotFoundException} exception is thrown to indicate that a security operation
+ * failed as a result of a tenant that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class TenantNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code TenantNotFoundException} instance.
+   * Constructs a new {@code TenantNotFoundException}.
    *
    * @param tenantId the ID for the tenant
    */

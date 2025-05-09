@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code LockTypeCategoryId} class implements the ID class for the <b>LockTypeCategory</b>
+ * The {@code LockTypeCategoryId} class implements the ID class for the {@code LockTypeCategory}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class LockTypeCategoryId implements Serializable {
   /** The Unicode locale identifier for the lock type category. */
   private String localeId;
 
-  /** Creates a new {@code LockTypeCategoryId} instance. */
+  /** Constructs a new {@code LockTypeCategoryId}. */
   public LockTypeCategoryId() {}
 
   /**

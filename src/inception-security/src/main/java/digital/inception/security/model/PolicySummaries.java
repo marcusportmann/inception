@@ -112,11 +112,11 @@ public class PolicySummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Creates a new {@code PolicySummaries} instance. */
+  /** Constructs a new {@code PolicySummaries}. */
   public PolicySummaries() {}
 
   /**
-   * Creates a new {@code PolicySummaries} instance.
+   * Constructs a new {@code PolicySummaries}.
    *
    * @param policySummaries the policy summaries
    * @param total the total number of policy summaries

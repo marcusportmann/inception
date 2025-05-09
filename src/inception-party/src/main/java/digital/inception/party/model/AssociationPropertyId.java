@@ -38,7 +38,7 @@ public class AssociationPropertyId implements Serializable {
   /** The code for the association property type. */
   private String type;
 
-  /** Creates a new {@code AssociationPropertyId} instance. */
+  /** Constructs a new {@code AssociationPropertyId}. */
   public AssociationPropertyId() {}
 
   /**

@@ -82,11 +82,11 @@ public class GroupMember implements Serializable {
   @NotNull
   private UUID userDirectoryId;
 
-  /** Creates a new {@code GroupMember} instance. */
+  /** Constructs a new {@code GroupMember}. */
   public GroupMember() {}
 
   /**
-   * Creates a new {@code GroupMember} instance.
+   * Constructs a new {@code GroupMember}.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    * @param groupName the name of the group

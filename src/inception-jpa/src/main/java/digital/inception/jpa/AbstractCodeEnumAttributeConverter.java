@@ -32,7 +32,7 @@ public abstract class AbstractCodeEnumAttributeConverter<E extends Enum<E> & Cod
   private final Class<E> enumType;
 
   /**
-   * Creates a new {@code CodeEnumAttributeConverter} instance.
+   * Constructs a new {@code CodeEnumAttributeConverter}.
    *
    * @param enumType the Enum type
    */

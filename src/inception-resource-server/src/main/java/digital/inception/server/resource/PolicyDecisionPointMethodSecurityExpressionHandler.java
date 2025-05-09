@@ -53,7 +53,7 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
   private boolean isSecurityEnabled;
 
   /**
-   * Creates a new {@code PolicyDecisionPointMethodSecurityExpressionHandler} instance.
+   * Constructs a new {@code PolicyDecisionPointMethodSecurityExpressionHandler}.
    *
    * @param applicationContext the Spring application context
    */

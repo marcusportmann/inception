@@ -25,8 +25,8 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * A <b>TenantUserDirectoryNotFoundException</b> is thrown to indicate that a security operation
- * failed as a result of a tenant user directory that could not be found.
+ * A {@code TenantUserDirectoryNotFoundException} exception is thrown to indicate that a security
+ * operation failed as a result of a tenant user directory that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,7 +46,7 @@ public class TenantUserDirectoryNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code TenantUserDirectoryNotFoundException} instance.
+   * Constructs a new {@code TenantUserDirectoryNotFoundException}.
    *
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory

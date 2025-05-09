@@ -98,11 +98,11 @@ public class UserDirectoryType implements java.io.Serializable {
   @Column(name = "provider_class", length = 1000, nullable = false)
   private String providerClassName;
 
-  /** Creates a new {@code UserDirectoryType} instance. */
+  /** Constructs a new {@code UserDirectoryType}. */
   public UserDirectoryType() {}
 
   /**
-   * Creates a new {@code UserDirectoryType} instance.
+   * Constructs a new {@code UserDirectoryType}.
    *
    * @param code the code for the user directory type
    * @param name the name of the user directory type

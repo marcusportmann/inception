@@ -46,7 +46,7 @@ public class FormEngineConfiguration extends AbstractEngineConfiguration
 
   private AppEngines FormEngines;
 
-  /** Creates a new {@code FormEngineConfiguration} instance. */
+  /** Constructs a new {@code FormEngineConfiguration}. */
   public FormEngineConfiguration() {
     this.formManagementService = new digital.inception.flowable.flowable.FormManagementService();
     this.formRepositoryService = new digital.inception.flowable.flowable.FormRepositoryService();

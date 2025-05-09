@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class InstantToStringConverter implements Converter<Instant, String> {
 
-  /** Creates a new {@code InstantToStringConverter} instance. */
+  /** Constructs a new {@code InstantToStringConverter}. */
   public InstantToStringConverter() {}
 
   @Override

@@ -39,7 +39,7 @@ public abstract class ErrorResponse extends Response {
   private final String errorDescription;
 
   /**
-   * Creates a new {@code ErrorGrantResponse} instance.
+   * Constructs a new {@code ErrorGrantResponse}.
    *
    * @param status the HTTP status that should be returned for the OAuth2 error response
    * @param error the single ASCII error code
@@ -52,7 +52,7 @@ public abstract class ErrorResponse extends Response {
   }
 
   /**
-   * Creates a new {@code ErrorResponse} instance.
+   * Constructs a new {@code ErrorResponse}.
    *
    * @param status the HTTP status that should be returned for the OAuth2 error response
    * @param error the single ASCII error code

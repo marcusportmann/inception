@@ -176,11 +176,11 @@ public class ErrorReport implements Serializable {
   @Column(name = "who", length = 100)
   private String who;
 
-  /** Creates a new {@code ErrorReport} instance. */
+  /** Constructs a new {@code ErrorReport}. */
   public ErrorReport() {}
 
   /**
-   * Creates a new {@code ErrorReport} instance.
+   * Constructs a new {@code ErrorReport}.
    *
    * @param id the ID for the error report
    * @param applicationId the ID for the application that generated the error report
@@ -205,7 +205,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Creates a new {@code ErrorReport} instance.
+   * Constructs a new {@code ErrorReport}.
    *
    * @param id the ID for the error report
    * @param applicationId the ID for the application that generated the error report

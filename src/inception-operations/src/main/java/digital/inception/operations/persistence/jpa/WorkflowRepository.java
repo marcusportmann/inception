@@ -22,11 +22,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The {@link WorkflowRepository} interface provides the persistence operations for the {@link
+ * The {@code WorkflowRepository} interface provides the persistence operations for the {@link
  * Workflow} domain type.
  *
- * <p>This repository extends {@link JpaRepository} to provide standard CRUD (Create, Read, Update,
- * Delete) operations and {@link JpaSpecificationExecutor} to support more complex queries using
+ * <p>This repository extends {@code JpaRepository} to provide standard CRUD (Create, Read, Update,
+ * Delete) operations and {@code JpaSpecificationExecutor} to support more complex queries using
  * specifications. It is designed to handle all data access requirements for workflows within the
  * application.
  *

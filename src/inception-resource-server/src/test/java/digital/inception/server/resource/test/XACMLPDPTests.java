@@ -209,7 +209,7 @@ public class XACMLPDPTests {
   @Configuration
   public static class XACMLTestConfiguration {
 
-    /** Creates a new {@code XACMLTestConfiguration} instance. */
+    /** Constructs a new {@code XACMLTestConfiguration}. */
     public XACMLTestConfiguration() {}
 
     /**

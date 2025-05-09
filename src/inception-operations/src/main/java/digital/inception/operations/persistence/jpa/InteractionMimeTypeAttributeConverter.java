@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class InteractionMimeTypeAttributeConverter
     extends AbstractCodeEnumAttributeConverter<InteractionMimeType> {
 
-  /** Creates a new {@code InteractionMimeTypeAttributeConverter} instance. */
+  /** Constructs a new {@code InteractionMimeTypeAttributeConverter}. */
   public InteractionMimeTypeAttributeConverter() {
     super(InteractionMimeType.class);
   }

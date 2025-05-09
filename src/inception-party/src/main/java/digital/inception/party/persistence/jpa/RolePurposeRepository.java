@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The {@code RolePurposeRepository} interface declares the persistence for the <b>RolePurpose</b>
+ * The {@code RolePurposeRepository} interface declares the persistence for the {@code RolePurpose}
  * domain type.
  *
  * @author Marcus Portmann

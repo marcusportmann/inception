@@ -82,7 +82,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   private final KeyStore trustStore;
 
   /**
-   * Creates a new {@code Crypto} instance.
+   * Constructs a new {@code Crypto}.
    *
    * @param keyStore the key store
    * @param keyStorePassword the key store password
@@ -96,7 +96,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   }
 
   /**
-   * Creates a new {@code Crypto} instance.
+   * Constructs a new {@code Crypto}.
    *
    * @param keyStore the key store
    * @param keyStorePassword the key store password

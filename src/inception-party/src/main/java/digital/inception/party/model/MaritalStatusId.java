@@ -36,7 +36,7 @@ public class MaritalStatusId implements Serializable {
   /** The Unicode locale identifier for the marital status. */
   private String localeId;
 
-  /** Creates a new {@code MaritalStatusId} instance. */
+  /** Constructs a new {@code MaritalStatusId}. */
   public MaritalStatusId() {}
 
   /**

@@ -80,11 +80,11 @@
 //  @Size(min = 1, max = 100)
 //  private String version;
 //
-//  /** Creates a new {@code ProcessInstanceSummary} instance. */
+//  /** Constructs a new {@code ProcessInstanceSummary}. */
 //  public ProcessInstanceSummary() {}
 //
 //  /**
-//   * Creates a new {@code ProcessInstanceSummary} instance.
+//   * Constructs a new {@code ProcessInstanceSummary}.
 //   *
 //   * @param id the ID for the process definition
 //   * @param name the name of the process definition

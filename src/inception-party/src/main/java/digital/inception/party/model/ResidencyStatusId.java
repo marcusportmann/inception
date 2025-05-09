@@ -37,7 +37,7 @@ public class ResidencyStatusId implements Serializable {
   /** The Unicode locale identifier for the residency status. */
   private String localeId;
 
-  /** Creates a new {@code ResidencyStatusId} instance. */
+  /** Constructs a new {@code ResidencyStatusId}. */
   public ResidencyStatusId() {}
 
   /**

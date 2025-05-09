@@ -43,11 +43,11 @@ public final class MimeData implements java.io.Serializable {
   /** The MIME type for the data. */
   private MimeType mimeType;
 
-  /** Creates a new {@code MimeData} instance. */
+  /** Constructs a new {@code MimeData}. */
   public MimeData() {}
 
   /**
-   * Creates a new {@code MimeData} instance.
+   * Constructs a new {@code MimeData}.
    *
    * @param mimeType the MIME type for the data
    * @param data the data
@@ -66,7 +66,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Creates a new {@code MimeData} instance.
+   * Constructs a new {@code MimeData}.
    *
    * @param mimeType the MIME type for the data
    * @param data the data
@@ -77,7 +77,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Creates a new {@code MimeData} instance.
+   * Constructs a new {@code MimeData}.
    *
    * @param data the data
    */

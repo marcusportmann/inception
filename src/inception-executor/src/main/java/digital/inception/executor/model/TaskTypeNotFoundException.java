@@ -45,7 +45,7 @@ public class TaskTypeNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Creates a new {@code TaskTypeNotFoundException} instance.
+   * Constructs a new {@code TaskTypeNotFoundException}.
    *
    * @param taskTypeCode the code for the task type
    */

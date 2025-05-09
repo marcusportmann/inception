@@ -122,7 +122,7 @@ public class Region implements Serializable {
   @Column(name = "sort_index")
   private Integer sortIndex;
 
-  /** Creates a new {@code Region} instance. */
+  /** Constructs a new {@code Region}. */
   public Region() {}
 
   /**

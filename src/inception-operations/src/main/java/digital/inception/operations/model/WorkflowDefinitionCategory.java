@@ -87,11 +87,11 @@ public class WorkflowDefinitionCategory implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Creates a new {@code WorkflowDefinitionCategory} instance. */
+  /** Constructs a new {@code WorkflowDefinitionCategory}. */
   public WorkflowDefinitionCategory() {}
 
   /**
-   * Creates a new {@code WorkflowDefinitionCategory} instance.
+   * Constructs a new {@code WorkflowDefinitionCategory}.
    *
    * @param id the ID for the workflow definition category
    * @param tenantId the ID for the tenant the workflow definition category is specific to

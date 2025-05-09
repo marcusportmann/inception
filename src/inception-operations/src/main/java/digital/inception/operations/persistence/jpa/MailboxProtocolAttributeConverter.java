@@ -30,7 +30,7 @@ import jakarta.persistence.Converter;
 public class MailboxProtocolAttributeConverter
     extends AbstractCodeEnumAttributeConverter<MailboxProtocol> {
 
-  /** Creates a new {@code MailboxProtocolAttributeConverter} instance. */
+  /** Constructs a new {@code MailboxProtocolAttributeConverter}. */
   public MailboxProtocolAttributeConverter() {
     super(MailboxProtocol.class);
   }

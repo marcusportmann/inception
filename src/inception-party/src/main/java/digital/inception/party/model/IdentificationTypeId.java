@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code IdentificationTypeId} class implements the ID class for the <b>IdentificationType</b>
+ * The {@code IdentificationTypeId} class implements the ID class for the {@code IdentificationType}
  * class.
  *
  * @author Marcus Portmann
@@ -37,7 +37,7 @@ public class IdentificationTypeId implements Serializable {
   /** The Unicode locale identifier for the identification type. */
   private String localeId;
 
-  /** Creates a new {@code IdentificationTypeId} instance. */
+  /** Constructs a new {@code IdentificationTypeId}. */
   public IdentificationTypeId() {}
 
   /**

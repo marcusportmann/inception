@@ -43,7 +43,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   private final String scope;
 
   /**
-   * Creates a new {@code ResourceOwnerPasswordCredentialsGrantResponse} instance.
+   * Constructs a new {@code ResourceOwnerPasswordCredentialsGrantResponse}.
    *
    * @param accessToken the access token
    * @param expiresIn the access token validity in seconds
@@ -61,7 +61,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   }
 
   /**
-   * Creates a new {@code ResourceOwnerPasswordCredentialsGrantResponse} instance.
+   * Constructs a new {@code ResourceOwnerPasswordCredentialsGrantResponse}.
    *
    * @param accessToken the access token
    * @param expiresIn the access token validity in seconds
@@ -78,7 +78,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   }
 
   /**
-   * Creates a new {@code ResourceOwnerPasswordCredentialsGrantResponse} instance.
+   * Constructs a new {@code ResourceOwnerPasswordCredentialsGrantResponse}.
    *
    * @param accessToken the access token
    * @param expiresIn the lifetime in seconds of the access token

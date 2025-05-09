@@ -24,8 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The {@code ReportDefinitionRepository} interface declares the persistence for the <b>
- * ReportDefinition</b> domain type.
+ * The {@code ReportDefinitionRepository} interface declares the persistence for the {@code
+ * ReportDefinition} domain type.
  *
  * @author Marcus Portmann
  */

@@ -42,7 +42,7 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
   private final boolean isSecurityEnabled;
 
   /**
-   * Creates a new {@code SecureApiController} instance.
+   * Constructs a new {@code SecureApiController}.
    *
    * @param applicationContext the Spring application context
    */

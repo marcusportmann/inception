@@ -44,7 +44,7 @@ public class NarayanaFactory {
     TxControl.setXANodeName(nodeName());
   }
 
-  /** Creates a new {@code NarayanaFactory} instance. */
+  /** Constructs a new {@code NarayanaFactory}. */
   public NarayanaFactory() {}
 
   /**

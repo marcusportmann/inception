@@ -93,11 +93,11 @@ public class JobParameter implements Serializable {
   @Column(name = "value", length = 2000, nullable = false)
   private String value;
 
-  /** Creates a new {@code JobParameter} instance. */
+  /** Constructs a new {@code JobParameter}. */
   public JobParameter() {}
 
   /**
-   * Creates a new {@code JobParameter} instance.
+   * Constructs a new {@code JobParameter}.
    *
    * @param name the name of the job parameter
    * @param value the value of the job parameter

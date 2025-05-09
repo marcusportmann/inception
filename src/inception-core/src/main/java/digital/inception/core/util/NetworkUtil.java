@@ -32,13 +32,13 @@ public final class NetworkUtil {
   private NetworkUtil() {}
 
   /**
-   * Returns an <b>InetAddress</b> object encapsulating what is most likely the machine's LAN IP
+   * Returns an {@code InetAddress} object encapsulating what is most likely the machine's LAN IP
    * address.
    *
-   * <p>This method is intended for use as a replacement of JDK method <b>
-   * InetAddress.getLocalHost</b>, because that method is ambiguous on Linux systems. Linux systems
+   * <p>This method is intended for use as a replacement of JDK method {@code
+   * InetAddress.getLocalHost}, because that method is ambiguous on Linux systems. Linux systems
    * enumerate the loopback network interface the same way as regular LAN network interfaces, but
-   * the JDK <b>InetAddress.getLocalHost</b> method does not specify the algorithm used to select
+   * the JDK {@code InetAddress.getLocalHost} method does not specify the algorithm used to select
    * the address returned under such circumstances, and will often return the loopback address,
    * which is not valid for network communication. Details <a
    * href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4665037">here</a>.
@@ -51,7 +51,7 @@ public final class NetworkUtil {
    * method will return simply the first non-loopback address found (IPv4 or IPv6).
    *
    * <p>If this method cannot find a non-loopback address using this selection algorithm, it will
-   * fall back to calling and returning the result of JDK method <b>InetAddress.getLocalHost</b>.
+   * fall back to calling and returning the result of JDK method {@code InetAddress.getLocalHost}.
    *
    * @return the LAN IP address
    * @throws UnknownHostException the LAN IP address could not be retrieved

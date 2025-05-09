@@ -21,21 +21,21 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.Instant;
 
 /**
- * The {@code InstantAdapter} class implements a JAXB 2.0 adapter used to convert between
- * <b>String</b> and {@code Instant} types. <br>
+ * The {@code InstantAdapter} class implements a JAXB 2.0 adapter used to convert between {@code
+ * String} and {@code Instant} types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class InstantAdapter extends XmlAdapter<String, Instant> {
 
-  /** Creates a new {@code InstantAdapter} instance. */
+  /** Constructs a new {@code InstantAdapter}. */
   public InstantAdapter() {}
 
   /**
-   * Marshals the <b>java.time.Instant</b> value as an ISO8601 string.
+   * Marshals the {@code java.time.Instant} value as an ISO8601 string.
    *
    * @param value the value to marshal
-   * @return the <b>java.time.Instant</b> value as an ISO8601 string
+   * @return the {@code java.time.Instant} value as an ISO8601 string
    */
   public static String toISO8601(Instant value) {
     if (value == null) {
@@ -46,10 +46,10 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <b>java.time.Instant</b>.
+   * Unmarshals the ISO8601 string value as a {@code java.time.Instant}.
    *
    * @param value the ISO8601 string value
-   * @return the ISO8601 string value as a <b>java.time.Instant</b>
+   * @return the ISO8601 string value as a {@code java.time.Instant}
    */
   public static Instant toInstant(String value) {
     if (value == null) {
@@ -64,10 +64,10 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
   }
 
   /**
-   * Marshals the <b>java.time.Instant</b> value as an ISO8601 string.
+   * Marshals the {@code java.time.Instant} value as an ISO8601 string.
    *
    * @param value the value to marshal
-   * @return the <b>java.time.Instant</b> value as an ISO8601 string
+   * @return the {@code java.time.Instant} value as an ISO8601 string
    */
   @Override
   public String marshal(Instant value) {
@@ -79,10 +79,10 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <b>java.time.Instant</b>.
+   * Unmarshals the ISO8601 string value as a {@code java.time.Instant}.
    *
    * @param value the ISO8601 string value
-   * @return the ISO8601 string value as a <b>java.time.Instant</b>
+   * @return the ISO8601 string value as a {@code java.time.Instant}
    */
   @Override
   public Instant unmarshal(String value) {

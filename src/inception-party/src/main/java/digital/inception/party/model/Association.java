@@ -177,11 +177,11 @@ public class Association implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 
-  /** Creates a new {@code Association} instance. */
+  /** Constructs a new {@code Association}. */
   public Association() {}
 
   /**
-   * Creates a new {@code Association} instance.
+   * Constructs a new {@code Association}.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -197,7 +197,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Creates a new {@code Association} instance.
+   * Constructs a new {@code Association}.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
@@ -216,7 +216,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Creates a new {@code Association} instance.
+   * Constructs a new {@code Association}.
    *
    * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
