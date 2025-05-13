@@ -32,7 +32,7 @@
 // public interface IFlowableService {
 //
 //  //  /**
-//  //   * Create the new process definition(s).
+//  //   * Create the process definition(s).
 //  //   *
 //  //   * @param processDefinitionData the BPMN XML data for the process definition(s)
 //  //   * @return the process definition summaries for the BPMN processes defined by the BPMN XML

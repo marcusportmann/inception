@@ -31,7 +31,7 @@ import java.util.UUID;
 public interface DocumentStore {
 
   /**
-   * Create the new document.
+   * Create the document.
    *
    * @param tenantId the ID for the tenant
    * @param document the document

@@ -103,7 +103,7 @@ public interface ExecutorService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Create the new task type.
+   * Create the task type.
    *
    * @param taskType the {@code TaskType} instance containing the information for the task type
    * @throws InvalidArgumentException if an argument is invalid

@@ -30,6 +30,7 @@ import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository
 import digital.inception.operations.store.DocumentStore;
 import java.security.MessageDigest;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -98,12 +99,17 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
     validateArgument("createDocumentRequest", createDocumentRequest);
 
+    if (!Objects.equals(tenantId, createDocumentRequest.getTenantId())) {
+      throw new InvalidArgumentException("createDocumentRequest.tenantId");
+    }
+
     if (!StringUtils.hasText(createdBy)) {
       throw new InvalidArgumentException("createdBy");
     }
 
     try {
-      if (documentDefinitionRepository.existsById(createDocumentRequest.getDefinitionId())) {
+      if (documentDefinitionRepository.existsByTenantIdAndId(
+          tenantId, createDocumentRequest.getDefinitionId())) {
         throw new DocumentDefinitionNotFoundException(createDocumentRequest.getDefinitionId());
       }
 
@@ -124,14 +130,19 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public void createDocumentDefinition(DocumentDefinition documentDefinition)
+  public void createDocumentDefinition(UUID tenantId, DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
           ServiceUnavailableException {
     validateArgument("documentDefinition", documentDefinition);
 
+    if (!Objects.equals(tenantId, documentDefinition.getTenantId())) {
+      throw new InvalidArgumentException("documentDefinition.tenantId");
+    }
+
     try {
-      if (documentDefinitionRepository.existsById(documentDefinition.getId())) {
+      if (documentDefinitionRepository.existsByTenantIdAndId(
+          tenantId, documentDefinition.getId())) {
         throw new DuplicateDocumentDefinitionException(documentDefinition.getId());
       }
 
@@ -159,7 +170,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public void deleteDocumentDefinition(String documentDefinitionId)
+  public void deleteDocumentDefinition(UUID tenantId, String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
@@ -212,7 +223,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public DocumentDefinition getDocumentDefinition(String documentDefinitionId)
+  public DocumentDefinition getDocumentDefinition(UUID tenantId, String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {

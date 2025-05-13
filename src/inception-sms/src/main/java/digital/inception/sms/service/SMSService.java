@@ -34,7 +34,7 @@ import java.util.UUID;
 public interface SMSService {
 
   /**
-   * Create the new SMS.
+   * Create the SMS.
    *
    * @param sms the {@code SMS} instance containing the information for the SMS
    * @throws InvalidArgumentException if an argument is invalid

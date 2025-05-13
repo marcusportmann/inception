@@ -36,7 +36,7 @@ import java.util.Optional;
 public interface SchedulerService {
 
   /**
-   * Create the new job.
+   * Create the job.
    *
    * @param job the {@code Job} instance containing the information for the job
    * @throws InvalidArgumentException if an argument is invalid

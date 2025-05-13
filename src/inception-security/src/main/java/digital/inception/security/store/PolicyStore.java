@@ -34,7 +34,7 @@ import java.util.List;
 public interface PolicyStore {
 
   /**
-   * Create the new policy.
+   * Create the policy.
    *
    * @param policy the policy
    * @return the policy

@@ -41,7 +41,7 @@ public interface WorkflowDefinitionRepository
    */
   @Transactional
   @Modifying
-  @Query("delete from WorkflowDefinition cd where cd.id = :workflowDefinitionId")
+  @Query("delete from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
   void deleteById(@Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
@@ -51,7 +51,7 @@ public interface WorkflowDefinitionRepository
    * @return {@code true} if a version of the workflow definition with the specified ID exists or
    *     {@code false} otherwise
    */
-  @Query("select count(cd) > 0 from WorkflowDefinition cd where cd.id = :workflowDefinitionId")
+  @Query("select count(wd) > 0 from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
   boolean existsById(@Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
@@ -63,7 +63,7 @@ public interface WorkflowDefinitionRepository
    */
   @Query(
       value =
-          "select * from operations_workflow_definitions cd where cd.id = :workflowDefinitionId order by cd.version desc limit 1",
+          "select * from operations_workflow_definitions wd where wd.id = :workflowDefinitionId order by wd.version desc limit 1",
       nativeQuery = true)
   Optional<WorkflowDefinition> findLatestVersionById(
       @Param("workflowDefinitionId") String workflowDefinitionId);
@@ -75,7 +75,7 @@ public interface WorkflowDefinitionRepository
    * @return the next version of the workflow definition with the specified ID
    */
   @Query(
-      "select coalesce(max(cd.version), 0) + 1 from WorkflowDefinition cd "
-          + "where cd.id = :workflowDefinitionId")
+      "select coalesce(max(wd.version), 0) + 1 from WorkflowDefinition wd "
+          + "where wd.id = :workflowDefinitionId")
   Integer getNextVersionById(@Param("workflowDefinitionId") String workflowDefinitionId);
 }

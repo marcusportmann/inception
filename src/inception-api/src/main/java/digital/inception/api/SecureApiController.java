@@ -35,6 +35,10 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public abstract class SecureApiController extends AbstractApiControllerBase {
 
+  /** The ID for the default tenant. */
+  public static final UUID DEFAULT_TENANT_ID =
+      UUID.fromString("00000000-0000-0000-0000-000000000000");
+
   /** The code for the Administrator role. */
   private static final String ADMINISTRATOR_ROLE_CODE = "Administrator";
 
@@ -65,6 +69,27 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
       }
     }
     this.isSecurityEnabled = isSecurityEnabled;
+  }
+
+  /**
+   * Returns the name of the authenticated principal or {@code "unknown"} if the name of the
+   * authenticated principal could not be retrieved.
+   *
+   * @return the name of the authenticated principal or {@code "unknown"} if the name of the
+   *     authenticated principal could not be retrieved
+   */
+  protected String getAuthenticationName() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication != null) {
+      String name = authentication.getName();
+
+      if (StringUtils.hasText(name)) {
+        return name;
+      }
+    }
+
+    return "unknown";
   }
 
   /**

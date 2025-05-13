@@ -62,7 +62,7 @@ public class MailWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new mail template.
+   * Create the mail template.
    *
    * @param mailTemplate the mail template to create
    * @throws InvalidArgumentException if an argument is invalid

@@ -77,7 +77,7 @@ public class ReportingWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new report definition.
+   * Create the report definition.
    *
    * @param reportDefinition the report definition to create
    * @throws InvalidArgumentException if an argument is invalid

@@ -36,7 +36,7 @@ import java.util.Map;
 public interface MailService {
 
   /**
-   * Create the new mail template.
+   * Create the mail template.
    *
    * @param mailTemplate the {@code MailTemplate} instance containing the information for the new
    *     mail template

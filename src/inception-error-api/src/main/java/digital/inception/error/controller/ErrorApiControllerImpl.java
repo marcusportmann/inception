@@ -28,8 +28,6 @@ import digital.inception.error.service.ErrorService;
 import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,11 +63,7 @@ public class ErrorApiControllerImpl extends SecureApiController implements Error
       throw new InvalidArgumentException("errorReport");
     }
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication != null) {
-      errorReport.setWho(authentication.getName());
-    }
+    errorReport.setWho(getAuthenticationName());
 
     errorService.createErrorReport(errorReport);
   }

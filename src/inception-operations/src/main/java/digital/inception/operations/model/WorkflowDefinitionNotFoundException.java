@@ -45,7 +45,7 @@ public class WorkflowDefinitionNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new {@code WorkflowDefinitionNotFoundException}.
+   * Constructs a new {@code WorkflowDefinitionNotFoundException}.
    *
    * @param workflowDefinitionId the ID for the workflow definition
    */

@@ -131,7 +131,8 @@ public class TestApiControllerImpl extends SecureApiController implements TestAp
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication != null) {
-      log.info("Processing secure API call for authenticated user: " + authentication.getName());
+      log.info(
+          "Processing the secure API call for the authenticated user: " + authentication.getName());
     }
 
     return CarType.PETROL;

@@ -62,7 +62,7 @@ public class SchedulerWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new job.
+   * Create the job.
    *
    * @param job the job to create
    * @throws InvalidArgumentException if an argument is invalid

@@ -218,8 +218,6 @@ public class SecurityApiControllerImpl extends SecureApiController
           TenantNotFoundException,
           UserDirectoryNotFoundException,
           ServiceUnavailableException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -236,6 +234,11 @@ public class SecurityApiControllerImpl extends SecureApiController
 
     if (!tenantUserDirectory.getTenantId().equals(tenantId)) {
       throw new InvalidArgumentException("tenantId");
+    }
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + tenantUserDirectory.getTenantId() + ")");
     }
 
     securityService.addUserDirectoryToTenant(tenantId, tenantUserDirectory.getUserDirectoryId());
@@ -1001,6 +1004,14 @@ public class SecurityApiControllerImpl extends SecureApiController
           TenantNotFoundException,
           TenantUserDirectoryNotFoundException,
           ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     securityService.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
   }
 

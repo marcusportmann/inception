@@ -39,7 +39,7 @@ import java.util.UUID;
 public interface InteractionStore {
 
   /**
-   * Create the new interaction.
+   * Create the interaction.
    *
    * @param tenantId the ID for the tenant
    * @param interaction the interaction
@@ -51,7 +51,7 @@ public interface InteractionStore {
       throws DuplicateInteractionException, ServiceUnavailableException;
 
   /**
-   * Create the new interaction attachment.
+   * Create the interaction attachment.
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachment the interaction attachment

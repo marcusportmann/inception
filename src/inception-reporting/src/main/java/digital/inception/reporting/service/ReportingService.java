@@ -40,7 +40,7 @@ public interface ReportingService {
   String SYSTEM_USERNAME = "SYSTEM";
 
   /**
-   * Create the new report definition.
+   * Create the report definition.
    *
    * @param reportDefinition the {@code ReportDefinition} instance containing the information for
    *     the new report definition

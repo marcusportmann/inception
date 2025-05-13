@@ -67,7 +67,7 @@ public class CodesWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new code.
+   * Create the code.
    *
    * @param code the code to create
    * @throws InvalidArgumentException if an argument is invalid
@@ -85,7 +85,7 @@ public class CodesWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new code category.
+   * Create the code category.
    *
    * @param codeCategory the code category to create
    * @throws InvalidArgumentException if an argument is invalid

@@ -52,7 +52,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public interface ReportingApiController {
 
   /**
-   * Create the new report definition.
+   * Create the report definition.
    *
    * @param reportDefinition the report definition to create
    * @throws InvalidArgumentException if an argument is invalid

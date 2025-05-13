@@ -36,7 +36,7 @@ import java.util.UUID;
 public interface WorkflowStore {
 
   /**
-   * Create the new workflow.
+   * Create the workflow.
    *
    * @param tenantId the ID for the tenant
    * @param workflow the workflow

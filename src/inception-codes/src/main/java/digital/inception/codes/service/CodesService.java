@@ -61,7 +61,7 @@ public interface CodesService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Create the new code.
+   * Create the code.
    *
    * @param code the {@code Code} instance containing the information for the new code
    * @throws InvalidArgumentException if an argument is invalid
@@ -76,7 +76,7 @@ public interface CodesService {
           ServiceUnavailableException;
 
   /**
-   * Create the new code category.
+   * Create the code category.
    *
    * @param codeCategory the {@code CodeCategory} instance containing the information for the new
    *     code category

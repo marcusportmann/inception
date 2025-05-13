@@ -522,7 +522,7 @@ public interface SecurityApiController {
           ServiceUnavailableException;
 
   /**
-   * Create the new group.
+   * Create the group.
    *
    * @param userDirectoryId the ID for the user directory
    * @param group the group
@@ -597,7 +597,7 @@ public interface SecurityApiController {
           ServiceUnavailableException;
 
   /**
-   * Create the new policy.
+   * Create the policy.
    *
    * @param policy the policy
    * @throws InvalidArgumentException if an argument is invalid
@@ -660,7 +660,7 @@ public interface SecurityApiController {
           ServiceUnavailableException;
 
   /**
-   * Create the new tenant.
+   * Create the tenant.
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
@@ -723,7 +723,7 @@ public interface SecurityApiController {
       throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException;
 
   /**
-   * Create the new user.
+   * Create the user.
    *
    * @param userDirectoryId the ID for the user directory
    * @param user the user
@@ -808,7 +808,7 @@ public interface SecurityApiController {
           ServiceUnavailableException;
 
   /**
-   * Create the new user directory.
+   * Create the user directory.
    *
    * @param userDirectory the user directory
    * @throws InvalidArgumentException if an argument is invalid

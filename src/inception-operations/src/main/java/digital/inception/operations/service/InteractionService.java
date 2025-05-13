@@ -49,7 +49,7 @@ public interface InteractionService {
   UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /**
-   * Create the new interaction.
+   * Create the interaction.
    *
    * @param tenantId the ID for the tenant
    * @param interaction the interaction
@@ -62,7 +62,7 @@ public interface InteractionService {
       throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException;
 
   /**
-   * Create the new interaction attachment.
+   * Create the interaction attachment.
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachment the interaction attachment

@@ -46,7 +46,7 @@ public class InteractionNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new {@code InteractionNotFoundException}.
+   * Constructs a new {@code InteractionNotFoundException}.
    *
    * @param interactionId the ID for the interaction
    */

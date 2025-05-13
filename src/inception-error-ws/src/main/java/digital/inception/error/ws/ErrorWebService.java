@@ -66,7 +66,7 @@ public class ErrorWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new error report.
+   * Create the error report.
    *
    * @param errorReport the error report to create
    * @throws InvalidArgumentException if an argument is invalid

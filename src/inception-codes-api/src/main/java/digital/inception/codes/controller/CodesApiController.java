@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public interface CodesApiController {
 
   /**
-   * Create the new code.
+   * Create the code.
    *
    * @param codeCategoryId the ID for the code category
    * @param code the code to create

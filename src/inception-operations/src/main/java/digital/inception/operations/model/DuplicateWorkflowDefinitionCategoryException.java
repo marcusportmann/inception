@@ -22,35 +22,35 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
 import java.io.Serial;
-import java.util.UUID;
 
 /**
- * The {@code WorkflowNotFoundException} exception is thrown to indicate an error condition as a
- * result of a workflow that could not be found.
+ * The {@code DuplicateWorkflowDefinitionCategoryException} exception is thrown to indicate an error
+ * condition as a result of an attempt to create a duplicate workflow definition category, i.e. a
+ * workflow definition category with the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "https://inception.digital/problems/operations/workflow-not-found",
-    title = "The workflow could not be found.",
-    status = 404)
+    type = "https://inception.digital/problems/operations/duplicate-workflow-definition-category",
+    title = "A workflow definition category with the specified ID already exists.",
+    status = 409)
 @WebFault(
-    name = "WorkflowNotFoundException",
+    name = "DuplicateWorkflowDefinitionCategoryException",
     targetNamespace = "https://inception.digital/operations",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class WorkflowNotFoundException extends ServiceException {
+public class DuplicateWorkflowDefinitionCategoryException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new {@code WorkflowNotFoundException}.
+   * Constructs a new {@code DuplicateWorkflowDefinitionCategoryException}.
    *
-   * @param workflowId the ID for the workflow
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category
    */
-  public WorkflowNotFoundException(UUID workflowId) {
-    super("The workflow (" + workflowId + ") could not be found");
+  public DuplicateWorkflowDefinitionCategoryException(String workflowDefinitionCategoryId) {
+    super("The workflow definition category (" + workflowDefinitionCategoryId + ") already exists");
   }
 }

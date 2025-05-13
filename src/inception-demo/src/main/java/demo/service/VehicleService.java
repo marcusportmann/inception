@@ -34,7 +34,7 @@ import digital.inception.core.sorting.SortDirection;
 public interface VehicleService {
 
   /**
-   * Create the new car.
+   * Create the car.
    *
    * @param car the car
    * @throws InvalidArgumentException if an argument is invalid
@@ -45,7 +45,7 @@ public interface VehicleService {
       throws InvalidArgumentException, DuplicateCarException, ServiceUnavailableException;
 
   /**
-   * Create the new vehicle.
+   * Create the vehicle.
    *
    * @param vehicle the vehicle
    * @throws InvalidArgumentException if an argument is invalid

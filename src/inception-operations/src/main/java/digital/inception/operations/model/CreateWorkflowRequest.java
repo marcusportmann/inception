@@ -35,12 +35,12 @@ import java.util.UUID;
 /** The {@code CreateWorkflowRequest} class represents a request to create a workflow. */
 @Schema(description = "A request to create a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"parentId", "definitionId", "externalReference", "data"})
+@JsonPropertyOrder({"tenantId", "definitionId", "parentId", "externalReference", "data"})
 @XmlRootElement(name = "CreateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "CreateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"parentId", "definitionId", "externalReference", "data"})
+    propOrder = {"tenantId", "definitionId", "parentId", "externalReference", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidCreateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})

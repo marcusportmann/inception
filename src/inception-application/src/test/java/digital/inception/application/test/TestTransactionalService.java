@@ -27,21 +27,21 @@ import java.util.Optional;
 public interface TestTransactionalService {
 
   /**
-   * Create the new test data.
+   * Create the test data.
    *
    * @param testData the test data
    */
   void createTestData(TestData testData) throws TestTransactionalServiceException;
 
   /**
-   * Create the new test data in a new transaction.
+   * Create the test data in a new transaction.
    *
    * @param testData the test data
    */
   void createTestDataInNewTransaction(TestData testData) throws TestTransactionalServiceException;
 
   /**
-   * Create the new test data in a new transaction with a checked exception.
+   * Create the test data in a new transaction with a checked exception.
    *
    * @param testData the test data
    */
@@ -49,7 +49,7 @@ public interface TestTransactionalService {
       throws TestTransactionalServiceException;
 
   /**
-   * Create the new test data in a new transaction with a runtime exception.
+   * Create the test data in a new transaction with a runtime exception.
    *
    * @param testData the test data
    */
@@ -57,7 +57,7 @@ public interface TestTransactionalService {
       throws TestTransactionalServiceException;
 
   /**
-   * Create the new test data with a checked exception.
+   * Create the test data with a checked exception.
    *
    * @param testData the test data
    */
@@ -65,7 +65,7 @@ public interface TestTransactionalService {
       throws TestTransactionalServiceException;
 
   /**
-   * Create the new test data with a runtime exception.
+   * Create the test data with a runtime exception.
    *
    * @param testData the test data
    */

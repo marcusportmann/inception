@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public interface ErrorApiController {
 
   /**
-   * Create the new error report.
+   * Create the error report.
    *
    * @param errorReport the error report
    * @throws InvalidArgumentException if an argument is invalid

@@ -265,7 +265,7 @@ public interface SecurityService {
           ServiceUnavailableException;
 
   /**
-   * Create the new function.
+   * Create the function.
    *
    * @param function the function
    * @throws InvalidArgumentException if an argument is invalid
@@ -276,7 +276,7 @@ public interface SecurityService {
       throws InvalidArgumentException, DuplicateFunctionException, ServiceUnavailableException;
 
   /**
-   * Create the new group.
+   * Create the group.
    *
    * @param group the group
    * @throws InvalidArgumentException if an argument is invalid
@@ -291,7 +291,7 @@ public interface SecurityService {
           ServiceUnavailableException;
 
   /**
-   * Create the new policy.
+   * Create the policy.
    *
    * @param policy the policy
    * @throws InvalidArgumentException if an argument is invalid
@@ -308,7 +308,7 @@ public interface SecurityService {
           ServiceUnavailableException;
 
   /**
-   * Create the new tenant.
+   * Create the tenant.
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
@@ -322,7 +322,7 @@ public interface SecurityService {
       throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException;
 
   /**
-   * Create the new user.
+   * Create the user.
    *
    * @param user the user
    * @param expiredPassword create the user with its password expired
@@ -339,7 +339,7 @@ public interface SecurityService {
           ServiceUnavailableException;
 
   /**
-   * Create the new user directory.
+   * Create the user directory.
    *
    * @param userDirectory the user directory
    * @throws InvalidArgumentException if an argument is invalid

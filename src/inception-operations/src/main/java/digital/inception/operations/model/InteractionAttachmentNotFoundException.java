@@ -46,7 +46,7 @@ public class InteractionAttachmentNotFoundException extends ServiceException {
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new {@code InteractionAttachmentNotFoundException}.
+   * Constructs a new {@code InteractionAttachmentNotFoundException}.
    *
    * @param interactionAttachmentId the ID for the interaction attachment
    */

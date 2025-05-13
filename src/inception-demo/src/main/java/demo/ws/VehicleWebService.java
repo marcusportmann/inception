@@ -57,7 +57,7 @@ public class VehicleWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new car.
+   * Create the car.
    *
    * @param car the car
    * @throws InvalidArgumentException if an argument is invalid

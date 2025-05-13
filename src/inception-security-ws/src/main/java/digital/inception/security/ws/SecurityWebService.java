@@ -301,7 +301,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new group.
+   * Create the group.
    *
    * @param group the group
    * @throws InvalidArgumentException if an argument is invalid
@@ -319,7 +319,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new policy.
+   * Create the policy.
    *
    * @param policy the policy
    * @throws InvalidArgumentException if an argument is invalid
@@ -339,7 +339,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new tenant.
+   * Create the tenant.
    *
    * @param tenant the tenant to create
    * @param createUserDirectory should a new internal user directory be created for the tenant
@@ -357,7 +357,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new user.
+   * Create the user.
    *
    * @param user the user
    * @param expiredPassword create the user with its password expired
@@ -381,7 +381,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new user directory.
+   * Create the user directory.
    *
    * @param userDirectory the user directory
    * @throws InvalidArgumentException if an argument is invalid

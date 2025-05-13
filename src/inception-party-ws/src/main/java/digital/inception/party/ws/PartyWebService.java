@@ -63,7 +63,7 @@ public class PartyWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new association.
+   * Create the association.
    *
    * @param tenantId the ID for the tenant
    * @param association the association
@@ -84,7 +84,7 @@ public class PartyWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new mandate.
+   * Create the mandate.
    *
    * @param tenantId the ID for the tenant
    * @param mandate the mandate
@@ -105,7 +105,7 @@ public class PartyWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new organization.
+   * Create the organization.
    *
    * @param tenantId the ID for the tenant
    * @param organization the organization
@@ -122,7 +122,7 @@ public class PartyWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Create the new person.
+   * Create the person.
    *
    * @param tenantId the ID for the tenant
    * @param person the person

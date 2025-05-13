@@ -46,7 +46,7 @@ export class SessionInterceptor implements HttpInterceptor {
         if (session) {
           httpRequest = httpRequest.clone({
             headers: httpRequest.headers.set('Authorization', `Bearer ${session.accessToken}`)
-            .set('X-TENANT-ID',
+            .set('Tenant-ID',
               (!!session.tenantId) ? session.tenantId : '00000000-0000-0000-0000-000000000000')
           });
         }

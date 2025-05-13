@@ -37,7 +37,7 @@ import java.util.UUID;
 public interface ErrorService {
 
   /**
-   * Create the new entry for the error report in the database.
+   * Create the entry for the error report in the database.
    *
    * @param errorReport the {@code ErrorReport} instance containing the information for the error
    *     report

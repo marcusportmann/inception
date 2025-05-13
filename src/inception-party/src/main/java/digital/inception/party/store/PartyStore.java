@@ -59,7 +59,7 @@ import java.util.UUID;
 public interface PartyStore {
 
   /**
-   * Create the new association.
+   * Create the association.
    *
    * @param tenantId the ID for the tenant
    * @param association the association
@@ -72,7 +72,7 @@ public interface PartyStore {
       throws DuplicateAssociationException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
-   * Create the new mandate.
+   * Create the mandate.
    *
    * @param tenantId the ID for the tenant
    * @param mandate the mandate
@@ -85,7 +85,7 @@ public interface PartyStore {
       throws DuplicateMandateException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
-   * Create the new organization.
+   * Create the organization.
    *
    * @param tenantId the ID for the tenant
    * @param organization the organization
@@ -97,7 +97,7 @@ public interface PartyStore {
       throws DuplicateOrganizationException, ServiceUnavailableException;
 
   /**
-   * Create the new person.
+   * Create the person.
    *
    * @param tenantId the ID for the tenant
    * @param person the person

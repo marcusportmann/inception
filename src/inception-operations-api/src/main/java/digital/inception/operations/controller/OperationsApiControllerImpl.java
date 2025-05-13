@@ -17,8 +17,21 @@
 package digital.inception.operations.controller;
 
 import digital.inception.api.SecureApiController;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.operations.model.CreateDocumentRequest;
+import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentDefinitionNotFoundException;
+import digital.inception.operations.model.DuplicateWorkflowDefinitionCategoryException;
+import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionNotFoundException;
+import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.WorkflowService;
+import java.util.UUID;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +46,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class OperationsApiControllerImpl extends SecureApiController
     implements OperationsApiController {
 
+  private final DocumentService documentService;
+
   /** The Workflow Service. */
   private final WorkflowService workflowService;
 
@@ -43,9 +58,64 @@ public class OperationsApiControllerImpl extends SecureApiController
    * @param workflowService the Workflow Service
    */
   public OperationsApiControllerImpl(
-      ApplicationContext applicationContext, WorkflowService workflowService) {
+      ApplicationContext applicationContext,
+      WorkflowService workflowService,
+      DocumentService documentService) {
     super(applicationContext);
 
     this.workflowService = workflowService;
+    this.documentService = documentService;
+  }
+
+  @Override
+  public UUID createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest)
+      throws InvalidArgumentException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(createDocumentRequest.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + createDocumentRequest.getTenantId() + ")");
+    }
+
+    Document document =
+        documentService.createDocument(tenantId, createDocumentRequest, getAuthenticationName());
+
+    return document.getId();
+  }
+
+  @Override
+  public UUID createWorkflow(UUID tenantId, CreateWorkflowRequest createWorkflowRequest)
+      throws InvalidArgumentException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(createWorkflowRequest.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + createWorkflowRequest.getTenantId() + ")");
+    }
+
+    Workflow workflow =
+        workflowService.createWorkflow(tenantId, createWorkflowRequest, getAuthenticationName());
+
+    return workflow.getId();
+  }
+
+  @Override
+  public void createWorkflowDefinitionCategory(
+      UUID tenantId, WorkflowDefinitionCategory workflowDefinitionCategory)
+      throws InvalidArgumentException,
+          DuplicateWorkflowDefinitionCategoryException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(workflowDefinitionCategory.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + workflowDefinitionCategory.getTenantId() + ")");
+    }
+
+    workflowService.createWorkflowDefinitionCategory(tenantId, workflowDefinitionCategory);
   }
 }

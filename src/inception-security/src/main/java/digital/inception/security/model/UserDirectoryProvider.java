@@ -122,7 +122,7 @@ public interface UserDirectoryProvider {
           ServiceUnavailableException;
 
   /**
-   * Create the new group.
+   * Create the group.
    *
    * @param group the group
    * @throws DuplicateGroupException if the group already exists
@@ -131,7 +131,7 @@ public interface UserDirectoryProvider {
   void createGroup(Group group) throws DuplicateGroupException, ServiceUnavailableException;
 
   /**
-   * Create the new user.
+   * Create the user.
    *
    * @param user the user
    * @param expiredPassword create the user with its password expired
