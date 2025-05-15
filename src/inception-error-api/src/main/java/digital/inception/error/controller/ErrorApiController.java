@@ -149,6 +149,7 @@ public interface ErrorApiController {
       value = "/error-reports/{errorReportId}",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Error.ErrorReportAdministration') or hasAccessToFunction('Error.ViewErrorReport')")
   ErrorReport getErrorReport(

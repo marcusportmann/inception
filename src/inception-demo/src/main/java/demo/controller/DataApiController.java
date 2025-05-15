@@ -52,10 +52,31 @@ public interface DataApiController {
    * @return the data
    * @throws ServiceUnavailableException if the data could not be retrieved
    */
+  @Operation(summary = "Retrieve all the data", description = "Retrieve all the data")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
   @RequestMapping(
       value = "/all-data",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   List<Data> getAllData() throws ServiceUnavailableException;
 
   /**
@@ -64,10 +85,33 @@ public interface DataApiController {
    * @return the reactive data
    * @throws ServiceUnavailableException if the reactive data could not be retrieved
    */
+  @Operation(
+      summary = "Retrieve all the reactive data",
+      description = "Retrieve all the reactive data")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
   @RequestMapping(
       value = "/all-reactive-data",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_NDJSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   // @PreAuthorize("hasAccess('GetAllReactiveData') or isSecurityDisabled() or
   // hasRole('Administrator')")
   @PreAuthorize("isSecurityDisabled() or hasRole('Administrator')")
@@ -79,10 +123,31 @@ public interface DataApiController {
    * @return the data
    * @throws ServiceUnavailableException if the data could not be retrieved
    */
+  @Operation(summary = "Retrieve the data", description = "Retrieve the data")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
   @RequestMapping(
       value = "/data",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   Data getData() throws ServiceUnavailableException;
 
   /**

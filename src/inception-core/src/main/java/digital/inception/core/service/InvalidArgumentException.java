@@ -30,6 +30,10 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@Problem(
+    type = "https://inception.digital/problems/invalid-argument",
+    title = "Invalid argument.",
+    status = 400)
 @WebFault(
     name = "InvalidArgumentException",
     targetNamespace = "https://inception.digital/core",

@@ -80,7 +80,6 @@ public interface InteractionService {
   /**
    * Create a mailbox interaction source.
    *
-   * @param tenantId the ID for the tenant
    * @param mailboxInteractionSource the mailbox interaction source
    * @return the mailbox interaction source
    * @throws InvalidArgumentException if an argument is invalid
@@ -89,7 +88,7 @@ public interface InteractionService {
    * @throws ServiceUnavailableException if the mailbox interaction source could not be created
    */
   MailboxInteractionSource createMailboxInteractionSource(
-      UUID tenantId, MailboxInteractionSource mailboxInteractionSource)
+      MailboxInteractionSource mailboxInteractionSource)
       throws InvalidArgumentException,
           DuplicateMailboxInteractionSourceException,
           ServiceUnavailableException;
@@ -97,7 +96,6 @@ public interface InteractionService {
   /**
    * Create a WhatsApp interaction source.
    *
-   * @param tenantId the ID for the tenant
    * @param whatsAppInteractionSource the WhatsApp interaction source
    * @return the WhatsApp interaction source
    * @throws InvalidArgumentException if an argument is invalid
@@ -106,7 +104,7 @@ public interface InteractionService {
    * @throws ServiceUnavailableException if the WhatsApp interaction source could not be created
    */
   WhatsAppInteractionSource createWhatsAppInteractionSource(
-      UUID tenantId, WhatsAppInteractionSource whatsAppInteractionSource)
+      WhatsAppInteractionSource whatsAppInteractionSource)
       throws InvalidArgumentException,
           DuplicateWhatsAppInteractionSourceException,
           ServiceUnavailableException;
@@ -140,14 +138,13 @@ public interface InteractionService {
   /**
    * Delete the mailbox interaction source.
    *
-   * @param tenantId the ID for the tenant
    * @param mailboxInteractionSourceId the ID for the mailbox interaction source
    * @throws InvalidArgumentException if an argument is invalid
    * @throws MailboxInteractionSourceNotFoundException if the mailbox interaction source could not
    *     be found
    * @throws ServiceUnavailableException if the mailbox interaction source could not be deleted
    */
-  void deleteMailboxInteractionSource(UUID tenantId, String mailboxInteractionSourceId)
+  void deleteMailboxInteractionSource(String mailboxInteractionSourceId)
       throws InvalidArgumentException,
           MailboxInteractionSourceNotFoundException,
           ServiceUnavailableException;
@@ -155,14 +152,13 @@ public interface InteractionService {
   /**
    * Delete the WhatsApp interaction source.
    *
-   * @param tenantId the ID for the tenant
    * @param whatsAppInteractionSourceId the ID for the WhatsApp interaction source
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WhatsAppInteractionSourceNotFoundException if the WhatsApp interaction source could not
    *     be found
    * @throws ServiceUnavailableException if the WhatsApp interaction source could not be deleted
    */
-  void deleteWhatsAppInteractionSource(UUID tenantId, String whatsAppInteractionSourceId)
+  void deleteWhatsAppInteractionSource(String whatsAppInteractionSourceId)
       throws InvalidArgumentException,
           WhatsAppInteractionSourceNotFoundException,
           ServiceUnavailableException;
@@ -224,7 +220,6 @@ public interface InteractionService {
   /**
    * Retrieve the mailbox interaction source.
    *
-   * @param tenantId the ID for the tenant
    * @param mailboxInteractionSourceId the ID for the mailbox interaction source
    * @return the mailbox interaction source
    * @throws InvalidArgumentException if an argument is invalid
@@ -232,8 +227,7 @@ public interface InteractionService {
    *     be found
    * @throws ServiceUnavailableException if the mailbox interaction source could not be retrieved
    */
-  MailboxInteractionSource getMailboxInteractionSource(
-      UUID tenantId, String mailboxInteractionSourceId)
+  MailboxInteractionSource getMailboxInteractionSource(String mailboxInteractionSourceId)
       throws InvalidArgumentException,
           MailboxInteractionSourceNotFoundException,
           ServiceUnavailableException;
@@ -241,17 +235,24 @@ public interface InteractionService {
   /**
    * Retrieve all the mailbox interaction sources.
    *
-   * @param tenantId the ID for the tenant
    * @return the mailbox interaction sources
    * @throws ServiceUnavailableException if the mailbox interaction sources could not be retrieved
    */
-  List<MailboxInteractionSource> getMailboxInteractionSources(UUID tenantId)
+  List<MailboxInteractionSource> getMailboxInteractionSources() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve all the mailbox interaction sources for the tenant with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the mailbox interaction sources for the tenant with the specified ID
+   * @throws ServiceUnavailableException if the mailbox interaction sources could not be retrieved
+   */
+  List<MailboxInteractionSource> getMailboxInteractionSourcesForTenant(UUID tenantId)
       throws ServiceUnavailableException;
 
   /**
    * Retrieve the WhatsApp interaction source.
    *
-   * @param tenantId the ID for the tenant
    * @param whatsAppInteractionSourceId the ID for the WhatsApp interaction source
    * @return the WhatsApp interaction source
    * @throws InvalidArgumentException if an argument is invalid
@@ -259,8 +260,7 @@ public interface InteractionService {
    *     be found
    * @throws ServiceUnavailableException if the WhatsApp interaction source could not be retrieved
    */
-  WhatsAppInteractionSource getWhatsAppInteractionSource(
-      UUID tenantId, String whatsAppInteractionSourceId)
+  WhatsAppInteractionSource getWhatsAppInteractionSource(String whatsAppInteractionSourceId)
       throws InvalidArgumentException,
           WhatsAppInteractionSourceNotFoundException,
           ServiceUnavailableException;
@@ -268,11 +268,20 @@ public interface InteractionService {
   /**
    * Retrieve all the WhatsApp interaction sources.
    *
-   * @param tenantId the ID for the tenant
    * @return the WhatsApp interaction sources
    * @throws ServiceUnavailableException if the WhatsApp interaction sources could not be retrieved
    */
-  List<WhatsAppInteractionSource> getWhatsAppInteractionSources(UUID tenantId)
+  List<WhatsAppInteractionSource> getWhatsAppInteractionSources()
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve all the WhatsApp interaction sources for the tenant with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the WhatsApp interaction sources for the tenant with the specified ID
+   * @throws ServiceUnavailableException if the WhatsApp interaction sources could not be retrieved
+   */
+  List<WhatsAppInteractionSource> getWhatsAppInteractionSourcesForTenant(UUID tenantId)
       throws ServiceUnavailableException;
 
   /**
@@ -311,15 +320,14 @@ public interface InteractionService {
   /**
    * Synchronize the mailbox interaction source.
    *
-   * @param tenantId the ID for the tenant
-   *     <p>This will retrieve the latest email messages from the associated mailbox and create the
-   *     corresponding interactions.
+   * <p>This will retrieve the latest email messages from the associated mailbox and create the
+   * corresponding interactions.
+   *
    * @param mailboxInteractionSource the mailbox interaction source
    * @return the number of new interactions
    * @throws ServiceUnavailableException if the mailbox interaction source could not be synchronized
    */
-  int synchronizeMailboxInteractionSource(
-      UUID tenantId, MailboxInteractionSource mailboxInteractionSource)
+  int synchronizeMailboxInteractionSource(MailboxInteractionSource mailboxInteractionSource)
       throws ServiceUnavailableException;
 
   /**

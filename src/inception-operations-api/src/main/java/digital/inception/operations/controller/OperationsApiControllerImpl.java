@@ -74,7 +74,7 @@ public class OperationsApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(createDocumentRequest.getTenantId())) {
+    if  ((!hasAccessToFunction("Operations.OperationsAdministration")) &&   (!hasAccessToTenant(createDocumentRequest.getTenantId()))) {
       throw new AccessDeniedException(
           "Access denied to the tenant (" + createDocumentRequest.getTenantId() + ")");
     }
@@ -92,7 +92,7 @@ public class OperationsApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(createWorkflowRequest.getTenantId())) {
+    if  ((!hasAccessToFunction("Operations.OperationsAdministration")) &&   (!hasAccessToTenant(createWorkflowRequest.getTenantId()))) {
       throw new AccessDeniedException(
           "Access denied to the tenant (" + createWorkflowRequest.getTenantId() + ")");
     }
@@ -105,16 +105,18 @@ public class OperationsApiControllerImpl extends SecureApiController
 
   @Override
   public void createWorkflowDefinitionCategory(
-      UUID tenantId, WorkflowDefinitionCategory workflowDefinitionCategory)
+      UUID tenantId,
+      WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionCategoryException,
           ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
-
-    if (!hasAccessToTenant(workflowDefinitionCategory.getTenantId())) {
-      throw new AccessDeniedException(
-          "Access denied to the tenant (" + workflowDefinitionCategory.getTenantId() + ")");
-    }
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
+     *       we want to retrieve the "global" and "tenant specific" workflow definition categories.
+     *       The ability to create or update workflow definition categories is an administrative
+     *       function and is not assigned to a user for a particular tenant.
+     */
 
     workflowService.createWorkflowDefinitionCategory(tenantId, workflowDefinitionCategory);
   }

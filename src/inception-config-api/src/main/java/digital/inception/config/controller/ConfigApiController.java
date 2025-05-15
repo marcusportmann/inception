@@ -150,6 +150,7 @@ public interface ConfigApiController {
       value = "/configs/{id}",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   Config getConfig(
@@ -189,6 +190,7 @@ public interface ConfigApiController {
       value = "/config-summaries",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   List<ConfigSummary> getConfigSummaries() throws ServiceUnavailableException;
@@ -240,6 +242,7 @@ public interface ConfigApiController {
       value = "/configs/{id}/value",
       method = RequestMethod.GET,
       produces = "text/plain")
+  @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   String getConfigValue(
@@ -277,6 +280,7 @@ public interface ConfigApiController {
       value = "/configs",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Config.ConfigAdministration')")
   List<Config> getConfigs() throws ServiceUnavailableException;

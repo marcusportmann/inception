@@ -32,14 +32,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * The {@code BackgroundTaskExecutorImpl} class implements the Background Task Executor.
  *
  * @author Marcus Portmann
  */
-@Service
+@Component
 @SuppressWarnings("unused")
 public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, SmartLifecycle {
 

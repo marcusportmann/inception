@@ -55,13 +55,12 @@ public interface DocumentService {
   /**
    * Create the document definition.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateDocumentDefinitionException if the document definition already exists
    * @throws ServiceUnavailableException if the document definition could not be created
    */
-  void createDocumentDefinition(UUID tenantId, DocumentDefinition documentDefinition)
+  void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
           ServiceUnavailableException;
@@ -81,13 +80,12 @@ public interface DocumentService {
   /**
    * Delete the document definition.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionId the ID for the document definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document definition could not be deleted
    */
-  void deleteDocumentDefinition(UUID tenantId, String documentDefinitionId)
+  void deleteDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
@@ -95,13 +93,12 @@ public interface DocumentService {
   /**
    * Check whether the document definition exists.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionId the ID for the document definition
    * @return {@code true} if the document definition exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the document definition failed
    */
-  boolean documentDefinitionExists(UUID tenantId, String documentDefinitionId)
+  boolean documentDefinitionExists(String documentDefinitionId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -120,14 +117,13 @@ public interface DocumentService {
   /**
    * Retrieve the document definition.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionId the ID for the document definition
    * @return the document definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document definition could not be retrieved
    */
-  DocumentDefinition getDocumentDefinition(UUID tenantId, String documentDefinitionId)
+  DocumentDefinition getDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
@@ -150,13 +146,12 @@ public interface DocumentService {
   /**
    * Update the document definition.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be updated
    */
-  void updateDocumentDefinition(UUID tenantId, DocumentDefinition documentDefinition)
+  void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;

@@ -30,6 +30,10 @@ import java.io.Serial;
  *
  * @author Marcus Portmann
  */
+@Problem(
+    type = "https://inception.digital/problems/service-unavailable",
+    title = "An error has occurred and your request could not be processed at this time.",
+    status = 500)
 @WebFault(
     name = "ServiceUnavailableException",
     targetNamespace = "https://inception.digital/core",

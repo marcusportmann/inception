@@ -41,20 +41,22 @@ import java.util.Objects;
 @Schema(description = "A WhatsApp interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"type"})
-@JsonPropertyOrder({"id", "name"})
+@JsonPropertyOrder({"id", "tenantId", "name"})
 @XmlRootElement(
     name = "WhatsAppInteractionSource",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WhatsAppInteractionSource",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "name"})
+    propOrder = {"id", "tenantId", "name"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
 @Table(name = "operations_whatsapp_interaction_sources")
 public class WhatsAppInteractionSource extends InteractionSourceBase implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  ADD TENANT ID
 
   /** Constructs a new {@code WhatsAppInteractionSource}. */
   public WhatsAppInteractionSource() {

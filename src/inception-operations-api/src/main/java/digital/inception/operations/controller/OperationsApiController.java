@@ -196,6 +196,7 @@ public interface OperationsApiController {
   /**
    * Create the workflow definition category.
    *
+   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategory the workflow definition category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateWorkflowDefinitionCategoryException if the workflow definition category
@@ -248,6 +249,15 @@ public interface OperationsApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinitionCategory(
+      @Parameter(
+          name = "Tenant-ID",
+          description = "The ID for the tenant",
+          example = "00000000-0000-0000-0000-000000000000")
+      @RequestHeader(
+          name = "Tenant-ID",
+          defaultValue = "00000000-0000-0000-0000-000000000000",
+          required = false)
+      UUID tenantId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The workflow definition category to create",
               required = true)

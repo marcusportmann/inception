@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.4</version>
+    <version>3.4.5</version>
   </parent>
 
   <repositories>
@@ -98,6 +98,7 @@
     <java.version>21</java.version>
 
     <agroal-pool.version>2.6</agroal-pool.version>
+    <archunit.version>1.4.1</archunit.version>
     <authzforce-ce-core-pdp-engine.version>21.0.1</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.12.0</avro.version>
     <azure-identity.version>1.15.4</azure-identity.version>
@@ -196,6 +197,11 @@
         <groupId>com.sun.activation</groupId>
         <artifactId>javax.activation</artifactId>
         <version>${sun-activation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.tngtech.archunit</groupId>
+        <artifactId>archunit-junit5</artifactId>
+        <version>${archunit.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-beanutils</groupId>
@@ -691,6 +697,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-test-archunit</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-web</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -759,6 +770,7 @@
     <module>inception-sms-api</module>
     <module>inception-sms-ws</module>
     <module>inception-test</module>
+    <module>inception-test-archunit</module>
     <module>inception-web</module>
     <module>inception-ws</module>
 

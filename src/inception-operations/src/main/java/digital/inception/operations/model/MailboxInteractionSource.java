@@ -45,6 +45,7 @@ import java.util.Objects;
 @JsonIgnoreProperties({"type"})
 @JsonPropertyOrder({
   "id",
+  "tenantId",
   "name",
   "protocol",
   "host",
@@ -65,6 +66,7 @@ import java.util.Objects;
     namespace = "https://inception.digital/operations",
     propOrder = {
       "id",
+      "tenantId",
       "name",
       "protocol",
       "host",
@@ -81,6 +83,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "operations_mailbox_interaction_sources")
 public class MailboxInteractionSource extends InteractionSourceBase implements Serializable {
+
+  ADD TENANT ID
 
   @Serial private static final long serialVersionUID = 1000000;
 

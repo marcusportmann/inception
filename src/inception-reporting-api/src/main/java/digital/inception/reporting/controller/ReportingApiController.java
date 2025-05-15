@@ -223,6 +223,7 @@ public interface ReportingApiController {
       value = "/generate-report",
       method = RequestMethod.POST,
       produces = "application/pdf")
+  @ResponseStatus(HttpStatus.OK)
   ResponseEntity<byte[]> generateReport(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The request to generate a report",

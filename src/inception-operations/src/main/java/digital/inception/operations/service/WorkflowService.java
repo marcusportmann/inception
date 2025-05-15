@@ -73,15 +73,13 @@ public interface WorkflowService {
   /**
    * Create the workflow definition category.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategory the workflow definition category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateWorkflowDefinitionCategoryException if the workflow definition category
    *     already exists
    * @throws ServiceUnavailableException if the workflow definition category could not be created
    */
-  void createWorkflowDefinitionCategory(
-      UUID tenantId, WorkflowDefinitionCategory workflowDefinitionCategory)
+  void createWorkflowDefinitionCategory(WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionCategoryException,
           ServiceUnavailableException;

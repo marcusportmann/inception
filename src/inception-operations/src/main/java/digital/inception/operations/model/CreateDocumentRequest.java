@@ -43,7 +43,6 @@ import java.util.UUID;
 @Schema(description = "A request to create a document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
   "definitionId",
   "fileType",
   "name",
@@ -58,7 +57,6 @@ import java.util.UUID;
     name = "CreateDocumentRequest",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "tenantId",
       "definitionId",
       "fileType",
       "name",
@@ -144,15 +142,6 @@ public class CreateDocumentRequest implements Serializable {
   @Column(name = "source_document_id")
   private UUID sourceDocumentId;
 
-  /** The ID for the tenant the document is associated with. */
-  @Schema(
-      description = "The ID for the tenant the document is associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  @NotNull
-  private UUID tenantId;
-
   /** Constructs a new {@code CreateDocumentRequest}. */
   public CreateDocumentRequest() {}
 
@@ -229,15 +218,6 @@ public class CreateDocumentRequest implements Serializable {
   }
 
   /**
-   * Returns the ID for the tenant the document is associated with.
-   *
-   * @return the ID for the tenant the document is associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
-  }
-
-  /**
    * Set the data for the document.
    *
    * @param data the data for the document
@@ -308,14 +288,5 @@ public class CreateDocumentRequest implements Serializable {
    */
   public void setSourceDocumentId(UUID sourceDocumentId) {
     this.sourceDocumentId = sourceDocumentId;
-  }
-
-  /**
-   * Set the ID for the tenant the document is associated with.
-   *
-   * @param tenantId the ID for the tenant the document is associated with
-   */
-  public void setTenantId(UUID tenantId) {
-    this.tenantId = tenantId;
   }
 }

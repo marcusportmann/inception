@@ -27,14 +27,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * The {@code BackgroundJobExecutor} class implements the Background Job Executor.
  *
  * @author Marcus Portmann
  */
-@Service
+@Component
 @SuppressWarnings("unused")
 public class BackgroundJobExecutor {
 

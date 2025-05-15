@@ -35,12 +35,12 @@ import java.util.UUID;
 /** The {@code CreateWorkflowRequest} class represents a request to create a workflow. */
 @Schema(description = "A request to create a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"tenantId", "definitionId", "parentId", "externalReference", "data"})
+@JsonPropertyOrder({"definitionId", "parentId", "externalReference", "data"})
 @XmlRootElement(name = "CreateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "CreateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"tenantId", "definitionId", "parentId", "externalReference", "data"})
+    propOrder = {"definitionId", "parentId", "externalReference", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidCreateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -77,15 +77,6 @@ public class CreateWorkflowRequest implements Serializable {
   @JsonProperty
   @XmlElement(name = "ParentId")
   private UUID parentId;
-
-  /** The ID for the tenant the workflow is associated with. */
-  @Schema(
-      description = "The ID for the tenant the workflow is associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  @NotNull
-  private UUID tenantId;
 
   /** Constructs a new {@code CreateWorkflowRequest}. */
   public CreateWorkflowRequest() {}
@@ -152,15 +143,6 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the tenant the workflow is associated with.
-   *
-   * @return the unique identifier for the tenant the workflow is associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
-  }
-
-  /**
    * Set the data for the workflow.
    *
    * @param data the data for the workflow
@@ -196,14 +178,5 @@ public class CreateWorkflowRequest implements Serializable {
    */
   public void setParentId(UUID parentId) {
     this.parentId = parentId;
-  }
-
-  /**
-   * Set the unique identifier for the tenant the workflow is associated with.
-   *
-   * @param tenantId the unique identifier for the tenant the workflow is associated with
-   */
-  public void setTenantId(UUID tenantId) {
-    this.tenantId = tenantId;
   }
 }

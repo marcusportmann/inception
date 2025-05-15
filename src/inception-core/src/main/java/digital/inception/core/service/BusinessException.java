@@ -29,6 +29,10 @@ import java.io.Serial;
  *
  * @author Marcus Portmann
  */
+@Problem(
+    type = "https://inception.digital/problems/business-error",
+    title = "A business error has occurred and your request could not be processed.",
+    status = 422)
 @WebFault(
     name = "BusinessException",
     targetNamespace = "https://inception.digital/core",

@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Service
+@Component
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class TokenServiceImpl implements TokenService {
 

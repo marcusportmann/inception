@@ -52,10 +52,30 @@ public interface TestApiController {
    * @throws ServiceUnavailableException if an error occurred
    */
   @Operation(summary = "Test an API call", description = "Test an API call")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "204", description = "The API call was tested successfully"),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
+      })
   @RequestMapping(
       value = "/test-api-call",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   void testApiCall() throws ServiceUnavailableException;
 
   /**
@@ -64,7 +84,27 @@ public interface TestApiController {
    * @throws ServiceUnavailableException if an error occurred
    */
   @Operation(summary = "Test the exception handling", description = "Test the exception handling")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "204", description = "The exception handling was tested successfully"),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
+      })
   @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   void testExceptionHandling() throws ServiceUnavailableException;
 
   /**
@@ -81,6 +121,7 @@ public interface TestApiController {
       value = "/test-offset-date-time",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   OffsetDateTime testOffsetDateTime(
       @Parameter(name = "offsetDateTime", description = "The offset date time", required = true)
           @RequestParam("offsetDateTime")
@@ -101,7 +142,7 @@ public interface TestApiController {
   @ApiResponses(
       value = {
         @ApiResponse(
-            responseCode = "200",
+            responseCode = "204",
             description = "The policy decision point authorization was successful"),
         @ApiResponse(
             responseCode = "400",
@@ -123,7 +164,7 @@ public interface TestApiController {
       value = {"/test-pdp-authorization/{pathVariable}/{anotherPathVariable}"},
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("authorize()")
   void testPolicyDecisionPointAuthorization(
       @Parameter(name = "pathVariable", description = "The path variable", required = true)
@@ -163,6 +204,7 @@ public interface TestApiController {
       value = "/test-returning-enum",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   CarType testReturningEnum() throws ServiceUnavailableException;
 
   /**
@@ -189,6 +231,7 @@ public interface TestApiController {
       value = "/test-returning-string",
       method = RequestMethod.GET,
       produces = "text/plain")
+  @ResponseStatus(HttpStatus.OK)
   String testReturningString(
       @Parameter(
               name = "throwException",
@@ -205,10 +248,23 @@ public interface TestApiController {
    * @throws ServiceUnavailableException if an error occurred
    */
   @Operation(summary = "Test task execution", description = "Test task execution")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "204", description = "The task execution was tested successfully"),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
+      })
   @RequestMapping(
       value = "/test-task-execution",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   void testTaskExecution(
       @Parameter(name = "slowTask", description = "Test the execution of a slow task") @RequestParam
           Boolean slowTask)

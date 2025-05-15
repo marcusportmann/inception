@@ -1286,6 +1286,7 @@ public interface SecurityApiController {
       value = "/generate-token",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Security.TokenAdministration')")
   Token generateToken(

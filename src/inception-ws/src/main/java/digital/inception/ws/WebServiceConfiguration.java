@@ -47,7 +47,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * The {@code WebServiceConfiguration} class provides the configuration for the {@code
- * inception-ws}</b> library.
+ * inception-ws} library.
  *
  * @author Marcus Portmann
  */
