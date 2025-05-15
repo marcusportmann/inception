@@ -194,6 +194,7 @@
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-test-archunit</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
