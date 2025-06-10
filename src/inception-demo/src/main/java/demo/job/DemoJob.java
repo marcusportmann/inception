@@ -16,8 +16,8 @@
 
 package demo.job;
 
+import digital.inception.scheduler.exception.JobExecutionFailedException;
 import digital.inception.scheduler.model.JobExecutionContext;
-import digital.inception.scheduler.model.JobExecutionFailedException;
 import digital.inception.scheduler.model.JobImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

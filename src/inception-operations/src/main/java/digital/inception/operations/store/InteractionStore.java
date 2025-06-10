@@ -16,14 +16,16 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.model.DuplicateInteractionAttachmentException;
-import digital.inception.operations.model.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
+import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
-import digital.inception.operations.model.InteractionAttachmentNotFoundException;
-import digital.inception.operations.model.InteractionNotFoundException;
+import digital.inception.operations.model.InteractionAttachmentSortBy;
+import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
@@ -126,6 +128,34 @@ public interface InteractionStore {
       UUID tenantId, UUID interactionId, String hash) throws ServiceUnavailableException;
 
   /**
+   * Retrieve the summaries for the interaction attachments for the interaction with the specified
+   * ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction the interaction attachments are associated with
+   * @param filter the filter to apply to the interaction attachment summaries
+   * @param sortBy the method used to sort the interaction attachment summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the interaction attachment summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param maxResults the maximum number of interaction attachment summaries that should be
+   *     retrieved
+   * @return the summaries for the interaction attachments for the interaction
+   * @throws ServiceUnavailableException if the interaction attachment summaries could not be
+   *     retrieved
+   */
+  InteractionAttachmentSummaries getInteractionAttachmentSummaries(
+      UUID tenantId,
+      UUID interactionId,
+      String filter,
+      InteractionAttachmentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve the ID for the interaction with the specified source reference and source ID.
    *
    * @param tenantId the ID for the tenant
@@ -137,7 +167,7 @@ public interface InteractionStore {
    *     reference and source ID could not be retrieved
    */
   Optional<UUID> getInteractionIdBySourceIdAndSourceReference(
-      UUID tenantId, String sourceId, String sourceReference) throws ServiceUnavailableException;
+      UUID tenantId, UUID sourceId, String sourceReference) throws ServiceUnavailableException;
 
   /**
    * Retrieve the summaries for the interactions for the interaction source with the specified ID.
@@ -156,7 +186,7 @@ public interface InteractionStore {
    */
   InteractionSummaries getInteractionSummaries(
       UUID tenantId,
-      String sourceId,
+      UUID sourceId,
       InteractionStatus status,
       String filter,
       InteractionSortBy sortBy,
@@ -164,6 +194,29 @@ public interface InteractionStore {
       Integer pageIndex,
       Integer pageSize,
       int maxResults)
+      throws ServiceUnavailableException;
+
+  /**
+   * Returns whether an interaction attachment with the specified ID exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionAttachmentId the ID for the interaction attachment
+   * @return {@code true} if an interaction attachment with the specified ID exists or {@code false}
+   *     otherwise
+   * @throws ServiceUnavailableException if the check for the interaction attachment failed
+   */
+  boolean interactionAttachmentExistsWithId(UUID tenantId, UUID interactionAttachmentId)
+      throws ServiceUnavailableException;
+
+  /**
+   * Returns whether an interaction with the specified ID exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @return {@code true} if an interaction with the specified ID exists or {@code false} otherwise
+   * @throws ServiceUnavailableException if the check for the interaction failed
+   */
+  boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
       throws ServiceUnavailableException;
 
   /**

@@ -17,11 +17,11 @@
 package digital.inception.api;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.BusinessException;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.Problem;
-import digital.inception.core.service.ServiceException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.BusinessException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.Problem;
+import digital.inception.core.exception.ServiceException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;

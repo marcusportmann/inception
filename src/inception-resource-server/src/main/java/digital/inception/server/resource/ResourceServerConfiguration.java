@@ -59,7 +59,6 @@ import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -71,6 +70,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -254,202 +255,12 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Returns the configuration for the XACML policy decision point.
+   * Returns the JWT decoder.
    *
-   * @return the configuration for the XACML policy decision point
-   */
-  public XacmlPolicyDecisionPointConfiguration getXacmlPolicyDecisionPoint() {
-    return xacmlPolicyDecisionPoint;
-  }
-
-  /**
-   * Returns the security filter chain.
-   *
-   * @param httpSecurity the HTTP security
-   * @return the security filter chain
-   * @throws Exception if the filter chain could not be initialized
+   * @return the JWT decoder
    */
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-    // Define reusable authorization manager for internal network access
-    AuthorizationManager<RequestAuthorizationContext> internalNetworkAccess =
-        AuthorizationManagers.anyOf(
-            hasIpAddress("100.0.0.0/8"),
-            hasIpAddress("127.0.0.0/8"),
-            hasIpAddress("0:0:0:0:0:0:0:1"),
-            hasIpAddress("::1"),
-            hasIpAddress("192.168.0.0/16"),
-            hasIpAddress("10.0.0.0/8"),
-            hasIpAddress("172.16.0.0/12"));
-
-    httpSecurity.authorizeHttpRequests(
-        authorizeRequests -> {
-          /*
-           * Check if the digital.inception.security.controller.SecurityApiController class exists
-           * on the classpath, and if so, enable non-authenticated internal network access to the
-           * /api/security/policies and /api/security/revoked-tokens Security API endpoints.
-           */
-          try {
-            Class.forName("digital.inception.security.controller.SecurityApiController");
-
-            authorizeRequests
-                .requestMatchers(
-                    antMatcher("/api/security/policies"),
-                    antMatcher("/api/security/revoked-tokens"))
-                .access(internalNetworkAccess);
-          } catch (Throwable ignored) {
-          }
-
-          /*
-           * Enable non-authenticated access to SOAP-based web services.
-           */
-          authorizeRequests.requestMatchers(antMatcher("/service/**")).permitAll();
-
-          /*
-           * Enable non-authenticated access to the OAuth endpoints.
-           */
-          authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
-          authorizeRequests.requestMatchers(antMatcher("/api/**/oauth")).permitAll();
-
-          // Enable non-authenticated access to API endpoints if API security is disabled, or we are
-          // running in debug mode, otherwise require authenticated access using a JWT bearer token.
-          if ((!apiSecurityEnabled) || inDebugMode) {
-            authorizeRequests
-                .requestMatchers(antMatcher("/api/**"))
-                .access(
-                    new AuthorizationManager<RequestAuthorizationContext>() {
-                      @Override
-                      public AuthorizationDecision check(
-                          Supplier<Authentication> authentication,
-                          RequestAuthorizationContext object) {
-                        return new AuthorizationDecision(true);
-                      }
-                    });
-          } else {
-            authorizeRequests.requestMatchers(antMatcher("/api/**")).authenticated();
-          }
-
-          // Static resources authorization rules
-          authorizeRequests
-              .requestMatchers(
-                  getStaticResourcesUriPatterns().stream()
-                      .map(AntPathRequestMatcher::antMatcher)
-                      .toArray(RequestMatcher[]::new))
-              .permitAll();
-
-          // Enable non-authenticated internal network access to the actuator endpoints
-          authorizeRequests
-              .requestMatchers(antMatcher("/actuator/**"))
-              .access(internalNetworkAccess);
-
-          // Enable non-authenticated internal network access to the Swagger endpoints
-          authorizeRequests
-              .requestMatchers(
-                  antMatcher("/swagger-ui/**"),
-                  antMatcher("/swagger-ui.html"),
-                  antMatcher("/v3/api-docs/swagger-config"),
-                  antMatcher("/v3/api-docs/**"))
-              .access(internalNetworkAccess);
-
-          // Deny all other requests
-          authorizeRequests.anyRequest().denyAll();
-        });
-
-    List<String> activeContentSecurityPolicyDirectives =
-        ((contentSecurityPolicyDirectives == null) || contentSecurityPolicyDirectives.isEmpty())
-            ? DEFAULT_CONTENT_SECURITY_POLICY_DIRECTIVES
-            : contentSecurityPolicyDirectives;
-
-    log.info(
-        "Using the content security policy directives: [{}]",
-        activeContentSecurityPolicyDirectives.stream()
-            .map(directive -> "\"" + directive + "\"") // Enquote each directive
-            .collect(Collectors.joining(", ")));
-
-    // Configure security headers
-    httpSecurity.headers(
-        headers ->
-            headers
-                .contentSecurityPolicy(
-                    csp ->
-                        csp.policyDirectives(
-                            String.join(" ", activeContentSecurityPolicyDirectives)))
-                .httpStrictTransportSecurity(
-                    hsts -> hsts.includeSubDomains(true).maxAgeInSeconds(31536000))
-                .referrerPolicy(referrerPolicy -> referrerPolicy.policy(ReferrerPolicy.NO_REFERRER))
-                .addHeaderWriter(
-                    new StaticHeadersWriter(
-                        "Permissions-Policy", "geolocation=(), microphone=(), camera=()")));
-
-    // Enable CORS and disable CSRF
-    httpSecurity
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .csrf(AbstractHttpConfigurer::disable);
-
-    // Configure OAuth2 resource server for JWT-based authentication
-    httpSecurity.oauth2ResourceServer(
-        oauth2 ->
-            oauth2.jwt(
-                jwt -> {
-                  jwt.decoder(getJwtDecoder());
-                  jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter());
-                }));
-
-    // Set session management to stateless
-    httpSecurity.sessionManagement(
-        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-    return httpSecurity.build();
-  }
-
-  /**
-   * Set the additional static resource URI patterns.
-   *
-   * @param additionalStaticResourceUriPatterns the additional static resource URI patterns
-   */
-  public void setAdditionalStaticResourceUriPatterns(
-      List<String> additionalStaticResourceUriPatterns) {
-    this.additionalStaticResourceUriPatterns = additionalStaticResourceUriPatterns;
-  }
-
-  /**
-   * Set the security policy directives for the content security policy.
-   *
-   * @param contentSecurityPolicyDirectives the security policy directives for the content security
-   *     policy
-   */
-  public void setContentSecurityPolicyDirectives(List<String> contentSecurityPolicyDirectives) {
-    this.contentSecurityPolicyDirectives = contentSecurityPolicyDirectives;
-  }
-
-  /**
-   * Set the JWT configuration.
-   *
-   * @param jwtConfiguration the JWT configuration
-   */
-  public void setJwt(JwtConfiguration jwtConfiguration) {
-    this.jwtConfiguration = jwtConfiguration;
-  }
-
-  /**
-   * Set the configuration for the XACML policy decision point.
-   *
-   * @param xacmlPolicyDecisionPoint the configuration for the XACML policy decision point
-   */
-  public void setXacmlPolicyDecisionPoint(
-      XacmlPolicyDecisionPointConfiguration xacmlPolicyDecisionPoint) {
-    this.xacmlPolicyDecisionPoint = xacmlPolicyDecisionPoint;
-  }
-
-  private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
-    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
-        getJwtGrantedAuthoritiesConverter());
-    return jwtAuthenticationConverter;
-  }
-
-  private JwtDecoder getJwtDecoder() {
+  public JwtDecoder getJwtDecoder() {
 
     if (jwtConfiguration.getRsaPublicKey() != null) {
       log.info("Using a RS256 RSA public key JWT decoder");
@@ -563,6 +374,218 @@ public class ResourceServerConfiguration implements InitializingBean {
         return new MultiIssuerJwtDecoder(jwtDecoders, false, null, -1);
       }
     }
+  }
+
+  /**
+   * Returns the configuration for the XACML policy decision point.
+   *
+   * @return the configuration for the XACML policy decision point
+   */
+  public XacmlPolicyDecisionPointConfiguration getXacmlPolicyDecisionPoint() {
+    return xacmlPolicyDecisionPoint;
+  }
+
+  /**
+   * Returns the security filter chain.
+   *
+   * @param httpSecurity the HTTP security
+   * @return the security filter chain
+   * @throws Exception if the filter chain could not be initialized
+   */
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+    // Define reusable authorization manager for internal network access
+    AuthorizationManager<RequestAuthorizationContext> internalNetworkAccess =
+        AuthorizationManagers.anyOf(
+            hasIpAddress("100.0.0.0/8"),
+            hasIpAddress("127.0.0.0/8"),
+            hasIpAddress("0:0:0:0:0:0:0:1"),
+            hasIpAddress("::1"),
+            hasIpAddress("192.168.0.0/16"),
+            hasIpAddress("10.0.0.0/8"),
+            hasIpAddress("172.16.0.0/12"));
+
+    httpSecurity.authorizeHttpRequests(
+        authorizeRequests -> {
+          /*
+           * Check if the digital.inception.security.controller.SecurityApiController class exists
+           * on the classpath, and if so, enable non-authenticated internal network access to the
+           * /api/security/policies and /api/security/revoked-tokens Security API endpoints.
+           */
+          try {
+            Class.forName("digital.inception.security.controller.SecurityApiController");
+
+            authorizeRequests
+                .requestMatchers(
+                    antMatcher("/api/security/policies"),
+                    antMatcher("/api/security/revoked-tokens"))
+                .access(internalNetworkAccess);
+          } catch (Throwable ignored) {
+          }
+
+          /*
+           * Enable non-authenticated access to SOAP-based web services.
+           */
+          authorizeRequests.requestMatchers(antMatcher("/service/**")).permitAll();
+
+          /*
+           * Enable non-authenticated access to the OAuth endpoints.
+           */
+          authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
+          authorizeRequests.requestMatchers(antMatcher("/api/**/oauth")).permitAll();
+
+          // Enable non-authenticated access to API endpoints if API security is disabled, or we are
+          // running in debug mode, otherwise require authenticated access using a JWT bearer token.
+          if ((!apiSecurityEnabled) || inDebugMode) {
+            authorizeRequests
+                .requestMatchers(antMatcher("/api/**"), antMatcher("/csrf/**"))
+                .access(
+                    new AuthorizationManager<RequestAuthorizationContext>() {
+                      @Override
+                      public AuthorizationDecision check(
+                          Supplier<Authentication> authentication,
+                          RequestAuthorizationContext object) {
+                        return new AuthorizationDecision(true);
+                      }
+                    });
+          } else {
+            authorizeRequests
+                .requestMatchers(
+                    antMatcher("/api/**"), antMatcher("/csrf/**"), antMatcher("/realtime/**"))
+                .authenticated();
+          }
+
+          // Static resources authorization rules
+          authorizeRequests
+              .requestMatchers(
+                  getStaticResourcesUriPatterns().stream()
+                      .map(AntPathRequestMatcher::antMatcher)
+                      .toArray(RequestMatcher[]::new))
+              .permitAll();
+
+          // Enable non-authenticated internal network access to the actuator endpoints
+          authorizeRequests
+              .requestMatchers(antMatcher("/actuator/**"), antMatcher("/realtime/**"))
+              .access(internalNetworkAccess);
+
+          // Enable non-authenticated internal network access to the Swagger endpoints
+          authorizeRequests
+              .requestMatchers(
+                  antMatcher("/swagger-ui/**"),
+                  antMatcher("/swagger-ui.html"),
+                  antMatcher("/v3/api-docs/swagger-config"),
+                  antMatcher("/v3/api-docs/**"))
+              .access(internalNetworkAccess);
+
+          // Deny all other requests
+          authorizeRequests.anyRequest().denyAll();
+        });
+
+    List<String> activeContentSecurityPolicyDirectives =
+        ((contentSecurityPolicyDirectives == null) || contentSecurityPolicyDirectives.isEmpty())
+            ? DEFAULT_CONTENT_SECURITY_POLICY_DIRECTIVES
+            : contentSecurityPolicyDirectives;
+
+    log.info(
+        "Using the content security policy directives: [{}]",
+        activeContentSecurityPolicyDirectives.stream()
+            .map(directive -> "\"" + directive + "\"") // Enquote each directive
+            .collect(Collectors.joining(", ")));
+
+    // Configure security headers
+    httpSecurity.headers(
+        headers ->
+            headers
+                .contentSecurityPolicy(
+                    csp ->
+                        csp.policyDirectives(
+                            String.join(" ", activeContentSecurityPolicyDirectives)))
+                .httpStrictTransportSecurity(
+                    hsts -> hsts.includeSubDomains(true).maxAgeInSeconds(31536000))
+                .referrerPolicy(referrerPolicy -> referrerPolicy.policy(ReferrerPolicy.NO_REFERRER))
+                .addHeaderWriter(
+                    new StaticHeadersWriter(
+                        "Permissions-Policy", "geolocation=(), microphone=(), camera=()")));
+
+    /*
+     * Enable CORS and disable CSRF for all endpoints except for the /csrf/token endpoint which is
+     * required to establish a websocket connection.
+     */
+    httpSecurity
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(
+            csrf -> {
+              // Configure CSRF to ignore all endpoints except /csrf/token
+              csrf.ignoringRequestMatchers(
+                      AntPathRequestMatcher.antMatcher("/api/**"),
+                      AntPathRequestMatcher.antMatcher("/service/**"),
+                      AntPathRequestMatcher.antMatcher("/oauth/**"),
+                      AntPathRequestMatcher.antMatcher("/actuator/**"))
+                  .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                  .csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler());
+            });
+
+    // Configure OAuth2 resource server for JWT-based authentication
+    httpSecurity.oauth2ResourceServer(
+        oauth2 ->
+            oauth2.jwt(
+                jwt -> {
+                  jwt.decoder(getJwtDecoder());
+                  jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter());
+                }));
+
+    // Set session management to stateless
+    httpSecurity.sessionManagement(
+        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+    return httpSecurity.build();
+  }
+
+  /**
+   * Set the additional static resource URI patterns.
+   *
+   * @param additionalStaticResourceUriPatterns the additional static resource URI patterns
+   */
+  public void setAdditionalStaticResourceUriPatterns(
+      List<String> additionalStaticResourceUriPatterns) {
+    this.additionalStaticResourceUriPatterns = additionalStaticResourceUriPatterns;
+  }
+
+  /**
+   * Set the security policy directives for the content security policy.
+   *
+   * @param contentSecurityPolicyDirectives the security policy directives for the content security
+   *     policy
+   */
+  public void setContentSecurityPolicyDirectives(List<String> contentSecurityPolicyDirectives) {
+    this.contentSecurityPolicyDirectives = contentSecurityPolicyDirectives;
+  }
+
+  /**
+   * Set the JWT configuration.
+   *
+   * @param jwtConfiguration the JWT configuration
+   */
+  public void setJwt(JwtConfiguration jwtConfiguration) {
+    this.jwtConfiguration = jwtConfiguration;
+  }
+
+  /**
+   * Set the configuration for the XACML policy decision point.
+   *
+   * @param xacmlPolicyDecisionPoint the configuration for the XACML policy decision point
+   */
+  public void setXacmlPolicyDecisionPoint(
+      XacmlPolicyDecisionPointConfiguration xacmlPolicyDecisionPoint) {
+    this.xacmlPolicyDecisionPoint = xacmlPolicyDecisionPoint;
+  }
+
+  private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
+    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+        getJwtGrantedAuthoritiesConverter());
+    return jwtAuthenticationConverter;
   }
 
   private Converter<Jwt, Collection<GrantedAuthority>> getJwtGrantedAuthoritiesConverter() {

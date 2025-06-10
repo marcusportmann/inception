@@ -17,8 +17,8 @@
 package digital.inception.party.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.party.model.AssociationPropertyType;
 import digital.inception.party.model.AssociationType;
 import digital.inception.party.model.AttributeType;
@@ -116,7 +116,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the association property type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The association property type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -185,7 +187,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the association type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The association type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -254,7 +258,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the attribute type category reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The attribute type category reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -322,7 +328,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the attribute type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The attribute type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -390,7 +398,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the consent type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The consent type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -459,7 +469,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the contact mechanism purpose reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The contact mechanism purpose reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -528,7 +540,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the contact mechanism role reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The contact mechanism role reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -597,7 +611,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the contact mechanism type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The contact mechanism type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -666,7 +682,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the employment status reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The employment status reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -735,7 +753,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the employment type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The employment type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -804,7 +824,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the external reference type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The external reference type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -873,7 +895,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the fields of study reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The fields of study reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -941,7 +965,7 @@ public interface PartyReferenceApiController {
       description = "Retrieve the gender reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The gender reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1009,7 +1033,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the identification type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The identification type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1081,7 +1107,9 @@ public interface PartyReferenceApiController {
           "Retrieve the industry classification category reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The industry classification category reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1152,7 +1180,9 @@ public interface PartyReferenceApiController {
           "Retrieve the industry classification system reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The industry classification system reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1221,7 +1251,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the industry classification reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The industry classification reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1289,7 +1321,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the link type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The link type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1357,7 +1391,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the lock type category reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The lock type category reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1425,7 +1461,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the lock type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The lock type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1492,7 +1530,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the mandatary role reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The mandatary role reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1561,7 +1601,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the mandate property type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The mandate property type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1629,7 +1671,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the mandate type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The mandate type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1696,7 +1740,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the marital status reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The marital status reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1764,7 +1810,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the marriage type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The marriage type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1832,7 +1880,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the next of kin type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The next of kin type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1900,7 +1950,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the occupation reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The occupation reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1969,7 +2021,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the physical address purpose reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The physical address purpose reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2038,7 +2092,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the physical address role reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The physical address role reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2107,7 +2163,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the physical address type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The physical address type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2177,7 +2235,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the preference type category reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The preference type category reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2246,7 +2306,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the preference type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The preference type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2315,7 +2377,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the qualification type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The qualification type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2383,7 +2447,7 @@ public interface PartyReferenceApiController {
       description = "Retrieve the race reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The race reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2451,7 +2515,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the residence permit type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The residence permit type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2520,7 +2586,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the residency status reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The residency status reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2589,7 +2657,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the residential type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The residential type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2657,7 +2727,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the role purpose reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The role purpose reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2723,7 +2795,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the role type attribute type constraint")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The role type attribute type constraint was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2776,7 +2850,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the role type preference type constraint")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The role type preference type constraint was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2830,7 +2906,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the role type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The role type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2898,7 +2976,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the segmentation type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The segmentation type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2966,7 +3046,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the segment reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The segment reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3033,7 +3115,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the skill type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The skill type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3101,7 +3185,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the source of funds type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The source of funds type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3170,7 +3256,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the source of wealth type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The source of wealth type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3239,7 +3327,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the status type category reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The status type category reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3307,7 +3397,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the status type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The status type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3375,7 +3467,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the tax number type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The tax number type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3444,7 +3538,9 @@ public interface PartyReferenceApiController {
       description = "Retrieve the times to contact reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The times to contact reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3512,7 +3608,7 @@ public interface PartyReferenceApiController {
       description = "Retrieve the title reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The title reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

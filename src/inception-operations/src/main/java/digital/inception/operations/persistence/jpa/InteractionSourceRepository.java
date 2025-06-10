@@ -17,6 +17,10 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceType;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -25,4 +29,43 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface InteractionSourceRepository extends JpaRepository<InteractionSource, String> {}
+public interface InteractionSourceRepository extends JpaRepository<InteractionSource, UUID> {
+
+  /**
+   * Returns whether an interaction source with the specified tenant ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the interaction source is associated with
+   * @param interactionSourceId the ID for the interaction source
+   * @return {@code true} if an interaction source with the specified tenant ID and ID exists or
+   *     {@code false} otherwise
+   */
+  boolean existsByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
+
+  /**
+   * Retrieve the interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source
+   * @return an Optional containing the interaction source or an empty Optional if the interaction
+   *     source could not be found
+   */
+  Optional<InteractionSource> findByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
+
+  /**
+   * Retrieve the interaction sources with the specified type ordered by name ascending.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceType the interaction source type for the interaction sources
+   * @return the interaction sources ordered by name ascending
+   */
+  List<InteractionSource> findByTenantIdAndTypeOrderByNameAsc(
+      UUID tenantId, InteractionSourceType interactionSourceType);
+
+  /**
+   * Retrieve the interaction sources ordered by name ascending.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the interaction sources ordered by name ascending
+   */
+  List<InteractionSource> findByTenantIdOrderByNameAsc(UUID tenantId);
+}

@@ -21,10 +21,10 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
-import digital.inception.operations.model.DocumentDefinitionNotFoundException;
-import digital.inception.operations.model.DuplicateWorkflowDefinitionCategoryException;
+import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
-import digital.inception.operations.model.WorkflowDefinitionNotFoundException;
+import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -66,7 +66,7 @@ public interface OperationsApiController {
   @Operation(summary = "Create the document", description = "Create the document")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The document was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -136,7 +136,7 @@ public interface OperationsApiController {
   @Operation(summary = "Create the workflow", description = "Create the workflow")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The workflow was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -210,7 +210,7 @@ public interface OperationsApiController {
       value = {
         @ApiResponse(
             responseCode = "204",
-            description = "The workflow definition category was created successfully"),
+            description = "The workflow definition category was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -250,14 +250,14 @@ public interface OperationsApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinitionCategory(
       @Parameter(
-          name = "Tenant-ID",
-          description = "The ID for the tenant",
-          example = "00000000-0000-0000-0000-000000000000")
-      @RequestHeader(
-          name = "Tenant-ID",
-          defaultValue = "00000000-0000-0000-0000-000000000000",
-          required = false)
-      UUID tenantId,
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The workflow definition category to create",
               required = true)

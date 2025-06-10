@@ -16,12 +16,12 @@
 
 package digital.inception.reporting.service;
 
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.reporting.model.DuplicateReportDefinitionException;
+import digital.inception.reporting.exception.DuplicateReportDefinitionException;
+import digital.inception.reporting.exception.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinition;
-import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
 import digital.inception.reporting.persistence.jpa.ReportDefinitionRepository;
 import digital.inception.reporting.persistence.jpa.ReportDefinitionSummaryRepository;

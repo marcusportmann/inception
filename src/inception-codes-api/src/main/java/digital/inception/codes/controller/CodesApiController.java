@@ -16,16 +16,16 @@
 
 package digital.inception.codes.controller;
 
+import digital.inception.codes.exception.CodeCategoryNotFoundException;
+import digital.inception.codes.exception.CodeNotFoundException;
+import digital.inception.codes.exception.DuplicateCodeCategoryException;
+import digital.inception.codes.exception.DuplicateCodeException;
 import digital.inception.codes.model.Code;
 import digital.inception.codes.model.CodeCategory;
-import digital.inception.codes.model.CodeCategoryNotFoundException;
 import digital.inception.codes.model.CodeCategorySummary;
-import digital.inception.codes.model.CodeNotFoundException;
-import digital.inception.codes.model.DuplicateCodeCategoryException;
-import digital.inception.codes.model.DuplicateCodeException;
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -67,7 +67,7 @@ public interface CodesApiController {
   @Operation(summary = "Create the code", description = "Create the code")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The code was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The code was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -140,9 +140,7 @@ public interface CodesApiController {
   @Operation(summary = "Create the code category", description = "Create the code category")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The code category was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The code category was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -200,7 +198,7 @@ public interface CodesApiController {
   @Operation(summary = "Delete the code", description = "Delete the code")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The code was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The code was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -261,9 +259,7 @@ public interface CodesApiController {
   @Operation(summary = "Delete the code category", description = "Delete the code category")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The code category was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The code category was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -323,7 +319,7 @@ public interface CodesApiController {
   @Operation(summary = "Retrieve the code", description = "Retrieve the code")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The code was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -384,7 +380,7 @@ public interface CodesApiController {
       description = "Retrieve all the code categories")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The code categories were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -429,7 +425,7 @@ public interface CodesApiController {
   @Operation(summary = "Retrieve the code category", description = "Retrieve the code category")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The code category was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -490,7 +486,9 @@ public interface CodesApiController {
       description = "Retrieve the XML or JSON data for a code category")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The XML or JSON data for the code category was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -552,7 +550,9 @@ public interface CodesApiController {
       description = "Retrieve the date and time the code category was last modified")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The date and time the code category was last modified was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -613,7 +613,9 @@ public interface CodesApiController {
       description = "Retrieve the name of the code category")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The name of the code category was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -671,7 +673,9 @@ public interface CodesApiController {
       description = "Retrieve the code category summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The code category summaries were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -712,7 +716,7 @@ public interface CodesApiController {
       description = "Retrieve the name of the code")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The name of the code was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -776,7 +780,9 @@ public interface CodesApiController {
       description = "Retrieve the codes for a code category")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The codes for the code category were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -836,7 +842,7 @@ public interface CodesApiController {
   @Operation(summary = "Update the code", description = "Update the code")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The code was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The code was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -903,9 +909,7 @@ public interface CodesApiController {
   @Operation(summary = "Update the code category", description = "Update the code category")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The code category was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The code category was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

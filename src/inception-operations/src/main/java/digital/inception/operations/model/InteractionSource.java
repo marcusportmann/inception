@@ -17,23 +17,33 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /** The {@code InteractionSource} class holds the information for an interaction source. */
@@ -52,6 +62,16 @@ public class InteractionSource implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
+  /** The attributes for the interaction source. */
+  @Valid
+  @OneToMany(
+      mappedBy = "interactionSource",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  @OrderBy("name")
+  private final List<InteractionSourceAttribute> attributes = new ArrayList<>();
+
   /** The ID for the interaction source. */
   @Schema(
       description = "The ID for the interaction source",
@@ -60,8 +80,8 @@ public class InteractionSource implements Serializable {
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
-  @Column(name = "id", length = 50, nullable = false)
-  private String id;
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /** The name of the interaction source. */
   @Schema(
@@ -103,13 +123,116 @@ public class InteractionSource implements Serializable {
    * Constructs a new {@code InteractionSource}.
    *
    * @param id the ID for the interaction source
+   * @param tenantId the ID for the tenant the interaction source is associated with
    * @param type the interaction source type
    * @param name the name of the interaction source
+   * @param attributes the attributes for the interaction source
    */
-  public InteractionSource(String id, InteractionSourceType type, String name) {
+  public InteractionSource(
+      UUID id,
+      UUID tenantId,
+      InteractionSourceType type,
+      String name,
+      List<InteractionSourceAttribute> attributes) {
     this.id = id;
+    this.tenantId = tenantId;
     this.type = type;
     this.name = name;
+    setAttributes(attributes);
+  }
+
+  /**
+   * Constructs a new mailbox {@code InteractionSource}.
+   *
+   * @param id the ID for the mailbox interaction source
+   * @param tenantId the ID for the tenant the mailbox interaction source is associated with
+   * @param name the name of the mailbox interaction source
+   * @param protocol the service provider and email protocol for the service hosting the mailbox
+   * @param host the hostname or IP address for the service hosting the mailbox
+   * @param port the network port for the service hosting the mailbox
+   * @param principal the principal identifying the entity that is attempting to authenticate and
+   *     gain access to the mailbox
+   * @param credential the credential used to authenticate the entity attempting to access the
+   *     mailbox
+   * @param emailAddress the email address for the mailbox
+   * @param archiveMail should mail retrieved from the mailbox be archived
+   * @param deleteMail should mail retrieved from the mailbox be deleted
+   * @param debug is debugging enabled for the mailbox interaction source
+   * @return the mailbox {@code InteractionSource}
+   */
+  public static InteractionSource createMailboxInteractionSource(
+      UUID id,
+      UUID tenantId,
+      String name,
+      MailboxProtocol protocol,
+      String host,
+      int port,
+      String principal,
+      String credential,
+      String emailAddress,
+      boolean archiveMail,
+      boolean deleteMail,
+      boolean debug) {
+    return new InteractionSource(
+        id,
+        tenantId,
+        InteractionSourceType.MAILBOX,
+        name,
+        List.of(
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.PROTOCOL.code(), protocol.code()),
+            new InteractionSourceAttribute(MailboxInteractionSourceAttributeName.HOST.code(), host),
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.PORT.code(), String.valueOf(port)),
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.PRINCIPAL.code(), principal),
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.CREDENTIAL.code(), credential),
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.EMAIL_ADDRESS.code(), emailAddress),
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.ARCHIVE_MAIL.code(),
+                String.valueOf(archiveMail)),
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.DELETE_MAIL.code(),
+                String.valueOf(deleteMail)),
+            new InteractionSourceAttribute(
+                MailboxInteractionSourceAttributeName.DEBUG.code(), String.valueOf(debug))));
+  }
+
+  /**
+   * Constructs a new WhatsApp {@code InteractionSource}.
+   *
+   * @param id the ID for the WhatsApp interaction source
+   * @param tenantId the ID for the tenant the WhatsApp interaction source is associated with
+   * @param name the name of the WhatsApp interaction source
+   * @param debug is debugging enabled for the WhatsApp interaction source
+   * @return the WhatsApp {@code InteractionSource}
+   */
+  public static InteractionSource createWhatsAppInteractionSource(
+      UUID id, UUID tenantId, String name, boolean debug) {
+    return new InteractionSource(
+        id,
+        tenantId,
+        InteractionSourceType.WHATSAPP,
+        name,
+        List.of(
+            new InteractionSourceAttribute(
+                WhatsAppInteractionSourceAttributeName.DEBUG.code(), String.valueOf(debug))));
+  }
+
+  /**
+   * Add the attribute for the interaction source.
+   *
+   * @param attribute the attribute
+   */
+  public void addAttribute(InteractionSourceAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute -> Objects.equals(existingAttribute.getName(), attribute.getName()));
+
+    attribute.setInteractionSource(this);
+
+    attributes.add(attribute);
   }
 
   /**
@@ -138,11 +261,38 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Retrieve the attribute with the specified name for the interaction source.
+   *
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the interaction source
+   *     or an empty Optional if the attribute could not be found
+   */
+  public Optional<InteractionSourceAttribute> getAttributeWithName(String name) {
+    return attributes.stream()
+        .filter(attribute -> Objects.equals(attribute.getName(), name))
+        .findFirst();
+  }
+
+  /**
+   * Returns the attributes for the interaction source.
+   *
+   * @return the attributes for the interaction source
+   */
+  @Schema(description = "The attributes for the interaction source")
+  @JsonProperty
+  @JsonManagedReference("interactionSourceAttributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  public List<InteractionSourceAttribute> getAttributes() {
+    return attributes;
+  }
+
+  /**
    * Returns the ID for the interaction source.
    *
    * @return the ID for the interaction source
    */
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -174,6 +324,17 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Returns whether the interaction source has an attribute with the specified name.
+   *
+   * @param name the name of the attribute
+   * @return {@code true} if the interaction source has an attribute with the specified name or
+   *     {@code false} otherwise
+   */
+  public boolean hasAttributeWithName(String name) {
+    return attributes.stream().anyMatch(attribute -> Objects.equals(attribute.getName(), name));
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -184,11 +345,31 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Remove the attribute with the specified name for the interaction source.
+   *
+   * @param name the name of the attribute
+   */
+  public void removeAttributeWithName(String name) {
+    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getName(), name));
+  }
+
+  /**
+   * Set the attributes for the interaction source.
+   *
+   * @param attributes the attributes for the interaction source
+   */
+  public void setAttributes(List<InteractionSourceAttribute> attributes) {
+    attributes.forEach(attribute -> attribute.setInteractionSource(this));
+    this.attributes.clear();
+    this.attributes.addAll(attributes);
+  }
+
+  /**
    * Set the ID for the interaction source.
    *
    * @param id the ID for the interaction source
    */
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -209,6 +390,16 @@ public class InteractionSource implements Serializable {
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
   }
+
+  /**
+   * Constructs a new {@code InteractionSource}.
+   *
+   * @param id the ID for the interaction source
+   * @param tenantId the ID for the tenant the interaction source is associated with
+   * @param type the interaction source type
+   * @param name the name of the interaction source
+   * @param attributes the attributes for the interaction source
+   */
 
   /**
    * Set the interaction source type.

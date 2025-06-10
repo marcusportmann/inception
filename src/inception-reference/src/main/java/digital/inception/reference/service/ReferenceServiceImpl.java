@@ -17,9 +17,9 @@
 package digital.inception.reference.service;
 
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.reference.model.Country;
 import digital.inception.reference.model.Language;
 import digital.inception.reference.model.MeasurementSystem;
@@ -68,6 +68,9 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
 
   /** The Region Repository. */
   private final RegionRepository regionRepository;
+
+  /** The internal reference to the Reference Service to enable caching. */
+  private ReferenceService referenceService;
 
   /**
    * Constructs a new {@code ReferenceServiceImpl}.
@@ -437,6 +440,10 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
    * @return the internal reference to the Reference Service to enable caching.
    */
   private ReferenceService getReferenceService() {
-    return getApplicationContext().getBean(ReferenceService.class);
+    if (referenceService == null) {
+      referenceService = getApplicationContext().getBean(ReferenceService.class);
+    }
+
+    return referenceService;
   }
 }

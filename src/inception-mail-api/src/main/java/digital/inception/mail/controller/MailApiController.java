@@ -17,11 +17,11 @@
 package digital.inception.mail.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.mail.model.DuplicateMailTemplateException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.mail.exception.DuplicateMailTemplateException;
+import digital.inception.mail.exception.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplate;
-import digital.inception.mail.model.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplateSummary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -61,9 +61,7 @@ public interface MailApiController {
   @Operation(summary = "Create the mail template", description = "Create the mail template")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The mail template was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The mail template was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -120,9 +118,7 @@ public interface MailApiController {
   @Operation(summary = "Delete the mail template", description = "Delete the mail template")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The mail template was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The mail template was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -181,7 +177,7 @@ public interface MailApiController {
   @Operation(summary = "Retrieve the mail template", description = "Retrieve the mail template")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The mail template was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -242,7 +238,9 @@ public interface MailApiController {
       description = "Retrieve the name of the mail template")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The name of the mail template was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -300,7 +298,9 @@ public interface MailApiController {
       description = "Retrieve the mail template summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The mail template summaries were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -335,7 +335,7 @@ public interface MailApiController {
   @Operation(summary = "Retrieve the mail templates", description = "Retrieve the mail templates")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The mail templates were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -365,7 +365,7 @@ public interface MailApiController {
   //  @Operation(summary = "Send a test mail", description = "Send a test mail")
   //  @ApiResponses(
   //      value = {
-  //        @ApiResponse(responseCode = "204", description = "The mail was sent successfully"),
+  //        @ApiResponse(responseCode = "204", description = "The mail was sent"),
   //        @ApiResponse(
   //            responseCode = "400",
   //            description = "Invalid argument",
@@ -427,9 +427,7 @@ public interface MailApiController {
   @Operation(summary = "Update the mail template", description = "Update the mail template")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The mail template was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The mail template was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

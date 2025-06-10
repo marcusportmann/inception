@@ -16,12 +16,12 @@
 
 package digital.inception.config.ws;
 
+import digital.inception.config.exception.ConfigNotFoundException;
 import digital.inception.config.model.Config;
-import digital.inception.config.model.ConfigNotFoundException;
 import digital.inception.config.model.ConfigSummary;
 import digital.inception.config.service.ConfigService;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;

@@ -21,8 +21,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
+import digital.inception.operations.persistence.jpa.RecipientsAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -39,6 +41,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
@@ -115,25 +118,8 @@ public class InteractionSummary implements Serializable {
   @Column(name = "conversation_id", length = 30)
   private String conversationId;
 
-  /**
-   * The identifier representing who the interaction is from, e.g. an email address, a mobile
-   * number, etc.
-   */
-  @Schema(
-      description =
-          "The identifier representing who the interaction is from, e.g. an email address, a mobile number, etc",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "From", required = true)
-  @NotNull
-  @Size(min = 1, max = 255)
-  @Column(name = "from", length = 255, nullable = false)
-  private String from;
-
   /** The ID for the interaction. */
-  @Schema(
-      description = "The unique identifier for the interaction",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(description = "The ID for the interaction", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -151,24 +137,53 @@ public class InteractionSummary implements Serializable {
   @Column(name = "mime_type", nullable = false)
   private InteractionMimeType mimeType;
 
-  /** The unique identifier for the party the interaction is associated with. */
-  @Schema(description = "The unique identifier for the party the interaction is associated with")
+  /** The ID for the party the interaction is associated with. */
+  @Schema(description = "The ID for the party the interaction is associated with")
   @JsonProperty
   @XmlElement(name = "PartyId")
   @Column(name = "party_id", nullable = false)
   private UUID partyId;
 
-  /** The unique identifier for the interaction source the interaction is associated with. */
+  /**
+   * The identifiers representing the recipients for the interaction, e.g. email addresses, mobile
+   * numbers, etc. Stored as a comma-delimited list in the database.
+   */
   @Schema(
       description =
-          "The unique identifier for the interaction source the interaction is associated with",
+          "The identifiers representing the recipients for the interaction, e.g. email addresses, mobile numbers, etc",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "Recipients", required = true)
+  @XmlElement(name = "Recipient", required = true)
+  @Convert(converter = RecipientsAttributeConverter.class)
+  @Column(name = "recipients", length = 2000)
+  private List<String> recipients;
+
+  /**
+   * The identifier representing who the interaction is from, e.g. an email address, a mobile
+   * number, etc.
+   */
+  @Schema(
+      description =
+          "The identifier representing who the interaction is from, e.g. an email address, a mobile number, etc",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Sender", required = true)
+  @NotNull
+  @Size(min = 1, max = 255)
+  @Column(name = "sender", length = 255, nullable = false)
+  private String sender;
+
+  /** The ID for the interaction source the interaction is associated with. */
+  @Schema(
+      description = "The ID for the interaction source the interaction is associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "SourceId", required = true)
   @NotNull
   @Size(min = 1, max = 50)
   @Column(name = "source_id", length = 50, nullable = false)
-  private String sourceId;
+  private UUID sourceId;
 
   /** The status of the interaction. */
   @Schema(
@@ -190,9 +205,9 @@ public class InteractionSummary implements Serializable {
   @Column(name = "subject", length = 2000, nullable = false)
   private String subject;
 
-  /** The unique identifier for the tenant the interaction is associated with. */
+  /** The ID for the tenant the interaction is associated with. */
   @Schema(
-      description = "The unique identifier for the tenant the interaction is associated with",
+      description = "The ID for the tenant the interaction is associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -211,14 +226,6 @@ public class InteractionSummary implements Serializable {
   @NotNull
   @Column(name = "timestamp", nullable = false)
   private OffsetDateTime timestamp;
-
-  /**
-   * The colon-seperated list of identifiers representing the recipients for the interaction, e.g.
-   * email addresses, mobile numbers, etc.
-   */
-  @JsonIgnore
-  @Column(name = "to", length = 2000)
-  private String to;
 
   /** The interaction type. */
   @Schema(description = "The interaction type", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -284,20 +291,9 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
-   * Returns the identifier representing who the interaction is from, e.g. an email address, a
-   * mobile number, etc.
+   * Returns the ID for the interaction.
    *
-   * @return the identifier representing who the interaction is from, e.g. an email address, a
-   *     mobile number, etc
-   */
-  public String getFrom() {
-    return from;
-  }
-
-  /**
-   * Returns the unique identifier for the interaction.
-   *
-   * @return the unique identifier for the interaction
+   * @return the ID for the interaction
    */
   public UUID getId() {
     return id;
@@ -313,20 +309,42 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the party the interaction is associated with.
+   * Returns the ID for the party the interaction is associated with.
    *
-   * @return the unique identifier for the party the interaction is associated with
+   * @return the ID for the party the interaction is associated with
    */
   public UUID getPartyId() {
     return partyId;
   }
 
   /**
-   * Returns the unique identifier for the interaction source the interaction is associated with.
+   * Returns the identifiers representing the recipients for the interaction, e.g. email addresses,
+   * mobile numbers, etc.
    *
-   * @return the unique identifier for the interaction source the interaction is associated with
+   * @return the identifiers representing the recipients for the interaction, e.g. email addresses,
+   *     mobile numbers, etc
    */
-  public String getSourceId() {
+  public List<String> getRecipients() {
+    return recipients;
+  }
+
+  /**
+   * Returns the identifier representing who the interaction is from, e.g. an email address, a
+   * mobile number, etc.
+   *
+   * @return the identifier representing who the interaction is from, e.g. an email address, a
+   *     mobile number, etc
+   */
+  public String getSender() {
+    return sender;
+  }
+
+  /**
+   * Returns the ID for the interaction source the interaction is associated with.
+   *
+   * @return the ID for the interaction source the interaction is associated with
+   */
+  public UUID getSourceId() {
     return sourceId;
   }
 
@@ -349,9 +367,9 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the tenant the interaction is associated with.
+   * Returns the ID for the tenant the interaction is associated with.
    *
-   * @return the unique identifier for the tenant the interaction is associated with
+   * @return the ID for the tenant the interaction is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -364,24 +382,6 @@ public class InteractionSummary implements Serializable {
    */
   public OffsetDateTime getTimestamp() {
     return timestamp;
-  }
-
-  /**
-   * Returns the identifiers representing the recipients for the interaction, e.g. email addresses,
-   * mobile numbers, etc.
-   *
-   * @return the identifiers representing the recipients for the interaction, e.g. email addresses,
-   *     mobile numbers, etc
-   */
-  @Schema(
-      description =
-          "The identifiers representing the recipients for the interaction, e.g. email addresses, mobile numbers, etc",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "To", required = true)
-  @XmlElement(name = "To", required = true)
-  public String[] getTo() {
-    return StringUtils.removeDuplicateStrings(StringUtils.delimitedListToStringArray(to, ";"));
   }
 
   /**
@@ -401,126 +401,5 @@ public class InteractionSummary implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
-  }
-
-  /**
-   * Set the date and time the interaction was assigned.
-   *
-   * @param assigned the date and time the interaction was assigned
-   */
-  public void setAssigned(OffsetDateTime assigned) {
-    this.assigned = assigned;
-  }
-
-  /**
-   * Set the username for the user the interaction is assigned to.
-   *
-   * @param assignedTo the username for the user the interaction is assigned to
-   */
-  public void setAssignedTo(String assignedTo) {
-    this.assignedTo = assignedTo;
-  }
-
-  /**
-   * Set the ID for the conversation the interaction is associated with.
-   *
-   * @param conversationId the ID for the conversation the interaction is associated with
-   */
-  public void setConversationId(String conversationId) {
-    this.conversationId = conversationId;
-  }
-
-  /**
-   * Set the identifier representing who the interaction is from, e.g. an email address, a mobile
-   * number, etc.
-   *
-   * @param from the identifier representing who the interaction is from, e.g. an email address, a
-   *     mobile number, etc
-   */
-  public void setFrom(String from) {
-    this.from = from;
-  }
-
-  /**
-   * Set the unique identifier for the interaction.
-   *
-   * @param id the unique identifier for the interaction
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   * Set the mime type for the content for the interaction.
-   *
-   * @param mimeType the mime type for the content for the interaction
-   */
-  public void setMimeType(InteractionMimeType mimeType) {
-    this.mimeType = mimeType;
-  }
-
-  /**
-   * Set the unique identifier for the party the interaction is associated with.
-   *
-   * @param partyId the unique identifier for the party the interaction is associated with
-   */
-  public void setPartyId(UUID partyId) {
-    this.partyId = partyId;
-  }
-
-  /**
-   * Set the ID for the interaction source the interaction is associated with.
-   *
-   * @param sourceId the ID for the interaction source the interaction is associated with
-   */
-  public void setSourceId(String sourceId) {
-    this.sourceId = sourceId;
-  }
-
-  /**
-   * Set the status of the interaction.
-   *
-   * @param status the status of the interaction
-   */
-  public void setStatus(InteractionStatus status) {
-    this.status = status;
-  }
-
-  /**
-   * Set the subject for the interaction.
-   *
-   * @param subject the subject for the interaction
-   */
-  public void setSubject(String subject) {
-    this.subject = subject;
-  }
-
-  /**
-   * Set the date and time the interaction was received or sent.
-   *
-   * @param timestamp the date and time the interaction was received or sent
-   */
-  public void setTimestamp(OffsetDateTime timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  /**
-   * Set the identifiers representing the recipients for the interaction, e.g. email addresses,
-   * mobile numbers, etc.
-   *
-   * @param to the identifiers representing the recipients for the interaction, e.g. email
-   *     addresses, mobile numbers, etc
-   */
-  public void setTo(String[] to) {
-    this.to = StringUtils.arrayToDelimitedString(to, ";");
-  }
-
-  /**
-   * Set the interaction type.
-   *
-   * @param type the interaction type
-   */
-  public void setType(InteractionType type) {
-    this.type = type;
   }
 }

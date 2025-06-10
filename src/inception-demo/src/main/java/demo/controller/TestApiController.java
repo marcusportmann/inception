@@ -18,8 +18,8 @@ package demo.controller;
 
 import demo.model.CarType;
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -54,22 +54,22 @@ public interface TestApiController {
   @Operation(summary = "Test an API call", description = "Test an API call")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The API call was tested successfully"),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(responseCode = "204", description = "The API call was tested"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/test-api-call",
@@ -86,22 +86,22 @@ public interface TestApiController {
   @Operation(summary = "Test the exception handling", description = "Test the exception handling")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The exception handling was tested successfully"),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(responseCode = "204", description = "The exception handling was tested"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -190,7 +190,7 @@ public interface TestApiController {
   @Operation(summary = "Test returning an enum", description = "Test returning an enum")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The enum was returned"),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -217,7 +217,7 @@ public interface TestApiController {
   @Operation(summary = "Test returning an string", description = "Test returning a string")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The string was returned"),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -250,15 +250,15 @@ public interface TestApiController {
   @Operation(summary = "Test task execution", description = "Test task execution")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The task execution was tested successfully"),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(responseCode = "204", description = "The task execution was tested"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/test-task-execution",

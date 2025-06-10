@@ -17,7 +17,6 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WorkflowEngine;
-import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -29,4 +28,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface WorkflowEngineRepository extends JpaRepository<WorkflowEngine, UUID> {}
+public interface WorkflowEngineRepository extends JpaRepository<WorkflowEngine, String> {}

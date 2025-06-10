@@ -18,11 +18,11 @@ package digital.inception.scheduler.controller;
 
 import digital.inception.api.SecureApiController;
 import digital.inception.core.api.ApiUtil;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.scheduler.model.DuplicateJobException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.scheduler.exception.DuplicateJobException;
+import digital.inception.scheduler.exception.JobNotFoundException;
 import digital.inception.scheduler.model.Job;
-import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.service.SchedulerService;
 import java.util.List;
 import org.springframework.context.ApplicationContext;

@@ -17,6 +17,8 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.Workflow;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -26,4 +28,25 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface DocumentRepository extends JpaRepository<Document, UUID> {}
+public interface DocumentRepository extends JpaRepository<Document, UUID> {
+
+  /**
+   * Returns whether a document with the specified tenant ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the document is associated with
+   * @param documentId the ID for the document
+   * @return {@code true} if a document with the specified tenant ID and ID exists or {@code false}
+   *     otherwise
+   */
+  boolean existsByTenantIdAndId(UUID tenantId, UUID documentId);
+
+  /**
+   * Retrieve the document.
+   *
+   * @param tenantId the ID for the tenant the document is associated with
+   * @param id the ID for the document
+   * @return an Optional containing the document or an empty Optional if the document could not be
+   *     found
+   */
+  Optional<Document> findByTenantIdAndId(UUID tenantId, UUID id);
+}

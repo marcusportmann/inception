@@ -17,28 +17,33 @@
 package digital.inception.operations.service;
 
 import com.github.f4b6a3.uuid.UuidCreator;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionException;
+import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
+import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
+import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
+import digital.inception.operations.exception.WorkflowEngineNotFoundException;
+import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.model.CreateWorkflowRequest;
-import digital.inception.operations.model.DuplicateWorkflowDefinitionException;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
+import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionId;
-import digital.inception.operations.model.WorkflowDefinitionNotFoundException;
-import digital.inception.operations.model.WorkflowDefinitionVersionNotFoundException;
-import digital.inception.operations.model.WorkflowNotFoundException;
+import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
+import digital.inception.operations.persistence.jpa.WorkflowEngineRepository;
 import digital.inception.operations.store.WorkflowStore;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import java.time.OffsetDateTime;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -49,13 +54,16 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings("unused")
-public class WorkflowServiceImpl implements WorkflowService {
+public class WorkflowServiceImpl extends AbstractServiceBase implements WorkflowService {
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
+  /** The Workflow Definition Category Repository. */
+  private final WorkflowDefinitionCategoryRepository workflowDefinitionCategoryRepository;
 
   /** The Workflow Definition Repository. */
   private final WorkflowDefinitionRepository workflowDefinitionRepository;
+
+  /** The Workflow Engine Repository. */
+  private final WorkflowEngineRepository workflowEngineRepository;
 
   /** The Workflow Store. */
   private final WorkflowStore workflowStore;
@@ -63,56 +71,68 @@ public class WorkflowServiceImpl implements WorkflowService {
   /**
    * Constructs a new {@code WorkflowServiceImpl}.
    *
-   * @param validator the JSR-380 validator
+   * @param applicationContext the Spring application context
    * @param workflowStore the Workflow Store
+   * @param workflowDefinitionCategoryRepository the Workflow Definition Category Repository
    * @param workflowDefinitionRepository the Workflow Definition Repository
+   * @param workflowEngineRepository the Workflow Engine Repository
    */
   public WorkflowServiceImpl(
-      Validator validator,
-      WorkflowStore caseStore,
-      WorkflowDefinitionRepository workflowDefinitionRepository) {
-    this.validator = validator;
-    this.caseStore = caseStore;
+      ApplicationContext applicationContext,
+      WorkflowStore workflowStore,
+      WorkflowDefinitionCategoryRepository workflowDefinitionCategoryRepository,
+      WorkflowDefinitionRepository workflowDefinitionRepository,
+      WorkflowEngineRepository workflowEngineRepository) {
+    super(applicationContext);
+
+    this.workflowStore = workflowStore;
+    this.workflowDefinitionCategoryRepository = workflowDefinitionCategoryRepository;
     this.workflowDefinitionRepository = workflowDefinitionRepository;
+    this.workflowEngineRepository = workflowEngineRepository;
   }
 
   @Override
-  public boolean workflowDefinitionExists(String workflowDefinitionId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(workflowDefinitionId)) {
-      throw new InvalidArgumentException("workflowDefinitionId");
+  public Workflow createWorkflow(UUID tenantId, CreateWorkflowRequest createWorkflowRequest)
+      throws InvalidArgumentException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
+
+    validateArgument("createWorkflowRequest", createWorkflowRequest);
 
     try {
-      return workflowDefinitionRepository.existsById(workflowDefinitionId);
+      Optional<WorkflowDefinition> workflowDefinitionOptional =
+          workflowDefinitionRepository.findLatestVersionById(
+              createWorkflowRequest.getDefinitionId());
+
+      if (workflowDefinitionOptional.isEmpty()) {
+        throw new WorkflowDefinitionNotFoundException(createWorkflowRequest.getDefinitionId());
+      }
+
+      WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
+
+      Workflow workflow =
+          new Workflow(
+              UuidCreator.getTimeOrderedEpoch(),
+              tenantId,
+              createWorkflowRequest.getParentId(),
+              workflowDefinition.getId(),
+              workflowDefinition.getVersion(),
+              WorkflowStatus.IN_PROGRESS,
+              createWorkflowRequest.getData());
+
+      return workflowStore.createWorkflow(tenantId, workflow);
+    } catch (WorkflowDefinitionNotFoundException e) {
+      throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to check whether the case definition (" + workflowDefinitionId + ") exists", e);
-    }
-  }
-
-  @Override
-  public boolean workflowDefinitionVersionExists(
-      String workflowDefinitionId, int workflowDefinitionVersion)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(workflowDefinitionId)) {
-      throw new InvalidArgumentException("workflowDefinitionId");
-    }
-
-    if (workflowDefinitionVersion <= 0) {
-      throw new InvalidArgumentException("workflowDefinitionVersion");
-    }
-
-    try {
-      return workflowDefinitionRepository.existsById(
-          new WorkflowDefinitionId(workflowDefinitionId, workflowDefinitionVersion));
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to check whether the case definition ("
-              + workflowDefinitionId
-              + ") version ("
-              + workflowDefinitionVersion
-              + ") exists",
+          "Failed to create the workflow ("
+              + createWorkflowRequest.getDefinitionId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
@@ -122,15 +142,7 @@ public class WorkflowServiceImpl implements WorkflowService {
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionException,
           ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    validateWorkflowDefinition(workflowDefinition);
-
-    if (!Objects.equals(tenantId, association.getTenantId())) {
-      throw new InvalidArgumentException("association.tenantId");
-    }
+    validateArgument("workflowDefinition", workflowDefinition);
 
     try {
       if (workflowDefinitionRepository.existsById(workflowDefinition.getId())) {
@@ -144,54 +156,68 @@ public class WorkflowServiceImpl implements WorkflowService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the case definition (" + workflowDefinition.getId() + ")", e);
+          "Failed to create the workflow definition (" + workflowDefinition.getId() + ")", e);
     }
   }
 
   @Override
-  public Workflow createWorkflow(CreateWorkflowRequest createWorkflowRequest, String createdBy)
+  public void createWorkflowDefinitionCategory(
+      WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,
-          WorkflowDefinitionNotFoundException,
+          DuplicateWorkflowDefinitionCategoryException,
           ServiceUnavailableException {
-    validateCreateCaseRequest(createCaseRequest);
+    validateArgument("workflowDefinitionCategory", workflowDefinitionCategory);
 
     try {
-      Optional<WorkflowDefinition> workflowDefinitionOptional =
-          workflowDefinitionRepository.findLatestVersionById(createCaseRequest.getDefinitionId());
-
-      if (workflowDefinitionOptional.isEmpty()) {
-        throw new WorkflowDefinitionNotFoundException(createCaseRequest.getDefinitionId());
+      if (workflowDefinitionCategoryRepository.existsById(workflowDefinitionCategory.getId())) {
+        throw new DuplicateWorkflowDefinitionCategoryException(workflowDefinitionCategory.getId());
       }
 
-      WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
-
-      Workflow theCase =
-          new Workflow(
-              UuidCreator.getTimeOrderedEpoch(),
-              createCaseRequest.getParentId(),
-              workflowDefinition.getId(),
-              workflowDefinition.getVersion(),
-              WorkflowStatus.IN_PROGRESS,
-              createCaseRequest.getData(),
-              createdBy);
-
-      return caseStore.createCase(theCase);
-    } catch (WorkflowDefinitionNotFoundException e) {
+      workflowDefinitionCategoryRepository.saveAndFlush(workflowDefinitionCategory);
+    } catch (DuplicateWorkflowDefinitionCategoryException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the case (" + createCaseRequest.getDefinitionId() + ")", e);
+          "Failed to create the workflow definition category ("
+              + workflowDefinitionCategory.getId()
+              + ")",
+          e);
     }
   }
 
   @Override
-  public void deleteCase(UUID caseId)
+  public void createWorkflowEngine(WorkflowEngine workflowEngine)
+      throws InvalidArgumentException,
+          DuplicateWorkflowEngineException,
+          ServiceUnavailableException {
+    validateArgument("workflowEngine", workflowEngine);
+
+    try {
+      if (workflowEngineRepository.existsById(workflowEngine.getId())) {
+        throw new DuplicateWorkflowEngineException(workflowEngine.getId());
+      }
+
+      workflowEngineRepository.saveAndFlush(workflowEngine);
+    } catch (DuplicateWorkflowEngineException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the workflow engine (" + workflowEngine.getId() + ")", e);
+    }
+  }
+
+  @Override
+  public void deleteWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
-    if (caseId == null) {
-      throw new InvalidArgumentException("caseId");
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    caseStore.deleteCase(caseId);
+    if (workflowId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
+    workflowStore.deleteWorkflow(tenantId, workflowId);
   }
 
   @Override
@@ -213,7 +239,33 @@ public class WorkflowServiceImpl implements WorkflowService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the case definition (" + workflowDefinitionId + ")", e);
+          "Failed to delete the workflow definition (" + workflowDefinitionId + ")", e);
+    }
+  }
+
+  @Override
+  public void deleteWorkflowDefinitionCategory(String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
+    }
+
+    try {
+      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinitionCategoryId)) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      workflowDefinitionCategoryRepository.deleteById(workflowDefinitionCategoryId);
+    } catch (WorkflowDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ")",
+          e);
     }
   }
 
@@ -245,7 +297,7 @@ public class WorkflowServiceImpl implements WorkflowService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the case definition ("
+          "Failed to delete the workflow definition ("
               + workflowDefinitionId
               + ") version ("
               + workflowDefinitionVersion
@@ -255,13 +307,40 @@ public class WorkflowServiceImpl implements WorkflowService {
   }
 
   @Override
-  public Workflow getCase(UUID caseId)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
-    if (caseId == null) {
-      throw new InvalidArgumentException("caseId");
+  public void deleteWorkflowEngine(String workflowEngineId)
+      throws InvalidArgumentException,
+          WorkflowEngineNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowEngineId)) {
+      throw new InvalidArgumentException("workflowEngineId");
     }
 
-    return caseStore.getCase(caseId);
+    try {
+      if (!workflowEngineRepository.existsById(workflowEngineId)) {
+        throw new WorkflowEngineNotFoundException(workflowEngineId);
+      }
+
+      workflowEngineRepository.deleteById(workflowEngineId);
+    } catch (WorkflowEngineNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow engine (" + workflowEngineId + ")", e);
+    }
+  }
+
+  @Override
+  public Workflow getWorkflow(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (workflowId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
+    return workflowStore.getWorkflow(tenantId, workflowId);
   }
 
   @Override
@@ -286,8 +365,38 @@ public class WorkflowServiceImpl implements WorkflowService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the latest version of the case definition ("
+          "Failed to retrieve the latest version of the workflow definition ("
               + workflowDefinitionId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowDefinitionCategory getWorkflowDefinitionCategory(
+      String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
+    }
+
+    try {
+      Optional<WorkflowDefinitionCategory> workflowDefinitionCategoryOptional =
+          workflowDefinitionCategoryRepository.findById(workflowDefinitionCategoryId);
+
+      if (workflowDefinitionCategoryOptional.isEmpty()) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      return workflowDefinitionCategoryOptional.get();
+    } catch (WorkflowDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow definition category ("
+              + workflowDefinitionCategoryId
               + ")",
           e);
     }
@@ -322,7 +431,7 @@ public class WorkflowServiceImpl implements WorkflowService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the case definition ("
+          "Failed to retrieve the workflow definition ("
               + workflowDefinitionId
               + ") version ("
               + workflowDefinitionVersion
@@ -332,30 +441,62 @@ public class WorkflowServiceImpl implements WorkflowService {
   }
 
   @Override
-  public Workflow updateCase(UpdateWorkflowRequest updateCaseRequest, String updatedBy)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
-    validateUpdateCaseRequest(updateCaseRequest);
+  public WorkflowEngine getWorkflowEngine(String workflowEngineId)
+      throws InvalidArgumentException,
+          WorkflowEngineNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowEngineId)) {
+      throw new InvalidArgumentException("workflowEngineId");
+    }
 
     try {
-      Workflow theCase = caseStore.getCase(updateCaseRequest.getId());
+      Optional<WorkflowEngine> workflowEngineOptional =
+          workflowEngineRepository.findById(workflowEngineId);
 
-      if (StringUtils.hasText(updateCaseRequest.getData())) {
-        theCase.setData(updateCaseRequest.getData());
+      if (workflowEngineOptional.isEmpty()) {
+        throw new WorkflowEngineNotFoundException(workflowEngineId);
       }
 
-      if (updateCaseRequest.getStatus() != null) {
-        theCase.setStatus(updateCaseRequest.getStatus());
+      return workflowEngineOptional.get();
+    } catch (WorkflowEngineNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow engine (" + workflowEngineId + ")", e);
+    }
+  }
+
+  @Override
+  public Workflow updateWorkflow(UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("updateWorkflowRequest", updateWorkflowRequest);
+
+    try {
+      Workflow workflow = workflowStore.getWorkflow(tenantId, updateWorkflowRequest.getId());
+
+      if (StringUtils.hasText(updateWorkflowRequest.getData())) {
+        workflow.setData(updateWorkflowRequest.getData());
       }
 
-      theCase.setUpdated(OffsetDateTime.now());
-      theCase.setUpdatedBy(updatedBy);
+      if (updateWorkflowRequest.getStatus() != null) {
+        workflow.setStatus(updateWorkflowRequest.getStatus());
+      }
 
-      return caseStore.updateCase(theCase);
+      return workflowStore.updateWorkflow(tenantId, workflow);
     } catch (WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the case (" + updateCaseRequest.getId() + ")", e);
+          "Failed to update the workflow ("
+              + updateWorkflowRequest.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -364,7 +505,7 @@ public class WorkflowServiceImpl implements WorkflowService {
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
-    validateWorkflowDefinition(workflowDefinition);
+    validateArgument("workflowDefinition", workflowDefinition);
 
     try {
       if (!workflowDefinitionRepository.existsById(workflowDefinition.getId())) {
@@ -379,65 +520,128 @@ public class WorkflowServiceImpl implements WorkflowService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the case definition (" + workflowDefinition.getId() + ")", e);
+          "Failed to update the workflow definition (" + workflowDefinition.getId() + ")", e);
     }
   }
 
-  private void validateCase(Workflow theCase) throws InvalidArgumentException {
-    if (theCase == null) {
-      throw new InvalidArgumentException("case");
-    }
+  @Override
+  public void updateWorkflowDefinitionCategory(
+      WorkflowDefinitionCategory workflowDefinitionCategory)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("workflowDefinitionCategory", workflowDefinitionCategory);
 
-    Set<ConstraintViolation<Workflow>> constraintViolations = validator.validate(theCase);
+    try {
+      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinitionCategory.getId())) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategory.getId());
+      }
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "case", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateWorkflowDefinition(WorkflowDefinition workflowDefinition)
-      throws InvalidArgumentException {
-    if (workflowDefinition == null) {
-      throw new InvalidArgumentException("workflowDefinition");
-    }
-
-    Set<ConstraintViolation<WorkflowDefinition>> constraintViolations =
-        validator.validate(workflowDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "workflowDefinition", ValidationError.toValidationErrors(constraintViolations));
+      workflowDefinitionCategoryRepository.saveAndFlush(workflowDefinitionCategory);
+    } catch (WorkflowDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the workflow definition category ("
+              + workflowDefinitionCategory.getId()
+              + ")",
+          e);
     }
   }
 
-  private void validateCreateCaseRequest(CreateWorkflowRequest createCaseRequest)
-      throws InvalidArgumentException {
-    if (createCaseRequest == null) {
-      throw new InvalidArgumentException("createCaseRequest");
-    }
+  @Override
+  public void updateWorkflowEngine(WorkflowEngine workflowEngine)
+      throws InvalidArgumentException,
+          WorkflowEngineNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("workflowEngine", workflowEngine);
 
-    Set<ConstraintViolation<CreateWorkflowRequest>> constraintViolations =
-        validator.validate(createCaseRequest);
+    try {
+      if (!workflowEngineRepository.existsById(workflowEngine.getId())) {
+        throw new WorkflowEngineNotFoundException(workflowEngine.getId());
+      }
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "createCaseRequest", ValidationError.toValidationErrors(constraintViolations));
+      workflowEngineRepository.saveAndFlush(workflowEngine);
+    } catch (WorkflowEngineNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the workflow engine (" + workflowEngine.getId() + ")", e);
     }
   }
 
-  private void validateUpdateCaseRequest(UpdateWorkflowRequest updateCaseRequest)
-      throws InvalidArgumentException {
-    if (updateCaseRequest == null) {
-      throw new InvalidArgumentException("updateCaseRequest");
+  @Override
+  public boolean workflowDefinitionCategoryExists(String workflowDefinitionCategoryId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }
 
-    Set<ConstraintViolation<UpdateWorkflowRequest>> constraintViolations =
-        validator.validate(updateCaseRequest);
+    try {
+      return workflowDefinitionCategoryRepository.existsById(workflowDefinitionCategoryId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ") exists",
+          e);
+    }
+  }
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "updateCaseRequest", ValidationError.toValidationErrors(constraintViolations));
+  @Override
+  public boolean workflowDefinitionExists(String workflowDefinitionId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionId)) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    try {
+      return workflowDefinitionRepository.existsById(workflowDefinitionId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow definition (" + workflowDefinitionId + ") exists",
+          e);
+    }
+  }
+
+  @Override
+  public boolean workflowDefinitionVersionExists(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionId)) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    if (workflowDefinitionVersion <= 0) {
+      throw new InvalidArgumentException("workflowDefinitionVersion");
+    }
+
+    try {
+      return workflowDefinitionRepository.existsById(
+          new WorkflowDefinitionId(workflowDefinitionId, workflowDefinitionVersion));
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow definition ("
+              + workflowDefinitionId
+              + ") version ("
+              + workflowDefinitionVersion
+              + ") exists",
+          e);
+    }
+  }
+
+  @Override
+  public boolean workflowEngineExists(String workflowEngineId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowEngineId)) {
+      throw new InvalidArgumentException("workflowEngineId");
+    }
+
+    try {
+      return workflowEngineRepository.existsById(workflowEngineId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow engine (" + workflowEngineId + ") exists", e);
     }
   }
 }

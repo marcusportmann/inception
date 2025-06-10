@@ -16,21 +16,21 @@
 
 package digital.inception.executor.ws;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.executor.model.BatchTasksNotFoundException;
-import digital.inception.executor.model.DuplicateTaskTypeException;
-import digital.inception.executor.model.InvalidTaskStatusException;
+import digital.inception.executor.exception.BatchTasksNotFoundException;
+import digital.inception.executor.exception.DuplicateTaskTypeException;
+import digital.inception.executor.exception.InvalidTaskStatusException;
+import digital.inception.executor.exception.TaskNotFoundException;
+import digital.inception.executor.exception.TaskTypeNotFoundException;
 import digital.inception.executor.model.QueueTaskRequest;
 import digital.inception.executor.model.Task;
 import digital.inception.executor.model.TaskEvent;
-import digital.inception.executor.model.TaskNotFoundException;
 import digital.inception.executor.model.TaskSortBy;
 import digital.inception.executor.model.TaskStatus;
 import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskType;
-import digital.inception.executor.model.TaskTypeNotFoundException;
 import digital.inception.executor.service.ExecutorService;
 import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;

@@ -66,7 +66,7 @@ public class InteractionSourceBase implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The unique identifier for the tenant the interaction source is associated with. */
+  /** The ID for the tenant the interaction source is associated with. */
   @NotNull
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
@@ -91,7 +91,7 @@ public class InteractionSourceBase implements Serializable {
   /**
    * Constructs a new {@code InteractionSourceBase}.
    *
-   * @param id the unique identifier for the interaction source
+   * @param id the ID for the interaction source
    * @param type the interaction source type
    */
   protected InteractionSourceBase(String id, InteractionSourceType type) {
@@ -102,7 +102,7 @@ public class InteractionSourceBase implements Serializable {
   /**
    * Constructs a new {@code InteractionSourceBase}.
    *
-   * @param id the unique identifier for the interaction source
+   * @param id the ID for the interaction source
    * @param type the type for the interaction source
    * @param name the name of the interaction source
    */
@@ -138,9 +138,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the interaction source.
+   * Returns the ID for the interaction source.
    *
-   * @return the unique identifier for the interaction source
+   * @return the ID for the interaction source
    */
   public String getId() {
     return id;
@@ -156,9 +156,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the tenant the interaction source is associated with.
+   * Returns the ID for the tenant the interaction source is associated with.
    *
-   * @return the unique identifier for the tenant the interaction source is associated with
+   * @return the ID for the tenant the interaction source is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -184,9 +184,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the interaction source.
+   * Set the ID for the interaction source.
    *
-   * @param id the unique identifier for the interaction source
+   * @param id the ID for the interaction source
    */
   public void setId(String id) {
     this.id = id;
@@ -202,9 +202,9 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the tenant the interaction source is associated with.
+   * Set the ID for the tenant the interaction source is associated with.
    *
-   * @param tenantId the unique identifier for the tenant the interaction source is associated with
+   * @param tenantId the ID for the tenant the interaction source is associated with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;

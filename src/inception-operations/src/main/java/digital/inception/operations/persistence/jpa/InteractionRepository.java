@@ -42,21 +42,43 @@ public interface InteractionRepository
    * @return {@code true} if an interaction with the specified source reference for the interaction
    *     source with the specified ID exists or {@code false} otherwise
    */
-  boolean existsBySourceIdAndSourceReference(String sourceId, String sourceReference);
+  boolean existsBySourceIdAndSourceReference(UUID sourceId, String sourceReference);
+
+  /**
+   * Returns whether an interaction with the specified tenant ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param interactionSourceId the ID for the interaction
+   * @return {@code true} if an interaction with the specified tenant ID and ID exists or {@code
+   *     false} otherwise
+   */
+  boolean existsByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
+
+  /**
+   * Retrieve the interaction.
+   *
+   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param id the ID for the interaction
+   * @return an Optional containing the interaction or an empty Optional if the interaction could
+   *     not be found
+   */
+  Optional<Interaction> findByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
    * Retrieve the ID for the interaction with the specified source reference and source ID.
    *
+   * @param tenantId the ID for the tenant the interaction is associated with
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference
    * @return an Optional containing the ID for the interaction with the specified source reference
    *     and source ID or an empty optional if the interaction could not be found
    */
   @Query(
-      "select i.id from Interaction i where i.sourceId = :sourceId "
+      "select i.id from Interaction i where i.tenantId = :tenantId and i.sourceId = :sourceId "
           + "and i.sourceReference = :sourceReference")
-  Optional<UUID> getIdBySourceIdAndSourceReference(
-      @Param("sourceId") String sourceId, @Param("sourceReference") String sourceReference);
+  Optional<UUID> getIdByTenantIdAndSourceIdAndSourceReference(
+      @Param("tenantId") UUID tenantId,
+      @Param("sourceId") UUID sourceId, @Param("sourceReference") String sourceReference);
 
   /**
    * Retrieve the subject for the interaction.

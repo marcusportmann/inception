@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import digital.inception.security.exception.UserNotFoundException;
 import digital.inception.security.service.SecurityService;
 import java.util.ArrayList;
 import java.util.List;

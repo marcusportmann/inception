@@ -16,32 +16,32 @@
 
 package digital.inception.operations.service;
 
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
+import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
+import digital.inception.operations.exception.DocumentNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
+import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
-import digital.inception.operations.model.DocumentDefinitionNotFoundException;
-import digital.inception.operations.model.DocumentNotFoundException;
-import digital.inception.operations.model.DuplicateDocumentDefinitionException;
+import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.UpdateDocumentRequest;
+import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
 import digital.inception.operations.store.DocumentStore;
 import java.security.MessageDigest;
-import java.time.OffsetDateTime;
 import java.util.Base64;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-// TODO: Change this to work the same as the Workflow Service where we use CreateDocumentRequest and
-// UpdateDocumentRequest
-//
-// TODO: Figure out how to do this with WorkflowDocument???
+// TODO: Add methods to link and unlink documents from a workflow, i.e. manage workflow documents
+// (WorkflowDocument).
 
 /**
  * The {@code DocumentServiceImpl} class provides the Document Service implementation.
@@ -50,6 +50,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class DocumentServiceImpl extends AbstractServiceBase implements DocumentService {
+
+  /** The Document Definition Category Repository. */
+  private final DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository;
 
   /** The Document Definition Repository. */
   private final DocumentDefinitionRepository documentDefinitionRepository;
@@ -62,21 +65,23 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
    *
    * @param applicationContext the Spring application context
    * @param documentStore the Document Store
+   * @param documentDefinitionCategoryRepository the Document Definition Category Repository
    * @param documentDefinitionRepository the Document Definition Repository
    */
   public DocumentServiceImpl(
       ApplicationContext applicationContext,
       DocumentStore documentStore,
+      DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository,
       DocumentDefinitionRepository documentDefinitionRepository) {
     super(applicationContext);
 
     this.documentStore = documentStore;
+    this.documentDefinitionCategoryRepository = documentDefinitionCategoryRepository;
     this.documentDefinitionRepository = documentDefinitionRepository;
   }
 
   @Override
-  public Document createDocument(
-      UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
+  public Document createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
@@ -86,19 +91,12 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
     validateArgument("createDocumentRequest", createDocumentRequest);
 
-    if (!StringUtils.hasText(createdBy)) {
-      throw new InvalidArgumentException("createdBy");
-    }
-
     try {
-      if (documentDefinitionRepository.existsById(
-          createDocumentRequest.getDefinitionId())) {
+      if (documentDefinitionRepository.existsById(createDocumentRequest.getDefinitionId())) {
         throw new DocumentDefinitionNotFoundException(createDocumentRequest.getDefinitionId());
       }
 
       Document document = new Document(createDocumentRequest.getDefinitionId());
-      document.setCreated(OffsetDateTime.now());
-      document.setCreatedBy(createdBy);
       document.setData(createDocumentRequest.getData());
       document.setExpiryDate(createDocumentRequest.getExpiryDate());
       document.setExternalReference(createDocumentRequest.getExternalReference());
@@ -131,8 +129,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("documentDefinition", documentDefinition);
 
     try {
-      if (documentDefinitionRepository.existsById(
-           documentDefinition.getId())) {
+      if (documentDefinitionRepository.existsById(documentDefinition.getId())) {
         throw new DuplicateDocumentDefinitionException(documentDefinition.getId());
       }
 
@@ -142,6 +139,31 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to create the document definition (" + documentDefinition.getId() + ")", e);
+    }
+  }
+
+  @Override
+  public void createDocumentDefinitionCategory(
+      DocumentDefinitionCategory documentDefinitionCategory)
+      throws InvalidArgumentException,
+          DuplicateDocumentDefinitionCategoryException,
+          ServiceUnavailableException {
+    validateArgument("documentDefinitionCategory", documentDefinitionCategory);
+
+    try {
+      if (documentDefinitionCategoryRepository.existsById(documentDefinitionCategory.getId())) {
+        throw new DuplicateDocumentDefinitionCategoryException(documentDefinitionCategory.getId());
+      }
+
+      documentDefinitionCategoryRepository.saveAndFlush(documentDefinitionCategory);
+    } catch (DuplicateDocumentDefinitionCategoryException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document definition category ("
+              + documentDefinitionCategory.getId()
+              + ")",
+          e);
     }
   }
 
@@ -179,6 +201,32 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to delete the document definition (" + documentDefinitionId + ")", e);
+    }
+  }
+
+  @Override
+  public void deleteDocumentDefinitionCategory(String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
+    try {
+      if (!documentDefinitionCategoryRepository.existsById(documentDefinitionCategoryId)) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
+      }
+
+      documentDefinitionCategoryRepository.deleteById(documentDefinitionCategoryId);
+    } catch (DocumentDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document definition category ("
+              + documentDefinitionCategoryId
+              + ")",
+          e);
     }
   }
 
@@ -239,13 +287,67 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document updateDocument(
-      UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
+  public DocumentDefinitionCategory getDocumentDefinitionCategory(
+      String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
+    try {
+      Optional<DocumentDefinitionCategory> documentDefinitionCategoryOptional =
+          documentDefinitionCategoryRepository.findById(documentDefinitionCategoryId);
+
+      if (documentDefinitionCategoryOptional.isEmpty()) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
+      }
+
+      return documentDefinitionCategoryOptional.get();
+    } catch (DocumentDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document definition category ("
+              + documentDefinitionCategoryId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Document updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
 
-    // USE CREATE DOCUMENT AS A BASIS
+    validateArgument("updateDocumentRequest", updateDocumentRequest);
 
-    return null;
+    try {
+      Document document = documentStore.getDocument(tenantId, updateDocumentRequest.getId());
+
+      document.setData(updateDocumentRequest.getData());
+      document.setExpiryDate(updateDocumentRequest.getExpiryDate());
+      document.setExternalReference(updateDocumentRequest.getExternalReference());
+      document.setFileType(updateDocumentRequest.getFileType());
+      document.setIssueDate(updateDocumentRequest.getIssueDate());
+      document.setName(updateDocumentRequest.getName());
+      document.setSourceDocumentId(updateDocumentRequest.getSourceDocumentId());
+
+      return documentStore.updateDocument(tenantId, document);
+    } catch (DocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the document ("
+              + updateDocumentRequest.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -266,6 +368,31 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to update the document definition (" + documentDefinition.getId() + ")", e);
+    }
+  }
+
+  @Override
+  public void updateDocumentDefinitionCategory(
+      DocumentDefinitionCategory documentDefinitionCategory)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("documentDefinitionCategory", documentDefinitionCategory);
+
+    try {
+      if (!documentDefinitionCategoryRepository.existsById(documentDefinitionCategory.getId())) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategory.getId());
+      }
+
+      documentDefinitionCategoryRepository.saveAndFlush(documentDefinitionCategory);
+    } catch (DocumentDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the document definition category ("
+              + documentDefinitionCategory.getId()
+              + ")",
+          e);
     }
   }
 

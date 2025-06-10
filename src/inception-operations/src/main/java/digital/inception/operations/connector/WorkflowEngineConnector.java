@@ -26,6 +26,5 @@ import digital.inception.operations.model.Workflow;
  */
 public interface WorkflowEngineConnector {
 
-  Workflow startWorkflow();
-
+  // Workflow startWorkflow();
 }

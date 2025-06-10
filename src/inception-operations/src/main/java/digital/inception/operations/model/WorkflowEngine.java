@@ -113,6 +113,19 @@ public class WorkflowEngine implements Serializable {
    *
    * @param id the ID for the workflow engine
    * @param name the name of the workflow engine
+   * @param attributes the attributes for the workflow engine
+   */
+  public WorkflowEngine(String id, String name, List<WorkflowEngineAttribute> attributes) {
+    this.id = id;
+    this.name = name;
+    setAttributes(attributes);
+  }
+
+  /**
+   * Constructs a new {@code WorkflowEngine}.
+   *
+   * @param id the ID for the workflow engine
+   * @param name the name of the workflow engine
    */
   public WorkflowEngine(String id, String name) {
     this.id = id;
@@ -240,6 +253,17 @@ public class WorkflowEngine implements Serializable {
    */
   public void removeAttributeWithName(String name) {
     attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getName(), name));
+  }
+
+  /**
+   * Set the attributes for the workflow engine.
+   *
+   * @param attributes the attributes for the workflow engine
+   */
+  public void setAttributes(List<WorkflowEngineAttribute> attributes) {
+    attributes.forEach(attribute -> attribute.setWorkflowEngine(this));
+    this.attributes.clear();
+    this.attributes.addAll(attributes);
   }
 
   /**

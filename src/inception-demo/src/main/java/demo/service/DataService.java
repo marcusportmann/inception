@@ -18,8 +18,8 @@ package demo.service;
 
 import demo.model.Data;
 import demo.model.ReactiveData;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import java.util.List;
 import reactor.core.publisher.Flux;
 

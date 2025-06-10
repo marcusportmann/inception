@@ -17,7 +17,6 @@
 package digital.inception.server.resource.test;
 
 import digital.inception.server.resource.ResourceServerConfiguration;
-import digital.inception.test.InceptionExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
@@ -37,7 +36,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  */
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ExtendWith(SpringExtension.class)
-@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {ResourceServerConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})

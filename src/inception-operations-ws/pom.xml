@@ -5,6 +5,10 @@
 
   <artifactId>inception-operations-ws</artifactId>
   <name>inception-operations-ws</name>
+  <properties>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+  </properties>
 
   <parent>
     <groupId>digital.inception</groupId>
@@ -55,12 +59,10 @@
             <configuration>
               <rules>
                 <dependencyConvergence>
-<!--                  <excludes>-->
-<!--                    <exclude>com.google.guava:guava:[32,33)</exclude>-->
-<!--                    <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>-->
-<!--                    <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>-->
-<!--                    <exclude>org.cryptacular:cryptacular:[1,2)</exclude>-->
-<!--                  </excludes>-->
+                  <excludes>
+                    <exclude>com.azure:azure-json:[1,2)</exclude>
+                    <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
+                  </excludes>
                 </dependencyConvergence>
               </rules>
             </configuration>

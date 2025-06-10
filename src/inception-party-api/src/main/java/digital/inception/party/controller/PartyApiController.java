@@ -17,32 +17,32 @@
 package digital.inception.party.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.party.exception.AssociationNotFoundException;
+import digital.inception.party.exception.DuplicateAssociationException;
+import digital.inception.party.exception.DuplicateMandateException;
+import digital.inception.party.exception.DuplicateOrganizationException;
+import digital.inception.party.exception.DuplicatePersonException;
+import digital.inception.party.exception.MandateNotFoundException;
+import digital.inception.party.exception.OrganizationNotFoundException;
+import digital.inception.party.exception.PartyNotFoundException;
+import digital.inception.party.exception.PersonNotFoundException;
 import digital.inception.party.model.Association;
-import digital.inception.party.model.AssociationNotFoundException;
 import digital.inception.party.model.AssociationSortBy;
 import digital.inception.party.model.AssociationsForParty;
-import digital.inception.party.model.DuplicateAssociationException;
-import digital.inception.party.model.DuplicateMandateException;
-import digital.inception.party.model.DuplicateOrganizationException;
-import digital.inception.party.model.DuplicatePersonException;
 import digital.inception.party.model.EntityType;
 import digital.inception.party.model.Mandate;
-import digital.inception.party.model.MandateNotFoundException;
 import digital.inception.party.model.MandateSortBy;
 import digital.inception.party.model.MandatesForParty;
 import digital.inception.party.model.Organization;
-import digital.inception.party.model.OrganizationNotFoundException;
 import digital.inception.party.model.OrganizationSortBy;
 import digital.inception.party.model.Organizations;
 import digital.inception.party.model.Parties;
 import digital.inception.party.model.Party;
-import digital.inception.party.model.PartyNotFoundException;
 import digital.inception.party.model.PartySortBy;
 import digital.inception.party.model.Person;
-import digital.inception.party.model.PersonNotFoundException;
 import digital.inception.party.model.PersonSortBy;
 import digital.inception.party.model.Persons;
 import digital.inception.party.model.Snapshots;
@@ -89,9 +89,7 @@ public interface PartyApiController {
   @Operation(summary = "Create the association", description = "Create the association")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The association was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The association was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -169,7 +167,7 @@ public interface PartyApiController {
   @Operation(summary = "Create the mandate", description = "Create the mandate")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The mandate was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The mandate was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -246,9 +244,7 @@ public interface PartyApiController {
   @Operation(summary = "Create the organization", description = "Create the organization")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The organization was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The organization was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -315,7 +311,7 @@ public interface PartyApiController {
   @Operation(summary = "Create the person", description = "Create the person")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The person was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The person was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -382,9 +378,7 @@ public interface PartyApiController {
   @Operation(summary = "Delete the association", description = "Delete the association")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The association was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The association was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -452,7 +446,7 @@ public interface PartyApiController {
   @Operation(summary = "Delete the mandate", description = "Delete the mandate")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The mandate was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The mandate was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -517,9 +511,7 @@ public interface PartyApiController {
   @Operation(summary = "Delete the organization", description = "Delete the organization")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The organization was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The organization was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -587,7 +579,7 @@ public interface PartyApiController {
   @Operation(summary = "Delete the person", description = "Delete the person")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The person was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The person was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -653,7 +645,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the association", description = "Retrieve the association")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The association was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -728,7 +720,9 @@ public interface PartyApiController {
       description = "Retrieve the associations for the party")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The associations for the party were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -810,7 +804,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the mandate", description = "Retrieve the mandate")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The mandate was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -882,7 +876,9 @@ public interface PartyApiController {
       description = "Retrieve the mandates for the party")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The mandates for the party were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -962,7 +958,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the organization", description = "Retrieve the organization")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The organization was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1034,7 +1030,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the organizations", description = "Retrieve the organizations")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The organizations were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1112,7 +1108,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the parties", description = "Retrieve the parties")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The parties were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1183,7 +1179,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the party", description = "Retrieve the party")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The party was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1249,7 +1245,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the person", description = "Retrieve the person")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The person was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1318,7 +1314,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the persons", description = "Retrieve the persons")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The persons were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1394,7 +1390,7 @@ public interface PartyApiController {
   @Operation(summary = "Retrieve the snapshots", description = "Retrieve the snapshots")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The snapshots were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1474,9 +1470,7 @@ public interface PartyApiController {
   @Operation(summary = "Update the association", description = "Update the association")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The association was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The association was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1555,7 +1549,7 @@ public interface PartyApiController {
   @Operation(summary = "Update the mandate", description = "Update the mandate")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The mandate was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The mandate was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1630,9 +1624,7 @@ public interface PartyApiController {
   @Operation(summary = "Update the organization", description = "Update the organization")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The organization was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The organization was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1706,7 +1698,7 @@ public interface PartyApiController {
   @Operation(summary = "Update the person", description = "Update the person")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The person was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The person was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

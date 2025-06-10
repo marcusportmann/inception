@@ -316,6 +316,11 @@ public final class HtmlToMarkdown {
     return markdown.toString().trim();
   }
 
+  /**
+   * The main method.
+   *
+   * @param args the command-line arguments
+   */
   public static void main(String[] args) {
     String html =
         "<h1>Hello World</h1><p>This is a <strong>bold</strong> paragraph with a <a href=\"https://example.com\">link</a>.</p>";

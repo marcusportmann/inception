@@ -16,12 +16,12 @@
 
 package digital.inception.config.controller;
 
+import digital.inception.config.exception.ConfigNotFoundException;
 import digital.inception.config.model.Config;
-import digital.inception.config.model.ConfigNotFoundException;
 import digital.inception.config.model.ConfigSummary;
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,7 +60,7 @@ public interface ConfigApiController {
   @Operation(summary = "Delete the config", description = "Delete the config")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The config was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The config was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -115,7 +115,7 @@ public interface ConfigApiController {
   @Operation(summary = "Retrieve the config", description = "Retrieve the config")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The config was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -169,7 +169,7 @@ public interface ConfigApiController {
       description = "Retrieve all the config summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The config summaries were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -207,7 +207,7 @@ public interface ConfigApiController {
   @Operation(summary = "Retrieve the config value", description = "Retrieve the config value")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The config value was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -259,7 +259,7 @@ public interface ConfigApiController {
   @Operation(summary = "Retrieve all the configs", description = "Retrieve all the configs")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The configs were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -295,7 +295,7 @@ public interface ConfigApiController {
   @Operation(summary = "Set the config", description = "Set the config")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The config was set successfully"),
+        @ApiResponse(responseCode = "204", description = "The config was set"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

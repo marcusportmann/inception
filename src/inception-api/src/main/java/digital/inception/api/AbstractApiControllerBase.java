@@ -17,8 +17,8 @@
 package digital.inception.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ValidationError;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ValidationError;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.util.Set;

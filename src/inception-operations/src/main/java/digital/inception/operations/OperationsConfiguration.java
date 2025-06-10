@@ -57,7 +57,7 @@ public class OperationsConfiguration {
    * @return the operations entity manager factory bean associated with the application data source
    */
   @Bean
-  public LocalContainerEntityManagerFactoryBean codesEntityManagerFactory(
+  public LocalContainerEntityManagerFactoryBean operationsEntityManagerFactory(
       ApplicationContext applicationContext,
       @Qualifier("applicationDataSource") DataSource dataSource) {
     return JpaUtil.createEntityManager(

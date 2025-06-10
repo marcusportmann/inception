@@ -18,14 +18,16 @@ package digital.inception.test.archunit;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.lang.ArchRule;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * The {@code MongoRepositoryConventionsRules} class holds the ArchUnit rules that verify structural
  * conventions for Spring Data Mongo repository interfaces.
+ *
+ * @author Marcus Portmann
  */
-public class MongoRepositoryConventionsRules {
+public final class MongoRepositoryConventionsRules {
 
   /**
    * The ArchUnit rule that verifies that Spring Data Mongo repository interfaces are public, named
@@ -36,7 +38,7 @@ public class MongoRepositoryConventionsRules {
           .that()
           .areInterfaces()
           .and()
-          .areAssignableTo(MongoRepository.class)
+          .areAssignableTo("org.springframework.data.mongodb.repository.MongoRepository")
           .should()
           .bePublic() // 1 – must be public
           .andShould()
@@ -47,4 +49,19 @@ public class MongoRepositoryConventionsRules {
 
   /** Constructs a new {@code MongoRepositoryConventionsRules}. */
   public MongoRepositoryConventionsRules() {}
+
+  /**
+   * Check that the ArchUnit rules are being adhered to.
+   *
+   * @param classes the Java classes to check
+   */
+  public static void check(JavaClasses classes) {
+    try {
+      Class.forName("org.springframework.data.mongodb.repository.MongoRepository");
+    } catch (ClassNotFoundException ignored) {
+      return;
+    }
+
+    MONGO_REPOSITORY_INTERFACES_ARE_PUBLIC_FOLLOW_NAMING_AND_LOCATION.check(classes);
+  }
 }

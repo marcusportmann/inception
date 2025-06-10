@@ -18,8 +18,8 @@ package digital.inception.test.archunit;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.lang.ArchRule;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * The {@code JpaRepositoryConventionsRules} class holds the ArchUnit rules that verify structural
@@ -27,7 +27,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public class JpaRepositoryConventionsRules {
+public final class JpaRepositoryConventionsRules {
 
   /**
    * The ArchUnit rule that verifies that Spring Data JPA repository interfaces are public, named
@@ -38,7 +38,7 @@ public class JpaRepositoryConventionsRules {
           .that()
           .areInterfaces()
           .and()
-          .areAssignableTo(JpaRepository.class)
+          .areAssignableTo("org.springframework.data.jpa.repository.JpaRepository")
           .should()
           .bePublic() // 1 – must be public
           .andShould()
@@ -49,4 +49,19 @@ public class JpaRepositoryConventionsRules {
 
   /** Constructs a new {@code JpaRepositoryConventionsRules}. */
   public JpaRepositoryConventionsRules() {}
+
+  /**
+   * Check that the ArchUnit rules are being adhered to.
+   *
+   * @param classes the Java classes to check
+   */
+  public static void check(JavaClasses classes) {
+    try {
+      Class.forName("org.springframework.data.jpa.repository.JpaRepository");
+    } catch (ClassNotFoundException ignored) {
+      return;
+    }
+
+    JPA_REPOSITORY_INTERFACES_ARE_PUBLIC_FOLLOW_NAMING_AND_LOCATION.check(classes);
+  }
 }

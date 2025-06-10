@@ -24,7 +24,7 @@
 // import static org.junit.Assert.fail;
 //
 // import digital.inception.security.Attribute;
-// import digital.inception.security.model.AuthenticationFailedException;
+// import digital.inception.security.exception.AuthenticationFailedException;
 // import digital.inception.security.model.Group;
 // import digital.inception.security.model.GroupMember;
 // import digital.inception.security.model.GroupMemberType;
@@ -165,7 +165,7 @@
 //  }
 //
 //  /** Test the delete invalid user functionality. */
-//  @Test(expected = digital.inception.security.model.UserNotFoundException.class)
+//  @Test(expected = digital.inception.security.exception.UserNotFoundException.class)
 //  public void deleteInvalidUserTest() throws Exception {
 //    securityService.deleteUser(SAMPLE_LDAP_USER_DIRECTORY_ID, "INVALID");
 //  }

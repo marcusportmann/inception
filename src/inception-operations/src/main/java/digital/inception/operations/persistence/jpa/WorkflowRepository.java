@@ -17,6 +17,7 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Workflow;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -33,4 +34,25 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author Marcus Portmann
  */
 public interface WorkflowRepository
-    extends JpaRepository<Workflow, UUID>, JpaSpecificationExecutor<Workflow> {}
+    extends JpaRepository<Workflow, UUID>, JpaSpecificationExecutor<Workflow> {
+
+  /**
+   * Returns whether a workflow with the specified tenant ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param workflowId the ID for the workflow
+   * @return {@code true} if a workflow with the specified tenant ID and ID exists or {@code false}
+   *     otherwise
+   */
+  boolean existsByTenantIdAndId(UUID tenantId, UUID workflowId);
+
+  /**
+   * Retrieve the workflow.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param id the ID for the workflow
+   * @return an Optional containing the workflow or an empty Optional if the workflow could not be
+   *     found
+   */
+  Optional<Workflow> findByTenantIdAndId(UUID tenantId, UUID id);
+}

@@ -17,11 +17,11 @@
 package digital.inception.error.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.error.exception.ErrorReportNotFoundException;
 import digital.inception.error.model.ErrorReport;
-import digital.inception.error.model.ErrorReportNotFoundException;
 import digital.inception.error.model.ErrorReportSortBy;
 import digital.inception.error.model.ErrorReportSummaries;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,9 +63,7 @@ public interface ErrorApiController {
   @Operation(summary = "Create the error report", description = "Create the error report")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The error report was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The error report was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -114,7 +112,7 @@ public interface ErrorApiController {
   @Operation(summary = "Retrieve the error report", description = "Retrieve the error report")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The error report was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -182,7 +180,9 @@ public interface ErrorApiController {
       description = "Retrieve the error report summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The error report summaries were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

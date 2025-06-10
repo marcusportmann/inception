@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+import digital.inception.security.exception.InvalidConfigurationException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;

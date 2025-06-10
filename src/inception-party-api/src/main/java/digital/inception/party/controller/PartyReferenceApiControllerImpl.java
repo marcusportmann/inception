@@ -17,8 +17,8 @@
 package digital.inception.party.controller;
 
 import digital.inception.api.SecureApiController;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.party.model.*;
 import digital.inception.party.service.PartyReferenceService;
 import java.util.List;

@@ -22,4 +22,11 @@ package digital.inception.operations.connector;
  *
  * @author Marcus Portmann
  */
-public class FlowableEmbeddedConnector implements WorkflowEngineConnector {}
+public class FlowableEmbeddedConnector implements WorkflowEngineConnector {
+
+  /**
+   * Constructs a new {@code FlowableEmbeddedConnector}.
+   */
+  public FlowableEmbeddedConnector() {}
+
+}

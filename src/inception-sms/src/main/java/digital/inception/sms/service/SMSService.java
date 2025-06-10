@@ -16,10 +16,10 @@
 
 package digital.inception.sms.service;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.sms.exception.SMSNotFoundException;
 import digital.inception.sms.model.SMS;
-import digital.inception.sms.model.SMSNotFoundException;
 import digital.inception.sms.model.SMSStatus;
 import java.util.Optional;
 import java.util.UUID;

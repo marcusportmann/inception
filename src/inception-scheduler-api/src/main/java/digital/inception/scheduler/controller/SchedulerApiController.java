@@ -17,11 +17,11 @@
 package digital.inception.scheduler.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.scheduler.model.DuplicateJobException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.scheduler.exception.DuplicateJobException;
+import digital.inception.scheduler.exception.JobNotFoundException;
 import digital.inception.scheduler.model.Job;
-import digital.inception.scheduler.model.JobNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,7 +60,7 @@ public interface SchedulerApiController {
   @Operation(summary = "Create the job", description = "Create the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The job was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The job was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -117,7 +117,7 @@ public interface SchedulerApiController {
   @Operation(summary = "Delete the job", description = "Delete the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The job was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The job was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -172,7 +172,7 @@ public interface SchedulerApiController {
   @Operation(summary = "Retrieve the job", description = "Retrieve the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The job was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -227,7 +227,7 @@ public interface SchedulerApiController {
   @Operation(summary = "Retrieve the name of the job", description = "Retrieve the name of the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The name of the job was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -276,7 +276,7 @@ public interface SchedulerApiController {
   @Operation(summary = "Retrieve the jobs", description = "Retrieve the jobs")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The jobs were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -314,7 +314,7 @@ public interface SchedulerApiController {
   @Operation(summary = "Update the job", description = "Update the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The job was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The job was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

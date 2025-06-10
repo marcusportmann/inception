@@ -16,12 +16,14 @@
 
 package demo.service;
 
+import demo.exception.DuplicateCarException;
+import demo.exception.DuplicateVehicleException;
 import demo.model.Car;
 import demo.model.Cars;
 import demo.model.Vehicle;
 import demo.model.Vehicles;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 
 /**

@@ -16,6 +16,10 @@
 
 package digital.inception.security.model;
 
+import digital.inception.security.exception.AuthenticationFailedException;
+import digital.inception.security.exception.ExpiredPasswordException;
+import digital.inception.security.exception.UserLockedException;
+import digital.inception.security.exception.UserNotFoundException;
 import digital.inception.security.service.SecurityService;
 import java.util.UUID;
 import org.springframework.security.authentication.AuthenticationManager;

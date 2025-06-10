@@ -16,19 +16,23 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.model.DuplicateInteractionAttachmentException;
-import digital.inception.operations.model.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
+import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
-import digital.inception.operations.model.InteractionAttachmentNotFoundException;
-import digital.inception.operations.model.InteractionNotFoundException;
+import digital.inception.operations.model.InteractionAttachmentSortBy;
+import digital.inception.operations.model.InteractionAttachmentSummaries;
+import digital.inception.operations.model.InteractionAttachmentSummary;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionSummary;
 import digital.inception.operations.persistence.jpa.InteractionAttachmentRepository;
+import digital.inception.operations.persistence.jpa.InteractionAttachmentSummaryRepository;
 import digital.inception.operations.persistence.jpa.InteractionRepository;
 import digital.inception.operations.persistence.jpa.InteractionSummaryRepository;
 import jakarta.persistence.criteria.Predicate;
@@ -63,6 +67,9 @@ public class InternalInteractionStore implements InteractionStore {
   /** The Interaction Attachment Repository. */
   private final InteractionAttachmentRepository interactionAttachmentRepository;
 
+  /** The Interaction Attachment Summary Repository. */
+  private final InteractionAttachmentSummaryRepository interactionAttachmentSummaryRepository;
+
   /** The Interaction Repository. */
   private final InteractionRepository interactionRepository;
 
@@ -73,14 +80,17 @@ public class InternalInteractionStore implements InteractionStore {
    * Constructs a new {@code InternalInteractionStore}.
    *
    * @param interactionAttachmentRepository the Interaction Attachment Repository
+   * @param interactionAttachmentSummaryRepository the Interaction Attachment Summary Repository
    * @param interactionRepository the Interaction Repository
    * @param interactionSummaryRepository the Interaction Summary Repository
    */
   public InternalInteractionStore(
       InteractionAttachmentRepository interactionAttachmentRepository,
+      InteractionAttachmentSummaryRepository interactionAttachmentSummaryRepository,
       InteractionRepository interactionRepository,
       InteractionSummaryRepository interactionSummaryRepository) {
     this.interactionAttachmentRepository = interactionAttachmentRepository;
+    this.interactionAttachmentSummaryRepository = interactionAttachmentSummaryRepository;
     this.interactionRepository = interactionRepository;
     this.interactionSummaryRepository = interactionSummaryRepository;
   }
@@ -100,7 +110,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the interaction (" + interaction.getId() + ")", e);
+          "Failed to create the interaction ("
+              + interaction.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -120,7 +135,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the interaction attachment (" + interactionAttachment.getId() + ")", e);
+          "Failed to create the interaction attachment ("
+              + interactionAttachment.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -128,7 +148,7 @@ public class InternalInteractionStore implements InteractionStore {
   public void deleteInteraction(UUID tenantId, UUID interactionId)
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
-      if (!interactionRepository.existsById(interactionId)) {
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
         throw new InteractionNotFoundException(interactionId);
       }
 
@@ -137,7 +157,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the interaction (" + interactionId + ")", e);
+          "Failed to delete the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -145,7 +170,8 @@ public class InternalInteractionStore implements InteractionStore {
   public void deleteInteractionAttachment(UUID tenantId, UUID interactionAttachmentId)
       throws InteractionAttachmentNotFoundException, ServiceUnavailableException {
     try {
-      if (!interactionAttachmentRepository.existsById(interactionAttachmentId)) {
+      if (!interactionAttachmentRepository.existsByTenantIdAndId(
+          tenantId, interactionAttachmentId)) {
         throw new InteractionAttachmentNotFoundException(interactionAttachmentId);
       }
 
@@ -154,7 +180,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the interaction attachment (" + interactionAttachmentId + ")", e);
+          "Failed to delete the interaction attachment ("
+              + interactionAttachmentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -162,7 +193,12 @@ public class InternalInteractionStore implements InteractionStore {
   public Interaction getInteraction(UUID tenantId, UUID interactionId)
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
-      Optional<Interaction> interactionOptional = interactionRepository.findById(interactionId);
+      /*
+       * NOTE: The search by both tenant ID and interaction ID includes a security check to ensure
+       * that the interaction not only exists, but is also associated with the specified tenant.
+       */
+      Optional<Interaction> interactionOptional =
+          interactionRepository.findByTenantIdAndId(tenantId, interactionId);
 
       if (interactionOptional.isPresent()) {
         return interactionOptional.get();
@@ -173,7 +209,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the interaction (" + interactionId + ")", e);
+          "Failed to retrieve the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -181,8 +222,14 @@ public class InternalInteractionStore implements InteractionStore {
   public InteractionAttachment getInteractionAttachment(UUID tenantId, UUID interactionAttachmentId)
       throws InteractionAttachmentNotFoundException, ServiceUnavailableException {
     try {
+      /*
+       * NOTE: The search by both tenant ID and interaction attachment ID includes a security check
+       *       to ensure that the interaction attachment not only exists, but is also associated
+       *       with the specified tenant.
+       */
+
       Optional<InteractionAttachment> interactionAttachmentOptional =
-          interactionAttachmentRepository.findById(interactionAttachmentId);
+          interactionAttachmentRepository.findByTenantIdAndId(tenantId, interactionAttachmentId);
 
       if (interactionAttachmentOptional.isPresent()) {
         return interactionAttachmentOptional.get();
@@ -193,7 +240,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the interaction attachment (" + interactionAttachmentId + ")", e);
+          "Failed to retrieve the interaction attachment ("
+              + interactionAttachmentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -201,13 +253,93 @@ public class InternalInteractionStore implements InteractionStore {
   public Optional<UUID> getInteractionAttachmentIdByInteractionIdAndHash(
       UUID tenantId, UUID interactionId, String hash) throws ServiceUnavailableException {
     try {
-      return interactionAttachmentRepository.getIdByInteractionIdAndHash(interactionId, hash);
+      return interactionAttachmentRepository.getIdByTenantIdAndInteractionIdAndHash(
+          tenantId, interactionId, hash);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the ID for the interaction attachment with interaction ID ("
               + interactionId
               + ") and hash ("
               + hash
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public InteractionAttachmentSummaries getInteractionAttachmentSummaries(
+      UUID tenantId,
+      UUID interactionId,
+      String filter,
+      InteractionAttachmentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws ServiceUnavailableException {
+    try {
+      PageRequest pageRequest;
+
+      if (sortBy == InteractionAttachmentSortBy.NAME) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      }
+
+      Page<InteractionAttachmentSummary> interactionAttachmentSummaryPage =
+          interactionAttachmentSummaryRepository.findAll(
+              (Specification<InteractionAttachmentSummary>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+                    predicates.add(criteriaBuilder.equal(root.get("interactionId"), interactionId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.or(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("name")),
+                                  "%" + filter.toLowerCase() + "%")));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
+
+      return new InteractionAttachmentSummaries(
+          tenantId,
+          interactionAttachmentSummaryPage.toList(),
+          interactionAttachmentSummaryPage.getTotalElements(),
+          interactionId,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered interaction attachment summaries for the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -215,15 +347,18 @@ public class InternalInteractionStore implements InteractionStore {
 
   @Override
   public Optional<UUID> getInteractionIdBySourceIdAndSourceReference(
-      UUID tenantId, String sourceId, String sourceReference) throws ServiceUnavailableException {
+      UUID tenantId, UUID sourceId, String sourceReference) throws ServiceUnavailableException {
     try {
-      return interactionRepository.getIdBySourceIdAndSourceReference(sourceId, sourceReference);
+      return interactionRepository.getIdByTenantIdAndSourceIdAndSourceReference(
+          tenantId, sourceId, sourceReference);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the ID for the interaction with source ID ("
               + sourceId
               + ") and source reference ("
               + sourceReference
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -232,7 +367,7 @@ public class InternalInteractionStore implements InteractionStore {
   @Override
   public InteractionSummaries getInteractionSummaries(
       UUID tenantId,
-      String sourceId,
+      UUID sourceId,
       InteractionStatus status,
       String filter,
       InteractionSortBy sortBy,
@@ -270,6 +405,8 @@ public class InternalInteractionStore implements InteractionStore {
                   (root, query, criteriaBuilder) -> {
                     List<Predicate> predicates = new ArrayList<>();
 
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
                     predicates.add(criteriaBuilder.equal(root.get("sourceId"), sourceId));
 
                     if (status != null) {
@@ -280,7 +417,7 @@ public class InternalInteractionStore implements InteractionStore {
                       predicates.add(
                           criteriaBuilder.or(
                               criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("from")),
+                                  criteriaBuilder.lower(root.get("sender")),
                                   "%" + filter.toLowerCase() + "%"),
                               criteriaBuilder.like(
                                   criteriaBuilder.lower(root.get("subject")),
@@ -303,7 +440,43 @@ public class InternalInteractionStore implements InteractionStore {
           pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered interaction summaries", e);
+          "Failed to retrieve the filtered interaction summaries for the interaction source ("
+              + sourceId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean interactionAttachmentExistsWithId(UUID tenantId, UUID interactionAttachmentId)
+      throws ServiceUnavailableException {
+    try {
+      return interactionAttachmentRepository.existsByTenantIdAndId(
+          tenantId, interactionAttachmentId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the interaction attachment ("
+              + interactionAttachmentId
+              + ") exists for the tenant ("
+              + tenantId
+              + ")");
+    }
+  }
+
+  @Override
+  public boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
+      throws ServiceUnavailableException {
+    try {
+      return interactionRepository.existsByTenantIdAndId(tenantId, interactionId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the interaction ("
+              + interactionId
+              + ") exists for the tenant ("
+              + tenantId
+              + ")");
     }
   }
 
@@ -311,7 +484,7 @@ public class InternalInteractionStore implements InteractionStore {
   public Interaction updateInteraction(UUID tenantId, Interaction interaction)
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
-      if (!interactionRepository.existsById(interaction.getId())) {
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interaction.getId())) {
         throw new InteractionNotFoundException(interaction.getId());
       }
 
@@ -322,7 +495,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the interaction (" + interaction.getId() + ")", e);
+          "Failed to update the interaction ("
+              + interaction.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -331,7 +509,8 @@ public class InternalInteractionStore implements InteractionStore {
       UUID tenantId, InteractionAttachment interactionAttachment)
       throws InteractionAttachmentNotFoundException, ServiceUnavailableException {
     try {
-      if (!interactionAttachmentRepository.existsById(interactionAttachment.getId())) {
+      if (!interactionAttachmentRepository.existsByTenantIdAndId(
+          tenantId, interactionAttachment.getId())) {
         throw new InteractionAttachmentNotFoundException(interactionAttachment.getId());
       }
 
@@ -342,7 +521,12 @@ public class InternalInteractionStore implements InteractionStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the interaction attachment (" + interactionAttachment.getId() + ")", e);
+          "Failed to update the interaction attachment ("
+              + interactionAttachment.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 }

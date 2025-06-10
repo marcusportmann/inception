@@ -16,6 +16,7 @@
 
 package digital.inception.operations.persistence.jpa;
 
+import digital.inception.core.model.CodeEnum;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -71,11 +72,13 @@ public class RequiredDocumentAttributeListAttributeConverter
   @Override
   public List<RequiredDocumentAttribute> convertToEntityAttribute(String dbData) {
     if (dbData == null || dbData.trim().isEmpty()) {
-      return new ArrayList<>();
+      return null;
     }
 
     return Arrays.stream(dbData.split(","))
-        .map(RequiredDocumentAttribute::fromCode)
+        .map(
+            requiredDocumentAttributeCode ->
+                CodeEnum.fromCode(RequiredDocumentAttribute.class, requiredDocumentAttributeCode))
         .collect(Collectors.toList());
   }
 }

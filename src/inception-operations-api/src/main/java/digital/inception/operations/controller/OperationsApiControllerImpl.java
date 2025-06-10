@@ -22,11 +22,11 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentDefinitionNotFoundException;
-import digital.inception.operations.model.DuplicateWorkflowDefinitionCategoryException;
+import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
-import digital.inception.operations.model.WorkflowDefinitionNotFoundException;
+import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.WorkflowService;
 import java.util.UUID;
@@ -74,7 +74,8 @@ public class OperationsApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
 
-    if  ((!hasAccessToFunction("Operations.OperationsAdministration")) &&   (!hasAccessToTenant(createDocumentRequest.getTenantId()))) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToTenant(createDocumentRequest.getTenantId()))) {
       throw new AccessDeniedException(
           "Access denied to the tenant (" + createDocumentRequest.getTenantId() + ")");
     }
@@ -92,7 +93,8 @@ public class OperationsApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
 
-    if  ((!hasAccessToFunction("Operations.OperationsAdministration")) &&   (!hasAccessToTenant(createWorkflowRequest.getTenantId()))) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToTenant(createWorkflowRequest.getTenantId()))) {
       throw new AccessDeniedException(
           "Access denied to the tenant (" + createWorkflowRequest.getTenantId() + ")");
     }
@@ -105,8 +107,7 @@ public class OperationsApiControllerImpl extends SecureApiController
 
   @Override
   public void createWorkflowDefinitionCategory(
-      UUID tenantId,
-      WorkflowDefinitionCategory workflowDefinitionCategory)
+      UUID tenantId, WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionCategoryException,
           ServiceUnavailableException {

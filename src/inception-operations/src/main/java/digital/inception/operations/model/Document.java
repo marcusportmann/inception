@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.file.FileType;
 import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.core.xml.OffsetDateTimeAdapter;
 import digital.inception.operations.constraint.ValidDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -42,7 +41,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -81,10 +79,6 @@ import java.util.UUID;
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
-      "created",
-      "createdBy",
-      "updated",
-      "updatedBy",
       "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -95,29 +89,6 @@ import java.util.UUID;
 public class Document implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The date and time the document was created. */
-  @Schema(
-      description = "The date and time the document was created",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Created", required = true)
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column(name = "created", nullable = false)
-  private OffsetDateTime created;
-
-  /** The person or system that created the document. */
-  @Schema(
-      description = "The person or system that created the document",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "CreatedBy", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "created_by", length = 100, nullable = false)
-  private String createdBy;
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -220,23 +191,6 @@ public class Document implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** The date and time the document was last updated. */
-  @Schema(description = "The date and time the document was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
-  private OffsetDateTime updated;
-
-  /** The person or system that last updated the document. */
-  @Schema(description = "The person or system that last updated the document")
-  @JsonProperty
-  @XmlElement(name = "UpdatedBy")
-  @Size(min = 1, max = 100)
-  @Column(name = "updated_by", length = 100)
-  private String updatedBy;
-
   /** Constructs a new {@code Document}. */
   public Document() {}
 
@@ -273,24 +227,6 @@ public class Document implements Serializable {
     Document other = (Document) object;
 
     return Objects.equals(id, other.id);
-  }
-
-  /**
-   * Returns the date and time the document was created.
-   *
-   * @return the date and time the document was created
-   */
-  public OffsetDateTime getCreated() {
-    return created;
-  }
-
-  /**
-   * Returns the person or system that created the document.
-   *
-   * @return the person or system that created the document
-   */
-  public String getCreatedBy() {
-    return createdBy;
   }
 
   /**
@@ -350,7 +286,7 @@ public class Document implements Serializable {
   /**
    * Returns the ID for the document.
    *
-   * @return the unique identifier for the document
+   * @return the ID for the document
    */
   public UUID getId() {
     return id;
@@ -375,57 +311,21 @@ public class Document implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the source document that was split to create this document.
+   * Returns the ID for the source document that was split to create this document.
    *
-   * @return the unique identifier for the source document that was split to create this document
+   * @return the ID for the source document that was split to create this document
    */
   public UUID getSourceDocumentId() {
     return sourceDocumentId;
   }
 
   /**
-   * Returns the unique identifier for the tenant the document is associated with.
+   * Returns the ID for the tenant the document is associated with.
    *
-   * @return the unique identifier for the tenant the document is associated with
+   * @return the ID for the tenant the document is associated with
    */
   public UUID getTenantId() {
     return tenantId;
-  }
-
-  /**
-   * Returns the date and time the document was last updated.
-   *
-   * @return the date and time the document was last updated
-   */
-  public OffsetDateTime getUpdated() {
-    return updated;
-  }
-
-  /**
-   * Returns the person or system that last updated the document.
-   *
-   * @return the person or system that last updated the document
-   */
-  public String getUpdatedBy() {
-    return updatedBy;
-  }
-
-  /**
-   * Set the date and time the document was created.
-   *
-   * @param created the date and time the document was created
-   */
-  public void setCreated(OffsetDateTime created) {
-    this.created = created;
-  }
-
-  /**
-   * Set the person or system that created the document.
-   *
-   * @param createdBy the person or system that created the document
-   */
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
   }
 
   /**
@@ -438,10 +338,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the document definition the document is associated with.
+   * Set the ID for the document definition the document is associated with.
    *
-   * @param definitionId the unique identifier for the document definition the document is
-   *     associated with
+   * @param definitionId the ID for the document definition the document is associated with
    */
   public void setDefinitionId(String definitionId) {
     this.definitionId = definitionId;
@@ -485,9 +384,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the document.
+   * Set the ID for the document.
    *
-   * @param id the unique identifier for the document
+   * @param id the ID for the document
    */
   public void setId(UUID id) {
     this.id = id;
@@ -512,39 +411,20 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the source document that was split to create this document.
+   * Set the ID for the source document that was split to create this document.
    *
-   * @param sourceDocumentId the unique identifier for the source document that was split to create
-   *     this document
+   * @param sourceDocumentId the ID for the source document that was split to create this document
    */
   public void setSourceDocumentId(UUID sourceDocumentId) {
     this.sourceDocumentId = sourceDocumentId;
   }
 
   /**
-   * Set the unique identifier for the tenant the document is associated with.
+   * Set the ID for the tenant the document is associated with.
    *
-   * @param tenantId the unique identifier for the tenant the document is associated with
+   * @param tenantId the ID for the tenant the document is associated with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
-  }
-
-  /**
-   * Set the date and time the document was last updated.
-   *
-   * @param updated the date and time the document was last updated
-   */
-  public void setUpdated(OffsetDateTime updated) {
-    this.updated = updated;
-  }
-
-  /**
-   * Set the person or system that last updated the document.
-   *
-   * @param updatedBy the person or system that last updated the document
-   */
-  public void setUpdatedBy(String updatedBy) {
-    this.updatedBy = updatedBy;
   }
 }

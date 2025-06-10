@@ -19,11 +19,11 @@ package digital.inception.test.archunit;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import org.springframework.stereotype.Service;
 
 /**
  * The {@code ServiceConventionsRules} class holds the ArchUnit rules that verify structural
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Marcus Portmann
  */
-public class ServiceConventionsRules {
+public final class ServiceConventionsRules {
 
   /**
    * The ArchUnit rule that verifies that Spring service implementations are named correctly, and
@@ -40,7 +40,7 @@ public class ServiceConventionsRules {
   public static final ArchRule SERVICE_IMPLS_FOLLOW_NAMING_AND_LOCATION =
       classes()
           .that()
-          .areAnnotatedWith(Service.class)
+          .areAnnotatedWith("org.springframework.stereotype.Service")
           .should()
           .haveSimpleNameEndingWith("ServiceImpl") // 2. naming
           .andShould()
@@ -62,8 +62,24 @@ public class ServiceConventionsRules {
                                 clazz.getName())));
                   }
                 }
-              });
+              })
+          .allowEmptyShould(true);
 
   /** Constructs a new {@code ServiceConventionsRules}. */
   public ServiceConventionsRules() {}
+
+  /**
+   * Check that the ArchUnit rules are being adhered to.
+   *
+   * @param classes the Java classes to check
+   */
+  public static void check(JavaClasses classes) {
+    try {
+      Class.forName("org.springframework.stereotype.Service");
+    } catch (ClassNotFoundException e) {
+      return;
+    }
+
+    SERVICE_IMPLS_FOLLOW_NAMING_AND_LOCATION.check(classes);
+  }
 }

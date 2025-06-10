@@ -16,6 +16,10 @@
 
 package digital.inception.executor.model;
 
+import digital.inception.executor.exception.TaskExecutionDelayedException;
+import digital.inception.executor.exception.TaskExecutionFailedException;
+import digital.inception.executor.exception.TaskExecutionRetryableException;
+
 /**
  * The {@code TaskExecutor} interface defines the functionality that must be provided by all task
  * executors.

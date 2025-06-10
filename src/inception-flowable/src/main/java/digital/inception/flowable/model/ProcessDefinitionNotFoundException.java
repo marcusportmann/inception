@@ -16,8 +16,8 @@
 //
 // package digital.inception.flowable.model;
 //
-// import digital.inception.core.service.Problem;
-// import digital.inception.core.service.ServiceException;
+// import digital.inception.core.exception.Problem;
+// import digital.inception.core.exception.ServiceException;
 // import jakarta.xml.bind.annotation.XmlAccessType;
 // import jakarta.xml.bind.annotation.XmlAccessorType;
 // import jakarta.xml.ws.WebFault;
@@ -47,7 +47,7 @@
 //  @Serial private static final long serialVersionUID = 1000000;
 //
 //  /**
-//   * w Creates a new {@code ProcessDefinitionNotFoundException} instance.
+//   * Creates a new {@code ProcessDefinitionNotFoundException} instance.
 //   *
 //   * @param processDefinitionId the ID for the process definition
 //   */

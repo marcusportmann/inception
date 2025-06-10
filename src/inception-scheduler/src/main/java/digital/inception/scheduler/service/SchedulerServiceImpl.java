@@ -16,16 +16,16 @@
 
 package digital.inception.scheduler.service;
 
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ServiceUtil;
-import digital.inception.scheduler.model.DuplicateJobException;
+import digital.inception.scheduler.exception.DuplicateJobException;
+import digital.inception.scheduler.exception.JobExecutionFailedException;
+import digital.inception.scheduler.exception.JobNotFoundException;
 import digital.inception.scheduler.model.Job;
 import digital.inception.scheduler.model.JobExecutionContext;
-import digital.inception.scheduler.model.JobExecutionFailedException;
 import digital.inception.scheduler.model.JobImplementation;
-import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.model.JobParameter;
 import digital.inception.scheduler.model.JobStatus;
 import digital.inception.scheduler.model.Predictor;

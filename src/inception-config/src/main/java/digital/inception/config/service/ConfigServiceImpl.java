@@ -16,14 +16,14 @@
 
 package digital.inception.config.service;
 
+import digital.inception.config.exception.ConfigNotFoundException;
 import digital.inception.config.model.Config;
-import digital.inception.config.model.ConfigNotFoundException;
 import digital.inception.config.model.ConfigSummary;
 import digital.inception.config.persistence.jpa.ConfigRepository;
 import digital.inception.config.persistence.jpa.ConfigSummaryRepository;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;

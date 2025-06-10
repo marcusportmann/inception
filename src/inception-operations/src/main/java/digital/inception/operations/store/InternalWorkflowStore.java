@@ -16,11 +16,11 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.model.DuplicateWorkflowException;
+import digital.inception.operations.exception.DuplicateWorkflowException;
+import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.model.Workflow;
-import digital.inception.operations.model.WorkflowNotFoundException;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowSummaries;
@@ -88,10 +88,12 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw new ServiceUnavailableException(
           "Failed to create the workflow ("
               + workflow.getId()
-              + ") with definition ID ("
+              + ") with the definition ID ("
               + workflow.getDefinitionId()
-              + ") and definition version ("
+              + ") and the definition version ("
               + workflow.getDefinitionVersion()
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -101,7 +103,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   public void deleteWorkflow(UUID tenantId, UUID workflowId)
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
-      if (!workflowRepository.existsById(workflowId)) {
+      if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
         throw new WorkflowNotFoundException(workflowId);
       }
 
@@ -110,7 +112,8 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the workflow (" + workflowId + ")", e);
+          "Failed to delete the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
     }
   }
 
@@ -118,7 +121,12 @@ public class InternalWorkflowStore implements WorkflowStore {
   public Workflow getWorkflow(UUID tenantId, UUID workflowId)
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
-      Optional<Workflow> workflowOptional = workflowRepository.findById(workflowId);
+      /*
+       * NOTE: The search by both tenant ID and workflow ID includes a security check to ensure
+       * that the workflow not only exists, but is also associated with the specified tenant.
+       */
+      Optional<Workflow> workflowOptional =
+          workflowRepository.findByTenantIdAndId(tenantId, workflowId);
 
       if (workflowOptional.isEmpty()) {
         throw new WorkflowNotFoundException(workflowId);
@@ -129,7 +137,8 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the workflow (" + workflowId + ")", e);
+          "Failed to retrieve the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
     }
   }
 
@@ -173,6 +182,8 @@ public class InternalWorkflowStore implements WorkflowStore {
                   (root, query, criteriaBuilder) -> {
                     List<Predicate> predicates = new ArrayList<>();
 
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
                     if (status != null) {
                       predicates.add(criteriaBuilder.equal(root.get("status"), status));
                     }
@@ -201,7 +212,8 @@ public class InternalWorkflowStore implements WorkflowStore {
           pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered workflow summaries", e);
+          "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
+          e);
     }
   }
 
@@ -209,7 +221,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   public Workflow updateWorkflow(UUID tenantId, Workflow workflow)
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
-      if (!workflowRepository.existsById(workflow.getId())) {
+      if (!workflowRepository.existsByTenantIdAndId(tenantId, workflow.getId())) {
         throw new WorkflowNotFoundException(workflow.getId());
       }
 
@@ -220,10 +232,12 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw new ServiceUnavailableException(
           "Failed to update the workflow ("
               + workflow.getId()
-              + ") with definition ID ("
+              + ") with the definition ID ("
               + workflow.getDefinitionId()
-              + ") and definition version ("
+              + ") and the definition version ("
               + workflow.getDefinitionVersion()
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }

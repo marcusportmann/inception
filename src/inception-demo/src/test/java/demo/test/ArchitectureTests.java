@@ -17,9 +17,8 @@
 package demo.test;
 
 import com.tngtech.archunit.junit.AnalyzeClasses;
-import com.tngtech.archunit.junit.ArchTest;
-import com.tngtech.archunit.junit.ArchTests;
-import digital.inception.test.archunit.InceptionArchUnitTests;
+import digital.inception.test.archunit.InceptionArchUnitRules;
+import org.junit.jupiter.api.Test;
 
 /**
  * The {@code ArchitectureTests} class applies the ArchUnit tests.
@@ -29,10 +28,12 @@ import digital.inception.test.archunit.InceptionArchUnitTests;
 @AnalyzeClasses(packages = {"digital.inception", "demo"})
 public class ArchitectureTests {
 
-  /** Include the standard ArchUnit tests for the Inception Framework. */
-  @ArchTest
-  static final ArchTests INCEPTION_ARCH_UNIT_TESTS = ArchTests.in(InceptionArchUnitTests.class);
-
   /** Constructs a new {@code ArchitectureTests}. */
   public ArchitectureTests() {}
+
+  /** Execute the ArchUnit rules. */
+  @Test
+  public void archUnitRulesTest() {
+    InceptionArchUnitRules.executeArchUnitRules("digital.inception", "demo");
+  }
 }

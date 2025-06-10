@@ -54,7 +54,12 @@
             <id>enforce</id>
             <configuration>
               <rules>
-                <dependencyConvergence/>
+                <dependencyConvergence>
+                  <excludes>
+                    <exclude>com.azure:azure-json:[1,2)</exclude>
+                    <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
+                  </excludes>
+                </dependencyConvergence>
               </rules>
             </configuration>
             <goals>

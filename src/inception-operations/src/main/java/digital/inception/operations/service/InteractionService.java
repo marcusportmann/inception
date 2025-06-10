@@ -16,24 +16,24 @@
 
 package digital.inception.operations.service;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.model.DuplicateInteractionAttachmentException;
-import digital.inception.operations.model.DuplicateInteractionException;
-import digital.inception.operations.model.DuplicateMailboxInteractionSourceException;
-import digital.inception.operations.model.DuplicateWhatsAppInteractionSourceException;
+import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
+import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionSourceException;
+import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
+import digital.inception.operations.exception.InteractionNotFoundException;
+import digital.inception.operations.exception.InteractionSourceNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
-import digital.inception.operations.model.InteractionAttachmentNotFoundException;
-import digital.inception.operations.model.InteractionNotFoundException;
+import digital.inception.operations.model.InteractionAttachmentSortBy;
+import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionSortBy;
+import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
-import digital.inception.operations.model.MailboxInteractionSource;
-import digital.inception.operations.model.MailboxInteractionSourceNotFoundException;
-import digital.inception.operations.model.WhatsAppInteractionSource;
-import digital.inception.operations.model.WhatsAppInteractionSourceNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,35 +78,18 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
-   * Create a mailbox interaction source.
+   * Create the interaction source.
    *
-   * @param mailboxInteractionSource the mailbox interaction source
-   * @return the mailbox interaction source
+   * @param tenantId the ID for the tenant
+   * @param interactionSource the interaction source
+   * @return the interaction source
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DuplicateMailboxInteractionSourceException if the mailbox interaction source already
-   *     exists
-   * @throws ServiceUnavailableException if the mailbox interaction source could not be created
+   * @throws DuplicateInteractionSourceException if the interaction source already exists
+   * @throws ServiceUnavailableException if the interaction source could not be created
    */
-  MailboxInteractionSource createMailboxInteractionSource(
-      MailboxInteractionSource mailboxInteractionSource)
+  InteractionSource createInteractionSource(UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,
-          DuplicateMailboxInteractionSourceException,
-          ServiceUnavailableException;
-
-  /**
-   * Create a WhatsApp interaction source.
-   *
-   * @param whatsAppInteractionSource the WhatsApp interaction source
-   * @return the WhatsApp interaction source
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DuplicateWhatsAppInteractionSourceException if the WhatsApp interaction source already
-   *     exists
-   * @throws ServiceUnavailableException if the WhatsApp interaction source could not be created
-   */
-  WhatsAppInteractionSource createWhatsAppInteractionSource(
-      WhatsAppInteractionSource whatsAppInteractionSource)
-      throws InvalidArgumentException,
-          DuplicateWhatsAppInteractionSourceException,
+          DuplicateInteractionSourceException,
           ServiceUnavailableException;
 
   /**
@@ -136,31 +119,17 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
-   * Delete the mailbox interaction source.
+   * Delete the interaction source.
    *
-   * @param mailboxInteractionSourceId the ID for the mailbox interaction source
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws MailboxInteractionSourceNotFoundException if the mailbox interaction source could not
-   *     be found
-   * @throws ServiceUnavailableException if the mailbox interaction source could not be deleted
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the interaction source could not be deleted
    */
-  void deleteMailboxInteractionSource(String mailboxInteractionSourceId)
+  void deleteInteractionSource(UUID tenantId, UUID interactionSourceId)
       throws InvalidArgumentException,
-          MailboxInteractionSourceNotFoundException,
-          ServiceUnavailableException;
-
-  /**
-   * Delete the WhatsApp interaction source.
-   *
-   * @param whatsAppInteractionSourceId the ID for the WhatsApp interaction source
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws WhatsAppInteractionSourceNotFoundException if the WhatsApp interaction source could not
-   *     be found
-   * @throws ServiceUnavailableException if the WhatsApp interaction source could not be deleted
-   */
-  void deleteWhatsAppInteractionSource(String whatsAppInteractionSourceId)
-      throws InvalidArgumentException,
-          WhatsAppInteractionSourceNotFoundException,
+          InteractionSourceNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -192,6 +161,73 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the summaries for the interaction attachments for the interaction with the specified
+   * ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction the interaction attachments are associated with
+   * @param filter the filter to apply to the interaction attachment summaries
+   * @param sortBy the method used to sort the interaction attachment summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the interaction attachment summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the interaction attachments for the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction attachment summaries could not be
+   *     retrieved
+   */
+  InteractionAttachmentSummaries getInteractionAttachmentSummaries(
+      UUID tenantId,
+      UUID interactionId,
+      String filter,
+      InteractionAttachmentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source
+   * @return the interaction source
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the interaction source could not be retrieved
+   */
+  InteractionSource getInteractionSource(UUID tenantId, UUID interactionSourceId)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve all the interaction sources.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the interaction sources
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction sources could not be retrieved
+   */
+  List<InteractionSource> getInteractionSources(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the interaction sources with the specified type.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceType the interaction source type for the interaction sources
+   * @return the interaction sources
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction sources with the specified type could
+   *     not be retrieved
+   */
+  List<InteractionSource> getInteractionSources(
+      UUID tenantId, InteractionSourceType interactionSourceType)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Retrieve the summaries for the interactions for the interaction source with the specified ID.
    *
    * @param tenantId the ID for the tenant
@@ -204,85 +240,21 @@ public interface InteractionService {
    * @param pageSize the page size
    * @return the summaries for the interactions
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
    * @throws ServiceUnavailableException if the interaction summaries could not be retrieved
    */
   InteractionSummaries getInteractionSummaries(
       UUID tenantId,
-      String sourceId,
+      UUID sourceId,
       InteractionStatus status,
       String filter,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the mailbox interaction source.
-   *
-   * @param mailboxInteractionSourceId the ID for the mailbox interaction source
-   * @return the mailbox interaction source
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws MailboxInteractionSourceNotFoundException if the mailbox interaction source could not
-   *     be found
-   * @throws ServiceUnavailableException if the mailbox interaction source could not be retrieved
-   */
-  MailboxInteractionSource getMailboxInteractionSource(String mailboxInteractionSourceId)
       throws InvalidArgumentException,
-          MailboxInteractionSourceNotFoundException,
+          InteractionSourceNotFoundException,
           ServiceUnavailableException;
-
-  /**
-   * Retrieve all the mailbox interaction sources.
-   *
-   * @return the mailbox interaction sources
-   * @throws ServiceUnavailableException if the mailbox interaction sources could not be retrieved
-   */
-  List<MailboxInteractionSource> getMailboxInteractionSources() throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the mailbox interaction sources for the tenant with the specified ID.
-   *
-   * @param tenantId the ID for the tenant
-   * @return the mailbox interaction sources for the tenant with the specified ID
-   * @throws ServiceUnavailableException if the mailbox interaction sources could not be retrieved
-   */
-  List<MailboxInteractionSource> getMailboxInteractionSourcesForTenant(UUID tenantId)
-      throws ServiceUnavailableException;
-
-  /**
-   * Retrieve the WhatsApp interaction source.
-   *
-   * @param whatsAppInteractionSourceId the ID for the WhatsApp interaction source
-   * @return the WhatsApp interaction source
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws WhatsAppInteractionSourceNotFoundException if the WhatsApp interaction source could not
-   *     be found
-   * @throws ServiceUnavailableException if the WhatsApp interaction source could not be retrieved
-   */
-  WhatsAppInteractionSource getWhatsAppInteractionSource(String whatsAppInteractionSourceId)
-      throws InvalidArgumentException,
-          WhatsAppInteractionSourceNotFoundException,
-          ServiceUnavailableException;
-
-  /**
-   * Retrieve all the WhatsApp interaction sources.
-   *
-   * @return the WhatsApp interaction sources
-   * @throws ServiceUnavailableException if the WhatsApp interaction sources could not be retrieved
-   */
-  List<WhatsAppInteractionSource> getWhatsAppInteractionSources()
-      throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the WhatsApp interaction sources for the tenant with the specified ID.
-   *
-   * @param tenantId the ID for the tenant
-   * @return the WhatsApp interaction sources for the tenant with the specified ID
-   * @throws ServiceUnavailableException if the WhatsApp interaction sources could not be retrieved
-   */
-  List<WhatsAppInteractionSource> getWhatsAppInteractionSourcesForTenant(UUID tenantId)
-      throws ServiceUnavailableException;
 
   /**
    * Returns whether an interaction attachment with the specified hash exists for the interaction
@@ -314,21 +286,51 @@ public interface InteractionService {
    * @throws ServiceUnavailableException if the check for the interaction failed
    */
   boolean interactionExistsWithSourceIdAndSourceReference(
-      UUID tenantId, String sourceId, String sourceReference)
+      UUID tenantId, UUID sourceId, String sourceReference)
       throws InvalidArgumentException, ServiceUnavailableException;
 
+
   /**
-   * Synchronize the mailbox interaction source.
+   * Returns whether an interaction with the specified ID exists.
    *
-   * <p>This will retrieve the latest email messages from the associated mailbox and create the
-   * corresponding interactions.
-   *
-   * @param mailboxInteractionSource the mailbox interaction source
-   * @return the number of new interactions
-   * @throws ServiceUnavailableException if the mailbox interaction source could not be synchronized
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @return {@code true} if an interaction with the specified ID exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the interaction failed
    */
-  int synchronizeMailboxInteractionSource(MailboxInteractionSource mailboxInteractionSource)
-      throws ServiceUnavailableException;
+  boolean interactionExistsWithId(
+      UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+
+  /**
+   * Returns whether an interaction attachment with the specified ID exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionAttachmentId the ID for the interaction attachment
+   * @return {@code true} if an interaction attachment with the specified ID exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the interaction attachment failed
+   */
+  boolean interactionAttachmentExistsWithId(
+      UUID tenantId, UUID interactionAttachmentId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+
+  /**
+   * Synchronize the interaction source.
+   *
+   * <p>In the case of a mailbox interaction source, this will retrieve the latest email messages
+   * from the associated mailbox and create the corresponding interactions.
+   *
+   * @param interactionSource the interaction source
+   * @return the number of new interactions
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction source could not be synchronized
+   */
+  int synchronizeInteractionSource(InteractionSource interactionSource)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Update the interaction.
@@ -357,5 +359,20 @@ public interface InteractionService {
       UUID tenantId, InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           InteractionAttachmentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Update the interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSource the interaction source
+   * @return the interaction source
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the interaction source could not be updated
+   */
+  InteractionSource updateInteractionSource(UUID tenantId, InteractionSource interactionSource)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
           ServiceUnavailableException;
 }

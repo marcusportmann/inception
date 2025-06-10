@@ -17,14 +17,14 @@
 package digital.inception.sms.service;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+import digital.inception.sms.exception.SMSNotFoundException;
 import digital.inception.sms.model.SMS;
-import digital.inception.sms.model.SMSNotFoundException;
 import digital.inception.sms.model.SMSStatus;
 import digital.inception.sms.persistence.jpa.SMSRepository;
 import jakarta.persistence.EntityManager;

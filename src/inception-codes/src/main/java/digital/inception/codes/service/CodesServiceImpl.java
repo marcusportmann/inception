@@ -16,22 +16,22 @@
 
 package digital.inception.codes.service;
 
+import digital.inception.codes.exception.CodeCategoryNotFoundException;
+import digital.inception.codes.exception.CodeNotFoundException;
+import digital.inception.codes.exception.DuplicateCodeCategoryException;
+import digital.inception.codes.exception.DuplicateCodeException;
 import digital.inception.codes.model.Code;
 import digital.inception.codes.model.CodeCategory;
-import digital.inception.codes.model.CodeCategoryNotFoundException;
 import digital.inception.codes.model.CodeCategorySummary;
 import digital.inception.codes.model.CodeId;
-import digital.inception.codes.model.CodeNotFoundException;
 import digital.inception.codes.model.CodeProvider;
 import digital.inception.codes.model.CodeProviderConfig;
-import digital.inception.codes.model.DuplicateCodeCategoryException;
-import digital.inception.codes.model.DuplicateCodeException;
 import digital.inception.codes.persistence.jpa.CodeCategoryRepository;
 import digital.inception.codes.persistence.jpa.CodeCategorySummaryRepository;
 import digital.inception.codes.persistence.jpa.CodeRepository;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;

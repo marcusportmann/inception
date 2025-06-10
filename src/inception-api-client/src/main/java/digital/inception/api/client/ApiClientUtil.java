@@ -18,7 +18,7 @@ package digital.inception.api.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.Problem;
+import digital.inception.core.exception.Problem;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.json.JsonUtil;
 import io.netty.handler.ssl.SslContext;

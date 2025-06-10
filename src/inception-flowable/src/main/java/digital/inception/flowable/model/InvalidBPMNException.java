@@ -16,8 +16,8 @@
 //
 // package digital.inception.flowable.model;
 //
-// import digital.inception.core.service.Problem;
-// import digital.inception.core.service.ServiceException;
+// import digital.inception.core.exception.Problem;
+// import digital.inception.core.exception.ServiceException;
 // import jakarta.xml.bind.annotation.XmlAccessType;
 // import jakarta.xml.bind.annotation.XmlAccessorType;
 // import jakarta.xml.ws.WebFault;

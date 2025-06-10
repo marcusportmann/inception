@@ -17,47 +17,51 @@
 package digital.inception.security.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.security.model.AuthenticationFailedException;
-import digital.inception.security.model.DuplicateGroupException;
-import digital.inception.security.model.DuplicatePolicyException;
-import digital.inception.security.model.DuplicateTenantException;
-import digital.inception.security.model.DuplicateUserDirectoryException;
-import digital.inception.security.model.DuplicateUserException;
-import digital.inception.security.model.ExistingGroupMembersException;
-import digital.inception.security.model.ExistingGroupsException;
-import digital.inception.security.model.ExistingPasswordException;
-import digital.inception.security.model.ExistingUsersException;
+import digital.inception.security.exception.AuthenticationFailedException;
+import digital.inception.security.exception.DuplicateGroupException;
+import digital.inception.security.exception.DuplicatePolicyException;
+import digital.inception.security.exception.DuplicateTenantException;
+import digital.inception.security.exception.DuplicateUserDirectoryException;
+import digital.inception.security.exception.DuplicateUserException;
+import digital.inception.security.exception.ExistingGroupMembersException;
+import digital.inception.security.exception.ExistingGroupsException;
+import digital.inception.security.exception.ExistingPasswordException;
+import digital.inception.security.exception.ExistingUsersException;
+import digital.inception.security.exception.GroupMemberNotFoundException;
+import digital.inception.security.exception.GroupNotFoundException;
+import digital.inception.security.exception.GroupRoleNotFoundException;
+import digital.inception.security.exception.InvalidPolicyDataException;
+import digital.inception.security.exception.InvalidSecurityCodeException;
+import digital.inception.security.exception.PolicyDataMismatchException;
+import digital.inception.security.exception.PolicyNotFoundException;
+import digital.inception.security.exception.RoleNotFoundException;
+import digital.inception.security.exception.TenantNotFoundException;
+import digital.inception.security.exception.TenantUserDirectoryNotFoundException;
+import digital.inception.security.exception.TokenNotFoundException;
+import digital.inception.security.exception.UserDirectoryNotFoundException;
+import digital.inception.security.exception.UserDirectoryTypeNotFoundException;
+import digital.inception.security.exception.UserLockedException;
+import digital.inception.security.exception.UserNotFoundException;
 import digital.inception.security.model.GenerateTokenRequest;
 import digital.inception.security.model.Group;
 import digital.inception.security.model.GroupMember;
-import digital.inception.security.model.GroupMemberNotFoundException;
 import digital.inception.security.model.GroupMemberType;
 import digital.inception.security.model.GroupMembers;
-import digital.inception.security.model.GroupNotFoundException;
 import digital.inception.security.model.GroupRole;
-import digital.inception.security.model.GroupRoleNotFoundException;
 import digital.inception.security.model.Groups;
-import digital.inception.security.model.InvalidPolicyDataException;
-import digital.inception.security.model.InvalidSecurityCodeException;
 import digital.inception.security.model.PasswordChange;
 import digital.inception.security.model.Policy;
-import digital.inception.security.model.PolicyDataMismatchException;
-import digital.inception.security.model.PolicyNotFoundException;
 import digital.inception.security.model.PolicySortBy;
 import digital.inception.security.model.PolicySummaries;
 import digital.inception.security.model.RevokedToken;
 import digital.inception.security.model.Role;
-import digital.inception.security.model.RoleNotFoundException;
 import digital.inception.security.model.Tenant;
-import digital.inception.security.model.TenantNotFoundException;
 import digital.inception.security.model.TenantUserDirectory;
-import digital.inception.security.model.TenantUserDirectoryNotFoundException;
 import digital.inception.security.model.Tenants;
 import digital.inception.security.model.Token;
-import digital.inception.security.model.TokenNotFoundException;
 import digital.inception.security.model.TokenSortBy;
 import digital.inception.security.model.TokenStatus;
 import digital.inception.security.model.TokenSummaries;
@@ -65,13 +69,9 @@ import digital.inception.security.model.User;
 import digital.inception.security.model.UserDirectories;
 import digital.inception.security.model.UserDirectory;
 import digital.inception.security.model.UserDirectoryCapabilities;
-import digital.inception.security.model.UserDirectoryNotFoundException;
 import digital.inception.security.model.UserDirectorySummaries;
 import digital.inception.security.model.UserDirectorySummary;
 import digital.inception.security.model.UserDirectoryType;
-import digital.inception.security.model.UserDirectoryTypeNotFoundException;
-import digital.inception.security.model.UserLockedException;
-import digital.inception.security.model.UserNotFoundException;
 import digital.inception.security.model.UserSortBy;
 import digital.inception.security.model.Users;
 import io.swagger.v3.oas.annotations.Operation;
@@ -364,9 +364,7 @@ public interface SecurityApiController {
       description = "Administratively change the password for the user")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The password for the user was changed successfully"),
+        @ApiResponse(responseCode = "204", description = "The password for the user was changed"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -443,9 +441,7 @@ public interface SecurityApiController {
       description = "Change the password for the user")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The password for the user was changed successfully"),
+        @ApiResponse(responseCode = "204", description = "The password for the user was changed"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -534,7 +530,7 @@ public interface SecurityApiController {
   @Operation(summary = "Create the group", description = "Create the group")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The group was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The group was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -609,7 +605,7 @@ public interface SecurityApiController {
   @Operation(summary = "Create the policy", description = "Create the policy")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The policy was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The policy was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument or invalid policy data",
@@ -671,7 +667,7 @@ public interface SecurityApiController {
   @Operation(summary = "Create the tenant", description = "Create the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The tenant was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The tenant was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -737,7 +733,7 @@ public interface SecurityApiController {
   @Operation(summary = "Create the user", description = "Create the user")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The user was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The user was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -818,9 +814,7 @@ public interface SecurityApiController {
   @Operation(summary = "Create the user directory", description = "Create the user directory")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The user directory was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The user directory was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -880,7 +874,7 @@ public interface SecurityApiController {
   @Operation(summary = "Delete the group", description = "Delete the group")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The group was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The group was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -953,7 +947,7 @@ public interface SecurityApiController {
   @Operation(summary = "Delete the policy", description = "Delete the policy")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The policy was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The policy was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1008,7 +1002,7 @@ public interface SecurityApiController {
   @Operation(summary = "Delete the tenant", description = "Delete the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The tenant was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The tenant was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1063,7 +1057,7 @@ public interface SecurityApiController {
   @Operation(summary = "Delete the token", description = "Delete the token")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The token was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The token was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1120,7 +1114,7 @@ public interface SecurityApiController {
   @Operation(summary = "Delete the user", description = "Delete the user")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The user was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The user was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1186,9 +1180,7 @@ public interface SecurityApiController {
   @Operation(summary = "Delete the user directory", description = "Delete the user directory")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The user directory was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The user directory was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1258,7 +1250,7 @@ public interface SecurityApiController {
   @Operation(summary = "Generate a token", description = "Generate a token")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "The token was generated successfully"),
+        @ApiResponse(responseCode = "200", description = "The token was generated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1311,7 +1303,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the group", description = "Retrieve the group")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The group was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1376,7 +1368,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve all the group names", description = "Retrieve all the group names")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The group names were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1440,7 +1432,9 @@ public interface SecurityApiController {
       description = "Retrieve the names of the groups the user is a member of")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The names of the groups the user is a member of were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1509,7 +1503,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the groups", description = "Retrieve the groups")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The groups were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1586,7 +1580,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the group members", description = "Retrieve the group members")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The group members were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1662,7 +1656,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve all the policies", description = "Retrieve all the policies")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The policies were retrieved"),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1691,7 +1685,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the policy", description = "Retrieve the policy")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The policy was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1749,7 +1743,7 @@ public interface SecurityApiController {
       description = "Retrieve the name of the policy")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The name of the policy was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1810,7 +1804,7 @@ public interface SecurityApiController {
       description = "Retrieve the policy summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The policy summaries were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1874,7 +1868,7 @@ public interface SecurityApiController {
       description = "Retrieve all the revoked tokens")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The revoked tokens were retrieved"),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1908,7 +1902,10 @@ public interface SecurityApiController {
       description = "Retrieve the codes for the roles that have been assigned to the group")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description =
+                "The codes for the roles that have been assigned to the group were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1970,7 +1967,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve all the roles", description = "Retrieve all the roles")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The roles were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -2013,7 +2010,9 @@ public interface SecurityApiController {
       description = "Retrieve the roles that have been assigned to the group")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The roles that have been assigned to the group were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2078,7 +2077,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the tenant", description = "Retrieve the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The tenant was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2136,7 +2135,7 @@ public interface SecurityApiController {
       description = "Retrieve the name of the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The name of the tenant was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2194,7 +2193,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the tenants", description = "Retrieve the tenants")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The tenants were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2255,7 +2254,9 @@ public interface SecurityApiController {
       description = "Retrieve the tenants the user directory is associated with")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The tenants the user directory is associated with were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2314,7 +2315,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the token", description = "Retrieve the token")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The token was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2370,7 +2371,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the name of token", description = "Retrieve the name of the token")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The name of the token was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2430,7 +2431,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the token summaries", description = "Retrieve the token summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The token summaries were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2495,7 +2496,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve all the tokens", description = "Retrieve all the tokens")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The tokens were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -2535,7 +2536,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the user", description = "Retrieve the user")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The user was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2602,7 +2603,7 @@ public interface SecurityApiController {
       description = "Retrieve the user directories")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The user directories were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2665,7 +2666,9 @@ public interface SecurityApiController {
       description = "Retrieve the user directories the tenant is associated with")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The user directories the tenant is associated with were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2721,7 +2724,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the user directory", description = "Retrieve the user directory")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The user directory was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2782,7 +2785,9 @@ public interface SecurityApiController {
       description = "Retrieve the capabilities the user directory supports")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The capabilities the user directory supports were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2843,7 +2848,9 @@ public interface SecurityApiController {
       description = "Retrieve the name of the user directory")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The name of the user directory was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2906,7 +2913,9 @@ public interface SecurityApiController {
       description = "Retrieve the summaries for the user directories")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The summaries for the user directories were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2969,7 +2978,10 @@ public interface SecurityApiController {
       description = "Retrieve the summaries for the user directories the tenant is associated with")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description =
+                "The summaries for the user directories the tenant is associated with were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3029,7 +3041,9 @@ public interface SecurityApiController {
       description = "Retrieve the user directory type for the user directory")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The user directory type for the user directory was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3090,7 +3104,7 @@ public interface SecurityApiController {
       description = "Retrieve the user directory types")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The user directory types were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -3132,7 +3146,7 @@ public interface SecurityApiController {
       description = "Retrieve the name of the user")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The name of the user was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3202,7 +3216,7 @@ public interface SecurityApiController {
   @Operation(summary = "Retrieve the users", description = "Retrieve the users")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The users were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3275,7 +3289,7 @@ public interface SecurityApiController {
   @Operation(summary = "Reinstate the token", description = "Reinstate the token")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The token was reinstated successfully"),
+        @ApiResponse(responseCode = "204", description = "The token was reinstated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3561,7 +3575,7 @@ public interface SecurityApiController {
       value = {
         @ApiResponse(
             responseCode = "204",
-            description = "The password reset process was initiated successfully"),
+            description = "The password reset process was initiated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3617,7 +3631,7 @@ public interface SecurityApiController {
   @Operation(summary = "Revoke the token", description = "Revoke the token")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The token was revoked successfully"),
+        @ApiResponse(responseCode = "204", description = "The token was revoked"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3675,7 +3689,7 @@ public interface SecurityApiController {
   @Operation(summary = "Update the group", description = "Update the group")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The group was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The group was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3747,7 +3761,7 @@ public interface SecurityApiController {
   @Operation(summary = "Update the policy", description = "Update the policy")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The policy was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The policy was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument or policy data",
@@ -3812,7 +3826,7 @@ public interface SecurityApiController {
   @Operation(summary = "Update the tenant", description = "Update the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The tenant was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The tenant was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3877,7 +3891,7 @@ public interface SecurityApiController {
   @Operation(summary = "Update the user", description = "Update the user")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The user was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The user was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3951,9 +3965,7 @@ public interface SecurityApiController {
   @Operation(summary = "Update the user directory", description = "Update the user directory")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The user directory was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The user directory was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

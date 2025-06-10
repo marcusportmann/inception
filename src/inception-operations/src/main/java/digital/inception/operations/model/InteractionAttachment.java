@@ -40,19 +40,37 @@ import java.util.UUID;
 /** The {@code InteractionAttachment} class holds the information for an interaction attachment. */
 @Schema(description = "An interaction attachment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "tenantId", "interactionId", "fileType", "name", "hash", "data"})
+@JsonPropertyOrder({
+  "id",
+  "tenantId",
+  "interactionId",
+  "sourceId",
+  "sourceReference",
+  "fileType",
+  "name",
+  "hash",
+  "data"
+})
 @XmlRootElement(name = "InteractionAttachment", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionAttachment",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "tenantId", "interactionId", "fileType", "name", "hash", "data"})
+    propOrder = {
+      "id",
+      "tenantId",
+      "interactionId",
+      "sourceId",
+      "sourceReference",
+      "fileType",
+      "name",
+      "hash",
+      "data"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_attachments")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class InteractionAttachment implements Serializable {
-
-  ADD SOURCE ID FOR SPLITTING
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -120,6 +138,25 @@ public class InteractionAttachment implements Serializable {
   @Column(name = "name", length = 200, nullable = false)
   private String name;
 
+  /** The ID for the interaction source the interaction attachment is associated with. */
+  @Schema(
+      description =
+          "The ID for the interaction source the interaction attachment is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SourceId", required = true)
+  @NotNull
+  @Column(name = "source_id", nullable = false)
+  private UUID sourceId;
+
+  /** The interaction source specific reference for the interaction attachment. */
+  @Schema(description = "The interaction source specific reference for the interaction attachment")
+  @JsonProperty
+  @XmlElement(name = "SourceReference")
+  @Size(min = 1, max = 400)
+  @Column(name = "source_reference", length = 400)
+  private String sourceReference;
+
   /** The ID for the tenant the interaction attachment is associated with. */
   @Schema(
       description = "The ID for the tenant the interaction attachment is associated with",
@@ -132,6 +169,73 @@ public class InteractionAttachment implements Serializable {
 
   /** Constructs a new {@code InteractionAttachment}. */
   public InteractionAttachment() {}
+
+  /**
+   * Constructs a new {@code InteractionAttachment}.
+   *
+   * @param id the ID for the interaction attachment
+   * @param tenantId the ID for the tenant the interaction attachment is associated with
+   * @param interactionId the ID for the interaction that the interaction attachment is associated
+   *     with
+   * @param sourceId the ID for the interaction source the interaction attachment is associated with
+   * @param sourceReference the interaction source specific reference for the interaction attachment
+   * @param fileType the file type for the interaction attachment
+   * @param name the name of the interaction attachment
+   * @param hash the base-64 encoded SHA-256 hash of the data for the interaction attachment
+   * @param data the data for the interaction attachment
+   */
+  public InteractionAttachment(
+      UUID id,
+      UUID tenantId,
+      UUID interactionId,
+      UUID sourceId,
+      String sourceReference,
+      FileType fileType,
+      String name,
+      String hash,
+      byte[] data) {
+    this.id = id;
+    this.tenantId = tenantId;
+    this.interactionId = interactionId;
+    this.sourceId = sourceId;
+    this.sourceReference = sourceReference;
+    this.fileType = fileType;
+    this.name = name;
+    this.hash = hash;
+    this.data = data;
+  }
+
+  /**
+   * Constructs a new {@code InteractionAttachment}.
+   *
+   * @param id the ID for the interaction attachment
+   * @param tenantId the ID for the tenant the interaction attachment is associated with
+   * @param interactionId the ID for the interaction that the interaction attachment is associated
+   *     with
+   * @param sourceId the ID for the interaction source the interaction attachment is associated with
+   * @param fileType the file type for the interaction attachment
+   * @param name the name of the interaction attachment
+   * @param hash the base-64 encoded SHA-256 hash of the data for the interaction attachment
+   * @param data the data for the interaction attachment
+   */
+  public InteractionAttachment(
+      UUID id,
+      UUID tenantId,
+      UUID interactionId,
+      UUID sourceId,
+      FileType fileType,
+      String name,
+      String hash,
+      byte[] data) {
+    this.id = id;
+    this.tenantId = tenantId;
+    this.interactionId = interactionId;
+    this.sourceId = sourceId;
+    this.fileType = fileType;
+    this.name = name;
+    this.hash = hash;
+    this.data = data;
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -195,11 +299,9 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the interaction that the interaction attachment is associated
-   * with.
+   * Returns the ID for the interaction that the interaction attachment is associated with.
    *
-   * @return the unique identifier for the interaction that the interaction attachment is associated
-   *     with
+   * @return the ID for the interaction that the interaction attachment is associated with
    */
   public UUID getInteractionId() {
     return interactionId;
@@ -215,9 +317,18 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the tenant the interaction attachment is associated with.
+   * Returns the ID for the interaction source the interaction attachment is associated with.
    *
-   * @return the unique identifier for the tenant the interaction attachment is associated with
+   * @return the ID for the interaction source the interaction attachment is associated with
+   */
+  public UUID getSourceId() {
+    return sourceId;
+  }
+
+  /**
+   * Returns the ID for the tenant the interaction attachment is associated with.
+   *
+   * @return the ID for the tenant the interaction attachment is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -261,20 +372,19 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the interaction attachment.
+   * Set the ID for the interaction attachment.
    *
-   * @param id the unique identifier for the interaction attachment
+   * @param id the ID for the interaction attachment
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the unique identifier for the interaction that the interaction attachment is associated
-   * with.
+   * Set the ID for the interaction that the interaction attachment is associated with.
    *
-   * @param interactionId the unique identifier for the interaction that the interaction attachment
-   *     is associated with
+   * @param interactionId the ID for the interaction that the interaction attachment is associated
+   *     with
    */
   public void setInteractionId(UUID interactionId) {
     this.interactionId = interactionId;
@@ -290,12 +400,38 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the tenant the interaction attachment is associated with.
+   * Set the ID for the interaction source the interaction attachment is associated with.
    *
-   * @param tenantId the unique identifier for the tenant the interaction attachment is associated
-   *     with
+   * @param sourceId the ID for the interaction source the interaction attachment is associated with
+   */
+  public void setSourceId(UUID sourceId) {
+    this.sourceId = sourceId;
+  }
+
+  /**
+   * Set the interaction source specific reference for the interaction attachment.
+   *
+   * @param sourceReference the interaction source specific reference for the interaction attachment
+   */
+  public void setSourceReference(String sourceReference) {
+    this.sourceReference = sourceReference;
+  }
+
+  /**
+   * Set the ID for the tenant the interaction attachment is associated with.
+   *
+   * @param tenantId the ID for the tenant the interaction attachment is associated with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
+  }
+
+  /**
+   * Returns the interaction source specific reference for the interaction attachment.
+   *
+   * @return the interaction source specific reference for the interaction attachment
+   */
+  String getSourceReference() {
+    return sourceReference;
   }
 }

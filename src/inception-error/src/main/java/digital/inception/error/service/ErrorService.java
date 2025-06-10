@@ -16,11 +16,11 @@
 
 package digital.inception.error.service;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.error.exception.ErrorReportNotFoundException;
 import digital.inception.error.model.ErrorReport;
-import digital.inception.error.model.ErrorReportNotFoundException;
 import digital.inception.error.model.ErrorReportSortBy;
 import digital.inception.error.model.ErrorReportSummaries;
 import digital.inception.error.model.ErrorReportSummary;

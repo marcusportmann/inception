@@ -16,11 +16,11 @@
 
 package digital.inception.mail.ws;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.mail.model.DuplicateMailTemplateException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.mail.exception.DuplicateMailTemplateException;
+import digital.inception.mail.exception.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplate;
-import digital.inception.mail.model.MailTemplateNotFoundException;
 import digital.inception.mail.model.MailTemplateSummary;
 import digital.inception.mail.service.MailService;
 import digital.inception.ws.AbstractWebServiceBase;

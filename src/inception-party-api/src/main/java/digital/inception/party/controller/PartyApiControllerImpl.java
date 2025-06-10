@@ -17,9 +17,18 @@
 package digital.inception.party.controller;
 
 import digital.inception.api.SecureApiController;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.party.exception.AssociationNotFoundException;
+import digital.inception.party.exception.DuplicateAssociationException;
+import digital.inception.party.exception.DuplicateMandateException;
+import digital.inception.party.exception.DuplicateOrganizationException;
+import digital.inception.party.exception.DuplicatePersonException;
+import digital.inception.party.exception.MandateNotFoundException;
+import digital.inception.party.exception.OrganizationNotFoundException;
+import digital.inception.party.exception.PartyNotFoundException;
+import digital.inception.party.exception.PersonNotFoundException;
 import digital.inception.party.model.*;
 import digital.inception.party.service.PartyService;
 import java.time.LocalDate;

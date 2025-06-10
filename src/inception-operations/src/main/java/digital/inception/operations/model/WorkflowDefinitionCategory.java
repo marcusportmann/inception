@@ -94,6 +94,17 @@ public class WorkflowDefinitionCategory implements Serializable {
    * Constructs a new {@code WorkflowDefinitionCategory}.
    *
    * @param id the ID for the workflow definition category
+   * @param name the name of the workflow definition category
+   */
+  public WorkflowDefinitionCategory(String id, String name) {
+    this.id = id;
+    this.name = name;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinitionCategory}.
+   *
+   * @param id the ID for the workflow definition category
    * @param tenantId the ID for the tenant the workflow definition category is specific to
    * @param name the name of the workflow definition category
    */

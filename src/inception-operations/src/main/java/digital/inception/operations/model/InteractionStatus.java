@@ -36,6 +36,14 @@ public enum InteractionStatus implements CodeEnum {
   @XmlEnumValue("Received")
   RECEIVED("received", "Received"),
 
+  /** Processing. */
+  @XmlEnumValue("Processing")
+  PROCESSING("processing", "Processing"),
+
+  /** Available. */
+  @XmlEnumValue("Available")
+  AVAILABLE("available", "Available"),
+
   /** Assigned. */
   @XmlEnumValue("Assigned")
   ASSIGNED("assigned", "Assigned"),

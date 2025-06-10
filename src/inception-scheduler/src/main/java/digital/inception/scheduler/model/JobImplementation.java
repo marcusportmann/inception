@@ -16,6 +16,8 @@
 
 package digital.inception.scheduler.model;
 
+import digital.inception.scheduler.exception.JobExecutionFailedException;
+
 /**
  * The {@code JobImplementation} interface defines the functionality that must be provided by all
  * jobs.

@@ -111,7 +111,7 @@ public class InteractionSummaries implements Serializable {
   @Schema(description = "The source ID filter that was applied to the interaction summaries")
   @JsonProperty
   @XmlElement(name = "SourceId")
-  private String sourceId;
+  private UUID sourceId;
 
   /** The ID for the tenant the interaction summaries are associated with. */
   @Schema(
@@ -149,7 +149,7 @@ public class InteractionSummaries implements Serializable {
       UUID tenantId,
       List<InteractionSummary> interactionSummaries,
       long total,
-      String sourceId,
+      UUID sourceId,
       String filter,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
@@ -225,7 +225,7 @@ public class InteractionSummaries implements Serializable {
    *
    * @return the source ID filter that was applied to the interaction summaries
    */
-  public String getSourceId() {
+  public UUID getSourceId() {
     return sourceId;
   }
 

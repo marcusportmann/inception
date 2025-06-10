@@ -16,16 +16,16 @@
 
 package digital.inception.server.authorization.oauth;
 
-import digital.inception.security.model.AuthenticationFailedException;
-import digital.inception.security.model.ExpiredPasswordException;
-import digital.inception.security.model.UserLockedException;
-import digital.inception.security.model.UserNotFoundException;
+import digital.inception.security.exception.AuthenticationFailedException;
+import digital.inception.security.exception.ExpiredPasswordException;
+import digital.inception.security.exception.UserLockedException;
+import digital.inception.security.exception.UserNotFoundException;
 import digital.inception.security.service.SecurityService;
-import digital.inception.server.authorization.token.InvalidOAuth2RefreshTokenException;
-import digital.inception.server.authorization.token.OAuth2AccessToken;
-import digital.inception.server.authorization.token.OAuth2RefreshToken;
-import digital.inception.server.authorization.token.RefreshedOAuth2Tokens;
-import digital.inception.server.authorization.token.TokenService;
+import digital.inception.server.authorization.token.exception.InvalidOAuth2RefreshTokenException;
+import digital.inception.server.authorization.token.model.OAuth2AccessToken;
+import digital.inception.server.authorization.token.model.OAuth2RefreshToken;
+import digital.inception.server.authorization.token.model.RefreshedOAuth2Tokens;
+import digital.inception.server.authorization.token.service.TokenService;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;

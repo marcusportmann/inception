@@ -52,9 +52,7 @@ public class AssignInteractionRequest implements Serializable {
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The ID for the interaction. */
-  @Schema(
-      description = "The unique identifier for the interaction",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(description = "The ID for the interaction", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "InteractionId", required = true)
   @NotNull
@@ -76,7 +74,7 @@ public class AssignInteractionRequest implements Serializable {
   /**
    * Constructs a new {@code AssignInteractionRequest}.
    *
-   * @param interactionId the unique identifier for the interaction
+   * @param interactionId the ID for the interaction
    * @param username the username for the user the interaction should be assigned to
    */
   public AssignInteractionRequest(UUID interactionId, String username) {
@@ -85,9 +83,9 @@ public class AssignInteractionRequest implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the interaction.
+   * Returns the ID for the interaction.
    *
-   * @return the unique identifier for the interaction
+   * @return the ID for the interaction
    */
   public UUID getInteractionId() {
     return interactionId;
@@ -103,9 +101,9 @@ public class AssignInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the interaction.
+   * Set the ID for the interaction.
    *
-   * @param interactionId the unique identifier for the interaction
+   * @param interactionId the ID for the interaction
    */
   public void setInteractionId(UUID interactionId) {
     this.interactionId = interactionId;

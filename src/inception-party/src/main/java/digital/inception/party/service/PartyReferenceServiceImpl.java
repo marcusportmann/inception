@@ -16,9 +16,9 @@
 
 package digital.inception.party.service;
 
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.party.model.AssociationPropertyType;
 import digital.inception.party.model.AssociationType;
 import digital.inception.party.model.AttributeType;
@@ -299,6 +299,9 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
 
   /** The Title Repository. */
   private final TitleRepository titleRepository;
+
+  /** The internal reference to the Party Reference Service to enable caching. */
+  private PartyReferenceService partyReferenceService;
 
   /**
    * Constructs a new {@code PartyReferenceServiceImpl}.
@@ -3397,6 +3400,10 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
    * @return the internal reference to the Party Reference Service to enable caching.
    */
   private PartyReferenceService getPartyReferenceService() {
-    return getApplicationContext().getBean(PartyReferenceService.class);
+    if (partyReferenceService == null) {
+      partyReferenceService = getApplicationContext().getBean(PartyReferenceService.class);
+    }
+
+    return partyReferenceService;
   }
 }

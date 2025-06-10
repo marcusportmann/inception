@@ -95,9 +95,8 @@ public class CreateWorkflowRequest implements Serializable {
   /**
    * Constructs a new {@code CreateWorkflowRequest}.
    *
-   * @param parentId the unique identifier for the parent workflow
-   * @param definitionId the unique identifier for the workflow definition the workflow is
-   *     associated with
+   * @param parentId the ID for the parent workflow
+   * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param data the data for the workflow
    */
   public CreateWorkflowRequest(UUID parentId, String definitionId, String data) {
@@ -116,9 +115,9 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the workflow definition the workflow is associated with.
+   * Returns the ID for the workflow definition the workflow is associated with.
    *
-   * @return the unique identifier for the workflow definition the workflow is associated with
+   * @return the ID for the workflow definition the workflow is associated with
    */
   public String getDefinitionId() {
     return definitionId;
@@ -134,9 +133,9 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the parent workflow.
+   * Returns the ID for the parent workflow.
    *
-   * @return the unique identifier for the parent workflow
+   * @return the ID for the parent workflow
    */
   public UUID getParentId() {
     return parentId;
@@ -152,10 +151,9 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the workflow definition the workflow is associated with.
+   * Set the ID for the workflow definition the workflow is associated with.
    *
-   * @param definitionId the unique identifier for the workflow definition the workflow is
-   *     associated with
+   * @param definitionId the ID for the workflow definition the workflow is associated with
    */
   public void setDefinitionId(String definitionId) {
     this.definitionId = definitionId;
@@ -172,9 +170,9 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the unique identifier for the parent workflow.
+   * Set the ID for the parent workflow.
    *
-   * @param parentId the unique identifier for the parent workflow
+   * @param parentId the ID for the parent workflow
    */
   public void setParentId(UUID parentId) {
     this.parentId = parentId;

@@ -16,8 +16,8 @@
 
 package digital.inception.reference.service;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.reference.model.Country;
 import digital.inception.reference.model.Language;
 import digital.inception.reference.model.MeasurementSystem;

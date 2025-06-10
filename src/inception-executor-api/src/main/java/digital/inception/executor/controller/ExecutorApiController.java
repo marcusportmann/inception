@@ -17,21 +17,21 @@
 package digital.inception.executor.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.executor.model.BatchTasksNotFoundException;
-import digital.inception.executor.model.DuplicateTaskTypeException;
-import digital.inception.executor.model.InvalidTaskStatusException;
+import digital.inception.executor.exception.BatchTasksNotFoundException;
+import digital.inception.executor.exception.DuplicateTaskTypeException;
+import digital.inception.executor.exception.InvalidTaskStatusException;
+import digital.inception.executor.exception.TaskNotFoundException;
+import digital.inception.executor.exception.TaskTypeNotFoundException;
 import digital.inception.executor.model.QueueTaskRequest;
 import digital.inception.executor.model.Task;
 import digital.inception.executor.model.TaskEvent;
-import digital.inception.executor.model.TaskNotFoundException;
 import digital.inception.executor.model.TaskSortBy;
 import digital.inception.executor.model.TaskStatus;
 import digital.inception.executor.model.TaskSummaries;
 import digital.inception.executor.model.TaskType;
-import digital.inception.executor.model.TaskTypeNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -194,7 +194,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Create the task type", description = "Create the task type")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The task type was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The task type was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -251,7 +251,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Delete the task", description = "Delete the task")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The task was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The task was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -306,7 +306,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Delete the task type", description = "Delete the task type")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The task type was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The task type was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -362,7 +362,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Retrieve the task", description = "Retrieve the task")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The task was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -420,7 +420,9 @@ public interface ExecutorApiController {
       description = "Retrieve the task events for a task")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The task events for the task were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -481,7 +483,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Retrieve the task summaries", description = "Retrieve the task summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The task summaries were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -554,7 +556,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Retrieve the task type", description = "Retrieve the task type")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The task type was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -612,7 +614,7 @@ public interface ExecutorApiController {
       description = "Retrieve the name of the task type")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The name of the task type was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -665,7 +667,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Retrieve all the task types", description = "Retrieve all the task types")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The task types were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -703,7 +705,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Queue a task for execution", description = "Queue a task for execution")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The task was queued for execution"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1003,7 +1005,7 @@ public interface ExecutorApiController {
   @Operation(summary = "Update the task type", description = "Update the task type")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The task type was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The task type was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

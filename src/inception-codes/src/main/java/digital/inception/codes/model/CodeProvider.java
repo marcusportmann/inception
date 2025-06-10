@@ -16,6 +16,9 @@
 
 package digital.inception.codes.model;
 
+import digital.inception.codes.exception.CodeCategoryNotFoundException;
+import digital.inception.codes.exception.CodeNotFoundException;
+import digital.inception.codes.exception.CodeProviderException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;

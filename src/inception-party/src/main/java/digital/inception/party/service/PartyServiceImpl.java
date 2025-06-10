@@ -16,34 +16,34 @@
 
 package digital.inception.party.service;
 
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.party.exception.AssociationNotFoundException;
+import digital.inception.party.exception.DuplicateAssociationException;
+import digital.inception.party.exception.DuplicateMandateException;
+import digital.inception.party.exception.DuplicateOrganizationException;
+import digital.inception.party.exception.DuplicatePersonException;
+import digital.inception.party.exception.MandateNotFoundException;
+import digital.inception.party.exception.OrganizationNotFoundException;
+import digital.inception.party.exception.PartyNotFoundException;
+import digital.inception.party.exception.PersonNotFoundException;
 import digital.inception.party.model.Association;
-import digital.inception.party.model.AssociationNotFoundException;
 import digital.inception.party.model.AssociationSortBy;
 import digital.inception.party.model.AssociationsForParty;
-import digital.inception.party.model.DuplicateAssociationException;
-import digital.inception.party.model.DuplicateMandateException;
-import digital.inception.party.model.DuplicateOrganizationException;
-import digital.inception.party.model.DuplicatePersonException;
 import digital.inception.party.model.EntityType;
 import digital.inception.party.model.Mandate;
-import digital.inception.party.model.MandateNotFoundException;
 import digital.inception.party.model.MandateSortBy;
 import digital.inception.party.model.MandatesForParty;
 import digital.inception.party.model.Organization;
-import digital.inception.party.model.OrganizationNotFoundException;
 import digital.inception.party.model.OrganizationSortBy;
 import digital.inception.party.model.Organizations;
 import digital.inception.party.model.Parties;
 import digital.inception.party.model.Party;
-import digital.inception.party.model.PartyNotFoundException;
 import digital.inception.party.model.PartySortBy;
 import digital.inception.party.model.PartyType;
 import digital.inception.party.model.Person;
-import digital.inception.party.model.PersonNotFoundException;
 import digital.inception.party.model.PersonSortBy;
 import digital.inception.party.model.Persons;
 import digital.inception.party.model.Snapshots;
@@ -96,6 +96,9 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   /** The maximum number of snapshots for a party that will be returned by the data store. */
   @Value("${inception.party.max-snapshots:#{100}}")
   private int maxSnapshots;
+
+  /** The internal reference to the Party Service to enable caching. */
+  private PartyService partyService;
 
   /**
    * Constructs a new {@code PartyServiceImpl}.
@@ -740,6 +743,10 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
    * @return the internal reference to the Party Service to enable caching.
    */
   private PartyService getPartyService() {
-    return getApplicationContext().getBean(PartyService.class);
+    if (partyService == null) {
+      partyService = getApplicationContext().getBean(PartyService.class);
+    }
+
+    return partyService;
   }
 }

@@ -16,10 +16,10 @@
 
 package digital.inception.executor.service;
 
+import digital.inception.executor.exception.TaskExecutionDelayedException;
+import digital.inception.executor.exception.TaskExecutionRetryableException;
 import digital.inception.executor.model.Task;
-import digital.inception.executor.model.TaskExecutionDelayedException;
 import digital.inception.executor.model.TaskExecutionResult;
-import digital.inception.executor.model.TaskExecutionRetryableException;
 import digital.inception.executor.model.TaskStatus;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;

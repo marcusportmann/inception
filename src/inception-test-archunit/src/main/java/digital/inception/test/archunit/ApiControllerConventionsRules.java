@@ -19,21 +19,16 @@ package digital.inception.test.archunit;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.JavaEnumConstant;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import digital.inception.core.service.Problem;
-import digital.inception.core.service.ServiceException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.Optional;
 
 /**
  * The {@code ApiControllerConventionsRules} class holds the ArchUnit rules that verify structural
@@ -41,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-public class ApiControllerConventionsRules {
+public final class ApiControllerConventionsRules {
 
   /**
    * The ArchUnit rule that verifies that API controller implementations are named correctly, have
@@ -50,13 +45,13 @@ public class ApiControllerConventionsRules {
   public static final ArchRule API_CONTROLLERS_FOLLOW_NAMING_AND_ANNOTATIONS_AND_LOCATION =
       classes()
           .that()
-          .areAnnotatedWith(RestController.class)
+          .areAnnotatedWith("org.springframework.web.bind.annotation.RestController")
           .should()
           .haveSimpleNameEndingWith("ApiControllerImpl")
           .andShould()
           .resideInAPackage("..controller..")
           .andShould()
-          .beAnnotatedWith(CrossOrigin.class)
+          .beAnnotatedWith("org.springframework.web.bind.annotation.CrossOrigin")
           .andShould(
               new ArchCondition<JavaClass>(
                   "implement an interface named like the class minus \"Impl\"") {
@@ -79,7 +74,7 @@ public class ApiControllerConventionsRules {
                 }
               })
           .andShould()
-          .resideInAPackage("..controller..")
+          .beAssignableTo("digital.inception.api.SecureApiController")
           .allowEmptyShould(true);
 
   /**
@@ -96,11 +91,9 @@ public class ApiControllerConventionsRules {
               .should()
               .resideInAPackage("..controller..")
               .andShould()
-              .beAnnotatedWith(RequestMapping.class)
+              .beAnnotatedWith("org.springframework.web.bind.annotation.RequestMapping")
               .andShould()
-              .beAnnotatedWith(Tag.class)
-              .andShould()
-              .resideInAPackage("..controller..")
+              .beAnnotatedWith("io.swagger.v3.oas.annotations.tags.Tag")
               .allowEmptyShould(true);
 
   /**
@@ -110,21 +103,19 @@ public class ApiControllerConventionsRules {
   public static final ArchRule API_CONTROLLER_METHODS_FOLLOW_ANNOTATIONS_AND_FULLY_DOCUMENTED =
       methods()
           .that()
-          .areAnnotatedWith(RequestMapping.class)
+          .areAnnotatedWith("org.springframework.web.bind.annotation.RequestMapping")
           .and()
           .areDeclaredInClassesThat()
           .areInterfaces()
           .and()
           .areDeclaredInClassesThat()
           .haveSimpleNameEndingWith("ApiController")
-          .and()
-          .areAnnotatedWith(RequestMapping.class)
           .should()
-          .beAnnotatedWith(Operation.class)
+          .beAnnotatedWith("io.swagger.v3.oas.annotations.Operation")
           .andShould()
-          .beAnnotatedWith(ApiResponses.class)
+          .beAnnotatedWith("io.swagger.v3.oas.annotations.responses.ApiResponses")
           .andShould()
-          .beAnnotatedWith(ResponseStatus.class)
+          .beAnnotatedWith("org.springframework.web.bind.annotation.ResponseStatus")
           .andShould(
               new ArchCondition<JavaMethod>(
                   "declare only exceptions annotated @Problem and extending ServiceException") {
@@ -134,8 +125,9 @@ public class ApiControllerConventionsRules {
                   for (JavaClass ex : method.getExceptionTypes()) {
 
                     boolean conforms =
-                        ex.isAnnotatedWith(Problem.class)
-                            && ex.isAssignableTo(ServiceException.class);
+                        ex.isAnnotatedWith("digital.inception.core.exception.Problem")
+                            && ex.isAssignableTo(
+                                "digital.inception.core.exception.ServiceException");
 
                     if (!conforms) {
                       String message =
@@ -150,6 +142,109 @@ public class ApiControllerConventionsRules {
               })
           .allowEmptyShould(true);
 
+  /**
+   * The ArchUnit rule that verifies that the methods on API controller interfaces have
+   * the @RequestMapping annotation.
+   */
+  public static final ArchRule API_CONTROLLER_METHODS_HAVE_REQUEST_MAPPING =
+      methods()
+          .that()
+          .areDeclaredInClassesThat()
+          .areInterfaces()
+          .and()
+          .areDeclaredInClassesThat()
+          .haveSimpleNameEndingWith("ApiController")
+          .and()
+          .areDeclaredInClassesThat()
+          .resideInAPackage("..controller..")
+          .should()
+          .beAnnotatedWith("org.springframework.web.bind.annotation.RequestMapping")
+          .orShould()
+          .beMetaAnnotatedWith("org.springframework.web.bind.annotation.RequestMapping")
+          .allowEmptyShould(true);
+
+  /**
+   * The ArchUnit rule that verifies that API controller methods without a return type have the
+   * correct HTTP status of HttpStatus.NO_CONTENT.
+   */
+  public static final ArchRule API_CONTROLLER_VOID_METHODS_REQUIRE_NO_CONTENT_HTTP_STATUS =
+      methods()
+          // 1️⃣  Scope: methods annotated with @RequestMapping …
+          .that()
+          .areAnnotatedWith("org.springframework.web.bind.annotation.RequestMapping")
+          //     … declared on an interface ending with “ApiController”
+          .and()
+          .areDeclaredInClassesThat()
+          .areInterfaces()
+          .and()
+          .areDeclaredInClassesThat()
+          .haveSimpleNameEndingWith("ApiController")
+
+          // 2️⃣  Condition: if return type is void ⇒ must have @ResponseStatus(NO_CONTENT)
+          .should(
+              new ArchCondition<JavaMethod>(
+                  "have @ResponseStatus(HttpStatus.NO_CONTENT) when the return type is void") {
+
+                @Override
+                public void check(JavaMethod method, ConditionEvents events) {
+                  boolean isVoid = method.getRawReturnType().isEquivalentTo(void.class);
+
+                  // Only enforce the annotation when the return type is void
+                  if (isVoid) {
+                    boolean hasResponseStatusAnnotation =
+                        method.isAnnotatedWith(
+                            "org.springframework.web.bind.annotation.ResponseStatus");
+
+                    if (hasResponseStatusAnnotation) {
+                      JavaAnnotation<?> annotation =
+                          method.getAnnotationOfType(
+                              "org.springframework.web.bind.annotation.ResponseStatus");
+
+                      Optional<Object> valueOptional = annotation.get("value");
+
+                      if (valueOptional.isPresent()) {
+                        Object value = valueOptional.get();
+
+                        if (value instanceof JavaEnumConstant javaEnumConstant) {
+                          if (!"NO_CONTENT".equals(javaEnumConstant.name())) {
+                            String message =
+                                String.format(
+                                    "Method %s returns void but is not annotated with "
+                                        + "@ResponseStatus(HttpStatus.NO_CONTENT)",
+                                    method.getFullName());
+                            events.add(SimpleConditionEvent.violated(method, message));
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              })
+          .allowEmptyShould(true);
+
   /** Constructs a new {@code ApiControllerConventionsRules}. */
   public ApiControllerConventionsRules() {}
+
+  /**
+   * Check that the ArchUnit rules are being adhered to.
+   *
+   * @param classes the Java classes to check
+   */
+  public static void check(JavaClasses classes) {
+    try {
+      Class.forName("org.springframework.web.bind.annotation.RestController");
+    } catch (ClassNotFoundException e) {
+      return;
+    }
+
+    API_CONTROLLERS_FOLLOW_NAMING_AND_ANNOTATIONS_AND_LOCATION.check(classes);
+
+    API_CONTROLLER_INTERFACES_FOLLOW_NAMING_AND_ANNOTATIONS_AND_LOCATION.check(classes);
+
+    API_CONTROLLER_METHODS_HAVE_REQUEST_MAPPING.check(classes);
+
+    API_CONTROLLER_METHODS_FOLLOW_ANNOTATIONS_AND_FULLY_DOCUMENTED.check(classes);
+
+    API_CONTROLLER_VOID_METHODS_REQUIRE_NO_CONTENT_HTTP_STATUS.check(classes);
+  }
 }

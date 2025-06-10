@@ -36,6 +36,10 @@ public enum InteractionSourceType implements CodeEnum {
   @XmlEnumValue("Mailbox")
   MAILBOX("mailbox", "Mailbox"),
 
+  /** Virtual. */
+  @XmlEnumValue("Virtual")
+  VIRTUAL("virtual", "Virtual"),
+
   /** WhatsApp. */
   @XmlEnumValue("WhatsApp")
   WHATSAPP("whatsapp", "WhatsApp");

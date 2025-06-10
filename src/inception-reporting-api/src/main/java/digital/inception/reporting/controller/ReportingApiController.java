@@ -17,11 +17,11 @@
 package digital.inception.reporting.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.reporting.model.DuplicateReportDefinitionException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.reporting.exception.DuplicateReportDefinitionException;
+import digital.inception.reporting.exception.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinition;
-import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -62,9 +62,7 @@ public interface ReportingApiController {
   @Operation(summary = "Create the report definition", description = "Create the report definition")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The report definition was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The report definition was created"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -123,9 +121,7 @@ public interface ReportingApiController {
   @Operation(summary = "Delete the report definition", description = "Delete the report definition")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The report definition was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The report definition was deleted"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -186,9 +182,7 @@ public interface ReportingApiController {
   @Operation(summary = "Generate the PDF report", description = "Generate the PDF report")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "The PDF report was generated successfully"),
+        @ApiResponse(responseCode = "200", description = "The PDF report was generated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -248,7 +242,7 @@ public interface ReportingApiController {
       description = "Retrieve the report definition")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The report definition was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -311,7 +305,9 @@ public interface ReportingApiController {
       description = "Retrieve the name of the report definition")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The name of the report definition was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -369,7 +365,9 @@ public interface ReportingApiController {
       description = "Retrieve the report definition summaries")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The report definition summaries were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -406,7 +404,7 @@ public interface ReportingApiController {
       description = "Retrieve the report definitions")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The report definitions were retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -444,9 +442,7 @@ public interface ReportingApiController {
   @Operation(summary = "Update the report definition", description = "Update the report definition")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The report definition was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The report definition was updated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

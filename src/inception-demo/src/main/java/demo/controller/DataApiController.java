@@ -19,8 +19,8 @@ package demo.controller;
 import demo.model.Data;
 import demo.model.ReactiveData;
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -55,7 +55,7 @@ public interface DataApiController {
   @Operation(summary = "Retrieve all the data", description = "Retrieve all the data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The data was retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -90,7 +90,7 @@ public interface DataApiController {
       description = "Retrieve all the reactive data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The reactive data was retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -126,7 +126,7 @@ public interface DataApiController {
   @Operation(summary = "Retrieve the data", description = "Retrieve the data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The data was retrieved"),
         @ApiResponse(
             responseCode = "403",
             description = "Access denied",
@@ -160,7 +160,7 @@ public interface DataApiController {
   @Operation(summary = "Process the data", description = "Process the data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The data was processed successfully"),
+        @ApiResponse(responseCode = "204", description = "The data was processed"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -208,7 +208,7 @@ public interface DataApiController {
   @Operation(summary = "Validate the data", description = "Validate the data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The data was validated successfully"),
+        @ApiResponse(responseCode = "204", description = "The data was validated"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

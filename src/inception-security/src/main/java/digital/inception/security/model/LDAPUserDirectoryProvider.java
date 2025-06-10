@@ -17,9 +17,22 @@
 package digital.inception.security.model;
 
 import com.github.f4b6a3.uuid.UuidCreator;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.JNDIUtil;
+import digital.inception.security.exception.AuthenticationFailedException;
+import digital.inception.security.exception.DuplicateGroupException;
+import digital.inception.security.exception.DuplicateUserException;
+import digital.inception.security.exception.ExistingGroupMembersException;
+import digital.inception.security.exception.ExistingPasswordException;
+import digital.inception.security.exception.ExpiredPasswordException;
+import digital.inception.security.exception.GroupMemberNotFoundException;
+import digital.inception.security.exception.GroupNotFoundException;
+import digital.inception.security.exception.GroupRoleNotFoundException;
+import digital.inception.security.exception.InvalidAttributeException;
+import digital.inception.security.exception.RoleNotFoundException;
+import digital.inception.security.exception.UserLockedException;
+import digital.inception.security.exception.UserNotFoundException;
 import digital.inception.security.persistence.jpa.GroupRepository;
 import digital.inception.security.persistence.jpa.RoleRepository;
 import digital.inception.security.persistence.jpa.UserRepository;

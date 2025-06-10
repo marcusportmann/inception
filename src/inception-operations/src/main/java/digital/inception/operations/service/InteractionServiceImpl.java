@@ -20,37 +20,39 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import com.microsoft.aad.msal4j.ClientCredentialFactory;
 import com.microsoft.aad.msal4j.ClientCredentialParameters;
 import com.microsoft.aad.msal4j.ConfidentialClientApplication;
-import com.microsoft.aad.msal4j.IAuthenticationResult;
 import com.microsoft.aad.msal4j.IClientCredential;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.file.FileType;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.service.ValidationError;
+import digital.inception.core.model.CodeEnum;
+import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.MimeData;
-import digital.inception.operations.model.DuplicateInteractionAttachmentException;
-import digital.inception.operations.model.DuplicateInteractionException;
-import digital.inception.operations.model.DuplicateMailboxInteractionSourceException;
-import digital.inception.operations.model.DuplicateWhatsAppInteractionSourceException;
+import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
+import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionSourceException;
+import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
+import digital.inception.operations.exception.InteractionNotFoundException;
+import digital.inception.operations.exception.InteractionSourceNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
-import digital.inception.operations.model.InteractionAttachmentNotFoundException;
+import digital.inception.operations.model.InteractionAttachmentSortBy;
+import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionMimeType;
-import digital.inception.operations.model.InteractionNotFoundException;
 import digital.inception.operations.model.InteractionSortBy;
+import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
-import digital.inception.operations.model.MailboxInteractionSource;
-import digital.inception.operations.model.MailboxInteractionSourceNotFoundException;
+import digital.inception.operations.model.MailboxInteractionSourceAttributeName;
 import digital.inception.operations.model.MailboxProtocol;
-import digital.inception.operations.model.WhatsAppInteractionSource;
-import digital.inception.operations.model.WhatsAppInteractionSourceNotFoundException;
-import digital.inception.operations.persistence.jpa.MailboxInteractionSourceRepository;
-import digital.inception.operations.persistence.jpa.WhatsAppInteractionSourceRepository;
+import digital.inception.operations.persistence.jpa.InteractionSourceRepository;
 import digital.inception.operations.store.InteractionStore;
+import digital.inception.operations.util.AttributeUtil;
 import digital.inception.operations.util.HtmlToSimplifiedHtml;
 import digital.inception.operations.util.MessageUtil;
+import jakarta.mail.Address;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Flags.Flag;
 import jakarta.mail.Folder;
@@ -58,8 +60,6 @@ import jakarta.mail.Message;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -70,11 +70,11 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,7 +86,7 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-public class InteractionServiceImpl implements InteractionService {
+public class InteractionServiceImpl extends AbstractServiceBase implements InteractionService {
 
   /** The characters for a base-62 encoded conversation ID. */
   private static final String BASE_62_ENCODING_CHARACTERS =
@@ -100,25 +100,22 @@ public class InteractionServiceImpl implements InteractionService {
   /** The maximum number of filtered interactions. */
   private static final int MAX_FILTERED_INTERACTIONS = 100;
 
-  /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+  /** The maximum number of filtered interaction attachments. */
+  private static final int MAX_FILTERED_INTERACTION_ATTACHMENTS = 100;
 
   /** The regular expression pattern used to extract the conversation ID from an email subject. */
   private final Pattern conversationIdPattern = Pattern.compile("\\[CID:([A-Z0-9]+)\\]");
 
+  /** The Interaction Source Repository. */
+  private final InteractionSourceRepository interactionSourceRepository;
+
   /** The Interaction Store. */
   private final InteractionStore interactionStore;
 
-  /** The Mailbox Interaction Source Repository. */
-  private final MailboxInteractionSourceRepository mailboxInteractionSourceRepository;
-
   private final SecureRandom secureRandom = new SecureRandom();
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
-  /** The WhatsApp Interaction Source Repository. */
-  private final WhatsAppInteractionSourceRepository whatsAppInteractionSourceRepository;
+  /** The internal reference to the Interaction Service to enable caching. */
+  private InteractionService InteractionService;
 
   /**
    * The minimum size for an image attachment on an email for it be processed as a valid attachment.
@@ -130,214 +127,391 @@ public class InteractionServiceImpl implements InteractionService {
    * Constructs a new {@code InteractionServiceImpl}.
    *
    * @param applicationContext the Spring application context
-   * @param validator the JSR-380 validator
    * @param interactionStore the Interaction Store
-   * @param mailboxInteractionSourceRepository the Mailbox Interaction Source Repository
-   * @param whatsAppInteractionSourceRepository the WhatsApp Interaction Source Repository
+   * @param interactionSourceRepository the Interaction Source Repository
    */
   public InteractionServiceImpl(
       ApplicationContext applicationContext,
-      Validator validator,
       InteractionStore interactionStore,
-      MailboxInteractionSourceRepository mailboxInteractionSourceRepository,
-      WhatsAppInteractionSourceRepository whatsAppInteractionSourceRepository) {
-    this.applicationContext = applicationContext;
-    this.validator = validator;
+      InteractionSourceRepository interactionSourceRepository) {
+    super(applicationContext);
+
     this.interactionStore = interactionStore;
-    this.mailboxInteractionSourceRepository = mailboxInteractionSourceRepository;
-    this.whatsAppInteractionSourceRepository = whatsAppInteractionSourceRepository;
+    this.interactionSourceRepository = interactionSourceRepository;
   }
 
   @Override
   @Transactional
   public Interaction createInteraction(UUID tenantId, Interaction interaction)
       throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException {
-    validateInteraction(interaction);
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
 
-    return interactionStore.createInteraction(tenantId, interaction);
+    validateArgument("interaction", interaction);
+
+    if (!Objects.equals(tenantId, interaction.getTenantId())) {
+      throw new InvalidArgumentException("interaction.tenantId");
+    }
+
+    try {
+      InteractionSource interactionSource =
+          getInteractionService().getInteractionSource(tenantId, interaction.getSourceId());
+
+      return interactionStore.createInteraction(tenantId, interaction);
+    } catch (DuplicateInteractionException e) {
+      throw e;
+    } catch (InteractionSourceNotFoundException e) {
+      throw new InvalidArgumentException("interaction.sourceId");
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the interaction ("
+              + interaction.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
   @Transactional
   public InteractionAttachment createInteractionAttachment(
-      UUID tenantId,
-      InteractionAttachment interactionAttachment)
+      UUID tenantId, InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           DuplicateInteractionAttachmentException,
           ServiceUnavailableException {
-    validateInteractionAttachment(interactionAttachment);
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
 
-    return interactionStore.createInteractionAttachment(tenantId, interactionAttachment);
+    validateArgument("interactionAttachment", interactionAttachment);
+
+    if (!Objects.equals(tenantId, interactionAttachment.getTenantId())) {
+      throw new InvalidArgumentException("interactionAttachment.tenantId");
+    }
+
+    try {
+      InteractionSource interactionSource =
+          getInteractionService()
+              .getInteractionSource(tenantId, interactionAttachment.getSourceId());
+
+      return interactionStore.createInteractionAttachment(tenantId, interactionAttachment);
+    } catch (DuplicateInteractionAttachmentException e) {
+      throw e;
+    } catch (InteractionSourceNotFoundException e) {
+      throw new InvalidArgumentException("interactionAttachment.sourceId");
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the interaction attachment ("
+              + interactionAttachment.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
   @Transactional
-  public MailboxInteractionSource createMailboxInteractionSource(
+  @CachePut(cacheNames = "interactionSources", key = "#interactionSource.id")
+  public InteractionSource createInteractionSource(
+      UUID tenantId, InteractionSource interactionSource)
+      throws InvalidArgumentException,
+          DuplicateInteractionSourceException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("interactionSource", interactionSource);
+
+    if (!Objects.equals(tenantId, interactionSource.getTenantId())) {
+      throw new InvalidArgumentException("interactionSource.tenantId");
+    }
+
+    try {
+      if (interactionSourceRepository.existsById(interactionSource.getId())) {
+        throw new DuplicateInteractionSourceException(interactionSource.getId());
+      }
+
+      interactionSourceRepository.saveAndFlush(interactionSource);
+
+      return interactionSource;
+    } catch (DuplicateInteractionSourceException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the interaction source ("
+              + interactionSource.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  @Transactional
+  public void deleteInteraction(UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    interactionStore.deleteInteraction(tenantId, interactionId);
+  }
+
+  @Override
+  @Transactional
+  public void deleteInteractionAttachment(UUID tenantId, UUID interactionAttachmentId)
+      throws InvalidArgumentException,
+          InteractionAttachmentNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionAttachmentId == null) {
+      throw new InvalidArgumentException("interactionAttachmentId");
+    }
+
+    interactionStore.deleteInteractionAttachment(tenantId, interactionAttachmentId);
+  }
+
+  @Override
+  @Transactional
+  public void deleteInteractionSource(UUID tenantId, UUID interactionSourceId)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionSourceId == null) {
+      throw new InvalidArgumentException("interactionSourceId");
+    }
+
+    try {
+      if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, interactionSourceId)) {
+        throw new InteractionSourceNotFoundException(interactionSourceId);
+      }
+
+      interactionSourceRepository.deleteById(interactionSourceId);
+    } catch (InteractionSourceNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the interaction source ("
+              + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Interaction getInteraction(UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    return interactionStore.getInteraction(tenantId, interactionId);
+  }
+
+  @Override
+  public InteractionAttachment getInteractionAttachment(UUID tenantId, UUID interactionAttachmentId)
+      throws InvalidArgumentException,
+          InteractionAttachmentNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionAttachmentId == null) {
+      throw new InvalidArgumentException("interactionAttachmentId");
+    }
+
+    return interactionStore.getInteractionAttachment(tenantId, interactionAttachmentId);
+  }
+
+  @Override
+  public InteractionAttachmentSummaries getInteractionAttachmentSummaries(
       UUID tenantId,
-      MailboxInteractionSource mailboxInteractionSource)
-      throws InvalidArgumentException,
-          DuplicateMailboxInteractionSourceException,
-          ServiceUnavailableException {
-    validateMailboxInteractionSource(mailboxInteractionSource);
+      UUID interactionId,
+      String filter,
+      InteractionAttachmentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
 
-    if (!Objects.equals(tenantId, mailboxInteractionSource.getTenantId())) {
-      XXX
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = InteractionAttachmentSortBy.NAME;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.DESCENDING;
+    }
+
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+
+    if (pageSize == null) {
+      pageSize = MAX_FILTERED_INTERACTIONS;
     }
 
     try {
-      if (mailboxInteractionSourceRepository.existsById(mailboxInteractionSource.getId())) {
-        throw new DuplicateMailboxInteractionSourceException(mailboxInteractionSource.getId());
+      if (!interactionStore.interactionExistsWithId(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(interactionId);
       }
 
-      mailboxInteractionSourceRepository.saveAndFlush(mailboxInteractionSource);
-
-      return mailboxInteractionSource;
-    } catch (DuplicateMailboxInteractionSourceException e) {
+      return interactionStore.getInteractionAttachmentSummaries(
+          tenantId,
+          interactionId,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize,
+          MAX_FILTERED_INTERACTION_ATTACHMENTS);
+    } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the mailbox interaction source ("
-              + mailboxInteractionSource.getId()
+          "Failed to retrieve the summaries for the interaction attachments for the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
   }
 
   @Override
-  @Transactional
-  public WhatsAppInteractionSource createWhatsAppInteractionSource(
-      WhatsAppInteractionSource whatsAppInteractionSource)
+  @Cacheable(cacheNames = "interactionSources", key = "#interactionSourceId")
+  public InteractionSource getInteractionSource(UUID tenantId, UUID interactionSourceId)
       throws InvalidArgumentException,
-          DuplicateWhatsAppInteractionSourceException,
+          InteractionSourceNotFoundException,
           ServiceUnavailableException {
-    validateWhatsAppInteractionSource(whatsAppInteractionSource);
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionSourceId == null) {
+      throw new InvalidArgumentException("interactionSourceId");
+    }
 
     try {
-      if (whatsAppInteractionSourceRepository.existsById(whatsAppInteractionSource.getId())) {
-        throw new DuplicateWhatsAppInteractionSourceException(whatsAppInteractionSource.getId());
+      /*
+       * NOTE: The search by both tenant ID and interaction source ID includes a security check to
+       *       ensure that the interaction source not only exists, but is also associated with the
+       *       specified tenant.
+       */
+
+      Optional<InteractionSource> interactionSourceOptional =
+          interactionSourceRepository.findByTenantIdAndId(tenantId, interactionSourceId);
+
+      if (interactionSourceOptional.isPresent()) {
+        return interactionSourceOptional.get();
+      } else {
+        throw new InteractionSourceNotFoundException(interactionSourceId);
       }
-
-      whatsAppInteractionSourceRepository.saveAndFlush(whatsAppInteractionSource);
-
-      return whatsAppInteractionSource;
-    } catch (DuplicateWhatsAppInteractionSourceException e) {
+    } catch (InteractionSourceNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the WhatsApp interaction source ("
-              + whatsAppInteractionSource.getId()
+          "Failed to retrieve the interaction source ("
+              + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
   }
 
   @Override
-  @Transactional
-  public void deleteInteraction(UUID interactionId)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
-    if (interactionId == null) {
-      throw new InvalidArgumentException("interactionId");
-    }
-
-    interactionStore.deleteInteraction(interactionId);
-  }
-
-  @Override
-  @Transactional
-  public void deleteInteractionAttachment(UUID interactionAttachmentId)
-      throws InvalidArgumentException,
-          InteractionAttachmentNotFoundException,
-          ServiceUnavailableException {
-    if (interactionAttachmentId == null) {
-      throw new InvalidArgumentException("interactionAttachmentId");
-    }
-
-    interactionStore.deleteInteractionAttachment(interactionAttachmentId);
-  }
-
-  @Override
-  @Transactional
-  public void deleteMailboxInteractionSource(String mailboxInteractionSourceId)
-      throws InvalidArgumentException,
-          MailboxInteractionSourceNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(mailboxInteractionSourceId)) {
-      throw new InvalidArgumentException("mailboxInteractionSourceId");
+  public List<InteractionSource> getInteractionSources(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
     try {
-      if (!mailboxInteractionSourceRepository.existsById(mailboxInteractionSourceId)) {
-        throw new MailboxInteractionSourceNotFoundException(mailboxInteractionSourceId);
-      }
-
-      mailboxInteractionSourceRepository.deleteById(mailboxInteractionSourceId);
-    } catch (MailboxInteractionSourceNotFoundException e) {
-      throw e;
+      return interactionSourceRepository.findByTenantIdOrderByNameAsc(tenantId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the mailbox interaction source (" + mailboxInteractionSourceId + ")",
-          e);
+          "Failed to retrieve the interaction sources for the tenant (" + tenantId + ")", e);
     }
   }
 
   @Override
-  @Transactional
-  public void deleteWhatsAppInteractionSource(String whatsAppInteractionSourceId)
-      throws InvalidArgumentException,
-          WhatsAppInteractionSourceNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(whatsAppInteractionSourceId)) {
-      throw new InvalidArgumentException("whatsAppInteractionSourceId");
+  public List<InteractionSource> getInteractionSources(
+      UUID tenantId, InteractionSourceType interactionSourceType)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
     try {
-      if (!whatsAppInteractionSourceRepository.existsById(whatsAppInteractionSourceId)) {
-        throw new WhatsAppInteractionSourceNotFoundException(whatsAppInteractionSourceId);
-      }
-
-      whatsAppInteractionSourceRepository.deleteById(whatsAppInteractionSourceId);
-    } catch (WhatsAppInteractionSourceNotFoundException e) {
-      throw e;
+      return interactionSourceRepository.findByTenantIdAndTypeOrderByNameAsc(
+          tenantId, interactionSourceType);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the WhatsApp interaction source (" + whatsAppInteractionSourceId + ")",
+          "Failed to retrieve the interaction sources with the type ("
+              + interactionSourceType
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
-  }
-
-  @Override
-  public Interaction getInteraction(UUID interactionId)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
-    if (interactionId == null) {
-      throw new InvalidArgumentException("interactionId");
-    }
-
-    return interactionStore.getInteraction(interactionId);
-  }
-
-  @Override
-  public InteractionAttachment getInteractionAttachment(UUID interactionAttachmentId)
-      throws InvalidArgumentException,
-          InteractionAttachmentNotFoundException,
-          ServiceUnavailableException {
-    if (interactionAttachmentId == null) {
-      throw new InvalidArgumentException("interactionAttachmentId");
-    }
-
-    return interactionStore.getInteractionAttachment(interactionAttachmentId);
   }
 
   @Override
   public InteractionSummaries getInteractionSummaries(
-      String sourceId,
+      UUID tenantId,
+      UUID sourceId,
       InteractionStatus status,
       String filter,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(sourceId)) {
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (sourceId == null) {
       throw new InvalidArgumentException("sourceId");
     }
 
@@ -365,99 +539,56 @@ public class InteractionServiceImpl implements InteractionService {
       pageSize = MAX_FILTERED_INTERACTIONS;
     }
 
-    return interactionStore.getInteractionSummaries(
-        sourceId,
-        status,
-        filter,
-        sortBy,
-        sortDirection,
-        pageIndex,
-        pageSize,
-        MAX_FILTERED_INTERACTIONS);
-  }
-
-  @Override
-  public MailboxInteractionSource getMailboxInteractionSource(String mailboxInteractionSourceId)
-      throws InvalidArgumentException,
-          MailboxInteractionSourceNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(mailboxInteractionSourceId)) {
-      throw new InvalidArgumentException("mailboxInteractionSourceId");
-    }
-
     try {
-      Optional<MailboxInteractionSource> mailboxInteractionSourceOptional =
-          mailboxInteractionSourceRepository.findById(mailboxInteractionSourceId);
-
-      if (mailboxInteractionSourceOptional.isPresent()) {
-        return mailboxInteractionSourceOptional.get();
-      } else {
-        throw new MailboxInteractionSourceNotFoundException(mailboxInteractionSourceId);
+      if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, sourceId)) {
+        throw new InteractionSourceNotFoundException(sourceId);
       }
-    } catch (MailboxInteractionSourceNotFoundException e) {
+
+      return interactionStore.getInteractionSummaries(
+          tenantId,
+          sourceId,
+          status,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize,
+          MAX_FILTERED_INTERACTIONS);
+    } catch (InteractionSourceNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the mailbox interaction source (" + mailboxInteractionSourceId + ")",
-          e);
-    }
-  }
-
-  @Override
-  public List<MailboxInteractionSource> getMailboxInteractionSources()
-      throws ServiceUnavailableException {
-    try {
-      return mailboxInteractionSourceRepository.findAllByOrderByIdAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the mailbox interaction sources", e);
-    }
-  }
-
-  @Override
-  public WhatsAppInteractionSource getWhatsAppInteractionSource(String whatsAppInteractionSourceId)
-      throws InvalidArgumentException,
-          WhatsAppInteractionSourceNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(whatsAppInteractionSourceId)) {
-      throw new InvalidArgumentException("whatsAppInteractionSourceId");
-    }
-
-    try {
-      Optional<WhatsAppInteractionSource> whatsAppInteractionSourceOptional =
-          whatsAppInteractionSourceRepository.findById(whatsAppInteractionSourceId);
-
-      if (whatsAppInteractionSourceOptional.isPresent()) {
-        return whatsAppInteractionSourceOptional.get();
-      } else {
-        throw new WhatsAppInteractionSourceNotFoundException(whatsAppInteractionSourceId);
-      }
-    } catch (WhatsAppInteractionSourceNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the WhatsApp interaction source ("
-              + whatsAppInteractionSourceId
+          "Failed to retrieve the summaries for the interactions for the interaction source ("
+              + sourceId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
   }
 
   @Override
-  public List<WhatsAppInteractionSource> getWhatsAppInteractionSources()
-      throws ServiceUnavailableException {
-    try {
-      return whatsAppInteractionSourceRepository.findAllByOrderByIdAsc();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the WhatsApp interaction sources", e);
+  public boolean interactionAttachmentExistsWithId(UUID tenantId, UUID interactionAttachmentId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
+
+    if (interactionAttachmentId == null) {
+      throw new InvalidArgumentException("interactionAttachmentId");
+    }
+
+    return interactionStore.interactionAttachmentExistsWithId(tenantId, interactionAttachmentId);
   }
 
   @Override
   public boolean interactionAttachmentExistsWithInteractionIdAndHash(
-      UUID interactionId, String hash)
+      UUID tenantId, UUID interactionId, String hash)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (interactionId == null) {
       throw new InvalidArgumentException("interactionId");
     }
@@ -468,7 +599,7 @@ public class InteractionServiceImpl implements InteractionService {
 
     try {
       return interactionStore
-          .getInteractionAttachmentIdByInteractionIdAndHash(interactionId, hash)
+          .getInteractionAttachmentIdByInteractionIdAndHash(tenantId, interactionId, hash)
           .isPresent();
 
     } catch (Throwable e) {
@@ -477,15 +608,35 @@ public class InteractionServiceImpl implements InteractionService {
               + interactionId
               + ") and hash ("
               + hash
-              + ") exists",
+              + ") exists for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
 
   @Override
-  public boolean interactionExistsWithSourceIdAndSourceReference(
-      String sourceId, String sourceReference)
+  public boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    return interactionStore.interactionExistsWithId(tenantId, interactionId);
+  }
+
+  @Override
+  public boolean interactionExistsWithSourceIdAndSourceReference(
+      UUID tenantId, UUID sourceId, String sourceReference)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (sourceId == null) {
       throw new InvalidArgumentException("sourceId");
     }
@@ -496,7 +647,7 @@ public class InteractionServiceImpl implements InteractionService {
 
     try {
       return interactionStore
-          .getInteractionIdBySourceIdAndSourceReference(sourceId, sourceReference)
+          .getInteractionIdBySourceIdAndSourceReference(tenantId, sourceId, sourceReference)
           .isPresent();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -504,127 +655,8 @@ public class InteractionServiceImpl implements InteractionService {
               + sourceId
               + ") and source reference ("
               + sourceReference
-              + ") exists",
-          e);
-    }
-  }
-
-  @Override
-  @Transactional
-  public int synchronizeMailboxInteractionSource(MailboxInteractionSource mailboxInteractionSource)
-      throws ServiceUnavailableException {
-    int numberOfNewInteractions = 0;
-
-    try {
-      /*
-       * Retrieve the Java Mail session and store using the mailbox configuration for the mailbox
-       * interaction source.
-       */
-      Store store;
-      if (mailboxInteractionSource.getProtocol() == MailboxProtocol.STANDARD_IMAP) {
-        store = getStandardImapStore(mailboxInteractionSource, false);
-      } else if (mailboxInteractionSource.getProtocol() == MailboxProtocol.STANDARD_IMAPS) {
-        store = getStandardImapStore(mailboxInteractionSource, true);
-      } else if (mailboxInteractionSource.getProtocol() == MailboxProtocol.MICROSOFT_365_IMAPS) {
-        store = getMicrosoft365ImapStore(mailboxInteractionSource);
-      } else {
-        throw new RuntimeException(
-            "Unsupported mailbox protocol ("
-                + mailboxInteractionSource.getProtocol().code()
-                + ") for mailbox interaction source ("
-                + mailboxInteractionSource.getId()
-                + ")");
-      }
-
-      // Access inbox
-      try (Folder inboxFolder = store.getFolder("INBOX")) {
-        inboxFolder.open(Folder.READ_WRITE);
-
-        Message[] messages = inboxFolder.getMessages();
-
-        // Process each message
-        for (Message message : messages) {
-          Interaction interaction =
-              createMessageInteractionForMailboxInteractionSource(
-                  mailboxInteractionSource, message);
-
-          Optional<UUID> interactionIdOptional =
-              interactionStore.getInteractionIdBySourceIdAndSourceReference(
-                  interaction.getSourceId(), interaction.getSourceReference());
-
-          UUID interactionId;
-
-          // Create the interaction if required
-          if (interactionIdOptional.isEmpty()) {
-            interactionId = interaction.getId();
-
-            interactionStore.createInteraction(interaction);
-
-            numberOfNewInteractions++;
-          } else {
-            interactionId = interactionIdOptional.get();
-          }
-
-          for (MimeData interactionAttachmentMimeData :
-              MessageUtil.getMessageAttachments(message, minimumImageAttachmentSize)) {
-
-            // Create the interaction attachments if required
-            if (!interactionAttachmentExistsWithInteractionIdAndHash(
-                interactionId, interactionAttachmentMimeData.getHash())) {
-              InteractionAttachment interactionAttachment = new InteractionAttachment();
-
-              interactionAttachment.setId(UuidCreator.getTimeOrderedEpoch());
-              interactionAttachment.setInteractionId(interactionId);
-
-              try {
-                interactionAttachment.setFileType(
-                    FileType.fromMimeType(
-                        interactionAttachmentMimeData.getMimeType().getBaseType().toLowerCase()));
-              } catch (Throwable ignored) {
-                interactionAttachment.setFileType(FileType.BINARY);
-              }
-
-              interactionAttachment.setName(
-                  StringUtils.hasText(interactionAttachmentMimeData.getName())
-                      ? interactionAttachmentMimeData.getName()
-                      : "No Name");
-              interactionAttachment.setHash(interactionAttachmentMimeData.getHash());
-              interactionAttachment.setData(interactionAttachmentMimeData.getData());
-
-              interactionStore.createInteractionAttachment(interactionAttachment);
-            }
-          }
-
-          // Archive the message if required
-          if (mailboxInteractionSource.getArchiveMail()) {
-            try (Folder archiveFolder = store.getFolder("Archive")) {
-              if (!archiveFolder.exists()) {
-                archiveFolder.create(Folder.HOLDS_MESSAGES);
-              }
-
-              archiveFolder.open(Folder.READ_WRITE);
-
-              inboxFolder.copyMessages(new Message[] {message}, archiveFolder);
-              message.setFlag(Flag.DELETED, true);
-            }
-          }
-          // Delete the message if required
-          else if (mailboxInteractionSource.getDeleteMail()) {
-            message.setFlag(Flag.DELETED, true);
-          }
-        }
-
-        // Expunge delete messages from INBOX
-        Message[] expungedMessages = inboxFolder.expunge();
-      } finally {
-        store.close();
-      }
-
-      return numberOfNewInteractions;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to synchronize the mailbox interaction source ("
-              + mailboxInteractionSource.getId()
+              + ") exists for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -632,27 +664,99 @@ public class InteractionServiceImpl implements InteractionService {
 
   @Override
   @Transactional
-  public Interaction updateInteraction(Interaction interaction)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
-    validateInteraction(interaction);
+  public int synchronizeInteractionSource(InteractionSource interactionSource)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    validateArgument("interactionSource", interactionSource);
 
-    return interactionStore.updateInteraction(interaction);
+    if (interactionSource.getType() == InteractionSourceType.MAILBOX) {
+      return synchronizeMailboxInteractionSource(interactionSource);
+    } else {
+      throw new ServiceUnavailableException(
+          "Failed to synchronize the interaction source ("
+              + interactionSource.getId()
+              + ") with the unsupported type ("
+              + interactionSource.getType()
+              + ")");
+    }
+  }
+
+  @Override
+  @Transactional
+  public Interaction updateInteraction(UUID tenantId, Interaction interaction)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("interaction", interaction);
+
+    if (!Objects.equals(tenantId, interaction.getTenantId())) {
+      throw new InvalidArgumentException("interaction.tenantId");
+    }
+
+    return interactionStore.updateInteraction(tenantId, interaction);
   }
 
   @Override
   @Transactional
   public InteractionAttachment updateInteractionAttachment(
-      InteractionAttachment interactionAttachment)
+      UUID tenantId, InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           InteractionAttachmentNotFoundException,
           ServiceUnavailableException {
-    validateInteractionAttachment(interactionAttachment);
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
 
-    return interactionStore.updateInteractionAttachment(interactionAttachment);
+    validateArgument("interactionAttachment", interactionAttachment);
+
+    if (!Objects.equals(tenantId, interactionAttachment.getTenantId())) {
+      throw new InvalidArgumentException("interactionAttachment.tenantId");
+    }
+
+    return interactionStore.updateInteractionAttachment(tenantId, interactionAttachment);
+  }
+
+  @Override
+  @CachePut(cacheNames = "interactionSources", key = "#interactionSource.id")
+  public InteractionSource updateInteractionSource(
+      UUID tenantId, InteractionSource interactionSource)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("interactionSource", interactionSource);
+
+    if (!Objects.equals(tenantId, interactionSource.getTenantId())) {
+      throw new InvalidArgumentException("interactionSource.tenantId");
+    }
+
+    try {
+      if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, interactionSource.getId())) {
+        throw new InteractionSourceNotFoundException(interactionSource.getId());
+      }
+
+      interactionSourceRepository.saveAndFlush(interactionSource);
+
+      return interactionSource;
+    } catch (InteractionSourceNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to updated the interaction source ("
+              + interactionSource.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   private Interaction createMessageInteractionForMailboxInteractionSource(
-      MailboxInteractionSource mailboxInteractionSource, Message message)
+      InteractionSource mailboxInteractionSource, Message message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
@@ -661,6 +765,7 @@ public class InteractionServiceImpl implements InteractionService {
     try {
       Interaction interaction = new Interaction();
       interaction.setId(UuidCreator.getTimeOrderedEpoch());
+      interaction.setTenantId(mailboxInteractionSource.getTenantId());
       interaction.setStatus(InteractionStatus.RECEIVED);
       interaction.setSourceId(mailboxInteractionSource.getId());
       interaction.setSourceReference(message.getHeader("Message-ID")[0]);
@@ -678,8 +783,11 @@ public class InteractionServiceImpl implements InteractionService {
       }
 
       interaction.setType(InteractionType.EMAIL);
-      interaction.setFromAddress(message.getFrom()[0]);
-      interaction.setToAddresses(message.getAllRecipients());
+      interaction.setSender(message.getFrom()[0].toString());
+      interaction.setRecipients(
+          Arrays.stream(message.getAllRecipients())
+              .map(Address::toString) // or InternetAddress::getAddress
+              .toList());
       interaction.setSubject(
           (message.getSubject().length() > 2000)
               ? message.getSubject().substring(0, 2000)
@@ -749,102 +857,192 @@ public class InteractionServiceImpl implements InteractionService {
     return encoded.toString();
   }
 
-  private Store getMicrosoft365ImapStore(MailboxInteractionSource mailboxInteractionSource) {
+  /**
+   * Returns the internal reference to the Interaction Service to enable caching.
+   *
+   * @return the internal reference to the Interaction Service to enable caching.
+   */
+  private InteractionService getInteractionService() {
+    if (InteractionService == null) {
+      InteractionService = getApplicationContext().getBean(InteractionService.class);
+    }
+
+    return InteractionService;
+  }
+
+  private Store getMicrosoft365ImapStore(InteractionSource interactionSource) {
+    boolean debug =
+        AttributeUtil.getAttributeValueAsBoolean(
+            interactionSource, MailboxInteractionSourceAttributeName.DEBUG.code());
+
+    String host =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.HOST.code());
+    if (!StringUtils.hasText(host)) {
+      throw new IllegalArgumentException(
+          "No \"host\" attribute specified for the Microsoft 365 IMAP store interaction source");
+    }
+
+    String portStr =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.PORT.code());
+    if (!StringUtils.hasText(portStr)) {
+      throw new IllegalArgumentException(
+          "No \"port\" attribute specified for the Microsoft 365 IMAP store interaction source");
+    }
+    int port;
     try {
-      Properties properties = new Properties();
+      port = Integer.parseInt(portStr);
+      if (port <= 0 || port > 65535) throw new NumberFormatException();
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException(
+          "Invalid \"port\" ("
+              + portStr
+              + ") specified for the Microsoft 365 IMAP store interaction source");
+    }
 
-      if (mailboxInteractionSource.getDebug()) {
-        properties.put("mail.debug", "true");
-        properties.put("mail.debug.auth", "true");
-      }
+    String emailAddress =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.EMAIL_ADDRESS.code());
+    if (!StringUtils.hasText(emailAddress)) {
+      throw new IllegalArgumentException(
+          "No \"email_address\" attribute specified for the Microsoft 365 IMAP store interaction source");
+    }
 
-      properties.put("mail.store.protocol", "imaps");
-      properties.put("mail.imaps.host", mailboxInteractionSource.getHost());
-      properties.put("mail.imaps.port", String.valueOf(mailboxInteractionSource.getPort()));
-      properties.put("mail.imaps.ssl.enable", "true");
-      properties.put("mail.imaps.starttls.enable", "true");
-      properties.put("mail.imaps.auth", "true");
-      properties.put("mail.imaps.auth.mechanisms", "XOAUTH2");
-      properties.put("mail.imaps.user", mailboxInteractionSource.getEmailAddress());
+    String clientSecret =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.CREDENTIAL.code());
+    if (!StringUtils.hasText(clientSecret)) {
+      throw new IllegalArgumentException(
+          "No \"credential\" attribute specified for the Microsoft 365 IMAP store interaction source");
+    }
 
-      properties.put("mail.imaps.auth.plain.disable", "true");
-      properties.put("mail.imaps.auth.xoauth2.disable", "false");
+    String clientId =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.PRINCIPAL.code());
+    if (!StringUtils.hasText(clientId)) {
+      throw new IllegalArgumentException(
+          "No \"principal\" attribute specified for the Microsoft 365 IMAP store interaction source");
+    }
 
-      Authenticator authenticator =
-          new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-              try {
-                IClientCredential clientCredential =
-                    ClientCredentialFactory.createFromSecret(
-                        mailboxInteractionSource.getCredential());
+    String authority =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.AUTHORITY.code());
+    if (!StringUtils.hasText(authority)) {
+      throw new IllegalArgumentException(
+          "No \"authority\" attribute specified for the Microsoft 365 IMAP store interaction source");
+    }
 
-                ConfidentialClientApplication app =
-                    ConfidentialClientApplication.builder(
-                            mailboxInteractionSource.getPrincipal(), clientCredential)
-                        .authority(mailboxInteractionSource.getAuthority())
-                        .build();
+    Properties props = new Properties();
+    if (debug) {
+      props.put("mail.debug", "true");
+      props.put("mail.debug.auth", "true");
+    }
+    props.put("mail.store.protocol", "imaps");
+    props.put("mail.imaps.host", host);
+    props.put("mail.imaps.port", String.valueOf(port));
+    props.put("mail.imaps.ssl.enable", "true");
+    props.put("mail.imaps.starttls.enable", "true");
+    props.put("mail.imaps.auth", "true");
+    props.put("mail.imaps.auth.mechanisms", "XOAUTH2");
+    props.put("mail.imaps.user", emailAddress);
+    props.put("mail.imaps.auth.plain.disable", "true");
+    props.put("mail.imaps.auth.xoauth2.disable", "false");
 
-                String scopes = "https://outlook.office365.com/.default";
+    Authenticator auth =
+        new Authenticator() {
+          @Override
+          protected PasswordAuthentication getPasswordAuthentication() {
+            try {
+              IClientCredential credential = ClientCredentialFactory.createFromSecret(clientSecret);
 
-                ClientCredentialParameters clientCredentialParam =
-                    ClientCredentialParameters.builder(
-                            Arrays.stream(scopes.split(","))
-                                .map(String::trim)
-                                .collect(Collectors.toSet()))
-                        .build();
+              ConfidentialClientApplication app =
+                  ConfidentialClientApplication.builder(clientId, credential)
+                      .authority(authority)
+                      .build();
 
-                CompletableFuture<IAuthenticationResult> future =
-                    app.acquireToken(clientCredentialParam);
+              ClientCredentialParameters params =
+                  ClientCredentialParameters.builder(
+                          Set.of("https://outlook.office365.com/.default"))
+                      .build();
 
-                String accessToken;
-                try {
-                  accessToken = future.get().accessToken();
-                } catch (Throwable e) {
-                  throw new RuntimeException(
-                      "Failed to retrieve the OAuth token used to access the Microsoft 365 IMAP mailbox ("
-                          + mailboxInteractionSource.getEmailAddress()
-                          + ")",
-                      e);
-                }
-
-                return new PasswordAuthentication(
-                    mailboxInteractionSource.getEmailAddress(), accessToken);
-              } catch (Throwable e) {
-                throw new RuntimeException(
-                    "Failed to create the PasswordAuthentication for Microsoft 365 IMAP mailbox ("
-                        + mailboxInteractionSource.getEmailAddress()
-                        + ")",
-                    e);
-              }
+              String accessToken = app.acquireToken(params).get().accessToken();
+              return new PasswordAuthentication(emailAddress, accessToken);
+            } catch (Throwable t) {
+              throw new RuntimeException(
+                  "Failed to obtain the OAuth token for the interaction source ("
+                      + interactionSource.getId()
+                      + ")",
+                  t);
             }
-          };
+          }
+        };
 
-      Session session = Session.getInstance(properties, authenticator);
-
-      if (mailboxInteractionSource.getDebug()) {
-        session.setDebug(true);
-      }
+    try {
+      Session session = Session.getInstance(props, auth);
+      session.setDebug(debug);
 
       Store store = session.getStore("imaps");
-
-      store.connect();
+      store.connect(); // triggers the Authenticator
 
       return store;
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to retrieved the Microsoft 365 IMAP store", e);
+    } catch (Throwable t) {
+      throw new RuntimeException(
+          "Failed to retrieve the Microsoft 365 IMAP Store for the interaction source ("
+              + interactionSource.getId()
+              + ")",
+          t);
     }
   }
 
-  private Store getStandardImapStore(
-      MailboxInteractionSource mailboxInteractionSource, boolean isSecure) {
+  private Store getStandardImapStore(InteractionSource interactionSource, boolean isSecure) {
+    String host =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.HOST.code());
+    if (!StringUtils.hasText(host)) {
+      throw new IllegalArgumentException(
+          "No \"host\" attribute specified for the IMAP store interaction source");
+    }
+
+    String portStr =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.PORT.code());
+    if (!StringUtils.hasText(portStr)) {
+      throw new IllegalArgumentException(
+          "No \"port\" attribute specified for the IMAP store interaction source");
+    }
+    int port;
+    try {
+      port = Integer.parseInt(portStr);
+      if (port <= 0 || port > 65535) throw new NumberFormatException();
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException(
+          "Invalid \"port\" (" + portStr + ") specified for the IMAP store interaction source");
+    }
+
+    String credential =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.CREDENTIAL.code());
+    if (!StringUtils.hasText(credential)) {
+      throw new IllegalArgumentException(
+          "No \"credential\" attribute specified for the IMAP store interaction source");
+    }
+
+    String principal =
+        AttributeUtil.getAttributeValue(
+            interactionSource, MailboxInteractionSourceAttributeName.PRINCIPAL.code());
+    if (!StringUtils.hasText(principal)) {
+      throw new IllegalArgumentException(
+          "No \"principal\" attribute specified for the IMAP store interaction source");
+    }
+
     try {
       Properties properties = new Properties();
 
       if (isSecure) {
         properties.put("mail.store.protocol", "imaps");
-        properties.put("mail.imaps.host", mailboxInteractionSource.getHost());
-        properties.put("mail.imaps.port", String.valueOf(mailboxInteractionSource.getPort()));
+        properties.put("mail.imaps.host", host);
+        properties.put("mail.imaps.port", String.valueOf(port));
         properties.put("mail.imaps.ssl.enable", "true");
         properties.put("mail.imaps.starttls.enable", "true");
         // TODO: FIX THIS -- MARCUS
@@ -852,81 +1050,177 @@ public class InteractionServiceImpl implements InteractionService {
         properties.put("mail.imaps.ssl.trust", "*");
       } else {
         properties.put("mail.store.protocol", "imap");
-        properties.put("mail.imap.host", mailboxInteractionSource.getHost());
-        properties.put("mail.imap.port", String.valueOf(mailboxInteractionSource.getPort()));
+        properties.put("mail.imap.host", host);
+        properties.put("mail.imap.port", String.valueOf(port));
       }
 
       // Create session and store
       Session session = Session.getInstance(properties);
       Store store = session.getStore(isSecure ? "imaps" : "imap");
 
-      store.connect(
-          mailboxInteractionSource.getHost(),
-          mailboxInteractionSource.getPort(),
-          mailboxInteractionSource.getPrincipal(),
-          mailboxInteractionSource.getCredential());
+      store.connect(host, port, principal, credential);
 
       return store;
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to retrieved the standard IMAP store", e);
+      throw new RuntimeException(
+          "Failed to retrieve the standard IMAP store for the interaction source ("
+              + interactionSource.getId()
+              + ")",
+          e);
     }
   }
 
-  private void validateInteraction(Interaction interaction) throws InvalidArgumentException {
-    if (interaction == null) {
-      throw new InvalidArgumentException("interaction");
-    }
+  private int synchronizeMailboxInteractionSource(InteractionSource interactionSource)
+      throws ServiceUnavailableException {
+    int numberOfNewInteractions = 0;
 
-    Set<ConstraintViolation<Interaction>> constraintViolations = validator.validate(interaction);
+    try {
+      MailboxProtocol mailboxProtocol =
+          CodeEnum.fromCode(
+              MailboxProtocol.class,
+              AttributeUtil.getAttributeValue(
+                  interactionSource, MailboxInteractionSourceAttributeName.PROTOCOL.code()));
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "interaction", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
+      /*
+       * Retrieve the Java Mail session and store using the mailbox configuration for the mailbox
+       * interaction source.
+       */
+      Store store;
+      if (mailboxProtocol == MailboxProtocol.STANDARD_IMAP) {
+        store = getStandardImapStore(interactionSource, false);
+      } else if (mailboxProtocol == MailboxProtocol.STANDARD_IMAPS) {
+        store = getStandardImapStore(interactionSource, true);
+      } else if (mailboxProtocol == MailboxProtocol.MICROSOFT_365_IMAPS) {
+        store = getMicrosoft365ImapStore(interactionSource);
+      } else {
+        throw new RuntimeException(
+            "Unsupported mailbox protocol ("
+                + mailboxProtocol.code()
+                + ") for the mailbox interaction source ("
+                + interactionSource.getId()
+                + ") for the tenant ("
+                + interactionSource.getTenantId()
+                + ")");
+      }
 
-  private void validateInteractionAttachment(InteractionAttachment interactionAttachment)
-      throws InvalidArgumentException {
-    if (interactionAttachment == null) {
-      throw new InvalidArgumentException("interactionAttachment");
-    }
+      // Access inbox
+      try (Folder inboxFolder = store.getFolder("INBOX")) {
+        inboxFolder.open(Folder.READ_WRITE);
 
-    Set<ConstraintViolation<InteractionAttachment>> constraintViolations =
-        validator.validate(interactionAttachment);
+        Message[] messages = inboxFolder.getMessages();
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "interactionAttachment", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
+        // Process each message
+        for (Message message : messages) {
+          Interaction interaction =
+              createMessageInteractionForMailboxInteractionSource(interactionSource, message);
 
-  private void validateMailboxInteractionSource(MailboxInteractionSource mailboxInteractionSource)
-      throws InvalidArgumentException {
-    if (mailboxInteractionSource == null) {
-      throw new InvalidArgumentException("mailboxInteractionSource");
-    }
+          Optional<UUID> interactionIdOptional =
+              interactionStore.getInteractionIdBySourceIdAndSourceReference(
+                  interaction.getTenantId(),
+                  interaction.getSourceId(),
+                  interaction.getSourceReference());
 
-    Set<ConstraintViolation<MailboxInteractionSource>> constraintViolations =
-        validator.validate(mailboxInteractionSource);
+          UUID interactionId;
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mailboxInteractionSource", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
+          // Create the interaction if required
+          if (interactionIdOptional.isEmpty()) {
+            interactionId = interaction.getId();
 
-  private void validateWhatsAppInteractionSource(
-      WhatsAppInteractionSource whatsAppInteractionSource) throws InvalidArgumentException {
-    if (whatsAppInteractionSource == null) {
-      throw new InvalidArgumentException("whatsAppInteractionSource");
-    }
+            interactionStore.createInteraction(interactionSource.getTenantId(), interaction);
 
-    Set<ConstraintViolation<WhatsAppInteractionSource>> constraintViolations =
-        validator.validate(whatsAppInteractionSource);
+            numberOfNewInteractions++;
+          } else {
+            interactionId = interactionIdOptional.get();
+          }
 
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "whatsAppInteractionSource", ValidationError.toValidationErrors(constraintViolations));
+          for (MimeData interactionAttachmentMimeData :
+              MessageUtil.getMessageAttachments(message, minimumImageAttachmentSize)) {
+
+            // Create the interaction attachments if required
+            if (!interactionAttachmentExistsWithInteractionIdAndHash(
+                interactionSource.getTenantId(),
+                interactionId,
+                interactionAttachmentMimeData.getHash())) {
+              InteractionAttachment interactionAttachment = new InteractionAttachment();
+
+              interactionAttachment.setId(UuidCreator.getTimeOrderedEpoch());
+              interactionAttachment.setSourceId(interactionSource.getId());
+              interactionAttachment.setTenantId(interactionSource.getTenantId());
+              interactionAttachment.setInteractionId(interactionId);
+
+              try {
+                interactionAttachment.setFileType(
+                    FileType.fromMimeType(
+                        interactionAttachmentMimeData.getMimeType().getBaseType().toLowerCase()));
+              } catch (Throwable ignored) {
+                interactionAttachment.setFileType(FileType.BINARY);
+              }
+
+              interactionAttachment.setName(
+                  StringUtils.hasText(interactionAttachmentMimeData.getName())
+                      ? interactionAttachmentMimeData.getName()
+                      : "No Name");
+              interactionAttachment.setHash(interactionAttachmentMimeData.getHash());
+              interactionAttachment.setData(interactionAttachmentMimeData.getData());
+
+              interactionStore.createInteractionAttachment(
+                  interactionSource.getTenantId(), interactionAttachment);
+            }
+          }
+
+          // Archive the message if required
+          boolean archiveEmail =
+              AttributeUtil.getAttributeValueAsBoolean(
+                  interactionSource, MailboxInteractionSourceAttributeName.ARCHIVE_MAIL.code());
+
+          boolean deleteEmail =
+              AttributeUtil.getAttributeValueAsBoolean(
+                  interactionSource, MailboxInteractionSourceAttributeName.DELETE_MAIL.code());
+
+          if (archiveEmail) {
+            try (Folder archiveFolder = store.getFolder("Archive")) {
+              if (!archiveFolder.exists()) {
+                archiveFolder.create(Folder.HOLDS_MESSAGES);
+              }
+
+              archiveFolder.open(Folder.READ_WRITE);
+
+              inboxFolder.copyMessages(new Message[] {message}, archiveFolder);
+              message.setFlag(Flag.DELETED, true);
+            }
+          }
+          // Delete the message if required
+          else if (deleteEmail) {
+            message.setFlag(Flag.DELETED, true);
+          }
+        }
+
+        // Expunge delete messages from INBOX
+        Message[] expungedMessages = inboxFolder.expunge();
+
+        if (expungedMessages.length > 0) {
+          log.info(
+              "Expunged "
+                  + expungedMessages.length
+                  + " messages from the INBOX for the mailbox interaction source ("
+                  + interactionSource.getId()
+                  + ") for the tenant ("
+                  + interactionSource.getTenantId()
+                  + ")");
+        }
+      } finally {
+        store.close();
+      }
+
+      return numberOfNewInteractions;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to synchronize the mailbox interaction source ("
+              + interactionSource.getId()
+              + ") for the tenant ("
+              + interactionSource.getTenantId()
+              + ")",
+          e);
     }
   }
 }

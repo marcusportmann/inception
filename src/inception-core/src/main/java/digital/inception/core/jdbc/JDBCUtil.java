@@ -32,6 +32,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 /**
@@ -41,6 +43,9 @@ import org.springframework.util.StringUtils;
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class JDBCUtil {
+
+  /* Logger */
+  private static final Logger log = LoggerFactory.getLogger(JDBCUtil.class);
 
   /** Private default constructor to enforce utility pattern. */
   private JDBCUtil() {}
@@ -61,15 +66,14 @@ public class JDBCUtil {
       }
     } catch (Throwable e) {
       throw new RuntimeException("Failed to convert the CLOB to a string", e);
-    }
-
-    // Free the Clob if supported
-    try {
-      clob.free();
-    } catch (SQLFeatureNotSupportedException ignored) {
-    } catch (Throwable e) {
-      throw new RuntimeException(
-          "Failed to free the CLOB after converting the CLOB to a string", e);
+    } finally {
+      // Free the Clob if supported
+      try {
+        clob.free();
+      } catch (SQLFeatureNotSupportedException ignored) {
+      } catch (Throwable e) {
+        log.error("Failed to free the CLOB after converting the CLOB to a string", e);
+      }
     }
 
     return sb.toString();

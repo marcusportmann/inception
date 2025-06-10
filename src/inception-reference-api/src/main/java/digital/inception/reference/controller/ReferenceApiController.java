@@ -17,8 +17,8 @@
 package digital.inception.reference.controller;
 
 import digital.inception.core.api.ProblemDetails;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.reference.model.Country;
 import digital.inception.reference.model.Language;
 import digital.inception.reference.model.MeasurementSystem;
@@ -67,7 +67,9 @@ public interface ReferenceApiController {
       description = "Retrieve the country reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The country reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -124,7 +126,9 @@ public interface ReferenceApiController {
       description = "Retrieve the language reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The language reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -182,7 +186,9 @@ public interface ReferenceApiController {
       description = "Retrieve the measurement system reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The measurement system reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -240,7 +246,9 @@ public interface ReferenceApiController {
       description = "Retrieve the measurement unit type reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The measurement unit type reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -298,7 +306,9 @@ public interface ReferenceApiController {
       description = "Retrieve the measurement unit reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The measurement unit reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -356,7 +366,7 @@ public interface ReferenceApiController {
       description = "Retrieve the region reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "200", description = "The region reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -420,7 +430,9 @@ public interface ReferenceApiController {
       description = "Retrieve the time zone reference data for a specific locale")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The time zone reference data was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

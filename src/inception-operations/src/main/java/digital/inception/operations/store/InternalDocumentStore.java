@@ -16,10 +16,10 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.operations.exception.DocumentNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentException;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentNotFoundException;
-import digital.inception.operations.model.DuplicateDocumentException;
 import digital.inception.operations.persistence.jpa.DocumentRepository;
 import digital.inception.operations.persistence.jpa.DocumentSummaryRepository;
 import java.util.Optional;
@@ -75,8 +75,10 @@ public class InternalDocumentStore implements DocumentStore {
       throw new ServiceUnavailableException(
           "Failed to create the document ("
               + document.getId()
-              + ") with definition ID ("
+              + ") with the definition ID ("
               + document.getDefinitionId()
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -86,7 +88,7 @@ public class InternalDocumentStore implements DocumentStore {
   public void deleteDocument(UUID tenantId, UUID documentId)
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
-      if (!documentRepository.existsById(documentId)) {
+      if (!documentRepository.existsByTenantIdAndId(tenantId, documentId)) {
         throw new DocumentNotFoundException(documentId);
       }
 
@@ -95,7 +97,8 @@ public class InternalDocumentStore implements DocumentStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the document (" + documentId + ")", e);
+          "Failed to delete the document (" + documentId + ") for the tenant (" + tenantId + ")",
+          e);
     }
   }
 
@@ -103,7 +106,12 @@ public class InternalDocumentStore implements DocumentStore {
   public Document getDocument(UUID tenantId, UUID documentId)
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
-      Optional<Document> documentOptional = documentRepository.findById(documentId);
+      /*
+       * NOTE: The search by both tenant ID and document ID includes a security check to ensure
+       * that the document not only exists, but is also associated with the specified tenant.
+       */
+      Optional<Document> documentOptional =
+          documentRepository.findByTenantIdAndId(tenantId, documentId);
 
       if (documentOptional.isEmpty()) {
         throw new DocumentNotFoundException(documentId);
@@ -114,7 +122,8 @@ public class InternalDocumentStore implements DocumentStore {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the document (" + documentId + ")", e);
+          "Failed to retrieve the document (" + documentId + ") for the tenant (" + tenantId + ")",
+          e);
     }
   }
 
@@ -122,20 +131,21 @@ public class InternalDocumentStore implements DocumentStore {
   public Document updateDocument(UUID tenantId, Document document)
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
-      if (!documentRepository.existsById(document.getId())) {
+      if (!documentRepository.existsByTenantIdAndId(tenantId, document.getId())) {
         throw new DocumentNotFoundException(document.getId());
       }
 
       return documentRepository.saveAndFlush(document);
     } catch (DocumentNotFoundException e) {
       throw e;
-
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to update the document ("
               + document.getId()
-              + ") with definition ID ("
+              + ") with the definition ID ("
               + document.getDefinitionId()
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }

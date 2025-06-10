@@ -16,6 +16,8 @@
 
 package digital.inception.operations.persistence.jpa;
 
+import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
+import digital.inception.operations.model.InteractionStatus;
 import jakarta.persistence.Converter;
 
 /**
@@ -26,10 +28,10 @@ import jakarta.persistence.Converter;
  */
 @Converter(autoApply = true)
 public class InteractionStatusAttributeConverter
-    extends AbstractCodeEnumAttributeConverter<InteractionStatusAttribute> {
+    extends AbstractCodeEnumAttributeConverter<InteractionStatus> {
 
   /** Constructs a new {@code InteractionStatusAttributeConverter}. */
   public InteractionStatusAttributeConverter() {
-    super(InteractionStatusAttribute.class);
+    super(InteractionStatus.class);
   }
 }

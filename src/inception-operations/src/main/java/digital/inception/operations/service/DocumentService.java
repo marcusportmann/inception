@@ -16,14 +16,17 @@
 
 package digital.inception.operations.service;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
+import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
+import digital.inception.operations.exception.DocumentNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
+import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
-import digital.inception.operations.model.DocumentDefinitionNotFoundException;
-import digital.inception.operations.model.DocumentNotFoundException;
-import digital.inception.operations.model.DuplicateDocumentDefinitionException;
+import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import java.util.UUID;
 
@@ -35,19 +38,20 @@ import java.util.UUID;
  */
 public interface DocumentService {
 
+  /** The ID for the default tenant. */
+  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
   /**
    * Create a new document.
    *
    * @param tenantId the ID for the tenant
    * @param createDocumentRequest the request to create a document
-   * @param createdBy the person or system requesting the document creation
    * @return the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document could not be created
    */
-  Document createDocument(
-      UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
+  Document createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
@@ -63,6 +67,20 @@ public interface DocumentService {
   void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
+          ServiceUnavailableException;
+
+  /**
+   * Create the document definition category.
+   *
+   * @param documentDefinitionCategory the document definition category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateDocumentDefinitionCategoryException if the document definition category
+   *     already exists
+   * @throws ServiceUnavailableException if the document definition category could not be created
+   */
+  void createDocumentDefinitionCategory(DocumentDefinitionCategory documentDefinitionCategory)
+      throws InvalidArgumentException,
+          DuplicateDocumentDefinitionCategoryException,
           ServiceUnavailableException;
 
   /**
@@ -88,6 +106,20 @@ public interface DocumentService {
   void deleteDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the document definition category.
+   *
+   * @param documentDefinitionCategoryId the ID for the document definition category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the document definition category could not be deleted
+   */
+  void deleteDocumentDefinitionCategory(String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -129,18 +161,31 @@ public interface DocumentService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the document definition category.
+   *
+   * @param documentDefinitionCategoryId the ID for the document definition category
+   * @return the document definition category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the document definition category could not be retrieved
+   */
+  DocumentDefinitionCategory getDocumentDefinitionCategory(String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Update the document.
    *
    * @param tenantId the ID for the tenant
    * @param updateDocumentRequest the request to update the document
-   * @param updatedBy the person or system requesting the document update
    * @return the updated document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be updated
    */
-  Document updateDocument(
-      UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
+  Document updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
@@ -154,5 +199,19 @@ public interface DocumentService {
   void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Update the document definition category.
+   *
+   * @param documentDefinitionCategory the document definition category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the document definition category could not be updated
+   */
+  void updateDocumentDefinitionCategory(DocumentDefinitionCategory documentDefinitionCategory)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException;
 }

@@ -16,12 +16,12 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.model.DuplicateWorkflowException;
+import digital.inception.operations.exception.DuplicateWorkflowException;
+import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
+import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.model.Workflow;
-import digital.inception.operations.model.WorkflowDefinitionVersionNotFoundException;
-import digital.inception.operations.model.WorkflowNotFoundException;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowSummaries;

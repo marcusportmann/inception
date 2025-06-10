@@ -18,8 +18,8 @@ package demo.ws;
 
 import demo.model.Data;
 import demo.service.DataService;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;

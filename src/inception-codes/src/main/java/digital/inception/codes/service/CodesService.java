@@ -16,15 +16,15 @@
 
 package digital.inception.codes.service;
 
+import digital.inception.codes.exception.CodeCategoryNotFoundException;
+import digital.inception.codes.exception.CodeNotFoundException;
+import digital.inception.codes.exception.DuplicateCodeCategoryException;
+import digital.inception.codes.exception.DuplicateCodeException;
 import digital.inception.codes.model.Code;
 import digital.inception.codes.model.CodeCategory;
-import digital.inception.codes.model.CodeCategoryNotFoundException;
 import digital.inception.codes.model.CodeCategorySummary;
-import digital.inception.codes.model.CodeNotFoundException;
-import digital.inception.codes.model.DuplicateCodeCategoryException;
-import digital.inception.codes.model.DuplicateCodeException;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;

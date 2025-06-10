@@ -19,8 +19,8 @@ package digital.inception.scheduler.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import digital.inception.scheduler.exception.JobNotFoundException;
 import digital.inception.scheduler.model.Job;
-import digital.inception.scheduler.model.JobNotFoundException;
 import digital.inception.scheduler.model.JobParameter;
 import digital.inception.scheduler.model.JobStatus;
 import digital.inception.scheduler.service.SchedulerService;
@@ -68,7 +68,7 @@ public class SchedulerServiceTests {
     job.setId("TestJob" + jobCount);
     job.setName("Test Job Name " + jobCount);
     job.setSchedulingPattern("5 * * * *");
-    job.setJobClass("digital.inception.scheduler.model.TestJob");
+    job.setJobClass("digital.inception.scheduler.job.TestJob");
     job.setEnabled(true);
     job.setStatus(JobStatus.UNSCHEDULED);
 

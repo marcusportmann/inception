@@ -371,7 +371,7 @@ public class ImapTest {
 
     message.addRecipient(Message.RecipientType.TO, new InternetAddress(TO_EMAIL_ADDRESS, TO_NAME));
 
-    message.setSubject("This is test subject");
+    message.setSubject("This is the test subject");
 
     // Create the HTML body part
     MimeBodyPart htmlBodyPart = new MimeBodyPart();

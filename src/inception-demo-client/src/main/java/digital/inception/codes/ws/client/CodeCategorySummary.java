@@ -74,31 +74,4 @@ public class CodeCategorySummary implements Serializable {
   public String getName() {
     return name;
   }
-
-  /**
-   * Sets the value of the id property.
-   *
-   * @param value allowed object is {@link String }
-   */
-  public void setId(String value) {
-    this.id = value;
-  }
-
-  /**
-   * Sets the value of the lastModified property.
-   *
-   * @param value allowed object is {@link String }
-   */
-  public void setLastModified(OffsetDateTime value) {
-    this.lastModified = value;
-  }
-
-  /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is {@link String }
-   */
-  public void setName(String value) {
-    this.name = value;
-  }
 }

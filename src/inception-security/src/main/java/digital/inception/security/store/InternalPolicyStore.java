@@ -16,11 +16,11 @@
 
 package digital.inception.security.store;
 
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.security.model.DuplicatePolicyException;
+import digital.inception.security.exception.DuplicatePolicyException;
+import digital.inception.security.exception.PolicyNotFoundException;
 import digital.inception.security.model.Policy;
-import digital.inception.security.model.PolicyNotFoundException;
 import digital.inception.security.model.PolicySortBy;
 import digital.inception.security.model.PolicySummaries;
 import digital.inception.security.model.PolicySummary;

@@ -16,8 +16,8 @@
 
 package digital.inception.party.service;
 
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.party.model.AssociationPropertyType;
 import digital.inception.party.model.AssociationType;
 import digital.inception.party.model.AttributeType;

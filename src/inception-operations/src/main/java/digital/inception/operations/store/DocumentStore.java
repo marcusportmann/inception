@@ -16,10 +16,10 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.operations.exception.DocumentNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentException;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentNotFoundException;
-import digital.inception.operations.model.DuplicateDocumentException;
 import java.util.UUID;
 
 /**

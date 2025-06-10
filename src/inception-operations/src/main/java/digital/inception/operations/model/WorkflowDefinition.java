@@ -56,6 +56,7 @@ import java.util.UUID;
   "version",
   "tenantId",
   "name",
+  "engineId",
   "documentDefinitions",
   "validationSchemaType",
   "validationSchema"
@@ -69,6 +70,7 @@ import java.util.UUID;
       "version",
       "tenantId",
       "name",
+      "engineId",
       "documentDefinitions",
       "validationSchemaType",
       "validationSchema"
@@ -78,9 +80,6 @@ import java.util.UUID;
 @Table(name = "operations_workflow_definitions")
 @IdClass(WorkflowDefinitionId.class)
 public class WorkflowDefinition implements Serializable {
-
-  ADD  WorkflowType E.G. flowable_embedded_bpmn_process, flowable_enterprise_bpmn, flowable_embedded_cmmn, flowable_enterprise_cmmn,
-  paradigm, camunda, sonata,
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -100,6 +99,27 @@ public class WorkflowDefinition implements Serializable {
       orphanRemoval = true)
   @OrderBy("documentDefinitionId")
   private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+
+  /** The ID for the workflow definition category the workflow definition is associated with. */
+  @Schema(
+      description =
+          "The ID for the workflow definition category the workflow definition is associated with")
+  @JsonProperty
+  @XmlElement(name = "CategoryId")
+  @Size(min = 1, max = 50)
+  @Column(name = "id", length = 50)
+  private String categoryId;
+
+  /** The ID for the workflow engine the workflow definition is associated with. */
+  @Schema(
+      description = "The ID for the workflow engine the workflow definition is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "EngineId", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  @Column(name = "engine_id", length = 50, nullable = false)
+  private String engineId;
 
   /** The ID for the workflow definition. */
   @Schema(
@@ -166,11 +186,32 @@ public class WorkflowDefinition implements Serializable {
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    */
-  public WorkflowDefinition(String id, int version, String name) {
+  public WorkflowDefinition(String id, int version, String name, String engineId) {
     this.id = id;
     this.version = version;
     this.name = name;
+    this.engineId = engineId;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   */
+  public WorkflowDefinition(
+      String id, int version, String categoryId, String name, String engineId) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.name = name;
+    this.engineId = engineId;
   }
 
   /**
@@ -179,6 +220,7 @@ public class WorkflowDefinition implements Serializable {
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
    * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    */
@@ -186,11 +228,42 @@ public class WorkflowDefinition implements Serializable {
       String id,
       int version,
       String name,
+      String engineId,
       ValidationSchemaType validationSchemaType,
       String validationSchema) {
     this.id = id;
     this.version = version;
     this.name = name;
+    this.engineId = engineId;
+    this.validationSchemaType = validationSchemaType;
+    this.validationSchema = validationSchema;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   */
+  public WorkflowDefinition(
+      String id,
+      int version,
+      String categoryId,
+      String name,
+      String engineId,
+      ValidationSchemaType validationSchemaType,
+      String validationSchema) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.name = name;
+    this.engineId = engineId;
     this.validationSchemaType = validationSchemaType;
     this.validationSchema = validationSchema;
   }
@@ -201,6 +274,7 @@ public class WorkflowDefinition implements Serializable {
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
    * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    * @param documentDefinitions the document definitions associated with the workflow definition
@@ -209,12 +283,51 @@ public class WorkflowDefinition implements Serializable {
       String id,
       int version,
       String name,
+      String engineId,
       ValidationSchemaType validationSchemaType,
       String validationSchema,
       Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
     this.id = id;
     this.version = version;
     this.name = name;
+    this.engineId = engineId;
+    this.validationSchemaType = validationSchemaType;
+    this.validationSchema = validationSchema;
+
+    for (WorkflowDefinitionDocumentDefinition documentDefinition : documentDefinitions) {
+      documentDefinition.setWorkflowDefinition(this);
+    }
+
+    this.documentDefinitions.addAll(documentDefinitions);
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   * @param documentDefinitions the document definitions associated with the workflow definition
+   */
+  public WorkflowDefinition(
+      String id,
+      int version,
+      String categoryId,
+      String name,
+      String engineId,
+      ValidationSchemaType validationSchemaType,
+      String validationSchema,
+      Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.name = name;
+    this.engineId = engineId;
     this.validationSchemaType = validationSchemaType;
     this.validationSchema = validationSchema;
 
@@ -231,16 +344,50 @@ public class WorkflowDefinition implements Serializable {
    * @param id the ID for the workflow definition
    * @param version the version of the workflow definition
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
   public WorkflowDefinition(
       String id,
       int version,
       String name,
+      String engineId,
       Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
     this.id = id;
     this.version = version;
     this.name = name;
+    this.engineId = engineId;
+
+    for (WorkflowDefinitionDocumentDefinition documentDefinition : documentDefinitions) {
+      documentDefinition.setWorkflowDefinition(this);
+    }
+
+    this.documentDefinitions.addAll(documentDefinitions);
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param documentDefinitions the document definitions associated with the workflow definition
+   */
+  public WorkflowDefinition(
+      String id,
+      int version,
+      String categoryId,
+      String name,
+      String engineId,
+      Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.name = name;
+    this.engineId = engineId;
 
     for (WorkflowDefinitionDocumentDefinition documentDefinition : documentDefinitions) {
       documentDefinition.setWorkflowDefinition(this);
@@ -256,12 +403,35 @@ public class WorkflowDefinition implements Serializable {
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    */
-  public WorkflowDefinition(String id, int version, UUID tenantId, String name) {
+  public WorkflowDefinition(String id, int version, UUID tenantId, String name, String engineId) {
     this.id = id;
     this.version = version;
     this.tenantId = tenantId;
     this.name = name;
+    this.engineId = engineId;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param tenantId the ID for the tenant the workflow definition is specific to
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   */
+  public WorkflowDefinition(
+      String id, int version, String categoryId, UUID tenantId, String name, String engineId) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.tenantId = tenantId;
+    this.name = name;
+    this.engineId = engineId;
   }
 
   /**
@@ -271,6 +441,7 @@ public class WorkflowDefinition implements Serializable {
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
    * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    */
@@ -279,12 +450,46 @@ public class WorkflowDefinition implements Serializable {
       int version,
       UUID tenantId,
       String name,
+      String engineId,
       ValidationSchemaType validationSchemaType,
       String validationSchema) {
     this.id = id;
     this.version = version;
     this.tenantId = tenantId;
     this.name = name;
+    this.engineId = engineId;
+    this.validationSchemaType = validationSchemaType;
+    this.validationSchema = validationSchema;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param tenantId the ID for the tenant the workflow definition is specific to
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   */
+  public WorkflowDefinition(
+      String id,
+      int version,
+      String categoryId,
+      UUID tenantId,
+      String name,
+      String engineId,
+      ValidationSchemaType validationSchemaType,
+      String validationSchema) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.tenantId = tenantId;
+    this.name = name;
+    this.engineId = engineId;
     this.validationSchemaType = validationSchemaType;
     this.validationSchema = validationSchema;
   }
@@ -296,6 +501,7 @@ public class WorkflowDefinition implements Serializable {
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
    * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
    * @param documentDefinitions the document definitions associated with the workflow definition
@@ -305,6 +511,7 @@ public class WorkflowDefinition implements Serializable {
       int version,
       UUID tenantId,
       String name,
+      String engineId,
       ValidationSchemaType validationSchemaType,
       String validationSchema,
       Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
@@ -312,6 +519,47 @@ public class WorkflowDefinition implements Serializable {
     this.version = version;
     this.tenantId = tenantId;
     this.name = name;
+    this.engineId = engineId;
+    this.validationSchemaType = validationSchemaType;
+    this.validationSchema = validationSchema;
+
+    for (WorkflowDefinitionDocumentDefinition documentDefinition : documentDefinitions) {
+      documentDefinition.setWorkflowDefinition(this);
+    }
+
+    this.documentDefinitions.addAll(documentDefinitions);
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param tenantId the ID for the tenant the workflow definition is specific to
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param validationSchemaType the validation schema type for the workflow definition
+   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   * @param documentDefinitions the document definitions associated with the workflow definition
+   */
+  public WorkflowDefinition(
+      String id,
+      int version,
+      String categoryId,
+      UUID tenantId,
+      String name,
+      String engineId,
+      ValidationSchemaType validationSchemaType,
+      String validationSchema,
+      Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.tenantId = tenantId;
+    this.name = name;
+    this.engineId = engineId;
     this.validationSchemaType = validationSchemaType;
     this.validationSchema = validationSchema;
 
@@ -329,6 +577,7 @@ public class WorkflowDefinition implements Serializable {
    * @param version the version of the workflow definition
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
   public WorkflowDefinition(
@@ -336,11 +585,47 @@ public class WorkflowDefinition implements Serializable {
       int version,
       UUID tenantId,
       String name,
+      String engineId,
       Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
     this.id = id;
     this.version = version;
     this.tenantId = tenantId;
     this.name = name;
+    this.engineId = engineId;
+
+    for (WorkflowDefinitionDocumentDefinition documentDefinition : documentDefinitions) {
+      documentDefinition.setWorkflowDefinition(this);
+    }
+
+    this.documentDefinitions.addAll(documentDefinitions);
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinition}.
+   *
+   * @param id the ID for the workflow definition
+   * @param version the version of the workflow definition
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   * @param tenantId the ID for the tenant the workflow definition is specific to
+   * @param name the name of the workflow definition
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param documentDefinitions the document definitions associated with the workflow definition
+   */
+  public WorkflowDefinition(
+      String id,
+      int version,
+      String categoryId,
+      UUID tenantId,
+      String name,
+      String engineId,
+      Set<WorkflowDefinitionDocumentDefinition> documentDefinitions) {
+    this.id = id;
+    this.version = version;
+    this.categoryId = categoryId;
+    this.tenantId = tenantId;
+    this.name = name;
+    this.engineId = engineId;
 
     for (WorkflowDefinitionDocumentDefinition documentDefinition : documentDefinitions) {
       documentDefinition.setWorkflowDefinition(this);
@@ -387,12 +672,30 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the ID for the workflow definition category the workflow definition is associated with.
+   *
+   * @return the ID for the workflow definition category the workflow definition is associated with
+   */
+  public String getCategoryId() {
+    return categoryId;
+  }
+
+  /**
    * Returns the document definitions associated with the workflow definition.
    *
    * @return the document definitions associated with the workflow definition
    */
   public List<WorkflowDefinitionDocumentDefinition> getDocumentDefinitions() {
     return documentDefinitions;
+  }
+
+  /**
+   * Returns the ID for the workflow engine the workflow definition is associated with.
+   *
+   * @return the ID for the workflow engine the workflow definition is associated with
+   */
+  public String getEngineId() {
+    return engineId;
   }
 
   /**
@@ -460,6 +763,16 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Set the ID for the workflow definition category the workflow definition is associated with.
+   *
+   * @param categoryId the ID for the workflow definition category the workflow definition is
+   *     associated with
+   */
+  public void setCategoryId(String categoryId) {
+    this.categoryId = categoryId;
+  }
+
+  /**
    * Set the document definitions associated with the workflow definition.
    *
    * @param documentDefinitions the document definitions associated with the workflow definition
@@ -471,6 +784,15 @@ public class WorkflowDefinition implements Serializable {
     }
     this.documentDefinitions.clear();
     this.documentDefinitions.addAll(documentDefinitions);
+  }
+
+  /**
+   * Set the ID for the workflow engine the workflow definition is associated with.
+   *
+   * @param engineId the ID for the workflow engine the workflow definition is associated with
+   */
+  public void setEngineId(String engineId) {
+    this.engineId = engineId;
   }
 
   /**

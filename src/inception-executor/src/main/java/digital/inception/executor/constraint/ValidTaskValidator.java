@@ -16,8 +16,8 @@
 
 package digital.inception.executor.constraint;
 
+import digital.inception.executor.exception.TaskTypeNotFoundException;
 import digital.inception.executor.model.Task;
-import digital.inception.executor.model.TaskTypeNotFoundException;
 import digital.inception.executor.service.ExecutorService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.reporting.exception.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinition;
-import digital.inception.reporting.model.ReportDefinitionNotFoundException;
 import digital.inception.reporting.model.ReportDefinitionSummary;
 import digital.inception.reporting.service.ReportingService;
 import digital.inception.test.InceptionExtension;

@@ -32,8 +32,29 @@ public interface InteractionAttachmentRepository
     extends JpaRepository<InteractionAttachment, UUID> {
 
   /**
+   * Returns whether an interaction attachment with the specified tenant ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the interaction attachment is associated with
+   * @param interactionSourceId the ID for the interaction attachment
+   * @return {@code true} if an interaction attachment with the specified tenant ID and ID exists or
+   *     {@code false} otherwise
+   */
+  boolean existsByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
+
+  /**
+   * Retrieve the interaction attachment.
+   *
+   * @param tenantId the ID for the tenant the interaction attachment is associated with
+   * @param id the ID for the interaction attachment
+   * @return an Optional containing the interaction attachment or an empty Optional if the
+   *     interaction attachment could not be found
+   */
+  Optional<InteractionAttachment> findByTenantIdAndId(UUID tenantId, UUID id);
+
+  /**
    * Retrieve the ID for the interaction attachment with the specified interaction ID and hash.
    *
+   * @param tenantId the ID for the tenant the interaction attachment is associated with
    * @param interactionId the ID for the interaction that the interaction attachment is associated
    *     with
    * @param hash the hash for interaction attachment
@@ -42,7 +63,8 @@ public interface InteractionAttachmentRepository
    *     found
    */
   @Query(
-      "select ia.id from InteractionAttachment ia where ia.interactionId = :interactionId "
-          + "and ia.hash = :hash")
-  Optional<UUID> getIdByInteractionIdAndHash(UUID interactionId, String hash);
+      "select ia.id from InteractionAttachment ia where ia.tenantId = :tenantId and "
+          + "ia.interactionId = :interactionId and ia.hash = :hash")
+  Optional<UUID> getIdByTenantIdAndInteractionIdAndHash(
+      UUID tenantId, UUID interactionId, String hash);
 }

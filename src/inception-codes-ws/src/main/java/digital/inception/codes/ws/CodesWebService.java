@@ -16,16 +16,16 @@
 
 package digital.inception.codes.ws;
 
+import digital.inception.codes.exception.CodeCategoryNotFoundException;
+import digital.inception.codes.exception.CodeNotFoundException;
+import digital.inception.codes.exception.DuplicateCodeCategoryException;
+import digital.inception.codes.exception.DuplicateCodeException;
 import digital.inception.codes.model.Code;
 import digital.inception.codes.model.CodeCategory;
-import digital.inception.codes.model.CodeCategoryNotFoundException;
 import digital.inception.codes.model.CodeCategorySummary;
-import digital.inception.codes.model.CodeNotFoundException;
-import digital.inception.codes.model.DuplicateCodeCategoryException;
-import digital.inception.codes.model.DuplicateCodeException;
 import digital.inception.codes.service.CodesService;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.ws.AbstractWebServiceBase;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;

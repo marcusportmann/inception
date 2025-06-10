@@ -115,8 +115,7 @@ public class DocumentSummary implements Serializable {
 
   /** The ID for the document definition the document is associated with. */
   @Schema(
-      description =
-          "The unique identifier for the document definition the document is associated with",
+      description = "The ID for the document definition the document is associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
@@ -143,10 +142,8 @@ public class DocumentSummary implements Serializable {
   @Column(name = "external_reference", length = 100)
   private String externalReference;
 
-  /** The unique identifier for the document. */
-  @Schema(
-      description = "The unique identifier for the document",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The ID for the document. */
+  @Schema(description = "The ID for the document", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -164,18 +161,16 @@ public class DocumentSummary implements Serializable {
   @Column(name = "issue_date")
   private LocalDate issueDate;
 
-  /** The unique identifier for the source document that was split to create this document. */
-  @Schema(
-      description =
-          "The unique identifier for the source document that was split to create this document")
+  /** The ID for the source document that was split to create this document. */
+  @Schema(description = "The ID for the source document that was split to create this document")
   @JsonProperty
   @XmlElement(name = "SourceDocumentId")
   @Column(name = "source_document_id")
   private UUID sourceDocumentId;
 
-  /** The unique identifier for the tenant the document is associated with. */
+  /** The ID for the tenant the document is associated with. */
   @Schema(
-      description = "The unique identifier for the tenant the document is associated with",
+      description = "The ID for the tenant the document is associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -247,9 +242,9 @@ public class DocumentSummary implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the document definition the document is associated with.
+   * Returns the ID for the document definition the document is associated with.
    *
-   * @return the unique identifier for the document definition the document is associated with
+   * @return the ID for the document definition the document is associated with
    */
   public String getDefinitionId() {
     return definitionId;
@@ -274,9 +269,9 @@ public class DocumentSummary implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the document.
+   * Returns the ID for the document.
    *
-   * @return the unique identifier for the document
+   * @return the ID for the document
    */
   public UUID getId() {
     return id;
@@ -292,18 +287,18 @@ public class DocumentSummary implements Serializable {
   }
 
   /**
-   * Returns the unique identifier for the source document that was split to create this document.
+   * Returns the ID for the source document that was split to create this document.
    *
-   * @return the unique identifier for the source document that was split to create this document
+   * @return the ID for the source document that was split to create this document
    */
   public UUID getSourceDocumentId() {
     return sourceDocumentId;
   }
 
   /**
-   * Returns the unique identifier for the tenant the document is associated with.
+   * Returns the ID for the tenant the document is associated with.
    *
-   * @return the unique identifier for the tenant the document is associated with
+   * @return the ID for the tenant the document is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -325,14 +320,5 @@ public class DocumentSummary implements Serializable {
    */
   public String getUpdatedBy() {
     return updatedBy;
-  }
-
-  /**
-   * Set the ID for the document.
-   *
-   * @param id the unique identifier for the document
-   */
-  public void setId(UUID id) {
-    this.id = id;
   }
 }
