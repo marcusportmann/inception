@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
@@ -61,7 +62,13 @@
                 <dependencyConvergence>
                   <excludes>
                     <exclude>com.azure:azure-json:[1,2)</exclude>
+                    <exclude>com.google.guava:guava:[31,34)</exclude>
                     <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
+                    <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
+                    <exclude>org.bouncycastle:bcpkix-jdk18on:[1,2)</exclude>
+                    <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
+                    <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
+                    <exclude>org.ow2.asm:asm:[9,10)</exclude>
                   </excludes>
                 </dependencyConvergence>
               </rules>

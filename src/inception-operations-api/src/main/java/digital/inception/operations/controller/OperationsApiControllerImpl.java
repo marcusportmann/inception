@@ -17,16 +17,16 @@
 package digital.inception.operations.controller;
 
 import digital.inception.api.SecureApiController;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
+import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
-import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
-import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.WorkflowService;
 import java.util.UUID;
@@ -75,13 +75,11 @@ public class OperationsApiControllerImpl extends SecureApiController
     tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToTenant(createDocumentRequest.getTenantId()))) {
-      throw new AccessDeniedException(
-          "Access denied to the tenant (" + createDocumentRequest.getTenantId() + ")");
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    Document document =
-        documentService.createDocument(tenantId, createDocumentRequest, getAuthenticationName());
+    Document document = documentService.createDocument(tenantId, createDocumentRequest);
 
     return document.getId();
   }
@@ -94,13 +92,11 @@ public class OperationsApiControllerImpl extends SecureApiController
     tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToTenant(createWorkflowRequest.getTenantId()))) {
-      throw new AccessDeniedException(
-          "Access denied to the tenant (" + createWorkflowRequest.getTenantId() + ")");
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    Workflow workflow =
-        workflowService.createWorkflow(tenantId, createWorkflowRequest, getAuthenticationName());
+    Workflow workflow = workflowService.createWorkflow(tenantId, createWorkflowRequest);
 
     return workflow.getId();
   }
@@ -114,11 +110,11 @@ public class OperationsApiControllerImpl extends SecureApiController
     /*
      * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
      *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant specific" workflow definition categories.
+     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
      *       The ability to create or update workflow definition categories is an administrative
      *       function and is not assigned to a user for a particular tenant.
      */
 
-    workflowService.createWorkflowDefinitionCategory(tenantId, workflowDefinitionCategory);
+    workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
   }
 }

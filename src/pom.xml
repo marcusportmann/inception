@@ -88,9 +88,10 @@
 
   <scm>
     <connection>scm:git:ssh://git@bitbucket.org/marcusportmann/inception.git</connection>
-    <developerConnection>scm:git:ssh://git@bitbucket.org/marcusportmann/inception.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@bitbucket.org/marcusportmann/inception.git
+    </developerConnection>
     <url>https://bitbucket.org/marcusportmann/inception.git</url>
-  </scm> 
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -529,7 +530,7 @@
         <groupId>digital.inception</groupId>
         <artifactId>inception-flowable</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-      </dependency>      
+      </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-jpa</artifactId>
@@ -720,7 +721,7 @@
     <module>inception-audit</module>
     <module>inception-audit-api</module>
     <module>inception-audit-ws</module>
-    <module>inception-authorization-server</module>    
+    <module>inception-authorization-server</module>
     <module>inception-cache</module>
     <module>inception-codes</module>
     <module>inception-codes-api</module>
@@ -746,14 +747,14 @@
     <module>inception-mail-ws</module>
     <module>inception-mongo</module>
     <module>inception-opentelemetry</module>
-<!--    <module>inception-operations</module>-->
-<!--    <module>inception-operations-api</module>-->
-<!--    <module>inception-operations-ws</module>-->
+    <module>inception-operations</module>
+    <module>inception-operations-api</module>
+    <module>inception-operations-ws</module>
     <module>inception-party</module>
     <module>inception-party-api</module>
     <module>inception-party-ws</module>
     <module>inception-r2dbc</module>
-    <module>inception-resource-server</module>    
+    <module>inception-resource-server</module>
     <module>inception-reporting</module>
     <module>inception-reporting-api</module>
     <module>inception-reporting-ws</module>
@@ -775,7 +776,7 @@
     <module>inception-ws</module>
 
     <module>inception-service-parent</module>
-    
+
     <module>inception-demo</module>
 
     <module>inception-demo-client</module>
