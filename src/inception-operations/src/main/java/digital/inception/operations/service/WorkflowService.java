@@ -42,9 +42,6 @@ import java.util.UUID;
  */
 public interface WorkflowService {
 
-  /** The ID for the default tenant. */
-  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-
   /**
    * Create a new workflow.
    *

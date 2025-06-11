@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -34,6 +35,7 @@ import digital.inception.operations.service.DocumentService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,54 +75,63 @@ public class DocumentServiceTests {
   /** Test the document definition functionality. */
   @Test
   public void documentDefinitionTest() throws Exception {
-    DocumentDefinitionCategory testSharedDocumentDefinitionCategory =
+    DocumentDefinitionCategory sharedDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
             "test_shared_document_definition_category", "Test Shared Document Definition Category");
 
-    documentService.createDocumentDefinitionCategory(testSharedDocumentDefinitionCategory);
+    documentService.createDocumentDefinitionCategory(sharedDocumentDefinitionCategory);
 
     DocumentDefinitionCategory retrievedDocumentDefinitionCategory =
-        documentService.getDocumentDefinitionCategory(testSharedDocumentDefinitionCategory.getId());
+        documentService.getDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
 
     compareDocumentDefinitionCategories(
-        testSharedDocumentDefinitionCategory, retrievedDocumentDefinitionCategory);
+        sharedDocumentDefinitionCategory, retrievedDocumentDefinitionCategory);
 
-    DocumentDefinitionCategory testTenantDocumentDefinitionCategory =
+    DocumentDefinitionCategory tenantDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
             "test_tenant_document_definition_category",
-            DocumentService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Document Definition Category");
 
-    documentService.createDocumentDefinitionCategory(testTenantDocumentDefinitionCategory);
+    documentService.createDocumentDefinitionCategory(tenantDocumentDefinitionCategory);
 
     DuplicateDocumentDefinitionCategoryException duplicateDocumentDefinitionCategoryException =
         assertThrows(
             DuplicateDocumentDefinitionCategoryException.class,
             () -> {
-              documentService.createDocumentDefinitionCategory(
-                  testTenantDocumentDefinitionCategory);
+              documentService.createDocumentDefinitionCategory(tenantDocumentDefinitionCategory);
             });
 
     retrievedDocumentDefinitionCategory =
-        documentService.getDocumentDefinitionCategory(testTenantDocumentDefinitionCategory.getId());
+        documentService.getDocumentDefinitionCategory(tenantDocumentDefinitionCategory.getId());
 
     compareDocumentDefinitionCategories(
-        testTenantDocumentDefinitionCategory, retrievedDocumentDefinitionCategory);
+        tenantDocumentDefinitionCategory, retrievedDocumentDefinitionCategory);
 
-    DocumentDefinition testSharedDocumentDefinition =
+    List<DocumentDefinitionCategory> documentDefinitionCategories =
+        documentService.getDocumentDefinitionCategories(TenantUtil.DEFAULT_TENANT_ID);
+
+    assertEquals(2, documentDefinitionCategories.size());
+
+    documentDefinitionCategories =
+        documentService.getDocumentDefinitionCategories(UUID.randomUUID());
+
+    assertEquals(1, documentDefinitionCategories.size());
+
+    DocumentDefinition sharedDocumentDefinition =
         new DocumentDefinition(
             "test_shared_document_definition_" + System.currentTimeMillis(),
-            testSharedDocumentDefinitionCategory.getId(),
+            sharedDocumentDefinitionCategory.getId(),
             "Test Shared Document Definition",
             List.of(
                 RequiredDocumentAttribute.EXPIRY_DATE,
                 RequiredDocumentAttribute.EXTERNAL_REFERENCE,
                 RequiredDocumentAttribute.ISSUE_DATE));
 
-    documentService.createDocumentDefinition(testSharedDocumentDefinition);
+    documentService.createDocumentDefinition(sharedDocumentDefinition);
 
     DocumentDefinition retrievedDocumentDefinition =
-        documentService.getDocumentDefinition(testSharedDocumentDefinition.getId());
+        documentService.getDocumentDefinition(sharedDocumentDefinition.getId());
 
     assertNotNull(retrievedDocumentDefinition.getRequiredDocumentAttributes());
 
@@ -129,64 +140,99 @@ public class DocumentServiceTests {
             .getRequiredDocumentAttributes()
             .contains(RequiredDocumentAttribute.EXTERNAL_REFERENCE));
 
-    compareDocumentDefinitions(testSharedDocumentDefinition, retrievedDocumentDefinition);
+    compareDocumentDefinitions(sharedDocumentDefinition, retrievedDocumentDefinition);
 
-    DocumentDefinition testTenantDocumentDefinition =
+    DocumentDefinition tenantDocumentDefinition =
         new DocumentDefinition(
             "test_tenant_document_definition_" + System.currentTimeMillis(),
-            testTenantDocumentDefinitionCategory.getId(),
-            DocumentService.DEFAULT_TENANT_ID,
+            tenantDocumentDefinitionCategory.getId(),
+            TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Document Definition");
 
-    documentService.createDocumentDefinition(testTenantDocumentDefinition);
+    documentService.createDocumentDefinition(tenantDocumentDefinition);
 
     DuplicateDocumentDefinitionException duplicateDocumentDefinitionException =
         assertThrows(
             DuplicateDocumentDefinitionException.class,
             () -> {
-              documentService.createDocumentDefinition(testTenantDocumentDefinition);
+              documentService.createDocumentDefinition(tenantDocumentDefinition);
             });
 
     retrievedDocumentDefinition =
-        documentService.getDocumentDefinition(testTenantDocumentDefinition.getId());
+        documentService.getDocumentDefinition(tenantDocumentDefinition.getId());
 
-    compareDocumentDefinitions(testTenantDocumentDefinition, retrievedDocumentDefinition);
+    compareDocumentDefinitions(tenantDocumentDefinition, retrievedDocumentDefinition);
 
-    DocumentDefinition testNoCategoryDocumentDefinition =
-        new DocumentDefinition(
-            "test_no_category_document_definition_" + System.currentTimeMillis(),
-            "Test No Category Document Definition");
+    List<DocumentDefinition> documentDefinitions =
+        documentService.getDocumentDefinitions(
+            TenantUtil.DEFAULT_TENANT_ID, sharedDocumentDefinitionCategory.getId());
 
-    documentService.createDocumentDefinition(testNoCategoryDocumentDefinition);
+    assertEquals(1, documentDefinitions.size());
+
+    documentDefinitions =
+        documentService.getDocumentDefinitions(
+            UUID.randomUUID(), sharedDocumentDefinitionCategory.getId());
+    assertEquals(sharedDocumentDefinition.getId(), documentDefinitions.getFirst().getId());
+
+    assertEquals(1, documentDefinitions.size());
+
+    documentDefinitions =
+        documentService.getDocumentDefinitions(
+            TenantUtil.DEFAULT_TENANT_ID, tenantDocumentDefinitionCategory.getId());
+
+    assertEquals(1, documentDefinitions.size());
+    assertEquals(tenantDocumentDefinition.getId(), documentDefinitions.getFirst().getId());
+
+    documentDefinitions =
+        documentService.getDocumentDefinitions(
+            UUID.randomUUID(), tenantDocumentDefinitionCategory.getId());
+
+    assertEquals(0, documentDefinitions.size());
+
+    tenantDocumentDefinition.setName("Updated Test Tenant Document Definition");
+    tenantDocumentDefinition.setCategoryId(sharedDocumentDefinitionCategory.getId());
+    tenantDocumentDefinition.setRequiredDocumentAttributes(
+        List.of(RequiredDocumentAttribute.EXPIRY_DATE));
+
+    documentService.updateDocumentDefinition(tenantDocumentDefinition);
 
     retrievedDocumentDefinition =
-        documentService.getDocumentDefinition(testNoCategoryDocumentDefinition.getId());
+        documentService.getDocumentDefinition(tenantDocumentDefinition.getId());
 
-    compareDocumentDefinitions(testNoCategoryDocumentDefinition, retrievedDocumentDefinition);
+    compareDocumentDefinitions(tenantDocumentDefinition, retrievedDocumentDefinition);
 
-    documentService.deleteDocumentDefinition(testNoCategoryDocumentDefinition.getId());
+    documentService.deleteDocumentDefinition(tenantDocumentDefinition.getId());
 
-    documentService.deleteDocumentDefinition(testTenantDocumentDefinition.getId());
-
-    documentService.deleteDocumentDefinition(testSharedDocumentDefinition.getId());
+    documentService.deleteDocumentDefinition(sharedDocumentDefinition.getId());
 
     DocumentDefinitionNotFoundException documentDefinitionNotFoundException =
         assertThrows(
             DocumentDefinitionNotFoundException.class,
             () -> {
-              documentService.getDocumentDefinition(testSharedDocumentDefinition.getId());
+              documentService.getDocumentDefinition(sharedDocumentDefinition.getId());
             });
 
-    documentService.deleteDocumentDefinitionCategory(testTenantDocumentDefinitionCategory.getId());
+    sharedDocumentDefinitionCategory.setName("Updated Test Shared Document Definition Category");
+    sharedDocumentDefinitionCategory.setTenantId(TenantUtil.DEFAULT_TENANT_ID);
 
-    documentService.deleteDocumentDefinitionCategory(testSharedDocumentDefinitionCategory.getId());
+    documentService.updateDocumentDefinitionCategory(sharedDocumentDefinitionCategory);
+
+    retrievedDocumentDefinitionCategory =
+        documentService.getDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
+
+    compareDocumentDefinitionCategories(
+        sharedDocumentDefinitionCategory, retrievedDocumentDefinitionCategory);
+
+    documentService.deleteDocumentDefinitionCategory(tenantDocumentDefinitionCategory.getId());
+
+    documentService.deleteDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
 
     DocumentDefinitionCategoryNotFoundException documentDefinitionCategoryNotFoundException =
         assertThrows(
             DocumentDefinitionCategoryNotFoundException.class,
             () -> {
               documentService.getDocumentDefinitionCategory(
-                  testSharedDocumentDefinitionCategory.getId());
+                  sharedDocumentDefinitionCategory.getId());
             });
   }
 

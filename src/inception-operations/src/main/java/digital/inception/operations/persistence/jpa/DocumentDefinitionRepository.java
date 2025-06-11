@@ -17,7 +17,11 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.DocumentDefinition;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The {@code DocumentDefinitionRepository} interface declares the persistence for the {@code
@@ -25,4 +29,30 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface DocumentDefinitionRepository extends JpaRepository<DocumentDefinition, String> {}
+public interface DocumentDefinitionRepository extends JpaRepository<DocumentDefinition, String> {
+
+  /**
+   * Returns all the document definitions that are associated with the document definition category
+   * with the specified ID and either
+   *
+   * <ul>
+   *   <li>specific to the given tenant ({@code tenantId} matches), or
+   *   <li>global (the document definition’s {@code tenantId} is {@code null}).
+   * </ul>
+   *
+   * @param categoryId the ID for the document definition category the document definitions are
+   *     associated with
+   * @param tenantId the tenant identifier to match (may not be {@code null})
+   * @return the matching document definitions, ordered by ID
+   */
+  @Query(
+      """
+         select dd
+           from DocumentDefinition dd
+          where dd.categoryId = :categoryId
+             and (dd.tenantId = :tenantId or dd.tenantId is null)
+          order by dd.id
+         """)
+  List<DocumentDefinition> findForCategoryAndTenantOrGlobal(
+      @Param("categoryId") String categoryId, @Param("tenantId") UUID tenantId);
+}

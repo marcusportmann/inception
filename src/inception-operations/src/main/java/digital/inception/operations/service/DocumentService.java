@@ -28,6 +28,7 @@ import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.UpdateDocumentRequest;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,9 +38,6 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public interface DocumentService {
-
-  /** The ID for the default tenant. */
-  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /**
    * Create a new document.
@@ -161,6 +159,17 @@ public interface DocumentService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the document definition categories.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the document definition categories
+   * @throws ServiceUnavailableException if the document definition categories could not be
+   *     retrieved
+   */
+  List<DocumentDefinitionCategory> getDocumentDefinitionCategories(UUID tenantId)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve the document definition category.
    *
    * @param documentDefinitionCategoryId the ID for the document definition category
@@ -174,6 +183,24 @@ public interface DocumentService {
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the document definitions associated with the document definition category with the
+   * specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentDefinitionCategoryId the ID for the document definition category the document
+   *     definitions are associated with
+   * @return the document definitions associated with the document definition category with the
+   *     specified ID
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the document definition categories could not be
+   *     retrieved
+   */
+  List<DocumentDefinition> getDocumentDefinitions(
+      UUID tenantId, String documentDefinitionCategoryId)
+      throws DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the document.

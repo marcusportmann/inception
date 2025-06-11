@@ -20,6 +20,7 @@ import digital.inception.api.SecureApiController;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.util.TenantUtil;
 import digital.inception.party.exception.AssociationNotFoundException;
 import digital.inception.party.exception.DuplicateAssociationException;
 import digital.inception.party.exception.DuplicateMandateException;
@@ -68,7 +69,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
           DuplicateAssociationException,
           PartyNotFoundException,
           ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(association.getTenantId())) {
       throw new AccessDeniedException(
@@ -84,7 +85,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
           DuplicateMandateException,
           PartyNotFoundException,
           ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(mandate.getTenantId())) {
       throw new AccessDeniedException(
@@ -97,7 +98,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public void createOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(organization.getTenantId())) {
       throw new AccessDeniedException(
@@ -110,7 +111,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public void createPerson(UUID tenantId, Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(person.getTenantId())) {
       throw new AccessDeniedException("Access denied to the tenant (" + person.getTenantId() + ")");
@@ -145,7 +146,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public Association getAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -164,7 +165,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
       Integer pageSize)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
 
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -181,7 +182,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public Mandate getMandate(UUID tenantId, UUID mandateId)
       throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -200,7 +201,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
       Integer pageSize)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
 
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -217,7 +218,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public Organization getOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -235,7 +236,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -261,7 +262,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -280,7 +281,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public Party getParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -292,7 +293,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public Person getPerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -310,7 +311,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -337,7 +338,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -360,7 +361,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
           AssociationNotFoundException,
           PartyNotFoundException,
           ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -387,7 +388,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
           MandateNotFoundException,
           PartyNotFoundException,
           ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -411,7 +412,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public void updateOrganization(UUID tenantId, UUID organizationId, Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
@@ -435,7 +436,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   @Override
   public void updatePerson(UUID tenantId, UUID personId, Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");

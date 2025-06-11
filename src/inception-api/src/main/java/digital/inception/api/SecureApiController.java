@@ -35,10 +35,6 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public abstract class SecureApiController extends AbstractApiControllerBase {
 
-  /** The ID for the default tenant. */
-  public static final UUID DEFAULT_TENANT_ID =
-      UUID.fromString("00000000-0000-0000-0000-000000000000");
-
   /** The code for the Administrator role. */
   private static final String ADMINISTRATOR_ROLE_CODE = "Administrator";
 

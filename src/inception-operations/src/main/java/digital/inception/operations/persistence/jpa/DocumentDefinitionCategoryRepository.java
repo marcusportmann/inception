@@ -17,7 +17,11 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The {@code DocumentDefinitionCategoryRepository} interface declares the persistence for the
@@ -26,4 +30,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Marcus Portmann
  */
 public interface DocumentDefinitionCategoryRepository
-    extends JpaRepository<DocumentDefinitionCategory, String> {}
+    extends JpaRepository<DocumentDefinitionCategory, String> {
+
+  /**
+   * Returns all the document definition categories that are either
+   *
+   * <ul>
+   *   <li>specific to the given tenant ({@code tenantId} matches), or
+   *   <li>global (the document definition category’s {@code tenantId} is {@code null}).
+   * </ul>
+   *
+   * @param tenantId the tenant identifier to match (may not be {@code null})
+   * @return the matching document definition categories, ordered by ID
+   */
+  @Query(
+      """
+         select ddc
+           from DocumentDefinitionCategory ddc
+          where ddc.tenantId = :tenantId
+             or ddc.tenantId is null
+          order by ddc.id
+         """)
+  List<DocumentDefinitionCategory> findForTenantOrGlobal(@Param("tenantId") UUID tenantId);
+}

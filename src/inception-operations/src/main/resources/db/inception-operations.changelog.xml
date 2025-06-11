@@ -70,14 +70,16 @@
       <column name="version" type="int" remarks="The version of the workflow definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="category_id" type="nvarchar(50)" remarks="The ID for the workflow definition category the workflow definition is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the workflow definition is specific to"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the workflow definition">
         <constraints nullable="false"/>
       </column>
       <column name="engine_id" type="nvarchar(50)" remarks="The ID for the workflow engine the workflow definition is associated with">
         <constraints nullable="false"/>
       </column>
-      <column name="category_id" type="nvarchar(50)" remarks="The ID for the workflow definition category the workflow definition is associated with"/>
-      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the workflow definition is specific to"/>
       <column name="validation_schema_type" type="nvarchar(50)" remarks="The schema type for the workflow definition"/>
       <column name="validation_schema" type="clob" remarks="The XML (XSD) or JSON schema for the workflow definition"/>
     </createTable>
@@ -111,11 +113,13 @@
       <column name="id" type="nvarchar(50)" remarks="The ID for the document definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="category_id" type="nvarchar(50)" remarks="The ID for the document definition category the document definition is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the document definition is specific to"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the document definition">
         <constraints nullable="false"/>
       </column>
-      <column name="category_id" type="nvarchar(50)" remarks="The ID for the document definition category the document definition is associated with"/>
-      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the document definition is specific to"/>
       <column name="required_document_attributes" type="nvarchar(510)" remarks="The comma-delimited list of codes for the required attributes for a document associated with the document definition"/>
     </createTable>
     <createIndex indexName="operations_document_definitions_category_id_ix"

@@ -30,6 +30,7 @@ import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.MimeData;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
@@ -196,22 +197,21 @@ public class InteractionServiceTests {
         getFitLifeCustomerServiceMailboxInteractionSource();
 
     interactionService.createInteractionSource(
-        InteractionService.DEFAULT_TENANT_ID, mailboxInteractionSource);
+        TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource);
 
-    InteractionSource retrievedMailboxInteractionSource =
+    InteractionSource retrievedInteractionSource =
         interactionService.getInteractionSource(
-            InteractionService.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
+            TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
 
-    compareInteractionSources(mailboxInteractionSource, retrievedMailboxInteractionSource);
+    compareInteractionSources(mailboxInteractionSource, retrievedInteractionSource);
 
-    List<InteractionSource> retrievedMailboxInteractionSources =
+    List<InteractionSource> retrievedInteractionSources =
         interactionService.getInteractionSources(
-            InteractionService.DEFAULT_TENANT_ID, InteractionSourceType.MAILBOX);
+            TenantUtil.DEFAULT_TENANT_ID, InteractionSourceType.MAILBOX);
 
-    assertEquals(1, retrievedMailboxInteractionSources.size());
+    assertEquals(1, retrievedInteractionSources.size());
 
-    compareInteractionSources(
-        mailboxInteractionSource, retrievedMailboxInteractionSources.getFirst());
+    compareInteractionSources(mailboxInteractionSource, retrievedInteractionSources.getFirst());
 
     // Create the Original Outlook HTML Message With Image
     Message originalOutlookHTMLMessageWithImage =
@@ -235,7 +235,7 @@ public class InteractionServiceTests {
 
     InteractionSummaries retrievedInteractionSummaries =
         interactionService.getInteractionSummaries(
-            InteractionService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
             null,
             null,
@@ -251,7 +251,7 @@ public class InteractionServiceTests {
 
     retrievedInteractionSummaries =
         interactionService.getInteractionSummaries(
-            InteractionService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
             InteractionStatus.RECEIVED,
             "test",
@@ -264,7 +264,7 @@ public class InteractionServiceTests {
 
     retrievedInteractionSummaries =
         interactionService.getInteractionSummaries(
-            InteractionService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
             InteractionStatus.RECEIVED,
             "bob",
@@ -277,7 +277,7 @@ public class InteractionServiceTests {
 
     retrievedInteractionSummaries =
         interactionService.getInteractionSummaries(
-            InteractionService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
             InteractionStatus.RECEIVED,
             "xxx",
@@ -290,11 +290,10 @@ public class InteractionServiceTests {
 
     assertTrue(
         interactionService.interactionExistsWithId(
-            InteractionService.DEFAULT_TENANT_ID, retrievedInteractionId));
+            TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId));
 
     Interaction retrievedInteraction =
-        interactionService.getInteraction(
-            InteractionService.DEFAULT_TENANT_ID, retrievedInteractionId);
+        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
 
     assertNull(
         retrievedInteraction.getAssigned(),
@@ -351,7 +350,7 @@ public class InteractionServiceTests {
         retrievedInteraction.getSubject(),
         "Invalid value for the \"subject\" interaction property");
     assertEquals(
-        InteractionService.DEFAULT_TENANT_ID,
+        TenantUtil.DEFAULT_TENANT_ID,
         retrievedInteraction.getTenantId(),
         "Invalid value for the \"tenantId\" interaction property");
     assertNotNull(
@@ -364,13 +363,7 @@ public class InteractionServiceTests {
 
     InteractionAttachmentSummaries retrievedInteractionAttachmentSummaries =
         interactionService.getInteractionAttachmentSummaries(
-            InteractionService.DEFAULT_TENANT_ID,
-            retrievedInteractionId,
-            null,
-            null,
-            null,
-            null,
-            null);
+            TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId, null, null, null, null, null);
 
     assertEquals(
         10, retrievedInteractionAttachmentSummaries.getInteractionAttachmentSummaries().size());
@@ -384,15 +377,16 @@ public class InteractionServiceTests {
     UUID anotherRetrievedInteractionAttachmentId =
         retrievedInteractionAttachmentSummaries
             .getInteractionAttachmentSummaries()
-            .getLast().getId();
+            .getLast()
+            .getId();
 
     assertTrue(
         interactionService.interactionAttachmentExistsWithId(
-            InteractionService.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId));
+            TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId));
 
     InteractionAttachment retrievedInteractionAttachment =
         interactionService.getInteractionAttachment(
-            InteractionService.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
+            TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
 
     assertEquals(
         280201,
@@ -419,59 +413,57 @@ public class InteractionServiceTests {
         retrievedInteractionAttachment.getSourceId(),
         "Invalid value for the \"sourceId\" interaction attachment property");
     assertEquals(
-        InteractionService.DEFAULT_TENANT_ID,
+        TenantUtil.DEFAULT_TENANT_ID,
         retrievedInteractionAttachment.getTenantId(),
         "Invalid value for the \"tenantId\" interaction attachment property");
 
     interactionService.deleteInteractionAttachment(
-        InteractionService.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
+        TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
 
     assertThrows(
         InteractionAttachmentNotFoundException.class,
         () -> {
           interactionService.deleteInteractionAttachment(
-              InteractionService.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
+              TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
         });
 
     assertThrows(
         InteractionAttachmentNotFoundException.class,
         () -> {
           interactionService.getInteractionAttachment(
-              InteractionService.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
+              TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
         });
 
-    interactionService.deleteInteraction(
-        InteractionService.DEFAULT_TENANT_ID, retrievedInteractionId);
+    interactionService.deleteInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
 
     assertThrows(
         InteractionNotFoundException.class,
         () -> {
           interactionService.deleteInteraction(
-              InteractionService.DEFAULT_TENANT_ID, retrievedInteractionId);
+              TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
         });
 
     assertThrows(
         InteractionNotFoundException.class,
         () -> {
-          interactionService.getInteraction(
-              InteractionService.DEFAULT_TENANT_ID, retrievedInteractionId);
+          interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
         });
 
     assertThrows(
         InteractionAttachmentNotFoundException.class,
         () -> {
           interactionService.getInteractionAttachment(
-              InteractionService.DEFAULT_TENANT_ID, anotherRetrievedInteractionAttachmentId);
+              TenantUtil.DEFAULT_TENANT_ID, anotherRetrievedInteractionAttachmentId);
         });
 
     interactionService.deleteInteractionSource(
-        InteractionService.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
+        TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
 
     assertThrows(
         InteractionSourceNotFoundException.class,
         () -> {
           interactionService.getInteractionSource(
-              InteractionService.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
+              TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
         });
   }
 
@@ -482,36 +474,35 @@ public class InteractionServiceTests {
     InteractionSource whatsAppInteractionSource =
         InteractionSource.createWhatsAppInteractionSource(
             UUID.randomUUID(),
-            InteractionService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             "FitLife Customer Service WhatsApp",
             true);
 
     interactionService.createInteractionSource(
-        InteractionService.DEFAULT_TENANT_ID, whatsAppInteractionSource);
+        TenantUtil.DEFAULT_TENANT_ID, whatsAppInteractionSource);
 
-    InteractionSource retrievedWhatsAppInteractionSource =
+    InteractionSource retrievedInteractionSource =
         interactionService.getInteractionSource(
-            InteractionService.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId());
+            TenantUtil.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId());
 
-    compareInteractionSources(whatsAppInteractionSource, retrievedWhatsAppInteractionSource);
+    compareInteractionSources(whatsAppInteractionSource, retrievedInteractionSource);
 
-    List<InteractionSource> retrievedWhatsAppInteractionSources =
+    List<InteractionSource> retrievedInteractionSources =
         interactionService.getInteractionSources(
-            InteractionService.DEFAULT_TENANT_ID, InteractionSourceType.WHATSAPP);
+            TenantUtil.DEFAULT_TENANT_ID, InteractionSourceType.WHATSAPP);
 
-    assertEquals(1, retrievedWhatsAppInteractionSources.size());
+    assertEquals(1, retrievedInteractionSources.size());
 
-    compareInteractionSources(
-        whatsAppInteractionSource, retrievedWhatsAppInteractionSources.getFirst());
+    compareInteractionSources(whatsAppInteractionSource, retrievedInteractionSources.getFirst());
 
     interactionService.deleteInteractionSource(
-        InteractionService.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId());
+        TenantUtil.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId());
 
     assertThrows(
         InteractionSourceNotFoundException.class,
         () -> {
           interactionService.getInteractionSource(
-              InteractionService.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId());
+              TenantUtil.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId());
         });
   }
 
@@ -591,7 +582,7 @@ public class InteractionServiceTests {
   private InteractionSource getFitLifeCustomerServiceMailboxInteractionSource() {
     return InteractionSource.createMailboxInteractionSource(
         UUID.randomUUID(),
-        InteractionService.DEFAULT_TENANT_ID,
+        TenantUtil.DEFAULT_TENANT_ID,
         "FitLife Customer Service Mailbox",
         ENABLE_GREEN_MAIL_SECURITY ? MailboxProtocol.STANDARD_IMAPS : MailboxProtocol.STANDARD_IMAP,
         "localhost",

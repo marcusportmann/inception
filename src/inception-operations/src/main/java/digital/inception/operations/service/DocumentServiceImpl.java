@@ -34,6 +34,7 @@ import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository
 import digital.inception.operations.store.DocumentStore;
 import java.security.MessageDigest;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -287,6 +288,18 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public List<DocumentDefinitionCategory> getDocumentDefinitionCategories(UUID tenantId)
+      throws ServiceUnavailableException {
+    try {
+      return documentDefinitionCategoryRepository.findForTenantOrGlobal(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document definition categories for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
   public DocumentDefinitionCategory getDocumentDefinitionCategory(
       String documentDefinitionCategoryId)
       throws InvalidArgumentException,
@@ -312,6 +325,25 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
           "Failed to retrieve the document definition category ("
               + documentDefinitionCategoryId
               + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<DocumentDefinition> getDocumentDefinitions(UUID tenantId,
+      String documentDefinitionCategoryId)
+      throws DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException {
+    try {
+      if (!documentDefinitionCategoryRepository.existsById(documentDefinitionCategoryId)) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
+      }
+
+      return documentDefinitionRepository.findForCategoryAndTenantOrGlobal(documentDefinitionCategoryId, tenantId);
+      } catch (DocumentDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document definitions associated with the document definition category (" + documentDefinitionCategoryId + ") for the tenant (" + tenantId + ")",
           e);
     }
   }

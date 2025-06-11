@@ -19,6 +19,7 @@ package digital.inception.operations.controller;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
@@ -46,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OperationsApiControllerImpl extends SecureApiController
     implements OperationsApiController {
 
+  /** The Document Service. */
   private final DocumentService documentService;
 
   /** The Workflow Service. */
@@ -55,12 +57,13 @@ public class OperationsApiControllerImpl extends SecureApiController
    * Constructs a new {@code OperationsApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
+   * @param documentService the Document Service
    * @param workflowService the Workflow Service
    */
   public OperationsApiControllerImpl(
       ApplicationContext applicationContext,
-      WorkflowService workflowService,
-      DocumentService documentService) {
+      DocumentService documentService,
+      WorkflowService workflowService) {
     super(applicationContext);
 
     this.workflowService = workflowService;
@@ -72,7 +75,7 @@ public class OperationsApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
         && (!hasAccessToTenant(tenantId))) {
@@ -89,7 +92,7 @@ public class OperationsApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
-    tenantId = (tenantId == null) ? DEFAULT_TENANT_ID : tenantId;
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
         && (!hasAccessToTenant(tenantId))) {

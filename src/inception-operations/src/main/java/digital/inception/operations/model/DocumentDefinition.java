@@ -59,11 +59,13 @@ public class DocumentDefinition implements Serializable {
   /** The ID for the document definition category the document definition is associated with. */
   @Schema(
       description =
-          "The ID for the document definition category the document definition is associated with")
-  @JsonProperty
-  @XmlElement(name = "CategoryId")
+          "The ID for the document definition category the document definition is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "CategoryId", required = true)
+  @NotNull
   @Size(min = 1, max = 50)
-  @Column(name = "category_id", length = 50)
+  @Column(name = "category_id", length = 50, nullable = false)
   private String categoryId;
 
   /** The ID for the document definition. */

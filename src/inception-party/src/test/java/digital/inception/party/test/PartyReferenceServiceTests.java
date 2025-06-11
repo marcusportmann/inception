@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import digital.inception.core.util.TenantUtil;
 import digital.inception.party.model.AssociationPropertyType;
 import digital.inception.party.model.AssociationType;
 import digital.inception.party.model.AttributeType;
@@ -122,7 +123,7 @@ public class PartyReferenceServiceTests {
 
     retrievedAssociationPropertyTypes =
         partyReferenceService.getAssociationPropertyTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7,
@@ -153,7 +154,7 @@ public class PartyReferenceServiceTests {
 
     retrievedAssociationTypes =
         partyReferenceService.getAssociationTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         22,
@@ -184,7 +185,7 @@ public class PartyReferenceServiceTests {
 
     retrievedAttributeTypeCategories =
         partyReferenceService.getAttributeTypeCategories(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -215,7 +216,7 @@ public class PartyReferenceServiceTests {
 
     retrievedAttributeTypes =
         partyReferenceService.getAttributeTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         11,
@@ -244,7 +245,7 @@ public class PartyReferenceServiceTests {
 
     retrievedConsentTypes =
         partyReferenceService.getConsentTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedConsentTypes.size(), "The correct number of consent types was not retrieved");
@@ -271,7 +272,7 @@ public class PartyReferenceServiceTests {
 
     retrievedContactMechanismPurposes =
         partyReferenceService.getContactMechanismPurposes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -302,7 +303,7 @@ public class PartyReferenceServiceTests {
 
     retrievedContactMechanismRoles =
         partyReferenceService.getContactMechanismRoles(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         26,
@@ -333,7 +334,7 @@ public class PartyReferenceServiceTests {
 
     retrievedContactMechanismTypes =
         partyReferenceService.getContactMechanismTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -364,7 +365,7 @@ public class PartyReferenceServiceTests {
 
     retrievedEmploymentStatuses =
         partyReferenceService.getEmploymentStatuses(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -395,7 +396,7 @@ public class PartyReferenceServiceTests {
 
     retrievedEmploymentTypes =
         partyReferenceService.getEmploymentTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -426,7 +427,7 @@ public class PartyReferenceServiceTests {
 
     retrievedExternalReferenceTypes =
         partyReferenceService.getExternalReferenceTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -457,7 +458,7 @@ public class PartyReferenceServiceTests {
 
     retrievedFieldsOfStudy =
         partyReferenceService.getFieldsOfStudy(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         192,
@@ -485,7 +486,7 @@ public class PartyReferenceServiceTests {
 
     retrievedGenders =
         partyReferenceService.getGenders(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(6, retrievedGenders.size(), "The correct number of genders was not retrieved");
 
@@ -510,7 +511,7 @@ public class PartyReferenceServiceTests {
 
     retrievedIdentificationTypes =
         partyReferenceService.getIdentificationTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -542,7 +543,7 @@ public class PartyReferenceServiceTests {
 
     retrievedIndustryClassificationCategories =
         partyReferenceService.getIndustryClassificationCategories(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         22,
@@ -574,7 +575,7 @@ public class PartyReferenceServiceTests {
 
     retrievedIndustryClassificationSystems =
         partyReferenceService.getIndustryClassificationSystems(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -605,7 +606,7 @@ public class PartyReferenceServiceTests {
 
     retrievedIndustryClassifications =
         partyReferenceService.getIndustryClassifications(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         89,
@@ -636,7 +637,7 @@ public class PartyReferenceServiceTests {
 
     retrievedLockTypeCategories =
         partyReferenceService.getLockTypeCategories(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -665,7 +666,7 @@ public class PartyReferenceServiceTests {
 
     retrievedLockTypes =
         partyReferenceService.getLockTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3, retrievedLockTypes.size(), "The correct number of lock types was not retrieved");
@@ -692,7 +693,7 @@ public class PartyReferenceServiceTests {
 
     retrievedMandataryRoles =
         partyReferenceService.getMandataryRoles(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         13,
@@ -723,7 +724,7 @@ public class PartyReferenceServiceTests {
 
     retrievedMandatePropertyTypes =
         partyReferenceService.getMandatePropertyTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -752,7 +753,7 @@ public class PartyReferenceServiceTests {
 
     retrievedMandateTypes =
         partyReferenceService.getMandateTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         14, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
@@ -779,7 +780,7 @@ public class PartyReferenceServiceTests {
 
     retrievedMaritalStatuses =
         partyReferenceService.getMaritalStatuses(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -808,7 +809,7 @@ public class PartyReferenceServiceTests {
 
     retrievedMarriageTypes =
         partyReferenceService.getMarriageTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         7, retrievedMarriageTypes.size(), "The correct number of marriage types was not retrieved");
@@ -835,7 +836,7 @@ public class PartyReferenceServiceTests {
 
     retrievedNextOfKinTypes =
         partyReferenceService.getNextOfKinTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         18,
@@ -864,7 +865,7 @@ public class PartyReferenceServiceTests {
 
     retrievedOccupations =
         partyReferenceService.getOccupations(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         30, retrievedOccupations.size(), "The correct number of occupations was not retrieved");
@@ -891,7 +892,7 @@ public class PartyReferenceServiceTests {
 
     retrievedPhysicalAddressPurposes =
         partyReferenceService.getPhysicalAddressPurposes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         4,
@@ -922,7 +923,7 @@ public class PartyReferenceServiceTests {
 
     retrievedPhysicalAddressRoles =
         partyReferenceService.getPhysicalAddressRoles(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -953,7 +954,7 @@ public class PartyReferenceServiceTests {
 
     retrievedPhysicalAddressTypes =
         partyReferenceService.getPhysicalAddressTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -984,7 +985,7 @@ public class PartyReferenceServiceTests {
 
     retrievedPreferenceTypeCategories =
         partyReferenceService.getPreferenceTypeCategories(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2,
@@ -1015,7 +1016,7 @@ public class PartyReferenceServiceTests {
 
     retrievedPreferenceTypes =
         partyReferenceService.getPreferenceTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
@@ -1046,7 +1047,7 @@ public class PartyReferenceServiceTests {
 
     retrievedQualificationTypes =
         partyReferenceService.getQualificationTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         15,
@@ -1074,7 +1075,7 @@ public class PartyReferenceServiceTests {
 
     retrievedRaces =
         partyReferenceService.getRaces(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(7, retrievedRaces.size(), "The correct number of races was not retrieved");
 
@@ -1099,7 +1100,7 @@ public class PartyReferenceServiceTests {
 
     retrievedResidencePermitTypes =
         partyReferenceService.getResidencePermitTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         10,
@@ -1130,7 +1131,7 @@ public class PartyReferenceServiceTests {
 
     retrievedResidencyStatuses =
         partyReferenceService.getResidencyStatuses(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -1161,7 +1162,7 @@ public class PartyReferenceServiceTests {
 
     retrievedResidentialTypes =
         partyReferenceService.getResidentialTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -1190,7 +1191,7 @@ public class PartyReferenceServiceTests {
 
     retrievedRolePurposes =
         partyReferenceService.getRolePurposes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         2, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
@@ -1279,7 +1280,7 @@ public class PartyReferenceServiceTests {
 
     retrievedRoleTypes =
         partyReferenceService.getRoleTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         39, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
@@ -1303,7 +1304,7 @@ public class PartyReferenceServiceTests {
 
     retrievedSegments =
         partyReferenceService.getSegments(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(10, retrievedSegments.size(), "The correct number of segments was not retrieved");
 
@@ -1328,7 +1329,7 @@ public class PartyReferenceServiceTests {
 
     retrievedSegmentationTypes =
         partyReferenceService.getSegmentationTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -1357,7 +1358,7 @@ public class PartyReferenceServiceTests {
 
     retrievedSkillTypes =
         partyReferenceService.getSkillTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         42, retrievedSkillTypes.size(), "The correct number of skill types was not retrieved");
@@ -1384,7 +1385,7 @@ public class PartyReferenceServiceTests {
 
     retrievedSourceOfFundsTypes =
         partyReferenceService.getSourceOfFundsTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         42,
@@ -1415,7 +1416,7 @@ public class PartyReferenceServiceTests {
 
     retrievedSourceOfWealthTypes =
         partyReferenceService.getSourceOfWealthTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         12,
@@ -1446,7 +1447,7 @@ public class PartyReferenceServiceTests {
 
     retrievedStatusTypeCategories =
         partyReferenceService.getStatusTypeCategories(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
@@ -1475,7 +1476,7 @@ public class PartyReferenceServiceTests {
 
     retrievedStatusTypes =
         partyReferenceService.getStatusTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3, retrievedStatusTypes.size(), "The correct number of status types was not retrieved");
@@ -1502,7 +1503,7 @@ public class PartyReferenceServiceTests {
 
     retrievedTaxNumberTypes =
         partyReferenceService.getTaxNumberTypes(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         8,
@@ -1533,7 +1534,7 @@ public class PartyReferenceServiceTests {
 
     retrievedTimesToContact =
         partyReferenceService.getTimesToContact(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         6,
@@ -1561,7 +1562,7 @@ public class PartyReferenceServiceTests {
 
     retrievedTitles =
         partyReferenceService.getTitles(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
+            TenantUtil.DEFAULT_TENANT_ID, PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(13, retrievedTitles.size(), "The correct number of titles was not retrieved");
 
@@ -1578,116 +1579,96 @@ public class PartyReferenceServiceTests {
   public void validityTest() throws Exception {
     assertTrue(
         partyReferenceService.isValidAttributeType(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "height"));
+            TenantUtil.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "height"));
     assertTrue(
         partyReferenceService.isValidAttributeTypeCategory(
-            PartyReferenceService.DEFAULT_TENANT_ID, "anthropometric_measurements"));
-    assertTrue(
-        partyReferenceService.isValidConsentType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "marketing"));
+            TenantUtil.DEFAULT_TENANT_ID, "anthropometric_measurements"));
+    assertTrue(partyReferenceService.isValidConsentType(TenantUtil.DEFAULT_TENANT_ID, "marketing"));
     assertTrue(
         partyReferenceService.isValidContactMechanismPurpose(
-            PartyReferenceService.DEFAULT_TENANT_ID, "person", "email_address", "security"));
+            TenantUtil.DEFAULT_TENANT_ID, "person", "email_address", "security"));
     assertTrue(
         partyReferenceService.isValidContactMechanismRole(
-            PartyReferenceService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             PartyType.PERSON.code(),
             ContactMechanismType.MOBILE_NUMBER,
             "personal_mobile_number"));
     assertTrue(
         partyReferenceService.isValidContactMechanismType(
-            PartyReferenceService.DEFAULT_TENANT_ID, ContactMechanismType.MOBILE_NUMBER));
+            TenantUtil.DEFAULT_TENANT_ID, ContactMechanismType.MOBILE_NUMBER));
     assertTrue(
-        partyReferenceService.isValidEmploymentStatus(
-            PartyReferenceService.DEFAULT_TENANT_ID, "employed"));
+        partyReferenceService.isValidEmploymentStatus(TenantUtil.DEFAULT_TENANT_ID, "employed"));
     assertTrue(
         partyReferenceService.isValidEmploymentType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "employed", "full_time"));
+            TenantUtil.DEFAULT_TENANT_ID, "employed", "full_time"));
     assertTrue(
         partyReferenceService.isValidExternalReferenceType(
-            PartyReferenceService.DEFAULT_TENANT_ID,
-            PartyType.PERSON.code(),
-            "test_external_reference_type"));
-    assertTrue(
-        partyReferenceService.isValidGender(PartyReferenceService.DEFAULT_TENANT_ID, "female"));
+            TenantUtil.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "test_external_reference_type"));
+    assertTrue(partyReferenceService.isValidGender(TenantUtil.DEFAULT_TENANT_ID, "female"));
     assertTrue(
         partyReferenceService.isValidIdentificationType(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "passport"));
+            TenantUtil.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "passport"));
     assertTrue(
         partyReferenceService.isValidLockType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "person", "suspected_fraud"));
+            TenantUtil.DEFAULT_TENANT_ID, "person", "suspected_fraud"));
     assertTrue(
-        partyReferenceService.isValidLockTypeCategory(
-            PartyReferenceService.DEFAULT_TENANT_ID, "fraud"));
-    assertTrue(
-        partyReferenceService.isValidMaritalStatus(
-            PartyReferenceService.DEFAULT_TENANT_ID, "married"));
+        partyReferenceService.isValidLockTypeCategory(TenantUtil.DEFAULT_TENANT_ID, "fraud"));
+    assertTrue(partyReferenceService.isValidMaritalStatus(TenantUtil.DEFAULT_TENANT_ID, "married"));
     assertTrue(
         partyReferenceService.isValidMarriageType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "married", "anc_with_accrual"));
+            TenantUtil.DEFAULT_TENANT_ID, "married", "anc_with_accrual"));
     // referenceService.isValidMinorType("minor");
-    assertTrue(
-        partyReferenceService.isValidNextOfKinType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "mother"));
-    assertTrue(
-        partyReferenceService.isValidOccupation(
-            PartyReferenceService.DEFAULT_TENANT_ID, "executive"));
+    assertTrue(partyReferenceService.isValidNextOfKinType(TenantUtil.DEFAULT_TENANT_ID, "mother"));
+    assertTrue(partyReferenceService.isValidOccupation(TenantUtil.DEFAULT_TENANT_ID, "executive"));
     assertTrue(
         partyReferenceService.isValidPhysicalAddressPurpose(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "billing"));
+            TenantUtil.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "billing"));
     assertTrue(
         partyReferenceService.isValidPhysicalAddressRole(
-            PartyReferenceService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             PartyType.PERSON.code(),
             PhysicalAddressRole.RESIDENTIAL));
     assertTrue(
-        partyReferenceService.isValidPhysicalAddressType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "complex"));
+        partyReferenceService.isValidPhysicalAddressType(TenantUtil.DEFAULT_TENANT_ID, "complex"));
     assertTrue(
         partyReferenceService.isValidPreferenceType(
-            PartyReferenceService.DEFAULT_TENANT_ID,
+            TenantUtil.DEFAULT_TENANT_ID,
             PartyType.ORGANIZATION.code(),
             "correspondence_language"));
     assertTrue(
         partyReferenceService.isValidPreferenceTypeCategory(
-            PartyReferenceService.DEFAULT_TENANT_ID, "correspondence"));
+            TenantUtil.DEFAULT_TENANT_ID, "correspondence"));
     assertTrue(
         partyReferenceService.isValidQualificationType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "doctoral_degree"));
-    assertTrue(partyReferenceService.isValidRace(PartyReferenceService.DEFAULT_TENANT_ID, "white"));
+            TenantUtil.DEFAULT_TENANT_ID, "doctoral_degree"));
+    assertTrue(partyReferenceService.isValidRace(TenantUtil.DEFAULT_TENANT_ID, "white"));
     assertTrue(
         partyReferenceService.isValidResidencePermitType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "za_general_work_visa"));
+            TenantUtil.DEFAULT_TENANT_ID, "za_general_work_visa"));
     assertTrue(
         partyReferenceService.isValidResidencyStatus(
-            PartyReferenceService.DEFAULT_TENANT_ID, "permanent_resident"));
-    assertTrue(
-        partyReferenceService.isValidResidentialType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "owner"));
+            TenantUtil.DEFAULT_TENANT_ID, "permanent_resident"));
+    assertTrue(partyReferenceService.isValidResidentialType(TenantUtil.DEFAULT_TENANT_ID, "owner"));
     assertTrue(
         partyReferenceService.isValidRolePurpose(
-            PartyReferenceService.DEFAULT_TENANT_ID, "test_role_purpose"));
+            TenantUtil.DEFAULT_TENANT_ID, "test_role_purpose"));
     assertTrue(
         partyReferenceService.isValidRoleType(
-            PartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "test_person_role"));
+            TenantUtil.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "test_person_role"));
     assertTrue(
-        partyReferenceService.isValidSegment(
-            PartyReferenceService.DEFAULT_TENANT_ID, "test_person_segment"));
+        partyReferenceService.isValidSegment(TenantUtil.DEFAULT_TENANT_ID, "test_person_segment"));
     assertTrue(
         partyReferenceService.isValidSourceOfFundsType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "salary_wages"));
+            TenantUtil.DEFAULT_TENANT_ID, "salary_wages"));
     assertTrue(
         partyReferenceService.isValidStatusType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "person", "fraud_investigation"));
+            TenantUtil.DEFAULT_TENANT_ID, "person", "fraud_investigation"));
     assertTrue(
-        partyReferenceService.isValidStatusTypeCategory(
-            PartyReferenceService.DEFAULT_TENANT_ID, "fraud"));
+        partyReferenceService.isValidStatusTypeCategory(TenantUtil.DEFAULT_TENANT_ID, "fraud"));
     assertTrue(
         partyReferenceService.isValidTaxNumberType(
-            PartyReferenceService.DEFAULT_TENANT_ID, "person", "za_income_tax_number"));
-    assertTrue(
-        partyReferenceService.isValidTimeToContact(
-            PartyReferenceService.DEFAULT_TENANT_ID, "anytime"));
-    assertTrue(partyReferenceService.isValidTitle(PartyReferenceService.DEFAULT_TENANT_ID, "mrs"));
+            TenantUtil.DEFAULT_TENANT_ID, "person", "za_income_tax_number"));
+    assertTrue(partyReferenceService.isValidTimeToContact(TenantUtil.DEFAULT_TENANT_ID, "anytime"));
+    assertTrue(partyReferenceService.isValidTitle(TenantUtil.DEFAULT_TENANT_ID, "mrs"));
   }
 }

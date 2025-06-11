@@ -86,9 +86,6 @@ public interface PartyReferenceService {
   /** The default locale ID. */
   String DEFAULT_LOCALE_ID = "en-US";
 
-  /** The ID for the default tenant. */
-  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-
   /**
    * Retrieve the association property type with the specified code for the association type with
    * the specified code for the tenant with the specified ID for the first matching locale.
