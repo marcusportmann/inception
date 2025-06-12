@@ -258,12 +258,12 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachmentId the ID for the interaction attachment
-   * @return {@code true} if an interaction attachment with the specified ID exists or {@code false} otherwise
+   * @return {@code true} if an interaction attachment with the specified ID exists or {@code false}
+   *     otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the interaction attachment failed
    */
-  boolean interactionAttachmentExistsWithId(
-      UUID tenantId, UUID interactionAttachmentId)
+  boolean interactionAttachmentExistsWithId(UUID tenantId, UUID interactionAttachmentId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -292,8 +292,7 @@ public interface InteractionService {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the interaction failed
    */
-  boolean interactionExistsWithId(
-      UUID tenantId, UUID interactionId)
+  boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

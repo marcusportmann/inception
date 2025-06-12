@@ -16,7 +16,6 @@
 
 package digital.inception.operations.connector;
 
-
 /**
  * The {@code WorkflowEngineConnector} interface defines the interface that must be implemented by
  * all workflow engine connectors.

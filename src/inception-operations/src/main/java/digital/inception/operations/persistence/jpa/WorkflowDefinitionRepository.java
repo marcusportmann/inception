@@ -16,7 +16,6 @@
 
 package digital.inception.operations.persistence.jpa;
 
-import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
 import java.util.List;
