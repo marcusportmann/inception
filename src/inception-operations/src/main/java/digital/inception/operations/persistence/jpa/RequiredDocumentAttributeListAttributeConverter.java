@@ -20,7 +20,6 @@ import digital.inception.core.model.CodeEnum;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;

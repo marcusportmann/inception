@@ -16,9 +16,12 @@
 
 package digital.inception.operations.persistence.jpa;
 
+import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -53,6 +56,31 @@ public interface WorkflowDefinitionRepository
    */
   @Query("select count(wd) > 0 from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
   boolean existsById(@Param("workflowDefinitionId") String workflowDefinitionId);
+
+  /**
+   * Returns all the workflow definitions that are associated with the workflow definition category
+   * with the specified ID and either
+   *
+   * <ul>
+   *   <li>specific to the given tenant ({@code tenantId} matches), or
+   *   <li>global (the workflow definition’s {@code tenantId} is {@code null}).
+   * </ul>
+   *
+   * @param categoryId the ID for the workflow definition category the workflow definitions are
+   *     associated with
+   * @param tenantId the tenant identifier to match (may not be {@code null})
+   * @return the matching workflow definitions, ordered by ID
+   */
+  @Query(
+      """
+         select wd
+           from WorkflowDefinition wd
+          where wd.categoryId = :categoryId
+             and (wd.tenantId = :tenantId or wd.tenantId is null)
+          order by wd.id
+         """)
+  List<WorkflowDefinition> findForCategoryAndTenantOrGlobal(
+      @Param("categoryId") String categoryId, @Param("tenantId") UUID tenantId);
 
   /**
    * Retrieve the latest version of the workflow definition with the specified ID.

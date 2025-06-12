@@ -254,6 +254,19 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
+   * Returns whether an interaction attachment with the specified ID exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionAttachmentId the ID for the interaction attachment
+   * @return {@code true} if an interaction attachment with the specified ID exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the interaction attachment failed
+   */
+  boolean interactionAttachmentExistsWithId(
+      UUID tenantId, UUID interactionAttachmentId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Returns whether an interaction attachment with the specified hash exists for the interaction
    * with the specified ID.
    *
@@ -271,6 +284,19 @@ public interface InteractionService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Returns whether an interaction with the specified ID exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @return {@code true} if an interaction with the specified ID exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the interaction failed
+   */
+  boolean interactionExistsWithId(
+      UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Returns whether an interaction with the specified source reference for the interaction source
    * with the specified ID exists.
    *
@@ -285,35 +311,6 @@ public interface InteractionService {
   boolean interactionExistsWithSourceIdAndSourceReference(
       UUID tenantId, UUID sourceId, String sourceReference)
       throws InvalidArgumentException, ServiceUnavailableException;
-
-
-  /**
-   * Returns whether an interaction with the specified ID exists.
-   *
-   * @param tenantId the ID for the tenant
-   * @param interactionId the ID for the interaction
-   * @return {@code true} if an interaction with the specified ID exists or {@code false} otherwise
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the check for the interaction failed
-   */
-  boolean interactionExistsWithId(
-      UUID tenantId, UUID interactionId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-
-  /**
-   * Returns whether an interaction attachment with the specified ID exists.
-   *
-   * @param tenantId the ID for the tenant
-   * @param interactionAttachmentId the ID for the interaction attachment
-   * @return {@code true} if an interaction attachment with the specified ID exists or {@code false} otherwise
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the check for the interaction attachment failed
-   */
-  boolean interactionAttachmentExistsWithId(
-      UUID tenantId, UUID interactionAttachmentId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
 
   /**
    * Synchronize the interaction source.

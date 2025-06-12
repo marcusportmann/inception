@@ -144,7 +144,7 @@
       <column name="required" type="boolean" remarks="Is a document with the document definition ID required for a workflow with the workflow definition ID and workflow definition version">
         <constraints nullable="false"/>
       </column>
-      <column name="unique" type="boolean" remarks="Is a workflow with the workflow definition ID and workflow definition version limited to a single document with the document definition ID">
+      <column name="singular" type="boolean" remarks="Is a workflow with the workflow definition ID and workflow definition version limited to a single document with the document definition ID">
         <constraints nullable="false"/>
       </column>
       <column name="validity_period_amount" type="integer" remarks="The validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
@@ -185,18 +185,10 @@
       </column>
       <column name="external_reference" type="nvarchar(100)" remarks="The external reference for the workflow"/>
       <column name="data" type="clob" remarks="The data for the workflow if not stored in an external repository"/>
-      <column name="created" type="timestamp with time zone" remarks="The date and time the workflow was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="created_by" type="nvarchar(100)" remarks="The person or system that created the workflow">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp with time zone" remarks="The date and time the workflow was updated"/>
-      <column name="updated_by" type="nvarchar(100)" remarks="The person or system that updated the workflow"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflows_workflow_definitions_fk"
       baseTableName="operations_workflows" baseColumnNames="definition_id,definition_version"
-      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="RESTRICT"/>
     <createIndex indexName="operations_workflow_definition_ix"
       tableName="operations_workflows">
       <column name="definition_id"/>
@@ -241,19 +233,12 @@
       <column name="issue_date" type="date" remarks="The issue date for the document"/>
       <column name="expiry_date" type="date" remarks="The expiry date for the document"/>
       <column name="external_reference" type="nvarchar(100)" remarks="The external reference for the document"/>
+      <column name="source_document_id" type="uuid" remarks="The ID for the source document that was split to create this document"/>
       <column name="data" type="${blob_type}" remarks="The data for the document if not stored in an external repository"/>
-      <column name="created" type="timestamp with time zone" remarks="The date and time the document was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="created_by" type="nvarchar(100)" remarks="The person or system that created the document">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp with time zone" remarks="The date and time the document was updated"/>
-      <column name="updated_by" type="nvarchar(100)" remarks="The person or system that updated the document"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_documents_document_definitions_fk"
       baseTableName="operations_documents" baseColumnNames="definition_id"
-      referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="CASCADE"/>
+      referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="RESTRICT"/>
     <createIndex indexName="operations_documents_definition_id_ix"
       tableName="operations_documents">
       <column name="definition_id"/>
@@ -265,10 +250,6 @@
     <createIndex indexName="operations_documents_tenant_id_ix"
       tableName="operations_documents">
       <column name="tenant_id"/>
-    </createIndex>
-    <createIndex indexName="operations_documents_updated_ix"
-      tableName="operations_documents">
-      <column name="updated"/>
     </createIndex>
 
     <createTable tableName="operations_workflow_documents" remarks="Workflow Documents">
@@ -545,7 +526,6 @@
       <dropTable tableName="operations_workflow_documents"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_documents"/>
-      <dropIndex tableName="operations_documents" indexName="operations_documents_updated_ix"/>
       <dropIndex tableName="operations_documents" indexName="operations_documents_tenant_id_ix"/>
       <dropIndex tableName="operations_documents" indexName="operations_documents_external_reference_ix"/>
       <dropIndex tableName="operations_documents" indexName="operations_documents_definition_id_ix"/>

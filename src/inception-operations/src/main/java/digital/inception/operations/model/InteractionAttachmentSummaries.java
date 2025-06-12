@@ -33,36 +33,39 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The {@code InteractionAttachmentSummaries} class represents the results of a request to retrieve a list of
- * interaction attachment summaries.
+ * The {@code InteractionAttachmentSummaries} class represents the results of a request to retrieve
+ * a list of interaction attachment summaries.
  */
-@Schema(description = "The results of a request to retrieve a list of interaction attachment summaries")
+@Schema(
+    description = "The results of a request to retrieve a list of interaction attachment summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "tenantId",
-    "interactionAttachmentSummaries",
-    "total",
-    "sortBy",
-    "sortDirection",
-    "pageIndex",
-    "pageSize",
-    "sourceId",
-    "filter"
+  "tenantId",
+  "interactionAttachmentSummaries",
+  "total",
+  "sortBy",
+  "sortDirection",
+  "pageIndex",
+  "pageSize",
+  "sourceId",
+  "filter"
 })
-@XmlRootElement(name = "InteractionAttachmentSummaries", namespace = "https://inception.digital/operations")
+@XmlRootElement(
+    name = "InteractionAttachmentSummaries",
+    namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionAttachmentSummaries",
     namespace = "https://inception.digital/operations",
     propOrder = {
-        "tenantId",
-        "interactionAttachmentSummaries",
-        "total",
-        "sortBy",
-        "sortDirection",
-        "pageIndex",
-        "pageSize",
-        "sourceId",
-        "filter"
+      "tenantId",
+      "interactionAttachmentSummaries",
+      "total",
+      "sortBy",
+      "sortDirection",
+      "pageIndex",
+      "pageSize",
+      "sourceId",
+      "filter"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -77,14 +80,18 @@ public class InteractionAttachmentSummaries implements Serializable {
   private String filter;
 
   /** The interaction attachment summaries. */
-  @Schema(description = "The interaction attachment summaries", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(
+      description = "The interaction attachment summaries",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "InteractionAttachmentSummaries", required = true)
   @XmlElement(name = "InteractionAttachmentSummary", required = true)
   private List<InteractionAttachmentSummary> interactionAttachmentSummaries;
 
   /** The interaction ID filter that was applied to the interaction attachment summaries. */
-  @Schema(description = "The interaction ID filter that was applied to the interaction attachment summaries")
+  @Schema(
+      description =
+          "The interaction ID filter that was applied to the interaction attachment summaries")
   @JsonProperty
   @XmlElement(name = "InteractionId")
   private UUID interactionId;
@@ -108,14 +115,16 @@ public class InteractionAttachmentSummaries implements Serializable {
   private InteractionAttachmentSortBy sortBy;
 
   /** The sort direction that was applied to the interaction attachment summaries. */
-  @Schema(description = "The sort direction that was applied to the interaction attachment summaries")
+  @Schema(
+      description = "The sort direction that was applied to the interaction attachment summaries")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
   /** The ID for the tenant the interaction attachment summaries are associated with. */
   @Schema(
-      description = "The ID for the tenant the interaction attachment summaries are associated with",
+      description =
+          "The ID for the tenant the interaction attachment summaries are associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -138,10 +147,12 @@ public class InteractionAttachmentSummaries implements Serializable {
    * @param tenantId the ID for the tenant the interaction attachment summaries are associated with
    * @param interactionAttachmentSummaries the interaction attachment summaries
    * @param total the total number of interaction attachment summaries
-   * @param interactionId the interaction ID filter that was applied to the interaction attachment summaries
+   * @param interactionId the interaction ID filter that was applied to the interaction attachment
+   *     summaries
    * @param filter the filter that was applied to the interaction attachment summaries
    * @param sortBy the method used to sort the interaction attachment summaries e.g. by name
-   * @param sortDirection the sort direction that was applied to the interaction attachment summaries
+   * @param sortDirection the sort direction that was applied to the interaction attachment
+   *     summaries
    * @param pageIndex the page index
    * @param pageSize the page size
    */

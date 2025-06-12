@@ -40,6 +40,14 @@ import java.util.UUID;
 public interface DocumentService {
 
   /**
+   * Calculate the hash for the document data.
+   *
+   * @param documentData the document data
+   * @return the hash for the document data
+   */
+  String calculateDocumentDataHash(byte[] documentData);
+
+  /**
    * Create a new document.
    *
    * @param tenantId the ID for the tenant

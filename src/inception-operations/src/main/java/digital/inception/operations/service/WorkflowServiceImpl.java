@@ -40,7 +40,7 @@ import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRe
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
 import digital.inception.operations.persistence.jpa.WorkflowEngineRepository;
 import digital.inception.operations.store.WorkflowStore;
-import jakarta.validation.Validator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -373,6 +373,18 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public List<WorkflowDefinitionCategory> getWorkflowDefinitionCategories(UUID tenantId)
+      throws ServiceUnavailableException {
+    try {
+      return workflowDefinitionCategoryRepository.findForTenantOrGlobal(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow definition categories for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowDefinitionCategory getWorkflowDefinitionCategory(
       String workflowDefinitionCategoryId)
       throws InvalidArgumentException,
@@ -441,6 +453,30 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public List<WorkflowDefinition> getWorkflowDefinitions(
+      UUID tenantId, String workflowDefinitionCategoryId)
+      throws WorkflowDefinitionCategoryNotFoundException, ServiceUnavailableException {
+    try {
+      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinitionCategoryId)) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      return workflowDefinitionRepository.findForCategoryAndTenantOrGlobal(
+          workflowDefinitionCategoryId, tenantId);
+    } catch (WorkflowDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow definitions associated with the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowEngine getWorkflowEngine(String workflowEngineId)
       throws InvalidArgumentException,
           WorkflowEngineNotFoundException,
@@ -463,6 +499,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow engine (" + workflowEngineId + ")", e);
+    }
+  }
+
+  @Override
+  public List<WorkflowEngine> getWorkflowEngines() throws ServiceUnavailableException {
+    try {
+      return workflowEngineRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the workflow engines", e);
     }
   }
 

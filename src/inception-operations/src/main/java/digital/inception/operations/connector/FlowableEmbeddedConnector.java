@@ -17,16 +17,13 @@
 package digital.inception.operations.connector;
 
 /**
- * The {@code FlowableEmbeddedConnector} connector implements the workflow engine connector for the
+ * The {@code FlowableEmbeddedConnector} class provides the workflow engine connector for the
  * embedded Flowable execution engine.
  *
  * @author Marcus Portmann
  */
 public class FlowableEmbeddedConnector implements WorkflowEngineConnector {
 
-  /**
-   * Constructs a new {@code FlowableEmbeddedConnector}.
-   */
+  /** Constructs a new {@code FlowableEmbeddedConnector}. */
   public FlowableEmbeddedConnector() {}
-
 }

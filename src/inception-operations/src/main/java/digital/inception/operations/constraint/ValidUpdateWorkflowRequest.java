@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidWorkflowValidator.class)
+@Constraint(validatedBy = ValidUpdateWorkflowRequestValidator.class)
 @Documented
 public @interface ValidUpdateWorkflowRequest {
 

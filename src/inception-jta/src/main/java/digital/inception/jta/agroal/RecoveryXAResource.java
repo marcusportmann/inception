@@ -18,7 +18,6 @@ package digital.inception.jta.agroal;
 
 import digital.inception.jta.util.XAExceptionUtil;
 import io.agroal.api.transaction.TransactionIntegration.ResourceRecoveryFactory;
-import java.sql.SQLException;
 import javax.sql.XAConnection;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;

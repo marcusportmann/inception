@@ -118,17 +118,6 @@ public class DocumentDefinition implements Serializable {
    * Constructs a new {@code DocumentDefinition}.
    *
    * @param id ID for the document definition
-   * @param name name of the document definition
-   */
-  public DocumentDefinition(String id, String name) {
-    this.id = id;
-    this.name = name;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
    * @param categoryId the ID for the document definition category the document definition is
    *     associated with
    * @param name name of the document definition
@@ -136,19 +125,6 @@ public class DocumentDefinition implements Serializable {
   public DocumentDefinition(String id, String categoryId, String name) {
     this.id = id;
     this.categoryId = categoryId;
-    this.name = name;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param tenantId ID for the tenant the document definition is specific to
-   * @param name name of the document definition
-   */
-  public DocumentDefinition(String id, UUID tenantId, String name) {
-    this.id = id;
-    this.tenantId = tenantId;
     this.name = name;
   }
 
@@ -172,21 +148,6 @@ public class DocumentDefinition implements Serializable {
    * Constructs a new {@code DocumentDefinition}.
    *
    * @param id ID for the document definition
-   * @param name name of the document definition
-   * @param requiredDocumentAttributes the required attributes for a document associated with the
-   *     document definition
-   */
-  public DocumentDefinition(
-      String id, String name, List<RequiredDocumentAttribute> requiredDocumentAttributes) {
-    this.id = id;
-    this.name = name;
-    this.requiredDocumentAttributes = requiredDocumentAttributes;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
    * @param categoryId the ID for the document definition category the document definition is
    *     associated with
    * @param name name of the document definition
@@ -200,26 +161,6 @@ public class DocumentDefinition implements Serializable {
       List<RequiredDocumentAttribute> requiredDocumentAttributes) {
     this.id = id;
     this.categoryId = categoryId;
-    this.name = name;
-    this.requiredDocumentAttributes = requiredDocumentAttributes;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param tenantId ID for the tenant the document definition is specific to
-   * @param name name of the document definition
-   * @param requiredDocumentAttributes the required attributes for a document associated with the
-   *     document definition
-   */
-  public DocumentDefinition(
-      String id,
-      UUID tenantId,
-      String name,
-      List<RequiredDocumentAttribute> requiredDocumentAttributes) {
-    this.id = id;
-    this.tenantId = tenantId;
     this.name = name;
     this.requiredDocumentAttributes = requiredDocumentAttributes;
   }

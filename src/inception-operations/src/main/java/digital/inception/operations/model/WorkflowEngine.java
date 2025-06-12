@@ -48,12 +48,12 @@ import java.util.Optional;
 /** The {@code WorkflowEngine} class holds the information for a workflow engine. */
 @Schema(description = "A workflow engine")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "connectorClassName"})
+@JsonPropertyOrder({"id", "name", "connectorClassName", "attributes"})
 @XmlRootElement(name = "WorkflowEngine", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowEngine",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "name", "connectorClassName"})
+    propOrder = {"id", "name", "connectorClassName", "attributes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_engines")
@@ -115,9 +115,11 @@ public class WorkflowEngine implements Serializable {
    * @param name the name of the workflow engine
    * @param attributes the attributes for the workflow engine
    */
-  public WorkflowEngine(String id, String name, List<WorkflowEngineAttribute> attributes) {
+  public WorkflowEngine(
+      String id, String name, String connectorClassName, List<WorkflowEngineAttribute> attributes) {
     this.id = id;
     this.name = name;
+    this.connectorClassName = connectorClassName;
     setAttributes(attributes);
   }
 
@@ -127,9 +129,10 @@ public class WorkflowEngine implements Serializable {
    * @param id the ID for the workflow engine
    * @param name the name of the workflow engine
    */
-  public WorkflowEngine(String id, String name) {
+  public WorkflowEngine(String id, String name, String connectorClassName) {
     this.id = id;
     this.name = name;
+    this.connectorClassName = connectorClassName;
   }
 
   /**

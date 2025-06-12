@@ -78,7 +78,8 @@ public interface InteractionRepository
           + "and i.sourceReference = :sourceReference")
   Optional<UUID> getIdByTenantIdAndSourceIdAndSourceReference(
       @Param("tenantId") UUID tenantId,
-      @Param("sourceId") UUID sourceId, @Param("sourceReference") String sourceReference);
+      @Param("sourceId") UUID sourceId,
+      @Param("sourceReference") String sourceReference);
 
   /**
    * Retrieve the subject for the interaction.

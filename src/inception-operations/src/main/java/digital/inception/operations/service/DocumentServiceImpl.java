@@ -81,6 +81,18 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     this.documentDefinitionRepository = documentDefinitionRepository;
   }
 
+  public String calculateDocumentDataHash(byte[] documentData) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+      digest.update(documentData);
+
+      return Base64.getEncoder().encodeToString(digest.digest());
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to calculate the SHA-256 hash for the document data", e);
+    }
+  }
+
   @Override
   public Document createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest)
       throws InvalidArgumentException,
@@ -93,7 +105,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("createDocumentRequest", createDocumentRequest);
 
     try {
-      if (documentDefinitionRepository.existsById(createDocumentRequest.getDefinitionId())) {
+      if (!documentDefinitionRepository.existsById(createDocumentRequest.getDefinitionId())) {
         throw new DocumentDefinitionNotFoundException(createDocumentRequest.getDefinitionId());
       }
 
@@ -102,7 +114,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setExpiryDate(createDocumentRequest.getExpiryDate());
       document.setExternalReference(createDocumentRequest.getExternalReference());
       document.setFileType(createDocumentRequest.getFileType());
-      document.setHash(calculateDocumentHash(createDocumentRequest.getData()));
+      document.setHash(calculateDocumentDataHash(createDocumentRequest.getData()));
       document.setIssueDate(createDocumentRequest.getIssueDate());
       document.setName(createDocumentRequest.getName());
       document.setSourceDocumentId(createDocumentRequest.getSourceDocumentId());
@@ -330,20 +342,25 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public List<DocumentDefinition> getDocumentDefinitions(UUID tenantId,
-      String documentDefinitionCategoryId)
+  public List<DocumentDefinition> getDocumentDefinitions(
+      UUID tenantId, String documentDefinitionCategoryId)
       throws DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException {
     try {
       if (!documentDefinitionCategoryRepository.existsById(documentDefinitionCategoryId)) {
         throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
       }
 
-      return documentDefinitionRepository.findForCategoryAndTenantOrGlobal(documentDefinitionCategoryId, tenantId);
-      } catch (DocumentDefinitionCategoryNotFoundException e) {
+      return documentDefinitionRepository.findForCategoryAndTenantOrGlobal(
+          documentDefinitionCategoryId, tenantId);
+    } catch (DocumentDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the document definitions associated with the document definition category (" + documentDefinitionCategoryId + ") for the tenant (" + tenantId + ")",
+          "Failed to retrieve the document definitions associated with the document definition category ("
+              + documentDefinitionCategoryId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
@@ -425,18 +442,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + documentDefinitionCategory.getId()
               + ")",
           e);
-    }
-  }
-
-  private String calculateDocumentHash(byte[] documentData) {
-    try {
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-
-      digest.update(documentData);
-
-      return Base64.getEncoder().encodeToString(digest.digest());
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to calculate the SHA-256 hash for the document data", e);
     }
   }
 }

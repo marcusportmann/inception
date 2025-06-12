@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.connector;
+package digital.inception.operations.test;
 
+import digital.inception.operations.connector.WorkflowEngineConnector;
 
 /**
- * The {@code WorkflowEngineConnector} interface defines the interface that must be implemented by
- * all workflow engine connectors.
+ * The {@code TestWorkflowEngineConnector} class provides a workflow engine connector implementation
+ * for testing purposes.
  *
  * @author Marcus Portmann
  */
-public interface WorkflowEngineConnector {
+public class TestWorkflowEngineConnector implements WorkflowEngineConnector {
 
-  // Workflow startWorkflow();
+  /** Constructs a new {@code TestWorkflowEngineConnector}. */
+  public TestWorkflowEngineConnector() {}
 }

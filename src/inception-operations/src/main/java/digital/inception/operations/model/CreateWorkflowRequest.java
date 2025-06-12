@@ -95,6 +95,20 @@ public class CreateWorkflowRequest implements Serializable {
   /**
    * Constructs a new {@code CreateWorkflowRequest}.
    *
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param externalReference the external reference used to link this workflow to an external
+   *     system
+   * @param data the data for the workflow
+   */
+  public CreateWorkflowRequest(String definitionId, String externalReference, String data) {
+    this.definitionId = definitionId;
+    this.externalReference = externalReference;
+    this.data = data;
+  }
+
+  /**
+   * Constructs a new {@code CreateWorkflowRequest}.
+   *
    * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param data the data for the workflow
@@ -102,6 +116,23 @@ public class CreateWorkflowRequest implements Serializable {
   public CreateWorkflowRequest(UUID parentId, String definitionId, String data) {
     this.parentId = parentId;
     this.definitionId = definitionId;
+    this.data = data;
+  }
+
+  /**
+   * Constructs a new {@code CreateWorkflowRequest}.
+   *
+   * @param parentId the ID for the parent workflow
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param externalReference the external reference used to link this workflow to an external
+   *     system
+   * @param data the data for the workflow
+   */
+  public CreateWorkflowRequest(
+      UUID parentId, String definitionId, String externalReference, String data) {
+    this.parentId = parentId;
+    this.definitionId = definitionId;
+    this.externalReference = externalReference;
     this.data = data;
   }
 

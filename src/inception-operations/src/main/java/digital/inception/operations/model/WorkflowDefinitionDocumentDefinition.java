@@ -52,7 +52,7 @@ import java.util.Objects;
 @JsonPropertyOrder({
   "documentDefinitionId",
   "required",
-  "unique",
+  "singular",
   "validityPeriodUnit",
   "validityPeriodAmount"
 })
@@ -65,7 +65,7 @@ import java.util.Objects;
     propOrder = {
       "documentDefinitionId",
       "required",
-      "unique",
+      "singular",
       "validityPeriodUnit",
       "validityPeriodAmount"
     })
@@ -112,10 +112,10 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
           "Is a workflow with the workflow definition ID and workflow definition version limited to a single document with the document definition ID",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Unique", required = true)
+  @XmlElement(name = "Singular", required = true)
   @NotNull
-  @Column(name = "unique", nullable = false)
-  private boolean unique;
+  @Column(name = "singular", nullable = false)
+  private boolean singular;
 
   /**
    * The validity period from a document's issue date during which the document, with the document
@@ -166,12 +166,50 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * @param documentDefinitionId ID for the document definition
    * @param required is a document with the document definition ID required for a workflow with the
    *     workflow definition ID and workflow definition version
+   * @param singular is a workflow with the workflow definition ID and workflow definition version
+   *     limited to a single document with the document definition ID
    */
   public WorkflowDefinitionDocumentDefinition(
-      WorkflowDefinition workflowDefinition, String documentDefinitionId, boolean required) {
+      WorkflowDefinition workflowDefinition,
+      String documentDefinitionId,
+      boolean required,
+      boolean singular) {
     this.workflowDefinition = workflowDefinition;
     this.documentDefinitionId = documentDefinitionId;
     this.required = required;
+    this.singular = singular;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDefinitionDocumentDefinition}.
+   *
+   * @param workflowDefinition the workflow definition the workflow definition document definition
+   *     is associated with
+   * @param documentDefinitionId ID for the document definition
+   * @param required is a document with the document definition ID required for a workflow with the
+   *     workflow definition ID and workflow definition version
+   * @param singular is a workflow with the workflow definition ID and workflow definition version
+   *     limited to a single document with the document definition ID
+   * @param validityPeriodUnit the unit of measurement of time for the validity period from a
+   *     document's issue date during which the document, with the document definition ID, can be
+   *     associated with a workflow with the workflow definition ID and workflow definition version
+   * @param validityPeriodAmount the validity period from a document's issue date during which the
+   *     document, with the document definition ID, can be associated with a workflow with the
+   *     workflow definition ID and workflow definition version
+   */
+  public WorkflowDefinitionDocumentDefinition(
+      WorkflowDefinition workflowDefinition,
+      String documentDefinitionId,
+      boolean required,
+      boolean singular,
+      TimeUnit validityPeriodUnit,
+      Integer validityPeriodAmount) {
+    this.workflowDefinition = workflowDefinition;
+    this.documentDefinitionId = documentDefinitionId;
+    this.required = required;
+    this.singular = singular;
+    this.validityPeriodUnit = validityPeriodUnit;
+    this.validityPeriodAmount = validityPeriodAmount;
   }
 
   /**
@@ -264,8 +302,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    *     version is limited to a single document with the document definition ID or {@code false}
    *     otherwise
    */
-  public boolean isUnique() {
-    return unique;
+  public boolean isSingular() {
+    return singular;
   }
 
   /**
@@ -297,8 +335,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    *     definition version is limited to a single document with the document definition ID or
    *     {@code false} otherwise
    */
-  public void setUnique(boolean unique) {
-    this.unique = unique;
+  public void setSingular(boolean unique) {
+    this.singular = unique;
   }
 
   /**

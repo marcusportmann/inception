@@ -32,6 +32,7 @@ import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowEngine;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -191,6 +192,17 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow definition categories.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the workflow definition categories
+   * @throws ServiceUnavailableException if the workflow definition categories could not be
+   *     retrieved
+   */
+  List<WorkflowDefinitionCategory> getWorkflowDefinitionCategories(UUID tenantId)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow definition category.
    *
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
@@ -224,6 +236,24 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow definitions associated with the workflow definition category with the
+   * specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category the workflow
+   *     definitions are associated with
+   * @return the workflow definitions associated with the workflow definition category with the
+   *     specified ID
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the workflow definition categories could not be
+   *     retrieved
+   */
+  List<WorkflowDefinition> getWorkflowDefinitions(
+      UUID tenantId, String workflowDefinitionCategoryId)
+      throws WorkflowDefinitionCategoryNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow engine.
    *
    * @param workflowEngineId the ID for the workflow engine
@@ -234,6 +264,13 @@ public interface WorkflowService {
    */
   WorkflowEngine getWorkflowEngine(String workflowEngineId)
       throws InvalidArgumentException, WorkflowEngineNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow engines.
+   *
+   * @throws ServiceUnavailableException if the workflow engines could not be retrieved
+   */
+  List<WorkflowEngine> getWorkflowEngines() throws ServiceUnavailableException;
 
   /**
    * Update the workflow.

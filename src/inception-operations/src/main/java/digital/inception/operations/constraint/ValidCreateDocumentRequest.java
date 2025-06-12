@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidDocumentValidator.class)
+@Constraint(validatedBy = ValidCreateDocumentRequestValidator.class)
 @Documented
 public @interface ValidCreateDocumentRequest {
 

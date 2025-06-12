@@ -21,7 +21,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code WorkflowEngineAttributeId} class implements the ID class for The {@code WorkflowEngineAttribute} class.
+ * The {@code WorkflowEngineAttributeId} class implements the ID class for The {@code
+ * WorkflowEngineAttribute} class.
  *
  * @author Marcus Portmann
  */
@@ -71,6 +72,7 @@ public class WorkflowEngineAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((workflowEngine == null) ? 0 : workflowEngine.hashCode()) + ((name == null) ? 0 : name.hashCode());
+    return ((workflowEngine == null) ? 0 : workflowEngine.hashCode())
+        + ((name == null) ? 0 : name.hashCode());
   }
 }

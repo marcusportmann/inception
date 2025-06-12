@@ -17,7 +17,6 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.Workflow;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

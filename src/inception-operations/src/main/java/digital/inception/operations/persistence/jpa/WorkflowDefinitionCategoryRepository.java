@@ -17,7 +17,11 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The {@code WorkflowDefinitionCategoryRepository} interface declares the persistence for the
@@ -26,4 +30,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Marcus Portmann
  */
 public interface WorkflowDefinitionCategoryRepository
-    extends JpaRepository<WorkflowDefinitionCategory, String> {}
+    extends JpaRepository<WorkflowDefinitionCategory, String> {
+
+  /**
+   * Returns all the workflow definition categories that are either
+   *
+   * <ul>
+   *   <li>specific to the given tenant ({@code tenantId} matches), or
+   *   <li>global (the workflow definition category’s {@code tenantId} is {@code null}).
+   * </ul>
+   *
+   * @param tenantId the tenant identifier to match (may not be {@code null})
+   * @return the matching workflow definition categories, ordered by ID
+   */
+  @Query(
+      """
+         select wdc
+           from WorkflowDefinitionCategory wdc
+          where wdc.tenantId = :tenantId
+             or wdc.tenantId is null
+          order by wdc.id
+         """)
+  List<WorkflowDefinitionCategory> findForTenantOrGlobal(@Param("tenantId") UUID tenantId);
+}

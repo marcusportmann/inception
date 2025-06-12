@@ -17,7 +17,6 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.InteractionAttachmentSummary;
-import digital.inception.operations.model.InteractionSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

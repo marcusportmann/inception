@@ -16,7 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -44,7 +43,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import org.springframework.util.StringUtils;
 
 /** The {@code InteractionSummary} class holds the information for an interaction summary. */
 @Schema(description = "An interaction summary")
