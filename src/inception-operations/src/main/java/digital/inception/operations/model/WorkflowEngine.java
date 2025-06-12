@@ -113,6 +113,8 @@ public class WorkflowEngine implements Serializable {
    *
    * @param id the ID for the workflow engine
    * @param name the name of the workflow engine
+   * @param connectorClassName the fully qualified name of the connector class for the workflow
+   *     engine
    * @param attributes the attributes for the workflow engine
    */
   public WorkflowEngine(
@@ -128,6 +130,8 @@ public class WorkflowEngine implements Serializable {
    *
    * @param id the ID for the workflow engine
    * @param name the name of the workflow engine
+   * @param connectorClassName the fully qualified name of the connector class for the workflow
+   *     engine
    */
   public WorkflowEngine(String id, String name, String connectorClassName) {
     this.id = id;

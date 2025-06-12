@@ -44,6 +44,7 @@ import digital.inception.operations.service.WorkflowService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -79,6 +80,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     })
 public class WorkflowServiceTests {
 
+  /** The secure random number generator. */
+  private static final SecureRandom secureRandom = new SecureRandom();
+
   /** The Document Service. */
   @Autowired private DocumentService documentService;
 
@@ -93,13 +97,13 @@ public class WorkflowServiceTests {
   public void jsonWorkflowTest() throws Exception {
     DocumentDefinitionCategory documentDefinitionCategory =
         new DocumentDefinitionCategory(
-            "test_document_definition_category", "Test Document Definition Category");
+            "test_document_definition_category_" + randomId(), "Test Document Definition Category");
 
     documentService.createDocumentDefinitionCategory(documentDefinitionCategory);
 
     DocumentDefinition documentDefinition =
         new DocumentDefinition(
-            "test_document_definition",
+            "test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
             "Test Document Definition");
 
@@ -107,13 +111,13 @@ public class WorkflowServiceTests {
 
     WorkflowDefinitionCategory workflowDefinitionCategory =
         new WorkflowDefinitionCategory(
-            "test_workflow_definition_category", "Test Workflow Definition Category");
+            "test_workflow_definition_category_" + randomId(), "Test Workflow Definition Category");
 
     workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
 
     WorkflowDefinition workflowDefinition =
         new WorkflowDefinition(
-            "test_json_workflow_definition",
+            "test_json_workflow_definition_" + randomId(),
             1,
             workflowDefinitionCategory.getId(),
             "Test JSON Workflow Definition",
@@ -128,7 +132,7 @@ public class WorkflowServiceTests {
     TestWorkflowData testWorkflowData =
         new TestWorkflowData(
             UUID.randomUUID(),
-            "This is name " + System.currentTimeMillis(),
+            "This is name " + randomId(),
             LocalDate.of(1976, 03, 07),
             new BigDecimal("1234.56"),
             OffsetDateTime.now());
@@ -178,13 +182,14 @@ public class WorkflowServiceTests {
 
     WorkflowEngineAttribute workflowEngineAttribute =
         new WorkflowEngineAttribute(
-            "test_workflow_engine_attribute_name", "test_workflow_engine_attribute_value");
+            "test_workflow_engine_attribute_name_" + randomId(),
+            "test_workflow_engine_attribute_value");
 
     List<WorkflowEngineAttribute> workflowEngineAttributes = List.of(workflowEngineAttribute);
 
     WorkflowEngine workflowEngine =
         new WorkflowEngine(
-            "test_workflow_engine",
+            "test_workflow_engine_" + randomId(),
             "Test Workflow Engine",
             "digital.inception.operations.test.TestWorkflowEngineConnector",
             workflowEngineAttributes);
@@ -204,7 +209,8 @@ public class WorkflowServiceTests {
 
     DocumentDefinitionCategory sharedDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
-            "test_shared_document_definition_category", "Test Shared Document Definition Category");
+            "test_shared_document_definition_category_" + randomId(),
+            "Test Shared Document Definition Category");
 
     documentService.createDocumentDefinitionCategory(sharedDocumentDefinitionCategory);
 
@@ -218,7 +224,7 @@ public class WorkflowServiceTests {
 
     DocumentDefinition sharedDocumentDefinition =
         new DocumentDefinition(
-            "test_shared_document_definition",
+            "test_shared_document_definition_" + randomId(),
             sharedDocumentDefinitionCategory.getId(),
             "Test Shared Document Definition",
             List.of(
@@ -230,7 +236,7 @@ public class WorkflowServiceTests {
 
     DocumentDefinition tenantDocumentDefinition =
         new DocumentDefinition(
-            "test_tenant_document_definition",
+            "test_tenant_document_definition_" + randomId(),
             tenantDocumentDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Document Definition");
@@ -239,7 +245,8 @@ public class WorkflowServiceTests {
 
     WorkflowDefinitionCategory sharedWorkflowDefinitionCategory =
         new WorkflowDefinitionCategory(
-            "test_shared_workflow_definition_category", "Test Shared Workflow Definition Category");
+            "test_shared_workflow_definition_category_" + randomId(),
+            "Test Shared Workflow Definition Category");
 
     workflowService.createWorkflowDefinitionCategory(sharedWorkflowDefinitionCategory);
 
@@ -251,7 +258,7 @@ public class WorkflowServiceTests {
 
     WorkflowDefinitionCategory tenantWorkflowDefinitionCategory =
         new WorkflowDefinitionCategory(
-            "test_tenant_workflow_definition_category",
+            "test_tenant_workflow_definition_category_" + randomId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Workflow Definition Category");
 
@@ -276,11 +283,11 @@ public class WorkflowServiceTests {
 
     WorkflowDefinition sharedWorkflowDefinition =
         new WorkflowDefinition(
-            "test_shared_workflow_definition",
+            "test_shared_workflow_definition_" + randomId(),
             1,
             sharedWorkflowDefinitionCategory.getId(),
             "Test Shared Workflow Definition",
-            "test_workflow_engine",
+            workflowEngine.getId(),
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
@@ -295,12 +302,12 @@ public class WorkflowServiceTests {
 
     WorkflowDefinition tenantWorkflowDefinition =
         new WorkflowDefinition(
-            "test_tenant_workflow_definition",
+            "test_tenant_workflow_definition_" + randomId(),
             1,
             tenantWorkflowDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Workflow Definition",
-            "test_workflow_engine",
+            workflowEngine.getId(),
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
@@ -539,5 +546,9 @@ public class WorkflowServiceTests {
         workflow1.getTenantId(),
         workflow2.getTenantId(),
         "The tenant ID values for the workflows do not match");
+  }
+
+  private String randomId() {
+    return String.format("%04X", secureRandom.nextInt(0x10000));
   }
 }

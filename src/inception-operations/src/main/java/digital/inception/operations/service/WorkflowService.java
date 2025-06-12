@@ -268,6 +268,7 @@ public interface WorkflowService {
   /**
    * Retrieve the workflow engines.
    *
+   * @return the workflow engines
    * @throws ServiceUnavailableException if the workflow engines could not be retrieved
    */
   List<WorkflowEngine> getWorkflowEngines() throws ServiceUnavailableException;

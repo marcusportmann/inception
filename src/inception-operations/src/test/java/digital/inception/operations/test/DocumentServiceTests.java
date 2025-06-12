@@ -40,6 +40,7 @@ import digital.inception.operations.service.DocumentService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -73,6 +74,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     })
 public class DocumentServiceTests {
 
+  /** The secure random number generator. */
+  private static final SecureRandom secureRandom = new SecureRandom();
+
   /** The Document Service. */
   @Autowired private DocumentService documentService;
 
@@ -84,7 +88,8 @@ public class DocumentServiceTests {
   public void documentServiceTest() throws Exception {
     DocumentDefinitionCategory sharedDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
-            "test_shared_document_definition_category", "Test Shared Document Definition Category");
+            "test_shared_document_definition_category_" + randomId(),
+            "Test Shared Document Definition Category");
 
     documentService.createDocumentDefinitionCategory(sharedDocumentDefinitionCategory);
 
@@ -96,7 +101,7 @@ public class DocumentServiceTests {
 
     DocumentDefinitionCategory tenantDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
-            "test_tenant_document_definition_category",
+            "test_tenant_document_definition_category_" + randomId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Document Definition Category");
 
@@ -129,7 +134,7 @@ public class DocumentServiceTests {
 
     DocumentDefinition sharedDocumentDefinition =
         new DocumentDefinition(
-            "test_shared_document_definition",
+            "test_shared_document_definition_" + randomId(),
             sharedDocumentDefinitionCategory.getId(),
             "Test Shared Document Definition",
             List.of(
@@ -153,7 +158,7 @@ public class DocumentServiceTests {
 
     DocumentDefinition tenantDocumentDefinition =
         new DocumentDefinition(
-            "test_tenant_document_definition",
+            "test_tenant_document_definition_" + randomId(),
             tenantDocumentDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Document Definition");
@@ -360,5 +365,9 @@ public class DocumentServiceTests {
     createDocumentRequest.setSourceDocumentId(null);
 
     return createDocumentRequest;
+  }
+
+  private String randomId() {
+    return String.format("%04X", secureRandom.nextInt(0x10000));
   }
 }
