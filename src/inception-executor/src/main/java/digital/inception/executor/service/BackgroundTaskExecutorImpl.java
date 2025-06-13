@@ -223,7 +223,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
     private final Task task;
 
     /**
-     * Constructs a new {@code TaskExecutorThread}.
+     * Constructs a new {@code TaskExecutor}.
      *
      * @param executorService the Executor Service
      * @param task the task

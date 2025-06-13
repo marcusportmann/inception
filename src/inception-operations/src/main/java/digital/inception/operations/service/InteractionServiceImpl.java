@@ -755,8 +755,8 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
   }
 
-  private Interaction createMessageInteractionForMailboxInteractionSource(
-      InteractionSource mailboxInteractionSource, Message message)
+  private Interaction createEmailInteraction(
+      InteractionSource interactionSource, Message message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
@@ -765,9 +765,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     try {
       Interaction interaction = new Interaction();
       interaction.setId(UuidCreator.getTimeOrderedEpoch());
-      interaction.setTenantId(mailboxInteractionSource.getTenantId());
+      interaction.setTenantId(interactionSource.getTenantId());
       interaction.setStatus(InteractionStatus.RECEIVED);
-      interaction.setSourceId(mailboxInteractionSource.getId());
+      interaction.setSourceId(interactionSource.getId());
       interaction.setSourceReference(message.getHeader("Message-ID")[0]);
 
       /*
@@ -1112,7 +1112,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         // Process each message
         for (Message message : messages) {
           Interaction interaction =
-              createMessageInteractionForMailboxInteractionSource(interactionSource, message);
+              createEmailInteraction(interactionSource, message);
 
           Optional<UUID> interactionIdOptional =
               interactionStore.getInteractionIdBySourceIdAndSourceReference(

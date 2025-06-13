@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package digital.inception.executor.service;
+package digital.inception.operations.service;
 
 /**
- * The {@code BackgroundTaskExecutor} interface defines the interface that must be implemented by
- * a background task executor.
+ * The {@code BackgroundInteractionProcessor} interface defines the interface that must be implemented by
+ * a background interaction processor.
  *
- * <p>This interface is required because The {@code BackgroundTaskExecutorImpl} class leverages
+ * <p>This interface is required because The {@code BackgroundInteractionProcessorImpl} class leverages
  * the @Async and @Scheduled annotations, and implements the {@code SmartLifecycle} interface.
  *
  * @author Marcus Portmann
  */
-public interface BackgroundTaskExecutor {
+public interface BackgroundInteractionProcessor {
 
-  /** Execute the tasks. */
-  void executeTasks();
+  /** Process the interactions. */
+  void processInteractions();
 }
