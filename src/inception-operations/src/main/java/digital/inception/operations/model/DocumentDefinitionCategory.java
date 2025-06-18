@@ -39,6 +39,8 @@ import java.util.UUID;
 /**
  * The {@code DocumentDefinitionCategory} class holds the information for a document definition
  * category.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "A document definition category")
 @JsonInclude(JsonInclude.Include.NON_NULL)

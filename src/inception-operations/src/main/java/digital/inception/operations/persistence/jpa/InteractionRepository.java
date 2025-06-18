@@ -17,12 +17,20 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Interaction;
+import digital.inception.operations.model.InteractionStatus;
+import jakarta.persistence.LockModeType;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The {@code InteractionRepository} interface declares the persistence for the {@code Interaction}
@@ -65,6 +73,21 @@ public interface InteractionRepository
   Optional<Interaction> findByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
+   * Retrieve the interactions queued for processing.
+   *
+   * @param lastProcessedBefore the date and time used to select failed interactions for
+   *     re-processing
+   * @param pageable the pagination information
+   * @return the interactions queued for processing
+   */
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  @Query(
+      "select i from Interaction i where i.status = digital.inception.operations.model.InteractionStatus.QUEUED "
+          + "and (i.lastProcessed < :lastProcessedBefore or i.lastProcessed is null)")
+  List<Interaction> findInteractionsQueuedForProcessingForWrite(
+      @Param("lastProcessedBefore") OffsetDateTime lastProcessedBefore, Pageable pageable);
+
+  /**
    * Retrieve the ID for the interaction with the specified source reference and source ID.
    *
    * @param tenantId the ID for the tenant the interaction is associated with
@@ -90,4 +113,51 @@ public interface InteractionRepository
    */
   @Query("select i.subject from Interaction i where i.id = :interactionId")
   Optional<String> getSubjectById(@Param("interactionId") UUID interactionId);
+
+  /**
+   * Lock the interaction for processing.
+   *
+   * @param interactionId the ID for the interaction
+   * @param lockName the name of the lock
+   * @param when the date and time the interaction is locked for processing
+   */
+  @Transactional
+  @Modifying
+  @Query(
+      "update Interaction i set i.lockName = :lockName, i.status = digital.inception.operations.model.InteractionStatus.PROCESSING, "
+          + "i.processingAttempts = i.processingAttempts + 1, i.lastProcessed = :when where i.id = :interactionId")
+  void lockInteractionForProcessing(
+      @Param("interactionId") UUID interactionId,
+      @Param("lockName") String lockName,
+      @Param("when") OffsetDateTime when);
+
+  /**
+   * Reset the interaction locks with the specified status.
+   *
+   * @param status the status
+   * @param newStatus the new status for the interactions
+   * @param lockName the lock name
+   */
+  @Transactional
+  @Modifying
+  @Query(
+      "update Interaction i set i.status = :newStatus, i.lockName = null "
+          + "where i.lockName = :lockName and i.status = :status")
+  void resetInteractionLocks(
+      @Param("status") InteractionStatus status,
+      @Param("newStatus") InteractionStatus newStatus,
+      @Param("lockName") String lockName);
+
+  /**
+   * Unlock the interaction.
+   *
+   * @param interactionId the ID for the interaction
+   * @param status the status for the interaction
+   */
+  @Transactional
+  @Modifying
+  @Query(
+      "update Interaction i set i.status = :status, i.lockName = null where i.id = :interactionId")
+  void unlockInteraction(
+      @Param("interactionId") UUID interactionId, @Param("status") InteractionStatus status);
 }

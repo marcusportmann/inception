@@ -46,6 +46,8 @@ import java.util.Objects;
 /**
  * The {@code WorkflowDefinitionDocumentDefinition} class holds the information for an association
  * of a document definition with a workflow definition.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "An association of a document definition with a workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)

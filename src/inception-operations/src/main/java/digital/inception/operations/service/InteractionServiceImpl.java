@@ -39,6 +39,7 @@ import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionMimeType;
+import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceType;
@@ -106,6 +107,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   /** The regular expression pattern used to extract the conversation ID from an email subject. */
   private final Pattern conversationIdPattern = Pattern.compile("\\[CID:([A-Z0-9]+)\\]");
 
+  /** The Interaction Processor. */
+  private final InteractionProcessor interactionProcessor;
+
   /** The Interaction Source Repository. */
   private final InteractionSourceRepository interactionSourceRepository;
 
@@ -116,6 +120,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   /** The internal reference to the Interaction Service to enable caching. */
   private InteractionService InteractionService;
+
+  /** The maximum number of processing attempts for an interaction. */
+  @Value("${inception.operations.maximum-interaction-processing-attempts:#{100}}")
+  private int maximumInteractionProcessingAttempts;
 
   /**
    * The minimum size for an image attachment on an email for it be processed as a valid attachment.
@@ -129,15 +137,18 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
    * @param applicationContext the Spring application context
    * @param interactionStore the Interaction Store
    * @param interactionSourceRepository the Interaction Source Repository
+   * @param interactionProcessor the Interaction Processor
    */
   public InteractionServiceImpl(
       ApplicationContext applicationContext,
       InteractionStore interactionStore,
-      InteractionSourceRepository interactionSourceRepository) {
+      InteractionSourceRepository interactionSourceRepository,
+      InteractionProcessor interactionProcessor) {
     super(applicationContext);
 
     this.interactionStore = interactionStore;
     this.interactionSourceRepository = interactionSourceRepository;
+    this.interactionProcessor = interactionProcessor;
   }
 
   @Override
@@ -473,6 +484,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  public List<InteractionSource> getInteractionSources() throws ServiceUnavailableException {
+    try {
+      return interactionSourceRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the interaction sources)", e);
+    }
+  }
+
+  @Override
   public List<InteractionSource> getInteractionSources(
       UUID tenantId, InteractionSourceType interactionSourceType)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -564,6 +584,22 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + tenantId
               + ")",
           e);
+    }
+  }
+
+  @Override
+  public int getMaximumInteractionProcessingAttempts() {
+    return maximumInteractionProcessingAttempts;
+  }
+
+  @Override
+  public Optional<Interaction> getNextInteractionQueuedForProcessing()
+      throws ServiceUnavailableException {
+    try {
+      return interactionStore.getNextInteractionQueuedForProcessing();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the next interaction queued for processing", e);
     }
   }
 
@@ -663,6 +699,36 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  public InteractionProcessingResult processInteraction(Interaction interaction)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return interactionProcessor.processInteraction(interaction);
+  }
+
+  @Override
+  public void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (status == null) {
+      throw new InvalidArgumentException("status");
+    }
+
+    if (newStatus == null) {
+      throw new InvalidArgumentException("newStatus");
+    }
+
+    try {
+      interactionStore.resetInteractionLocks(status, newStatus);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to reset the locks for the interactions with status ("
+              + status
+              + ") and set their status to ("
+              + newStatus
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   @Transactional
   public int synchronizeInteractionSource(InteractionSource interactionSource)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -677,6 +743,32 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + ") with the unsupported type ("
               + interactionSource.getType()
               + ")");
+    }
+  }
+
+  @Override
+  public void unlockInteraction(UUID interactionId, InteractionStatus status)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    if (status == null) {
+      throw new InvalidArgumentException("status");
+    }
+
+    try {
+      interactionStore.unlockInteraction(interactionId, status);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to unlock and set the status for the interaction ("
+              + interactionId
+              + ") to ("
+              + status
+              + ")",
+          e);
     }
   }
 
@@ -755,8 +847,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
   }
 
-  private Interaction createEmailInteraction(
-      InteractionSource interactionSource, Message message)
+  private Interaction createEmailInteraction(InteractionSource interactionSource, Message message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
@@ -766,7 +857,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       Interaction interaction = new Interaction();
       interaction.setId(UuidCreator.getTimeOrderedEpoch());
       interaction.setTenantId(interactionSource.getTenantId());
-      interaction.setStatus(InteractionStatus.RECEIVED);
+      interaction.setStatus(InteractionStatus.QUEUED);
       interaction.setSourceId(interactionSource.getId());
       interaction.setSourceReference(message.getHeader("Message-ID")[0]);
 
@@ -1111,8 +1202,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
         // Process each message
         for (Message message : messages) {
-          Interaction interaction =
-              createEmailInteraction(interactionSource, message);
+          Interaction interaction = createEmailInteraction(interactionSource, message);
 
           Optional<UUID> interactionIdOptional =
               interactionStore.getInteractionIdBySourceIdAndSourceReference(
@@ -1165,6 +1255,8 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
               interactionStore.createInteractionAttachment(
                   interactionSource.getTenantId(), interactionAttachment);
+
+              // TODO: Publish event
             }
           }
 
@@ -1210,6 +1302,11 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         }
       } finally {
         store.close();
+      }
+
+      // Trigger the processing of any new interactions
+      if (numberOfNewInteractions > 0) {
+        getApplicationContext().getBean(BackgroundInteractionProcessor.class).processInteractions();
       }
 
       return numberOfNewInteractions;

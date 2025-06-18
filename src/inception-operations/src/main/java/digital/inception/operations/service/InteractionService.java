@@ -29,12 +29,14 @@ import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
+import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -211,6 +213,14 @@ public interface InteractionService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Retrieve all the interaction sources.
+   *
+   * @return the interaction sources
+   * @throws ServiceUnavailableException if the interaction sources could not be retrieved
+   */
+  List<InteractionSource> getInteractionSources() throws ServiceUnavailableException;
+
+  /**
    * Retrieve the interaction sources with the specified type.
    *
    * @param tenantId the ID for the tenant
@@ -252,6 +262,25 @@ public interface InteractionService {
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Returns the maximum number of processing attempts for an interaction.
+   *
+   * @return the maximum number of processing attempts for an interaction
+   */
+  int getMaximumInteractionProcessingAttempts();
+
+  /**
+   * Retrieve the next interaction that is queued for processing.
+   *
+   * <p>The interaction will be locked to prevent duplicate processing.
+   *
+   * @return an Optional containing the next interaction that is queued for processing or an empty
+   *     Optional if no interactions are currently queued for processing
+   * @throws ServiceUnavailableException if the next interaction queued for processing could not be
+   *     retrieved
+   */
+  Optional<Interaction> getNextInteractionQueuedForProcessing() throws ServiceUnavailableException;
 
   /**
    * Returns whether an interaction attachment with the specified ID exists.
@@ -312,6 +341,28 @@ public interface InteractionService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Process the interaction.
+   *
+   * @param interaction the interaction
+   * @return the result of processing the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction could not be processed
+   */
+  InteractionProcessingResult processInteraction(Interaction interaction)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Reset the interaction locks.
+   *
+   * @param status the current status of the interactions that have been locked
+   * @param newStatus the new status for the interactions that have been unlocked
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction locks could not be reset
+   */
+  void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Synchronize the interaction source.
    *
    * <p>In the case of a mailbox interaction source, this will retrieve the latest email messages
@@ -324,6 +375,18 @@ public interface InteractionService {
    */
   int synchronizeInteractionSource(InteractionSource interactionSource)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Unlock a locked interaction.
+   *
+   * @param interactionId the ID for the interaction
+   * @param status the new status for the unlocked interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be unlocked
+   */
+  void unlockInteraction(UUID interactionId, InteractionStatus status)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the interaction.

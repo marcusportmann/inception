@@ -39,6 +39,8 @@ import java.util.UUID;
 /**
  * The {@code WorkflowDefinitionCategory} class holds the information for a workflow definition
  * category.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "A workflow definition category")
 @JsonInclude(JsonInclude.Include.NON_NULL)

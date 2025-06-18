@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,12 +50,12 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   /** The Executor Service. */
   private final ExecutorService executorService;
 
+  /** Is the Background Task Executor running. */
+  private final AtomicBoolean running = new AtomicBoolean(false);
+
   /** The number of task execution threads to start initially. */
   @Value("${inception.executor.initial-task-execution-threads:#{1}}")
   private int initialTaskExecutionThreads;
-
-  /** Is the Background Task Executor running. */
-  private boolean isRunning;
 
   /**
    * The maximum number of tasks to queue for execution if no task execution threads are available.
@@ -89,8 +90,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   }
 
   /** Execute the tasks. */
-  @Scheduled(cron = "0 * * * * *")
-  @Async
+  @Scheduled(fixedDelay = 60, timeUnit = TimeUnit.SECONDS)
   public void executeTasks() {
     Optional<Task> taskOptional;
 
@@ -98,7 +98,7 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
       return;
     }
 
-    while (isRunning) {
+    while (running.get()) {
       // Retrieve the next task queued for execution
       try {
         if (taskExecutor.getQueue().remainingCapacity() == 0) {
@@ -168,13 +168,14 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
 
   @Override
   public boolean isRunning() {
-    return isRunning || taskExecutor.isTerminating();
+    return running.get() || taskExecutor.isTerminating();
   }
 
   @Override
   public void start() {
-    log.info("Starting the Background Task Executor");
-    isRunning = true;
+    if (running.compareAndSet(false, true)) {
+      log.info("Background Task Executor started");
+    }
   }
 
   @Override
@@ -185,27 +186,27 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
             (taskExecutor.getActiveCount() + taskExecutor.getQueue().size())
                 * taskCompletionTimeout);
 
-    log.info(
-        "Shutting down the Background Task Executor with "
-            + taskExecutor.getActiveCount()
-            + " active tasks and "
-            + taskExecutor.getQueue().size()
-            + " queued tasks (Timeout is "
-            + terminationTimeout
-            + " milliseconds)");
+    if (running.compareAndSet(true, false)) {
+      log.info(
+          "Shutting down the Background Task Executor with "
+              + taskExecutor.getActiveCount()
+              + " active tasks and "
+              + taskExecutor.getQueue().size()
+              + " queued tasks (Timeout is "
+              + terminationTimeout
+              + " milliseconds)");
 
-    isRunning = false;
+      try {
+        taskExecutor.shutdown();
 
-    try {
-      taskExecutor.shutdown();
-
-      if (taskExecutor.awaitTermination(terminationTimeout, TimeUnit.MILLISECONDS)) {
-        log.info("Successfully shutdown the Background Task Executor");
-      } else {
-        log.warn("Failed to cleanly shutdown the Background Task Executor");
+        if (taskExecutor.awaitTermination(terminationTimeout, TimeUnit.MILLISECONDS)) {
+          log.info("Successfully shutdown the Background Task Executor");
+        } else {
+          log.warn("Failed to cleanly shutdown the Background Task Executor");
+        }
+      } catch (InterruptedException e) {
+        log.warn("The shutdown of the Background Task Executor was interrupted");
       }
-    } catch (InterruptedException e) {
-      log.warn("The shutdown of the Background Task Executor was interrupted");
     }
   }
 

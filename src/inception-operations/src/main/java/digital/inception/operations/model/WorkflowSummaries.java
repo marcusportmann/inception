@@ -35,6 +35,8 @@ import java.util.UUID;
 /**
  * The {@code WorkflowSummaries} class holds the results of a request to retrieve a list of workflow
  * summaries.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "The results of a request to retrieve a list of workflow summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)

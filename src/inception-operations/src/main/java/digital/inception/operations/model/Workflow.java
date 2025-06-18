@@ -37,7 +37,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-/** The {@code Workflow} class holds the information for a workflow. */
+/**
+ * The {@code Workflow} class holds the information for a workflow.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

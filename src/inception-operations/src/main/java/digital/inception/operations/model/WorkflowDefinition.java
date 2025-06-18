@@ -51,7 +51,11 @@ import java.util.Set;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-/** The {@code WorkflowDefinition} class holds the information for a workflow definition. */
+/**
+ * The {@code WorkflowDefinition} class holds the information for a workflow definition.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

@@ -40,6 +40,8 @@ import java.util.UUID;
 /**
  * The {@code InteractionAttachmentSummary} class holds the summary information for an interaction
  * attachment.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "An interaction attachment summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)

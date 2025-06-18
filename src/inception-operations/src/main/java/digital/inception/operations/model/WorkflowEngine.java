@@ -45,7 +45,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/** The {@code WorkflowEngine} class holds the information for a workflow engine. */
+/**
+ * The {@code WorkflowEngine} class holds the information for a workflow engine.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A workflow engine")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "connectorClassName", "attributes"})

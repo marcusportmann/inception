@@ -44,6 +44,8 @@ import java.util.Objects;
 /**
  * The {@code InteractionSourceAttribute} class holds the information for an attribute for an
  * interaction source.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "An attribute for an interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)

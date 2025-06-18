@@ -46,7 +46,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-/** The {@code InteractionSource} class holds the information for an interaction source. */
+/**
+ * The {@code InteractionSource} class holds the information for an interaction source.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "An interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "tenantId", "type", "name"})

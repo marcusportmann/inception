@@ -44,7 +44,11 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-/** The {@code Document} class holds the information for a document. */
+/**
+ * The {@code Document} class holds the information for a document.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

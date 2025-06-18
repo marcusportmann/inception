@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -32,24 +31,23 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The {@code AssignInteractionRequest} class represents a request to assign an interaction to a
- * user.
+ * The {@code InteractionProcessingResult} class represents the result of processing an interaction.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A request to assign an interaction to a user")
+@Schema(description = "The result of processing an interaction")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"interactionId", "username"})
+@JsonPropertyOrder({"interactionId"})
 @XmlRootElement(
-    name = "AssignInteractionRequest",
+    name = "InteractionProcessingResult",
     namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "AssignInteractionRequest",
+    name = "InteractionProcessingResult",
     namespace = "https://inception.digital/operations",
-    propOrder = {"interactionId", "username"})
+    propOrder = {"interactionId"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AssignInteractionRequest implements Serializable {
+public class InteractionProcessingResult implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -60,28 +58,16 @@ public class AssignInteractionRequest implements Serializable {
   @NotNull
   private UUID interactionId;
 
-  /** The username for the user the interaction should be assigned to. */
-  @Schema(
-      description = "The username for the user the interaction should be assigned to",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Username", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  private String username;
-
-  /** Constructs a new {@code AssignInteractionRequest}. */
-  public AssignInteractionRequest() {}
+  /** Constructs a new {@code InteractionProcessingResult}. */
+  public InteractionProcessingResult() {}
 
   /**
-   * Constructs a new {@code AssignInteractionRequest}.
+   * Constructs a new {@code InteractionProcessingResult}.
    *
    * @param interactionId the ID for the interaction
-   * @param username the username for the user the interaction should be assigned to
    */
-  public AssignInteractionRequest(UUID interactionId, String username) {
+  public InteractionProcessingResult(UUID interactionId) {
     this.interactionId = interactionId;
-    this.username = username;
   }
 
   /**
@@ -94,29 +80,11 @@ public class AssignInteractionRequest implements Serializable {
   }
 
   /**
-   * Returns the username for the user the interaction should be assigned to.
-   *
-   * @return the username for the user the interaction should be assigned to
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
    * Set the ID for the interaction.
    *
    * @param interactionId the ID for the interaction
    */
   public void setInteractionId(UUID interactionId) {
     this.interactionId = interactionId;
-  }
-
-  /**
-   * Set the username for the user the interaction should be assigned to.
-   *
-   * @param username the username for the user the interaction should be assigned to
-   */
-  public void setUsername(String username) {
-    this.username = username;
   }
 }

@@ -32,9 +32,9 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "InteractionStatus", namespace = "https://inception.digital/operations")
 public enum InteractionStatus implements CodeEnum {
 
-  /** Received. */
-  @XmlEnumValue("Received")
-  RECEIVED("received", "Received"),
+  /** Queued. */
+  @XmlEnumValue("Queued")
+  QUEUED("queued", "Queued"),
 
   /** Processing. */
   @XmlEnumValue("Processing")

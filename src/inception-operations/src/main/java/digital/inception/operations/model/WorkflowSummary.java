@@ -40,7 +40,11 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-/** The {@code WorkflowSummary} class holds the information for a workflow summary. */
+/**
+ * The {@code WorkflowSummary} class holds the information for a workflow summary.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A workflow summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

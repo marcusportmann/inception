@@ -44,6 +44,8 @@ import java.util.Objects;
 /**
  * The {@code WorkflowEngineAttribute} class holds the information for an attribute for a workflow
  * engine.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "An attribute for a workflow engine")
 @JsonInclude(JsonInclude.Include.NON_NULL)

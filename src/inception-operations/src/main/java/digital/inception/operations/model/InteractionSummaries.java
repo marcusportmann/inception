@@ -35,6 +35,8 @@ import java.util.UUID;
 /**
  * The {@code InteractionSummaries} class represents the results of a request to retrieve a list of
  * interaction summaries.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "The results of a request to retrieve a list of interaction summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)

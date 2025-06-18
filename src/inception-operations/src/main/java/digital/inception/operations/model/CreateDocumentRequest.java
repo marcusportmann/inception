@@ -39,7 +39,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
-/** The {@code CreateDocumentRequest} class represents a request to create a document. */
+/**
+ * The {@code CreateDocumentRequest} class represents a request to create a document.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A request to create a document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

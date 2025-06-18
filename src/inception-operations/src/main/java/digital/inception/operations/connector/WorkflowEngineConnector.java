@@ -24,5 +24,6 @@ package digital.inception.operations.connector;
  */
 public interface WorkflowEngineConnector {
 
-  // Workflow startWorkflow();
+  // Workflow startWorkflow(WorkflowDefinition workflowDefinition, CreateWorkflowRequest
+  // createWorkflowRequest);
 }

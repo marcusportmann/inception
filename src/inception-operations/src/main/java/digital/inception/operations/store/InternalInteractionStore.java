@@ -18,6 +18,7 @@ package digital.inception.operations.store;
 
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.util.ServiceUtil;
 import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
@@ -35,7 +36,10 @@ import digital.inception.operations.persistence.jpa.InteractionAttachmentReposit
 import digital.inception.operations.persistence.jpa.InteractionAttachmentSummaryRepository;
 import digital.inception.operations.persistence.jpa.InteractionRepository;
 import digital.inception.operations.persistence.jpa.InteractionSummaryRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +52,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -64,6 +70,9 @@ public class InternalInteractionStore implements InteractionStore {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(InternalInteractionStore.class);
 
+  /* The name of the Interaction Service the Internal Interaction Store instance is associated with. */
+  private final String instanceName = ServiceUtil.getServiceInstanceName("InteractionService");
+
   /** The Interaction Attachment Repository. */
   private final InteractionAttachmentRepository interactionAttachmentRepository;
 
@@ -75,6 +84,10 @@ public class InternalInteractionStore implements InteractionStore {
 
   /** The Interaction Summary Repository. */
   private final InteractionSummaryRepository interactionSummaryRepository;
+
+  /* Entity Manager */
+  @PersistenceContext(unitName = "operations")
+  private EntityManager entityManager;
 
   /**
    * Constructs a new {@code InternalInteractionStore}.
@@ -450,6 +463,44 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public Optional<Interaction> getNextInteractionQueuedForProcessing()
+      throws ServiceUnavailableException {
+    try {
+      // Handle the situation where different time precisions are used in the database
+      OffsetDateTime now = OffsetDateTime.now().plusSeconds(1);
+
+      PageRequest pageRequest = PageRequest.of(0, 1);
+
+      List<Interaction> interactions =
+          interactionRepository.findInteractionsQueuedForProcessingForWrite(now, pageRequest);
+
+      if (!interactions.isEmpty()) {
+        Interaction interaction = interactions.getFirst();
+
+        OffsetDateTime locked = OffsetDateTime.now();
+
+        interactionRepository.lockInteractionForProcessing(
+            interaction.getId(), instanceName, locked);
+
+        entityManager.detach(interaction);
+
+        interaction.setStatus(InteractionStatus.PROCESSING);
+        interaction.setLocked(locked);
+        interaction.setLockName(instanceName);
+        interaction.incrementProcessingAttempts();
+
+        return Optional.of(interaction);
+      } else {
+        return Optional.empty();
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the next interaction that has been queued for processing", e);
+    }
+  }
+
+  @Override
   public boolean interactionAttachmentExistsWithId(UUID tenantId, UUID interactionAttachmentId)
       throws ServiceUnavailableException {
     try {
@@ -477,6 +528,44 @@ public class InternalInteractionStore implements InteractionStore {
               + ") exists for the tenant ("
               + tenantId
               + ")");
+    }
+  }
+
+  @Override
+  public void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
+      throws ServiceUnavailableException {
+    try {
+      interactionRepository.resetInteractionLocks(status, newStatus, instanceName);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to reset the locks for the interactions with status ("
+              + status
+              + ") that have been locked using the lock name ("
+              + instanceName
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void unlockInteraction(UUID interactionId, InteractionStatus status)
+      throws InteractionNotFoundException, ServiceUnavailableException {
+    try {
+      if (!interactionRepository.existsById(interactionId)) {
+        throw new InteractionNotFoundException(interactionId);
+      }
+
+      interactionRepository.unlockInteraction(interactionId, status);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to unlock and set the status for the interaction ("
+              + interactionId
+              + ") to ("
+              + status
+              + ")",
+          e);
     }
   }
 

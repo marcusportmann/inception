@@ -50,7 +50,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
-/** The {@code Interaction} class holds the information for an interaction. */
+/**
+ * The {@code Interaction} class holds the information for an interaction.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "An interaction")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -69,7 +73,13 @@ import org.springframework.util.StringUtils;
   "content",
   "timestamp",
   "assigned",
-  "assignedTo"
+  "assignedTo",
+  "processed",
+  "processingAttempts",
+  "processingTime",
+  "locked",
+  "lockName",
+  "lastProcessed"
 })
 @XmlRootElement(name = "Interaction", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -91,7 +101,13 @@ import org.springframework.util.StringUtils;
       "content",
       "timestamp",
       "assigned",
-      "assignedTo"
+      "assignedTo",
+      "processed",
+      "processingAttempts",
+      "processingTime",
+      "locked",
+      "lockName",
+      "lastProcessed"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -129,9 +145,6 @@ public class Interaction implements Serializable {
   @Column(name = "content", length = 10485760, nullable = false)
   private String content;
 
-  //   TODO: ADD STATE MANAGEMENT TO AN INTERATION TO INDICATE STATUS OF SUBSEQUENT PROCESSING E.G.
-  //   AUTO DOCUMENT CLASSIFICATION WITH LOCK MANAGEMENT
-
   /** The ID for the conversation the interaction is associated with. */
   @Schema(description = "The ID for the conversation the interaction is associated with")
   @JsonProperty
@@ -149,6 +162,31 @@ public class Interaction implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
+  /** The date and time the last attempt was made to process the interaction. */
+  @Schema(description = "The date and time the last attempt was made to process the interaction")
+  @JsonProperty
+  @XmlElement(name = "LastProcessed")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "last_processed")
+  private OffsetDateTime lastProcessed;
+
+  /** The name of the entity that has locked the interaction for processing. */
+  @Schema(description = "The name of the entity that has locked the interaction for processing")
+  @XmlElement(name = "LockName")
+  @Size(min = 1, max = 100)
+  @Column(name = "lock_name", length = 100)
+  private String lockName;
+
+  /** The date and time the interaction was locked for processing. */
+  @Schema(description = "The date and time the interaction was locked for processing")
+  @JsonProperty
+  @XmlElement(name = "Locked")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "locked")
+  private OffsetDateTime locked;
+
   /** The mime type for the content for the interaction. */
   @Schema(
       description = "The mime type for the content for the interaction",
@@ -165,6 +203,32 @@ public class Interaction implements Serializable {
   @XmlElement(name = "PartyId")
   @Column(name = "party_id")
   private UUID partyId;
+
+  /** The date and time the interaction was processed. */
+  @Schema(description = "The date and time the interaction was processed")
+  @JsonProperty
+  @XmlElement(name = "Processed")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "processed")
+  private OffsetDateTime processed;
+
+  /** The number of times the processing of the interaction has been attempted. */
+  @Schema(description = "The number of times the processing of the interaction has been attempted")
+  @JsonProperty
+  @XmlElement(name = "ProcessingAttempts")
+  @Column(name = "processing_attempts", nullable = false)
+  private Integer processingAttempts = 0;
+
+  /** The time taken to process the interaction in milliseconds. */
+  @Schema(
+      description = "The time taken to process the interaction in milliseconds",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ProcessingTime", required = true)
+  @NotNull
+  @Column(name = "processing_time", nullable = false)
+  private long processingTime;
 
   /**
    * The identifiers representing the recipients for the interaction, e.g. email addresses, mobile
@@ -255,6 +319,9 @@ public class Interaction implements Serializable {
   @NotNull
   @Column(name = "type", nullable = false)
   private InteractionType type;
+
+  //   TODO: ADD STATE MANAGEMENT TO AN INTERATION TO INDICATE STATUS OF SUBSEQUENT PROCESSING E.G.
+  //   AUTO DOCUMENT CLASSIFICATION WITH LOCK MANAGEMENT
 
   /** Constructs a new {@code Interaction}. */
   public Interaction() {}
@@ -414,6 +481,33 @@ public class Interaction implements Serializable {
   }
 
   /**
+   * Returns the date and time the last attempt was made to process the interaction.
+   *
+   * @return the date and time the last attempt was made to process the interaction
+   */
+  public OffsetDateTime getLastProcessed() {
+    return lastProcessed;
+  }
+
+  /**
+   * Returns the name of the entity that has locked the interaction for processing.
+   *
+   * @return the name of the entity that has locked the interaction for processing
+   */
+  public String getLockName() {
+    return lockName;
+  }
+
+  /**
+   * Returns the date and time the interaction was locked for processing.
+   *
+   * @return the date and time the interaction was locked for processing
+   */
+  public OffsetDateTime getLocked() {
+    return locked;
+  }
+
+  /**
    * Returns the mime type for the content for the interaction.
    *
    * @return the mime type for the content for the interaction
@@ -429,6 +523,33 @@ public class Interaction implements Serializable {
    */
   public UUID getPartyId() {
     return partyId;
+  }
+
+  /**
+   * Returns the date and time the interaction was processed.
+   *
+   * @return the date and time the interaction was processed
+   */
+  public OffsetDateTime getProcessed() {
+    return processed;
+  }
+
+  /**
+   * Returns the number of times the processing of the interaction has been attempted.
+   *
+   * @return the number of times the processing of the interaction has been attempted
+   */
+  public Integer getProcessingAttempts() {
+    return processingAttempts;
+  }
+
+  /**
+   * Returns the time taken to process the interaction in milliseconds.
+   *
+   * @return the time taken to process the interaction in milliseconds
+   */
+  public long getProcessingTime() {
+    return processingTime;
   }
 
   /**
@@ -579,6 +700,15 @@ public class Interaction implements Serializable {
     return (id == null) ? 0 : id.hashCode();
   }
 
+  /** Increment the number of times that the processing of the interaction was attempted. */
+  public void incrementProcessingAttempts() {
+    if (processingAttempts == null) {
+      processingAttempts = 1;
+    } else {
+      processingAttempts++;
+    }
+  }
+
   /**
    * Set the date and time the interaction was assigned.
    *
@@ -625,6 +755,33 @@ public class Interaction implements Serializable {
   }
 
   /**
+   * Set the date and time the last attempt was made to process the interaction.
+   *
+   * @param lastProcessed the date and time the last attempt was made to process the interaction
+   */
+  public void setLastProcessed(OffsetDateTime lastProcessed) {
+    this.lastProcessed = lastProcessed;
+  }
+
+  /**
+   * Set the name of the entity that has locked the interaction for processing.
+   *
+   * @param lockName the name of the entity that has locked the interaction for processing
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
+  }
+
+  /**
+   * Set the date and time the interaction was locked for processing.
+   *
+   * @param locked the date and time the interaction was locked for processing
+   */
+  public void setLocked(OffsetDateTime locked) {
+    this.locked = locked;
+  }
+
+  /**
    * Set the mime type for the content for the interaction.
    *
    * @param mimeType the mime type for the content for the interaction
@@ -640,6 +797,34 @@ public class Interaction implements Serializable {
    */
   public void setPartyId(UUID partyId) {
     this.partyId = partyId;
+  }
+
+  /**
+   * Set the date and time the interaction was processed.
+   *
+   * @param processed the date and time the interaction was processed
+   */
+  public void setProcessed(OffsetDateTime processed) {
+    this.processed = processed;
+  }
+
+  /**
+   * Set the number of times the processing of the interaction has been attempted.
+   *
+   * @param processingAttempts the number of times the processing of the interaction has been
+   *     attempted
+   */
+  public void setProcessingAttempts(Integer processingAttempts) {
+    this.processingAttempts = processingAttempts;
+  }
+
+  /**
+   * Set the time taken to process the interaction in milliseconds.
+   *
+   * @param processingTime the time taken to process the interaction in milliseconds
+   */
+  public void setProcessingTime(@NotNull long processingTime) {
+    this.processingTime = processingTime;
   }
 
   /**

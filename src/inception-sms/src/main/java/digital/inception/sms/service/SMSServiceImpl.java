@@ -455,7 +455,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
               + smsId
               + ") to ("
               + status
-              + ") in the database",
+              + ")",
           e);
     }
   }
@@ -485,7 +485,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
               + smsId
               + ") to ("
               + status
-              + ") in the database",
+              + ")",
           e);
     }
   }

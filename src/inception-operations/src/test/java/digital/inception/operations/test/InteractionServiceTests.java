@@ -47,6 +47,8 @@ import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.service.BackgroundInteractionProcessor;
+import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.InteractionService;
 import digital.inception.operations.util.MessageUtil;
 import digital.inception.test.InceptionExtension;
@@ -117,6 +119,13 @@ public class InteractionServiceTests {
   private static final String TO_USERNAME = "service@fitlife.com";
 
   private static int emailCount;
+
+  /** The Background Interaction Processor. */
+  @Autowired private BackgroundInteractionProcessor backgroundInteractionProcessor;
+
+  /** The Background Interaction Source Synchronizer. */
+  @Autowired
+  private BackgroundInteractionSourceSynchronizer backgroundInteractionSourceSynchronizer;
 
   private GreenMail greenMail;
 
@@ -223,15 +232,10 @@ public class InteractionServiceTests {
     // Wait for mail to arrive
     assertTrue(greenMail.waitForIncomingEmail(5000, 1));
 
-    int numberOfNewInteractions =
-        interactionService.synchronizeInteractionSource(mailboxInteractionSource);
+    Integer numberOfNewInteractions =
+        backgroundInteractionSourceSynchronizer.synchronizeInteractionSources().block();
 
     assertEquals(1, numberOfNewInteractions);
-
-    numberOfNewInteractions =
-        interactionService.synchronizeInteractionSource(mailboxInteractionSource);
-
-    assertEquals(0, numberOfNewInteractions);
 
     InteractionSummaries retrievedInteractionSummaries =
         interactionService.getInteractionSummaries(
@@ -249,11 +253,23 @@ public class InteractionServiceTests {
     UUID retrievedInteractionId =
         retrievedInteractionSummaries.getInteractionSummaries().getFirst().getId();
 
+    numberOfNewInteractions =
+        backgroundInteractionSourceSynchronizer.synchronizeInteractionSources().block();
+
+    assertEquals(0, numberOfNewInteractions);
+
+    Integer numberOfInteractionsProcessed =
+        backgroundInteractionProcessor.processInteractions().block();
+
+    assertEquals(1, numberOfInteractionsProcessed);
+
+    waitForInteractionToProcess(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
+
     retrievedInteractionSummaries =
         interactionService.getInteractionSummaries(
             TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
-            InteractionStatus.RECEIVED,
+            InteractionStatus.AVAILABLE,
             "test",
             InteractionSortBy.TIMESTAMP,
             SortDirection.ASCENDING,
@@ -266,7 +282,7 @@ public class InteractionServiceTests {
         interactionService.getInteractionSummaries(
             TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
-            InteractionStatus.RECEIVED,
+            InteractionStatus.AVAILABLE,
             "bob",
             InteractionSortBy.TIMESTAMP,
             SortDirection.ASCENDING,
@@ -279,7 +295,7 @@ public class InteractionServiceTests {
         interactionService.getInteractionSummaries(
             TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
-            InteractionStatus.RECEIVED,
+            InteractionStatus.AVAILABLE,
             "xxx",
             InteractionSortBy.TIMESTAMP,
             SortDirection.ASCENDING,
@@ -342,7 +358,7 @@ public class InteractionServiceTests {
         StringUtils.hasText(retrievedInteraction.getSourceReference()),
         "Invalid value for the \"sourceReference\" interaction property");
     assertEquals(
-        InteractionStatus.RECEIVED,
+        InteractionStatus.AVAILABLE,
         retrievedInteraction.getStatus(),
         "Invalid value for the \"status\" interaction property");
     assertEquals(
@@ -766,5 +782,24 @@ public class InteractionServiceTests {
     message.setContent(mixedMultipart);
 
     return message;
+  }
+
+  private void waitForInteractionToProcess(UUID tenantId, UUID interactionId) throws Exception {
+    for (int i = 0; i < 50; i++) {
+      Interaction interaction = interactionService.getInteraction(tenantId, interactionId);
+
+      if (interaction.getStatus() == InteractionStatus.AVAILABLE) {
+        return;
+      }
+
+      Thread.sleep(250);
+    }
+
+    throw new RuntimeException(
+        "Timed out waiting for the interaction ("
+            + interactionId
+            + ") for tenant ("
+            + tenantId
+            + ") to process");
   }
 }

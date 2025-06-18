@@ -32,7 +32,11 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
-/** The {@code CreateWorkflowRequest} class represents a request to create a workflow. */
+/**
+ * The {@code CreateWorkflowRequest} class represents a request to create a workflow.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A request to create a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"definitionId", "parentId", "externalReference", "data"})

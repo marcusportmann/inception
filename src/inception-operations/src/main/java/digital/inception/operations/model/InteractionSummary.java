@@ -44,7 +44,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/** The {@code InteractionSummary} class holds the information for an interaction summary. */
+/**
+ * The {@code InteractionSummary} class holds the information for an interaction summary.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "An interaction summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

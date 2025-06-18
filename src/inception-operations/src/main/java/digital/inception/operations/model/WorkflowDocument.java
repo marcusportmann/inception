@@ -43,6 +43,8 @@ import java.util.UUID;
 /**
  * The {@code WorkflowDocument} class holds the information for an association of a document with a
  * workflow.
+ *
+ * @author Marcus Portmann
  */
 @Schema(description = "An association of a document with a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -40,7 +40,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
-/** The {@code UpdateDocumentRequest} class represents a request to update a document. */
+/**
+ * The {@code UpdateDocumentRequest} class represents a request to update a document.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A request to update a document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

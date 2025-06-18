@@ -18,6 +18,7 @@ package digital.inception.security.service;
 
 import digital.inception.security.persistence.jpa.PasswordResetRepository;
 import java.time.OffsetDateTime;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +54,7 @@ public class BackgroundPasswordResetExpiry {
   }
 
   /** Expire the password resets. */
-  @Scheduled(cron = "0 * * * * *")
+  @Scheduled(fixedDelay = 60, timeUnit = TimeUnit.SECONDS)
   @Transactional
   public void expirePasswordResets() {
     try {

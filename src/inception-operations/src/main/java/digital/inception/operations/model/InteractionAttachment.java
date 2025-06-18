@@ -37,7 +37,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-/** The {@code InteractionAttachment} class holds the information for an interaction attachment. */
+/**
+ * The {@code InteractionAttachment} class holds the information for an interaction attachment.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "An interaction attachment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

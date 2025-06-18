@@ -197,6 +197,18 @@ public interface InteractionStore {
       throws ServiceUnavailableException;
 
   /**
+   * Retrieve the next interaction that is queued for processing.
+   *
+   * <p>The interaction will be locked to prevent duplicate processing.
+   *
+   * @return an Optional containing the next interaction that is queued for processing or an empty
+   *     Optional if no interactions are currently queued for processing
+   * @throws ServiceUnavailableException if the next interaction queued for processing could not be
+   *     retrieved
+   */
+  Optional<Interaction> getNextInteractionQueuedForProcessing() throws ServiceUnavailableException;
+
+  /**
    * Returns whether an interaction attachment with the specified ID exists.
    *
    * @param tenantId the ID for the tenant
@@ -218,6 +230,27 @@ public interface InteractionStore {
    */
   boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
       throws ServiceUnavailableException;
+
+  /**
+   * Reset the interaction locks.
+   *
+   * @param status the current status of the interactions that have been locked
+   * @param newStatus the new status for the interactions that have been unlocked
+   * @throws ServiceUnavailableException if the interaction locks could not be reset
+   */
+  void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
+      throws ServiceUnavailableException;
+
+  /**
+   * Unlock a locked interaction.
+   *
+   * @param interactionId the ID for the interaction
+   * @param status the new status for the unlocked interaction
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be unlocked
+   */
+  void unlockInteraction(UUID interactionId, InteractionStatus status)
+      throws InteractionNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the interaction.

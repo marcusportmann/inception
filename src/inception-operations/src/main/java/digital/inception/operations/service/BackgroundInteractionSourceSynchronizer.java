@@ -19,21 +19,21 @@ package digital.inception.operations.service;
 import reactor.core.publisher.Mono;
 
 /**
- * The {@code BackgroundInteractionProcessor} interface defines the interface that must be
- * implemented by a Background Interaction Processor.
+ * The {@code BackgroundInteractionSourceSynchronizer} interface defines the interface that must be
+ * implemented by a Background Interaction Source Synchronizer.
  *
- * <p>This interface is required because The {@code BackgroundInteractionProcessorImpl} class
- * leverages the @Async and @Scheduled annotations, and implements the {@code SmartLifecycle}
+ * <p>This interface is required because The {@code BackgroundInteractionSourceSynchronizerImpl}
+ * class leverages the @Async and @Scheduled annotations, and implements the {@code SmartLifecycle}
  * interface.
  *
  * @author Marcus Portmann
  */
-public interface BackgroundInteractionProcessor {
+public interface BackgroundInteractionSourceSynchronizer {
 
   /**
-   * Process the interactions.
+   * Synchronize the interaction sources.
    *
-   * @return the number of processed interactions
+   * @return the number of new interactions
    */
-  Mono<Integer> processInteractions();
+  Mono<Integer> synchronizeInteractionSources();
 }

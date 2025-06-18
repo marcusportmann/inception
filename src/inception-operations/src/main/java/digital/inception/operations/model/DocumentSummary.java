@@ -43,7 +43,11 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-/** The {@code DocumentSummary} class holds the information for a document summary. */
+/**
+ * The {@code DocumentSummary} class holds the information for a document summary.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A document summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

@@ -32,7 +32,11 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
-/** The {@code UpdateWorkflowRequest} class represents a request to update a workflow. */
+/**
+ * The {@code UpdateWorkflowRequest} class represents a request to update a workflow.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A request to update a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "status", "data"})

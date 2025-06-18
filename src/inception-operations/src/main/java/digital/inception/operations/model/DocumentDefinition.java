@@ -40,7 +40,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/** The {@code DocumentDefinition} class holds the information for document definition. */
+/**
+ * The {@code DocumentDefinition} class holds the information for document definition.
+ *
+ * @author Marcus Portmann
+ */
 @Schema(description = "A document definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "categoryId", "tenantId", "name", "requiredDocumentAttributes"})
