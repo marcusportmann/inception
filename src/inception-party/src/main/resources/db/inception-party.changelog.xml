@@ -404,7 +404,7 @@
       <column name="name" type="nvarchar(200)" remarks="The name of the industry classification category">
         <constraints nullable="false"/>
       </column>
-      <column name="description" type="nvarchar(1000)" defaultValue="" remarks="The description for the industry classification category">
+      <column name="description" type="nvarchar(2000)" defaultValue="" remarks="The description for the industry classification category">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -437,7 +437,7 @@
       <column name="name" type="nvarchar(200)" remarks="The name of the industry classification">
         <constraints nullable="false"/>
       </column>
-      <column name="description" type="nvarchar(1000)" defaultValue="" remarks="The description for the industry classification">
+      <column name="description" type="nvarchar(2000)" defaultValue="" remarks="The description for the industry classification">
         <constraints nullable="false"/>
       </column>
     </createTable>

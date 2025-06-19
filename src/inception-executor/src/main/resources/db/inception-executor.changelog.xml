@@ -142,7 +142,7 @@
       <column name="task_step" type="nvarchar(50)" remarks="The code for the task step for a multistep task"/>
       <column name="task_data" type="clob" remarks="The task data"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="executor_task_events_task_id_fk"
+    <addForeignKeyConstraint constraintName="executor_task_events_task_fk"
       baseTableName="executor_task_events" baseColumnNames="task_id"
       referencedTableName="executor_tasks" referencedColumnNames="id"
       onDelete="CASCADE"/>

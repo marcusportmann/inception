@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +38,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -60,11 +58,7 @@ import java.util.UUID;
   "externalReference",
   "sourceDocumentId",
   "issueDate",
-  "expiryDate",
-  "created",
-  "createdBy",
-  "updated",
-  "updatedBy"
+  "expiryDate"
 })
 @XmlRootElement(name = "DocumentSummary", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -80,11 +74,7 @@ import java.util.UUID;
       "externalReference",
       "sourceDocumentId",
       "issueDate",
-      "expiryDate",
-      "created",
-      "createdBy",
-      "updated",
-      "updatedBy"
+      "expiryDate"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -93,29 +83,6 @@ import java.util.UUID;
 public class DocumentSummary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The date and time the document was created. */
-  @Schema(
-      description = "The date and time the document was created",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Created", required = true)
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column(name = "created", nullable = false)
-  private OffsetDateTime created;
-
-  /** The person or system that created the document. */
-  @Schema(
-      description = "The person or system that created the document",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "CreatedBy", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "created_by", length = 100, nullable = false)
-  private String createdBy;
 
   /** The ID for the document definition the document is associated with. */
   @Schema(
@@ -182,23 +149,6 @@ public class DocumentSummary implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** The date and time the document was last updated. */
-  @Schema(description = "The date and time the document was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
-  private OffsetDateTime updated;
-
-  /** The person or system that last updated the document. */
-  @Schema(description = "The person or system that last updated the document")
-  @JsonProperty
-  @XmlElement(name = "UpdatedBy")
-  @Size(min = 1, max = 100)
-  @Column(name = "updated_by", length = 100)
-  private String updatedBy;
-
   /** Constructs a new {@code DocumentSummary}. */
   public DocumentSummary() {}
 
@@ -225,24 +175,6 @@ public class DocumentSummary implements Serializable {
     DocumentSummary other = (DocumentSummary) object;
 
     return Objects.equals(id, other.id);
-  }
-
-  /**
-   * Returns the date and time the document was created.
-   *
-   * @return the date and time the document was created
-   */
-  public OffsetDateTime getCreated() {
-    return created;
-  }
-
-  /**
-   * Returns the person or system that created the document.
-   *
-   * @return the person or system that created the document
-   */
-  public String getCreatedBy() {
-    return createdBy;
   }
 
   /**
@@ -306,23 +238,5 @@ public class DocumentSummary implements Serializable {
    */
   public UUID getTenantId() {
     return tenantId;
-  }
-
-  /**
-   * Returns the date and time the document was last updated.
-   *
-   * @return the date and time the document was last updated
-   */
-  public OffsetDateTime getUpdated() {
-    return updated;
-  }
-
-  /**
-   * Returns the person or system that last updated the document.
-   *
-   * @return the person or system that last updated the document
-   */
-  public String getUpdatedBy() {
-    return updatedBy;
   }
 }

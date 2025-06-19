@@ -41,7 +41,7 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_workflow_engine_attributes_workflow_engines_fk"
+    <addForeignKeyConstraint constraintName="operations_workflow_engine_attributes_workflow_engine_fk"
       baseTableName="operations_workflow_engine_attributes" baseColumnNames="engine_id"
       referencedTableName="operations_workflow_engines" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_engine_attributes_engine_id_ix"
@@ -83,7 +83,7 @@
       <column name="validation_schema_type" type="nvarchar(50)" remarks="The schema type for the workflow definition"/>
       <column name="validation_schema" type="clob" remarks="The XML (XSD) or JSON schema for the workflow definition"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_workflow_definitions_workflow_engines_fk"
+    <addForeignKeyConstraint constraintName="operations_workflow_definitions_workflow_engine_fk"
       baseTableName="operations_workflow_definitions" baseColumnNames="engine_id"
       referencedTableName="operations_workflow_engines" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_definitions_category_id_ix"
@@ -150,10 +150,10 @@
       <column name="validity_period_amount" type="integer" remarks="The validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
       <column name="validity_period_unit" type="nvarchar(50)" remarks="The unit of measurement of time for the validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_workflow_definition_document_definitions_workflow_definitions_fk"
+    <addForeignKeyConstraint constraintName="operations_workflow_definition_document_definitions_workflow_definition_fk"
       baseTableName="operations_workflow_definition_document_definitions" baseColumnNames="workflow_definition_id,workflow_definition_version"
       referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="operations_workflow_definition_document_definitions_document_definitions_fk"
+    <addForeignKeyConstraint constraintName="operations_workflow_definition_document_definitions_document_definition_fk"
       baseTableName="operations_workflow_definition_document_definitions" baseColumnNames="document_definition_id"
       referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_definition_document_definitions_document_definition_id_ix"
@@ -186,7 +186,7 @@
       <column name="external_reference" type="nvarchar(100)" remarks="The external reference for the workflow"/>
       <column name="data" type="clob" remarks="The data for the workflow if not stored in an external repository"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_workflows_workflow_definitions_fk"
+    <addForeignKeyConstraint constraintName="operations_workflows_workflow_definition_fk"
       baseTableName="operations_workflows" baseColumnNames="definition_id,definition_version"
       referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="RESTRICT"/>
     <createIndex indexName="operations_workflow_definition_ix"
@@ -209,6 +209,31 @@
     <createIndex indexName="operations_workflows_tenant_id_ix"
       tableName="operations_workflows">
       <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_notes" remarks="Workflow Notes">
+      <column name="id" type="uuid" remarks="The ID for the workflow note">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="workflow_id" type="uuid" remarks="The ID for the workflow the workflow note is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="who" type="nvarchar(100)" remarks="The username for the user associated with the workflow note">
+        <constraints nullable="false"/>
+      </column>
+      <column name="content" type="nvarchar(2000)" remarks="The content for the workflow note">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp with time zone" remarks="The date and time the workflow note was created">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_notes_workflow_fk"
+      baseTableName="operations_workflow_notes" baseColumnNames="workflow_id"
+      referencedTableName="operations_workflows" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_notes_workflow_id_ix"
+      tableName="operations_workflow_notes">
+      <column name="workflow_id"/>
     </createIndex>
 
     <createTable tableName="operations_documents" remarks="Documents">
@@ -236,7 +261,7 @@
       <column name="source_document_id" type="uuid" remarks="The ID for the source document that was split to create this document"/>
       <column name="data" type="${blob_type}" remarks="The data for the document if not stored in an external repository"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_documents_document_definitions_fk"
+    <addForeignKeyConstraint constraintName="operations_documents_document_definition_fk"
       baseTableName="operations_documents" baseColumnNames="definition_id"
       referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="RESTRICT"/>
     <createIndex indexName="operations_documents_definition_id_ix"
@@ -280,13 +305,13 @@
       <column name="verified" type="timestamp with time zone" remarks="The date and time the workflow document was verified"/>
       <column name="verified_by" type="nvarchar(100)" remarks="The person or system that verified the workflow document"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_workflow_documents_workflows_fk"
+    <addForeignKeyConstraint constraintName="operations_workflow_documents_workflow_fk"
       baseTableName="operations_workflow_documents" baseColumnNames="workflow_id"
       referencedTableName="operations_workflows" referencedColumnNames="id" onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="operations_workflow_documents_document_definitions_fk"
+    <addForeignKeyConstraint constraintName="operations_workflow_documents_document_definition_fk"
       baseTableName="operations_workflow_documents" baseColumnNames="document_definition_id"
       referencedTableName="operations_document_definitions" referencedColumnNames="id" onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="operations_workflow_documents_documents_fk"
+    <addForeignKeyConstraint constraintName="operations_workflow_documents_document_fk"
       baseTableName="operations_workflow_documents" baseColumnNames="document_id"
       referencedTableName="operations_documents" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_documents_document_definition_id_ix"
@@ -340,7 +365,7 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_interaction_source_attributes_interaction_sources_fk"
+    <addForeignKeyConstraint constraintName="operations_interaction_source_attributes_interaction_source_fk"
       baseTableName="operations_interaction_source_attributes" baseColumnNames="source_id"
       referencedTableName="operations_interaction_sources" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="operations_interaction_source_attributes_source_id_ix"
@@ -387,7 +412,6 @@
       </column>
       <column name="assigned" type="timestamp with time zone" remarks="The date and time the interaction was assigned"/>
       <column name="assigned_to" type="nvarchar(100)" remarks="The username for the user the interaction is assigned to"/>
-
       <column name="processed" type="timestamp with time zone" remarks="The date and time the interaction was processed"/>
       <column name="processing_attempts" type="int" defaultValue="0" remarks="The number of times the processing of the interaction has been attempted">
         <constraints nullable="false"/>
@@ -398,9 +422,8 @@
       <column name="locked" type="timestamp with time zone" remarks="The date and time the interaction was locked for processing"/>
       <column name="lock_name" type="nvarchar(100)" remarks="The name of the entity that has locked the interaction for processing"/>
       <column name="last_processed" type="timestamp with time zone" remarks="The date and time the last attempt was made to process the interaction"/>
-
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_interactions_interaction_sources_fk"
+    <addForeignKeyConstraint constraintName="operations_interactions_interaction_source_fk"
       baseTableName="operations_interactions" baseColumnNames="source_id"
       referencedTableName="operations_interaction_sources" referencedColumnNames="id" onDelete="RESTRICT"/>
     <createIndex indexName="operations_interactions_assigned_to_ix"
@@ -462,10 +485,10 @@
       </column>
       <column name="data" type="${blob_type}" remarks="The data for the interaction attachment if not stored in an external repository"/>
     </createTable>
-    <addForeignKeyConstraint constraintName="operations_interaction_attachments_interactions_fk"
+    <addForeignKeyConstraint constraintName="operations_interaction_attachments_interaction_fk"
       baseTableName="operations_interaction_attachments" baseColumnNames="interaction_id"
       referencedTableName="operations_interactions" referencedColumnNames="id" onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="operations_interaction_attachments_interaction_sources_fk"
+    <addForeignKeyConstraint constraintName="operations_interaction_attachments_interaction_source_fk"
       baseTableName="operations_interaction_attachments" baseColumnNames="source_id"
       referencedTableName="operations_interaction_sources" referencedColumnNames="id" onDelete="RESTRICT"/>
     <createIndex indexName="operations_interaction_attachments_interaction_id_ix"

@@ -162,7 +162,7 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="security_users_password_history_user_id_fk"
+    <addForeignKeyConstraint constraintName="security_users_password_history_user_fk"
       baseTableName="security_users_password_history" baseColumnNames="user_id"
       referencedTableName="security_users" referencedColumnNames="id"
       onDelete="CASCADE"/>

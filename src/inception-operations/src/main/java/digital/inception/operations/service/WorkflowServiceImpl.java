@@ -16,7 +16,6 @@
 
 package digital.inception.operations.service;
 
-import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
@@ -39,6 +38,7 @@ import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
 import digital.inception.operations.persistence.jpa.WorkflowEngineRepository;
+import digital.inception.operations.persistence.jpa.WorkflowNoteRepository;
 import digital.inception.operations.store.WorkflowStore;
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +65,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   /** The Workflow Engine Repository. */
   private final WorkflowEngineRepository workflowEngineRepository;
 
+  /** The Workflow Note Repository. */
+  private final WorkflowNoteRepository workflowNoteRepository;
+
   /** The Workflow Store. */
   private final WorkflowStore workflowStore;
 
@@ -76,19 +79,22 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    * @param workflowDefinitionCategoryRepository the Workflow Definition Category Repository
    * @param workflowDefinitionRepository the Workflow Definition Repository
    * @param workflowEngineRepository the Workflow Engine Repository
+   * @param workflowNoteRepository the Workflow Note Repository
    */
   public WorkflowServiceImpl(
       ApplicationContext applicationContext,
       WorkflowStore workflowStore,
       WorkflowDefinitionCategoryRepository workflowDefinitionCategoryRepository,
       WorkflowDefinitionRepository workflowDefinitionRepository,
-      WorkflowEngineRepository workflowEngineRepository) {
+      WorkflowEngineRepository workflowEngineRepository,
+      WorkflowNoteRepository workflowNoteRepository) {
     super(applicationContext);
 
     this.workflowStore = workflowStore;
     this.workflowDefinitionCategoryRepository = workflowDefinitionCategoryRepository;
     this.workflowDefinitionRepository = workflowDefinitionRepository;
     this.workflowEngineRepository = workflowEngineRepository;
+    this.workflowNoteRepository = workflowNoteRepository;
   }
 
   @Override
@@ -115,7 +121,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       Workflow workflow =
           new Workflow(
-              UuidCreator.getTimeOrderedEpoch(),
               tenantId,
               createWorkflowRequest.getParentId(),
               workflowDefinition.getId(),

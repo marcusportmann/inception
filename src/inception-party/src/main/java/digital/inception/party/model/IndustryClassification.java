@@ -105,8 +105,8 @@ public class IndustryClassification implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
-  @Size(max = 1000)
-  @Column(name = "description", length = 1000, nullable = false)
+  @Size(max = 2000)
+  @Column(name = "description", length = 2000, nullable = false)
   private String description;
 
   /** The Unicode locale identifier for the industry classification. */

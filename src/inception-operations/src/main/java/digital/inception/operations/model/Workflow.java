@@ -19,6 +19,7 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.operations.constraint.ValidWorkflow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -154,7 +155,6 @@ public class Workflow implements Serializable {
   /**
    * Constructs a new {@code Workflow}.
    *
-   * @param id the ID for the workflow
    * @param tenantId the ID for the tenant the workflow is associated with
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param definitionVersion the version of the workflow definition the workflow is associated with
@@ -162,13 +162,12 @@ public class Workflow implements Serializable {
    * @param data the data for the workflow
    */
   public Workflow(
-      UUID id,
       UUID tenantId,
       String definitionId,
       int definitionVersion,
       WorkflowStatus status,
       String data) {
-    this.id = id;
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.definitionId = definitionId;
     this.definitionVersion = definitionVersion;
@@ -179,7 +178,6 @@ public class Workflow implements Serializable {
   /**
    * Constructs a new {@code Workflow}.
    *
-   * @param id the ID for the workflow
    * @param tenantId the ID for the tenant the workflow is associated with
    * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
@@ -188,14 +186,13 @@ public class Workflow implements Serializable {
    * @param data the data for the workflow
    */
   public Workflow(
-      UUID id,
       UUID tenantId,
       UUID parentId,
       String definitionId,
       int definitionVersion,
       WorkflowStatus status,
       String data) {
-    this.id = id;
+    this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.parentId = parentId;
     this.definitionId = definitionId;
