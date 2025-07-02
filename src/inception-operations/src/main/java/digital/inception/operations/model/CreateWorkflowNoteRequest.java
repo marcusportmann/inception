@@ -75,6 +75,17 @@ public class CreateWorkflowNoteRequest implements Serializable {
   public CreateWorkflowNoteRequest() {}
 
   /**
+   * Constructs a new {@code CreateWorkflowNoteRequest}.
+   *
+   * @param workflowId the ID for the workflow the workflow note is associated with
+   * @param content the content for the workflow note
+   */
+  public CreateWorkflowNoteRequest(UUID workflowId, String content) {
+    this.workflowId = workflowId;
+    this.content = content;
+  }
+
+  /**
    * Returns the content for the workflow note.
    *
    * @return the content for the workflow note

@@ -166,8 +166,8 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      InteractionSource interactionSource =
-          getInteractionService().getInteractionSource(tenantId, interaction.getSourceId());
+      // Retrieve the interaction source using the InteractionService interface to leverage caching
+      getInteractionService().getInteractionSource(tenantId, interaction.getSourceId());
 
       return interactionStore.createInteraction(tenantId, interaction);
     } catch (DuplicateInteractionException e) {
@@ -203,9 +203,8 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      InteractionSource interactionSource =
-          getInteractionService()
-              .getInteractionSource(tenantId, interactionAttachment.getSourceId());
+      // Retrieve the interaction source using the InteractionService interface to leverage caching
+      getInteractionService().getInteractionSource(tenantId, interactionAttachment.getSourceId());
 
       return interactionStore.createInteractionAttachment(tenantId, interactionAttachment);
     } catch (DuplicateInteractionAttachmentException e) {
@@ -1306,7 +1305,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
       // Trigger the processing of any new interactions
       if (numberOfNewInteractions > 0) {
-        getApplicationContext().getBean(BackgroundInteractionProcessor.class).processInteractions();
+        getApplicationContext()
+            .getBean(BackgroundInteractionProcessor.class)
+            .processInteractions()
+            .subscribe();
       }
 
       return numberOfNewInteractions;

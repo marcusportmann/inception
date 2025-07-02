@@ -178,6 +178,7 @@ public class WorkflowNote implements Serializable {
       UUID tenantId, UUID workflowId, String content, OffsetDateTime created, String createdBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
+    this.workflowId = workflowId;
     this.content = content;
     this.created = created;
     this.createdBy = createdBy;

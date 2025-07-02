@@ -98,15 +98,13 @@ public class DocumentDefinition implements Serializable {
   /** The required attributes for a document associated with the document definition. */
   @Schema(
       description =
-          "The required attributes for a document associated with the document definition",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "RequiredDocumentAttributes", required = true)
-  @XmlElement(name = "RequiredDocumentAttribute", required = true)
-  @NotNull
+          "The required attributes for a document associated with the document definition")
+  @JsonProperty
+  @XmlElementWrapper(name = "RequiredDocumentAttributes")
+  @XmlElement(name = "RequiredDocumentAttribute")
   @Size(max = 10)
   @Convert(converter = RequiredDocumentAttributeListAttributeConverter.class)
-  @Column(name = "required_document_attributes", length = 510, nullable = false)
+  @Column(name = "required_document_attributes", length = 510)
   private List<RequiredDocumentAttribute> requiredDocumentAttributes;
 
   /** The ID for the tenant the document definition is specific to. */

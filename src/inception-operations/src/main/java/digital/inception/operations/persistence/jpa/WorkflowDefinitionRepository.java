@@ -57,8 +57,8 @@ public interface WorkflowDefinitionRepository
   boolean existsById(@Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
-   * Returns all the workflow definitions that are associated with the workflow definition category
-   * with the specified ID and either
+   * Returns the latest versions of all the workflow definitions that are associated with the
+   * workflow definition category with the specified ID and either
    *
    * <ul>
    *   <li>specific to the given tenant ({@code tenantId} matches), or
@@ -72,12 +72,18 @@ public interface WorkflowDefinitionRepository
    */
   @Query(
       """
-         select wd
-           from WorkflowDefinition wd
-          where wd.categoryId = :categoryId
-             and (wd.tenantId = :tenantId or wd.tenantId is null)
-          order by wd.id
-         """)
+       select wd
+         from WorkflowDefinition wd
+        where wd.categoryId = :categoryId
+          and (wd.tenantId = :tenantId or wd.tenantId is null)
+          and wd.version = (
+                select max(wd2.version)
+                  from WorkflowDefinition wd2
+                 where wd2.id        = wd.id
+                   and wd2.tenantId  = wd.tenantId
+              )
+        order by wd.id
+       """)
   List<WorkflowDefinition> findForCategoryAndTenantOrGlobal(
       @Param("categoryId") String categoryId, @Param("tenantId") UUID tenantId);
 
@@ -92,7 +98,8 @@ public interface WorkflowDefinitionRepository
       value =
           "select * from operations_workflow_definitions wd where wd.id = :workflowDefinitionId order by wd.version desc limit 1",
       nativeQuery = true)
-  Optional<WorkflowDefinition> findLatestVersionById(@Param("workflowDefinitionId") String workflowDefinitionId);
+  Optional<WorkflowDefinition> findLatestVersionById(
+      @Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
    * Retrieve the next version of the workflow definition with the specified ID.
@@ -100,6 +107,7 @@ public interface WorkflowDefinitionRepository
    * @param workflowDefinitionId the ID for the workflow definition
    * @return the next version of the workflow definition with the specified ID
    */
-  @Query("select coalesce(max(wd.version), 0) + 1 from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
+  @Query(
+      "select coalesce(max(wd.version), 0) + 1 from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
   Integer getNextVersionById(@Param("workflowDefinitionId") String workflowDefinitionId);
 }

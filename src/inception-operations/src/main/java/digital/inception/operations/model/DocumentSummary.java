@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.file.FileType;
 import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -113,6 +114,16 @@ public class DocumentSummary implements Serializable {
   @Column(name = "external_reference", length = 100)
   private String externalReference;
 
+  /** The file type for the document. */
+  @Schema(
+      description = "The file type for the document",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "FileType", required = true)
+  @NotNull
+  @Column(name = "file_type", nullable = false)
+  private FileType fileType;
+
   /** The ID for the document. */
   @Schema(description = "The ID for the document", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -131,6 +142,15 @@ public class DocumentSummary implements Serializable {
   @XmlSchemaType(name = "date")
   @Column(name = "issue_date")
   private LocalDate issueDate;
+
+  /** The name of the document. */
+  @Schema(description = "The name of the document", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 200)
+  @Column(name = "name", length = 200, nullable = false)
+  private String name;
 
   /** The ID for the source document that was split to create this document. */
   @Schema(description = "The ID for the source document that was split to create this document")
@@ -205,6 +225,15 @@ public class DocumentSummary implements Serializable {
   }
 
   /**
+   * Returns the file type for the document.
+   *
+   * @return the file type for the document
+   */
+  public FileType getFileType() {
+    return fileType;
+  }
+
+  /**
    * Returns the ID for the document.
    *
    * @return the ID for the document
@@ -220,6 +249,15 @@ public class DocumentSummary implements Serializable {
    */
   public LocalDate getIssueDate() {
     return issueDate;
+  }
+
+  /**
+   * Returns the name of the document.
+   *
+   * @return the name of the document
+   */
+  public String getName() {
+    return name;
   }
 
   /**

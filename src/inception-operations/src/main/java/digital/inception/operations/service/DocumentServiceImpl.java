@@ -304,7 +304,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     if (documentNoteId == null) {
       throw new InvalidArgumentException("documentNoteId");
     }
-    
+
     try {
       documentStore.deleteDocumentNote(tenantId, documentNoteId);
     } catch (DocumentNoteNotFoundException e) {
@@ -458,6 +458,107 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public DocumentNote getDocumentNote(UUID tenantId, UUID documentNoteId)
+      throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (documentNoteId == null) {
+      throw new InvalidArgumentException("documentNoteId");
+    }
+
+    try {
+      return documentStore.getDocumentNote(tenantId, documentNoteId);
+    } catch (DocumentNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document note ("
+              + documentNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentNotes getDocumentNotes(
+      UUID tenantId,
+      UUID documentId,
+      String filter,
+      DocumentNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (documentId == null) {
+      throw new InvalidArgumentException("documentId");
+    }
+
+    try {
+      return documentStore.getDocumentNotes(
+          tenantId, documentId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+    } catch (DocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered document notes for the document ("
+              + documentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentSummaries getDocumentSummaries(
+      UUID tenantId,
+      String filter,
+      DocumentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = DocumentSortBy.DEFINITION_ID;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.DESCENDING;
+    }
+
+    try {
+      return documentStore.getDocumentSummaries(
+          tenantId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
   public Document updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -467,7 +568,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("updateDocumentRequest", updateDocumentRequest);
 
     try {
-      Document document = documentStore.getDocument(tenantId, updateDocumentRequest.getDocumentId());
+      Document document =
+          documentStore.getDocument(tenantId, updateDocumentRequest.getDocumentId());
 
       document.setData(updateDocumentRequest.getData());
       document.setExpiryDate(updateDocumentRequest.getExpiryDate());
@@ -538,8 +640,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public DocumentNote updateDocumentNote(UUID tenantId,
-      UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
+  public DocumentNote updateDocumentNote(
+      UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -548,7 +650,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("updateDocumentNoteRequest", updateDocumentNoteRequest);
 
     try {
-      DocumentNote documentNote = documentStore.getDocumentNote(tenantId, updateDocumentNoteRequest.getDocumentNoteId());
+      DocumentNote documentNote =
+          documentStore.getDocumentNote(tenantId, updateDocumentNoteRequest.getDocumentNoteId());
 
       documentNote.setContent(updateDocumentNoteRequest.getContent());
       documentNote.setUpdated(OffsetDateTime.now());
@@ -564,67 +667,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + ") for the tenant ("
               + tenantId
               + ")",
-          e);
-    }
-  }
-
-  @Override
-  public DocumentNotes getDocumentNotes(UUID tenantId, UUID documentId, String filter,
-      DocumentNoteSortBy sortBy, SortDirection sortDirection, Integer pageIndex, Integer pageSize,
-      int maxResults)
-      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if (documentId == null) {
-      throw new InvalidArgumentException("documentId");
-    }
-
-    try {
-      return documentStore.getDocumentNotes(tenantId, documentId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
-    } catch (DocumentNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered document notes for the document ("
-              + documentId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public DocumentSummaries getDocumentSummaries(UUID tenantId, String filter, DocumentSortBy sortBy,
-      SortDirection sortDirection, Integer pageIndex, Integer pageSize, int maxResults)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (sortBy == null) {
-      sortBy = DocumentSortBy.DEFINITION_ID;
-    }
-
-    if (sortDirection == null) {
-      sortDirection = SortDirection.DESCENDING;
-    }
-
-    try {
-      return documentStore.getDocumentSummaries(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
           e);
     }
   }

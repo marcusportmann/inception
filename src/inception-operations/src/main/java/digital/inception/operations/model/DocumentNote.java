@@ -178,6 +178,7 @@ public class DocumentNote implements Serializable {
       UUID tenantId, UUID documentId, String content, OffsetDateTime created, String createdBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
+    this.documentId = documentId;
     this.content = content;
     this.created = created;
     this.createdBy = createdBy;

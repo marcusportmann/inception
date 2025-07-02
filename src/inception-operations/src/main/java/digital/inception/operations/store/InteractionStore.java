@@ -160,7 +160,7 @@ public interface InteractionStore {
    *
    * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interaction is associated with
-   * @param sourceReference the interaction source specific reference
+   * @param sourceReference the interaction source-specific reference
    * @return an Optional containing the ID for the interaction with the specified source reference
    *     and source ID or an empty optional if the interaction could not be found
    * @throws ServiceUnavailableException if the ID for the interaction with the specified source
@@ -197,12 +197,12 @@ public interface InteractionStore {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the next interaction that is queued for processing.
+   * Retrieve the next interaction queued for processing.
    *
    * <p>The interaction will be locked to prevent duplicate processing.
    *
-   * @return an Optional containing the next interaction that is queued for processing or an empty
-   *     Optional if no interactions are currently queued for processing
+   * @return an Optional containing the next interaction queued for processing or an empty Optional
+   *     if no interactions are currently queued for processing
    * @throws ServiceUnavailableException if the next interaction queued for processing could not be
    *     retrieved
    */

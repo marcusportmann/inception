@@ -275,7 +275,7 @@ public interface DocumentService {
    * @param tenantId the ID for the tenant
    * @param documentId the ID for the document the document notes are associated with
    * @param filter the filter to apply to the document notes
-   * @param sortBy the method used to sort the document notes e.g. by created
+   * @param sortBy the method used to sort the document notes, e.g. by created
    * @param sortDirection the sort direction to apply to the document notes
    * @param pageIndex the page index
    * @param pageSize the page size

@@ -73,6 +73,17 @@ public class UpdateDocumentNoteRequest implements Serializable {
   public UpdateDocumentNoteRequest() {}
 
   /**
+   * Constructs a new {@code UpdateDocumentNoteRequest}.
+   *
+   * @param documentNoteId the ID for the document note
+   * @param content the content for the document note
+   */
+  public UpdateDocumentNoteRequest(UUID documentNoteId, String content) {
+    this.documentNoteId = documentNoteId;
+    this.content = content;
+  }
+
+  /**
    * Returns the content for the document note.
    *
    * @return the content for the document note

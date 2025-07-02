@@ -271,12 +271,12 @@ public interface InteractionService {
   int getMaximumInteractionProcessingAttempts();
 
   /**
-   * Retrieve the next interaction that is queued for processing.
+   * Retrieve the next interaction queued for processing.
    *
    * <p>The interaction will be locked to prevent duplicate processing.
    *
-   * @return an Optional containing the next interaction that is queued for processing or an empty
-   *     Optional if no interactions are currently queued for processing
+   * @return an Optional containing the next interaction queued for processing or an empty Optional
+   *     if no interactions are currently queued for processing
    * @throws ServiceUnavailableException if the next interaction queued for processing could not be
    *     retrieved
    */
@@ -330,7 +330,7 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interaction is associated with
-   * @param sourceReference the interaction source specific reference for the interaction
+   * @param sourceReference the interaction source-specific reference for the interaction
    * @return {@code true} if an interaction with the specified source reference for the interaction
    *     source with the specified ID exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid

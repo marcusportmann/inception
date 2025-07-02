@@ -16,21 +16,18 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentException;
 import digital.inception.operations.exception.DuplicateDocumentNoteException;
-import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
-import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import java.util.UUID;
 
 /**
@@ -127,7 +124,7 @@ public interface DocumentStore {
    * @param tenantId the ID for the tenant
    * @param documentId the ID for the document the document notes are associated with
    * @param filter the filter to apply to the document notes
-   * @param sortBy the method used to sort the document notes e.g. by created
+   * @param sortBy the method used to sort the document notes, e.g. by created
    * @param sortDirection the sort direction to apply to the document notes
    * @param pageIndex the page index
    * @param pageSize the page size

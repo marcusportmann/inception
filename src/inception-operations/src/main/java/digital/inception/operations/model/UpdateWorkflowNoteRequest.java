@@ -73,6 +73,17 @@ public class UpdateWorkflowNoteRequest implements Serializable {
   public UpdateWorkflowNoteRequest() {}
 
   /**
+   * Constructs a new {@code UpdateWorkflowNoteRequest}.
+   *
+   * @param workflowNoteId the ID for the workflow note
+   * @param content the content for the workflow note
+   */
+  public UpdateWorkflowNoteRequest(UUID workflowNoteId, String content) {
+    this.workflowNoteId = workflowNoteId;
+    this.content = content;
+  }
+
+  /**
    * Returns the content for the workflow note.
    *
    * @return the content for the workflow note

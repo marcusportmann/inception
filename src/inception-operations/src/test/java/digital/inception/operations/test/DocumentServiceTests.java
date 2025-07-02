@@ -24,18 +24,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.file.FileType;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
+import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentNote;
+import digital.inception.operations.model.DocumentNoteSortBy;
+import digital.inception.operations.model.DocumentNotes;
+import digital.inception.operations.model.DocumentSortBy;
+import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.DocumentSummary;
 import digital.inception.operations.model.RequiredDocumentAttribute;
+import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.test.InceptionExtension;
@@ -228,7 +238,8 @@ public class DocumentServiceTests {
 
     UpdateDocumentRequest updateDocumentRequest = getUpdateDocumentRequest(document);
 
-    documentService.updateDocument(TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest);
+    Document updatedDocument =
+        documentService.updateDocument(TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest);
 
     retrievedDocument = documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
 
@@ -264,6 +275,96 @@ public class DocumentServiceTests {
         updateDocumentRequest.getSourceDocumentId(),
         retrievedDocument.getSourceDocumentId(),
         "Invalid value for the \"sourceDocumentId\" document property");
+
+    DocumentSummaries documentSummaries =
+        documentService.getDocumentSummaries(
+            TenantUtil.DEFAULT_TENANT_ID,
+            retrievedDocument.getDefinitionId(),
+            DocumentSortBy.DEFINITION_ID,
+            SortDirection.ASCENDING,
+            0,
+            10,
+            100);
+
+    assertEquals(1, documentSummaries.getTotal());
+
+    DocumentSummary documentSummary = documentSummaries.getDocumentSummaries().getFirst();
+
+    assertEquals(
+        retrievedDocument.getExpiryDate(),
+        documentSummary.getExpiryDate(),
+        "Invalid value for the \"expiryDate\" document summary property");
+    assertEquals(
+        retrievedDocument.getExternalReference(),
+        documentSummary.getExternalReference(),
+        "Invalid value for the \"externalReference\" document summary property");
+    assertEquals(
+        retrievedDocument.getFileType(),
+        documentSummary.getFileType(),
+        "Invalid value for the \"fileType\" document summary property");
+    assertEquals(
+        retrievedDocument.getId(),
+        documentSummary.getId(),
+        "Invalid value for the \"id\" document summary property");
+    assertEquals(
+        retrievedDocument.getIssueDate(),
+        documentSummary.getIssueDate(),
+        "Invalid value for the \"issueDate\" document summary property");
+    assertEquals(
+        retrievedDocument.getName(),
+        documentSummary.getName(),
+        "Invalid value for the \"name\" document summary property");
+    assertEquals(
+        retrievedDocument.getSourceDocumentId(),
+        documentSummary.getSourceDocumentId(),
+        "Invalid value for the \"sourceDocumentId\" document summary property");
+
+    CreateDocumentNoteRequest createDocumentNoteRequest =
+        new CreateDocumentNoteRequest(document.getId(), "This is the document note content.");
+
+    DocumentNote documentNote =
+        documentService.createDocumentNote(
+            TenantUtil.DEFAULT_TENANT_ID, createDocumentNoteRequest, "TEST1");
+
+    DocumentNote retrievedDocumentNote =
+        documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNote.getId());
+
+    compareDocumentNotes(documentNote, retrievedDocumentNote);
+
+    UpdateDocumentNoteRequest updateDocumentNoteRequest =
+        new UpdateDocumentNoteRequest(documentNote.getId(), "This is the document note content.");
+
+    DocumentNote updatedDocumentNote =
+        documentService.updateDocumentNote(
+            TenantUtil.DEFAULT_TENANT_ID, updateDocumentNoteRequest, "TEST2");
+
+    retrievedDocumentNote =
+        documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, updatedDocumentNote.getId());
+
+    compareDocumentNotes(updatedDocumentNote, retrievedDocumentNote);
+
+    DocumentNotes documentNotes =
+        documentService.getDocumentNotes(
+            TenantUtil.DEFAULT_TENANT_ID,
+            document.getId(),
+            "TEST2",
+            DocumentNoteSortBy.CREATED,
+            SortDirection.ASCENDING,
+            0,
+            10,
+            100);
+
+    assertEquals(1, documentNotes.getTotal());
+
+    compareDocumentNotes(updatedDocumentNote, documentNotes.getDocumentNotes().getFirst());
+
+    documentService.deleteDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNote.getId());
+
+    assertThrows(
+        DocumentNoteNotFoundException.class,
+        () -> {
+          documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNote.getId());
+        });
 
     documentService.deleteDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
 
@@ -350,6 +451,33 @@ public class DocumentServiceTests {
             ? documentDefinition2.getRequiredDocumentAttributes()
             : List.of(),
         "The required document attributes values for the document definitions do not match");
+  }
+
+  private void compareDocumentNotes(DocumentNote documentNote1, DocumentNote documentNote2) {
+    assertEquals(
+        documentNote1.getId(),
+        documentNote2.getId(),
+        "The ID values for the document notes do not match");
+    assertEquals(
+        documentNote1.getContent(),
+        documentNote2.getContent(),
+        "The content values for the document notes do not match");
+    assertEquals(
+        documentNote1.getCreated(),
+        documentNote2.getCreated(),
+        "The created values for the document notes do not match");
+    assertEquals(
+        documentNote1.getCreatedBy(),
+        documentNote2.getCreatedBy(),
+        "The created by values for the document notes do not match");
+    assertEquals(
+        documentNote1.getUpdated(),
+        documentNote2.getUpdated(),
+        "The updated values for the document notes do not match");
+    assertEquals(
+        documentNote1.getUpdatedBy(),
+        documentNote2.getUpdatedBy(),
+        "The updated by values for the document notes do not match");
   }
 
   private void compareDocuments(Document document1, Document document2) {

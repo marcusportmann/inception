@@ -20,7 +20,6 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
@@ -32,8 +31,6 @@ import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
-import digital.inception.operations.model.DocumentNote;
-import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -80,7 +77,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   /** The Workflow Store. */
   private final WorkflowStore workflowStore;
 
-
   /**
    * Constructs a new {@code WorkflowServiceImpl}.
    *
@@ -103,7 +99,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     this.workflowDefinitionRepository = workflowDefinitionRepository;
     this.workflowEngineRepository = workflowEngineRepository;
   }
-  
+
   @Override
   public Workflow createWorkflow(UUID tenantId, CreateWorkflowRequest createWorkflowRequest)
       throws InvalidArgumentException,
@@ -219,8 +215,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public WorkflowNote createWorkflowNote(UUID tenantId,
-      CreateWorkflowNoteRequest createWorkflowNoteRequest, String createdBy)
+  public WorkflowNote createWorkflowNote(
+      UUID tenantId, CreateWorkflowNoteRequest createWorkflowNoteRequest, String createdBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -237,7 +233,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowNotFoundException(createWorkflowNoteRequest.getWorkflowId());
       }
 
-      WorkflowNote workflowNote = new WorkflowNote(tenantId, createWorkflowNoteRequest.getWorkflowId(), createWorkflowNoteRequest.getContent(), OffsetDateTime.now(), createdBy);
+      WorkflowNote workflowNote =
+          new WorkflowNote(
+              tenantId,
+              createWorkflowNoteRequest.getWorkflowId(),
+              createWorkflowNoteRequest.getContent(),
+              OffsetDateTime.now(),
+              createdBy);
 
       return workflowStore.createWorkflowNote(tenantId, workflowNote);
     } catch (WorkflowNotFoundException e) {
@@ -400,7 +402,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + ")",
           e);
     }
-    }
+  }
 
   @Override
   public Workflow getWorkflow(UUID tenantId, UUID workflowId)
@@ -585,8 +587,40 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public WorkflowNotes getWorkflowNotes(UUID tenantId, UUID workflowId, String filter,
-      WorkflowNoteSortBy sortBy, SortDirection sortDirection, Integer pageIndex, Integer pageSize,
+  public WorkflowNote getWorkflowNote(UUID tenantId, UUID workflowNoteId)
+      throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (workflowNoteId == null) {
+      throw new InvalidArgumentException("workflowNoteId");
+    }
+
+    try {
+      return workflowStore.getWorkflowNote(tenantId, workflowNoteId);
+    } catch (WorkflowNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow note ("
+              + workflowNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowNotes getWorkflowNotes(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      WorkflowNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
       int maxResults)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -598,7 +632,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     try {
-      return workflowStore.getWorkflowNotes(tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+      return workflowStore.getWorkflowNotes(
+          tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
     } catch (WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -612,38 +647,46 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
   }
 
-    @Override
-    public WorkflowSummaries getWorkflowSummaries(UUID tenantId, WorkflowStatus status, String filter, WorkflowSortBy sortBy,
-        SortDirection sortDirection, Integer pageIndex, Integer pageSize, int maxResults)
+  @Override
+  public WorkflowSummaries getWorkflowSummaries(
+      UUID tenantId,
+      WorkflowStatus status,
+      String filter,
+      WorkflowSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
       throws InvalidArgumentException, ServiceUnavailableException {
-      if (tenantId == null) {
-        throw new InvalidArgumentException("tenantId");
-      }
-
-      if ((pageIndex != null) && (pageIndex < 0)) {
-        throw new InvalidArgumentException("pageIndex");
-      }
-
-      if ((pageSize != null) && (pageSize <= 0)) {
-        throw new InvalidArgumentException("pageSize");
-      }
-
-      if (sortBy == null) {
-        sortBy = WorkflowSortBy.DEFINITION_ID;
-      }
-
-      if (sortDirection == null) {
-        sortDirection = SortDirection.DESCENDING;
-      }
-
-      try {
-        return workflowStore.getWorkflowSummaries(tenantId, status, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
-            e);
-      }
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = WorkflowSortBy.DEFINITION_ID;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.DESCENDING;
+    }
+
+    try {
+      return workflowStore.getWorkflowSummaries(
+          tenantId, status, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
 
   @Override
   public Workflow updateWorkflow(UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest)
@@ -655,7 +698,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("updateWorkflowRequest", updateWorkflowRequest);
 
     try {
-      Workflow workflow = workflowStore.getWorkflow(tenantId, updateWorkflowRequest.getWorkflowId());
+      Workflow workflow =
+          workflowStore.getWorkflow(tenantId, updateWorkflowRequest.getWorkflowId());
 
       if (StringUtils.hasText(updateWorkflowRequest.getData())) {
         workflow.setData(updateWorkflowRequest.getData());
@@ -750,6 +794,38 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public WorkflowNote updateWorkflowNote(
+      UUID tenantId, UpdateWorkflowNoteRequest updateWorkflowNoteRequest, String updatedBy)
+      throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("updateWorkflowNoteRequest", updateWorkflowNoteRequest);
+
+    try {
+      WorkflowNote workflowNote =
+          workflowStore.getWorkflowNote(tenantId, updateWorkflowNoteRequest.getWorkflowNoteId());
+
+      workflowNote.setContent(updateWorkflowNoteRequest.getContent());
+      workflowNote.setUpdated(OffsetDateTime.now());
+      workflowNote.setUpdatedBy(updatedBy);
+
+      return workflowStore.updateWorkflowNote(tenantId, workflowNote);
+    } catch (WorkflowNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the workflow note ("
+              + updateWorkflowNoteRequest.getWorkflowNoteId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public boolean workflowDefinitionCategoryExists(String workflowDefinitionCategoryId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
@@ -829,35 +905,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       return workflowStore.workflowExists(tenantId, workflowId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to check whether the workflow (" + workflowId + ") exists for the tenant (" + tenantId + ")", e);
-    }
-  }
-
-  @Override
-  public WorkflowNote updateWorkflowNote(UUID tenantId,
-      UpdateWorkflowNoteRequest updateWorkflowNoteRequest, String updatedBy)
-      throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    validateArgument("updateWorkflowNoteRequest", updateWorkflowNoteRequest);
-
-    try {
-      WorkflowNote workflowNote = workflowStore.getWorkflowNote(tenantId, updateWorkflowNoteRequest.getWorkflowNoteId());
-
-      workflowNote.setContent(updateWorkflowNoteRequest.getContent());
-      workflowNote.setUpdated(OffsetDateTime.now());
-      workflowNote.setUpdatedBy(updatedBy);
-
-      return workflowStore.updateWorkflowNote(tenantId, workflowNote);
-    } catch (WorkflowNoteNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the workflow note ("
-              + updateWorkflowNoteRequest.getWorkflowNoteId()
-              + ") for the tenant ("
+          "Failed to check whether the workflow ("
+              + workflowId
+              + ") exists for the tenant ("
               + tenantId
               + ")",
           e);

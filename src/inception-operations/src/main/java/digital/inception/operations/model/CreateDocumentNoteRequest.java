@@ -75,6 +75,17 @@ public class CreateDocumentNoteRequest implements Serializable {
   public CreateDocumentNoteRequest() {}
 
   /**
+   * Constructs a new {@code CreateDocumentNoteRequest}.
+   *
+   * @param documentId the ID for the document the document note is associated with
+   * @param content the content for the document note
+   */
+  public CreateDocumentNoteRequest(UUID documentId, String content) {
+    this.documentId = documentId;
+    this.content = content;
+  }
+
+  /**
    * Returns the content for the document note.
    *
    * @return the content for the document note
