@@ -113,7 +113,7 @@ public class ErrorReport implements Serializable {
       description = "The date and time the error report was created",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Created")
+  @XmlElement(name = "Created", required = true)
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @NotNull

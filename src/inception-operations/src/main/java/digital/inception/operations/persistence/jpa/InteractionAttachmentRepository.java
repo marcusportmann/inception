@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The {@code InteractionAttachmentRepository} interface declares the persistence for the {@code
@@ -35,21 +36,21 @@ public interface InteractionAttachmentRepository
    * Returns whether an interaction attachment with the specified tenant ID and ID exists.
    *
    * @param tenantId the ID for the tenant the interaction attachment is associated with
-   * @param interactionSourceId the ID for the interaction attachment
+   * @param interactionAttachmentId the ID for the interaction attachment
    * @return {@code true} if an interaction attachment with the specified tenant ID and ID exists or
    *     {@code false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID interactionAttachmentId);
 
   /**
    * Retrieve the interaction attachment.
    *
    * @param tenantId the ID for the tenant the interaction attachment is associated with
-   * @param id the ID for the interaction attachment
+   * @param interactionAttachmentId the ID for the interaction attachment
    * @return an Optional containing the interaction attachment or an empty Optional if the
    *     interaction attachment could not be found
    */
-  Optional<InteractionAttachment> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<InteractionAttachment> findByTenantIdAndId(UUID tenantId, UUID interactionAttachmentId);
 
   /**
    * Retrieve the ID for the interaction attachment with the specified interaction ID and hash.
@@ -66,5 +67,7 @@ public interface InteractionAttachmentRepository
       "select ia.id from InteractionAttachment ia where ia.tenantId = :tenantId and "
           + "ia.interactionId = :interactionId and ia.hash = :hash")
   Optional<UUID> getIdByTenantIdAndInteractionIdAndHash(
-      UUID tenantId, UUID interactionId, String hash);
+      @Param("tenantId") UUID tenantId,
+      @Param("interactionId") UUID interactionId,
+      @Param("hash") String hash);
 }

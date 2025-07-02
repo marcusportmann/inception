@@ -48,7 +48,7 @@ import java.util.UUID;
 @Schema(description = "A request to update a document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "id",
+  "documentId",
   "fileType",
   "name",
   "externalReference",
@@ -62,7 +62,7 @@ import java.util.UUID;
     name = "UpdateDocumentRequest",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "id",
+      "documentId",
       "fileType",
       "name",
       "externalReference",
@@ -85,6 +85,14 @@ public class UpdateDocumentRequest implements Serializable {
   @NotNull
   @Size(min = 1, max = 41943040)
   private byte[] data;
+
+  /** The ID for the document. */
+  @Schema(description = "The ID for the document", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "DocumentId", required = true)
+  @NotNull
+  @Id
+  private UUID documentId;
 
   /** The expiry date for the document. */
   @Schema(description = "The ISO 8601 format expiry date for the document")
@@ -110,14 +118,6 @@ public class UpdateDocumentRequest implements Serializable {
   @XmlElement(name = "FileType", required = true)
   @NotNull
   private FileType fileType;
-
-  /** The ID for the document. */
-  @Schema(description = "The ID for the document", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  private UUID id;
 
   /** The issue date for the document. */
   @Schema(description = "The ISO 8601 format issue date for the document")
@@ -158,6 +158,15 @@ public class UpdateDocumentRequest implements Serializable {
   }
 
   /**
+   * Returns the ID for the document.
+   *
+   * @return the ID for the document
+   */
+  public UUID getDocumentId() {
+    return documentId;
+  }
+
+  /**
    * Returns the expiry date for the document.
    *
    * @return the expiry date for the document
@@ -182,15 +191,6 @@ public class UpdateDocumentRequest implements Serializable {
    */
   public FileType getFileType() {
     return fileType;
-  }
-
-  /**
-   * Returns the ID for the document.
-   *
-   * @return the ID for the document
-   */
-  public UUID getId() {
-    return id;
   }
 
   /**
@@ -230,6 +230,15 @@ public class UpdateDocumentRequest implements Serializable {
   }
 
   /**
+   * Set the ID for the document.
+   *
+   * @param documentId the ID for the document
+   */
+  public void setDocumentId(UUID documentId) {
+    this.documentId = documentId;
+  }
+
+  /**
    * Set the expiry date for the document.
    *
    * @param expiryDate the expiry date for the document
@@ -255,15 +264,6 @@ public class UpdateDocumentRequest implements Serializable {
    */
   public void setFileType(FileType fileType) {
     this.fileType = fileType;
-  }
-
-  /**
-   * Set the ID for the document.
-   *
-   * @param id the ID for the document
-   */
-  public void setId(UUID id) {
-    this.id = id;
   }
 
   /**

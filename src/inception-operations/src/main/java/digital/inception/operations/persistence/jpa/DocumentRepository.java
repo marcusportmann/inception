@@ -43,9 +43,9 @@ public interface DocumentRepository extends JpaRepository<Document, UUID> {
    * Retrieve the document.
    *
    * @param tenantId the ID for the tenant the document is associated with
-   * @param id the ID for the document
+   * @param documentId the ID for the document
    * @return an Optional containing the document or an empty Optional if the document could not be
    *     found
    */
-  Optional<Document> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Document> findByTenantIdAndId(UUID tenantId, UUID documentId);
 }

@@ -213,7 +213,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
         throw new CodeNotFoundException(codeCategoryId, codeId);
       }
 
-      codeRepository.deleteById(codeCategoryId, codeId);
+      codeRepository.deleteByCodeCategoryIdAndId(codeCategoryId, codeId);
     } catch (CodeNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -478,7 +478,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
     }
 
     try {
-      Optional<String> nameOptional = codeRepository.getNameById(codeCategoryId, codeId);
+      Optional<String> nameOptional = codeRepository.getNameByCodeCategoryIdAndId(codeCategoryId, codeId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();

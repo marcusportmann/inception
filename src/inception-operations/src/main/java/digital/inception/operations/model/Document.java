@@ -62,10 +62,6 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
-  "created",
-  "createdBy",
-  "updated",
-  "updatedBy",
   "data"
 })
 @XmlRootElement(name = "Document", namespace = "https://inception.digital/operations")

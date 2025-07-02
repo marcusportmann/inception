@@ -18,6 +18,8 @@ package digital.inception.operations.service;
 
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
+import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
@@ -26,12 +28,22 @@ import digital.inception.operations.exception.WorkflowDefinitionNotFoundExceptio
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
+import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.DocumentNote;
+import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowEngine;
+import digital.inception.operations.model.WorkflowNote;
+import digital.inception.operations.model.WorkflowNoteSortBy;
+import digital.inception.operations.model.WorkflowNotes;
+import digital.inception.operations.model.WorkflowSortBy;
+import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowSummaries;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,6 +111,20 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Create the workflow note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param createWorkflowNoteRequest the request to create a workflow note
+   * @param createdBy the username for the user who created the workflow note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow note could not be created
+   */
+  WorkflowNote createWorkflowNote(
+      UUID tenantId, CreateWorkflowNoteRequest createWorkflowNoteRequest, String createdBy)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
    * Delete the workflow.
    *
    * @param tenantId the ID for the tenant
@@ -162,6 +188,18 @@ public interface WorkflowService {
    */
   void deleteWorkflowEngine(String workflowEngineId)
       throws InvalidArgumentException, WorkflowEngineNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the workflow note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowNoteId the ID for the workflow note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNoteNotFoundException if the workflow note could not be found
+   * @throws ServiceUnavailableException if the workflow note could not be deleted
+   */
+  void deleteWorkflowNote(UUID tenantId, UUID workflowNoteId)
+      throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the workflow.
@@ -274,6 +312,72 @@ public interface WorkflowService {
   List<WorkflowEngine> getWorkflowEngines() throws ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowNoteId the ID for the workflow note
+   * @return the workflow note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNoteNotFoundException if the workflow note could not be found
+   * @throws ServiceUnavailableException if the workflow note could not be retrieved
+   */
+  WorkflowNote getWorkflowNote(UUID tenantId, UUID workflowNoteId)
+      throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow notes for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow notes are associated with
+   * @param filter the filter to apply to the workflow notes
+   * @param sortBy the method used to sort the workflow notes e.g. by created at
+   * @param sortDirection the sort direction to apply to the workflow notes
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param maxResults the maximum number of workflow notes that should be retrieved
+   * @return the workflow notes
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow notes could not be retrieved
+   */
+  WorkflowNotes getWorkflowNotes(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      WorkflowNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the workflows.
+   *
+   * @param tenantId the ID for the tenant
+   * @param status the status filter to apply to the workflow summaries
+   * @param filter the filter to apply to the workflow summaries
+   * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
+   * @param sortDirection the sort direction to apply to the workflow summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param maxResults the maximum number of workflow summaries that should be retrieved
+   * @return the summaries for the workflows
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the workflow summaries could not be retrieved
+   */
+  WorkflowSummaries getWorkflowSummaries(
+      UUID tenantId,
+      WorkflowStatus status,
+      String filter,
+      WorkflowSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Update the workflow.
    *
    * @param tenantId the ID for the tenant
@@ -325,6 +429,20 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowEngineNotFoundException, ServiceUnavailableException;
 
   /**
+   * Update the workflow note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param updateWorkflowNoteRequest the request to update a workflow note
+   * @param updatedBy the username for the user updating the workflow note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNoteNotFoundException if the workflow note could not be found
+   * @throws ServiceUnavailableException if the workflow note could not be updated
+   */
+  WorkflowNote updateWorkflowNote(
+      UUID tenantId, UpdateWorkflowNoteRequest updateWorkflowNoteRequest, String updatedBy)
+      throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
+
+  /**
    * Check whether the workflow definition category exists.
    *
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
@@ -369,4 +487,15 @@ public interface WorkflowService {
    */
   boolean workflowEngineExists(String workflowEngineId)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Returns whether a workflow with the specified tenant ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param workflowId the ID for the workflow
+   * @return {@code true} if a workflow with the specified tenant ID and ID exists or {@code false}
+   *     otherwise
+   * @throws ServiceUnavailableException if the existence of the workflow could not be determined
+   */
+  boolean workflowExists(UUID tenantId, UUID workflowId) throws ServiceUnavailableException;
 }

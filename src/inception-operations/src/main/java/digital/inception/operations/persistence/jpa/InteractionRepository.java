@@ -56,21 +56,21 @@ public interface InteractionRepository
    * Returns whether an interaction with the specified tenant ID and ID exists.
    *
    * @param tenantId the ID for the tenant the interaction is associated with
-   * @param interactionSourceId the ID for the interaction
+   * @param interactionId the ID for the interaction
    * @return {@code true} if an interaction with the specified tenant ID and ID exists or {@code
    *     false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID interactionId);
 
   /**
    * Retrieve the interaction.
    *
    * @param tenantId the ID for the tenant the interaction is associated with
-   * @param id the ID for the interaction
+   * @param interactionId the ID for the interaction
    * @return an Optional containing the interaction or an empty Optional if the interaction could
    *     not be found
    */
-  Optional<Interaction> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Interaction> findByTenantIdAndId(UUID tenantId, UUID interactionId);
 
   /**
    * Retrieve the interactions queued for processing.
@@ -127,9 +127,7 @@ public interface InteractionRepository
       "update Interaction i set i.lockName = :lockName, i.status = digital.inception.operations.model.InteractionStatus.PROCESSING, "
           + "i.processingAttempts = i.processingAttempts + 1, i.lastProcessed = :when where i.id = :interactionId")
   void lockInteractionForProcessing(
-      @Param("interactionId") UUID interactionId,
-      @Param("lockName") String lockName,
-      @Param("when") OffsetDateTime when);
+      @Param("interactionId") UUID interactionId, @Param("lockName") String lockName, @Param("when") OffsetDateTime when);
 
   /**
    * Reset the interaction locks with the specified status.
@@ -156,8 +154,6 @@ public interface InteractionRepository
    */
   @Transactional
   @Modifying
-  @Query(
-      "update Interaction i set i.status = :status, i.lockName = null where i.id = :interactionId")
-  void unlockInteraction(
-      @Param("interactionId") UUID interactionId, @Param("status") InteractionStatus status);
+  @Query("update Interaction i set i.status = :status, i.lockName = null where i.id = :interactionId")
+  void unlockInteraction(@Param("interactionId") UUID interactionId, @Param("status") InteractionStatus status);
 }

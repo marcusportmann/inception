@@ -16,15 +16,15 @@
 
 package digital.inception.operations.persistence.jpa;
 
-import digital.inception.operations.model.WorkflowNote;
+import digital.inception.operations.model.DocumentNote;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * The {@code WorkflowNoteRepository} interface provides the persistence operations for the {@link
- * WorkflowNote} domain type.
+ * The {@code DocumentNoteRepository} interface provides the persistence operations for the {@link
+ * DocumentNote} domain type.
  *
  * <p>This repository extends {@code JpaRepository} to provide standard CRUD (Create, Read, Update,
  * Delete) operations and {@code JpaSpecificationExecutor} to support more complex queries using
@@ -32,26 +32,26 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  *
  * @author Marcus Portmann
  */
-public interface WorkflowNoteRepository
-    extends JpaRepository<WorkflowNote, UUID>, JpaSpecificationExecutor<WorkflowNote> {
+public interface DocumentNoteRepository
+    extends JpaRepository<DocumentNote, UUID>, JpaSpecificationExecutor<DocumentNote> {
 
   /**
-   * Returns whether a workflow note with the specified tenant ID and ID exists.
+   * Returns whether a document note with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
-   * @param workflowNoteId the ID for the workflow note
-   * @return {@code true} if a workflow note with the specified tenant ID and ID exists or {@code
+   * @param tenantId the ID for the tenant the document note is associated with
+   * @param documentNoteId the ID for the document note
+   * @return {@code true} if a document note with the specified tenant ID and ID exists or {@code
    *     false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID workflowNoteId);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID documentNoteId);
 
   /**
-   * Retrieve the workflow note.
+   * Retrieve the document note.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
-   * @param workflowNoteId the ID for the workflow note
-   * @return an Optional containing the workflow note or an empty Optional if the workflow note
+   * @param tenantId the ID for the tenant the document note is associated with
+   * @param documentNoteId the ID for the document note
+   * @return an Optional containing the document note or an empty Optional if the document note
    *     could not be found
    */
-  Optional<WorkflowNote> findByTenantIdAndId(UUID tenantId, UUID workflowNoteId);
+  Optional<DocumentNote> findByTenantIdAndId(UUID tenantId, UUID documentNoteId);
 }

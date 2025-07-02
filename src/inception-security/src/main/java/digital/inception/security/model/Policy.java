@@ -67,7 +67,7 @@ public class Policy implements Serializable {
   @XmlElement(name = "Data", required = true)
   @NotNull
   @Size(min = 1, max = 10485760)
-  @Column(name = "data")
+  @Column(name = "data", nullable = false)
   private String data;
 
   /** The ID for the policy. */

@@ -54,11 +54,7 @@ import java.util.UUID;
   "definitionId",
   "definitionVersion",
   "status",
-  "externalReference",
-  "created",
-  "createdBy",
-  "updated",
-  "updatedBy"
+  "externalReference"
 })
 @XmlRootElement(name = "WorkflowSummary", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -71,11 +67,7 @@ import java.util.UUID;
       "definitionId",
       "definitionVersion",
       "status",
-      "externalReference",
-      "created",
-      "createdBy",
-      "updated",
-      "updatedBy"
+      "externalReference"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

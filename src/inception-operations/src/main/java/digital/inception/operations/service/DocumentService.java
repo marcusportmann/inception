@@ -18,15 +18,24 @@ package digital.inception.operations.service;
 
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
+import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentNote;
+import digital.inception.operations.model.DocumentNoteSortBy;
+import digital.inception.operations.model.DocumentNotes;
+import digital.inception.operations.model.DocumentSortBy;
+import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import java.util.List;
 import java.util.UUID;
@@ -90,6 +99,20 @@ public interface DocumentService {
           ServiceUnavailableException;
 
   /**
+   * Create the document note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param createDocumentNoteRequest the request to create a document note
+   * @param createdBy the username for the user creating the document note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentNotFoundException if the document could not be found
+   * @throws ServiceUnavailableException if the document note could not be created
+   */
+  DocumentNote createDocumentNote(
+      UUID tenantId, CreateDocumentNoteRequest createDocumentNoteRequest, String createdBy)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
+
+  /**
    * Delete the document.
    *
    * @param tenantId the ID for the tenant
@@ -129,6 +152,18 @@ public interface DocumentService {
           ServiceUnavailableException;
 
   /**
+   * Delete the document note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentNoteId the ID for the document note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentNoteNotFoundException if the document note could not be found
+   * @throws ServiceUnavailableException if the document note could not be deleted
+   */
+  void deleteDocumentNote(UUID tenantId, UUID documentNoteId)
+      throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
+
+  /**
    * Check whether the document definition exists.
    *
    * @param documentDefinitionId the ID for the document definition
@@ -138,6 +173,17 @@ public interface DocumentService {
    */
   boolean documentDefinitionExists(String documentDefinitionId)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Returns whether a document with the specified tenant ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the document is associated with
+   * @param documentId the ID for the document
+   * @return {@code true} if a document with the specified tenant ID and ID exists or {@code false}
+   *     otherwise
+   * @throws ServiceUnavailableException if the existence of the document could not be determined
+   */
+  boolean documentExists(UUID tenantId, UUID documentId) throws ServiceUnavailableException;
 
   /**
    * Retrieve the document.
@@ -211,6 +257,70 @@ public interface DocumentService {
       throws DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the document note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentNoteId the ID for the document note
+   * @return the document note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentNoteNotFoundException if the document note could not be found
+   * @throws ServiceUnavailableException if the document note could not be retrieved
+   */
+  DocumentNote getDocumentNote(UUID tenantId, UUID documentNoteId)
+      throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the document notes for the document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentId the ID for the document the document notes are associated with
+   * @param filter the filter to apply to the document notes
+   * @param sortBy the method used to sort the document notes e.g. by created
+   * @param sortDirection the sort direction to apply to the document notes
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param maxResults the maximum number of document notes that should be retrieved
+   * @return the document notes
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentNotFoundException if the document could not be found
+   * @throws ServiceUnavailableException if the document notes could not be retrieved
+   */
+  DocumentNotes getDocumentNotes(
+      UUID tenantId,
+      UUID documentId,
+      String filter,
+      DocumentNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the documents.
+   *
+   * @param tenantId the ID for the tenant
+   * @param filter the filter to apply to the document summaries
+   * @param sortBy the method used to sort the document summaries e.g. by definition ID
+   * @param sortDirection the sort direction to apply to the document summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param maxResults the maximum number of document summaries that should be retrieved
+   * @return the summaries for the documents
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the document summaries could not be retrieved
+   */
+  DocumentSummaries getDocumentSummaries(
+      UUID tenantId,
+      String filter,
+      DocumentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Update the document.
    *
    * @param tenantId the ID for the tenant
@@ -249,4 +359,18 @@ public interface DocumentService {
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Update the document note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param updateDocumentNoteRequest the request to update a document note
+   * @param updatedBy the username for the user updating the document note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentNoteNotFoundException if the document note could not be found
+   * @throws ServiceUnavailableException if the document note could not be updated
+   */
+  DocumentNote updateDocumentNote(
+      UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
+      throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
 }

@@ -50,9 +50,9 @@ public interface WorkflowRepository
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant the workflow is associated with
-   * @param id the ID for the workflow
+   * @param workflowId the ID for the workflow
    * @return an Optional containing the workflow or an empty Optional if the workflow could not be
    *     found
    */
-  Optional<Workflow> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Workflow> findByTenantIdAndId(UUID tenantId, UUID workflowId);
 }

@@ -101,7 +101,7 @@ public class ArchivedTask implements Serializable {
   @XmlElement(name = "Data", required = true)
   @NotNull
   @Size(min = 1, max = 10485760)
-  @Column(name = "data")
+  @Column(name = "data", nullable = false)
   private String data;
 
   /** The date and time the task was executed. */
@@ -112,7 +112,8 @@ public class ArchivedTask implements Serializable {
   @XmlElement(name = "Executed", required = true)
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @Column(name = "executed")
+  @NotNull
+  @Column(name = "executed", nullable = false)
   private OffsetDateTime executed;
 
   /** The time taken to execute the task in milliseconds. */

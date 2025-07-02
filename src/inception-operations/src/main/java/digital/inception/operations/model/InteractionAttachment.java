@@ -86,7 +86,7 @@ public class InteractionAttachment implements Serializable {
   @XmlElement(name = "Data", required = true)
   @NotNull
   @Size(min = 1, max = 20971520)
-  @Column(name = "data")
+  @Column(name = "data", nullable = false)
   private byte[] data;
 
   /** The file type for the interaction attachment. */

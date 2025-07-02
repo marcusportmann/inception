@@ -42,7 +42,8 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
   @Transactional
   @Modifying
   @Query("delete from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
-  void deleteById(@Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
+  void deleteByCodeCategoryIdAndId(
+      @Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
 
   /**
    * Retrieve the codes for the code category.
@@ -61,6 +62,6 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
    *     be found
    */
   @Query("select c.name from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
-  Optional<String> getNameById(
+  Optional<String> getNameByCodeCategoryIdAndId(
       @Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
 }

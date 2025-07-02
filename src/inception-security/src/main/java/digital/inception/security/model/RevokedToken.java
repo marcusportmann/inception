@@ -86,7 +86,7 @@ public class RevokedToken implements Serializable {
       description = "The date and time the token was issued",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Issued")
+  @XmlElement(name = "Issued", required = true)
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @NotNull

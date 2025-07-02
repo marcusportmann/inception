@@ -242,7 +242,8 @@ public class Interaction implements Serializable {
   @XmlElementWrapper(name = "Recipients", required = true)
   @XmlElement(name = "Recipient", required = true)
   @Convert(converter = RecipientsAttributeConverter.class)
-  @Column(name = "recipients", length = 2000)
+  @NotNull
+  @Column(name = "recipients", length = 2000, nullable = false)
   private List<String> recipients;
 
   /**

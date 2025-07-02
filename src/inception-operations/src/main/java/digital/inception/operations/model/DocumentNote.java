@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.operations.constraint.ValidWorkflow;
+import digital.inception.operations.constraint.ValidDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,30 +43,30 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code WorkflowNote} class holds the information for a workflow note.
+ * The {@code DocumentNote} class holds the information for a document note.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A workflow note")
+@Schema(description = "A document note")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
   "tenantId",
-  "workflowId",
+  "documentId",
   "content",
   "created",
   "createdBy",
   "updated",
   "updatedBy"
 })
-@XmlRootElement(name = "WorkflowNote", namespace = "https://inception.digital/operations")
+@XmlRootElement(name = "DocumentNote", namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "WorkflowNote",
+    name = "DocumentNote",
     namespace = "https://inception.digital/operations",
     propOrder = {
       "id",
       "tenantId",
-      "workflowId",
+      "documentId",
       "content",
       "created",
       "createdBy",
@@ -74,17 +74,17 @@ import java.util.UUID;
       "updatedBy"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidWorkflow
+@ValidDocument
 @Entity
-@Table(name = "operations_workflow_notes")
+@Table(name = "operations_document_notes")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class WorkflowNote implements Serializable {
+public class DocumentNote implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The content for the workflow note. */
+  /** The content for the document note. */
   @Schema(
-      description = "The content for the workflow note",
+      description = "The content for the document note",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Content", required = true)
@@ -93,9 +93,9 @@ public class WorkflowNote implements Serializable {
   @Column(name = "content", length = 2000, nullable = false)
   private String content;
 
-  /** The date and time the workflow note was created. */
+  /** The date and time the document note was created. */
   @Schema(
-      description = "The date and time the workflow note was created",
+      description = "The date and time the document note was created",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Created", required = true)
@@ -105,9 +105,9 @@ public class WorkflowNote implements Serializable {
   @Column(name = "created", nullable = false)
   private OffsetDateTime created;
 
-  /** The username for the user who created the workflow note. */
+  /** The username for the user who created the document note. */
   @Schema(
-      description = "The username for the user who created the workflow note",
+      description = "The username for the user who created the document note",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CreatedBy", required = true)
@@ -116,8 +116,18 @@ public class WorkflowNote implements Serializable {
   @Column(name = "created_by", length = 100, nullable = false)
   private String createdBy;
 
-  /** The ID for the workflow note. */
-  @Schema(description = "The ID for the workflow note", requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The ID for the document the document note is associated with. */
+  @Schema(
+      description = "The ID for the document the document note is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "DocumentId", required = true)
+  @NotNull
+  @Column(name = "document_id", length = 50, nullable = false)
+  private UUID documentId;
+
+  /** The ID for the document note. */
+  @Schema(description = "The ID for the document note", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -125,9 +135,9 @@ public class WorkflowNote implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The ID for the tenant the workflow note is associated with. */
+  /** The ID for the tenant the document note is associated with. */
   @Schema(
-      description = "The ID for the tenant the workflow note is associated with",
+      description = "The ID for the tenant the document note is associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -135,8 +145,8 @@ public class WorkflowNote implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** The date and time the workflow note was last updated. */
-  @Schema(description = "The date and time the workflow note was last updated")
+  /** The date and time the document note was last updated. */
+  @Schema(description = "The date and time the document note was last updated")
   @JsonProperty
   @XmlElement(name = "Updated")
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
@@ -144,38 +154,28 @@ public class WorkflowNote implements Serializable {
   @Column(name = "updated")
   private OffsetDateTime updated;
 
-  /** The username for the user who last updated the workflow note. */
-  @Schema(description = "The username for the user who last updated the workflow note")
+  /** The username for the user who last updated the document note. */
+  @Schema(description = "The username for the user who last updated the document note")
   @JsonProperty
   @XmlElement(name = "UpdatedBy")
   @Size(min = 1, max = 100)
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
 
-  /** The ID for the workflow the workflow note is associated with. */
-  @Schema(
-      description = "The ID for the workflow the workflow note is associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "WorkflowId", required = true)
-  @NotNull
-  @Column(name = "workflow_id", length = 50, nullable = false)
-  private UUID workflowId;
-
-  /** Constructs a new {@code WorkflowNote}. */
-  public WorkflowNote() {}
+  /** Constructs a new {@code DocumentNote}. */
+  public DocumentNote() {}
 
   /**
-   * Constructs a new {@code WorkflowNote}.
+   * Constructs a new {@code DocumentNote}.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
-   * @param workflowId the ID for the workflow the workflow note is associated with
-   * @param content the content for the workflow note
-   * @param created the date and time the workflow note was created
-   * @param createdBy the username for the user who created the workflow note
+   * @param tenantId the ID for the tenant the document note is associated with
+   * @param documentId the ID for the document the document note is associated with
+   * @param content the content for the document note
+   * @param created the date and time the document note was created
+   * @param createdBy the username for the user who created the document note
    */
-  public WorkflowNote(
-      UUID tenantId, UUID workflowId, String content, OffsetDateTime created, String createdBy) {
+  public DocumentNote(
+      UUID tenantId, UUID documentId, String content, OffsetDateTime created, String createdBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.content = content;
@@ -203,81 +203,81 @@ public class WorkflowNote implements Serializable {
       return false;
     }
 
-    WorkflowNote other = (WorkflowNote) object;
+    DocumentNote other = (DocumentNote) object;
 
     return Objects.equals(id, other.id);
   }
 
   /**
-   * Returns the content for the workflow note.
+   * Returns the content for the document note.
    *
-   * @return the content for the workflow note
+   * @return the content for the document note
    */
   public String getContent() {
     return content;
   }
 
   /**
-   * Returns the date and time the workflow note was created.
+   * Returns the date and time the document note was created.
    *
-   * @return the date and time the workflow note was created
+   * @return the date and time the document note was created
    */
   public OffsetDateTime getCreated() {
     return created;
   }
 
   /**
-   * Returns the username for the user who created the workflow note.
+   * Returns the username for the user who created the document note.
    *
-   * @return the username for the user who created the workflow note
+   * @return the username for the user who created the document note
    */
   public String getCreatedBy() {
     return createdBy;
   }
 
   /**
-   * Returns the ID for the workflow note.
+   * Returns the ID for the document the document note is associated with.
    *
-   * @return the ID for the workflow note
+   * @return the ID for the document the document note is associated with
+   */
+  public UUID getDocumentId() {
+    return documentId;
+  }
+
+  /**
+   * Returns the ID for the document note.
+   *
+   * @return the ID for the document note
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the ID for the tenant the workflow note is associated with.
+   * Returns the ID for the tenant the document note is associated with.
    *
-   * @return the ID for the tenant the workflow note is associated with
+   * @return the ID for the tenant the document note is associated with
    */
   public UUID getTenantId() {
     return tenantId;
   }
 
   /**
-   * Returns the date and time the workflow note was last updated.
+   * Returns the date and time the document note was last updated.
    *
-   * @return the date and time the workflow note was last updated
+   * @return the date and time the document note was last updated
    */
   public OffsetDateTime getUpdated() {
     return updated;
   }
 
   /**
-   * Returns the username for the user who last updated the workflow note.
+   * Returns the username for the user who last updated the document note.
    *
-   * @return the username for the user who last updated the workflow note
+   * @return the username for the user who last updated the document note
    */
   public String getUpdatedBy() {
     return updatedBy;
-  }
-
-  /**
-   * Returns the ID for the workflow the workflow note is associated with.
-   *
-   * @return the ID for the workflow the workflow note is associated with
-   */
-  public UUID getWorkflowId() {
-    return workflowId;
   }
 
   /**
@@ -291,74 +291,74 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the content for the workflow note.
+   * Set the content for the document note.
    *
-   * @param content the content for the workflow note
+   * @param content the content for the document note
    */
   public void setContent(String content) {
     this.content = content;
   }
 
   /**
-   * Set the date and time the workflow note was created.
+   * Set the date and time the document note was created.
    *
-   * @param created the date and time the workflow note was created
+   * @param created the date and time the document note was created
    */
   public void setCreated(OffsetDateTime created) {
     this.created = created;
   }
 
   /**
-   * Set the username for the user who created the workflow note.
+   * Set the username for the user who created the document note.
    *
-   * @param createdBy the username for the user who created the workflow note
+   * @param createdBy the username for the user who created the document note
    */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
   }
 
   /**
-   * Set the ID for the workflow note.
+   * Set the ID for the document the document note is associated with.
    *
-   * @param id the ID for the workflow note
+   * @param documentId the ID for the document the document note is associated with
+   */
+  public void setDocumentId(UUID documentId) {
+    this.documentId = documentId;
+  }
+
+  /**
+   * Set the ID for the document note.
+   *
+   * @param id the ID for the document note
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the ID for the tenant the workflow note is associated with.
+   * Set the ID for the tenant the document note is associated with.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
+   * @param tenantId the ID for the tenant the document note is associated with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
   }
 
   /**
-   * Set the date and time the workflow note was last updated.
+   * Set the date and time the document note was last updated.
    *
-   * @param updated the date and time the workflow note was last updated
+   * @param updated the date and time the document note was last updated
    */
   public void setUpdated(OffsetDateTime updated) {
     this.updated = updated;
   }
 
   /**
-   * Set the username for the user who last updated the workflow note.
+   * Set the username for the user who last updated the document note.
    *
-   * @param updatedBy the username for the user who last updated the workflow note
+   * @param updatedBy the username for the user who last updated the document note
    */
   public void setUpdatedBy(String updatedBy) {
     this.updatedBy = updatedBy;
-  }
-
-  /**
-   * Set the ID for the workflow the workflow note is associated with.
-   *
-   * @param workflowId the ID for the workflow the workflow note is associated with
-   */
-  public void setWorkflowId(UUID workflowId) {
-    this.workflowId = workflowId;
   }
 }

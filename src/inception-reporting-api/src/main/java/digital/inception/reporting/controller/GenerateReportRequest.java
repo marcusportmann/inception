@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.reporting.model.ReportParameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -43,11 +45,14 @@ public class GenerateReportRequest implements Serializable {
       description = "The ID for the report definition",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
   private String reportDefinitionId;
 
   /** The report parameters. */
   @Schema(description = "The report parameters", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
+  @NotNull
   private List<ReportParameter> reportParameters;
 
   /** Constructs a new {@code GenerateReportRequest}. */

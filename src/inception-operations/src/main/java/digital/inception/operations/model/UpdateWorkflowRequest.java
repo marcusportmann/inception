@@ -39,12 +39,12 @@ import java.util.UUID;
  */
 @Schema(description = "A request to update a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "status", "data"})
+@JsonPropertyOrder({"workflowId", "status", "data"})
 @XmlRootElement(name = "UpdateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "UpdateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "status", "data"})
+    propOrder = {"workflowId", "status", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidUpdateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -59,18 +59,18 @@ public class UpdateWorkflowRequest implements Serializable {
   @Size(min = 1, max = 10485760)
   private String data;
 
-  /** The ID for the workflow. */
-  @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  private UUID id;
-
   /** The updated status of the workflow. */
   @Schema(description = "The updated status of the workflow")
   @JsonProperty
   @XmlElement(name = "Status")
   private WorkflowStatus status;
+
+  /** The ID for the workflow. */
+  @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "WorkflowId", required = true)
+  @NotNull
+  private UUID workflowId;
 
   /** Constructs a new {@code UpdateWorkflowRequest}. */
   public UpdateWorkflowRequest() {}
@@ -78,34 +78,34 @@ public class UpdateWorkflowRequest implements Serializable {
   /**
    * Constructs a new {@code UpdateWorkflowRequest}.
    *
-   * @param id the ID for the workflow
+   * @param workflowId the ID for the workflow
    * @param data the updated data for the workflow
    */
-  public UpdateWorkflowRequest(UUID id, String data) {
-    this.id = id;
+  public UpdateWorkflowRequest(UUID workflowId, String data) {
+    this.workflowId = workflowId;
     this.data = data;
   }
 
   /**
    * Constructs a new {@code UpdateWorkflowRequest}.
    *
-   * @param id the ID for the workflow
+   * @param workflowId the ID for the workflow
    * @param status the updated status of the workflow
    */
-  public UpdateWorkflowRequest(UUID id, WorkflowStatus status) {
-    this.id = id;
+  public UpdateWorkflowRequest(UUID workflowId, WorkflowStatus status) {
+    this.workflowId = workflowId;
     this.status = status;
   }
 
   /**
    * Constructs a new {@code UpdateWorkflowRequest}.
    *
-   * @param id the ID for the workflow
+   * @param workflowId the ID for the workflow
    * @param status the updated status of the workflow
    * @param data the updated data for the workflow
    */
-  public UpdateWorkflowRequest(UUID id, WorkflowStatus status, String data) {
-    this.id = id;
+  public UpdateWorkflowRequest(UUID workflowId, WorkflowStatus status, String data) {
+    this.workflowId = workflowId;
     this.status = status;
     this.data = data;
   }
@@ -120,21 +120,21 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the ID for the workflow.
-   *
-   * @return the ID for the workflow
-   */
-  public UUID getId() {
-    return id;
-  }
-
-  /**
    * Returns the updated status of the workflow.
    *
    * @return the updated status of the workflow
    */
   public WorkflowStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Returns the ID for the workflow.
+   *
+   * @return the ID for the workflow
+   */
+  public UUID getWorkflowId() {
+    return workflowId;
   }
 
   /**
@@ -147,20 +147,20 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
-   *
-   * @param id the ID for the workflow
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
    * Set the updated status of the workflow.
    *
    * @param status the updated status of the workflow
    */
   public void setStatus(WorkflowStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Set the ID for the workflow.
+   *
+   * @param workflowId the ID for the workflow
+   */
+  public void setWorkflowId(UUID workflowId) {
+    this.workflowId = workflowId;
   }
 }

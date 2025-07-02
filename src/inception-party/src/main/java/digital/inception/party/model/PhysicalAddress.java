@@ -218,9 +218,10 @@ public class PhysicalAddress implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Country", required = true)
+  @NotNull
   @Size(min = 2, max = 2)
   @ValidCountryCode
-  @Column(name = "country", length = 2)
+  @Column(name = "country", length = 2, nullable = false)
   private String country;
 
   /** The farm description for the physical address. */
@@ -353,11 +354,12 @@ public class PhysicalAddress implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "PostalCode", required = true)
+  @NotNull
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.PostalCode.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
-  @Column(name = "postal_code", length = 50)
+  @Column(name = "postal_code", length = 50, nullable = false)
   private String postalCode;
 
   /** The codes for the physical address purposes. */

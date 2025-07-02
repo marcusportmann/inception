@@ -92,8 +92,7 @@ public interface WorkflowDefinitionRepository
       value =
           "select * from operations_workflow_definitions wd where wd.id = :workflowDefinitionId order by wd.version desc limit 1",
       nativeQuery = true)
-  Optional<WorkflowDefinition> findLatestVersionById(
-      @Param("workflowDefinitionId") String workflowDefinitionId);
+  Optional<WorkflowDefinition> findLatestVersionById(@Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
    * Retrieve the next version of the workflow definition with the specified ID.
@@ -101,8 +100,6 @@ public interface WorkflowDefinitionRepository
    * @param workflowDefinitionId the ID for the workflow definition
    * @return the next version of the workflow definition with the specified ID
    */
-  @Query(
-      "select coalesce(max(wd.version), 0) + 1 from WorkflowDefinition wd "
-          + "where wd.id = :workflowDefinitionId")
+  @Query("select coalesce(max(wd.version), 0) + 1 from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
   Integer getNextVersionById(@Param("workflowDefinitionId") String workflowDefinitionId);
 }

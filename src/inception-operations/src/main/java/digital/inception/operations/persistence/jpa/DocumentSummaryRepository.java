@@ -19,6 +19,7 @@ package digital.inception.operations.persistence.jpa;
 import digital.inception.operations.model.DocumentSummary;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * The {@code DocumentSummaryRepository} interface declares the persistence for the {@code
@@ -26,4 +27,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface DocumentSummaryRepository extends JpaRepository<DocumentSummary, UUID> {}
+public interface DocumentSummaryRepository
+    extends JpaRepository<DocumentSummary, UUID>, JpaSpecificationExecutor<DocumentSummary> {}

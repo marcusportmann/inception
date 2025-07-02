@@ -19,20 +19,30 @@ package digital.inception.operations.service;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
+import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentNote;
+import digital.inception.operations.model.DocumentNoteSortBy;
+import digital.inception.operations.model.DocumentNotes;
+import digital.inception.operations.model.DocumentSortBy;
+import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
 import digital.inception.operations.store.DocumentStore;
 import java.security.MessageDigest;
+import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -181,6 +191,47 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public DocumentNote createDocumentNote(
+      UUID tenantId, CreateDocumentNoteRequest createDocumentNoteRequest, String createdBy)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("createDocumentNoteRequest", createDocumentNoteRequest);
+
+    if (!StringUtils.hasText(createdBy)) {
+      throw new InvalidArgumentException("createdBy");
+    }
+
+    try {
+      if (!documentExists(tenantId, createDocumentNoteRequest.getDocumentId())) {
+        throw new DocumentNotFoundException(createDocumentNoteRequest.getDocumentId());
+      }
+
+      DocumentNote documentNote =
+          new DocumentNote(
+              tenantId,
+              createDocumentNoteRequest.getDocumentId(),
+              createDocumentNoteRequest.getContent(),
+              OffsetDateTime.now(),
+              createdBy);
+
+      return documentStore.createDocumentNote(tenantId, documentNote);
+    } catch (DocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document note for the document ("
+              + createDocumentNoteRequest.getDocumentId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void deleteDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -244,6 +295,32 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public void deleteDocumentNote(UUID tenantId, UUID documentNoteId)
+      throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (documentNoteId == null) {
+      throw new InvalidArgumentException("documentNoteId");
+    }
+    
+    try {
+      documentStore.deleteDocumentNote(tenantId, documentNoteId);
+    } catch (DocumentNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document note ("
+              + documentNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public boolean documentDefinitionExists(String documentDefinitionId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(documentDefinitionId)) {
@@ -255,6 +332,21 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to check whether the document definition (" + documentDefinitionId + ") exists",
+          e);
+    }
+  }
+
+  @Override
+  public boolean documentExists(UUID tenantId, UUID documentId) throws ServiceUnavailableException {
+    try {
+      return documentStore.documentExists(tenantId, documentId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the document ("
+              + documentId
+              + ") exists for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
@@ -375,7 +467,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("updateDocumentRequest", updateDocumentRequest);
 
     try {
-      Document document = documentStore.getDocument(tenantId, updateDocumentRequest.getId());
+      Document document = documentStore.getDocument(tenantId, updateDocumentRequest.getDocumentId());
 
       document.setData(updateDocumentRequest.getData());
       document.setExpiryDate(updateDocumentRequest.getExpiryDate());
@@ -391,7 +483,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to update the document ("
-              + updateDocumentRequest.getId()
+              + updateDocumentRequest.getDocumentId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -441,6 +533,98 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
           "Failed to update the document definition category ("
               + documentDefinitionCategory.getId()
               + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentNote updateDocumentNote(UUID tenantId,
+      UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
+      throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("updateDocumentNoteRequest", updateDocumentNoteRequest);
+
+    try {
+      DocumentNote documentNote = documentStore.getDocumentNote(tenantId, updateDocumentNoteRequest.getDocumentNoteId());
+
+      documentNote.setContent(updateDocumentNoteRequest.getContent());
+      documentNote.setUpdated(OffsetDateTime.now());
+      documentNote.setUpdatedBy(updatedBy);
+
+      return documentStore.updateDocumentNote(tenantId, documentNote);
+    } catch (DocumentNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the document note ("
+              + updateDocumentNoteRequest.getDocumentNoteId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentNotes getDocumentNotes(UUID tenantId, UUID documentId, String filter,
+      DocumentNoteSortBy sortBy, SortDirection sortDirection, Integer pageIndex, Integer pageSize,
+      int maxResults)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (documentId == null) {
+      throw new InvalidArgumentException("documentId");
+    }
+
+    try {
+      return documentStore.getDocumentNotes(tenantId, documentId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+    } catch (DocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered document notes for the document ("
+              + documentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentSummaries getDocumentSummaries(UUID tenantId, String filter, DocumentSortBy sortBy,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize, int maxResults)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = DocumentSortBy.DEFINITION_ID;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.DESCENDING;
+    }
+
+    try {
+      return documentStore.getDocumentSummaries(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
           e);
     }
   }

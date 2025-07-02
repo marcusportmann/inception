@@ -36,19 +36,19 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   /**
    * Delete the config with the specified ID.
    *
-   * @param id the ID for the config
+   * @param configId the ID for the config
    */
   @Transactional
   @Modifying
-  void deleteByIdIgnoreCase(String id);
+  void deleteByIdIgnoreCase(String configId);
 
   /**
    * Check whether the config exists.
    *
-   * @param id the ID for the config
+   * @param configId the ID for the config
    * @return {@code true} if the config exists or {@code false} otherwise
    */
-  boolean existsByIdIgnoreCase(String id);
+  boolean existsByIdIgnoreCase(String configId);
 
   /**
    * Retrieve all the configs ordered by ID ascending.
@@ -60,10 +60,10 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   /**
    * Retrieve the config.
    *
-   * @param id the ID for the config
+   * @param configId the ID for the config
    * @return an Optional containing the config or an empty Optional if the config could not be found
    */
-  Optional<Config> findByIdIgnoreCase(String id);
+  Optional<Config> findByIdIgnoreCase(String configId);
 
   /**
    * Retrieve the filtered configs.
@@ -76,10 +76,10 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   /**
    * Retrieve the value for the config.
    *
-   * @param id the ID for the config
+   * @param configId the ID for the config
    * @return an Optional containing the value for the config or an empty Optional if the config
    *     could not be found
    */
-  @Query("select c.value from Config c where lower(c.id) = lower(:id)")
-  Optional<String> getValueByIdIgnoreCase(@Param("id") String id);
+  @Query("select c.value from Config c where lower(c.id) = lower(:configId)")
+  Optional<String> getValueByIdIgnoreCase(@Param("configId") String configId);
 }

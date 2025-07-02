@@ -103,9 +103,10 @@ public class DocumentDefinition implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "RequiredDocumentAttributes", required = true)
   @XmlElement(name = "RequiredDocumentAttribute", required = true)
+  @NotNull
   @Size(max = 10)
   @Convert(converter = RequiredDocumentAttributeListAttributeConverter.class)
-  @Column(name = "required_document_attributes", length = 510)
+  @Column(name = "required_document_attributes", length = 510, nullable = false)
   private List<RequiredDocumentAttribute> requiredDocumentAttributes;
 
   /** The ID for the tenant the document definition is specific to. */

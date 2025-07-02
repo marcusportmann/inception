@@ -36,6 +36,7 @@ import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.RequiredDocumentAttribute;
+import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
@@ -225,6 +226,45 @@ public class DocumentServiceTests {
 
     compareDocuments(document, retrievedDocument);
 
+    UpdateDocumentRequest updateDocumentRequest = getUpdateDocumentRequest(document);
+
+    documentService.updateDocument(TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest);
+
+    retrievedDocument = documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
+
+    assertArrayEquals(
+        updateDocumentRequest.getData(),
+        retrievedDocument.getData(),
+        "Invalid value for the \"data\" document property");
+    assertEquals(
+        updateDocumentRequest.getExpiryDate(),
+        retrievedDocument.getExpiryDate(),
+        "Invalid value for the \"expiryDate\" document property");
+    assertEquals(
+        updateDocumentRequest.getExternalReference(),
+        retrievedDocument.getExternalReference(),
+        "Invalid value for the \"externalReference\" document property");
+    assertEquals(
+        updateDocumentRequest.getFileType(),
+        retrievedDocument.getFileType(),
+        "Invalid value for the \"fileType\" document property");
+    assertEquals(
+        updateDocumentRequest.getDocumentId(),
+        retrievedDocument.getId(),
+        "Invalid value for the \"id\" document property");
+    assertEquals(
+        updateDocumentRequest.getIssueDate(),
+        retrievedDocument.getIssueDate(),
+        "Invalid value for the \"issueDate\" document property");
+    assertEquals(
+        updateDocumentRequest.getName(),
+        retrievedDocument.getName(),
+        "Invalid value for the \"name\" document property");
+    assertEquals(
+        updateDocumentRequest.getSourceDocumentId(),
+        retrievedDocument.getSourceDocumentId(),
+        "Invalid value for the \"sourceDocumentId\" document property");
+
     documentService.deleteDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
 
     assertThrows(
@@ -243,7 +283,8 @@ public class DocumentServiceTests {
           documentService.getDocumentDefinition(sharedDocumentDefinition.getId());
         });
 
-    sharedDocumentDefinitionCategory.setName("Updated Test Shared Document Definition Category");
+    sharedDocumentDefinitionCategory.setName(
+        "Updated " + sharedDocumentDefinitionCategory.getName());
     sharedDocumentDefinitionCategory.setTenantId(TenantUtil.DEFAULT_TENANT_ID);
 
     documentService.updateDocumentDefinitionCategory(sharedDocumentDefinitionCategory);
@@ -365,6 +406,24 @@ public class DocumentServiceTests {
     createDocumentRequest.setSourceDocumentId(null);
 
     return createDocumentRequest;
+  }
+
+  private UpdateDocumentRequest getUpdateDocumentRequest(Document document) {
+    byte[] data =
+        "<html><body>This is some HTML test data.</body></html>".getBytes(StandardCharsets.UTF_8);
+
+    UpdateDocumentRequest updateDocumentRequest = new UpdateDocumentRequest();
+
+    updateDocumentRequest.setData(data);
+    updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
+    updateDocumentRequest.setExternalReference(UUID.randomUUID().toString());
+    updateDocumentRequest.setFileType(FileType.HTML);
+    updateDocumentRequest.setDocumentId(document.getId());
+    updateDocumentRequest.setIssueDate(LocalDate.of(2017, 8, 17));
+    updateDocumentRequest.setName("test.html");
+    updateDocumentRequest.setSourceDocumentId(UUID.randomUUID());
+
+    return updateDocumentRequest;
   }
 
   private String randomId() {
