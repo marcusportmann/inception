@@ -32,9 +32,9 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "InteractionSortBy", namespace = "https://inception.digital/operations")
 public enum InteractionSortBy implements CodeEnum {
-  /** Sort by timestamp. */
-  @XmlEnumValue("Timestamp")
-  TIMESTAMP("timestamp", "Sort By Timestamp");
+  /** Sort by occurred. */
+  @XmlEnumValue("Occurred")
+  OCCURRED("occurred", "Sort By Occurred");
 
   private final String code;
 

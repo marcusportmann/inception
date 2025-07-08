@@ -61,6 +61,7 @@ public interface WorkflowStore {
    *
    * @param tenantId the ID for the tenant
    * @param workflowNote the workflow note
+   * @return the workflow note
    * @throws DuplicateWorkflowNoteException if the workflow note already exists
    * @throws ServiceUnavailableException if the workflow note could not be created
    */
@@ -169,7 +170,7 @@ public interface WorkflowStore {
    *
    * @param tenantId the ID for the tenant
    * @param workflow the workflow
-   * @return the workflow
+   * @return the updated workflow
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws ServiceUnavailableException if the workflow could not be updated
    */
@@ -181,6 +182,7 @@ public interface WorkflowStore {
    *
    * @param tenantId the ID for the tenant
    * @param workflowNote the workflow note
+   * @return the updated workflow note
    * @throws WorkflowNoteNotFoundException if the workflow note could not be found
    * @throws ServiceUnavailableException if the workflow note could not be updated
    */

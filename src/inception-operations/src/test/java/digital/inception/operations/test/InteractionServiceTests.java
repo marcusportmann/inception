@@ -67,6 +67,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.util.ByteArrayDataSource;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -118,7 +119,8 @@ public class InteractionServiceTests {
 
   private static final String TO_USERNAME = "service@fitlife.com";
 
-  private static int emailCount;
+  /** The secure random number generator. */
+  private static final SecureRandom secureRandom = new SecureRandom();
 
   /** The Background Interaction Processor. */
   @Autowired private BackgroundInteractionProcessor backgroundInteractionProcessor;
@@ -198,6 +200,64 @@ public class InteractionServiceTests {
     store.close();
   }
 
+  /** Test the interaction functionality. */
+  @Test
+  public void interactionTest() throws Exception {
+    InteractionSource interactionSource = InteractionSource.createVirtualInteractionSource(
+        UUID.randomUUID(),
+        TenantUtil.DEFAULT_TENANT_ID,
+        "Virtual Interaction Source " + randomId());
+
+    interactionService.createInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource);
+
+    InteractionSource retrievedInteractionSource = interactionService.getInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId()) ;
+
+    compareInteractionSources(interactionSource, retrievedInteractionSource);
+
+    Interaction interaction = new Interaction(UUID.randomUUID(),
+        TenantUtil.DEFAULT_TENANT_ID,
+        interactionSource.getId(),
+        InteractionType.OTHER,
+       "test_sender",
+        List.of("test_recipient"),
+        "Test subject " + randomId(),
+        "This is the test content.",
+        InteractionMimeType.TEXT_PLAIN,
+        InteractionStatus.AVAILABLE);
+
+    interactionService.createInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction);
+
+    Interaction retrievedInteraction = interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
+
+    compareInteractions(interaction, retrievedInteraction);
+
+    interactionService.deleteInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getId());
+
+    assertThrows(
+        InteractionNotFoundException.class,
+        () -> {
+          interactionService.getInteraction(
+              TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
+        });
+
+    interactionSource.setName("Updated " + interactionSource.getName());
+
+    interactionService.updateInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource);
+
+    retrievedInteractionSource = interactionService.getInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
+
+    compareInteractionSources(interactionSource, retrievedInteractionSource);
+
+    interactionService.deleteInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
+
+    assertThrows(
+        InteractionSourceNotFoundException.class,
+        () -> {
+          interactionService.getInteractionSource(
+              TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
+        });
+  }
+
   /** Test the mailbox interaction source functionality. */
   @Test
   public void mailboxInteractionSourceTest() throws Exception {
@@ -215,6 +275,13 @@ public class InteractionServiceTests {
     compareInteractionSources(mailboxInteractionSource, retrievedInteractionSource);
 
     List<InteractionSource> retrievedInteractionSources =
+        interactionService.getInteractionSources(TenantUtil.DEFAULT_TENANT_ID);
+
+    assertEquals(1, retrievedInteractionSources.size());
+
+    compareInteractionSources(mailboxInteractionSource, retrievedInteractionSources.getFirst());
+
+    retrievedInteractionSources =
         interactionService.getInteractionSources(
             TenantUtil.DEFAULT_TENANT_ID, InteractionSourceType.MAILBOX);
 
@@ -258,11 +325,6 @@ public class InteractionServiceTests {
 
     assertEquals(0, numberOfNewInteractions);
 
-    Integer numberOfInteractionsProcessed =
-        backgroundInteractionProcessor.processInteractions().block();
-
-    assertEquals(1, numberOfInteractionsProcessed);
-
     waitForInteractionToProcess(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
 
     retrievedInteractionSummaries =
@@ -271,7 +333,7 @@ public class InteractionServiceTests {
             mailboxInteractionSource.getId(),
             InteractionStatus.AVAILABLE,
             "test",
-            InteractionSortBy.TIMESTAMP,
+            InteractionSortBy.OCCURRED,
             SortDirection.ASCENDING,
             0,
             10);
@@ -284,7 +346,7 @@ public class InteractionServiceTests {
             mailboxInteractionSource.getId(),
             InteractionStatus.AVAILABLE,
             "bob",
-            InteractionSortBy.TIMESTAMP,
+            InteractionSortBy.OCCURRED,
             SortDirection.ASCENDING,
             0,
             10);
@@ -297,7 +359,7 @@ public class InteractionServiceTests {
             mailboxInteractionSource.getId(),
             InteractionStatus.AVAILABLE,
             "xxx",
-            InteractionSortBy.TIMESTAMP,
+            InteractionSortBy.OCCURRED,
             SortDirection.ASCENDING,
             0,
             10);
@@ -370,12 +432,14 @@ public class InteractionServiceTests {
         retrievedInteraction.getTenantId(),
         "Invalid value for the \"tenantId\" interaction property");
     assertNotNull(
-        retrievedInteraction.getTimestamp(),
-        "Invalid value for the \"timestamp\" interaction property");
+        retrievedInteraction.getOccurred(),
+        "Invalid value for the \"occurred\" interaction property");
     assertEquals(
         InteractionType.EMAIL,
         retrievedInteraction.getType(),
         "Invalid value for the \"type\" interaction property");
+
+    assertTrue(interactionService.interactionExistsWithSourceIdAndSourceReference(TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getSourceId(), retrievedInteraction.getSourceReference()));
 
     InteractionAttachmentSummaries retrievedInteractionAttachmentSummaries =
         interactionService.getInteractionAttachmentSummaries(
@@ -432,6 +496,11 @@ public class InteractionServiceTests {
         TenantUtil.DEFAULT_TENANT_ID,
         retrievedInteractionAttachment.getTenantId(),
         "Invalid value for the \"tenantId\" interaction attachment property");
+
+    assertTrue(interactionService.interactionAttachmentExistsWithInteractionIdAndHash(
+        TenantUtil.DEFAULT_TENANT_ID,
+        retrievedInteraction.getId(),
+        retrievedInteractionAttachment.getHash()));
 
     interactionService.deleteInteractionAttachment(
         TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
@@ -531,7 +600,7 @@ public class InteractionServiceTests {
       greenMail = new GreenMail(ServerSetupTest.SMTP_IMAP);
     }
 
-    GreenMailUser toUser = greenMail.setUser(TO_EMAIL_ADDRESS, TO_USERNAME, TO_PASSWORD);
+    GreenMailUser greenMailUser = greenMail.setUser(TO_EMAIL_ADDRESS, TO_USERNAME, TO_PASSWORD);
 
     greenMail.start();
   }
@@ -543,33 +612,33 @@ public class InteractionServiceTests {
   }
 
   private void compareInteractionSources(
-      InteractionSource mailboxInteractionSource1, InteractionSource mailboxInteractionSource2) {
+      InteractionSource interactionSource1, InteractionSource interactionSource2) {
     assertEquals(
-        mailboxInteractionSource1.getId(),
-        mailboxInteractionSource2.getId(),
+        interactionSource1.getId(),
+        interactionSource2.getId(),
         "The ID values for the interaction sources do not match");
     assertEquals(
-        mailboxInteractionSource1.getTenantId(),
-        mailboxInteractionSource2.getTenantId(),
+        interactionSource1.getTenantId(),
+        interactionSource2.getTenantId(),
         "The Tenant ID values for the interaction sources do not match");
     assertEquals(
-        mailboxInteractionSource1.getType(),
-        mailboxInteractionSource2.getType(),
+        interactionSource1.getType(),
+        interactionSource2.getType(),
         "The type values for the interaction sources do not match");
     assertEquals(
-        mailboxInteractionSource1.getName(),
-        mailboxInteractionSource2.getName(),
+        interactionSource1.getName(),
+        interactionSource2.getName(),
         "The name values for the interaction sources do not match");
     assertEquals(
-        mailboxInteractionSource1.getAttributes().size(),
-        mailboxInteractionSource2.getAttributes().size(),
+        interactionSource1.getAttributes().size(),
+        interactionSource2.getAttributes().size(),
         "The number of attributes for the interaction sources do not match");
 
     for (InteractionSourceAttribute interactionSourceAttribute1 :
-        mailboxInteractionSource1.getAttributes()) {
+        interactionSource1.getAttributes()) {
       boolean foundInteractionSourceAttribute = false;
       for (InteractionSourceAttribute interactionSourceAttribute2 :
-          mailboxInteractionSource2.getAttributes()) {
+          interactionSource2.getAttributes()) {
         if (Objects.equals(
             interactionSourceAttribute1.getName(), interactionSourceAttribute2.getName())) {
           foundInteractionSourceAttribute = true;
@@ -593,6 +662,98 @@ public class InteractionServiceTests {
                 + "\" attributes for the interaction sources do not match");
       }
     }
+  }
+
+  private void compareInteractions(
+      Interaction interaction1, Interaction interaction2) {
+    assertEquals(
+        interaction1.getAssigned(),
+        interaction2.getAssigned(),
+        "The assigned values for the interactions do not match");
+    assertEquals(
+        interaction1.getAssignedTo(),
+        interaction2.getAssignedTo(),
+        "The assigned to values for the interactions do not match");
+    assertEquals(
+        interaction1.getContent(),
+        interaction2.getContent(),
+        "The content values for the interactions do not match");
+    assertEquals(
+        interaction1.getConversationId(),
+        interaction2.getConversationId(),
+        "The conversation ID values for the interactions do not match");
+    assertEquals(
+        interaction1.getId(),
+        interaction2.getId(),
+        "The ID values for the interactions do not match");
+    assertEquals(
+        interaction1.getLastProcessed(),
+        interaction2.getLastProcessed(),
+        "The last processed values for the interactions do not match");
+    assertEquals(
+        interaction1.getLockName(),
+        interaction2.getLockName(),
+        "The lock name values for the interactions do not match");
+    assertEquals(
+        interaction1.getLocked(),
+        interaction2.getLocked(),
+        "The locked values for the interactions do not match");
+    assertEquals(
+        interaction1.getMimeType(),
+        interaction2.getMimeType(),
+        "The mime type values for the interactions do not match");
+    assertEquals(
+        interaction1.getPartyId(),
+        interaction2.getPartyId(),
+        "The party ID values for the interactions do not match");
+    assertEquals(
+        interaction1.getProcessed(),
+        interaction2.getProcessed(),
+        "The processed values for the interactions do not match");
+    assertEquals(
+        interaction1.getProcessingAttempts(),
+        interaction2.getProcessingAttempts(),
+        "The processing attempts values for the interactions do not match");
+    assertEquals(
+        interaction1.getProcessingTime(),
+        interaction2.getProcessingTime(),
+        "The processing time values for the interactions do not match");
+    assertEquals(
+        interaction1.getRecipients().size(),
+        interaction2.getRecipients().size(),
+        "The recipients values for the interactions do not match");
+    assertEquals(
+        interaction1.getSender(),
+        interaction2.getSender(),
+        "The sender values for the interactions do not match");
+    assertEquals(
+        interaction1.getSourceId(),
+        interaction2.getSourceId(),
+        "The source ID values for the interactions do not match");
+    assertEquals(
+        interaction1.getSourceReference(),
+        interaction2.getSourceReference(),
+        "The source reference values for the interactions do not match");
+    assertEquals(
+        interaction1.getStatus(),
+        interaction2.getStatus(),
+        "The status values for the interactions do not match");
+    assertEquals(
+        interaction1.getSubject(),
+        interaction2.getSubject(),
+        "The subject values for the interactions do not match");
+    assertEquals(
+        interaction1.getTenantId(),
+        interaction2.getTenantId(),
+        "The tenant ID values for the interactions do not match");
+    assertEquals(
+        interaction1.getOccurred(),
+        interaction2.getOccurred(),
+        "The occurred values for the interactions do not match");
+    assertEquals(
+        interaction1.getType(),
+        interaction2.getType(),
+        "The type values for the interactions do not match");
   }
 
   private InteractionSource getFitLifeCustomerServiceMailboxInteractionSource() {
@@ -782,6 +943,10 @@ public class InteractionServiceTests {
     message.setContent(mixedMultipart);
 
     return message;
+  }
+
+  private String randomId() {
+    return String.format("%04X", secureRandom.nextInt(0x10000));
   }
 
   private void waitForInteractionToProcess(UUID tenantId, UUID interactionId) throws Exception {

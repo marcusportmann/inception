@@ -104,6 +104,7 @@ public interface DocumentService {
    * @param tenantId the ID for the tenant
    * @param createDocumentNoteRequest the request to create a document note
    * @param createdBy the username for the user creating the document note
+   * @return the document note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document note could not be created
@@ -366,6 +367,7 @@ public interface DocumentService {
    * @param tenantId the ID for the tenant
    * @param updateDocumentNoteRequest the request to update a document note
    * @param updatedBy the username for the user updating the document note
+   * @return the updated document note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNoteNotFoundException if the document note could not be found
    * @throws ServiceUnavailableException if the document note could not be updated

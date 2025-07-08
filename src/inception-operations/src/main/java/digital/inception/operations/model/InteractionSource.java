@@ -205,6 +205,19 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Constructs a new virtual {@code InteractionSource}.
+   *
+   * @param id the ID for the virtual interaction source
+   * @param tenantId the ID for the tenant the virtual interaction source is associated with
+   * @param name the name of the virtual interaction source
+   * @return the virtual {@code InteractionSource}
+   */
+  public static InteractionSource createVirtualInteractionSource(
+      UUID id, UUID tenantId, String name) {
+    return new InteractionSource(id, tenantId, InteractionSourceType.VIRTUAL, name, List.of());
+  }
+
+  /**
    * Constructs a new WhatsApp {@code InteractionSource}.
    *
    * @param id the ID for the WhatsApp interaction source

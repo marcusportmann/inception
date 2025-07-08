@@ -21,7 +21,7 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
-import digital.inception.operations.exception.DuplicateWorkflowDefinitionException;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
@@ -148,23 +148,28 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   @Override
   public void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
-          DuplicateWorkflowDefinitionException,
+          DuplicateWorkflowDefinitionVersionException,
           ServiceUnavailableException {
     validateArgument("workflowDefinition", workflowDefinition);
 
     try {
-      if (workflowDefinitionRepository.existsById(workflowDefinition.getId())) {
-        throw new DuplicateWorkflowDefinitionException(workflowDefinition.getId());
+      if (workflowDefinitionRepository.existsByIdAndVersion(
+          workflowDefinition.getId(), workflowDefinition.getVersion())) {
+        throw new DuplicateWorkflowDefinitionVersionException(
+            workflowDefinition.getId(), workflowDefinition.getVersion());
       }
 
-      workflowDefinition.setVersion(1);
-
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
-    } catch (DuplicateWorkflowDefinitionException e) {
+    } catch (DuplicateWorkflowDefinitionVersionException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the workflow definition (" + workflowDefinition.getId() + ")", e);
+          "Failed to create the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ")",
+          e);
     }
   }
 
@@ -726,24 +731,28 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   @Override
   public void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
-          WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
     validateArgument("workflowDefinition", workflowDefinition);
 
     try {
-      if (!workflowDefinitionRepository.existsById(workflowDefinition.getId())) {
-        throw new WorkflowDefinitionNotFoundException(workflowDefinition.getId());
+      if (!workflowDefinitionRepository.existsByIdAndVersion(
+          workflowDefinition.getId(), workflowDefinition.getVersion())) {
+        throw new WorkflowDefinitionVersionNotFoundException(
+            workflowDefinition.getId(), workflowDefinition.getVersion());
       }
 
-      workflowDefinition.setVersion(
-          workflowDefinitionRepository.getNextVersionById(workflowDefinition.getId()));
-
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
-    } catch (WorkflowDefinitionNotFoundException e) {
+    } catch (WorkflowDefinitionVersionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the workflow definition (" + workflowDefinition.getId() + ")", e);
+          "Failed to update the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ")",
+          e);
     }
   }
 

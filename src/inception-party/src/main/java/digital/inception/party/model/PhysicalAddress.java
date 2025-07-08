@@ -218,7 +218,6 @@ public class PhysicalAddress implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Country", required = true)
-  @NotNull
   @Size(min = 2, max = 2)
   @ValidCountryCode
   @Column(name = "country", length = 2, nullable = false)
@@ -354,7 +353,6 @@ public class PhysicalAddress implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "PostalCode", required = true)
-  @NotNull
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.PostalCode.Pattern.message}",

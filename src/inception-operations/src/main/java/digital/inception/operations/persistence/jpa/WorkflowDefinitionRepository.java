@@ -57,6 +57,21 @@ public interface WorkflowDefinitionRepository
   boolean existsById(@Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
+   * Returns whether a version of the workflow definition with the specified ID and version exists.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return {@code true} if the version of the workflow definition with the specified ID exists or
+   *     {@code false} otherwise
+   */
+  @Query(
+      "select count(wd) > 0 from WorkflowDefinition wd "
+          + "where wd.id = :workflowDefinitionId and wd.version = :workflowDefinitionVersion")
+  boolean existsByIdAndVersion(
+      @Param("workflowDefinitionId") String workflowDefinitionId,
+      @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
+
+  /**
    * Returns the latest versions of all the workflow definitions that are associated with the
    * workflow definition category with the specified ID and either
    *
@@ -80,7 +95,6 @@ public interface WorkflowDefinitionRepository
                 select max(wd2.version)
                   from WorkflowDefinition wd2
                  where wd2.id        = wd.id
-                   and wd2.tenantId  = wd.tenantId
               )
         order by wd.id
        """)

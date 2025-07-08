@@ -543,7 +543,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     if (sortBy == null) {
-      sortBy = InteractionSortBy.TIMESTAMP;
+      sortBy = InteractionSortBy.OCCURRED;
     }
 
     if (sortDirection == null) {
@@ -886,10 +886,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       Date receivedDate = message.getReceivedDate();
 
       if (receivedDate != null) {
-        interaction.setTimestamp(
+        interaction.setOccurred(
             receivedDate.toInstant().atOffset(OffsetDateTime.now().getOffset()));
       } else {
-        interaction.setTimestamp(OffsetDateTime.now());
+        interaction.setOccurred(OffsetDateTime.now());
       }
 
       MimeData messageContent = MessageUtil.getMessageContent(message);

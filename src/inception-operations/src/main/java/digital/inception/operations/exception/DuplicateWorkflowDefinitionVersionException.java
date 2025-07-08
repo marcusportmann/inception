@@ -24,33 +24,40 @@ import jakarta.xml.ws.WebFault;
 import java.io.Serial;
 
 /**
- * The {@code DuplicateWorkflowDefinitionException} exception is thrown to indicate an error
- * condition as a result of an attempt to create a duplicate workflow definition, i.e. a workflow
- * definition with the specified ID already exists.
+ * The {@code DuplicateWorkflowDefinitionVersionException} exception is thrown to indicate an error
+ * condition as a result of an attempt to create a duplicate workflow definition version, i.e. a
+ * workflow definition with the specified ID and version already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "https://inception.digital/problems/operations/duplicate-workflow-definition",
-    title = "A workflow definition with the specified ID already exists.",
+    type = "https://inception.digital/problems/operations/duplicate-workflow-definition-version",
+    title = "A workflow definition with the specified ID and version already exists.",
     status = 409)
 @WebFault(
-    name = "DuplicateWorkflowDefinitionException",
+    name = "DuplicateWorkflowDefinitionVersionException",
     targetNamespace = "https://inception.digital/operations",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class DuplicateWorkflowDefinitionException extends ServiceException {
+public class DuplicateWorkflowDefinitionVersionException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new {@code DuplicateWorkflowDefinitionException}.
+   * Constructs a new {@code DuplicateWorkflowDefinitionVersionException}.
    *
    * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
    */
-  public DuplicateWorkflowDefinitionException(String workflowDefinitionId) {
-    super("The workflow definition (" + workflowDefinitionId + ") already exists");
+  public DuplicateWorkflowDefinitionVersionException(
+      String workflowDefinitionId, int workflowDefinitionVersion) {
+    super(
+        "The workflow definition ("
+            + workflowDefinitionId
+            + ") version ("
+            + workflowDefinitionVersion
+            + ") already exists");
   }
 }

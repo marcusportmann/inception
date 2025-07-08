@@ -36,6 +36,10 @@ public enum InteractionType implements CodeEnum {
   @XmlEnumValue("Email")
   EMAIL("email", "Email"),
 
+  /** Other. */
+  @XmlEnumValue("Other")
+  OTHER("other", "Other"),
+
   /** SMS. */
   @XmlEnumValue("SMS")
   SMS("sms", "SMS"),

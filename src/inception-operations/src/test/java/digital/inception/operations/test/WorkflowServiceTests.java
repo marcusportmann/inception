@@ -18,27 +18,40 @@ package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.time.TimeUnit;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
+import digital.inception.operations.exception.WorkflowEngineNotFoundException;
+import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.RequiredDocumentAttribute;
+import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
+import digital.inception.operations.model.WorkflowNote;
+import digital.inception.operations.model.WorkflowNoteSortBy;
+import digital.inception.operations.model.WorkflowNotes;
+import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowSummaries;
+import digital.inception.operations.model.WorkflowSummary;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.WorkflowService;
 import digital.inception.test.InceptionExtension;
@@ -133,7 +146,7 @@ public class WorkflowServiceTests {
         new TestWorkflowData(
             UUID.randomUUID(),
             "This is name " + randomId(),
-            LocalDate.of(1976, 03, 07),
+            LocalDate.of(1976, 3, 7),
             new BigDecimal("1234.56"),
             OffsetDateTime.now());
 
@@ -151,6 +164,50 @@ public class WorkflowServiceTests {
 
     compareWorkflows(workflow, retrievedWorkflow);
 
+    WorkflowSummaries workflowSummaries =
+        workflowService.getWorkflowSummaries(
+            TenantUtil.DEFAULT_TENANT_ID,
+            WorkflowStatus.IN_PROGRESS,
+            workflow.getDefinitionId(),
+            WorkflowSortBy.DEFINITION_ID,
+            SortDirection.ASCENDING,
+            0,
+            10,
+            100);
+
+    assertEquals(1, workflowSummaries.getTotal());
+
+    WorkflowSummary workflowSummary = workflowSummaries.getWorkflowSummaries().getFirst();
+
+    assertEquals(
+        retrievedWorkflow.getDefinitionId(),
+        workflowSummary.getDefinitionId(),
+        "Invalid value for the \"definitionId\" workflow summary property");
+    assertEquals(
+        retrievedWorkflow.getDefinitionVersion(),
+        workflowSummary.getDefinitionVersion(),
+        "Invalid value for the \"definitionVersion\" workflow summary property");
+    assertEquals(
+        retrievedWorkflow.getExternalReference(),
+        workflowSummary.getExternalReference(),
+        "Invalid value for the \"externalReference\" workflow summary property");
+    assertEquals(
+        retrievedWorkflow.getId(),
+        workflowSummary.getId(),
+        "Invalid value for the \"id\" workflow summary property");
+    assertEquals(
+        retrievedWorkflow.getParentId(),
+        workflowSummary.getParentId(),
+        "Invalid value for the \"parentId\" workflow summary property");
+    assertEquals(
+        retrievedWorkflow.getStatus(),
+        workflowSummary.getStatus(),
+        "Invalid value for the \"status\" workflow summary property");
+    assertEquals(
+        retrievedWorkflow.getTenantId(),
+        workflowSummary.getTenantId(),
+        "Invalid value for the \"tenantId\" workflow summary property");
+
     testWorkflowData.setName(testWorkflowData.getName() + " Updated");
 
     testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
@@ -158,12 +215,60 @@ public class WorkflowServiceTests {
     UpdateWorkflowRequest updateWorkflowRequest =
         new UpdateWorkflowRequest(workflow.getId(), WorkflowStatus.COMPLETED, testWorkflowDataJson);
 
-    workflowService.updateWorkflow(TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest);
+    Workflow updatedWorkflow =
+        workflowService.updateWorkflow(TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest);
 
     retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
     assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
+
+    CreateWorkflowNoteRequest createWorkflowNoteRequest =
+        new CreateWorkflowNoteRequest(workflow.getId(), "This is the workflow note content.");
+
+    WorkflowNote workflowNote =
+        workflowService.createWorkflowNote(
+            TenantUtil.DEFAULT_TENANT_ID, createWorkflowNoteRequest, "TEST1");
+
+    WorkflowNote retrievedWorkflowNote =
+        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+
+    compareWorkflowNotes(workflowNote, retrievedWorkflowNote);
+
+    UpdateWorkflowNoteRequest updateWorkflowNoteRequest =
+        new UpdateWorkflowNoteRequest(workflowNote.getId(), "This is the workflow note content.");
+
+    WorkflowNote updatedWorkflowNote =
+        workflowService.updateWorkflowNote(
+            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowNoteRequest, "TEST2");
+
+    retrievedWorkflowNote =
+        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, updatedWorkflowNote.getId());
+
+    compareWorkflowNotes(updatedWorkflowNote, retrievedWorkflowNote);
+
+    WorkflowNotes workflowNotes =
+        workflowService.getWorkflowNotes(
+            TenantUtil.DEFAULT_TENANT_ID,
+            workflow.getId(),
+            "TEST2",
+            WorkflowNoteSortBy.CREATED,
+            SortDirection.ASCENDING,
+            0,
+            10,
+            100);
+
+    assertEquals(1, workflowNotes.getTotal());
+
+    compareWorkflowNotes(updatedWorkflowNote, workflowNotes.getWorkflowNotes().getFirst());
+
+    workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+
+    assertThrows(
+        WorkflowNoteNotFoundException.class,
+        () -> {
+          workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+        });
 
     workflowService.deleteWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
@@ -195,6 +300,8 @@ public class WorkflowServiceTests {
             workflowEngineAttributes);
 
     workflowService.createWorkflowEngine(workflowEngine);
+
+    assertTrue(workflowService.workflowEngineExists(workflowEngine.getId()));
 
     WorkflowEngine retrievedWorkflowEngine =
         workflowService.getWorkflowEngine(workflowEngine.getId());
@@ -250,6 +357,9 @@ public class WorkflowServiceTests {
 
     workflowService.createWorkflowDefinitionCategory(sharedWorkflowDefinitionCategory);
 
+    assertTrue(
+        workflowService.workflowDefinitionCategoryExists(sharedWorkflowDefinitionCategory.getId()));
+
     WorkflowDefinitionCategory retrievedWorkflowDefinitionCategory =
         workflowService.getWorkflowDefinitionCategory(sharedWorkflowDefinitionCategory.getId());
 
@@ -295,6 +405,8 @@ public class WorkflowServiceTests {
 
     workflowService.createWorkflowDefinition(sharedWorkflowDefinition);
 
+    assertTrue(workflowService.workflowDefinitionExists(sharedWorkflowDefinition.getId()));
+
     WorkflowDefinition retrievedWorkflowDefinition =
         workflowService.getWorkflowDefinition(sharedWorkflowDefinition.getId());
 
@@ -325,6 +437,7 @@ public class WorkflowServiceTests {
     List<WorkflowDefinition> workflowDefinitions =
         workflowService.getWorkflowDefinitions(
             TenantUtil.DEFAULT_TENANT_ID, sharedWorkflowDefinitionCategory.getId());
+
     assertEquals(1, workflowDefinitions.size());
     assertEquals(sharedWorkflowDefinition.getId(), workflowDefinitions.getFirst().getId());
 
@@ -339,8 +452,29 @@ public class WorkflowServiceTests {
             UUID.randomUUID(), tenantWorkflowDefinitionCategory.getId());
     assertEquals(0, workflowDefinitions.size());
 
+    assertThrows(
+        DuplicateWorkflowDefinitionVersionException.class,
+        () -> {
+          workflowService.createWorkflowDefinition(tenantWorkflowDefinition);
+        });
+
+    tenantWorkflowDefinition.setVersion(tenantWorkflowDefinition.getVersion() + 1);
+    workflowService.createWorkflowDefinition(tenantWorkflowDefinition);
+
+    workflowDefinitions =
+        workflowService.getWorkflowDefinitions(
+            TenantUtil.DEFAULT_TENANT_ID, tenantWorkflowDefinitionCategory.getId());
+
+    assertEquals(1, workflowDefinitions.size());
+    assertEquals(tenantWorkflowDefinition.getId(), workflowDefinitions.getFirst().getId());
+    assertEquals(2, workflowDefinitions.getFirst().getVersion());
+
+    retrievedWorkflowDefinition =
+        workflowService.getWorkflowDefinition(tenantWorkflowDefinition.getId());
+
+    assertEquals(2, retrievedWorkflowDefinition.getVersion());
+
     tenantWorkflowDefinition.setName("Updated Test Tenant Workflow Definition");
-    tenantWorkflowDefinition.setCategoryId(sharedDocumentDefinitionCategory.getId());
     tenantWorkflowDefinition.removeDocumentDefinition(sharedDocumentDefinition.getId());
 
     workflowService.updateWorkflowDefinition(tenantWorkflowDefinition);
@@ -349,6 +483,19 @@ public class WorkflowServiceTests {
         workflowService.getWorkflowDefinition(tenantWorkflowDefinition.getId());
 
     compareWorkflowDefinitions(tenantWorkflowDefinition, retrievedWorkflowDefinition);
+
+    workflowService.deleteWorkflowDefinitionVersion(tenantWorkflowDefinition.getId(), 2);
+
+    retrievedWorkflowDefinition =
+        workflowService.getWorkflowDefinitionVersion(tenantWorkflowDefinition.getId(), 1);
+
+    assertEquals(tenantWorkflowDefinition.getId(), retrievedWorkflowDefinition.getId());
+    assertEquals(1, retrievedWorkflowDefinition.getVersion());
+
+    retrievedWorkflowDefinition =
+        workflowService.getWorkflowDefinition(tenantWorkflowDefinition.getId());
+
+    assertEquals(1, retrievedWorkflowDefinition.getVersion());
 
     workflowService.deleteWorkflowDefinition(tenantWorkflowDefinition.getId());
 
@@ -400,6 +547,28 @@ public class WorkflowServiceTests {
     documentService.deleteDocumentDefinitionCategory(tenantDocumentDefinitionCategory.getId());
 
     documentService.deleteDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
+
+    workflowEngineAttribute =
+        new WorkflowEngineAttribute(
+            "test_workflow_engine_attribute_name_" + randomId(),
+            "test_workflow_engine_attribute_value");
+
+    workflowEngine.addAttribute(workflowEngineAttribute);
+    workflowEngine.setName("Test Workflow Engine Updated");
+
+    workflowService.updateWorkflowEngine(workflowEngine);
+
+    retrievedWorkflowEngine = workflowService.getWorkflowEngine(workflowEngine.getId());
+
+    compareWorkflowEngines(workflowEngine, retrievedWorkflowEngine);
+
+    workflowService.deleteWorkflowEngine(workflowEngine.getId());
+
+    assertThrows(
+        WorkflowEngineNotFoundException.class,
+        () -> {
+          workflowService.deleteWorkflowEngine(workflowEngine.getId());
+        });
   }
 
   private void compareWorkflowDefinitionCategories(
@@ -515,6 +684,33 @@ public class WorkflowServiceTests {
                         + ")");
               }
             });
+  }
+
+  private void compareWorkflowNotes(WorkflowNote workflowNote1, WorkflowNote workflowNote2) {
+    assertEquals(
+        workflowNote1.getId(),
+        workflowNote2.getId(),
+        "The ID values for the workflow notes do not match");
+    assertEquals(
+        workflowNote1.getContent(),
+        workflowNote2.getContent(),
+        "The content values for the workflow notes do not match");
+    assertEquals(
+        workflowNote1.getCreated(),
+        workflowNote2.getCreated(),
+        "The created values for the workflow notes do not match");
+    assertEquals(
+        workflowNote1.getCreatedBy(),
+        workflowNote2.getCreatedBy(),
+        "The created by values for the workflow notes do not match");
+    assertEquals(
+        workflowNote1.getUpdated(),
+        workflowNote2.getUpdated(),
+        "The updated values for the workflow notes do not match");
+    assertEquals(
+        workflowNote1.getUpdatedBy(),
+        workflowNote2.getUpdatedBy(),
+        "The updated by values for the workflow notes do not match");
   }
 
   private void compareWorkflows(Workflow workflow1, Workflow workflow2) {

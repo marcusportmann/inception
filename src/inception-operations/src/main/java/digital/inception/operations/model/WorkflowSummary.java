@@ -77,29 +77,6 @@ public class WorkflowSummary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The date and time the workflow was created. */
-  @Schema(
-      description = "The date and time the workflow was created",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Created", required = true)
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column(name = "created", nullable = false)
-  private OffsetDateTime created;
-
-  /** The person or system that created the workflow. */
-  @Schema(
-      description = "The person or system that created the workflow",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "CreatedBy", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "created_by", length = 100, nullable = false)
-  private String createdBy;
-
   /** The ID for the workflow definition the workflow is associated with. */
   @Schema(
       description = "The ID for the workflow definition the workflow is associated with",
@@ -163,23 +140,6 @@ public class WorkflowSummary implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** The date and time the workflow was last updated. */
-  @Schema(description = "The date and time the workflow was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
-  private OffsetDateTime updated;
-
-  /** The person or system that last updated the workflow. */
-  @Schema(description = "The person or system that last updated the workflow")
-  @JsonProperty
-  @XmlElement(name = "UpdatedBy")
-  @Size(min = 1, max = 100)
-  @Column(name = "updated_by", length = 100)
-  private String updatedBy;
-
   /** Constructs a new {@code WorkflowSummary}. */
   public WorkflowSummary() {}
 
@@ -206,24 +166,6 @@ public class WorkflowSummary implements Serializable {
     WorkflowSummary other = (WorkflowSummary) object;
 
     return Objects.equals(id, other.id);
-  }
-
-  /**
-   * Returns the date and time the workflow was created.
-   *
-   * @return the date and time the workflow was created
-   */
-  public OffsetDateTime getCreated() {
-    return created;
-  }
-
-  /**
-   * Returns the person or system that created the workflow.
-   *
-   * @return the person or system that created the workflow
-   */
-  public String getCreatedBy() {
-    return createdBy;
   }
 
   /**
@@ -287,24 +229,6 @@ public class WorkflowSummary implements Serializable {
    */
   public UUID getTenantId() {
     return tenantId;
-  }
-
-  /**
-   * Returns the date and time the workflow was last updated.
-   *
-   * @return the date and time the workflow was last updated
-   */
-  public OffsetDateTime getUpdated() {
-    return updated;
-  }
-
-  /**
-   * Returns the person or system that last updated the workflow.
-   *
-   * @return the person or system that last updated the workflow
-   */
-  public String getUpdatedBy() {
-    return updatedBy;
   }
 
   /**

@@ -82,21 +82,7 @@ public class ProblemHandler {
     Problem problem =
         AnnotatedElementUtils.findMergedAnnotation(serviceException.getClass(), Problem.class);
 
-    if (problem != null) {
-      problemDetails.setType(problem.type());
-      problemDetails.setTitle(problem.title());
-      problemDetails.setStatus(problem.status());
-      problemDetails.setDetail(serviceException.getMessage());
-
-      if (inDebugMode || verboseErrorHandling) {
-        log.error(
-            "A service error occurred while processing the request: {}",
-            problemDetails,
-            serviceException);
-      } else {
-        log.error("A service error occurred while processing the request: {}", problemDetails);
-      }
-    } else if (serviceException instanceof BusinessException businessException) {
+    if (serviceException instanceof BusinessException businessException) {
       log.error(
           "A business error occurred while processing the request: {}",
           serviceException.getMessage(),
@@ -152,6 +138,20 @@ public class ProblemHandler {
           "An error has occurred and your request could not be processed at this time.");
       problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
       problemDetails.setDetail(serviceException.getMessage());
+    } else if (problem != null) {
+      problemDetails.setType(problem.type());
+      problemDetails.setTitle(problem.title());
+      problemDetails.setStatus(problem.status());
+      problemDetails.setDetail(serviceException.getMessage());
+
+      if (inDebugMode || verboseErrorHandling) {
+        log.error(
+            "A service error occurred while processing the request: {}",
+            problemDetails,
+            serviceException);
+      } else {
+        log.error("A service error occurred while processing the request: {}", problemDetails);
+      }
     } else {
       log.error(
           "An unknown service error with no problem details occurred while processing the request: {}",

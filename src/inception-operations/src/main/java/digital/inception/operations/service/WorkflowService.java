@@ -20,7 +20,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
-import digital.inception.operations.exception.DuplicateWorkflowDefinitionException;
+import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
@@ -69,16 +69,17 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
-   * Create the workflow definition.
+   * Create the version of the workflow definition.
    *
-   * @param workflowDefinition the workflow definition
+   * @param workflowDefinition the version of the workflow definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DuplicateWorkflowDefinitionException if the workflow definition already exists
-   * @throws ServiceUnavailableException if the workflow definition could not be created
+   * @throws DuplicateWorkflowDefinitionVersionException if the workflow definition version already
+   *     exists
+   * @throws ServiceUnavailableException if the workflow definition version could not be created
    */
   void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
-          DuplicateWorkflowDefinitionException,
+          DuplicateWorkflowDefinitionVersionException,
           ServiceUnavailableException;
 
   /**
@@ -114,6 +115,7 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param createWorkflowNoteRequest the request to create a workflow note
    * @param createdBy the username for the user who created the workflow note
+   * @return the workflow note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws ServiceUnavailableException if the workflow note could not be created
@@ -389,16 +391,17 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
-   * Update the workflow definition.
+   * Update the workflow definition version.
    *
-   * @param workflowDefinition the workflow definition
+   * @param workflowDefinition the workflow definition version
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
-   * @throws ServiceUnavailableException if the workflow definition could not be updated
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws ServiceUnavailableException if the workflow definition version could not be updated
    */
   void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
-          WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -432,6 +435,7 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param updateWorkflowNoteRequest the request to update a workflow note
    * @param updatedBy the username for the user updating the workflow note
+   * @return the updated workflow note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNoteNotFoundException if the workflow note could not be found
    * @throws ServiceUnavailableException if the workflow note could not be updated

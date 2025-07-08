@@ -392,7 +392,7 @@ public class InternalInteractionStore implements InteractionStore {
     try {
       PageRequest pageRequest;
 
-      if (sortBy == InteractionSortBy.TIMESTAMP) {
+      if (sortBy == InteractionSortBy.OCCURRED) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
@@ -400,7 +400,7 @@ public class InternalInteractionStore implements InteractionStore {
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "timestamp");
+                "occurred");
       } else {
         pageRequest =
             PageRequest.of(
@@ -409,7 +409,7 @@ public class InternalInteractionStore implements InteractionStore {
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "timestamp");
+                "occurred");
       }
 
       Page<InteractionSummary> interactionSummaryPage =

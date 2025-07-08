@@ -55,6 +55,7 @@ public interface DocumentStore {
    *
    * @param tenantId the ID for the tenant
    * @param documentNote the document note
+   * @return the document note
    * @throws DuplicateDocumentNoteException if the document note already exists
    * @throws ServiceUnavailableException if the document note could not be created
    */
@@ -172,7 +173,7 @@ public interface DocumentStore {
    *
    * @param tenantId the ID for the tenant
    * @param document the document
-   * @return the document
+   * @return the updated document
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be updated
    */
@@ -184,6 +185,7 @@ public interface DocumentStore {
    *
    * @param tenantId the ID for the tenant
    * @param documentNote the document note
+   * @return the updated document note
    * @throws DocumentNoteNotFoundException if the document note could not be found
    * @throws ServiceUnavailableException if the document note could not be updated
    */

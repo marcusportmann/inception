@@ -450,7 +450,7 @@
       <column name="content" type="clob" remarks="The content for the interaction">
         <constraints nullable="false"/>
       </column>
-      <column name="timestamp" type="timestamp with time zone" remarks="The date and time the interaction was received or sent">
+      <column name="occurred" type="timestamp with time zone" remarks="The date and time the interaction occurred (received if inbound, sent if outbound)">
         <constraints nullable="false"/>
       </column>
       <column name="assigned" type="timestamp with time zone" remarks="The date and time the interaction was assigned"/>
@@ -498,9 +498,9 @@
       tableName="operations_interactions">
       <column name="tenant_id"/>
     </createIndex>
-    <createIndex indexName="operations_interactions_timestamp_ix"
+    <createIndex indexName="operations_interactions_occurred_ix"
       tableName="operations_interactions">
-      <column name="timestamp"/>
+      <column name="occurred"/>
     </createIndex>
 
     <createTable tableName="operations_interaction_attachments" remarks="Interaction Attachments">

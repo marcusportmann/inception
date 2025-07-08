@@ -43,7 +43,11 @@ public enum WorkflowDocumentStatus implements CodeEnum {
 
   /** Verified. */
   @XmlEnumValue("Verified")
-  VERIFIED("verified", "Verified");
+  VERIFIED("verified", "Verified"),
+
+  /** Waived. */
+  @XmlEnumValue("Waived")
+  WAIVED("waived", "Waived");
 
   private final String code;
 

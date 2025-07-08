@@ -71,7 +71,7 @@ import org.springframework.util.StringUtils;
   "subject",
   "mimeType",
   "content",
-  "timestamp",
+  "occurred",
   "assigned",
   "assignedTo",
   "processed",
@@ -99,7 +99,7 @@ import org.springframework.util.StringUtils;
       "subject",
       "mimeType",
       "content",
-      "timestamp",
+      "occurred",
       "assigned",
       "assignedTo",
       "processed",
@@ -196,6 +196,18 @@ public class Interaction implements Serializable {
   @NotNull
   @Column(name = "mime_type", nullable = false)
   private InteractionMimeType mimeType;
+
+  /** The date and time the interaction occurred (received if inbound, sent if outbound). */
+  @Schema(
+      description =
+          "The date and time the interaction occurred (received if inbound, sent if outbound)",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Occurred", required = true)
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "occurred", nullable = false)
+  private OffsetDateTime occurred;
 
   /** The ID for the party the interaction is associated with. */
   @Schema(description = "The ID for the party the interaction is associated with")
@@ -304,15 +316,6 @@ public class Interaction implements Serializable {
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** The date and time the interaction was received. */
-  @Schema(description = "The date and time the interaction was received")
-  @JsonProperty
-  @XmlElement(name = "Timestamp")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "timestamp")
-  private OffsetDateTime timestamp;
-
   /** The type of interaction. */
   @Schema(description = "The type of interaction", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -364,7 +367,7 @@ public class Interaction implements Serializable {
     this.content = content;
     this.mimeType = mimeType;
     this.status = status;
-    this.timestamp = OffsetDateTime.now();
+    this.occurred = OffsetDateTime.now();
   }
 
   /**
@@ -407,7 +410,7 @@ public class Interaction implements Serializable {
     this.content = content;
     this.mimeType = mimeType;
     this.status = status;
-    this.timestamp = OffsetDateTime.now();
+    this.occurred = OffsetDateTime.now();
   }
 
   /**
@@ -515,6 +518,15 @@ public class Interaction implements Serializable {
    */
   public InteractionMimeType getMimeType() {
     return mimeType;
+  }
+
+  /**
+   * Returns the date and time the interaction occurred (received if inbound, sent if outbound).
+   *
+   * @return the date and time the interaction occurred (received if inbound, sent if outbound)
+   */
+  public OffsetDateTime getOccurred() {
+    return occurred;
   }
 
   /**
@@ -679,15 +691,6 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Returns the date and time the interaction was received.
-   *
-   * @return the date and time the interaction was received
-   */
-  public OffsetDateTime getTimestamp() {
-    return timestamp;
-  }
-
-  /**
    * Returns the type of interaction.
    *
    * @return the type of interaction
@@ -792,6 +795,16 @@ public class Interaction implements Serializable {
   }
 
   /**
+   * Set the date and time the interaction occurred (received if inbound, sent if outbound).
+   *
+   * @param occurred the date and time the interaction occurred (received if inbound, sent if
+   *     outbound)
+   */
+  public void setOccurred(OffsetDateTime occurred) {
+    this.occurred = occurred;
+  }
+
+  /**
    * Set the ID for the party the interaction is associated with.
    *
    * @param partyId the ID for the party the interaction is associated with
@@ -891,15 +904,6 @@ public class Interaction implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
-  }
-
-  /**
-   * Set the date and time the interaction was received.
-   *
-   * @param timestamp the date and time the interaction was received
-   */
-  public void setTimestamp(OffsetDateTime timestamp) {
-    this.timestamp = timestamp;
   }
 
   /**

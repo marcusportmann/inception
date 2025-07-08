@@ -63,7 +63,7 @@ import java.util.UUID;
   "to",
   "subject",
   "mimeType",
-  "timestamp",
+  "occurred",
   "assigned",
   "assignedTo"
 })
@@ -83,7 +83,7 @@ import java.util.UUID;
       "to",
       "subject",
       "mimeType",
-      "timestamp",
+      "occurred",
       "assigned",
       "assignedTo"
     })
@@ -138,6 +138,18 @@ public class InteractionSummary implements Serializable {
   @NotNull
   @Column(name = "mime_type", nullable = false)
   private InteractionMimeType mimeType;
+
+  /** The date and time the interaction occurred (received if inbound, sent if outbound). */
+  @Schema(
+      description =
+          "The date and time the interaction occurred (received if inbound, sent if outbound)",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Occurred", required = true)
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "occurred", nullable = false)
+  private OffsetDateTime occurred;
 
   /** The ID for the party the interaction is associated with. */
   @Schema(description = "The ID for the party the interaction is associated with")
@@ -217,18 +229,6 @@ public class InteractionSummary implements Serializable {
   @NotNull
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
-
-  /** The date and time the interaction was received or sent. */
-  @Schema(
-      description = "The date and time the interaction was received or sent",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Timestamp", required = true)
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column(name = "timestamp", nullable = false)
-  private OffsetDateTime timestamp;
 
   /** The interaction type. */
   @Schema(description = "The interaction type", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -312,6 +312,15 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
+   * Returns the date and time the interaction occurred (received if inbound, sent if outbound).
+   *
+   * @return the date and time the interaction occurred (received if inbound, sent if outbound)
+   */
+  public OffsetDateTime getOccurred() {
+    return occurred;
+  }
+
+  /**
    * Returns the ID for the party the interaction is associated with.
    *
    * @return the ID for the party the interaction is associated with
@@ -376,15 +385,6 @@ public class InteractionSummary implements Serializable {
    */
   public UUID getTenantId() {
     return tenantId;
-  }
-
-  /**
-   * Returns the date and time the interaction was received or sent.
-   *
-   * @return the date and time the interaction was received or sent
-   */
-  public OffsetDateTime getTimestamp() {
-    return timestamp;
   }
 
   /**
