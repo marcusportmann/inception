@@ -45,7 +45,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
@@ -53,7 +53,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Service
+@Component
 @Conditional(InternalWorkflowStoreEnabledCondition.class)
 @SuppressWarnings("unused")
 public class InternalWorkflowStore implements WorkflowStore {

@@ -23,28 +23,28 @@ import jakarta.jws.soap.SOAPBinding;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The {@code OperationsWebService} class.
+ * The {@code WorkflowWebService} class.
  *
  * @author Marcus Portmann
  */
 @WebService(
-    serviceName = "OperationsService",
-    name = "IOperationsService",
+    serviceName = "WorkflowService",
+    name = "IWorkflowService",
     targetNamespace = "https://inception.digital/operations")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class OperationsWebService extends AbstractWebServiceBase {
+public class WorkflowWebService extends AbstractWebServiceBase {
 
   /** The Workflow Service. */
   private final WorkflowService workflowService;
 
   /**
-   * Constructs a new {@code OperationsWebService}.
+   * Constructs a new {@code WorkflowWebService}.
    *
    * @param applicationContext the Spring application context
    * @param workflowService the Workflow Service
    */
-  public OperationsWebService(
+  public WorkflowWebService(
       ApplicationContext applicationContext, WorkflowService workflowService) {
     super(applicationContext);
 

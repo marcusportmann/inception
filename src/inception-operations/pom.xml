@@ -33,6 +33,10 @@
       <artifactId>azure-identity</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
@@ -50,13 +54,7 @@
     <dependency>
       <groupId>com.github.librepdf</groupId>
       <artifactId>openpdf</artifactId>
-      <version>2.0.3</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.18.3</version>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -92,6 +90,7 @@
                   <excludes>
                     <exclude>com.azure:azure-json:[1,2)</exclude>
                     <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
+                    <exclude>com.nimbusds:nimbus-jose-jwt:[9,11)</exclude>
                   </excludes>
                 </dependencyConvergence>
               </rules>

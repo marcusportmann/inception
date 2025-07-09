@@ -121,12 +121,14 @@
     <jasperreports.version>7.0.3</jasperreports.version>
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.1.Final</jboss-transaction-spi.version>
+    <jsoup.version>1.21.1</jsoup.version>
     <liquibase-slf4j.version>5.1.0</liquibase-slf4j.version>
     <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
     <mssql-jdbc.version>12.10.0.jre11</mssql-jdbc.version>
     <narayana.version>7.2.2.Final</narayana.version>
     <ognl.version>3.4.7</ognl.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
+    <openpdf.version>2.2.4</openpdf.version>
     <!-- NOTE: The Open Telemetry Java Agent version need to be compatible with the Open Telemetry SDK version -->
     <!--       See: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/settings.gradle.kts -->
     <opentelemetry-sdk.version>1.48.0</opentelemetry-sdk.version>
@@ -163,6 +165,11 @@
         <groupId>com.github.f4b6a3</groupId>
         <artifactId>uuid-creator</artifactId>
         <version>${uuid-creator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.librepdf</groupId>
+        <artifactId>openpdf</artifactId>
+        <version>${openpdf.version}</version>
       </dependency>
       <dependency>
         <groupId>com.ibm.icu</groupId>
@@ -390,6 +397,11 @@
         <version>${narayana.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.jsoup</groupId>
+        <artifactId>jsoup</artifactId>
+        <version>${jsoup.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.openapitools</groupId>
         <artifactId>jackson-databind-nullable</artifactId>
         <version>${jackson-databind-nullable.version}</version>
@@ -584,6 +596,16 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-operations</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-operations-api</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-operations-ws</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>

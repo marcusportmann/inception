@@ -51,7 +51,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -62,7 +62,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Service
+@Component
 @Conditional(InternalInteractionStoreEnabledCondition.class)
 @SuppressWarnings("unused")
 public class InternalInteractionStore implements InteractionStore {

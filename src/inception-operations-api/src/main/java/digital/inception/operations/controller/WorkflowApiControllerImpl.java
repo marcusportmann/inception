@@ -20,15 +20,11 @@ import digital.inception.api.SecureApiController;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.util.TenantUtil;
-import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
-import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
-import digital.inception.operations.model.Document;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
-import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.WorkflowService;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -37,54 +33,30 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The {@code OperationsApiControllerImpl} class.
+ * The {@code WorkflowApiControllerImpl} class.
  *
  * @author Marcus Portmann
  */
 @RestController
 @CrossOrigin
 @SuppressWarnings({"unused"})
-public class OperationsApiControllerImpl extends SecureApiController
-    implements OperationsApiController {
-
-  /** The Document Service. */
-  private final DocumentService documentService;
+public class WorkflowApiControllerImpl extends SecureApiController
+    implements WorkflowApiController {
 
   /** The Workflow Service. */
   private final WorkflowService workflowService;
 
   /**
-   * Constructs a new {@code OperationsApiControllerImpl}.
+   * Constructs a new {@code WorkflowApiControllerImpl}.
    *
    * @param applicationContext the Spring application context
-   * @param documentService the Document Service
    * @param workflowService the Workflow Service
    */
-  public OperationsApiControllerImpl(
-      ApplicationContext applicationContext,
-      DocumentService documentService,
-      WorkflowService workflowService) {
+  public WorkflowApiControllerImpl(
+      ApplicationContext applicationContext, WorkflowService workflowService) {
     super(applicationContext);
 
     this.workflowService = workflowService;
-    this.documentService = documentService;
-  }
-
-  @Override
-  public UUID createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest)
-      throws InvalidArgumentException,
-          DocumentDefinitionNotFoundException,
-          ServiceUnavailableException {
-    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
-
-    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToTenant(tenantId))) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    Document document = documentService.createDocument(tenantId, createDocumentRequest);
-
-    return document.getId();
   }
 
   @Override
@@ -110,6 +82,13 @@ public class OperationsApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionCategoryException,
           ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     /*
      * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
      *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
