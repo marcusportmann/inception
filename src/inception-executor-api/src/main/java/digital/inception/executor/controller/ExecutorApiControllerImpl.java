@@ -150,6 +150,15 @@ public class ExecutorApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void requeueTask(UUID taskId)
+      throws InvalidArgumentException,
+          TaskNotFoundException,
+          InvalidTaskStatusException,
+          ServiceUnavailableException {
+    executorService.requeueTask(taskId);
+  }
+
+  @Override
   public void suspendBatch(String batchId)
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException {
     executorService.suspendBatch(batchId);

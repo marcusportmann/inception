@@ -66,6 +66,11 @@ public class WorkflowEngine implements Serializable {
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The attributes for the workflow engine. */
+  @Schema(description = "The attributes for the workflow engine")
+  @JsonProperty
+  @JsonManagedReference("workflowEngineAttributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(
       mappedBy = "workflowEngine",
@@ -200,11 +205,6 @@ public class WorkflowEngine implements Serializable {
    *
    * @return the attributes for the workflow engine
    */
-  @Schema(description = "The attributes for the workflow engine")
-  @JsonProperty
-  @JsonManagedReference("workflowEngineAttributeReference")
-  @XmlElementWrapper(name = "Attributes")
-  @XmlElement(name = "Attribute")
   public List<WorkflowEngineAttribute> getAttributes() {
     return attributes;
   }

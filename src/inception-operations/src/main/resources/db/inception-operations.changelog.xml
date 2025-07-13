@@ -94,7 +94,30 @@
       tableName="operations_workflow_definitions">
       <column name="tenant_id"/>
     </createIndex>
-    
+
+    <createTable tableName="operations_workflow_definition_attributes" remarks="Workflow Definition Attributes">
+      <column name="definition_id" type="nvarchar(50)" remarks="The ID for the workflow definition the workflow definition attribute is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="definition_version" type="integer" remarks="The version of the workflow definition the workflow definition attribute is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(50)" remarks="The name of the workflow definition attribute">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="value" type="nvarchar(1000)" remarks="The value for the workflow definition attribute">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_definition_attributes_workflow_definition_fk"
+      baseTableName="operations_workflow_definition_attributes" baseColumnNames="definition_id,definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_definition_attributes_definition_ix"
+      tableName="operations_workflow_definition_attributes">
+      <column name="definition_id"/>
+      <column name="definition_version"/>
+    </createIndex>
+
     <createTable tableName="operations_document_definition_categories" remarks="Document Definition Categories">
       <column name="id" type="nvarchar(50)" remarks="The ID for the document definition category">
         <constraints primaryKey="true" nullable="false"/>
@@ -185,6 +208,14 @@
       </column>
       <column name="external_reference" type="nvarchar(100)" remarks="The external reference for the workflow"/>
       <column name="data" type="clob" remarks="The data for the workflow if not stored in an external repository"/>
+      <column name="created" type="timestamp with time zone" remarks="The date and time the workflow was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="nvarchar(100)" remarks="The username for the user who created the workflow">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp with time zone" remarks="The date and time the workflow was last updated"/>
+      <column name="updated_by" type="nvarchar(100)" remarks="The username for the user who last updated the workflow"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflows_workflow_definition_fk"
       baseTableName="operations_workflows" baseColumnNames="definition_id,definition_version"
@@ -269,6 +300,14 @@
       <column name="external_reference" type="nvarchar(100)" remarks="The external reference for the document"/>
       <column name="source_document_id" type="uuid" remarks="The ID for the source document that was split to create this document"/>
       <column name="data" type="${blob_type}" remarks="The data for the document if not stored in an external repository"/>
+      <column name="created" type="timestamp with time zone" remarks="The date and time the document was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="nvarchar(100)" remarks="The username for the user who created the document">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp with time zone" remarks="The date and time the document was last updated"/>
+      <column name="updated_by" type="nvarchar(100)" remarks="The username for the user who last updated the document"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_documents_document_definition_fk"
       baseTableName="operations_documents" baseColumnNames="definition_id"

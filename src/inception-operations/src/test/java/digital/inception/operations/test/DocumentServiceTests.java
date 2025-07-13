@@ -229,7 +229,8 @@ public class DocumentServiceTests {
     Document document =
         documentService.createDocument(
             TenantUtil.DEFAULT_TENANT_ID,
-            getCreateDocumentRequest(sharedDocumentDefinition.getId()));
+            getCreateDocumentRequest(sharedDocumentDefinition.getId()),
+            "TEST1");
 
     Document retrievedDocument =
         documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
@@ -239,7 +240,8 @@ public class DocumentServiceTests {
     UpdateDocumentRequest updateDocumentRequest = getUpdateDocumentRequest(document);
 
     Document updatedDocument =
-        documentService.updateDocument(TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest);
+        documentService.updateDocument(
+            TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest, "TEST2");
 
     retrievedDocument = documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
 
@@ -481,6 +483,14 @@ public class DocumentServiceTests {
   }
 
   private void compareDocuments(Document document1, Document document2) {
+    assertEquals(
+        document1.getCreated(),
+        document2.getCreated(),
+        "The created values for the documents do not match");
+    assertEquals(
+        document1.getCreatedBy(),
+        document2.getCreatedBy(),
+        "The created by values for the documents do not match");
     assertArrayEquals(
         document1.getData(), document2.getData(), "The data values for the documents do not match");
     assertEquals(
@@ -517,6 +527,14 @@ public class DocumentServiceTests {
         document1.getTenantId(),
         document2.getTenantId(),
         "The tenant ID values for the documents do not match");
+    assertEquals(
+        document1.getUpdated(),
+        document2.getUpdated(),
+        "The updated values for the documents do not match");
+    assertEquals(
+        document1.getUpdatedBy(),
+        document2.getUpdatedBy(),
+        "The updated by values for the documents do not match");
   }
 
   private CreateDocumentRequest getCreateDocumentRequest(String documentDefinitionId) {

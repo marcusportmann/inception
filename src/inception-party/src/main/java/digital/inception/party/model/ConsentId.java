@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code ConsentId} class implements the ID class for The {@code Consent} class.
@@ -31,8 +30,8 @@ public class ConsentId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the person the consent is associated with. */
-  private UUID person;
+  /** The person the consent is associated with. */
+  private Person person;
 
   /** The code for the consent type. */
   private String type;

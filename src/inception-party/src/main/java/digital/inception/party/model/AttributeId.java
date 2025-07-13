@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code AttributeId} class implements the ID class for The {@code Attribute} class.
@@ -31,8 +30,8 @@ public class AttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the party the attribute is associated with. */
-  private UUID party;
+  /** The party the attribute is associated with. */
+  private PartyBase party;
 
   /** The code for the attribute type. */
   private String type;

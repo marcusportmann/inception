@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code SkillId} class implements the ID class for The {@code Skill} class.
@@ -31,8 +30,8 @@ public class SkillId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the person the skill is associated with. */
-  private UUID person;
+  /** The person the skill is associated with. */
+  private Person person;
 
   /** The code for the skill type. */
   private String type;

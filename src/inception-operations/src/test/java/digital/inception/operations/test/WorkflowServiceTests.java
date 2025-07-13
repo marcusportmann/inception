@@ -42,6 +42,7 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
+import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
@@ -140,6 +141,9 @@ public class WorkflowServiceTests {
 
     workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false);
 
+    workflowDefinition.addAttribute(
+        new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
+
     workflowService.createWorkflowDefinition(workflowDefinition);
 
     TestWorkflowData testWorkflowData =
@@ -157,7 +161,8 @@ public class WorkflowServiceTests {
             workflowDefinition.getId(), UUID.randomUUID().toString(), testWorkflowDataJson);
 
     Workflow workflow =
-        workflowService.createWorkflow(TenantUtil.DEFAULT_TENANT_ID, createWorkflowRequest);
+        workflowService.createWorkflow(
+            TenantUtil.DEFAULT_TENANT_ID, createWorkflowRequest, "TEST1");
 
     Workflow retrievedWorkflow =
         workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
@@ -216,7 +221,8 @@ public class WorkflowServiceTests {
         new UpdateWorkflowRequest(workflow.getId(), WorkflowStatus.COMPLETED, testWorkflowDataJson);
 
     Workflow updatedWorkflow =
-        workflowService.updateWorkflow(TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest);
+        workflowService.updateWorkflow(
+            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest, "TEST2");
 
     retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
@@ -423,6 +429,11 @@ public class WorkflowServiceTests {
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
+    tenantWorkflowDefinition.addAttribute(
+        new WorkflowDefinitionAttribute("attribute_name", "attribute_value"));
+    tenantWorkflowDefinition.addAttribute(
+        new WorkflowDefinitionAttribute("another_attribute_name", "another_attribute_value"));
+
     tenantWorkflowDefinition.addDocumentDefinition(tenantDocumentDefinition.getId(), true, false);
     tenantWorkflowDefinition.addDocumentDefinition(
         sharedDocumentDefinition.getId(), true, true, TimeUnit.MONTHS, 6);
@@ -476,6 +487,11 @@ public class WorkflowServiceTests {
 
     tenantWorkflowDefinition.setName("Updated Test Tenant Workflow Definition");
     tenantWorkflowDefinition.removeDocumentDefinition(sharedDocumentDefinition.getId());
+
+    tenantWorkflowDefinition.addAttribute(
+        new WorkflowDefinitionAttribute("attribute_name", "updated_attribute_value"));
+
+    tenantWorkflowDefinition.removeAttributeWithName("another_attribute_name");
 
     workflowService.updateWorkflowDefinition(tenantWorkflowDefinition);
 
@@ -591,6 +607,10 @@ public class WorkflowServiceTests {
   private void compareWorkflowDefinitions(
       WorkflowDefinition workflowDefinition1, WorkflowDefinition workflowDefinition2) {
     assertEquals(
+        workflowDefinition1.getAttributes().size(),
+        workflowDefinition2.getAttributes().size(),
+        "The number of attributes for the workflow definitions do not match");
+    assertEquals(
         workflowDefinition1.getCategoryId(),
         workflowDefinition2.getCategoryId(),
         "The category ID values for the workflow definitions do not match");
@@ -626,6 +646,26 @@ public class WorkflowServiceTests {
         workflowDefinition1.getDocumentDefinitions().size(),
         workflowDefinition2.getDocumentDefinitions().size(),
         "The number of document definitions for the workflow definitions do not match");
+
+    workflowDefinition1
+        .getAttributes()
+        .forEach(
+            attribute1 -> {
+              boolean foundAttribute =
+                  workflowDefinition2.getAttributes().stream()
+                      .anyMatch(
+                          attribute2 -> Objects.equals(attribute1.getName(), attribute2.getName()));
+              if (!foundAttribute) {
+                fail(
+                    "Failed to find the attribute ("
+                        + attribute1.getName()
+                        + ") for the workflow definition ("
+                        + workflowDefinition1.getId()
+                        + ") version ("
+                        + workflowDefinition1.getVersion()
+                        + ")");
+              }
+            });
 
     workflowDefinition1
         .getDocumentDefinitions()
@@ -715,6 +755,14 @@ public class WorkflowServiceTests {
 
   private void compareWorkflows(Workflow workflow1, Workflow workflow2) {
     assertEquals(
+        workflow1.getCreated(),
+        workflow2.getCreated(),
+        "The created values for the workflows do not match");
+    assertEquals(
+        workflow1.getCreatedBy(),
+        workflow2.getCreatedBy(),
+        "The created by values for the workflows do not match");
+    assertEquals(
         workflow1.getData(), workflow2.getData(), "The data values for the workflows do not match");
     assertEquals(
         workflow1.getDefinitionId(),
@@ -742,6 +790,14 @@ public class WorkflowServiceTests {
         workflow1.getTenantId(),
         workflow2.getTenantId(),
         "The tenant ID values for the workflows do not match");
+    assertEquals(
+        workflow1.getUpdated(),
+        workflow2.getUpdated(),
+        "The updated values for the workflows do not match");
+    assertEquals(
+        workflow1.getUpdatedBy(),
+        workflow2.getUpdatedBy(),
+        "The updated by values for the workflows do not match");
   }
 
   private String randomId() {

@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code TaxNumberId} class implements the ID class for The {@code TaxNumber} class.
@@ -31,8 +30,8 @@ public class TaxNumberId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the party the tax number is associated with. */
-  private UUID party;
+  /** The party the tax number is associated with. */
+  private PartyBase party;
 
   /** The code for the tax number type. */
   private String type;

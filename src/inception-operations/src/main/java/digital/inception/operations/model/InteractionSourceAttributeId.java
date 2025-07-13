@@ -32,8 +32,8 @@ public class InteractionSourceAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the interaction source the attribute is associated with. */
-  private UUID interactionSource;
+  /** The interaction source the attribute is associated with. */
+  private InteractionSource interactionSource;
 
   /** The name of the interaction source attribute. */
   private String name;

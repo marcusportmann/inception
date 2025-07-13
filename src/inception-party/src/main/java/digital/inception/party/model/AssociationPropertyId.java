@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code AssociationPropertyId} class implements the ID class for the {@code
@@ -32,8 +31,8 @@ public class AssociationPropertyId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the association the association property is associated with. */
-  private UUID association;
+  /** The association the association property is associated with. */
+  private Association association;
 
   /** The code for the association property type. */
   private String type;

@@ -432,6 +432,21 @@ public interface ExecutorService {
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
   /**
+   * Requeue the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be requeued
+   */
+  void requeueTask(UUID taskId)
+      throws InvalidArgumentException,
+          TaskNotFoundException,
+          InvalidTaskStatusException,
+          ServiceUnavailableException;
+
+  /**
    * Reset "hung" tasks, which have been locked and executing longer than a global or
    * task-type-specific timeout.
    *

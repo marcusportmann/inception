@@ -101,7 +101,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public Workflow createWorkflow(UUID tenantId, CreateWorkflowRequest createWorkflowRequest)
+  public Workflow createWorkflow(
+      UUID tenantId, CreateWorkflowRequest createWorkflowRequest, String createdBy)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
@@ -129,7 +130,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               workflowDefinition.getId(),
               workflowDefinition.getVersion(),
               WorkflowStatus.IN_PROGRESS,
-              createWorkflowRequest.getData());
+              createWorkflowRequest.getData(),
+              OffsetDateTime.now(),
+              createdBy);
 
       return workflowStore.createWorkflow(tenantId, workflow);
     } catch (WorkflowDefinitionNotFoundException e) {
@@ -149,10 +152,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   public void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
+          WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
     validateArgument("workflowDefinition", workflowDefinition);
 
     try {
+      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinition.getCategoryId())) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinition.getCategoryId());
+      }
+
       if (workflowDefinitionRepository.existsByIdAndVersion(
           workflowDefinition.getId(), workflowDefinition.getVersion())) {
         throw new DuplicateWorkflowDefinitionVersionException(
@@ -160,7 +168,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       }
 
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
-    } catch (DuplicateWorkflowDefinitionVersionException e) {
+    } catch (DuplicateWorkflowDefinitionVersionException
+        | WorkflowDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -694,7 +703,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public Workflow updateWorkflow(UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest)
+  public Workflow updateWorkflow(
+      UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -713,6 +723,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       if (updateWorkflowRequest.getStatus() != null) {
         workflow.setStatus(updateWorkflowRequest.getStatus());
       }
+
+      workflow.setUpdated(OffsetDateTime.now());
+      workflow.setUpdatedBy(updatedBy);
 
       return workflowStore.updateWorkflow(tenantId, workflow);
     } catch (WorkflowNotFoundException e) {

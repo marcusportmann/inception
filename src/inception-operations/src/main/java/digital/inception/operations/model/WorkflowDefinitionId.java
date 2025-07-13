@@ -31,10 +31,10 @@ public class WorkflowDefinitionId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the case definition. */
+  /** The ID for the workflow definition. */
   private String id;
 
-  /** The version of the case definition. */
+  /** The version of the workflow definition. */
   private int version;
 
   /** Constructs a new {@code WorkflowDefinitionId}. */

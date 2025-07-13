@@ -24,6 +24,13 @@ package digital.inception.operations.connector;
  */
 public interface WorkflowEngineConnector {
 
-  // Workflow startWorkflow(WorkflowDefinition workflowDefinition, CreateWorkflowRequest
+  // Workflow startWorkflow(UUID tenantId, WorkflowDefinition workflowDefinition, CreateWorkflowRequest
   // createWorkflowRequest);
+
+  // byte[] getWorkflowData(UUID tenantId, WorkflowDefinition workflowDefinition, workflowId);
+
+  // byte[] getWorkflowForm(UUID tenantId, WorkflowDefinition workflowDefinition, WorkflowFormType workflowFormType);
 }
+
+
+//ADD WorkflowStepDefinition, WorkflowStep, WorkflowDefinitionAttribute, WorkflowAttribute (flag for if this is searchable)

@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.springframework.beans.factory.annotation.Value;
@@ -344,7 +345,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
 
         createTaskEvent(TaskEventType.STEP_COMPLETED, taskType, task);
 
-        getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
+        triggerTaskExecution();
       }
       // Complete the single step task, or the last step of a multistep task
       else {
@@ -869,7 +870,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
 
       taskRepository.saveAndFlush(task);
 
-      getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
+      triggerTaskExecution();
 
       return task.getId();
     } catch (TaskTypeNotFoundException e) {
@@ -969,12 +970,42 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
 
         taskRepository.requeueTask(task.getId(), nextExecution);
 
-        getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
+        triggerTaskExecution();
       }
     } catch (TaskNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to requeue the task (" + task.getId() + ")", e);
+    }
+  }
+
+  private void triggerTaskExecution() {
+    try {
+      getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
+    } catch (RejectedExecutionException e) {
+      log.warn("Failed to trigger the task execution due to thread pool exhaustion" , e);
+    }
+    catch (Throwable ignored) {
+    }
+  }
+
+  @Override
+  public void requeueTask(UUID taskId)
+      throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
+    if (taskId == null) {
+      throw new InvalidArgumentException("taskId");
+    }
+
+    try {
+      if (!taskRepository.existsById(taskId)) {
+        throw new TaskNotFoundException(taskId);
+      }
+
+      taskRepository.requeueTask(taskId, OffsetDateTime.now());
+    } catch (TaskNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to requeue the task (" + taskId + ")", e);
     }
   }
 
@@ -1179,7 +1210,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
         throw new InvalidTaskStatusException(taskId);
       }
 
-      getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
+      triggerTaskExecution();
     } catch (TaskNotFoundException | InvalidTaskStatusException e) {
       throw e;
     } catch (Throwable e) {

@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code ContactMechanismId} class implements the ID class for the {@code ContactMechanism}
@@ -32,8 +31,8 @@ public class ContactMechanismId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the party the contact mechanism is associated with. */
-  private UUID party;
+  /** The party the contact mechanism is associated with. */
+  private PartyBase party;
 
   /** The code for the contact mechanism role. */
   private String role;

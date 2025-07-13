@@ -104,7 +104,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest)
+  public Document createDocument(
+      UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
@@ -120,6 +121,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       }
 
       Document document = new Document(createDocumentRequest.getDefinitionId());
+      document.setCreated(OffsetDateTime.now());
+      document.setCreatedBy(createdBy);
       document.setData(createDocumentRequest.getData());
       document.setExpiryDate(createDocumentRequest.getExpiryDate());
       document.setExternalReference(createDocumentRequest.getExternalReference());
@@ -148,16 +151,21 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   public void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
+          DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
     validateArgument("documentDefinition", documentDefinition);
 
     try {
+      if (!documentDefinitionCategoryRepository.existsById(documentDefinition.getCategoryId())) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinition.getCategoryId());
+      }
+
       if (documentDefinitionRepository.existsById(documentDefinition.getId())) {
         throw new DuplicateDocumentDefinitionException(documentDefinition.getId());
       }
 
       documentDefinitionRepository.saveAndFlush(documentDefinition);
-    } catch (DuplicateDocumentDefinitionException e) {
+    } catch (DuplicateDocumentDefinitionException | DocumentDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -559,7 +567,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest)
+  public Document updateDocument(
+      UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -578,6 +587,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setIssueDate(updateDocumentRequest.getIssueDate());
       document.setName(updateDocumentRequest.getName());
       document.setSourceDocumentId(updateDocumentRequest.getSourceDocumentId());
+      document.setUpdated(OffsetDateTime.now());
+      document.setUpdatedBy(updatedBy);
 
       return documentStore.updateDocument(tenantId, document);
     } catch (DocumentNotFoundException e) {

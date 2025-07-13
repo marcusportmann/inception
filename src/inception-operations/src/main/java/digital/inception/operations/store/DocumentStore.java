@@ -85,12 +85,12 @@ public interface DocumentStore {
       throws DocumentNoteNotFoundException, ServiceUnavailableException;
 
   /**
-   * Returns whether a document with the specified tenant ID and ID exists.
+   * Check whether the document with the specified tenant ID and ID exists.
    *
    * @param tenantId the ID for the tenant the document is associated with
    * @param documentId the ID for the document
-   * @return {@code true} if a document with the specified tenant ID and ID exists or {@code false}
-   *     otherwise
+   * @return {@code true} if the document with the specified tenant ID and ID exists or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the existence of the document could not be determined
    */
   boolean documentExists(UUID tenantId, UUID documentId) throws ServiceUnavailableException;

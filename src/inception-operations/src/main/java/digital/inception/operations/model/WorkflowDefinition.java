@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
@@ -66,7 +67,8 @@ import org.springframework.util.StringUtils;
   "engineId",
   "documentDefinitions",
   "validationSchemaType",
-  "validationSchema"
+  "validationSchema",
+  "attributes"
 })
 @XmlRootElement(name = "WorkflowDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -80,7 +82,8 @@ import org.springframework.util.StringUtils;
       "engineId",
       "documentDefinitions",
       "validationSchemaType",
-      "validationSchema"
+      "validationSchema",
+      "attributes"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -89,6 +92,21 @@ import org.springframework.util.StringUtils;
 public class WorkflowDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the workflow definition. */
+  @Schema(description = "The attributes for the workflow definition")
+  @JsonProperty
+  @JsonManagedReference("workflowDefinitionAttributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  @Valid
+  @OneToMany(
+      mappedBy = "workflowDefinition",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  @OrderBy("name")
+  private final List<WorkflowDefinitionAttribute> attributes = new ArrayList<>();
 
   /** The document definitions associated with the workflow definition. */
   @Schema(
@@ -433,6 +451,20 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Add the attribute for the workflow definition.
+   *
+   * @param attribute the attribute
+   */
+  public void addAttribute(WorkflowDefinitionAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute -> Objects.equals(existingAttribute.getName(), attribute.getName()));
+
+    attribute.setWorkflowDefinition(this);
+
+    attributes.add(attribute);
+  }
+
+  /**
    * Associate the document definition with the workflow definition.
    *
    * @param documentDefinitionId the ID for the document definition
@@ -501,6 +533,28 @@ public class WorkflowDefinition implements Serializable {
     WorkflowDefinition other = (WorkflowDefinition) object;
 
     return Objects.equals(id, other.id) && (version == other.version);
+  }
+
+  /**
+   * Retrieve the attribute with the specified name for the workflow definition.
+   *
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the workflow
+   *     definition or an empty Optional if the attribute could not be found
+   */
+  public Optional<WorkflowDefinitionAttribute> getAttributeWithName(String name) {
+    return attributes.stream()
+        .filter(attribute -> Objects.equals(attribute.getName(), name))
+        .findFirst();
+  }
+
+  /**
+   * Returns the attributes for the workflow definition.
+   *
+   * @return the attributes for the workflow definition
+   */
+  public List<WorkflowDefinitionAttribute> getAttributes() {
+    return attributes;
   }
 
   /**
@@ -595,6 +649,15 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Remove the attribute with the specified name for the workflow definition.
+   *
+   * @param name the name of the attribute
+   */
+  public void removeAttributeWithName(String name) {
+    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getName(), name));
+  }
+
+  /**
    * Disassociate the document definition from the workflow definition.
    *
    * @param documentDefinitionId the ID for the document definition
@@ -616,6 +679,17 @@ public class WorkflowDefinition implements Serializable {
         iterator.remove();
       }
     }
+  }
+
+  /**
+   * Set the attributes for the workflow definition.
+   *
+   * @param attributes the attributes for the workflow definition
+   */
+  public void setAttributes(List<WorkflowDefinitionAttribute> attributes) {
+    attributes.forEach(attribute -> attribute.setWorkflowDefinition(this));
+    this.attributes.clear();
+    this.attributes.addAll(attributes);
   }
 
   /**

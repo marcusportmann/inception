@@ -34,8 +34,8 @@ public class WorkflowEngineAttributeId implements Serializable {
   /** The name of the workflow engine attribute. */
   private String name;
 
-  /** The ID for the workflow engine the attribute is associated with. */
-  private String workflowEngine;
+  /** The workflow engine the attribute is associated with. */
+  private WorkflowEngine workflowEngine;
 
   /** Constructs a new {@code WorkflowEngineAttributeId}. */
   public WorkflowEngineAttributeId() {}

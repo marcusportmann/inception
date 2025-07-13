@@ -31,8 +31,8 @@ public class MandataryId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the mandate the mandatary is associated with. */
-  private UUID mandate;
+  /** The mandate the mandatary is associated with. */
+  private Mandate mandate;
 
   /** The ID for the party who is the recipient of the mandate. */
   private UUID partyId;

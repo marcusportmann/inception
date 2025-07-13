@@ -61,12 +61,14 @@ public interface DocumentService {
    *
    * @param tenantId the ID for the tenant
    * @param createDocumentRequest the request to create a document
+   * @param createdBy the username for the user creating the document
    * @return the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document could not be created
    */
-  Document createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest)
+  Document createDocument(
+      UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
@@ -77,11 +79,14 @@ public interface DocumentService {
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateDocumentDefinitionException if the document definition already exists
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
    * @throws ServiceUnavailableException if the document definition could not be created
    */
   void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
+          DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -176,12 +181,12 @@ public interface DocumentService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Returns whether a document with the specified tenant ID and ID exists.
+   * Check whether the document with the specified tenant ID and ID exists.
    *
    * @param tenantId the ID for the tenant the document is associated with
    * @param documentId the ID for the document
-   * @return {@code true} if a document with the specified tenant ID and ID exists or {@code false}
-   *     otherwise
+   * @return {@code true} if the document with the specified tenant ID and ID exists or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the existence of the document could not be determined
    */
   boolean documentExists(UUID tenantId, UUID documentId) throws ServiceUnavailableException;
@@ -326,12 +331,14 @@ public interface DocumentService {
    *
    * @param tenantId the ID for the tenant
    * @param updateDocumentRequest the request to update the document
+   * @param updatedBy the username for the user updating the document
    * @return the updated document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be updated
    */
-  Document updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest)
+  Document updateDocument(
+      UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**

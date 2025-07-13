@@ -190,12 +190,12 @@ public interface WorkflowStore {
       throws WorkflowNoteNotFoundException, ServiceUnavailableException;
 
   /**
-   * Returns whether a workflow with the specified tenant ID and ID exists.
+   * Check whether the workflow with the specified tenant ID and ID exists.
    *
    * @param tenantId the ID for the tenant the workflow is associated with
    * @param workflowId the ID for the workflow
-   * @return {@code true} if a workflow with the specified tenant ID and ID exists or {@code false}
-   *     otherwise
+   * @return {@code true} if the workflow with the specified tenant ID and ID exists or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the existence of the workflow could not be determined
    */
   boolean workflowExists(UUID tenantId, UUID workflowId) throws ServiceUnavailableException;

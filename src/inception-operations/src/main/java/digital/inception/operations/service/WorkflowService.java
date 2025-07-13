@@ -58,28 +58,33 @@ public interface WorkflowService {
    *
    * @param tenantId the ID for the tenant
    * @param createWorkflowRequest the request to create a workflow
+   * @param createdBy the username for the user creating the workflow
    * @return the workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws ServiceUnavailableException if the workflow could not be created
    */
-  Workflow createWorkflow(UUID tenantId, CreateWorkflowRequest createWorkflowRequest)
+  Workflow createWorkflow(
+      UUID tenantId, CreateWorkflowRequest createWorkflowRequest, String createdBy)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException;
 
   /**
-   * Create the version of the workflow definition.
+   * Create the workflow definition version.
    *
-   * @param workflowDefinition the version of the workflow definition
+   * @param workflowDefinition the workflow definition version
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateWorkflowDefinitionVersionException if the workflow definition version already
    *     exists
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be created
    */
   void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
+          WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -382,12 +387,14 @@ public interface WorkflowService {
    *
    * @param tenantId the ID for the tenant
    * @param updateWorkflowRequest the request to update the workflow
+   * @param updatedBy the username for the user updating the workflow
    * @return the updated workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws ServiceUnavailableException if the workflow could not be created
    */
-  Workflow updateWorkflow(UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest)
+  Workflow updateWorkflow(
+      UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -491,12 +498,12 @@ public interface WorkflowService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Returns whether a workflow with the specified tenant ID and ID exists.
+   * Check whether the workflow with the specified tenant ID and ID exists.
    *
    * @param tenantId the ID for the tenant the workflow is associated with
    * @param workflowId the ID for the workflow
-   * @return {@code true} if a workflow with the specified tenant ID and ID exists or {@code false}
-   *     otherwise
+   * @return {@code true} if the workflow with the specified tenant ID and ID exists or {@code
+   *     false} otherwise
    * @throws ServiceUnavailableException if the existence of the workflow could not be determined
    */
   boolean workflowExists(UUID tenantId, UUID workflowId) throws ServiceUnavailableException;

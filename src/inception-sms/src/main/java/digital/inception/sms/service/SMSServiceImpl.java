@@ -297,7 +297,10 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
 
       createSMS(sms);
 
-      getApplicationContext().getBean(BackgroundSMSSender.class).sendSMSs();
+      try {
+        getApplicationContext().getBean(BackgroundSMSSender.class).sendSMSs();
+      } catch (Throwable ignored) {
+      }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to queue the SMS for the mobile number (" + mobileNumber + ") for sending", e);
@@ -451,12 +454,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to set the status for the SMS ("
-              + smsId
-              + ") to ("
-              + status
-              + ")",
-          e);
+          "Failed to set the status for the SMS (" + smsId + ") to (" + status + ")", e);
     }
   }
 
@@ -481,12 +479,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to unlock and set the status for the SMS ("
-              + smsId
-              + ") to ("
-              + status
-              + ")",
-          e);
+          "Failed to unlock and set the status for the SMS (" + smsId + ") to (" + status + ")", e);
     }
   }
 

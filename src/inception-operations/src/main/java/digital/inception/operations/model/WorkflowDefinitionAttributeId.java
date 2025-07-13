@@ -14,30 +14,31 @@
  * limitations under the License.
  */
 
-package digital.inception.party.model;
+package digital.inception.operations.model;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code LockId} class implements the ID class for The {@code Lock} class.
+ * The {@code WorkflowDefinitionAttributeId} class implements the ID class for the {@code
+ * WorkflowDefinitionAttribute} class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"UnusedDeclaration"})
-public class LockId implements Serializable {
+@SuppressWarnings("unused")
+public class WorkflowDefinitionAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The party the lock is associated with. */
-  private PartyBase party;
+  /** name of the workflow definition attribute. */
+  private String name;
 
-  /** The code for the lock type. */
-  private String type;
+  /** The workflow definition the workflow definition attribute is associated with. */
+  private WorkflowDefinition workflowDefinition;
 
-  /** Constructs a new {@code LockId}. */
-  public LockId() {}
+  /** Constructs a new {@code WorkflowDefinitionAttributeId}. */
+  public WorkflowDefinitionAttributeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -59,9 +60,10 @@ public class LockId implements Serializable {
       return false;
     }
 
-    LockId other = (LockId) object;
+    WorkflowDefinitionAttributeId other = (WorkflowDefinitionAttributeId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(workflowDefinition, other.workflowDefinition)
+        && Objects.equals(name, other.name);
   }
 
   /**
@@ -71,6 +73,7 @@ public class LockId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((workflowDefinition == null) ? 0 : workflowDefinition.hashCode())
+        + ((name == null) ? 0 : name.hashCode());
   }
 }

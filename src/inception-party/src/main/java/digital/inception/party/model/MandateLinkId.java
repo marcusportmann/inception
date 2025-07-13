@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code MandateLinkId} class implements the ID class for The {@code MandateLink} class.
@@ -31,8 +30,8 @@ public class MandateLinkId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the mandate the mandate link is associated with. */
-  private UUID mandate;
+  /** The mandate the mandate link is associated with. */
+  private Mandate mandate;
 
   /** The target for the mandate link. */
   private String target;

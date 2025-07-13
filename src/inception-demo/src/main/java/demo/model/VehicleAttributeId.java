@@ -19,7 +19,6 @@ package demo.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code VehicleAttributeId} class implements the ID class for the {@code VehicleAttribute}
@@ -35,8 +34,8 @@ public class VehicleAttributeId implements Serializable {
   /** The code for the vehicle attribute type. */
   private String type;
 
-  /** The ID for the vehicle the vehicle attribute is associated with. */
-  private UUID vehicle;
+  /** The vehicle the vehicle attribute is associated with. */
+  private Vehicle vehicle;
 
   /** Constructs a new {@code VehicleAttributeId}. */
   public VehicleAttributeId() {}

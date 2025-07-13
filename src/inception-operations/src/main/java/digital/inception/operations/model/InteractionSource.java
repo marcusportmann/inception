@@ -67,6 +67,11 @@ public class InteractionSource implements Serializable {
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The attributes for the interaction source. */
+  @Schema(description = "The attributes for the interaction source")
+  @JsonProperty
+  @JsonManagedReference("interactionSourceAttributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(
       mappedBy = "interactionSource",
@@ -295,11 +300,6 @@ public class InteractionSource implements Serializable {
    *
    * @return the attributes for the interaction source
    */
-  @Schema(description = "The attributes for the interaction source")
-  @JsonProperty
-  @JsonManagedReference("interactionSourceAttributeReference")
-  @XmlElementWrapper(name = "Attributes")
-  @XmlElement(name = "Attribute")
   public List<InteractionSourceAttribute> getAttributes() {
     return attributes;
   }

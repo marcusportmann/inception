@@ -752,6 +752,72 @@ public interface ExecutorApiController {
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
   /**
+   * Requeue the task.
+   *
+   * @param taskId the ID for the task
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TaskNotFoundException if the task could not be found
+   * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
+   * @throws ServiceUnavailableException if the task could not be reueued
+   */
+  @Operation(summary = "Requeue the task", description = "Requeue the task")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The task was successfully requeued"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The task could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The status of the task is invalid for the operation",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/tasks/{taskId}/requeue",
+      method = RequestMethod.PATCH,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAccessToFunction('Executor.TaskAdministration')")
+  void requeueTask(
+      @Parameter(name = "taskId", description = "The ID for the task", required = true)
+          @PathVariable
+          UUID taskId)
+      throws InvalidArgumentException,
+          TaskNotFoundException,
+          InvalidTaskStatusException,
+          ServiceUnavailableException;
+
+  /**
    * Suspend the batch.
    *
    * @param batchId the ID for the batch

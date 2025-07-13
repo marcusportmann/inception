@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code SourceOfWealthId} class implements the ID class for The {@code SourceOfWealth} class.
@@ -31,8 +30,8 @@ public class SourceOfWealthId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the person the source of wealth is associated with. */
-  private UUID person;
+  /** The person the source of wealth is associated with. */
+  private Person person;
 
   /** The code for the source of wealth type. */
   private String type;

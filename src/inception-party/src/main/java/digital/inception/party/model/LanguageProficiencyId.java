@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code LanguageProficiencyId} class implements the ID class for the {@code
@@ -35,8 +34,8 @@ public class LanguageProficiencyId implements Serializable {
   /** The ISO 639-1 alpha-2 code for the language. */
   private String language;
 
-  /** The ID for the person the language proficiency is associated with. */
-  private UUID person;
+  /** The person the language proficiency is associated with. */
+  private Person person;
 
   /** Constructs a new {@code LanguageProficiencyId}. */
   public LanguageProficiencyId() {}

@@ -19,7 +19,6 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code IndustryAllocationId} class implements the ID class for the {@code IndustryAllocation}
@@ -35,8 +34,8 @@ public class IndustryAllocationId implements Serializable {
   /** The code for the industry classification. */
   private String industry;
 
-  /** The ID for the organization the industry allocation is associated with. */
-  private UUID organization;
+  /** The organization the industry allocation is associated with. */
+  private Organization organization;
 
   /** The code for the industry classification system. */
   private String system;
