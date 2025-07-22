@@ -21,8 +21,11 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
+import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
+import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
+import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
@@ -31,6 +34,7 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowEngine;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -194,7 +198,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinition(
       @Parameter(
               name = "Tenant-ID",
@@ -275,7 +279,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinitionCategory(
       @Parameter(
               name = "Tenant-ID",
@@ -293,6 +297,65 @@ public interface WorkflowApiController {
           WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionCategoryException,
+          ServiceUnavailableException;
+
+  /**
+   * Create the workflow engine.
+   *
+   * @param workflowEngine the workflow engine
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateWorkflowEngineException if the workflow engine already exists
+   * @throws ServiceUnavailableException if the workflow engine could not be created
+   */
+  @Operation(summary = "Create the workflow engine", description = "Create the workflow engine")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow engine was created"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A workflow engine with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflow-engines",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void createWorkflowEngine(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The workflow engine to create",
+              required = true)
+          @RequestBody
+          WorkflowEngine workflowEngine)
+      throws InvalidArgumentException,
+          DuplicateWorkflowEngineException,
           ServiceUnavailableException;
 
   /**
@@ -362,6 +425,624 @@ public interface WorkflowApiController {
           @RequestBody
           CreateWorkflowNoteRequest createWorkflowNoteRequest)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be deleted
+   */
+  @Operation(summary = "Delete the workflow", description = "Delete the workflow")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflows/{workflowId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+  void deleteWorkflow(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
+          @PathVariable
+          UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the workflow definition.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws ServiceUnavailableException if the workflow definition could not be deleted
+   */
+  @Operation(
+      summary = "Delete the workflow definition",
+      description = "Delete the workflow definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow definition was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description =
+                "The workflow definition category or workflow definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void deleteWorkflowDefinition(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "workflowDefinitionCategoryId",
+              description = "The ID for the workflow definition category",
+              required = true)
+          @PathVariable
+          String workflowDefinitionCategoryId,
+      @Parameter(
+              name = "workflowDefinitionId",
+              description = "The ID for the workflow definition",
+              required = true)
+          @PathVariable
+          String workflowDefinitionId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the workflow definition category.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the workflow definition category could not be deleted
+   */
+  @Operation(
+      summary = "Delete the workflow definition category",
+      description = "Delete the workflow definition category")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The workflow definition category was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow definition category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflow-definition-categories/{workflowDefinitionCategoryId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void deleteWorkflowDefinitionCategory(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "workflowDefinitionCategoryId",
+              description = "The ID for the workflow definition category",
+              required = true)
+          @PathVariable
+          String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the workflow engine.
+   *
+   * @param workflowEngineId the ID for the workflow engine
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowEngineNotFoundException if the workflow engine could not be found
+   * @throws ServiceUnavailableException if the workflow engine could not be deleted
+   */
+  @Operation(summary = "Delete the workflow engine", description = "Delete the workflow engine")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow engine was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow engine could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflow-engines/{workflowEngineId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void deleteWorkflowEngine(
+      @Parameter(
+              name = "workflowEngineId",
+              description = "The ID for the workflow engine",
+              required = true)
+          @PathVariable
+          String workflowEngineId)
+      throws InvalidArgumentException, WorkflowEngineNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the workflow note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param workflowNoteId the ID for the workflow note
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowNoteNotFoundException if the workflow note could not be found
+   * @throws ServiceUnavailableException if the workflow note could not be deleted
+   */
+  @Operation(summary = "Delete the workflow note", description = "Delete the workflow note")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow note was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow or workflow note could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflows/{workflowId}/notes/{workflowNoteId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+  void deleteWorkflowNote(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
+          @PathVariable
+          UUID workflowId,
+      @Parameter(
+              name = "workflowNoteId",
+              description = "The ID for the workflow note",
+              required = true)
+          @PathVariable
+          UUID workflowNoteId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowNoteNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the latest version of the workflow definition.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category the workflow
+   *     definition is associated with
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @return the latest version of the workflow definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws ServiceUnavailableException if the workflow definition could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the workflow definition",
+      description = "Retrieve the workflow definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The workflow definition was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description =
+                "The workflow definition category or workflow definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  WorkflowDefinition getWorkflowDefinition(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "workflowDefinitionCategoryId",
+              description = "The ID for the workflow definition category",
+              required = true)
+          @PathVariable
+          String workflowDefinitionCategoryId,
+      @Parameter(
+              name = "workflowDefinitionId",
+              description = "The ID for the workflow definition",
+              required = true)
+          @PathVariable
+          String workflowDefinitionId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow definition category.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category
+   * @return the workflow definition category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the workflow definition category could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the workflow definition category",
+      description = "Retrieve the workflow definition category")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The workflow definition category was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow definition category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflow-definition-categories/{workflowDefinitionCategoryId}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  WorkflowDefinitionCategory getWorkflowDefinitionCategory(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "workflowDefinitionCategoryId",
+              description = "The ID for the workflow definition category",
+              required = true)
+          @PathVariable
+          String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow definition version.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category the workflow
+   *     definition is associated with
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return the workflow definition version
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws ServiceUnavailableException if the workflow definition version could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the workflow definition version",
+      description = "Retrieve the workflow definition version")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The workflow definition version was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description =
+                "The workflow definition category or workflow definition version could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  WorkflowDefinition getWorkflowDefinitionVersion(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "workflowDefinitionCategoryId",
+              description = "The ID for the workflow definition category",
+              required = true)
+          @PathVariable
+          String workflowDefinitionCategoryId,
+      @Parameter(
+              name = "workflowDefinitionId",
+              description = "The ID for the workflow definition",
+              required = true)
+          @PathVariable
+          String workflowDefinitionId,
+      @Parameter(
+              name = "workflowDefinitionVersion",
+              description = "The version of the workflow definition",
+              required = true)
+          @PathVariable
+          int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the workflow.

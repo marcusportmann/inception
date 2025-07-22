@@ -164,6 +164,8 @@ public class WorkflowServiceTests {
         workflowService.createWorkflow(
             TenantUtil.DEFAULT_TENANT_ID, createWorkflowRequest, "TEST1");
 
+    assertTrue(workflowService.workflowExists(TenantUtil.DEFAULT_TENANT_ID, workflow.getId()));
+
     Workflow retrievedWorkflow =
         workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
@@ -235,6 +237,10 @@ public class WorkflowServiceTests {
     WorkflowNote workflowNote =
         workflowService.createWorkflowNote(
             TenantUtil.DEFAULT_TENANT_ID, createWorkflowNoteRequest, "TEST1");
+
+    assertTrue(
+        workflowService.workflowNoteExists(
+            TenantUtil.DEFAULT_TENANT_ID, workflowNote.getWorkflowId(), workflowNote.getId()));
 
     WorkflowNote retrievedWorkflowNote =
         workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
@@ -412,6 +418,10 @@ public class WorkflowServiceTests {
     workflowService.createWorkflowDefinition(sharedWorkflowDefinition);
 
     assertTrue(workflowService.workflowDefinitionExists(sharedWorkflowDefinition.getId()));
+
+    assertTrue(
+        workflowService.workflowDefinitionExists(
+            sharedWorkflowDefinition.getCategoryId(), sharedWorkflowDefinition.getId()));
 
     WorkflowDefinition retrievedWorkflowDefinition =
         workflowService.getWorkflowDefinition(sharedWorkflowDefinition.getId());

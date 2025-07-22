@@ -479,4 +479,23 @@ public class InternalWorkflowStore implements WorkflowStore {
           e);
     }
   }
+
+  @Override
+  public boolean workflowNoteExists(UUID tenantId, UUID workflowId, UUID workflowNoteId)
+      throws ServiceUnavailableException {
+    try {
+      return workflowNoteRepository.existsByTenantIdAndWorkflowIdAndId(
+          tenantId, workflowId, workflowNoteId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow note ("
+              + workflowNoteId
+              + ") exists for the workflow ("
+              + workflowId
+              + ") and tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
 }

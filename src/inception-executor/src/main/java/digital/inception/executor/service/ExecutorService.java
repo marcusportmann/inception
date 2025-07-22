@@ -510,6 +510,9 @@ public interface ExecutorService {
   boolean taskTypeExists(String taskTypeCode)
       throws InvalidArgumentException, ServiceUnavailableException;
 
+  /** Trigger the task execution. */
+  void triggerTaskExecution();
+
   /**
    * Unlock a locked task.
    *

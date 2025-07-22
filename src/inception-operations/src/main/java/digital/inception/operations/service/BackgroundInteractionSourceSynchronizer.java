@@ -16,15 +16,10 @@
 
 package digital.inception.operations.service;
 
-import reactor.core.publisher.Mono;
 
 /**
  * The {@code BackgroundInteractionSourceSynchronizer} interface defines the interface that must be
  * implemented by a Background Interaction Source Synchronizer.
- *
- * <p>This interface is required because The {@code BackgroundInteractionSourceSynchronizerImpl}
- * class leverages the @Async and @Scheduled annotations, and implements the {@code SmartLifecycle}
- * interface.
  *
  * @author Marcus Portmann
  */
@@ -35,5 +30,5 @@ public interface BackgroundInteractionSourceSynchronizer {
    *
    * @return the number of new interactions
    */
-  Mono<Integer> synchronizeInteractionSources();
+  int synchronizeInteractionSources();
 }

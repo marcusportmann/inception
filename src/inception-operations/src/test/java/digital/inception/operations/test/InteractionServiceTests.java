@@ -47,7 +47,6 @@ import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.MailboxProtocol;
-import digital.inception.operations.service.BackgroundInteractionProcessor;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.InteractionService;
 import digital.inception.operations.util.MessageUtil;
@@ -122,9 +121,6 @@ public class InteractionServiceTests {
   /** The secure random number generator. */
   private static final SecureRandom secureRandom = new SecureRandom();
 
-  /** The Background Interaction Processor. */
-  @Autowired private BackgroundInteractionProcessor backgroundInteractionProcessor;
-
   /** The Background Interaction Source Synchronizer. */
   @Autowired
   private BackgroundInteractionSourceSynchronizer backgroundInteractionSourceSynchronizer;
@@ -144,7 +140,7 @@ public class InteractionServiceTests {
                 ? greenMail.getSmtps().createSession()
                 : greenMail.getSmtp().createSession());
 
-    // Send message
+    // Send the message
     Transport.send(originalOutlookHTMLMessageWithImage);
 
     // Wait for mail to arrive
@@ -203,59 +199,65 @@ public class InteractionServiceTests {
   /** Test the interaction functionality. */
   @Test
   public void interactionTest() throws Exception {
-    InteractionSource interactionSource = InteractionSource.createVirtualInteractionSource(
-        UUID.randomUUID(),
-        TenantUtil.DEFAULT_TENANT_ID,
-        "Virtual Interaction Source " + randomId());
+    InteractionSource interactionSource =
+        InteractionSource.createVirtualInteractionSource(
+            UUID.randomUUID(),
+            TenantUtil.DEFAULT_TENANT_ID,
+            "Virtual Interaction Source " + randomId());
 
     interactionService.createInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource);
 
-    InteractionSource retrievedInteractionSource = interactionService.getInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId()) ;
+    InteractionSource retrievedInteractionSource =
+        interactionService.getInteractionSource(
+            TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
 
     compareInteractionSources(interactionSource, retrievedInteractionSource);
 
-    Interaction interaction = new Interaction(UUID.randomUUID(),
-        TenantUtil.DEFAULT_TENANT_ID,
-        interactionSource.getId(),
-        InteractionType.OTHER,
-       "test_sender",
-        List.of("test_recipient"),
-        "Test subject " + randomId(),
-        "This is the test content.",
-        InteractionMimeType.TEXT_PLAIN,
-        InteractionStatus.AVAILABLE);
+    Interaction interaction =
+        new Interaction(
+            UUID.randomUUID(),
+            TenantUtil.DEFAULT_TENANT_ID,
+            interactionSource.getId(),
+            InteractionType.OTHER,
+            "test_sender",
+            List.of("test_recipient"),
+            "Test subject " + randomId(),
+            "This is the test content.",
+            InteractionMimeType.TEXT_PLAIN,
+            InteractionStatus.AVAILABLE);
 
     interactionService.createInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction);
 
-    Interaction retrievedInteraction = interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
+    Interaction retrievedInteraction =
+        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
 
     compareInteractions(interaction, retrievedInteraction);
 
-    interactionService.deleteInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getId());
+    interactionService.deleteInteraction(
+        TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getId());
 
     assertThrows(
         InteractionNotFoundException.class,
-        () -> {
-          interactionService.getInteraction(
-              TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
-        });
+        () -> interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction.getId()));
 
     interactionSource.setName("Updated " + interactionSource.getName());
 
     interactionService.updateInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource);
 
-    retrievedInteractionSource = interactionService.getInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
+    retrievedInteractionSource =
+        interactionService.getInteractionSource(
+            TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
 
     compareInteractionSources(interactionSource, retrievedInteractionSource);
 
-    interactionService.deleteInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
+    interactionService.deleteInteractionSource(
+        TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
 
     assertThrows(
         InteractionSourceNotFoundException.class,
-        () -> {
-          interactionService.getInteractionSource(
-              TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
-        });
+        () ->
+            interactionService.getInteractionSource(
+                TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId()));
   }
 
   /** Test the mailbox interaction source functionality. */
@@ -293,14 +295,14 @@ public class InteractionServiceTests {
     Message originalOutlookHTMLMessageWithImage =
         getOriginalOutlookHTMLMessageWithImage(greenMail.getSmtp().createSession());
 
-    // Send message
+    // Send the message
     Transport.send(originalOutlookHTMLMessageWithImage);
 
     // Wait for mail to arrive
     assertTrue(greenMail.waitForIncomingEmail(5000, 1));
 
     Integer numberOfNewInteractions =
-        backgroundInteractionSourceSynchronizer.synchronizeInteractionSources().block();
+        backgroundInteractionSourceSynchronizer.synchronizeInteractionSources();
 
     assertEquals(1, numberOfNewInteractions);
 
@@ -321,7 +323,7 @@ public class InteractionServiceTests {
         retrievedInteractionSummaries.getInteractionSummaries().getFirst().getId();
 
     numberOfNewInteractions =
-        backgroundInteractionSourceSynchronizer.synchronizeInteractionSources().block();
+        backgroundInteractionSourceSynchronizer.synchronizeInteractionSources();
 
     assertEquals(0, numberOfNewInteractions);
 
@@ -439,7 +441,11 @@ public class InteractionServiceTests {
         retrievedInteraction.getType(),
         "Invalid value for the \"type\" interaction property");
 
-    assertTrue(interactionService.interactionExistsWithSourceIdAndSourceReference(TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getSourceId(), retrievedInteraction.getSourceReference()));
+    assertTrue(
+        interactionService.interactionExistsWithSourceIdAndSourceReference(
+            TenantUtil.DEFAULT_TENANT_ID,
+            retrievedInteraction.getSourceId(),
+            retrievedInteraction.getSourceReference()));
 
     InteractionAttachmentSummaries retrievedInteractionAttachmentSummaries =
         interactionService.getInteractionAttachmentSummaries(
@@ -497,59 +503,55 @@ public class InteractionServiceTests {
         retrievedInteractionAttachment.getTenantId(),
         "Invalid value for the \"tenantId\" interaction attachment property");
 
-    assertTrue(interactionService.interactionAttachmentExistsWithInteractionIdAndHash(
-        TenantUtil.DEFAULT_TENANT_ID,
-        retrievedInteraction.getId(),
-        retrievedInteractionAttachment.getHash()));
+    assertTrue(
+        interactionService.interactionAttachmentExistsWithInteractionIdAndHash(
+            TenantUtil.DEFAULT_TENANT_ID,
+            retrievedInteraction.getId(),
+            retrievedInteractionAttachment.getHash()));
 
     interactionService.deleteInteractionAttachment(
         TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
 
     assertThrows(
         InteractionAttachmentNotFoundException.class,
-        () -> {
-          interactionService.deleteInteractionAttachment(
-              TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
-        });
+        () ->
+            interactionService.deleteInteractionAttachment(
+                TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId));
 
     assertThrows(
         InteractionAttachmentNotFoundException.class,
-        () -> {
-          interactionService.getInteractionAttachment(
-              TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
-        });
+        () ->
+            interactionService.getInteractionAttachment(
+                TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId));
 
     interactionService.deleteInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
 
     assertThrows(
         InteractionNotFoundException.class,
-        () -> {
-          interactionService.deleteInteraction(
-              TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
-        });
+        () ->
+            interactionService.deleteInteraction(
+                TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId));
 
     assertThrows(
         InteractionNotFoundException.class,
-        () -> {
-          interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
-        });
+        () ->
+            interactionService.getInteraction(
+                TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId));
 
     assertThrows(
         InteractionAttachmentNotFoundException.class,
-        () -> {
-          interactionService.getInteractionAttachment(
-              TenantUtil.DEFAULT_TENANT_ID, anotherRetrievedInteractionAttachmentId);
-        });
+        () ->
+            interactionService.getInteractionAttachment(
+                TenantUtil.DEFAULT_TENANT_ID, anotherRetrievedInteractionAttachmentId));
 
     interactionService.deleteInteractionSource(
         TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
 
     assertThrows(
         InteractionSourceNotFoundException.class,
-        () -> {
-          interactionService.getInteractionSource(
-              TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
-        });
+        () ->
+            interactionService.getInteractionSource(
+                TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource.getId()));
   }
 
   /** Test the WhatsApp interaction source functionality. */
@@ -585,10 +587,9 @@ public class InteractionServiceTests {
 
     assertThrows(
         InteractionSourceNotFoundException.class,
-        () -> {
-          interactionService.getInteractionSource(
-              TenantUtil.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId());
-        });
+        () ->
+            interactionService.getInteractionSource(
+                TenantUtil.DEFAULT_TENANT_ID, whatsAppInteractionSource.getId()));
   }
 
   @BeforeEach
@@ -664,8 +665,7 @@ public class InteractionServiceTests {
     }
   }
 
-  private void compareInteractions(
-      Interaction interaction1, Interaction interaction2) {
+  private void compareInteractions(Interaction interaction1, Interaction interaction2) {
     assertEquals(
         interaction1.getAssigned(),
         interaction2.getAssigned(),

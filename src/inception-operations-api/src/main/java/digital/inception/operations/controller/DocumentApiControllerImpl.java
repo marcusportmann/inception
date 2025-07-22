@@ -26,8 +26,6 @@ import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
-import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
-import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
@@ -36,7 +34,6 @@ import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
-import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.service.DocumentService;
 import java.util.Objects;
 import java.util.UUID;
@@ -151,6 +148,144 @@ public class DocumentApiControllerImpl extends SecureApiController
             tenantId, createDocumentNoteRequest, getAuthenticationName());
 
     return documentNote.getId();
+  }
+
+  @Override
+  public void deleteDocument(UUID tenantId, UUID documentId)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    documentService.deleteDocument(tenantId, documentId);
+  }
+
+  @Override
+  public void deleteDocumentDefinition(
+      UUID tenantId, String documentDefinitionCategoryId, String documentDefinitionId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (documentDefinitionCategoryId == null) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
+    try {
+      if (!documentService.documentDefinitionCategoryExists(documentDefinitionCategoryId)) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
+      }
+
+      if (!documentService.documentDefinitionExists(
+          documentDefinitionCategoryId, documentDefinitionId)) {
+        throw new DocumentDefinitionNotFoundException(documentDefinitionId);
+      }
+    } catch (DocumentDefinitionCategoryNotFoundException | DocumentDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document definition ("
+              + documentDefinitionId
+              + ") for the document definition category ("
+              + documentDefinitionCategoryId
+              + ")",
+          e);
+    }
+
+    documentService.deleteDocumentDefinition(documentDefinitionId);
+  }
+
+  @Override
+  public void deleteDocumentDefinitionCategory(UUID tenantId, String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getDocumentDefinitionCategories() method where
+     *       we want to retrieve the "global" and "tenant-specific" document definition categories.
+     *       The ability to create or update document definition categories is an administrative
+     *       function and is not assigned to a user for a particular tenant.
+     */
+
+    documentService.deleteDocumentDefinitionCategory(documentDefinitionCategoryId);
+  }
+
+  @Override
+  public void deleteDocumentNote(UUID tenantId, UUID documentId, UUID documentNoteId)
+      throws InvalidArgumentException,
+          DocumentNotFoundException,
+          DocumentNoteNotFoundException,
+          ServiceUnavailableException {
+    if (documentId == null) {
+      throw new InvalidArgumentException("documentId");
+    }
+
+    try {
+      if (!documentService.documentExists(tenantId, documentId)) {
+        throw new DocumentNotFoundException(documentId);
+      }
+
+      if (!documentService.documentNoteExists(tenantId, documentId, documentNoteId)) {
+        throw new DocumentNoteNotFoundException(documentId);
+      }
+    } catch (DocumentNotFoundException | DocumentNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document note ("
+              + documentNoteId
+              + ") for the document ("
+              + documentId
+              + ")",
+          e);
+    }
+
+    documentService.deleteDocumentNote(tenantId, documentNoteId);
+  }
+
+  @Override
+  public DocumentDefinition getDocumentDefinition(
+      UUID tenantId, String documentDefinitionCategoryId, String documentDefinitionId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
+    try {
+      if (!documentService.documentDefinitionCategoryExists(documentDefinitionCategoryId)) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
+      }
+
+      if (!documentService.documentDefinitionExists(
+          documentDefinitionCategoryId, documentDefinitionId)) {
+        throw new DocumentDefinitionNotFoundException(documentDefinitionId);
+      }
+    } catch (DocumentDefinitionCategoryNotFoundException | DocumentDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document definition ("
+              + documentDefinitionId
+              + ") under the document definition category ("
+              + documentDefinitionCategoryId
+              + ")",
+          e);
+    }
+
+    return documentService.getDocumentDefinition(documentDefinitionId);
+  }
+
+  @Override
+  public DocumentDefinitionCategory getDocumentDefinitionCategory(
+      UUID tenantId, String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    DocumentDefinitionCategory documentDefinitionCategory =
+        documentService.getDocumentDefinitionCategory(documentDefinitionCategoryId);
+
+    if ((documentDefinitionCategory.getTenantId() != null)
+        && (!documentDefinitionCategory.getTenantId().equals(tenantId))) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    return documentDefinitionCategory;
   }
 
   @Override

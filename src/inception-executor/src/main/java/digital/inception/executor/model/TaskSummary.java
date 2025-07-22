@@ -137,8 +137,8 @@ public class TaskSummary implements Serializable {
   @Schema(
       description = "The date and time the task was queued for execution",
       requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty
-  @XmlElement(name = "Queued")
+  @JsonProperty(required = true)
+  @XmlElement(name = "Queued", required = true)
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @Column(name = "queued")

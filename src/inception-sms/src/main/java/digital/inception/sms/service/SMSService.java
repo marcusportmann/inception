@@ -143,6 +143,9 @@ public interface SMSService {
   void setSMSStatus(UUID smsId, SMSStatus status)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
 
+  /** Trigger the SMS sending. */
+  void triggerSMSSending();
+
   /**
    * Unlock the SMS.
    *

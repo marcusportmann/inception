@@ -42,10 +42,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.w3c.dom.Document;
@@ -66,6 +69,9 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
 
   /** The SMS Portal provider. */
   private final String PROVIDER_SMS_PORTAL = "sms-portal";
+
+  /** The Spring application event publisher. */
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   /* The name of the SMS Service instance. */
   private final String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
@@ -111,15 +117,18 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
    * Constructs a new {@code SMSServiceImpl}.
    *
    * @param applicationContext the Spring application context
+   * @param applicationEventPublisher the Spring application event publisher
    * @param webClientBuilder the web client builder
    * @param smsRepository the SMS persistence
    */
   public SMSServiceImpl(
       ApplicationContext applicationContext,
+      ApplicationEventPublisher applicationEventPublisher,
       WebClient.Builder webClientBuilder,
       SMSRepository smsRepository) {
     super(applicationContext);
 
+    this.applicationEventPublisher = applicationEventPublisher;
     this.webClientBuilder = webClientBuilder;
     this.smsRepository = smsRepository;
   }
@@ -282,6 +291,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
   }
 
   @Override
+  @Transactional
   public void sendSMS(String mobileNumber, String message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(mobileNumber)) {
@@ -297,10 +307,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
 
       createSMS(sms);
 
-      try {
-        getApplicationContext().getBean(BackgroundSMSSender.class).sendSMSs();
-      } catch (Throwable ignored) {
-      }
+      triggerSMSSending();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to queue the SMS for the mobile number (" + mobileNumber + ") for sending", e);
@@ -459,6 +466,18 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
   }
 
   @Override
+  public void triggerSMSSending() {
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            // Fire-and-forget trigger *after* the TX is really committed
+            applicationEventPublisher.publishEvent(new TriggerSMSSendingEvent());
+          }
+        });
+  }
+
+  @Override
   public void unlockSMS(UUID smsId, SMSStatus status)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
@@ -519,6 +538,26 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
         + "</senddata>";
   }
 
+  /*
+  private APISoap getMyMobileAPIService() {
+    // Retrieve the proxy for the MyMobileAPI service
+    URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
+        "META-INF/wsdl/MyMobileAPI.wsdl");
+
+    API api = new API(wsdlLocation, new QName("http://www.mymobileapi.com/api5", "API"));
+
+    APISoap apiSoap = api.getAPISoap();
+
+    BindingProvider bindingProvider = ((BindingProvider) apiSoap);
+
+    // Set the endpoint for the service
+    bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+        myMobileAPIEndPoint);
+
+    return apiSoap;
+  }
+  */
+
   private String formatMobileNumber(String mobileNumber) {
     if (!StringUtils.hasText(mobileNumber)) {
       return "";
@@ -554,26 +593,6 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
       throw new ServiceUnavailableException("Failed to retrieve the SMS Portal token", e);
     }
   }
-
-  /*
-  private APISoap getMyMobileAPIService() {
-    // Retrieve the proxy for the MyMobileAPI service
-    URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
-        "META-INF/wsdl/MyMobileAPI.wsdl");
-
-    API api = new API(wsdlLocation, new QName("http://www.mymobileapi.com/api5", "API"));
-
-    APISoap apiSoap = api.getAPISoap();
-
-    BindingProvider bindingProvider = ((BindingProvider) apiSoap);
-
-    // Set the endpoint for the service
-    bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-        myMobileAPIEndPoint);
-
-    return apiSoap;
-  }
-  */
 
   private Element parseAPIResultXML(String xml) {
     try {
@@ -624,4 +643,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
       throw new RuntimeException("Failed to parse the API result XML", e);
     }
   }
+
+  /** The {@code TriggerSMSSendingEvent} record. */
+  public record TriggerSMSSendingEvent() {}
 }

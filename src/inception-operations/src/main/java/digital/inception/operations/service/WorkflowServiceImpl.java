@@ -866,6 +866,32 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public boolean workflowDefinitionExists(
+      String workflowDefinitionCategoryId, String workflowDefinitionId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
+    }
+
+    if (!StringUtils.hasText(workflowDefinitionId)) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    try {
+      return workflowDefinitionRepository.existsByCategoryIdAndId(
+          workflowDefinitionCategoryId, workflowDefinitionId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow definition ("
+              + workflowDefinitionId
+              + ") exists and is associated with the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public boolean workflowDefinitionExists(String workflowDefinitionId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(workflowDefinitionId)) {
@@ -931,6 +957,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           "Failed to check whether the workflow ("
               + workflowId
               + ") exists for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean workflowNoteExists(UUID tenantId, UUID workflowId, UUID workflowNoteId)
+      throws ServiceUnavailableException {
+    try {
+      return workflowStore.workflowNoteExists(tenantId, workflowId, workflowNoteId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow note ("
+              + workflowNoteId
+              + ") exists for the workflow ("
+              + workflowId
+              + ") and tenant ("
               + tenantId
               + ")",
           e);

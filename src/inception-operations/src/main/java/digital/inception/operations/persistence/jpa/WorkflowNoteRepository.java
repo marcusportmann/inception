@@ -46,6 +46,17 @@ public interface WorkflowNoteRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID workflowNoteId);
 
   /**
+   * Returns whether a workflow note with the specified tenant ID, workflow ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the workflow note is associated with
+   * @param workflowId the ID for the workflow the workflow note is associated with
+   * @param workflowNoteId the ID for the workflow note
+   * @return {@code true} if a workflow note with the specified tenant ID, workflow ID and ID exists
+   *     or {@code false} otherwise
+   */
+  boolean existsByTenantIdAndWorkflowIdAndId(UUID tenantId, UUID workflowId, UUID workflowNoteId);
+
+  /**
    * Retrieve the workflow note.
    *
    * @param tenantId the ID for the tenant the workflow note is associated with

@@ -73,7 +73,6 @@ public class BackgroundSMSSender {
   }
 
   /** Send the SMSs. */
-  @Async
   @Scheduled(cron = "0 * * * * *")
   public void sendSMSs() {
     Optional<SMS> smsOptional;

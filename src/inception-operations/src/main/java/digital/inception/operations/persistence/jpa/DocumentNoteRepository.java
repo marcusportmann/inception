@@ -46,6 +46,17 @@ public interface DocumentNoteRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID documentNoteId);
 
   /**
+   * Returns whether a document note with the specified tenant ID, document ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the document note is associated with
+   * @param documentId the ID for the document the document note is associated with
+   * @param documentNoteId the ID for the document note
+   * @return {@code true} if a document note with the specified tenant ID, document ID and ID exists
+   *     or {@code false} otherwise
+   */
+  boolean existsByTenantIdAndDocumentIdAndId(UUID tenantId, UUID documentId, UUID documentNoteId);
+
+  /**
    * Retrieve the document note.
    *
    * @param tenantId the ID for the tenant the document note is associated with

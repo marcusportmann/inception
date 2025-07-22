@@ -18,6 +18,7 @@ package digital.inception.scheduler;
 
 import digital.inception.core.CoreConfiguration;
 import digital.inception.jpa.JpaUtil;
+import java.util.concurrent.Executor;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
  * The {@code SchedulerConfiguration} class provides the Spring configuration for the Scheduler
@@ -58,5 +60,23 @@ public class SchedulerConfiguration {
       @Qualifier("applicationDataSource") DataSource dataSource) {
     return JpaUtil.createEntityManager(
         applicationContext, "scheduler", dataSource, "digital.inception.scheduler");
+  }
+
+  /**
+   * Returns the dedicated {@code ThreadPoolTaskExecutor} used to trigger job execution
+   * asynchronously.
+   *
+   * @return the dedicated {@code ThreadPoolTaskExecutor} used to trigger job execution
+   *     asynchronously
+   */
+  @Bean
+  public Executor triggerJobExecutionExecutor() {
+    ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    threadPoolTaskExecutor.setCorePoolSize(1);
+    threadPoolTaskExecutor.setMaxPoolSize(2);
+    threadPoolTaskExecutor.setQueueCapacity(100);
+    threadPoolTaskExecutor.setThreadNamePrefix("trigger-job-execution-task-");
+    threadPoolTaskExecutor.initialize();
+    return threadPoolTaskExecutor;
   }
 }

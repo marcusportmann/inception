@@ -19,15 +19,12 @@ package digital.inception.operations.service;
 import digital.inception.operations.model.InteractionSource;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * The {@code BackgroundInteractionSourceSynchronizerImpl} class implements the Background
@@ -43,6 +40,9 @@ public class BackgroundInteractionSourceSynchronizerImpl
   /* Logger */
   private static final Logger log =
       LoggerFactory.getLogger(BackgroundInteractionSourceSynchronizerImpl.class);
+
+  /** Is the Background Interaction Source Synchronizer executing? */
+  private final AtomicBoolean executing = new AtomicBoolean(false);
 
   /** The Interaction Service. */
   private final InteractionService interactionService;
@@ -80,35 +80,38 @@ public class BackgroundInteractionSourceSynchronizerImpl
   @Override
   public void stop() {
     if (running.compareAndSet(true, false)) {
-      log.info("Background Interaction Source Synchronizer started");
+      log.info("Shutting down the Background Interaction Source Synchronizer");
     }
   }
 
-  @Scheduled(fixedDelay = 60, timeUnit = TimeUnit.SECONDS)
-  @Override
-  public Mono<Integer> synchronizeInteractionSources() {
-    return Mono.fromCallable(this::synchronizeInteractionSourcesInternal)
-        .subscribeOn(Schedulers.boundedElastic());
-  }
+  /** Synchronize the interaction sources. */
+  @Scheduled(cron = "0 * * * * *")
+  public int synchronizeInteractionSources() {
+    if (!executing.compareAndSet(false, true)) {
+      return 0;
+    }
 
-  private int synchronizeInteractionSourcesInternal() {
-    int numberOfNewInteractions = 0;
+    try {
+      int numberOfNewInteractions = 0;
 
-    if (running.get()) {
-      try {
-        List<InteractionSource> interactionSources = interactionService.getInteractionSources();
+      if (running.get()) {
+        try {
+          List<InteractionSource> interactionSources = interactionService.getInteractionSources();
 
-        if (running.get()) {
-          for (InteractionSource interactionSource : interactionSources) {
-            numberOfNewInteractions +=
-                interactionService.synchronizeInteractionSource(interactionSource);
+          if (running.get()) {
+            for (InteractionSource interactionSource : interactionSources) {
+              numberOfNewInteractions +=
+                  interactionService.synchronizeInteractionSource(interactionSource);
+            }
           }
+        } catch (Throwable e) {
+          log.error("Failed to synchronize the interaction sources", e);
         }
-      } catch (Throwable e) {
-        log.error("Failed to synchronize the interaction sources", e);
       }
-    }
 
-    return numberOfNewInteractions;
+      return numberOfNewInteractions;
+    } finally {
+      executing.set(false);
+    }
   }
 }

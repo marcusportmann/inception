@@ -22,8 +22,11 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
+import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
+import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
+import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
@@ -33,6 +36,7 @@ import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.service.WorkflowService;
 import java.util.Objects;
@@ -133,6 +137,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void createWorkflowEngine(WorkflowEngine workflowEngine)
+      throws InvalidArgumentException,
+          DuplicateWorkflowEngineException,
+          ServiceUnavailableException {
+    workflowService.createWorkflowEngine(workflowEngine);
+  }
+
+  @Override
   public UUID createWorkflowNote(UUID tenantId, CreateWorkflowNoteRequest createWorkflowNoteRequest)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
@@ -148,6 +160,190 @@ public class WorkflowApiControllerImpl extends SecureApiController
             tenantId, createWorkflowNoteRequest, getAuthenticationName());
 
     return workflowNote.getId();
+  }
+
+  @Override
+  public void deleteWorkflow(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    workflowService.deleteWorkflow(tenantId, workflowId);
+  }
+
+  @Override
+  public void deleteWorkflowDefinition(
+      UUID tenantId, String workflowDefinitionCategoryId, String workflowDefinitionId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (workflowDefinitionCategoryId == null) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
+    }
+
+    try {
+      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      if (!workflowService.workflowDefinitionExists(
+          workflowDefinitionCategoryId, workflowDefinitionId)) {
+        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
+      }
+    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow definition ("
+              + workflowDefinitionId
+              + ") for the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ")",
+          e);
+    }
+
+    workflowService.deleteWorkflowDefinition(workflowDefinitionId);
+  }
+
+  @Override
+  public void deleteWorkflowDefinitionCategory(UUID tenantId, String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
+     *       The ability to create or update workflow definition categories is an administrative
+     *       function and is not assigned to a user for a particular tenant.
+     */
+
+    workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategoryId);
+  }
+
+  @Override
+  public void deleteWorkflowEngine(String workflowEngineId)
+      throws InvalidArgumentException,
+          WorkflowEngineNotFoundException,
+          ServiceUnavailableException {
+    workflowService.deleteWorkflowEngine(workflowEngineId);
+  }
+
+  @Override
+  public void deleteWorkflowNote(UUID tenantId, UUID workflowId, UUID workflowNoteId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowNoteNotFoundException,
+          ServiceUnavailableException {
+    if (workflowId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(workflowId);
+      }
+
+      if (!workflowService.workflowNoteExists(tenantId, workflowId, workflowNoteId)) {
+        throw new WorkflowNoteNotFoundException(workflowId);
+      }
+    } catch (WorkflowNotFoundException | WorkflowNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow note ("
+              + workflowNoteId
+              + ") for the workflow ("
+              + workflowId
+              + ")",
+          e);
+    }
+
+    workflowService.deleteWorkflowNote(tenantId, workflowNoteId);
+  }
+
+  @Override
+  public WorkflowDefinition getWorkflowDefinition(
+      UUID tenantId, String workflowDefinitionCategoryId, String workflowDefinitionId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException {
+    try {
+      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      if (!workflowService.workflowDefinitionExists(
+          workflowDefinitionCategoryId, workflowDefinitionId)) {
+        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
+      }
+    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow definition ("
+              + workflowDefinitionId
+              + ") under the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ")",
+          e);
+    }
+
+    return workflowService.getWorkflowDefinition(workflowDefinitionId);
+  }
+
+  @Override
+  public WorkflowDefinitionCategory getWorkflowDefinitionCategory(
+      UUID tenantId, String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    WorkflowDefinitionCategory workflowDefinitionCategory =
+        workflowService.getWorkflowDefinitionCategory(workflowDefinitionCategoryId);
+
+    if ((workflowDefinitionCategory.getTenantId() != null)
+        && (!workflowDefinitionCategory.getTenantId().equals(tenantId))) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    return workflowDefinitionCategory;
+  }
+
+  @Override
+  public WorkflowDefinition getWorkflowDefinitionVersion(
+      UUID tenantId,
+      String workflowDefinitionCategoryId,
+      String workflowDefinitionId,
+      int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
+          ServiceUnavailableException {
+    try {
+      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      if (!workflowService.workflowDefinitionExists(
+          workflowDefinitionCategoryId, workflowDefinitionId)) {
+        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
+      }
+    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the version ("
+              + workflowDefinitionVersion
+              + ") of the workflow definition ("
+              + workflowDefinitionId
+              + ") under the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ")",
+          e);
+    }
+
+    return workflowService.getWorkflowDefinitionVersion(
+        workflowDefinitionId, workflowDefinitionVersion);
   }
 
   @Override

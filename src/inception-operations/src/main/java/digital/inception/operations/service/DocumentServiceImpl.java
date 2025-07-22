@@ -329,6 +329,50 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public boolean documentDefinitionCategoryExists(String documentDefinitionCategoryId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
+    try {
+      return documentDefinitionCategoryRepository.existsById(documentDefinitionCategoryId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the document definition category ("
+              + documentDefinitionCategoryId
+              + ") exists",
+          e);
+    }
+  }
+
+  @Override
+  public boolean documentDefinitionExists(
+      String documentDefinitionCategoryId, String documentDefinitionId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
+    if (!StringUtils.hasText(documentDefinitionId)) {
+      throw new InvalidArgumentException("documentDefinitionId");
+    }
+
+    try {
+      return documentDefinitionRepository.existsByCategoryIdAndId(
+          documentDefinitionCategoryId, documentDefinitionId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the document definition ("
+              + documentDefinitionId
+              + ") exists and is associated with the document definition category ("
+              + documentDefinitionCategoryId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public boolean documentDefinitionExists(String documentDefinitionId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(documentDefinitionId)) {
@@ -353,6 +397,24 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
           "Failed to check whether the document ("
               + documentId
               + ") exists for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean documentNoteExists(UUID tenantId, UUID documentId, UUID documentNoteId)
+      throws ServiceUnavailableException {
+    try {
+      return documentStore.documentNoteExists(tenantId, documentId, documentNoteId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the document note ("
+              + documentNoteId
+              + ") exists for the document ("
+              + documentId
+              + ") and tenant ("
               + tenantId
               + ")",
           e);

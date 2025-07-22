@@ -187,6 +187,25 @@ public class InternalDocumentStore implements DocumentStore {
   }
 
   @Override
+  public boolean documentNoteExists(UUID tenantId, UUID documentId, UUID documentNoteId)
+      throws ServiceUnavailableException {
+    try {
+      return documentNoteRepository.existsByTenantIdAndDocumentIdAndId(
+          tenantId, documentId, documentNoteId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the document note ("
+              + documentNoteId
+              + ") exists for the document ("
+              + documentId
+              + ") and tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public Document getDocument(UUID tenantId, UUID documentId)
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {

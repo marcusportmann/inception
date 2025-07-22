@@ -158,6 +158,7 @@ public class TaskSummaries implements Serializable {
       int pageSize) {
     this.taskSummaries = taskSummaries;
     this.total = total;
+    this.type = type;
     this.status = status;
     this.filter = filter;
     this.sortBy = sortBy;

@@ -31,7 +31,7 @@ public class WorkflowDefinitionAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** name of the workflow definition attribute. */
+  /** The name of the workflow definition attribute. */
   private String name;
 
   /** The workflow definition the workflow definition attribute is associated with. */

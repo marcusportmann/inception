@@ -339,9 +339,9 @@ public class InternalInteractionStore implements InteractionStore {
 
       return new InteractionAttachmentSummaries(
           tenantId,
+          interactionId,
           interactionAttachmentSummaryPage.toList(),
           interactionAttachmentSummaryPage.getTotalElements(),
-          interactionId,
           filter,
           sortBy,
           sortDirection,

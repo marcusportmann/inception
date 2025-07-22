@@ -52,6 +52,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
+
 /**
  * The {@code WorkflowDefinition} class holds the information for a workflow definition.
  *
@@ -60,30 +61,32 @@ import org.springframework.util.StringUtils;
 @Schema(description = "A workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "id",
-  "version",
-  "tenantId",
-  "name",
-  "engineId",
-  "documentDefinitions",
-  "validationSchemaType",
-  "validationSchema",
-  "attributes"
+    "id",
+    "version",
+    "categoryId",
+    "tenantId",
+    "name",
+    "engineId",
+    "documentDefinitions",
+    "validationSchemaType",
+    "validationSchema",
+    "attributes"
 })
 @XmlRootElement(name = "WorkflowDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinition",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "id",
-      "version",
-      "tenantId",
-      "name",
-      "engineId",
-      "documentDefinitions",
-      "validationSchemaType",
-      "validationSchema",
-      "attributes"
+        "id",
+        "version",
+        "categoryId",
+        "tenantId",
+        "name",
+        "engineId",
+        "documentDefinitions",
+        "validationSchemaType",
+        "validationSchema",
+        "attributes"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

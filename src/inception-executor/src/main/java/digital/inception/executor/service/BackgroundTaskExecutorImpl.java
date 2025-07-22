@@ -31,9 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * The {@code BackgroundTaskExecutorImpl} class implements the Background Task Executor.
@@ -47,10 +47,13 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(BackgroundTaskExecutorImpl.class);
 
+  /** Is the Background Task Executor executing? */
+  private final AtomicBoolean executing = new AtomicBoolean(false);
+
   /** The Executor Service. */
   private final ExecutorService executorService;
 
-  /** Is the Background Task Executor running. */
+  /** Is the Background Task Executor running? */
   private final AtomicBoolean running = new AtomicBoolean(false);
 
   /** The number of task execution threads to start initially. */
@@ -90,42 +93,50 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   }
 
   /** Execute the tasks. */
-  @Scheduled(fixedDelay = 60, timeUnit = TimeUnit.SECONDS)
+  @Scheduled(cron = "0 * * * * *")
   public void executeTasks() {
-    Optional<Task> taskOptional;
-
-    if (executorService == null) {
+    if (!executing.compareAndSet(false, true)) {
       return;
     }
 
-    while (running.get()) {
-      // Retrieve the next task queued for execution
-      try {
-        if (taskExecutor.getQueue().remainingCapacity() == 0) {
-          if (log.isDebugEnabled()) {
-            log.debug(
-                "The maximum number of tasks queued for execution has been reached ("
-                    + maximumTaskExecutionQueueLength
-                    + ")");
-          }
-          return;
-        }
+    try {
+      Optional<Task> taskOptional;
 
-        taskOptional = executorService.getNextTaskQueuedForExecution();
-
-        if (taskOptional.isEmpty()) {
-          if (log.isDebugEnabled()) {
-            log.debug("No tasks queued for execution");
-          }
-
-          return;
-        }
-      } catch (Throwable e) {
-        log.error("Failed to retrieve the next task queued for execution", e);
+      if (executorService == null) {
         return;
       }
 
-      taskExecutor.execute(new TaskExecutor(executorService, taskOptional.get()));
+      while (running.get()) {
+        // Retrieve the next task queued for execution
+        try {
+          if (taskExecutor.getQueue().remainingCapacity() == 0) {
+            if (log.isDebugEnabled()) {
+              log.debug(
+                  "The maximum number of tasks queued for execution has been reached ("
+                      + maximumTaskExecutionQueueLength
+                      + ")");
+            }
+            return;
+          }
+
+          taskOptional = executorService.getNextTaskQueuedForExecution();
+
+          if (taskOptional.isEmpty()) {
+            if (log.isDebugEnabled()) {
+              log.debug("No tasks queued for execution");
+            }
+
+            return;
+          }
+        } catch (Throwable e) {
+          log.error("Failed to retrieve the next task queued for execution", e);
+          return;
+        }
+
+        taskExecutor.execute(new TaskExecutor(executorService, taskOptional.get()));
+      }
+    } finally {
+      executing.set(false);
     }
   }
 
@@ -263,6 +274,16 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
           }
         }
       } catch (TaskExecutionRetryableException e) {
+        if (log.isDebugEnabled()) {
+          log.debug(
+              "Requeueing the retryable task (%s) with type (%s) on step (%s) with %d execution attempts"
+                  .formatted(
+                      task.getId(),
+                      task.getType(),
+                      StringUtils.hasText(task.getStep()) ? task.getStep() : "",
+                      task.getExecutionAttempts()));
+        }
+
         try {
           executorService.requeueTask(task);
         } catch (Throwable f) {

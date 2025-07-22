@@ -77,8 +77,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 
 /**
@@ -103,6 +106,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   /** The maximum number of filtered interaction attachments. */
   private static final int MAX_FILTERED_INTERACTION_ATTACHMENTS = 100;
+
+  /** The Spring application event publisher. */
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   /** The regular expression pattern used to extract the conversation ID from an email subject. */
   private final Pattern conversationIdPattern = Pattern.compile("\\[CID:([A-Z0-9]+)\\]");
@@ -135,17 +141,20 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
    * Constructs a new {@code InteractionServiceImpl}.
    *
    * @param applicationContext the Spring application context
+   * @param applicationEventPublisher the Spring application event publisher
    * @param interactionStore the Interaction Store
    * @param interactionSourceRepository the Interaction Source Repository
    * @param interactionProcessor the Interaction Processor
    */
   public InteractionServiceImpl(
       ApplicationContext applicationContext,
+      ApplicationEventPublisher applicationEventPublisher,
       InteractionStore interactionStore,
       InteractionSourceRepository interactionSourceRepository,
       InteractionProcessor interactionProcessor) {
     super(applicationContext);
 
+    this.applicationEventPublisher = applicationEventPublisher;
     this.interactionStore = interactionStore;
     this.interactionSourceRepository = interactionSourceRepository;
     this.interactionProcessor = interactionProcessor;
@@ -746,6 +755,31 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  public void triggerInteractionProcessing() {
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            // Fire-and-forget trigger *after* the TX is really committed
+            applicationEventPublisher.publishEvent(new TriggerInteractionProcessingEvent());
+          }
+        });
+  }
+
+  @Override
+  public void triggerInteractionSourceSynchronization() {
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            // Fire-and-forget trigger *after* the TX is really committed
+            applicationEventPublisher.publishEvent(
+                new TriggerInteractionSourceSynchronizationEvent());
+          }
+        });
+  }
+
+  @Override
   public void unlockInteraction(UUID interactionId, InteractionStatus status)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
     if (interactionId == null) {
@@ -1305,10 +1339,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
       // Trigger the processing of any new interactions
       if (numberOfNewInteractions > 0) {
-        getApplicationContext()
-            .getBean(BackgroundInteractionProcessor.class)
-            .processInteractions()
-            .subscribe();
+        triggerInteractionProcessing();
       }
 
       return numberOfNewInteractions;
@@ -1322,4 +1353,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           e);
     }
   }
+
+  /** The {@code TriggerInteractionProcessingEvent} record. */
+  public record TriggerInteractionProcessingEvent() {}
+
+  /** The {@code TriggerInteractionSourceSynchronizationEvent} record. */
+  public record TriggerInteractionSourceSynchronizationEvent() {}
 }

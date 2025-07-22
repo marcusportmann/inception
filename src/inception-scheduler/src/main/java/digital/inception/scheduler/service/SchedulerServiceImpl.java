@@ -41,12 +41,15 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 
 /**
@@ -56,6 +59,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class SchedulerServiceImpl extends AbstractServiceBase implements SchedulerService {
+
+  /** The Spring application event publisher. */
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   /* The name of the Scheduler Service instance. */
   private final String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
@@ -83,11 +89,16 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
    * Constructs a new {@code SchedulerServiceImpl}.
    *
    * @param applicationContext the Spring application context
+   * @param applicationEventPublisher the Spring application event publisher
    * @param jobRepository the Job Repository
    */
-  public SchedulerServiceImpl(ApplicationContext applicationContext, JobRepository jobRepository) {
+  public SchedulerServiceImpl(
+      ApplicationContext applicationContext,
+      ApplicationEventPublisher applicationEventPublisher,
+      JobRepository jobRepository) {
     super(applicationContext);
 
+    this.applicationEventPublisher = applicationEventPublisher;
     this.jobRepository = jobRepository;
   }
 
@@ -456,6 +467,18 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
   }
 
   @Override
+  public void triggerJobExecution() {
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            // Fire-and-forget trigger *after* the TX is really committed
+            applicationEventPublisher.publishEvent(new TriggerJobExecutionEvent());
+          }
+        });
+  }
+
+  @Override
   public void unlockJob(String jobId, JobStatus status)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
@@ -509,4 +532,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
       throw new ServiceUnavailableException("Failed to update the job (" + job.getId() + ")", e);
     }
   }
+
+  /** The {@code TriggerJobExecutionEvent} record. */
+  public record TriggerJobExecutionEvent() {}
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.executor.model;
+package digital.inception.operations.model;
 
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,49 +23,45 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code TaskSortBy} enumeration defines the possible methods used to sort a list of tasks.
+ * The {@code WorkflowFormType} enumeration defines the possible workflow form types.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The method used to sort the list of tasks")
+@Schema(description = "The workflow form type")
 @XmlEnum
-@XmlType(name = "TaskSortBy", namespace = "https://inception.digital/executor")
-public enum TaskSortBy implements CodeEnum {
+@XmlType(name = "WorkflowFormType", namespace = "https://inception.digital/operations")
+public enum WorkflowFormType implements CodeEnum {
 
-  /** Sort by queued. */
-  @XmlEnumValue("Queued")
-  QUEUED("queued", "Sort By Queued"),
+  /** Start Form. */
+  @XmlEnumValue("StartForm")
+  START_FORM("start_form", "Start Form"),
 
-  /** Sort by type. */
-  @XmlEnumValue("Type")
-  TYPE("type", "Sort By Type"),
-
-  /** Sort by executed. */
-  @XmlEnumValue("Executed")
-  EXECUTED("executed", "Sort By Executed");
+  /** Work Fork. */
+  @XmlEnumValue("WorkForm")
+  WORK_FORM("work_form", "Work Form");
 
   private final String code;
 
   private final String description;
 
-  TaskSortBy(String code, String description) {
+  WorkflowFormType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the method used to sort a list of tasks.
+   * Returns the code for the workflow form type.
    *
-   * @return the code for the method used to sort a list of tasks
+   * @return the code for the workflow form type
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the method used to sort a list of tasks.
+   * Returns the description for the workflow form type.
    *
-   * @return the description for the method used to sort a list of tasks
+   * @return the description for the workflow form type
    */
   public String description() {
     return description;

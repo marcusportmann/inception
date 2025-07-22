@@ -104,6 +104,9 @@ public class DocumentServiceTests {
 
     documentService.createDocumentDefinitionCategory(sharedDocumentDefinitionCategory);
 
+    assertTrue(
+        documentService.documentDefinitionCategoryExists(sharedDocumentDefinitionCategory.getId()));
+
     DocumentDefinitionCategory retrievedDocumentDefinitionCategory =
         documentService.getDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
 
@@ -154,6 +157,12 @@ public class DocumentServiceTests {
                 RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
+
+    assertTrue(documentService.documentDefinitionExists(sharedDocumentDefinition.getId()));
+
+    assertTrue(
+        documentService.documentDefinitionExists(
+            sharedDocumentDefinition.getCategoryId(), sharedDocumentDefinition.getId()));
 
     DocumentDefinition retrievedDocumentDefinition =
         documentService.getDocumentDefinition(sharedDocumentDefinition.getId());
@@ -231,6 +240,8 @@ public class DocumentServiceTests {
             TenantUtil.DEFAULT_TENANT_ID,
             getCreateDocumentRequest(sharedDocumentDefinition.getId()),
             "TEST1");
+
+    assertTrue(documentService.documentExists(TenantUtil.DEFAULT_TENANT_ID, document.getId()));
 
     Document retrievedDocument =
         documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
@@ -327,6 +338,10 @@ public class DocumentServiceTests {
     DocumentNote documentNote =
         documentService.createDocumentNote(
             TenantUtil.DEFAULT_TENANT_ID, createDocumentNoteRequest, "TEST1");
+
+    assertTrue(
+        documentService.documentNoteExists(
+            TenantUtil.DEFAULT_TENANT_ID, documentNote.getDocumentId(), documentNote.getId()));
 
     DocumentNote retrievedDocumentNote =
         documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNote.getId());

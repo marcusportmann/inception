@@ -73,7 +73,12 @@ public class TestMultistepTaskExecutor extends MultistepTaskExecutor<TestMultist
             task.getId(), "Simulating the failure of a task with type (" + task.getType() + ")");
       }
 
-      if (taskData.getRetryTask()) {
+      if (taskData.getRetryTask() && (task.getExecutionAttempts() < 2)) {
+        try {
+          Thread.sleep(200L);
+        } catch (Throwable ignored) {
+        }
+
         throw new TaskExecutionRetryableException(
             task.getId(),
             "Simulating the temporary failure of a task with type (" + task.getType() + ")");

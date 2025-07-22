@@ -376,6 +376,12 @@ public interface InteractionService {
   int synchronizeInteractionSource(InteractionSource interactionSource)
       throws InvalidArgumentException, ServiceUnavailableException;
 
+  /** Trigger the interaction processing. */
+  void triggerInteractionProcessing();
+
+  /** Trigger the interaction source synchronization. */
+  void triggerInteractionSourceSynchronization();
+
   /**
    * Unlock a locked interaction.
    *

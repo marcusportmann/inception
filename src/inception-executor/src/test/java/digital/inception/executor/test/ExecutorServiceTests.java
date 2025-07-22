@@ -43,10 +43,13 @@ import digital.inception.executor.model.TaskType;
 import digital.inception.executor.service.ExecutorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import java.security.SecureRandom;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -81,6 +84,9 @@ public class ExecutorServiceTests {
 
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(ExecutorServiceTests.class);
+
+  /** The secure random number generator. */
+  private static final SecureRandom secureRandom = new SecureRandom();
 
   /** The Executor Service. */
   @Autowired private ExecutorService executorService;
@@ -393,6 +399,43 @@ public class ExecutorServiceTests {
     assertEquals("This is a test message", retrievedTestMultistepTaskData.getMessage());
 
     assertEquals(TaskStatus.FAILED, retrievedTask.getStatus());
+  }
+
+  /** Multi-step task load test. */
+  @Test
+  @Disabled
+  public void multistepTaskLoadTest() throws Exception {
+
+    TaskType testMultistepTaskType =
+        new TaskType(
+            "test_multistep_" + generateSuffix(),
+            "Test Multistep",
+            TaskPriority.NORMAL,
+            "za.co.discovery.nova.executor.test.TestMultistepTaskExecutor",
+            10);
+
+    executorService.createTaskType(testMultistepTaskType);
+
+    List<UUID> taskIds = new ArrayList<>();
+
+    for (int i = 0; i < 1000; i++) {
+      TestMultistepTaskData testMultistepTaskData =
+          new TestMultistepTaskData("This is test message " + randomId());
+
+      testMultistepTaskData.setRetryTask(true);
+
+      UUID taskId =
+          executorService.queueTask(
+              new QueueTaskRequest(
+                  testMultistepTaskType.getCode(),
+                  objectMapper.writeValueAsString(testMultistepTaskData)));
+
+      taskIds.add(taskId);
+    }
+
+    for (UUID taskId : taskIds) {
+      waitForTaskToComplete(taskId, 600);
+    }
   }
 
   /** Test the multistep task retry functionality. */
@@ -1156,6 +1199,10 @@ public class ExecutorServiceTests {
   private <TaskDataType> TaskDataType deserializeTaskData(
       String json, Class<TaskDataType> taskDataTypeClass) throws JsonProcessingException {
     return objectMapper.readValue(json, taskDataTypeClass);
+  }
+
+  private String randomId() {
+    return String.format("%04X", secureRandom.nextInt(0x10000));
   }
 
   private void waitForTaskToComplete(UUID taskId, int seconds) throws Exception {

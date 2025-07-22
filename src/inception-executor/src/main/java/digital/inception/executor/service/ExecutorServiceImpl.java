@@ -59,11 +59,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -72,6 +72,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 
 /**
@@ -92,6 +94,9 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
 
   /** The maximum number of filtered tasks. */
   private static final int MAX_FILTERED_TASKS = 100;
+
+  /** The Spring application event publisher. */
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   /** The Archived Task Repository. */
   private final ArchivedTaskRepository archivedTaskRepository;
@@ -154,6 +159,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
    * Constructs a new {@code ExecutorServiceImpl}.
    *
    * @param applicationContext the Spring application context
+   * @param applicationEventPublisher the Spring application event publisher
    * @param archivedTaskRepository the Archived Task Repository
    * @param taskEventRepository the Task Event Repository
    * @param taskRepository the Task Repository
@@ -162,6 +168,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
    */
   public ExecutorServiceImpl(
       ApplicationContext applicationContext,
+      ApplicationEventPublisher applicationEventPublisher,
       ArchivedTaskRepository archivedTaskRepository,
       TaskEventRepository taskEventRepository,
       TaskRepository taskRepository,
@@ -169,6 +176,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
       TaskTypeRepository taskTypeRepository) {
     super(applicationContext);
 
+    this.applicationEventPublisher = applicationEventPublisher;
     this.archivedTaskRepository = archivedTaskRepository;
     this.taskEventRepository = taskEventRepository;
     this.taskRepository = taskRepository;
@@ -304,6 +312,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   }
 
   @Override
+  @Transactional
   public void completeTask(Task task, TaskExecutionResult taskExecutionResult, long executionTime)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (task == null) {
@@ -492,6 +501,18 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
     }
 
     try {
+      log.warn(
+          "Failing the task ("
+              + task.getId()
+              + ") with type ("
+              + task.getType()
+              + ") and step ("
+              + (StringUtils.hasText(task.getStep()) ? task.getStep() : "")
+              + "): "
+              + (StringUtils.hasText(task.getFailure())
+                  ? task.getFailure()
+                  : "No failure description"));
+
       TaskType taskType = getTaskType(task.getType());
 
       taskRepository.failTask(task.getId(), OffsetDateTime.now(), task.getFailure());
@@ -688,7 +709,9 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
 
       String sortProperty;
 
-      if (sortBy == TaskSortBy.TYPE) {
+      if (sortBy == TaskSortBy.EXECUTED) {
+        sortProperty = "executed";
+      } else if (sortBy == TaskSortBy.TYPE) {
         sortProperty = "type";
       } else {
         sortProperty = "queued";
@@ -836,6 +859,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   }
 
   @Override
+  @Transactional
   public UUID queueTask(QueueTaskRequest queueTaskRequest)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     validateArgument("queueTaskRequest", queueTaskRequest);
@@ -883,6 +907,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   }
 
   @Override
+  @Transactional
   public UUID queueTask(
       String type, String batchId, String externalReference, boolean suspended, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
@@ -912,24 +937,28 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   }
 
   @Override
+  @Transactional
   public UUID queueTask(String type, String batchId, String externalReference, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     return queueTask(type, batchId, externalReference, false, dataObject);
   }
 
   @Override
+  @Transactional
   public UUID queueTask(String type, String batchId, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     return queueTask(type, batchId, null, false, dataObject);
   }
 
   @Override
+  @Transactional
   public UUID queueTask(String type, Object dataObject)
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException {
     return queueTask(type, null, null, false, dataObject);
   }
 
   @Override
+  @Transactional
   public void requeueTask(Task task)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
     if (task == null) {
@@ -979,17 +1008,8 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
     }
   }
 
-  private void triggerTaskExecution() {
-    try {
-      getApplicationContext().getBean(BackgroundTaskExecutor.class).executeTasks();
-    } catch (RejectedExecutionException e) {
-      log.warn("Failed to trigger the task execution due to thread pool exhaustion" , e);
-    }
-    catch (Throwable ignored) {
-    }
-  }
-
   @Override
+  @Transactional
   public void requeueTask(UUID taskId)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
     if (taskId == null) {
@@ -1002,6 +1022,8 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
       }
 
       taskRepository.requeueTask(taskId, OffsetDateTime.now());
+
+      triggerTaskExecution();
     } catch (TaskNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1150,6 +1172,18 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   }
 
   @Override
+  public void triggerTaskExecution() {
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            // Fire-and-forget trigger *after* the TX is really committed
+            applicationEventPublisher.publishEvent(new TriggerTaskExecutionEvent());
+          }
+        });
+  }
+
+  @Override
   public void unlockTask(UUID taskId, TaskStatus status)
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException {
     if (taskId == null) {
@@ -1192,6 +1226,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   }
 
   @Override
+  @Transactional
   public void unsuspendTask(UUID taskId)
       throws InvalidArgumentException,
           TaskNotFoundException,
@@ -1306,4 +1341,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
           e);
     }
   }
+
+  /** The {@code TriggerTaskExecutionEvent} record. */
+  public record TriggerTaskExecutionEvent() {}
 }

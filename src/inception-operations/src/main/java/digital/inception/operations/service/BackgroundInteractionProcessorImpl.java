@@ -31,8 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * The {@code BackgroundInteractionProcessorImpl} class implements the Background Interaction
@@ -48,6 +46,9 @@ public class BackgroundInteractionProcessorImpl
   /* Logger */
   private static final Logger log =
       LoggerFactory.getLogger(BackgroundInteractionProcessorImpl.class);
+
+  /** Is the Background Interaction Processor executing? */
+  private final AtomicBoolean executing = new AtomicBoolean(false);
 
   /** The Interaction Service. */
   private final InteractionService interactionService;
@@ -137,10 +138,47 @@ public class BackgroundInteractionProcessorImpl
   }
 
   /** Process the interactions. */
-  @Scheduled(fixedDelay = 60, timeUnit = TimeUnit.SECONDS)
-  public Mono<Integer> processInteractions() {
-    return Mono.fromCallable(this::processInteractionsInternal)
-        .subscribeOn(Schedulers.boundedElastic());
+  @Scheduled(cron = "0 * * * * *")
+  public int processInteractions() {
+    if (!executing.compareAndSet(false, true)) {
+      return 0;
+    }
+
+    try {
+      int numberOfProcessedInteractions = 0;
+
+      while (running.get()) {
+        // Retrieve the next interaction queued for processing
+        try {
+          if (interactionProcessor.getQueue().remainingCapacity() == 0) {
+            if (log.isDebugEnabled()) {
+              log.debug(
+                  "The maximum number of interactions queued for processing has been reached ("
+                      + maximumInteractionProcessingQueueLength
+                      + ")");
+            }
+          }
+
+          Optional<Interaction> interactionOptional =
+              interactionService.getNextInteractionQueuedForProcessing();
+
+          if (interactionOptional.isEmpty()) {
+            return numberOfProcessedInteractions;
+          } else {
+            interactionProcessor.execute(
+                new InteractionProcessor(interactionService, interactionOptional.get()));
+
+            numberOfProcessedInteractions++;
+          }
+        } catch (Throwable e) {
+          log.error("Failed to retrieve the next interaction queued for processing", e);
+        }
+      }
+
+      return numberOfProcessedInteractions;
+    } finally {
+      executing.set(false);
+    }
   }
 
   @Override
@@ -180,42 +218,6 @@ public class BackgroundInteractionProcessorImpl
         log.warn("The shutdown of the Background Interaction Processor was interrupted");
       }
     }
-  }
-
-  private int processInteractionsInternal() {
-    int numberOfProcessedInteractions = 0;
-
-    while (running.get()) {
-      // Retrieve the next interaction queued for processing
-      try {
-        if (interactionProcessor.getQueue().remainingCapacity() == 0) {
-          if (log.isDebugEnabled()) {
-            log.debug(
-                "The maximum number of interactions queued for processing has been reached ("
-                    + maximumInteractionProcessingQueueLength
-                    + ")");
-          }
-          return numberOfProcessedInteractions;
-        }
-
-        Optional<Interaction> interactionOptional =
-            interactionService.getNextInteractionQueuedForProcessing();
-
-        if (interactionOptional.isEmpty()) {
-          return numberOfProcessedInteractions;
-        } else {
-          interactionProcessor.execute(
-              new InteractionProcessor(interactionService, interactionOptional.get()));
-
-          numberOfProcessedInteractions++;
-        }
-      } catch (Throwable e) {
-        log.error("Failed to retrieve the next interaction queued for processing", e);
-        return numberOfProcessedInteractions;
-      }
-    }
-
-    return numberOfProcessedInteractions;
   }
 
   /**

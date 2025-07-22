@@ -170,6 +170,17 @@ public interface DocumentService {
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
 
   /**
+   * Check whether the document definition category exists.
+   *
+   * @param documentDefinitionCategoryId the ID for the document definition category
+   * @return {@code true} if the document definition category exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the document definition category failed
+   */
+  boolean documentDefinitionCategoryExists(String documentDefinitionCategoryId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Check whether the document definition exists.
    *
    * @param documentDefinitionId the ID for the document definition
@@ -178,6 +189,19 @@ public interface DocumentService {
    * @throws ServiceUnavailableException if the check for the document definition failed
    */
   boolean documentDefinitionExists(String documentDefinitionId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Check whether the document definition exists and is associated with the document definition
+   * category with the specified ID.
+   *
+   * @param documentDefinitionCategoryId the ID for the document definition category
+   * @param documentDefinitionId the ID for the document definition
+   * @return {@code true} if the document definition exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the document definition failed
+   */
+  boolean documentDefinitionExists(String documentDefinitionCategoryId, String documentDefinitionId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -190,6 +214,20 @@ public interface DocumentService {
    * @throws ServiceUnavailableException if the existence of the document could not be determined
    */
   boolean documentExists(UUID tenantId, UUID documentId) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the document note with the specified tenant ID, document ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the document note is associated with
+   * @param documentId the ID for the document the document note is associated with
+   * @param documentNoteId the ID for the document note
+   * @return {@code true} if the document note with the specified tenant ID, document ID and ID
+   *     exists or {@code false} otherwise
+   * @throws ServiceUnavailableException if the existence of the document note could not be
+   *     determined
+   */
+  boolean documentNoteExists(UUID tenantId, UUID documentId, UUID documentNoteId)
+      throws ServiceUnavailableException;
 
   /**
    * Retrieve the document.

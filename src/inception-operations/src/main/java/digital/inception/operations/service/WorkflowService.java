@@ -474,6 +474,19 @@ public interface WorkflowService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Check whether the workflow definition exists and is associated with the workflow definition
+   * category with the specified ID.
+   *
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @return {@code true} if the workflow definition exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the check for the workflow definition failed
+   */
+  boolean workflowDefinitionExists(String workflowDefinitionCategoryId, String workflowDefinitionId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Check whether the workflow definition version exists.
    *
    * @param workflowDefinitionId the ID for the workflow definition
@@ -507,4 +520,18 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the existence of the workflow could not be determined
    */
   boolean workflowExists(UUID tenantId, UUID workflowId) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the workflow note with the specified tenant ID, workflow ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the workflow note is associated with
+   * @param workflowId the ID for the workflow the workflow note is associated with
+   * @param workflowNoteId the ID for the workflow note
+   * @return {@code true} if the workflow note with the specified tenant ID, workflow ID and ID
+   *     exists or {@code false} otherwise
+   * @throws ServiceUnavailableException if the existence of the workflow note could not be
+   *     determined
+   */
+  boolean workflowNoteExists(UUID tenantId, UUID workflowId, UUID workflowNoteId)
+      throws ServiceUnavailableException;
 }

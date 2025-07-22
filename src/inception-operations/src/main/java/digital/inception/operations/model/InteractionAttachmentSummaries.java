@@ -147,10 +147,10 @@ public class InteractionAttachmentSummaries implements Serializable {
    * Constructs a new {@code InteractionAttachmentSummaries}.
    *
    * @param tenantId the ID for the tenant the interaction attachment summaries are associated with
-   * @param interactionAttachmentSummaries the interaction attachment summaries
-   * @param total the total number of interaction attachment summaries
    * @param interactionId the interaction ID filter that was applied to the interaction attachment
    *     summaries
+   * @param interactionAttachmentSummaries the interaction attachment summaries
+   * @param total the total number of interaction attachment summaries
    * @param filter the filter that was applied to the interaction attachment summaries
    * @param sortBy the method used to sort the interaction attachment summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the interaction attachment
@@ -160,18 +160,18 @@ public class InteractionAttachmentSummaries implements Serializable {
    */
   public InteractionAttachmentSummaries(
       UUID tenantId,
+      UUID interactionId,
       List<InteractionAttachmentSummary> interactionAttachmentSummaries,
       long total,
-      UUID interactionId,
       String filter,
       InteractionAttachmentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.tenantId = tenantId;
+    this.interactionId = interactionId;
     this.interactionAttachmentSummaries = interactionAttachmentSummaries;
     this.total = total;
-    this.interactionId = interactionId;
     this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;

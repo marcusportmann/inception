@@ -47,6 +47,17 @@ public interface WorkflowDefinitionRepository
   void deleteById(@Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
+   * Returns whether a workflow definition with the specified ID exists and is associated with the
+   * workflow definition category with the specified ID.
+   *
+   * @param categoryId the ID for the workflow definition category
+   * @param id the ID for the workflow definition
+   * @return {@code true} if a workflow definition with the specified ID exists and is associated
+   *     with the workflow definition category with the specified ID or {@code false} otherwise
+   */
+  boolean existsByCategoryIdAndId(String categoryId, String id);
+
+  /**
    * Returns whether a version of the workflow definition with the specified ID exists.
    *
    * @param workflowDefinitionId the ID for the workflow definition

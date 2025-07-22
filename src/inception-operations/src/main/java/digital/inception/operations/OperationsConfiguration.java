@@ -17,6 +17,7 @@
 package digital.inception.operations;
 
 import digital.inception.jpa.JpaUtil;
+import java.util.concurrent.Executor;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
  * The {@code OperationsConfiguration} class provides the Spring configuration for the Operations
@@ -62,5 +64,41 @@ public class OperationsConfiguration {
       @Qualifier("applicationDataSource") DataSource dataSource) {
     return JpaUtil.createEntityManager(
         applicationContext, "operations", dataSource, "digital.inception.operations");
+  }
+
+  /**
+   * Returns the dedicated {@code ThreadPoolTaskExecutor} used to trigger interaction processing
+   * asynchronously.
+   *
+   * @return the dedicated {@code ThreadPoolTaskExecutor} used to trigger interaction processing
+   *     asynchronously
+   */
+  @Bean
+  public Executor triggerInteractionProcessingExecutor() {
+    ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    threadPoolTaskExecutor.setCorePoolSize(1);
+    threadPoolTaskExecutor.setMaxPoolSize(2);
+    threadPoolTaskExecutor.setQueueCapacity(100);
+    threadPoolTaskExecutor.setThreadNamePrefix("trigger-interaction-processing-task-");
+    threadPoolTaskExecutor.initialize();
+    return threadPoolTaskExecutor;
+  }
+
+  /**
+   * Returns the dedicated {@code ThreadPoolTaskExecutor} used to trigger interaction source
+   * synchronization asynchronously.
+   *
+   * @return the dedicated {@code ThreadPoolTaskExecutor} used to trigger interaction source
+   *     synchronization asynchronously
+   */
+  @Bean
+  public Executor triggerInteractionSourceSynchronizationExecutor() {
+    ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    threadPoolTaskExecutor.setCorePoolSize(1);
+    threadPoolTaskExecutor.setMaxPoolSize(2);
+    threadPoolTaskExecutor.setQueueCapacity(100);
+    threadPoolTaskExecutor.setThreadNamePrefix("trigger-interaction-source-synchronization-task-");
+    threadPoolTaskExecutor.initialize();
+    return threadPoolTaskExecutor;
   }
 }

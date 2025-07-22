@@ -32,6 +32,17 @@ import org.springframework.data.repository.query.Param;
 public interface DocumentDefinitionRepository extends JpaRepository<DocumentDefinition, String> {
 
   /**
+   * Returns whether a document definition with the specified ID exists and is associated with the
+   * document definition category with the specified ID.
+   *
+   * @param categoryId the ID for the document definition category
+   * @param id the ID for the document definition
+   * @return {@code true} if a document definition with the specified ID exists and is associated
+   *     with the document definition category with the specified ID or {@code false} otherwise
+   */
+  boolean existsByCategoryIdAndId(String categoryId, String id);
+
+  /**
    * Returns all the document definitions that are associated with the document definition category
    * with the specified ID and either
    *

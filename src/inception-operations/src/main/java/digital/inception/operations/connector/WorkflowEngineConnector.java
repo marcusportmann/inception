@@ -27,9 +27,9 @@ public interface WorkflowEngineConnector {
   // Workflow startWorkflow(UUID tenantId, WorkflowDefinition workflowDefinition, CreateWorkflowRequest
   // createWorkflowRequest);
 
-  // byte[] getWorkflowData(UUID tenantId, WorkflowDefinition workflowDefinition, workflowId);
+  // byte[] getWorkflowData(UUID tenantId, UUID, workflowId);
 
-  // byte[] getWorkflowForm(UUID tenantId, WorkflowDefinition workflowDefinition, WorkflowFormType workflowFormType);
+  // byte[] getWorkflowForm( WorkflowDefinition workflowDefinition, WorkflowFormType workflowFormType); "Start Form", "Work Form"
 }
 
 

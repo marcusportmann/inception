@@ -17,11 +17,8 @@
 package digital.inception.executor.service;
 
 /**
- * The {@code BackgroundTaskExecutor} interface defines the interface that must be implemented by
- * a background task executor.
- *
- * <p>This interface is required because The {@code BackgroundTaskExecutorImpl} class leverages
- * the @Async and @Scheduled annotations, and implements the {@code SmartLifecycle} interface.
+ * The {@code BackgroundTaskExecutor} interface defines the interface that must be implemented by a
+ * background task executor.
  *
  * @author Marcus Portmann
  */

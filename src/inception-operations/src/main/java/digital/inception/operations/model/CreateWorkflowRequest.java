@@ -39,12 +39,12 @@ import java.util.UUID;
  */
 @Schema(description = "A request to create a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"definitionId", "parentId", "externalReference", "data"})
+@JsonPropertyOrder({"definitionId", "parentId", "externalReference", "data", "startWorkflow"})
 @XmlRootElement(name = "CreateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "CreateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"definitionId", "parentId", "externalReference", "data"})
+    propOrder = {"definitionId", "parentId", "externalReference", "data", "startWorkflow"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidCreateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -81,6 +81,12 @@ public class CreateWorkflowRequest implements Serializable {
   @JsonProperty
   @XmlElement(name = "ParentId")
   private UUID parentId;
+
+  /** Should the workflow be started after it is created? */
+  @Schema(description = "Should the workflow be started after it is created")
+  @JsonProperty
+  @XmlElement(name = "StartWorkflow")
+  private Boolean startWorkflow;
 
   /** Constructs a new {@code CreateWorkflowRequest}. */
   public CreateWorkflowRequest() {}
@@ -177,6 +183,16 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
+   * Returns whether the workflow should be started after it is created.
+   *
+   * @return {@code true} if the workflow should be started after it is created or {@code false}
+   *     otherwise
+   */
+  public Boolean getStartWorkflow() {
+    return startWorkflow;
+  }
+
+  /**
    * Set the data for the workflow.
    *
    * @param data the data for the workflow
@@ -211,5 +227,15 @@ public class CreateWorkflowRequest implements Serializable {
    */
   public void setParentId(UUID parentId) {
     this.parentId = parentId;
+  }
+
+  /**
+   * Set whether the workflow should be started after it is created.
+   *
+   * @param startWorkflow {@code true} if the workflow should be started after it is created or
+   *     {@code false} otherwise
+   */
+  public void setStartWorkflow(Boolean startWorkflow) {
+    this.startWorkflow = startWorkflow;
   }
 }

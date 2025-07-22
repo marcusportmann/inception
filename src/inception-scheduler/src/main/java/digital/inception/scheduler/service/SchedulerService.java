@@ -182,6 +182,9 @@ public interface SchedulerService {
   void setJobStatus(String jobId, JobStatus status)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
+  /** Trigger the job execution. */
+  void triggerJobExecution();
+
   /**
    * Unlock a locked job.
    *

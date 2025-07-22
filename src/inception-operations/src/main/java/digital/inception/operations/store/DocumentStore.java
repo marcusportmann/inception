@@ -31,7 +31,7 @@ import digital.inception.operations.model.DocumentSummaries;
 import java.util.UUID;
 
 /**
- * The {@code DocumentStore} interface defines the functionality provided by a case store, which
+ * The {@code DocumentStore} interface defines the functionality provided by a document store, which
  * manages the persistence of documents.
  *
  * @author Marcus Portmann
@@ -94,6 +94,20 @@ public interface DocumentStore {
    * @throws ServiceUnavailableException if the existence of the document could not be determined
    */
   boolean documentExists(UUID tenantId, UUID documentId) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the document note with the specified tenant ID, document ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the document note is associated with
+   * @param documentId the ID for the document the document note is associated with
+   * @param documentNoteId the ID for the document note
+   * @return {@code true} if the document note with the specified tenant ID, document ID and ID
+   *     exists or {@code false} otherwise
+   * @throws ServiceUnavailableException if the existence of the document note could not be
+   *     determined
+   */
+  boolean documentNoteExists(UUID tenantId, UUID documentId, UUID documentNoteId)
+      throws ServiceUnavailableException;
 
   /**
    * Retrieve the document.
