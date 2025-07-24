@@ -326,7 +326,6 @@ public interface DocumentService {
    * @param sortDirection the sort direction to apply to the document notes
    * @param pageIndex the page index
    * @param pageSize the page size
-   * @param maxResults the maximum number of document notes that should be retrieved
    * @return the document notes
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
@@ -339,8 +338,7 @@ public interface DocumentService {
       DocumentNoteSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**

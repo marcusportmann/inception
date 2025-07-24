@@ -21,6 +21,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
+import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
@@ -32,6 +33,8 @@ import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.DocumentNoteSortBy;
+import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -40,6 +43,8 @@ import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
+import digital.inception.operations.model.WorkflowNoteSortBy;
+import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowSummaries;
@@ -635,5 +640,21 @@ public class WorkflowApiControllerImpl extends SecureApiController
     WorkflowNote workflowNote =
         workflowService.updateWorkflowNote(
             tenantId, updateWorkflowNoteRequest, getAuthenticationName());
+  }
+
+  @Override
+  public WorkflowNotes getWorkflowNotes(UUID tenantId, UUID workflowId, String filter,
+      WorkflowNoteSortBy sortBy, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getWorkflowNotes(
+        tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

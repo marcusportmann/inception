@@ -77,6 +77,10 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   /** The Document Store. */
   private final DocumentStore documentStore;
 
+  /** The maximum number of filtered document notes that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-document-notes:#{100}}")
+  private int maxFilteredDocumentNotes;
+
   /** The maximum number of filtered documents that will be returned by the service. */
   @Value("${inception.operations.max-filtered-documents:#{100}}")
   private int maxFilteredDocuments;
@@ -580,8 +584,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       DocumentNoteSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -593,7 +596,14 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
     try {
       return documentStore.getDocumentNotes(
-          tenantId, documentId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+          tenantId,
+          documentId,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize,
+          maxFilteredDocumentNotes);
     } catch (DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {

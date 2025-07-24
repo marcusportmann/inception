@@ -83,6 +83,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   /** The Workflow Store. */
   private final WorkflowStore workflowStore;
 
+  /** The maximum number of filtered workflow notes that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-workflow-notes:#{100}}")
+  private int maxFilteredWorkflowNotes;
+
   /** The maximum number of filtered workflows that will be returned by the service. */
   @Value("${inception.operations.max-filtered-workflows:#{100}}")
   private int maxFilteredWorkflows;
@@ -653,8 +657,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowNoteSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -666,7 +669,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     try {
       return workflowStore.getWorkflowNotes(
-          tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+          tenantId,
+          workflowId,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize,
+          maxFilteredWorkflowNotes);
     } catch (WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {

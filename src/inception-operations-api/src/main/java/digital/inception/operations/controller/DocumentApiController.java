@@ -33,6 +33,8 @@ import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
+import digital.inception.operations.model.DocumentNoteSortBy;
+import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
@@ -1103,6 +1105,93 @@ public interface DocumentApiController {
           DocumentNotFoundException,
           DocumentNoteNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the document notes for the document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentId the ID for the document the document notes are associated with
+   * @param filter the filter to apply to the document notes
+   * @param sortBy the method used to sort the document notes, e.g. by created
+   * @param sortDirection the sort direction to apply to the document notes
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the document notes
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentNotFoundException if the document could not be found
+   * @throws ServiceUnavailableException if the document notes could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the document notes for the document",
+      description = "Retrieve the document notes for the document")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document notes for the document were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/documents/{documentId}/notes",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  DocumentNotes getDocumentNotes(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "documentId", description = "The ID for the document", required = true)
+          @PathVariable
+          UUID documentId,
+      @Parameter(name = "filter", description = "The filter to apply to the document notes")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The method used to sort the document notes e.g. by created")
+          @RequestParam(value = "sortBy", required = false)
+          DocumentNoteSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the document summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the summaries for the documents.

@@ -342,7 +342,6 @@ public interface WorkflowService {
    * @param sortDirection the sort direction to apply to the workflow notes
    * @param pageIndex the page index
    * @param pageSize the page size
-   * @param maxResults the maximum number of workflow notes that should be retrieved
    * @return the workflow notes
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
@@ -355,8 +354,7 @@ public interface WorkflowService {
       WorkflowNoteSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**

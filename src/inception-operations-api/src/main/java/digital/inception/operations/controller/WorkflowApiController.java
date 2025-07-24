@@ -39,6 +39,8 @@ import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
+import digital.inception.operations.model.WorkflowNoteSortBy;
+import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowSummaries;
@@ -1430,6 +1432,93 @@ public interface WorkflowApiController {
           WorkflowNotFoundException,
           WorkflowNoteNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow notes for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow notes are associated with
+   * @param filter the filter to apply to the workflow notes
+   * @param sortBy the method used to sort the workflow notes, e.g. by created
+   * @param sortDirection the sort direction to apply to the workflow notes
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the workflow notes
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow notes could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the workflow notes for the workflow",
+      description = "Retrieve the workflow notes for the workflow")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The workflow notes for the workflow were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflows/{workflowId}/notes",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  WorkflowNotes getWorkflowNotes(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
+          @PathVariable
+          UUID workflowId,
+      @Parameter(name = "filter", description = "The filter to apply to the workflow notes")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The method used to sort the workflow notes e.g. by created")
+          @RequestParam(value = "sortBy", required = false)
+          WorkflowNoteSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the workflow summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the summaries for the workflows.
