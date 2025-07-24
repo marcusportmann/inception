@@ -1,0 +1,21 @@
+meta {
+  name: Get Workflow Definition Version
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflow-definition-categories/{{workflowDefinitionCategoryId}}/workflow-definitions/{{workflowDefinitionId}}/{{workflowDefinitionVersion}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  workflowDefinitionCategoryId: test_workflow_definition_category
+  workflowDefinitionId: test_workflow_definition
+  workflowDefinitionVersion: 1
+}
+
+settings {
+  encodeUrl: true
+}

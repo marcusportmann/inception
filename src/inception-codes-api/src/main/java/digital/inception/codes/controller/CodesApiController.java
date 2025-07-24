@@ -307,7 +307,7 @@ public interface CodesApiController {
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the code
+   * Retrieve the code.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
@@ -414,7 +414,7 @@ public interface CodesApiController {
   List<CodeCategory> getCodeCategories() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the code category
+   * Retrieve the code category.
    *
    * @param codeCategoryId the ID for the code category
    * @return the code category
@@ -473,7 +473,7 @@ public interface CodesApiController {
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the XML or JSON data for a code category
+   * Retrieve the XML or JSON data for a code category.
    *
    * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
@@ -767,7 +767,7 @@ public interface CodesApiController {
       throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the codes for a code category
+   * Retrieve the codes for a code category.
    *
    * @param codeCategoryId the ID for the code category
    * @return the codes for the code category

@@ -1,0 +1,19 @@
+meta {
+  name: Get Document
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  documentId: 019838e6-92cc-7f8d-91c1-9efb288a1826
+}
+
+settings {
+  encodeUrl: true
+}

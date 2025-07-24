@@ -1,0 +1,19 @@
+meta {
+  name: Delete Workflow Engine
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseURL}}/api/operations/workflow-engines/{{workflowEngineId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  workflowEngineId: test_workflow_engine
+}
+
+settings {
+  encodeUrl: true
+}

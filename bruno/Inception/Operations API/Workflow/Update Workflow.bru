@@ -1,0 +1,23 @@
+meta {
+  name: Update Workflow
+  type: http
+  seq: 22
+}
+
+post {
+  url: {{baseURL}}/api/operations/update-workflow
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "workflowId": "019837d1-8c13-7205-a8c5-282bc3e0608e",
+    "status": "cancelled",
+    "data": "eyJuYW1lIjogInVwZGF0ZWQgdmFsdWUifQ=="
+  }
+}
+
+settings {
+  encodeUrl: true
+}

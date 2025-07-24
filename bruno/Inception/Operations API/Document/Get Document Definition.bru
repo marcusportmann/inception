@@ -1,0 +1,20 @@
+meta {
+  name: Get Document Definition
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseURL}}/api/operations/document-definition-categories/{{documentDefinitionCategoryId}}/document-definitions/{{documentDefinitionId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  documentDefinitionCategoryId: test_document_definition_category
+  documentDefinitionId: test_document_definition
+}
+
+settings {
+  encodeUrl: true
+}

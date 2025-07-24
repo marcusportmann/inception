@@ -35,6 +35,7 @@ import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.service.DocumentService;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -153,6 +154,14 @@ public class DocumentApiControllerImpl extends SecureApiController
   @Override
   public void deleteDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     documentService.deleteDocument(tenantId, documentId);
   }
 
@@ -163,6 +172,14 @@ public class DocumentApiControllerImpl extends SecureApiController
           DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getDocumentDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" document definitions.
+     *       The ability to create or update document definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
     if (documentDefinitionCategoryId == null) {
       throw new InvalidArgumentException("documentDefinitionCategoryId");
     }
@@ -213,6 +230,14 @@ public class DocumentApiControllerImpl extends SecureApiController
           DocumentNotFoundException,
           DocumentNoteNotFoundException,
           ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     if (documentId == null) {
       throw new InvalidArgumentException("documentId");
     }
@@ -241,12 +266,34 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public Document getDocument(UUID tenantId, UUID documentId)
+      throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocument(tenantId, documentId);
+  }
+
+  @Override
   public DocumentDefinition getDocumentDefinition(
       UUID tenantId, String documentDefinitionCategoryId, String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getDocumentDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" document definitions.
+     *       The ability to create or update document definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
     try {
       if (!documentService.documentDefinitionCategoryExists(documentDefinitionCategoryId)) {
         throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
@@ -272,20 +319,74 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public List<DocumentDefinitionCategory> getDocumentDefinitionCategories(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentDefinitionCategories(tenantId);
+  }
+
+  @Override
   public DocumentDefinitionCategory getDocumentDefinitionCategory(
       UUID tenantId, String documentDefinitionCategoryId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getDocumentDefinitionCategories() method where
+     *       we want to retrieve the "global" and "tenant-specific" document definition categories.
+     *       The ability to create or update document definition categories is an administrative
+     *       function and is not assigned to a user for a particular tenant.
+     */
+
     DocumentDefinitionCategory documentDefinitionCategory =
         documentService.getDocumentDefinitionCategory(documentDefinitionCategoryId);
 
-    if ((documentDefinitionCategory.getTenantId() != null)
-        && (!documentDefinitionCategory.getTenantId().equals(tenantId))) {
-      throw new InvalidArgumentException("tenantId");
+    return documentDefinitionCategory;
+  }
+
+  @Override
+  public DocumentNote getDocumentNote(UUID tenantId, UUID documentId, UUID documentNoteId)
+      throws InvalidArgumentException,
+          DocumentNotFoundException,
+          DocumentNoteNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return documentDefinitionCategory;
+    try {
+      if (!documentService.documentExists(tenantId, documentId)) {
+        throw new DocumentNotFoundException(documentId);
+      }
+
+      if (!documentService.documentNoteExists(tenantId, documentId, documentNoteId)) {
+        throw new DocumentNoteNotFoundException(documentNoteId);
+      }
+    } catch (DocumentNotFoundException | DocumentNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document note ("
+              + documentNoteId
+              + ") for the document ("
+              + documentId
+              + ")",
+          e);
+    }
+
+    return documentService.getDocumentNote(tenantId, documentNoteId);
   }
 
   @Override

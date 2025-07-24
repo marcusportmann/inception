@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Inception",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

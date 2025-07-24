@@ -1,0 +1,19 @@
+meta {
+  name: Delete Workflow Definition Category
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{baseURL}}/api/operations/workflow-definition-categories/{{workflowDefinitionCategoryId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  workflowDefinitionCategoryId: test_workflow_definition_category
+}
+
+settings {
+  encodeUrl: true
+}

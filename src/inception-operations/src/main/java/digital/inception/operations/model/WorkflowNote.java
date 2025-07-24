@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.operations.constraint.ValidWorkflow;
+import digital.inception.operations.constraint.ValidWorkflowNote;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,7 +74,7 @@ import java.util.UUID;
       "updatedBy"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidWorkflow
+@ValidWorkflowNote
 @Entity
 @Table(name = "operations_workflow_notes")
 @SuppressWarnings({"unused", "WeakerAccess"})

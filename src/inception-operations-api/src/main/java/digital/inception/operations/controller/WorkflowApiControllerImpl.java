@@ -39,6 +39,7 @@ import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.service.WorkflowService;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -165,6 +166,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
   @Override
   public void deleteWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     workflowService.deleteWorkflow(tenantId, workflowId);
   }
 
@@ -175,6 +184,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
+     *       The ability to create or update workflow definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
     if (workflowDefinitionCategoryId == null) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }
@@ -233,6 +250,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
           WorkflowNotFoundException,
           WorkflowNoteNotFoundException,
           ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     if (workflowId == null) {
       throw new InvalidArgumentException("workflowId");
     }
@@ -261,12 +286,34 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public Workflow getWorkflow(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getWorkflow(tenantId, workflowId);
+  }
+
+  @Override
   public WorkflowDefinition getWorkflowDefinition(
       UUID tenantId, String workflowDefinitionCategoryId, String workflowDefinitionId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
+     *       The ability to create or update workflow definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
     try {
       if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
         throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
@@ -292,11 +339,33 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public List<WorkflowDefinitionCategory> getWorkflowDefinitionCategories(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getWorkflowDefinitionCategories(tenantId);
+  }
+
+  @Override
   public WorkflowDefinitionCategory getWorkflowDefinitionCategory(
       UUID tenantId, String workflowDefinitionCategoryId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
+     *       The ability to create or update workflow definition categories is an administrative
+     *       function and is not assigned to a user for a particular tenant.
+     */
+
     WorkflowDefinitionCategory workflowDefinitionCategory =
         workflowService.getWorkflowDefinitionCategory(workflowDefinitionCategoryId);
 
@@ -319,6 +388,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
           WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
+     *       The ability to create or update workflow definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
     try {
       if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
         throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
@@ -344,6 +421,58 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     return workflowService.getWorkflowDefinitionVersion(
         workflowDefinitionId, workflowDefinitionVersion);
+  }
+
+  @Override
+  public WorkflowEngine getWorkflowEngine(String workflowEngineId)
+      throws InvalidArgumentException,
+          WorkflowEngineNotFoundException,
+          ServiceUnavailableException {
+    return workflowService.getWorkflowEngine(workflowEngineId);
+  }
+
+  @Override
+  public List<WorkflowEngine> getWorkflowEngines()
+      throws InvalidArgumentException, ServiceUnavailableException {
+
+    return workflowService.getWorkflowEngines();
+  }
+
+  @Override
+  public WorkflowNote getWorkflowNote(UUID tenantId, UUID workflowId, UUID workflowNoteId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowNoteNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(workflowId);
+      }
+
+      if (!workflowService.workflowNoteExists(tenantId, workflowId, workflowNoteId)) {
+        throw new WorkflowNoteNotFoundException(workflowNoteId);
+      }
+    } catch (WorkflowNotFoundException | WorkflowNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow note ("
+              + workflowNoteId
+              + ") for the workflow ("
+              + workflowId
+              + ")",
+          e);
+    }
+
+    return workflowService.getWorkflowNote(tenantId, workflowNoteId);
   }
 
   @Override

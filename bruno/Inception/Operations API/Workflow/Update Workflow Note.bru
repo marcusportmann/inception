@@ -1,0 +1,22 @@
+meta {
+  name: Update Workflow Note
+  type: http
+  seq: 21
+}
+
+post {
+  url: {{baseURL}}/api/operations/update-workflow-note
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "workflowNoteId": "019837d1-b401-70c9-bb58-0e10f4529f09",
+    "content": "The updated test workflow note content."
+  }
+}
+
+settings {
+  encodeUrl: true
+}

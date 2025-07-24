@@ -351,7 +351,7 @@ public interface ExecutorApiController {
       throws InvalidArgumentException, TaskTypeNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the task
+   * Retrieve the task.
    *
    * @param taskId the ID for the task
    * @return the task
@@ -407,7 +407,7 @@ public interface ExecutorApiController {
       throws InvalidArgumentException, TaskNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the task events for a task
+   * Retrieve the task events for a task.
    *
    * @param taskId the ID for the task
    * @return the task events for the task
@@ -545,7 +545,7 @@ public interface ExecutorApiController {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the task type
+   * Retrieve the task type.
    *
    * @param taskTypeCode the code for the task type
    * @return the task type
