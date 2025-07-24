@@ -30,6 +30,7 @@ import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
@@ -283,22 +284,24 @@ public interface DocumentService {
           ServiceUnavailableException;
 
   /**
-   * Retrieve the document definitions associated with the document definition category with the
-   * specified ID.
+   * Retrieve the summaries for the document definitions associated with the document definition
+   * category with the specified ID.
    *
    * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category the document
    *     definitions are associated with
-   * @return the document definitions associated with the document definition category with the
-   *     specified ID
+   * @return the summaries for the document definitions associated with the document definition
+   *     category with the specified ID
+   * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
    *     not be found
-   * @throws ServiceUnavailableException if the document definition categories could not be
-   *     retrieved
+   * @throws ServiceUnavailableException if the document definition summaries could not be retrieved
    */
-  List<DocumentDefinition> getDocumentDefinitions(
+  List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
       UUID tenantId, String documentDefinitionCategoryId)
-      throws DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the document note.
@@ -344,24 +347,24 @@ public interface DocumentService {
    * Retrieve the summaries for the documents.
    *
    * @param tenantId the ID for the tenant
+   * @param definitionId the document definition ID filter to apply to the document summaries
    * @param filter the filter to apply to the document summaries
    * @param sortBy the method used to sort the document summaries e.g. by definition ID
    * @param sortDirection the sort direction to apply to the document summaries
    * @param pageIndex the page index
    * @param pageSize the page size
-   * @param maxResults the maximum number of document summaries that should be retrieved
    * @return the summaries for the documents
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the document summaries could not be retrieved
    */
   DocumentSummaries getDocumentSummaries(
       UUID tenantId,
+      String definitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -384,11 +387,14 @@ public interface DocumentService {
    *
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
    * @throws DocumentDefinitionNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be updated
    */
   void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 

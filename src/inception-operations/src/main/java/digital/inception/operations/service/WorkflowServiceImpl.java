@@ -37,6 +37,7 @@ import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -46,12 +47,14 @@ import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
+import digital.inception.operations.persistence.jpa.WorkflowDefinitionSummaryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowEngineRepository;
 import digital.inception.operations.store.WorkflowStore;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -71,11 +74,18 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   /** The Workflow Definition Repository. */
   private final WorkflowDefinitionRepository workflowDefinitionRepository;
 
+  /** The Workflow Definition Summary Repository. */
+  private final WorkflowDefinitionSummaryRepository workflowDefinitionSummaryRepository;
+
   /** The Workflow Engine Repository. */
   private final WorkflowEngineRepository workflowEngineRepository;
 
   /** The Workflow Store. */
   private final WorkflowStore workflowStore;
+
+  /** The maximum number of filtered workflows that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-workflows:#{100}}")
+  private int maxFilteredWorkflows;
 
   /**
    * Constructs a new {@code WorkflowServiceImpl}.
@@ -84,6 +94,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    * @param workflowStore the Workflow Store
    * @param workflowDefinitionCategoryRepository the Workflow Definition Category Repository
    * @param workflowDefinitionRepository the Workflow Definition Repository
+   * @param workflowDefinitionSummaryRepository the Workflow Definition Summary Repository
    * @param workflowEngineRepository the Workflow Engine Repository
    */
   public WorkflowServiceImpl(
@@ -91,12 +102,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowStore workflowStore,
       WorkflowDefinitionCategoryRepository workflowDefinitionCategoryRepository,
       WorkflowDefinitionRepository workflowDefinitionRepository,
+      WorkflowDefinitionSummaryRepository workflowDefinitionSummaryRepository,
       WorkflowEngineRepository workflowEngineRepository) {
     super(applicationContext);
 
     this.workflowStore = workflowStore;
     this.workflowDefinitionCategoryRepository = workflowDefinitionCategoryRepository;
     this.workflowDefinitionRepository = workflowDefinitionRepository;
+    this.workflowDefinitionSummaryRepository = workflowDefinitionSummaryRepository;
     this.workflowEngineRepository = workflowEngineRepository;
   }
 
@@ -504,6 +517,36 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public List<WorkflowDefinitionSummary> getWorkflowDefinitionSummaries(
+      UUID tenantId, String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
+    }
+
+    try {
+      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinitionCategoryId)) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      return workflowDefinitionSummaryRepository.findForCategoryAndTenantOrGlobal(
+          workflowDefinitionCategoryId, tenantId);
+    } catch (WorkflowDefinitionCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the summaries for the workflow definitions associated with the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowDefinition getWorkflowDefinitionVersion(
       String workflowDefinitionId, int workflowDefinitionVersion)
       throws InvalidArgumentException,
@@ -536,30 +579,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + workflowDefinitionId
               + ") version ("
               + workflowDefinitionVersion
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public List<WorkflowDefinition> getWorkflowDefinitions(
-      UUID tenantId, String workflowDefinitionCategoryId)
-      throws WorkflowDefinitionCategoryNotFoundException, ServiceUnavailableException {
-    try {
-      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinitionCategoryId)) {
-        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
-      }
-
-      return workflowDefinitionRepository.findForCategoryAndTenantOrGlobal(
-          workflowDefinitionCategoryId, tenantId);
-    } catch (WorkflowDefinitionCategoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the workflow definitions associated with the workflow definition category ("
-              + workflowDefinitionCategoryId
-              + ") for the tenant ("
-              + tenantId
               + ")",
           e);
     }
@@ -664,13 +683,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   @Override
   public WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
+      String definitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -694,7 +713,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     try {
       return workflowStore.getWorkflowSummaries(
-          tenantId, status, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+          tenantId,
+          definitionId,
+          status,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize,
+          maxFilteredWorkflows);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
@@ -744,11 +771,16 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   @Override
   public void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
     validateArgument("workflowDefinition", workflowDefinition);
 
     try {
+      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinition.getCategoryId())) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinition.getCategoryId());
+      }
+
       if (!workflowDefinitionRepository.existsByIdAndVersion(
           workflowDefinition.getId(), workflowDefinition.getVersion())) {
         throw new WorkflowDefinitionVersionNotFoundException(
@@ -756,7 +788,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       }
 
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
-    } catch (WorkflowDefinitionVersionNotFoundException e) {
+    } catch (WorkflowDefinitionCategoryNotFoundException
+        | WorkflowDefinitionVersionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

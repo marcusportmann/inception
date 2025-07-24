@@ -144,6 +144,7 @@ public interface WorkflowStore {
    * Retrieve the summaries for the workflows.
    *
    * @param tenantId the ID for the tenant
+   * @param definitionId the workflow definition ID filter to apply to the workflow summaries
    * @param status the status filter to apply to the workflow summaries
    * @param filter the filter to apply to the workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
@@ -156,6 +157,7 @@ public interface WorkflowStore {
    */
   WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
+      String definitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,

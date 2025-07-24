@@ -345,6 +345,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   @Override
   public WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
+      String definitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
@@ -384,16 +385,22 @@ public class InternalWorkflowStore implements WorkflowStore {
 
                     predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
 
+                    if (StringUtils.hasText(definitionId)) {
+                      predicates.add(
+                          criteriaBuilder.equal(
+                              root.get("definitionId"), definitionId));
+                    }
+
                     if (status != null) {
                       predicates.add(criteriaBuilder.equal(root.get("status"), status));
                     }
 
                     if (StringUtils.hasText(filter)) {
-                      predicates.add(
-                          criteriaBuilder.or(
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("definitionId")),
-                                  "%" + filter.toLowerCase() + "%")));
+//                      predicates.add(
+//                          criteriaBuilder.or(
+//                              criteriaBuilder.like(
+//                                  criteriaBuilder.lower(root.get("definitionId")),
+//                                  "%" + filter.toLowerCase() + "%")));
                     }
 
                     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

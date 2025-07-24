@@ -44,6 +44,7 @@ import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
 import digital.inception.operations.model.WorkflowNote;
@@ -174,13 +175,13 @@ public class WorkflowServiceTests {
     WorkflowSummaries workflowSummaries =
         workflowService.getWorkflowSummaries(
             TenantUtil.DEFAULT_TENANT_ID,
-            WorkflowStatus.IN_PROGRESS,
             workflow.getDefinitionId(),
+            WorkflowStatus.IN_PROGRESS,
+            null,
             WorkflowSortBy.DEFINITION_ID,
             SortDirection.ASCENDING,
             0,
-            10,
-            100);
+            10);
 
     assertEquals(1, workflowSummaries.getTotal());
 
@@ -455,23 +456,23 @@ public class WorkflowServiceTests {
 
     compareWorkflowDefinitions(tenantWorkflowDefinition, retrievedWorkflowDefinition);
 
-    List<WorkflowDefinition> workflowDefinitions =
-        workflowService.getWorkflowDefinitions(
+    List<WorkflowDefinitionSummary> workflowDefinitionSummaries =
+        workflowService.getWorkflowDefinitionSummaries(
             TenantUtil.DEFAULT_TENANT_ID, sharedWorkflowDefinitionCategory.getId());
 
-    assertEquals(1, workflowDefinitions.size());
-    assertEquals(sharedWorkflowDefinition.getId(), workflowDefinitions.getFirst().getId());
+    assertEquals(1, workflowDefinitionSummaries.size());
+    assertEquals(sharedWorkflowDefinition.getId(), workflowDefinitionSummaries.getFirst().getId());
 
-    workflowDefinitions =
-        workflowService.getWorkflowDefinitions(
+    workflowDefinitionSummaries =
+        workflowService.getWorkflowDefinitionSummaries(
             TenantUtil.DEFAULT_TENANT_ID, tenantWorkflowDefinitionCategory.getId());
-    assertEquals(1, workflowDefinitions.size());
-    assertEquals(tenantWorkflowDefinition.getId(), workflowDefinitions.getFirst().getId());
+    assertEquals(1, workflowDefinitionSummaries.size());
+    assertEquals(tenantWorkflowDefinition.getId(), workflowDefinitionSummaries.getFirst().getId());
 
-    workflowDefinitions =
-        workflowService.getWorkflowDefinitions(
+    workflowDefinitionSummaries =
+        workflowService.getWorkflowDefinitionSummaries(
             UUID.randomUUID(), tenantWorkflowDefinitionCategory.getId());
-    assertEquals(0, workflowDefinitions.size());
+    assertEquals(0, workflowDefinitionSummaries.size());
 
     assertThrows(
         DuplicateWorkflowDefinitionVersionException.class,
@@ -482,13 +483,13 @@ public class WorkflowServiceTests {
     tenantWorkflowDefinition.setVersion(tenantWorkflowDefinition.getVersion() + 1);
     workflowService.createWorkflowDefinition(tenantWorkflowDefinition);
 
-    workflowDefinitions =
-        workflowService.getWorkflowDefinitions(
+    workflowDefinitionSummaries =
+        workflowService.getWorkflowDefinitionSummaries(
             TenantUtil.DEFAULT_TENANT_ID, tenantWorkflowDefinitionCategory.getId());
 
-    assertEquals(1, workflowDefinitions.size());
-    assertEquals(tenantWorkflowDefinition.getId(), workflowDefinitions.getFirst().getId());
-    assertEquals(2, workflowDefinitions.getFirst().getVersion());
+    assertEquals(1, workflowDefinitionSummaries.size());
+    assertEquals(tenantWorkflowDefinition.getId(), workflowDefinitionSummaries.getFirst().getId());
+    assertEquals(2, workflowDefinitionSummaries.getFirst().getVersion());
 
     retrievedWorkflowDefinition =
         workflowService.getWorkflowDefinition(tenantWorkflowDefinition.getId());

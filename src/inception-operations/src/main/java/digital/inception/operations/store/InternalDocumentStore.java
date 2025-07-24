@@ -374,6 +374,7 @@ public class InternalDocumentStore implements DocumentStore {
   @Override
   public DocumentSummaries getDocumentSummaries(
       UUID tenantId,
+      String definitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
@@ -412,11 +413,15 @@ public class InternalDocumentStore implements DocumentStore {
 
                     predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
 
+                    if (StringUtils.hasText(definitionId)) {
+                      predicates.add(criteriaBuilder.equal(root.get("definitionId"), definitionId));
+                    }
+
                     if (StringUtils.hasText(filter)) {
                       predicates.add(
                           criteriaBuilder.or(
                               criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("definitionId")),
+                                  criteriaBuilder.lower(root.get("name")),
                                   "%" + filter.toLowerCase() + "%")));
                     }
 

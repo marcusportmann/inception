@@ -35,6 +35,7 @@ import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -261,6 +262,26 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the summaries for the workflow definitions associated with the workflow definition
+   * category with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category the workflow
+   *     definitions are associated with
+   * @return the summaries for the workflow definitions associated with the workflow definition
+   *     category with the specified ID
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the workflow definition summaries could not be retrieved
+   */
+  List<WorkflowDefinitionSummary> getWorkflowDefinitionSummaries(
+      UUID tenantId, String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow definition version.
    *
    * @param workflowDefinitionId the ID for the workflow definition
@@ -277,24 +298,6 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException;
-
-  /**
-   * Retrieve the workflow definitions associated with the workflow definition category with the
-   * specified ID.
-   *
-   * @param tenantId the ID for the tenant
-   * @param workflowDefinitionCategoryId the ID for the workflow definition category the workflow
-   *     definitions are associated with
-   * @return the workflow definitions associated with the workflow definition category with the
-   *     specified ID
-   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
-   *     not be found
-   * @throws ServiceUnavailableException if the workflow definition categories could not be
-   *     retrieved
-   */
-  List<WorkflowDefinition> getWorkflowDefinitions(
-      UUID tenantId, String workflowDefinitionCategoryId)
-      throws WorkflowDefinitionCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the workflow engine.
@@ -360,26 +363,26 @@ public interface WorkflowService {
    * Retrieve the summaries for the workflows.
    *
    * @param tenantId the ID for the tenant
+   * @param definitionId the workflow definition ID filter to apply to the workflow summaries
    * @param status the status filter to apply to the workflow summaries
    * @param filter the filter to apply to the workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
    * @param sortDirection the sort direction to apply to the workflow summaries
    * @param pageIndex the page index
    * @param pageSize the page size
-   * @param maxResults the maximum number of workflow summaries that should be retrieved
    * @return the summaries for the workflows
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the workflow summaries could not be retrieved
    */
   WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
+      String definitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -402,12 +405,15 @@ public interface WorkflowService {
    *
    * @param workflowDefinition the workflow definition version
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
    *     be found
    * @throws ServiceUnavailableException if the workflow definition version could not be updated
    */
   void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException;
 

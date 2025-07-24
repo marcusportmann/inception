@@ -31,6 +31,7 @@ import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
@@ -40,6 +41,7 @@ import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
+import digital.inception.operations.persistence.jpa.DocumentDefinitionSummaryRepository;
 import digital.inception.operations.store.DocumentStore;
 import java.security.MessageDigest;
 import java.time.OffsetDateTime;
@@ -47,6 +49,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -68,8 +71,15 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   /** The Document Definition Repository. */
   private final DocumentDefinitionRepository documentDefinitionRepository;
 
+  /** The Document Definition Summary Repository. */
+  private final DocumentDefinitionSummaryRepository documentDefinitionSummaryRepository;
+
   /** The Document Store. */
   private final DocumentStore documentStore;
+
+  /** The maximum number of filtered documents that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-documents:#{100}}")
+  private int maxFilteredDocuments;
 
   /**
    * Constructs a new {@code DocumentServiceImpl}.
@@ -78,17 +88,20 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
    * @param documentStore the Document Store
    * @param documentDefinitionCategoryRepository the Document Definition Category Repository
    * @param documentDefinitionRepository the Document Definition Repository
+   * @param documentDefinitionSummaryRepository the Document Definition Summary Repository
    */
   public DocumentServiceImpl(
       ApplicationContext applicationContext,
       DocumentStore documentStore,
       DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository,
-      DocumentDefinitionRepository documentDefinitionRepository) {
+      DocumentDefinitionRepository documentDefinitionRepository,
+      DocumentDefinitionSummaryRepository documentDefinitionSummaryRepository) {
     super(applicationContext);
 
     this.documentStore = documentStore;
     this.documentDefinitionCategoryRepository = documentDefinitionCategoryRepository;
     this.documentDefinitionRepository = documentDefinitionRepository;
+    this.documentDefinitionSummaryRepository = documentDefinitionSummaryRepository;
   }
 
   public String calculateDocumentDataHash(byte[] documentData) {
@@ -504,21 +517,27 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public List<DocumentDefinition> getDocumentDefinitions(
+  public List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
       UUID tenantId, String documentDefinitionCategoryId)
-      throws DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
     try {
       if (!documentDefinitionCategoryRepository.existsById(documentDefinitionCategoryId)) {
         throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
       }
 
-      return documentDefinitionRepository.findForCategoryAndTenantOrGlobal(
+      return documentDefinitionSummaryRepository.findForCategoryAndTenantOrGlobal(
           documentDefinitionCategoryId, tenantId);
     } catch (DocumentDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the document definitions associated with the document definition category ("
+          "Failed to retrieve the summaries for the document definitions associated with the document definition category ("
               + documentDefinitionCategoryId
               + ") for the tenant ("
               + tenantId
@@ -591,12 +610,12 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public DocumentSummaries getDocumentSummaries(
       UUID tenantId,
+      String definitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -620,7 +639,14 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
     try {
       return documentStore.getDocumentSummaries(
-          tenantId, filter, sortBy, sortDirection, pageIndex, pageSize, maxResults);
+          tenantId,
+          definitionId,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize,
+          maxFilteredDocuments);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
@@ -669,17 +695,22 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     validateArgument("documentDefinition", documentDefinition);
 
     try {
+      if (!documentDefinitionCategoryRepository.existsById(documentDefinition.getCategoryId())) {
+        throw new DocumentDefinitionCategoryNotFoundException(documentDefinition.getCategoryId());
+      }
+
       if (!documentDefinitionRepository.existsById(documentDefinition.getId())) {
         throw new DocumentDefinitionNotFoundException(documentDefinition.getId());
       }
 
       documentDefinitionRepository.saveAndFlush(documentDefinition);
-    } catch (DocumentDefinitionNotFoundException e) {
+    } catch (DocumentDefinitionCategoryNotFoundException | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

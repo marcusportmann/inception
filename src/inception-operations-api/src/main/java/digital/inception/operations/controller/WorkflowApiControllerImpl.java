@@ -19,6 +19,7 @@ package digital.inception.operations.controller;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
@@ -36,8 +37,12 @@ import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
+import digital.inception.operations.model.WorkflowSortBy;
+import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.service.WorkflowService;
 import java.util.List;
 import java.util.Objects;
@@ -378,6 +383,23 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public List<WorkflowDefinitionSummary> getWorkflowDefinitionSummaries(
+      UUID tenantId, String workflowDefinitionCategoryId)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getWorkflowDefinitionSummaries(tenantId, workflowDefinitionCategoryId);
+  }
+
+  @Override
   public WorkflowDefinition getWorkflowDefinitionVersion(
       UUID tenantId,
       String workflowDefinitionCategoryId,
@@ -476,6 +498,29 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public WorkflowSummaries getWorkflowSummaries(
+      UUID tenantId,
+      String definitionId,
+      WorkflowStatus status,
+      String filter,
+      WorkflowSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getWorkflowSummaries(
+        tenantId, definitionId, status, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @Override
   public void updateWorkflow(UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
@@ -488,6 +533,92 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     Workflow workflow =
         workflowService.updateWorkflow(tenantId, updateWorkflowRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void updateWorkflowDefinition(
+      String workflowDefinitionCategoryId,
+      String workflowDefinitionId,
+      Integer workflowDefinitionVersion,
+      WorkflowDefinition workflowDefinition)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
+          ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
+     *       The ability to create or update workflow definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
+    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
+    }
+
+    if (!StringUtils.hasText(workflowDefinitionId)) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    if (workflowDefinitionVersion == null) {
+      throw new InvalidArgumentException("workflowDefinitionVersion");
+    }
+
+    if (!Objects.equals(workflowDefinitionCategoryId, workflowDefinition.getCategoryId())) {
+      throw new InvalidArgumentException("workflowDefinition.categoryId");
+    }
+
+    if (!Objects.equals(workflowDefinitionId, workflowDefinition.getId())) {
+      throw new InvalidArgumentException("workflowDefinition.id");
+    }
+
+    if (workflowDefinitionVersion != workflowDefinition.getVersion()) {
+      throw new InvalidArgumentException("workflowDefinition.version");
+    }
+
+    workflowService.updateWorkflowDefinition(workflowDefinition);
+  }
+
+  @Override
+  public void updateWorkflowDefinitionCategory(
+      String workflowDefinitionCategoryId, WorkflowDefinitionCategory workflowDefinitionCategory)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
+     *       The ability to create or update workflow definition categories is an administrative
+     *       function and is not assigned to a user for a particular tenant.
+     */
+
+    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
+      throw new InvalidArgumentException("workflowDefinitionCategoryId");
+    }
+
+    if (!Objects.equals(workflowDefinitionCategoryId, workflowDefinitionCategory.getId())) {
+      throw new InvalidArgumentException("workflowDefinitionCategory.id");
+    }
+
+    workflowService.updateWorkflowDefinitionCategory(workflowDefinitionCategory);
+  }
+
+  @Override
+  public void updateWorkflowEngine(String workflowEngineId, WorkflowEngine workflowEngine)
+      throws InvalidArgumentException,
+          WorkflowEngineNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowEngineId)) {
+      throw new InvalidArgumentException("workflowEngineId");
+    }
+
+    if (!Objects.equals(workflowEngineId, workflowEngine.getId())) {
+      throw new InvalidArgumentException("workflowEngine.id");
+    }
+
+    workflowService.updateWorkflowEngine(workflowEngine);
   }
 
   @Override

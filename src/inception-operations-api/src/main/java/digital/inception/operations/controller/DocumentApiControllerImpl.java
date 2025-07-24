@@ -19,6 +19,7 @@ package digital.inception.operations.controller;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -31,7 +32,10 @@ import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
+import digital.inception.operations.model.DocumentSortBy;
+import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.service.DocumentService;
@@ -353,6 +357,23 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
+      UUID tenantId, String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentDefinitionSummaries(tenantId, documentDefinitionCategoryId);
+  }
+
+  @Override
   public DocumentNote getDocumentNote(UUID tenantId, UUID documentId, UUID documentNoteId)
       throws InvalidArgumentException,
           DocumentNotFoundException,
@@ -390,6 +411,28 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public DocumentSummaries getDocumentSummaries(
+      UUID tenantId,
+      String definitionId,
+      String filter,
+      DocumentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentSummaries(
+        tenantId, definitionId, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @Override
   public void updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
@@ -418,5 +461,59 @@ public class DocumentApiControllerImpl extends SecureApiController
     DocumentNote documentNote =
         documentService.updateDocumentNote(
             tenantId, updateDocumentNoteRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void updateDocumentDefinitionCategory(String documentDefinitionCategoryId,
+      DocumentDefinitionCategory documentDefinitionCategory)
+      throws InvalidArgumentException, DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getDocumentDefinitionCategories() method where
+     *       we want to retrieve the "global" and "tenant-specific" document definition categories.
+     *       The ability to create or update document definition categories is an administrative
+     *       function and is not assigned to a user for a particular tenant.
+     */
+
+    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
+    if (!Objects.equals(documentDefinitionCategoryId, documentDefinitionCategory.getId())) {
+      throw new InvalidArgumentException("documentDefinitionCategory.id");
+    }
+
+    documentService.updateDocumentDefinitionCategory(documentDefinitionCategory);
+  }
+
+  @Override
+  public void updateDocumentDefinition(String documentDefinitionCategoryId,
+      String documentDefinitionId, DocumentDefinition documentDefinition)
+      throws InvalidArgumentException, DocumentDefinitionCategoryNotFoundException, DocumentDefinitionNotFoundException, ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getDocumentDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" document definitions.
+     *       The ability to create or update document definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
+    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
+      throw new InvalidArgumentException("documentDefinitionCategoryId");
+    }
+
+    if (!StringUtils.hasText(documentDefinitionId)) {
+      throw new InvalidArgumentException("documentDefinitionId");
+    }
+
+    if (!Objects.equals(documentDefinitionCategoryId, documentDefinition.getCategoryId())) {
+      throw new InvalidArgumentException("documentDefinition.categoryId");
+    }
+
+    if (!Objects.equals(documentDefinitionId, documentDefinition.getId())) {
+      throw new InvalidArgumentException("documentDefinition.id");
+    }
+
+    documentService.updateDocumentDefinition(documentDefinition);
   }
 }

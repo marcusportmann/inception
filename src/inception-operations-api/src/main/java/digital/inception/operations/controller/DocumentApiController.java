@@ -19,6 +19,7 @@ package digital.inception.operations.controller;
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
@@ -30,7 +31,10 @@ import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
+import digital.inception.operations.model.DocumentSortBy;
+import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
@@ -950,6 +955,78 @@ public interface DocumentApiController {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the summaries for the document definitions associated with the document definition
+   * category with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentDefinitionCategoryId the ID for the document definition category the document
+   *     definitions are associated with
+   * @return the summaries for the document definitions associated with the document definition
+   *     category with the specified ID
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the document definition summaries could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the document definition summaries",
+      description = "Retrieve the document definition summaries")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document definition summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/document-definition-categories/{documentDefinitionCategoryId}/document-definition-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "documentDefinitionCategoryId",
+              description = "The ID for the document definition category",
+              required = true)
+          @PathVariable
+          String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Retrieve the document note.
    *
    * @param tenantId the ID for the tenant
@@ -1027,6 +1104,92 @@ public interface DocumentApiController {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the summaries for the documents.
+   *
+   * @param tenantId the ID for the tenant
+   * @param definitionId the document definition ID filter to apply to the document summaries
+   * @param filter the filter to apply to the document summaries
+   * @param sortBy the method used to sort the document summaries e.g. by definition ID
+   * @param sortDirection the sort direction to apply to the document summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the documents
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the document summaries could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the document summaries",
+      description = "Retrieve the document summaries")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The document summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/document-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  DocumentSummaries getDocumentSummaries(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "definitionId",
+              description = "The document definition ID filter to apply to the document summaries")
+          @RequestParam(value = "definitionId", required = false)
+          String definitionId,
+      @Parameter(name = "filter", description = "The filter to apply to the document summaries")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The method used to sort the document summaries e.g. by definition ID")
+          @RequestParam(value = "sortBy", required = false)
+          DocumentSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the document summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Update the document.
    *
    * @param tenantId the ID for the tenant
@@ -1092,6 +1255,157 @@ public interface DocumentApiController {
           @RequestBody
           UpdateDocumentRequest updateDocumentRequest)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Update the document definition.
+   *
+   * @param documentDefinitionCategoryId the ID for the document definition category
+   * @param documentDefinitionId the ID for the document definition
+   * @param documentDefinition the document definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
+   * @throws DocumentDefinitionNotFoundException if the document definition could not be found
+   * @throws ServiceUnavailableException if the document definition could not be updated
+   */
+  @Operation(
+      summary = "Update the document definition",
+      description = "Update the document definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The document definition was updated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description =
+                "The document definition category or document definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/document-definition-categories/{documentDefinitionCategoryId}/document-definitions/{documentDefinitionId}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void updateDocumentDefinition(
+      @Parameter(
+              name = "documentDefinitionCategoryId",
+              description = "The ID for the document definition category",
+              required = true)
+          @PathVariable
+          String documentDefinitionCategoryId,
+      @Parameter(
+              name = "documentDefinitionId",
+              description = "The ID for the document definition",
+              required = true)
+          @PathVariable
+          String documentDefinitionId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The document definition",
+              required = true)
+          @RequestBody
+          DocumentDefinition documentDefinition)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Update the document definition category.
+   *
+   * @param documentDefinitionCategoryId the ID for the document definition category
+   * @param documentDefinitionCategory the document definition category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
+   * @throws ServiceUnavailableException if the document definition category could not be updated
+   */
+  @Operation(
+      summary = "Update the document definition category",
+      description = "Update the document definition category")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The document definition category was updated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document definition category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/document-definition-categories/{documentDefinitionCategoryId}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void updateDocumentDefinitionCategory(
+      @Parameter(
+              name = "documentDefinitionCategoryId",
+              description = "The ID for the document definition category",
+              required = true)
+          @PathVariable
+          String documentDefinitionCategoryId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The document definition category",
+              required = true)
+          @RequestBody
+          DocumentDefinitionCategory documentDefinitionCategory)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the document note.
