@@ -1,0 +1,24 @@
+meta {
+  name: Get Document Notes
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}/notes?sortBy=created&sortDirection=desc
+  body: none
+  auth: inherit
+}
+
+params:query {
+  sortBy: created
+  sortDirection: desc
+}
+
+vars:pre-request {
+  documentId: 01983d5c-7cb7-7741-b1a8-334eabf39520
+}
+
+settings {
+  encodeUrl: true
+}

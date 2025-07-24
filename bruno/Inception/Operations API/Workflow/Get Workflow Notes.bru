@@ -1,0 +1,19 @@
+meta {
+  name: Get Workflow Notes
+  type: http
+  seq: 27
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}/notes
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  workflowId: 01983d5f-705e-7c07-88b3-75d27aaa6bd6
+}
+
+settings {
+  encodeUrl: true
+}
