@@ -268,8 +268,7 @@ public class WorkflowServiceTests {
             WorkflowNoteSortBy.CREATED,
             SortDirection.ASCENDING,
             0,
-            10,
-            100);
+            10);
 
     assertEquals(1, workflowNotes.getTotal());
 

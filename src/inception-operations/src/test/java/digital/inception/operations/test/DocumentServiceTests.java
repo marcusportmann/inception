@@ -369,8 +369,7 @@ public class DocumentServiceTests {
             DocumentNoteSortBy.CREATED,
             SortDirection.ASCENDING,
             0,
-            10,
-            100);
+            10);
 
     assertEquals(1, documentNotes.getTotal());
 
