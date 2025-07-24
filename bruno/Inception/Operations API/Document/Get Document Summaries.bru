@@ -1,0 +1,19 @@
+meta {
+  name: Get Document Summaries
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseURL}}/api/operations/document-summaries?definitionId=test_document_definition
+  body: none
+  auth: inherit
+}
+
+params:query {
+  definitionId: test_document_definition
+}
+
+settings {
+  encodeUrl: true
+}

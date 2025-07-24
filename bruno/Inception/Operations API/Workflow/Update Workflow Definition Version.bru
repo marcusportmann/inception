@@ -1,0 +1,53 @@
+meta {
+  name: Update Workflow Definition Version
+  type: http
+  seq: 25
+}
+
+put {
+  url: {{baseURL}}/api/operations/workflow-definition-categories/{{workflowDefinitionCategoryId}}/workflow-definitions/{{workflowDefinitionId}}/{{workflowDefinitionVersion}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "test_workflow_definition",
+    "version": 1,
+    "categoryId": "test_workflow_definition_category",
+    "name": "Updated Test Workflow Definition",
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "engineId": "flowable_embedded",
+    "attributes": [
+      {
+        "name": "process_id",
+        "value": "test_process"
+      },
+      {
+        "name": "another_attribute_name",
+        "value": "another_attribute_value"
+      }
+    ],
+    "documentDefinitions": [
+      {
+        "documentDefinitionId": "test_document_definition",
+        "required": true,
+        "singular": true,
+        "validityPeriodAmount": 8,
+        "validityPeriodUnit": "months"
+      }
+    ],
+    "validationSchemaType": "json",
+    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"
+  }
+}
+
+vars:pre-request {
+  workflowDefinitionCategoryId: test_workflow_definition_category
+  workflowDefinitionId: test_workflow_definition
+  workflowDefinitionVersion: 1
+}
+
+settings {
+  encodeUrl: true
+}

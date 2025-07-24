@@ -1,0 +1,19 @@
+meta {
+  name: Get Workflow Summaries
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflow-summaries?definitionId=test_workflow_definition
+  body: none
+  auth: inherit
+}
+
+params:query {
+  definitionId: test_workflow_definition
+}
+
+settings {
+  encodeUrl: true
+}

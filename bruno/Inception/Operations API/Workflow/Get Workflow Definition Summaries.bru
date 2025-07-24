@@ -1,0 +1,19 @@
+meta {
+  name: Get Workflow Definition Summaries
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflow-definition-categories/{{workflowDefinitionCategoryId}}/workflow-definition-summaries
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  workflowDefinitionCategoryId: test_workflow_definition_category
+}
+
+settings {
+  encodeUrl: true
+}
