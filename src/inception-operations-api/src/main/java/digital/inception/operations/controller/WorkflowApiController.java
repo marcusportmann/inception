@@ -1088,6 +1088,7 @@ public interface WorkflowApiController {
    *     definitions are associated with
    * @return the summaries for the workflow definitions associated with the workflow definition
    *     category with the specified ID
+   * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
    *     not be found
    * @throws ServiceUnavailableException if the workflow definition summaries could not be retrieved
@@ -1754,6 +1755,7 @@ public interface WorkflowApiController {
    * Update the workflow engine.
    *
    * @param workflowEngineId the ID for the workflow engine
+   * @param workflowEngine the workflow engine
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowEngineNotFoundException if the workflow engine could not be found
    * @throws ServiceUnavailableException if the workflow engine could not be updated

@@ -963,6 +963,7 @@ public interface DocumentApiController {
    *     definitions are associated with
    * @return the summaries for the document definitions associated with the document definition
    *     category with the specified ID
+   * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
    *     not be found
    * @throws ServiceUnavailableException if the document definition summaries could not be retrieved
