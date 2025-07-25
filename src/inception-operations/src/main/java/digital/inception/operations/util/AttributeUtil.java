@@ -33,50 +33,50 @@ public final class AttributeUtil {
   private AttributeUtil() {}
 
   /**
-   * Returns the {@code String} value for the attribute with the specified name for the interaction
+   * Returns the {@code String} value for the attribute with the specified code for the interaction
    * source.
    *
    * @param interactionSource the interaction source
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code String} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
-  public static String getAttributeValue(InteractionSource interactionSource, String name) {
+  public static String getAttributeValue(InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(InteractionSourceAttribute::getValue)
         .orElse(null);
   }
 
   /**
-   * Returns the {@code String} value for the attribute with the specified name for the workflow
+   * Returns the {@code String} value for the attribute with the specified code for the workflow
    * engine.
    *
    * @param workflowEngine the workflow engine
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code String} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
-  public static String getAttributeValue(WorkflowEngine workflowEngine, String name) {
+  public static String getAttributeValue(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(WorkflowEngineAttribute::getValue)
         .orElse(null);
   }
 
   /**
-   * Returns the {@code Boolean} value for the attribute with the specified name for the interaction
+   * Returns the {@code Boolean} value for the attribute with the specified code for the interaction
    * source.
    *
    * @param interactionSource the interaction source
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Boolean} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
   public static Boolean getAttributeValueAsBoolean(
-      InteractionSource interactionSource, String name) {
+      InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -87,7 +87,7 @@ public final class AttributeUtil {
                     "Failed to parse the boolean value ("
                         + value
                         + ") for the interaction source attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }
@@ -96,17 +96,17 @@ public final class AttributeUtil {
   }
 
   /**
-   * Returns the {@code Boolean} value for the attribute with the specified name for the workflow
+   * Returns the {@code Boolean} value for the attribute with the specified code for the workflow
    * engine.
    *
    * @param workflowEngine the workflow engine
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Boolean} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
-  public static Boolean getAttributeValueAsBoolean(WorkflowEngine workflowEngine, String name) {
+  public static Boolean getAttributeValueAsBoolean(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {
@@ -117,7 +117,7 @@ public final class AttributeUtil {
                     "Failed to parse the boolean value ("
                         + value
                         + ") for the workflow engine attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }
@@ -126,17 +126,17 @@ public final class AttributeUtil {
   }
 
   /**
-   * Returns the {@code Double} value for the attribute with the specified name for the interaction
+   * Returns the {@code Double} value for the attribute with the specified code for the interaction
    * source.
    *
    * @param interactionSource the interaction source
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Double} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
-  public static Double getAttributeValueAsDouble(InteractionSource interactionSource, String name) {
+  public static Double getAttributeValueAsDouble(InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -147,7 +147,7 @@ public final class AttributeUtil {
                     "Failed to parse the double value ("
                         + value
                         + ") for the interaction source attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }
@@ -156,17 +156,17 @@ public final class AttributeUtil {
   }
 
   /**
-   * Returns the {@code Double} value for the attribute with the specified name for the workflow
+   * Returns the {@code Double} value for the attribute with the specified code for the workflow
    * engine.
    *
    * @param workflowEngine the workflow engine
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Double} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
-  public static Double getAttributeValueAsDouble(WorkflowEngine workflowEngine, String name) {
+  public static Double getAttributeValueAsDouble(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {
@@ -177,7 +177,7 @@ public final class AttributeUtil {
                     "Failed to parse the double value ("
                         + value
                         + ") for the workflow engine attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }
@@ -186,18 +186,18 @@ public final class AttributeUtil {
   }
 
   /**
-   * Returns the {@code Integer} value for the attribute with the specified name for the interaction
+   * Returns the {@code Integer} value for the attribute with the specified code for the interaction
    * source.
    *
    * @param interactionSource the interaction source
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Integer} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
   public static Integer getAttributeValueAsInteger(
-      InteractionSource interactionSource, String name) {
+      InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -208,7 +208,7 @@ public final class AttributeUtil {
                     "Failed to parse the integer value ("
                         + value
                         + ") for the interaction source attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }
@@ -217,17 +217,17 @@ public final class AttributeUtil {
   }
 
   /**
-   * Returns the {@code Integer} value for the attribute with the specified name for the workflow
+   * Returns the {@code Integer} value for the attribute with the specified code for the workflow
    * engine.
    *
    * @param workflowEngine the workflow engine
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Integer} value for the attribute or {@code null} if the attribute could not
    *     be found or has no value
    */
-  public static Integer getAttributeValueAsInteger(WorkflowEngine workflowEngine, String name) {
+  public static Integer getAttributeValueAsInteger(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {
@@ -238,7 +238,7 @@ public final class AttributeUtil {
                     "Failed to parse the integer value ("
                         + value
                         + ") for the workflow engine attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }
@@ -247,17 +247,17 @@ public final class AttributeUtil {
   }
 
   /**
-   * Returns the {@code Long} value for the attribute with the specified name for the interaction
+   * Returns the {@code Long} value for the attribute with the specified code for the interaction
    * source.
    *
    * @param interactionSource the interaction source
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Long} value for the attribute or {@code null} if the attribute could not be
    *     found or has no value
    */
-  public static Long getAttributeValueAsLong(InteractionSource interactionSource, String name) {
+  public static Long getAttributeValueAsLong(InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -268,7 +268,7 @@ public final class AttributeUtil {
                     "Failed to parse the long value ("
                         + value
                         + ") for the interaction source attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }
@@ -277,17 +277,17 @@ public final class AttributeUtil {
   }
 
   /**
-   * Returns the {@code Long} value for the attribute with the specified name for the workflow
+   * Returns the {@code Long} value for the attribute with the specified code for the workflow
    * engine.
    *
    * @param workflowEngine the workflow engine
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    * @return the {@code Long} value for the attribute or {@code null} if the attribute could not be
    *     found or has no value
    */
-  public static Long getAttributeValueAsLong(WorkflowEngine workflowEngine, String name) {
+  public static Long getAttributeValueAsLong(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithName(name)
+        .getAttributeWithCode(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {
@@ -298,7 +298,7 @@ public final class AttributeUtil {
                     "Failed to parse the long value ("
                         + value
                         + ") for the workflow engine attribute ("
-                        + name
+                        + code
                         + ")",
                     e);
               }

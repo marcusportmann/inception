@@ -22,24 +22,24 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code InteractionSourceAttributeId} class implements the ID class for The {@code
- * InteractionSourceAttribute} class.
+ * The {@code WorkflowStepDefinitionId} class implements the ID class for the {@code
+ * WorkflowStepDefinition} class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"UnusedDeclaration"})
-public class InteractionSourceAttributeId implements Serializable {
+@SuppressWarnings("unused")
+public class WorkflowStepDefinitionId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the interaction source attribute. */
+  /** The code for the workflow step. */
   private String code;
 
-  /** The interaction source the attribute is associated with. */
-  private InteractionSource interactionSource;
+  /** The workflow definition the workflow step definition is associated with. */
+  private WorkflowDefinition workflowDefinition;
 
-  /** Constructs a new {@code InteractionSourceAttributeId}. */
-  public InteractionSourceAttributeId() {}
+  /** Constructs a new {@code WorkflowStepDefinitionId}. */
+  public WorkflowStepDefinitionId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -61,9 +61,9 @@ public class InteractionSourceAttributeId implements Serializable {
       return false;
     }
 
-    InteractionSourceAttributeId other = (InteractionSourceAttributeId) object;
+    WorkflowStepDefinitionId other = (WorkflowStepDefinitionId) object;
 
-    return Objects.equals(interactionSource, other.interactionSource)
+    return Objects.equals(workflowDefinition, other.workflowDefinition)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -74,7 +74,7 @@ public class InteractionSourceAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((interactionSource == null) ? 0 : interactionSource.hashCode())
+    return ((workflowDefinition == null) ? 0 : workflowDefinition.hashCode())
         + ((code == null) ? 0 : code.hashCode());
   }
 }

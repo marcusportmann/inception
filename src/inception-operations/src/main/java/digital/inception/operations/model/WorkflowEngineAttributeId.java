@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -31,8 +32,8 @@ public class WorkflowEngineAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The name of the workflow engine attribute. */
-  private String name;
+  /** The code for the workflow engine attribute. */
+  private String code;
 
   /** The workflow engine the attribute is associated with. */
   private WorkflowEngine workflowEngine;
@@ -62,7 +63,8 @@ public class WorkflowEngineAttributeId implements Serializable {
 
     WorkflowEngineAttributeId other = (WorkflowEngineAttributeId) object;
 
-    return Objects.equals(workflowEngine, other.workflowEngine) && Objects.equals(name, other.name);
+    return Objects.equals(workflowEngine, other.workflowEngine)
+        && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
   /**
@@ -73,6 +75,6 @@ public class WorkflowEngineAttributeId implements Serializable {
   @Override
   public int hashCode() {
     return ((workflowEngine == null) ? 0 : workflowEngine.hashCode())
-        + ((name == null) ? 0 : name.hashCode());
+        + ((code == null) ? 0 : code.hashCode());
   }
 }

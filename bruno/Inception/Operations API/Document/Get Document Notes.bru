@@ -5,14 +5,14 @@ meta {
 }
 
 get {
-  url: {{baseURL}}/api/operations/documents/{{documentId}}/notes?sortBy=created&sortDirection=desc
+  url: {{baseURL}}/api/operations/documents/{{documentId}}/notes?sortBy=created&sortDirection=asc
   body: none
   auth: inherit
 }
 
 params:query {
   sortBy: created
-  sortDirection: desc
+  sortDirection: asc
 }
 
 vars:pre-request {

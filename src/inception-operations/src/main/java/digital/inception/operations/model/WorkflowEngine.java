@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -77,7 +78,7 @@ public class WorkflowEngine implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  @OrderBy("name")
+  @OrderBy("code")
   private final List<WorkflowEngineAttribute> attributes = new ArrayList<>();
 
   /** The fully qualified name of the connector class for the workflow engine. */
@@ -155,7 +156,8 @@ public class WorkflowEngine implements Serializable {
    */
   public void addAttribute(WorkflowEngineAttribute attribute) {
     attributes.removeIf(
-        existingAttribute -> Objects.equals(existingAttribute.getName(), attribute.getName()));
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
 
     attribute.setWorkflowEngine(this);
 
@@ -184,19 +186,19 @@ public class WorkflowEngine implements Serializable {
 
     WorkflowEngine other = (WorkflowEngine) object;
 
-    return Objects.equals(id, other.id);
+    return StringUtil.equalsIgnoreCase(id, other.id);
   }
 
   /**
-   * Retrieve the attribute with the specified name for the workflow engine.
+   * Retrieve the attribute with the specified code for the workflow engine.
    *
-   * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name for the workflow engine or
+   * @param code the code for the attribute
+   * @return an Optional containing the attribute with the specified code for the workflow engine or
    *     an empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowEngineAttribute> getAttributeWithName(String name) {
+  public Optional<WorkflowEngineAttribute> getAttributeWithCode(String code) {
     return attributes.stream()
-        .filter(attribute -> Objects.equals(attribute.getName(), name))
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();
   }
 
@@ -237,14 +239,15 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Returns whether the workflow engine has an attribute with the specified name.
+   * Returns whether the workflow engine has an attribute with the specified code.
    *
-   * @param name the name of the attribute
-   * @return {@code true} if the workflow engine has an attribute with the specified name or {@code
+   * @param code the code for the attribute
+   * @return {@code true} if the workflow engine has an attribute with the specified code or {@code
    *     false} otherwise
    */
-  public boolean hasAttributeWithName(String name) {
-    return attributes.stream().anyMatch(attribute -> Objects.equals(attribute.getName(), name));
+  public boolean hasAttributeWithCode(String code) {
+    return attributes.stream()
+        .anyMatch(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code));
   }
 
   /**
@@ -258,12 +261,12 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified name for the workflow engine.
+   * Remove the attribute with the specified code for the workflow engine.
    *
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    */
-  public void removeAttributeWithName(String name) {
-    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getName(), name));
+  public void removeAttributeWithCode(String code) {
+    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getCode(), code));
   }
 
   /**

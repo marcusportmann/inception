@@ -29,7 +29,8 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface DocumentDefinitionSummaryRepository extends JpaRepository<DocumentDefinitionSummary, String> {
+public interface DocumentDefinitionSummaryRepository
+    extends JpaRepository<DocumentDefinitionSummary, String> {
 
   /**
    * Returns whether a document definition with the specified ID exists and is associated with the

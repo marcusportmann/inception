@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.time.TimeUnit;
+import digital.inception.core.util.StringUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -46,12 +47,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
-
 
 /**
  * The {@code WorkflowDefinition} class holds the information for a workflow definition.
@@ -61,32 +60,34 @@ import org.springframework.util.StringUtils;
 @Schema(description = "A workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id",
-    "version",
-    "categoryId",
-    "tenantId",
-    "name",
-    "engineId",
-    "documentDefinitions",
-    "validationSchemaType",
-    "validationSchema",
-    "attributes"
+  "id",
+  "version",
+  "categoryId",
+  "tenantId",
+  "name",
+  "engineId",
+  "documentDefinitions",
+  "validationSchemaType",
+  "validationSchema",
+  "attributes",
+  "stepDefinitions"
 })
 @XmlRootElement(name = "WorkflowDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinition",
     namespace = "https://inception.digital/operations",
     propOrder = {
-        "id",
-        "version",
-        "categoryId",
-        "tenantId",
-        "name",
-        "engineId",
-        "documentDefinitions",
-        "validationSchemaType",
-        "validationSchema",
-        "attributes"
+      "id",
+      "version",
+      "categoryId",
+      "tenantId",
+      "name",
+      "engineId",
+      "documentDefinitions",
+      "validationSchemaType",
+      "validationSchema",
+      "attributes",
+      "stepDefinitions"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -108,7 +109,7 @@ public class WorkflowDefinition implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  @OrderBy("name")
+  @OrderBy("code")
   private final List<WorkflowDefinitionAttribute> attributes = new ArrayList<>();
 
   /** The document definitions associated with the workflow definition. */
@@ -127,6 +128,21 @@ public class WorkflowDefinition implements Serializable {
       orphanRemoval = true)
   @OrderBy("documentDefinitionId")
   private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+
+  /** The workflow step definitions for the workflow definition. */
+  @Schema(description = "The workflow step definitions for the workflow definition")
+  @JsonProperty
+  @JsonManagedReference("workflowStepDefinitionReference")
+  @XmlElementWrapper(name = "StepDefinitions")
+  @XmlElement(name = "StepDefinition")
+  @Valid
+  @OneToMany(
+      mappedBy = "workflowDefinition",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  @OrderBy("code")
+  private final List<WorkflowStepDefinition> stepDefinitions = new ArrayList<>();
 
   /** The ID for the workflow definition category the workflow definition is associated with. */
   @Schema(
@@ -460,7 +476,8 @@ public class WorkflowDefinition implements Serializable {
    */
   public void addAttribute(WorkflowDefinitionAttribute attribute) {
     attributes.removeIf(
-        existingAttribute -> Objects.equals(existingAttribute.getName(), attribute.getName()));
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
 
     attribute.setWorkflowDefinition(this);
 
@@ -478,6 +495,11 @@ public class WorkflowDefinition implements Serializable {
    */
   public void addDocumentDefinition(
       String documentDefinitionId, boolean required, boolean singular) {
+    documentDefinitions.removeIf(
+        existingDocumentDefinition ->
+            StringUtil.equalsIgnoreCase(
+                existingDocumentDefinition.getDocumentDefinitionId(), documentDefinitionId));
+
     documentDefinitions.add(
         new WorkflowDefinitionDocumentDefinition(this, documentDefinitionId, required, singular));
   }
@@ -503,6 +525,11 @@ public class WorkflowDefinition implements Serializable {
       boolean singular,
       TimeUnit validityPeriodUnit,
       Integer validityPeriodAmount) {
+    documentDefinitions.removeIf(
+        existingDocumentDefinition ->
+            StringUtil.equalsIgnoreCase(
+                existingDocumentDefinition.getDocumentDefinitionId(), documentDefinitionId));
+
     documentDefinitions.add(
         new WorkflowDefinitionDocumentDefinition(
             this,
@@ -511,6 +538,22 @@ public class WorkflowDefinition implements Serializable {
             singular,
             validityPeriodUnit,
             validityPeriodAmount));
+  }
+
+  /**
+   * Add the workflow step definition for the workflow definition.
+   *
+   * @param stepDefinition the workflow step definition
+   */
+  public void addStepDefinition(WorkflowStepDefinition stepDefinition) {
+    stepDefinitions.removeIf(
+        existingStepDefinition ->
+            StringUtil.equalsIgnoreCase(
+                existingStepDefinition.getCode(), stepDefinition.getCode()));
+
+    stepDefinition.setWorkflowDefinition(this);
+
+    stepDefinitions.add(stepDefinition);
   }
 
   /**
@@ -535,19 +578,20 @@ public class WorkflowDefinition implements Serializable {
 
     WorkflowDefinition other = (WorkflowDefinition) object;
 
-    return Objects.equals(id, other.id) && (version == other.version);
+    return StringUtil.equalsIgnoreCase(id, other.id) && (version == other.version);
   }
 
   /**
-   * Retrieve the attribute with the specified name for the workflow definition.
+   * Retrieve the attribute with the specified code for the workflow definition.
    *
-   * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name for the workflow
+   * @param code the code for the attribute
+   * @return an Optional containing the attribute with the specified code for the workflow
    *     definition or an empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowDefinitionAttribute> getAttributeWithName(String name) {
+  public Optional<WorkflowDefinitionAttribute> getAttributeWithCode(String code) {
     return attributes.stream()
-        .filter(attribute -> Objects.equals(attribute.getName(), name))
+        .filter(attribute ->
+                StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();
   }
 
@@ -652,12 +696,12 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified name for the workflow definition.
+   * Remove the attribute with the specified code for the workflow definition.
    *
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    */
-  public void removeAttributeWithName(String name) {
-    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getName(), name));
+  public void removeAttributeWithCode(String code) {
+    attributes.removeIf(existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
   }
 
   /**
@@ -675,7 +719,7 @@ public class WorkflowDefinition implements Serializable {
     while (iterator.hasNext()) {
       WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition = iterator.next();
 
-      if (Objects.equals(
+      if (StringUtil.equalsIgnoreCase(
           workflowDefinitionDocumentDefinition.getDocumentDefinitionId(), documentDefinitionId)) {
         // break the parent link so orphanRemoval can cascade the delete
         workflowDefinitionDocumentDefinition.setWorkflowDefinition(null);

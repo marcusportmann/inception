@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.time.TimeUnit;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.core.util.StringUtil;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
@@ -501,7 +502,7 @@ public class WorkflowServiceTests {
     tenantWorkflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("attribute_name", "updated_attribute_value"));
 
-    tenantWorkflowDefinition.removeAttributeWithName("another_attribute_name");
+    tenantWorkflowDefinition.removeAttributeWithCode("another_attribute_name");
 
     workflowService.updateWorkflowDefinition(tenantWorkflowDefinition);
 
@@ -664,11 +665,13 @@ public class WorkflowServiceTests {
               boolean foundAttribute =
                   workflowDefinition2.getAttributes().stream()
                       .anyMatch(
-                          attribute2 -> Objects.equals(attribute1.getName(), attribute2.getName()));
+                          attribute2 ->
+                              StringUtil.equalsIgnoreCase(
+                                  attribute1.getCode(), attribute2.getCode()));
               if (!foundAttribute) {
                 fail(
                     "Failed to find the attribute ("
-                        + attribute1.getName()
+                        + attribute1.getCode()
                         + ") for the workflow definition ("
                         + workflowDefinition1.getId()
                         + ") version ("
@@ -728,7 +731,7 @@ public class WorkflowServiceTests {
               if (!foundAttribute) {
                 fail(
                     "Failed to find the attribute ("
-                        + workflowEngineAttribute1.getName()
+                        + workflowEngineAttribute1.getCode()
                         + ") for the workflow engine ("
                         + workflowEngine1.getId()
                         + ")");

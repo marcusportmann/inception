@@ -386,9 +386,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                     predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
 
                     if (StringUtils.hasText(definitionId)) {
-                      predicates.add(
-                          criteriaBuilder.equal(
-                              root.get("definitionId"), definitionId));
+                      predicates.add(criteriaBuilder.equal(root.get("definitionId"), definitionId));
                     }
 
                     if (status != null) {
@@ -396,11 +394,12 @@ public class InternalWorkflowStore implements WorkflowStore {
                     }
 
                     if (StringUtils.hasText(filter)) {
-//                      predicates.add(
-//                          criteriaBuilder.or(
-//                              criteriaBuilder.like(
-//                                  criteriaBuilder.lower(root.get("definitionId")),
-//                                  "%" + filter.toLowerCase() + "%")));
+                      //                      predicates.add(
+                      //                          criteriaBuilder.or(
+                      //                              criteriaBuilder.like(
+                      //
+                      // criteriaBuilder.lower(root.get("definitionId")),
+                      //                                  "%" + filter.toLowerCase() + "%")));
                     }
 
                     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

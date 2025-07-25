@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -63,7 +64,7 @@ public class WorkflowDefinitionDocumentDefinitionId implements Serializable {
     WorkflowDefinitionDocumentDefinitionId other = (WorkflowDefinitionDocumentDefinitionId) object;
 
     return Objects.equals(workflowDefinition, other.workflowDefinition)
-        && Objects.equals(documentDefinitionId, other.documentDefinitionId);
+        && StringUtil.equalsIgnoreCase(documentDefinitionId, other.documentDefinitionId);
   }
 
   /**

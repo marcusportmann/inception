@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -67,7 +68,7 @@ public class WorkflowDefinitionDocumentDefinitionSummaryId implements Serializab
         (WorkflowDefinitionDocumentDefinitionSummaryId) object;
 
     return Objects.equals(workflowDefinitionSummary, other.workflowDefinitionSummary)
-        && Objects.equals(documentDefinitionId, other.documentDefinitionId);
+        && StringUtil.equalsIgnoreCase(documentDefinitionId, other.documentDefinitionId);
   }
 
   /**

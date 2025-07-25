@@ -16,7 +16,6 @@
 
 package digital.inception.operations.service;
 
-
 /**
  * The {@code BackgroundInteractionSourceSynchronizer} interface defines the interface that must be
  * implemented by a Background Interaction Source Synchronizer.

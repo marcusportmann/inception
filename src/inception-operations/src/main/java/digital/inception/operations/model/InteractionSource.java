@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -78,7 +79,7 @@ public class InteractionSource implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  @OrderBy("name")
+  @OrderBy("code")
   private final List<InteractionSourceAttribute> attributes = new ArrayList<>();
 
   /** The ID for the interaction source. */
@@ -250,7 +251,8 @@ public class InteractionSource implements Serializable {
    */
   public void addAttribute(InteractionSourceAttribute attribute) {
     attributes.removeIf(
-        existingAttribute -> Objects.equals(existingAttribute.getName(), attribute.getName()));
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
 
     attribute.setInteractionSource(this);
 
@@ -283,15 +285,15 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Retrieve the attribute with the specified name for the interaction source.
+   * Retrieve the attribute with the specified code for the interaction source.
    *
-   * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name for the interaction source
+   * @param code the code for the attribute
+   * @return an Optional containing the attribute with the specified code for the interaction source
    *     or an empty Optional if the attribute could not be found
    */
-  public Optional<InteractionSourceAttribute> getAttributeWithName(String name) {
+  public Optional<InteractionSourceAttribute> getAttributeWithCode(String code) {
     return attributes.stream()
-        .filter(attribute -> Objects.equals(attribute.getName(), name))
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();
   }
 
@@ -341,14 +343,15 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Returns whether the interaction source has an attribute with the specified name.
+   * Returns whether the interaction source has an attribute with the specified code.
    *
-   * @param name the name of the attribute
-   * @return {@code true} if the interaction source has an attribute with the specified name or
+   * @param code the code for the attribute
+   * @return {@code true} if the interaction source has an attribute with the specified code or
    *     {@code false} otherwise
    */
-  public boolean hasAttributeWithName(String name) {
-    return attributes.stream().anyMatch(attribute -> Objects.equals(attribute.getName(), name));
+  public boolean hasAttributeWithCode(String code) {
+    return attributes.stream()
+        .anyMatch(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code));
   }
 
   /**
@@ -362,12 +365,13 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified name for the interaction source.
+   * Remove the attribute with the specified code for the interaction source.
    *
-   * @param name the name of the attribute
+   * @param code the code for the attribute
    */
-  public void removeAttributeWithName(String name) {
-    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getName(), name));
+  public void removeAttributeWithCode(String code) {
+    attributes.removeIf(
+        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
   }
 
   /**

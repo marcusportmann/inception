@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.time.TimeUnit;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -237,7 +238,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
     WorkflowDefinitionDocumentDefinition other = (WorkflowDefinitionDocumentDefinition) object;
 
     return Objects.equals(workflowDefinition, other.workflowDefinition)
-        && Objects.equals(documentDefinitionId, other.documentDefinitionId);
+        && StringUtil.equalsIgnoreCase(documentDefinitionId, other.documentDefinitionId);
   }
 
   /**

@@ -16,9 +16,9 @@
 
 package digital.inception.operations.model;
 
+import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code WorkflowDefinitionId} class implements the ID class for the {@code WorkflowDefinition}
@@ -73,7 +73,7 @@ public class WorkflowDefinitionId implements Serializable {
 
     WorkflowDefinitionId other = (WorkflowDefinitionId) object;
 
-    return Objects.equals(id, other.id) && (version == other.version);
+    return StringUtil.equalsIgnoreCase(id, other.id) && (version == other.version);
   }
 
   /**

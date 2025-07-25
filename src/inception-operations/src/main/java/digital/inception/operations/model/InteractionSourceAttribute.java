@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,14 +50,14 @@ import java.util.Objects;
  */
 @Schema(description = "An attribute for an interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"name", "value"})
+@JsonPropertyOrder({"code", "value"})
 @XmlRootElement(
     name = "InteractionSourceAttribute",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionSourceAttribute",
     namespace = "https://inception.digital/operations",
-    propOrder = {"name", "value"})
+    propOrder = {"code", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_source_attributes")
@@ -64,6 +65,18 @@ import java.util.Objects;
 public class InteractionSourceAttribute implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The code for the interaction source attribute. */
+  @Schema(
+      description = "The code for the interaction source attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  @Id
+  @Column(name = "code", length = 50, nullable = false)
+  private String code;
 
   /** The interaction source the interaction source attribute is associated with. */
   @Schema(hidden = true)
@@ -73,18 +86,6 @@ public class InteractionSourceAttribute implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "source_id")
   private InteractionSource interactionSource;
-
-  /** The name of the interaction source attribute. */
-  @Schema(
-      description = "The name of the interaction source attribute",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Id
-  @Column(name = "name", length = 50, nullable = false)
-  private String name;
 
   /** The value for the interaction source attribute. */
   @Schema(
@@ -103,11 +104,11 @@ public class InteractionSourceAttribute implements Serializable {
   /**
    * Constructs a new {@code InteractionSourceAttribute}.
    *
-   * @param name the name of the interaction source attribute
+   * @param code the code for the interaction source attribute
    * @param value the value for the interaction source attribute
    */
-  public InteractionSourceAttribute(String name, String value) {
-    this.name = name;
+  public InteractionSourceAttribute(String code, String value) {
+    this.code = code;
     this.value = value;
   }
 
@@ -134,7 +135,16 @@ public class InteractionSourceAttribute implements Serializable {
     InteractionSourceAttribute other = (InteractionSourceAttribute) object;
 
     return Objects.equals(interactionSource, other.interactionSource)
-        && Objects.equals(name, other.name);
+        && StringUtil.equalsIgnoreCase(code, other.code);
+  }
+
+  /**
+   * Returns the code for the interaction source attribute.
+   *
+   * @return the code for the interaction source attribute
+   */
+  public String getCode() {
+    return code;
   }
 
   /**
@@ -145,15 +155,6 @@ public class InteractionSourceAttribute implements Serializable {
   @Schema(hidden = true)
   public InteractionSource getInteractionSource() {
     return interactionSource;
-  }
-
-  /**
-   * Returns the name of the interaction source attribute.
-   *
-   * @return the name of the interaction source attribute
-   */
-  public String getName() {
-    return name;
   }
 
   /**
@@ -173,7 +174,16 @@ public class InteractionSourceAttribute implements Serializable {
   @Override
   public int hashCode() {
     return ((interactionSource == null) ? 0 : interactionSource.hashCode())
-        + ((name == null) ? 0 : name.hashCode());
+        + ((code == null) ? 0 : code.hashCode());
+  }
+
+  /**
+   * Set the code for the interaction source attribute.
+   *
+   * @param code the code for the interaction source attribute
+   */
+  public void setCode(String code) {
+    this.code = code;
   }
 
   /**
@@ -185,15 +195,6 @@ public class InteractionSourceAttribute implements Serializable {
   @Schema(hidden = true)
   public void setInteractionSource(InteractionSource interactionSource) {
     this.interactionSource = interactionSource;
-  }
-
-  /**
-   * Set the name of the interaction source attribute.
-   *
-   * @param name the name of the interaction source attribute
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**

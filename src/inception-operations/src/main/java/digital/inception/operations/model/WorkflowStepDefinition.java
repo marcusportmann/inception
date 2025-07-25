@@ -44,32 +44,29 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code WorkflowDefinitionAttribute} class holds the information for an attribute for a
- * workflow definition.
+ * The {@code WorkflowStepDefinition} class holds the information for a workflow step definition.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "An attribute for a workflow definition")
+@Schema(description = "A workflow step definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "value"})
-@XmlRootElement(
-    name = "WorkflowDefinitionAttribute",
-    namespace = "https://inception.digital/operations")
+@JsonPropertyOrder({"code", "name", "description"})
+@XmlRootElement(name = "WorkflowStepDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "WorkflowDefinitionAttribute",
+    name = "WorkflowStepDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "value"})
+    propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "operations_workflow_definition_attributes")
-@IdClass(WorkflowDefinitionAttributeId.class)
-public class WorkflowDefinitionAttribute implements Serializable {
+@Table(name = "operations_workflow_step_definitions")
+@IdClass(WorkflowStepDefinitionId.class)
+public class WorkflowStepDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the workflow definition attribute. */
+  /** The code for the workflow step. */
   @Schema(
-      description = "The code for the workflow definition attribute",
+      description = "The code for the workflow step",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -79,38 +76,51 @@ public class WorkflowDefinitionAttribute implements Serializable {
   @Column(name = "code", length = 50, nullable = false)
   private String code;
 
-  /** The value for the workflow definition attribute. */
+  /** The description for the workflow step. */
   @Schema(
-      description = "The value for the workflow definition attribute",
+      description = "The description for the workflow step",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Value", required = true)
+  @XmlElement(name = "Description", required = true)
   @NotNull
-  @Size(min = 1, max = 1000)
-  @Column(name = "value", length = 1000, nullable = false)
-  private String value;
+  @Size(min = 1, max = 200)
+  @Column(name = "description", length = 200, nullable = false)
+  private String description;
 
-  /** The workflow definition the workflow definition attribute is associated with. */
+  /** The name of the workflow step. */
+  @Schema(
+      description = "The name of the workflow step",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "name", length = 100, nullable = false)
+  private String name;
+
+  /** The workflow definition the workflow step definition is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("workflowDefinitionAttributeReference")
+  @JsonBackReference("workflowStepDefinitionReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumns({@JoinColumn(name = "definition_id"), @JoinColumn(name = "definition_version")})
   private WorkflowDefinition workflowDefinition;
 
-  /** Constructs a new {@code WorkflowDefinitionAttribute}. */
-  public WorkflowDefinitionAttribute() {}
+  /** Constructs a new {@code WorkflowStepDefinition}. */
+  public WorkflowStepDefinition() {}
 
   /**
-   * Constructs a new {@code WorkflowDefinitionAttribute}.
+   * Constructs a new {@code WorkflowStepDefinition}.
    *
-   * @param code the code for the workflow definition attribute
-   * @param value the value for the workflow definition attribute
+   * @param code the code for the workflow step
+   * @param name the name of the workflow step
+   * @param description the description for the workflow step
    */
-  public WorkflowDefinitionAttribute(String code, String value) {
+  public WorkflowStepDefinition(String code, String name, String description) {
     this.code = code;
-    this.value = value;
+    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -133,34 +143,43 @@ public class WorkflowDefinitionAttribute implements Serializable {
       return false;
     }
 
-    WorkflowDefinitionAttribute other = (WorkflowDefinitionAttribute) object;
+    WorkflowStepDefinition other = (WorkflowStepDefinition) object;
 
     return Objects.equals(workflowDefinition, other.workflowDefinition)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
   /**
-   * Returns the code for the workflow definition attribute.
+   * Returns the code for the workflow step.
    *
-   * @return the code for the workflow definition attribute
+   * @return the code for the workflow step
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the value for the workflow definition attribute.
+   * Returns the description for the workflow step.
    *
-   * @return the value for the workflow definition attribute
+   * @return the description for the workflow step
    */
-  public String getValue() {
-    return value;
+  public String getDescription() {
+    return description;
   }
 
   /**
-   * Returns the workflow definition the workflow definition attribute is associated with.
+   * Returns the name of the workflow step.
    *
-   * @return the workflow definition the workflow definition attribute is associated with
+   * @return the name of the workflow step
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the workflow definition the workflow step definition is associated with.
+   *
+   * @return the workflow definition the workflow step definition is associated with
    */
   @Schema(hidden = true)
   public WorkflowDefinition getWorkflowDefinition() {
@@ -179,28 +198,37 @@ public class WorkflowDefinitionAttribute implements Serializable {
   }
 
   /**
-   * Set the code for the workflow definition attribute.
+   * Set the code for the workflow step.
    *
-   * @param code the code for the workflow definition attribute
+   * @param code the code for the workflow step
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the value for the workflow definition attribute.
+   * Set the description for the workflow step.
    *
-   * @param value the value for the workflow definition attribute
+   * @param description the description for the workflow step
    */
-  public void setValue(String value) {
-    this.value = value;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**
-   * Set the workflow definition the workflow definition attribute is associated with.
+   * Set the name of the workflow step.
    *
-   * @param workflowDefinition the workflow definition the workflow definition attribute is
-   *     associated with
+   * @param name the name of the workflow step
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the workflow definition the workflow step definition is associated with.
+   *
+   * @param workflowDefinition the workflow definition the workflow step definition is associated
+   *     with
    */
   @Schema(hidden = true)
   public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {

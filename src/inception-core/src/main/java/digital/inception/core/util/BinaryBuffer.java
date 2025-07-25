@@ -27,7 +27,7 @@ import java.io.Serial;
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class BinaryBuffer implements java.io.Serializable {
+public final class BinaryBuffer implements java.io.Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 

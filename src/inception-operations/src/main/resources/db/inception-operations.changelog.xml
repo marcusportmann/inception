@@ -34,7 +34,7 @@
       <column name="engine_id" type="nvarchar(50)" remarks="The ID for the workflow engine the workflow engine attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="name" type="nvarchar(50)" remarks="The name of the workflow engine attribute">
+      <column name="code" type="nvarchar(50)" remarks="The code for the workflow engine attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)" remarks="The value for the workflow engine attribute">
@@ -105,7 +105,7 @@
       <column name="definition_version" type="integer" remarks="The version of the workflow definition the workflow definition attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="name" type="nvarchar(50)" remarks="The name of the workflow definition attribute">
+      <column name="code" type="nvarchar(50)" remarks="The code for the workflow definition attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)" remarks="The value for the workflow definition attribute">
@@ -117,6 +117,58 @@
       referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_definition_attributes_definition_ix"
       tableName="operations_workflow_definition_attributes">
+      <column name="definition_id"/>
+      <column name="definition_version"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_attribute_definitions" remarks="Workflow Attribute Definitions">
+      <column name="definition_id" type="nvarchar(50)" remarks="The ID for the workflow definition the workflow attribute definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="definition_version" type="integer" remarks="The version of the workflow definition the workflow attribute definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow attribute">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the workflow attribute">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_attribute_definitions_workflow_definition_fk"
+      baseTableName="operations_workflow_attribute_definitions" baseColumnNames="definition_id,definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_attribute_definitions_definition_ix"
+      tableName="operations_workflow_attribute_definitions">
+      <column name="definition_id"/>
+      <column name="definition_version"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_step_definitions" remarks="Workflow Step Definitions">
+      <column name="definition_id" type="nvarchar(50)" remarks="The ID for the workflow definition the workflow step definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="definition_version" type="integer" remarks="The version of the workflow definition the workflow step definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="code" type="nvarchar(50)" remarks="The code for the workflow step">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow step">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the workflow step">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_step_definitions_workflow_definition_fk"
+      baseTableName="operations_workflow_step_definitions" baseColumnNames="definition_id,definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_step_definitions_definition_ix"
+      tableName="operations_workflow_step_definitions">
       <column name="definition_id"/>
       <column name="definition_version"/>
     </createIndex>
@@ -446,7 +498,7 @@
       <column name="source_id" type="uuid" remarks="The ID for the interaction source the interaction source attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="name" type="nvarchar(50)" remarks="The name of the interaction source attribute">
+      <column name="code" type="nvarchar(50)" remarks="The code for the interaction source attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)" remarks="The value for the interaction source attribute">

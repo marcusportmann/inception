@@ -30,6 +30,7 @@ import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.MimeData;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.core.util.StringUtil;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
@@ -640,15 +641,15 @@ public class InteractionServiceTests {
       boolean foundInteractionSourceAttribute = false;
       for (InteractionSourceAttribute interactionSourceAttribute2 :
           interactionSource2.getAttributes()) {
-        if (Objects.equals(
-            interactionSourceAttribute1.getName(), interactionSourceAttribute2.getName())) {
+        if (StringUtil.equalsIgnoreCase(
+            interactionSourceAttribute1.getCode(), interactionSourceAttribute2.getCode())) {
           foundInteractionSourceAttribute = true;
 
           if (!Objects.equals(
               interactionSourceAttribute1.getValue(), interactionSourceAttribute2.getValue())) {
             fail(
                 "The \""
-                    + interactionSourceAttribute1.getName()
+                    + interactionSourceAttribute1.getCode()
                     + "\" attributes for the interaction sources do not match");
           }
 
@@ -659,7 +660,7 @@ public class InteractionServiceTests {
       if (!foundInteractionSourceAttribute) {
         fail(
             "The \""
-                + interactionSourceAttribute1.getName()
+                + interactionSourceAttribute1.getCode()
                 + "\" attributes for the interaction sources do not match");
       }
     }

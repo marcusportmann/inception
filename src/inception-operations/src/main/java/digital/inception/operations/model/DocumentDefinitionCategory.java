@@ -19,6 +19,7 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +34,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -138,7 +138,7 @@ public class DocumentDefinitionCategory implements Serializable {
 
     DocumentDefinitionCategory other = (DocumentDefinitionCategory) object;
 
-    return Objects.equals(id, other.id);
+    return StringUtil.equalsIgnoreCase(id, other.id);
   }
 
   /**

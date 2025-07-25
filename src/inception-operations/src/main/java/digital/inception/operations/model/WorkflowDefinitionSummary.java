@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,7 +44,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -194,7 +194,7 @@ public class WorkflowDefinitionSummary implements Serializable {
 
     WorkflowDefinitionSummary other = (WorkflowDefinitionSummary) object;
 
-    return Objects.equals(id, other.id) && (version == other.version);
+    return StringUtil.equalsIgnoreCase(id, other.id) && (version == other.version);
   }
 
   /**

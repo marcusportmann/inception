@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,14 +50,14 @@ import java.util.Objects;
  */
 @Schema(description = "An attribute for a workflow engine")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"name", "value"})
+@JsonPropertyOrder({"code", "value"})
 @XmlRootElement(
     name = "WorkflowEngineAttribute",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowEngineAttribute",
     namespace = "https://inception.digital/operations",
-    propOrder = {"name", "value"})
+    propOrder = {"code", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_engine_attributes")
@@ -65,17 +66,17 @@ public class WorkflowEngineAttribute implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The name of the workflow engine attribute. */
+  /** The code for the workflow engine attribute. */
   @Schema(
-      description = "The name of the workflow engine attribute",
+      description = "The code for the workflow engine attribute",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
+  @XmlElement(name = "Code", required = true)
   @NotNull
   @Size(min = 1, max = 50)
   @Id
-  @Column(name = "name", length = 50, nullable = false)
-  private String name;
+  @Column(name = "code", length = 50, nullable = false)
+  private String code;
 
   /** The value for the workflow engine attribute. */
   @Schema(
@@ -103,11 +104,11 @@ public class WorkflowEngineAttribute implements Serializable {
   /**
    * Constructs a new {@code WorkflowEngineAttribute}.
    *
-   * @param name the name of the workflow engine attribute
+   * @param code the code for the workflow engine attribute
    * @param value the value for the workflow engine attribute
    */
-  public WorkflowEngineAttribute(String name, String value) {
-    this.name = name;
+  public WorkflowEngineAttribute(String code, String value) {
+    this.code = code;
     this.value = value;
   }
 
@@ -133,16 +134,17 @@ public class WorkflowEngineAttribute implements Serializable {
 
     WorkflowEngineAttribute other = (WorkflowEngineAttribute) object;
 
-    return Objects.equals(workflowEngine, other.workflowEngine) && Objects.equals(name, other.name);
+    return Objects.equals(workflowEngine, other.workflowEngine)
+        && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
   /**
-   * Returns the name of the workflow engine attribute.
+   * Returns the code for the workflow engine attribute.
    *
-   * @return the name of the workflow engine attribute
+   * @return the code for the workflow engine attribute
    */
-  public String getName() {
-    return name;
+  public String getCode() {
+    return code;
   }
 
   /**
@@ -172,16 +174,16 @@ public class WorkflowEngineAttribute implements Serializable {
   @Override
   public int hashCode() {
     return ((workflowEngine == null) ? 0 : workflowEngine.hashCode())
-        + ((name == null) ? 0 : name.hashCode());
+        + ((code == null) ? 0 : code.hashCode());
   }
 
   /**
-   * Set the name of the workflow engine attribute.
+   * Set the code for the workflow engine attribute.
    *
-   * @param name the name of the workflow engine attribute
+   * @param code the code for the workflow engine attribute
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setCode(String code) {
+    this.code = code;
   }
 
   /**

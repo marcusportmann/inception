@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
  *
  * <p>Derived from the org.apache.commons.text.WordUtil class in the commons-text library.
  */
-public class WordUtil {
+public final class WordUtil {
 
   /**
    * {@code WordUtil} instances should NOT be constructed in standard programming. Instead, the

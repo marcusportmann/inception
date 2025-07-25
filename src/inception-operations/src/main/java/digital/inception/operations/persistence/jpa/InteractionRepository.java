@@ -127,7 +127,9 @@ public interface InteractionRepository
       "update Interaction i set i.lockName = :lockName, i.status = digital.inception.operations.model.InteractionStatus.PROCESSING, "
           + "i.processingAttempts = i.processingAttempts + 1, i.lastProcessed = :when where i.id = :interactionId")
   void lockInteractionForProcessing(
-      @Param("interactionId") UUID interactionId, @Param("lockName") String lockName, @Param("when") OffsetDateTime when);
+      @Param("interactionId") UUID interactionId,
+      @Param("lockName") String lockName,
+      @Param("when") OffsetDateTime when);
 
   /**
    * Reset the interaction locks with the specified status.
@@ -154,6 +156,8 @@ public interface InteractionRepository
    */
   @Transactional
   @Modifying
-  @Query("update Interaction i set i.status = :status, i.lockName = null where i.id = :interactionId")
-  void unlockInteraction(@Param("interactionId") UUID interactionId, @Param("status") InteractionStatus status);
+  @Query(
+      "update Interaction i set i.status = :status, i.lockName = null where i.id = :interactionId")
+  void unlockInteraction(
+      @Param("interactionId") UUID interactionId, @Param("status") InteractionStatus status);
 }
