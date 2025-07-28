@@ -503,7 +503,7 @@ public interface WorkflowApiController {
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
-   * Delete the workflow definition.
+   * Delete all versions of the workflow definition.
    *
    * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
@@ -515,8 +515,8 @@ public interface WorkflowApiController {
    * @throws ServiceUnavailableException if the workflow definition could not be deleted
    */
   @Operation(
-      summary = "Delete the workflow definition",
-      description = "Delete the workflow definition")
+      summary = "Delete all versions of the workflow definition",
+      description = "Delete all versions of the workflow definition")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "204", description = "The workflow definition was deleted"),
@@ -659,6 +659,102 @@ public interface WorkflowApiController {
           String workflowDefinitionCategoryId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the workflow definition version.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDefinitionCategoryId the ID for the workflow definition category
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
+   *     not be found
+   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws ServiceUnavailableException if the workflow definition version could not be deleted
+   */
+  @Operation(
+      summary = "Delete the workflow definition version",
+      description = "Delete the workflow definition version")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The workflow definition version was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description =
+                "The workflow definition category or workflow definition version could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void deleteWorkflowDefinitionVersion(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "workflowDefinitionCategoryId",
+              description = "The ID for the workflow definition category",
+              required = true)
+          @PathVariable
+          String workflowDefinitionCategoryId,
+      @Parameter(
+              name = "workflowDefinitionId",
+              description = "The ID for the workflow definition",
+              required = true)
+          @PathVariable
+          String workflowDefinitionId,
+      @Parameter(
+              name = "workflowDefinitionVersion",
+              description = "The version of the workflow definition",
+              required = true)
+          @PathVariable
+          int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -872,14 +968,17 @@ public interface WorkflowApiController {
    * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
    *     not be found
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
-   * @throws ServiceUnavailableException if the workflow definition could not be retrieved
+   * @throws ServiceUnavailableException if the latest version of the workflow definition could not
+   *     be retrieved
    */
   @Operation(
-      summary = "Retrieve the workflow definition",
-      description = "Retrieve the workflow definition")
+      summary = "Retrieve the latest version of the workflow definition",
+      description = "Retrieve the latest version of the workflow definition")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "The workflow definition was retrieved"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "The latest version of the workflow definition was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

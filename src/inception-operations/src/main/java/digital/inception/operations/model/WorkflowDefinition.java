@@ -66,11 +66,11 @@ import org.springframework.util.StringUtils;
   "tenantId",
   "name",
   "engineId",
-  "documentDefinitions",
-  "validationSchemaType",
-  "validationSchema",
   "attributes",
-  "stepDefinitions"
+  "documentDefinitions",
+  "stepDefinitions",
+  "validationSchemaType",
+  "validationSchema"
 })
 @XmlRootElement(name = "WorkflowDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -83,11 +83,11 @@ import org.springframework.util.StringUtils;
       "tenantId",
       "name",
       "engineId",
-      "documentDefinitions",
-      "validationSchemaType",
-      "validationSchema",
       "attributes",
-      "stepDefinitions"
+      "documentDefinitions",
+      "stepDefinitions",
+      "validationSchemaType",
+      "validationSchema"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -590,8 +590,7 @@ public class WorkflowDefinition implements Serializable {
    */
   public Optional<WorkflowDefinitionAttribute> getAttributeWithCode(String code) {
     return attributes.stream()
-        .filter(attribute ->
-                StringUtil.equalsIgnoreCase(attribute.getCode(), code))
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();
   }
 
@@ -650,6 +649,15 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the workflow step definitions for the workflow definition.
+   *
+   * @return the workflow step definitions for the workflow definition
+   */
+  public List<WorkflowStepDefinition> getStepDefinitions() {
+    return stepDefinitions;
+  }
+
+  /**
    * Returns the ID for the tenant the workflow definition is specific to.
    *
    * @return the ID for the tenant the workflow definition is specific to
@@ -701,7 +709,8 @@ public class WorkflowDefinition implements Serializable {
    * @param code the code for the attribute
    */
   public void removeAttributeWithCode(String code) {
-    attributes.removeIf(existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
+    attributes.removeIf(
+        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
   }
 
   /**
@@ -726,6 +735,17 @@ public class WorkflowDefinition implements Serializable {
         iterator.remove();
       }
     }
+  }
+
+  /**
+   * Remove the workflow step definition with the specified code for the workflow definition.
+   *
+   * @param code the code for the workflow step definition
+   */
+  public void removeStepDefinitionWithCode(String code) {
+    stepDefinitions.removeIf(
+        existingStepDefinition ->
+            StringUtil.equalsIgnoreCase(existingStepDefinition.getCode(), code));
   }
 
   /**
@@ -788,6 +808,17 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the workflow step definitions for the workflow definition.
+   *
+   * @param stepDefinitions the workflow step definitions for the workflow definition
+   */
+  public void setStepDefinitions(List<WorkflowStepDefinition> stepDefinitions) {
+    stepDefinitions.forEach(stepDefinition -> stepDefinition.setWorkflowDefinition(this));
+    this.stepDefinitions.clear();
+    this.stepDefinitions.addAll(stepDefinitions);
   }
 
   /**

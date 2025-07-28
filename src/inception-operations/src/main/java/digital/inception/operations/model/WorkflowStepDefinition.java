@@ -44,7 +44,16 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The {@code WorkflowStepDefinition} class holds the information for a workflow step definition.
+ * The {@code WorkflowStepDefinition} class encapsulates the definition of a step within a workflow.
+ *
+ * <p>A workflow step represents a distinct unit of work—such as a milestone, task, or decision
+ * point— that contributes to achieving a specific outcome or completing a particular phase of an
+ * overall workflow.
+ *
+ * <p>Each step may involve human or system activities, and exists within the broader context of an
+ * end-to-end workflow composed of multiple such steps. A step typically transitions from an initial
+ * state (e.g., "Initiated") to a terminal state (e.g., "Completed"), forming part of the structured
+ * execution path of the workflow.
  *
  * @author Marcus Portmann
  */

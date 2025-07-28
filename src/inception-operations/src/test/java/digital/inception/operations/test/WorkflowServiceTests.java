@@ -53,6 +53,7 @@ import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
 import digital.inception.operations.service.DocumentService;
@@ -445,6 +446,24 @@ public class WorkflowServiceTests {
     tenantWorkflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("another_attribute_name", "another_attribute_value"));
 
+    tenantWorkflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            "test_workflow_step_1",
+            "Test Workflow Step 1",
+            "The description for Test Workflow Step 1"));
+
+    tenantWorkflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            "test_workflow_step_2",
+            "Test Workflow Step 2",
+            "The description for Test Workflow Step 2"));
+
+    tenantWorkflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            "test_workflow_step_3",
+            "Test Workflow Step 3",
+            "The description for Test Workflow Step 3"));
+
     tenantWorkflowDefinition.addDocumentDefinition(tenantDocumentDefinition.getId(), true, false);
     tenantWorkflowDefinition.addDocumentDefinition(
         sharedDocumentDefinition.getId(), true, true, TimeUnit.MONTHS, 6);
@@ -503,6 +522,8 @@ public class WorkflowServiceTests {
         new WorkflowDefinitionAttribute("attribute_name", "updated_attribute_value"));
 
     tenantWorkflowDefinition.removeAttributeWithCode("another_attribute_name");
+
+    tenantWorkflowDefinition.removeStepDefinitionWithCode("test_workflow_step_2");
 
     workflowService.updateWorkflowDefinition(tenantWorkflowDefinition);
 
@@ -654,9 +675,9 @@ public class WorkflowServiceTests {
         workflowDefinition2.getVersion(),
         "The version values for the workflow definitions do not match");
     assertEquals(
-        workflowDefinition1.getDocumentDefinitions().size(),
-        workflowDefinition2.getDocumentDefinitions().size(),
-        "The number of document definitions for the workflow definitions do not match");
+        workflowDefinition1.getAttributes().size(),
+        workflowDefinition2.getAttributes().size(),
+        "The number of attributes for the workflow definitions do not match");
 
     workflowDefinition1
         .getAttributes()
@@ -680,6 +701,11 @@ public class WorkflowServiceTests {
               }
             });
 
+    assertEquals(
+        workflowDefinition1.getDocumentDefinitions().size(),
+        workflowDefinition2.getDocumentDefinitions().size(),
+        "The number of document definitions for the workflow definitions do not match");
+
     workflowDefinition1
         .getDocumentDefinitions()
         .forEach(
@@ -695,6 +721,34 @@ public class WorkflowServiceTests {
                 fail(
                     "Failed to find the document definition ("
                         + workflowDefinitionDocumentDefinition1.getDocumentDefinitionId()
+                        + ") for the workflow definition ("
+                        + workflowDefinition1.getId()
+                        + ") version ("
+                        + workflowDefinition1.getVersion()
+                        + ")");
+              }
+            });
+
+    assertEquals(
+        workflowDefinition1.getStepDefinitions().size(),
+        workflowDefinition2.getStepDefinitions().size(),
+        "The number of step definitions for the workflow definitions do not match");
+
+    workflowDefinition1
+        .getStepDefinitions()
+        .forEach(
+            workflowStepDefinition1 -> {
+              boolean foundStepDefinition =
+                  workflowDefinition2.getStepDefinitions().stream()
+                      .anyMatch(
+                          workflowStepDefinition2 ->
+                              Objects.equals(
+                                  workflowStepDefinition1,
+                                  workflowStepDefinition2));
+              if (!foundStepDefinition) {
+                fail(
+                    "Failed to find the workflow step definition ("
+                        + workflowStepDefinition1.getCode()
                         + ") for the workflow definition ("
                         + workflowDefinition1.getId()
                         + ") version ("

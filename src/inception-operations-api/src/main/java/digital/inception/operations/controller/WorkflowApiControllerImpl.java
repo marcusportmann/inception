@@ -21,7 +21,6 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
-import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
@@ -33,8 +32,6 @@ import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.CreateWorkflowRequest;
-import digital.inception.operations.model.DocumentNoteSortBy;
-import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -244,6 +241,52 @@ public class WorkflowApiControllerImpl extends SecureApiController
      */
 
     workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategoryId);
+  }
+
+  @Override
+  public void deleteWorkflowDefinitionVersion(
+      UUID tenantId,
+      String workflowDefinitionCategoryId,
+      String workflowDefinitionId,
+      int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowDefinitionNotFoundException,
+          WorkflowDefinitionVersionNotFoundException,
+          ServiceUnavailableException {
+    /*
+     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
+     *       in the API. It is actually used in the getWorkflowDefinitions() method where
+     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
+     *       The ability to create or update workflow definitions is an administrative function and
+     *       is not assigned to a user for a particular tenant.
+     */
+
+    try {
+      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
+        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
+      }
+
+      if (!workflowService.workflowDefinitionExists(
+          workflowDefinitionCategoryId, workflowDefinitionId)) {
+        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
+      }
+    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the version ("
+              + workflowDefinitionVersion
+              + ") of the workflow definition ("
+              + workflowDefinitionId
+              + ") under the workflow definition category ("
+              + workflowDefinitionCategoryId
+              + ")",
+          e);
+    }
+
+    workflowService.deleteWorkflowDefinitionVersion(
+        workflowDefinitionId, workflowDefinitionVersion);
   }
 
   @Override
@@ -503,6 +546,28 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public WorkflowNotes getWorkflowNotes(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      WorkflowNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getWorkflowNotes(
+        tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @Override
   public WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
       String definitionId,
@@ -640,21 +705,5 @@ public class WorkflowApiControllerImpl extends SecureApiController
     WorkflowNote workflowNote =
         workflowService.updateWorkflowNote(
             tenantId, updateWorkflowNoteRequest, getAuthenticationName());
-  }
-
-  @Override
-  public WorkflowNotes getWorkflowNotes(UUID tenantId, UUID workflowId, String filter,
-      WorkflowNoteSortBy sortBy, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
-
-    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
-        && (!hasAccessToTenant(tenantId))) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    return workflowService.getWorkflowNotes(
-        tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }
