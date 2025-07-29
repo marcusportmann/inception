@@ -35,7 +35,7 @@ import digital.inception.operations.exception.WorkflowDefinitionNotFoundExceptio
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
-import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.RequiredDocumentAttribute;
@@ -159,13 +159,13 @@ public class WorkflowServiceTests {
 
     String testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
 
-    CreateWorkflowRequest createWorkflowRequest =
-        new CreateWorkflowRequest(
+    InitiateWorkflowRequest initiateWorkflowRequest =
+        new InitiateWorkflowRequest(
             workflowDefinition.getId(), UUID.randomUUID().toString(), testWorkflowDataJson);
 
     Workflow workflow =
         workflowService.createWorkflow(
-            TenantUtil.DEFAULT_TENANT_ID, createWorkflowRequest, "TEST1");
+            TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowRequest, "TEST1");
 
     assertTrue(workflowService.workflowExists(TenantUtil.DEFAULT_TENANT_ID, workflow.getId()));
 

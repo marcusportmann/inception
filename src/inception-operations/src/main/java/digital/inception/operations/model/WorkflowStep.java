@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
+import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,25 +38,28 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
- * The {@code WorkflowStep} class holds the information for a step for a workflow.
+ * The {@code WorkflowStep} class holds the information for a workflow step.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A step for a workflow")
+@Schema(description = "A workflow step")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "initiated", "completed"})
+@JsonPropertyOrder({"code", "status", "initiated", "finalized"})
 @XmlRootElement(name = "WorkflowStep", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowStep",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "initiated", "completed"})
+    propOrder = {"code", "status", "initiated", "finalized"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_steps")
@@ -76,6 +80,37 @@ public class WorkflowStep implements Serializable {
   @Column(name = "code", length = 50, nullable = false)
   private String code;
 
+  /** The date and time the workflow step was finalized. */
+  @Schema(description = "The date and time the workflow step was finalized")
+  @JsonProperty
+  @XmlElement(name = "Finalized")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "finalized")
+  private OffsetDateTime finalized;
+
+  /** The date and time the workflow was initiated. */
+  @Schema(
+      description = "The date and time the workflow step was initiated",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Initiated", required = true)
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @NotNull
+  @Column(name = "initiated", nullable = false)
+  private OffsetDateTime initiated;
+
+  /** The status of the workflow step. */
+  @Schema(
+      description = "The status of the workflow step",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Status", required = true)
+  @NotNull
+  @Column(name = "status", nullable = false)
+  private WorkflowStepStatus status;
+
   /** The workflow the workflow step is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("workflowStepReference")
@@ -92,9 +127,13 @@ public class WorkflowStep implements Serializable {
    * Constructs a new {@code WorkflowStep}.
    *
    * @param code the code for the workflow step
+   * @param status the status of the workflow step
+   * @param initiated the date and time the workflow was initiated
    */
-  public WorkflowStep(String code) {
+  public WorkflowStep(String code, WorkflowStepStatus status, OffsetDateTime initiated) {
     this.code = code;
+    this.status = status;
+    this.initiated = initiated;
   }
 
   /**
@@ -133,6 +172,33 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
+   * Returns the date and time the workflow step was finalized.
+   *
+   * @return the date and time the workflow step was finalized
+   */
+  public OffsetDateTime getFinalized() {
+    return finalized;
+  }
+
+  /**
+   * Returns the date and time the workflow was initiated.
+   *
+   * @return the date and time the workflow was initiated
+   */
+  public OffsetDateTime getInitiated() {
+    return initiated;
+  }
+
+  /**
+   * Returns the status of the workflow step.
+   *
+   * @return the status of the workflow step
+   */
+  public WorkflowStepStatus getStatus() {
+    return status;
+  }
+
+  /**
    * Returns the workflow the workflow step is associated with.
    *
    * @return the workflow the workflow step is associated with
@@ -159,6 +225,33 @@ public class WorkflowStep implements Serializable {
    */
   public void setCode(String code) {
     this.code = code;
+  }
+
+  /**
+   * Set the date and time the workflow step was finalized.
+   *
+   * @param finalized the date and time the workflow step was finalized
+   */
+  public void setFinalized(OffsetDateTime finalized) {
+    this.finalized = finalized;
+  }
+
+  /**
+   * Set the date and time the workflow was initiated.
+   *
+   * @param initiated the date and time the workflow was initiated
+   */
+  public void setInitiated(OffsetDateTime initiated) {
+    this.initiated = initiated;
+  }
+
+  /**
+   * Set the status of the workflow step.
+   *
+   * @param status the status of the workflow step
+   */
+  public void setStatus(WorkflowStepStatus status) {
+    this.status = status;
   }
 
   /**

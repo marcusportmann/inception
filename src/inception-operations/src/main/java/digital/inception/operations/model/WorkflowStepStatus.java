@@ -23,24 +23,16 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code WorkflowStatus} enumeration defines the possible statuses for a workflow.
+ * The {@code WorkflowStepStatus} enumeration defines the possible workflow step statuses.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The workflow status")
+@Schema(description = "The workflow step status")
 @XmlEnum
-@XmlType(name = "WorkflowStatus", namespace = "https://inception.digital/operations")
-public enum WorkflowStatus implements CodeEnum {
+@XmlType(name = "WorkflowStepStatus", namespace = "https://inception.digital/operations")
+public enum WorkflowStepStatus implements CodeEnum {
 
-  /** Pending. */
-  @XmlEnumValue("Pending")
-  PENDING("pending", "Pending"),
-
-  /**
-   * Active.
-   *
-   * <p>Maps to Running, Active, Executing, etc., for a workflow engine.
-   */
+  /** Active. */
   @XmlEnumValue("Active")
   ACTIVE("active", "Active"),
 
@@ -68,24 +60,24 @@ public enum WorkflowStatus implements CodeEnum {
 
   private final String description;
 
-  WorkflowStatus(String code, String description) {
+  WorkflowStepStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the workflow status.
+   * Returns the code for the workflow step status.
    *
-   * @return the code for the workflow status
+   * @return the code for the workflow step status
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the workflow status.
+   * Returns the description for the workflow step status.
    *
-   * @return the description for the workflow status
+   * @return the description for the workflow step status
    */
   public String description() {
     return description;

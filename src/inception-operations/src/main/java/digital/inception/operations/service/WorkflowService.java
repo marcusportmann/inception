@@ -29,7 +29,7 @@ import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
-import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -53,23 +53,6 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public interface WorkflowService {
-
-  /**
-   * Create a new workflow.
-   *
-   * @param tenantId the ID for the tenant
-   * @param createWorkflowRequest the request to create a workflow
-   * @param createdBy the username for the user creating the workflow
-   * @return the workflow
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
-   * @throws ServiceUnavailableException if the workflow could not be created
-   */
-  Workflow createWorkflow(
-      UUID tenantId, CreateWorkflowRequest createWorkflowRequest, String createdBy)
-      throws InvalidArgumentException,
-          WorkflowDefinitionNotFoundException,
-          ServiceUnavailableException;
 
   /**
    * Create the workflow definition version.
@@ -382,6 +365,23 @@ public interface WorkflowService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Initiate a new workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param initiateWorkflowRequest the request to initiate a workflow
+   * @param createdBy the username for the user initiating the workflow
+   * @return the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws ServiceUnavailableException if the workflow could not be initiated
+   */
+  Workflow initiateWorkflow(
+      UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String createdBy)
+      throws InvalidArgumentException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the workflow.

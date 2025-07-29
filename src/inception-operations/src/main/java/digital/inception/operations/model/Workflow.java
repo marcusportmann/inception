@@ -50,7 +50,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -68,7 +67,6 @@ import java.util.UUID;
   "definitionVersion",
   "status",
   "externalReference",
-  "attributes",
   "steps",
   "data",
   "created",
@@ -88,7 +86,6 @@ import java.util.UUID;
       "definitionVersion",
       "status",
       "externalReference",
-      "attributes",
       "steps",
       "data",
       "created",
@@ -105,23 +102,8 @@ public class Workflow implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The attributes for the workflow. */
-  @Schema(description = "The attributes for the workflow")
-  @JsonProperty
-  @JsonManagedReference("workflowAttributeReference")
-  @XmlElementWrapper(name = "Attributes")
-  @XmlElement(name = "Attribute")
-  @Valid
-  @OneToMany(
-      mappedBy = "workflow",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
-  @OrderBy("code")
-  private final List<WorkflowAttribute> attributes = new ArrayList<>();
-
-  /** The steps for the workflow. */
-  @Schema(description = "The steps for the workflow")
+  /** The workflow steps for the workflow. */
+  @Schema(description = "The workflow steps for the workflow")
   @JsonProperty
   @JsonManagedReference("workflowStepReference")
   @XmlElementWrapper(name = "Steps")
@@ -132,7 +114,7 @@ public class Workflow implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("initiated")
   private final List<WorkflowStep> steps = new ArrayList<>();
 
   /** The date and time the workflow was created. */
@@ -311,24 +293,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Add the attribute for the workflow.
+   * Add the workflow step for the workflow.
    *
-   * @param attribute the attribute
-   */
-  public void addAttribute(WorkflowAttribute attribute) {
-    attributes.removeIf(
-        existingAttribute ->
-            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
-
-    attribute.setWorkflow(this);
-
-    attributes.add(attribute);
-  }
-
-  /**
-   * Add the step for the workflow.
-   *
-   * @param step the step
+   * @param step the workflow step
    */
   public void addStep(WorkflowStep step) {
     steps.removeIf(
@@ -362,28 +329,6 @@ public class Workflow implements Serializable {
     Workflow other = (Workflow) object;
 
     return Objects.equals(id, other.id);
-  }
-
-  /**
-   * Retrieve the attribute with the specified code for the workflow.
-   *
-   * @param code the code for the attribute
-   * @return an Optional containing the attribute with the specified code for the workflow or an
-   *     empty Optional if the attribute could not be found
-   */
-  public Optional<WorkflowAttribute> getAttributeWithCode(String code) {
-    return attributes.stream()
-        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
-        .findFirst();
-  }
-
-  /**
-   * Returns the attributes for the workflow.
-   *
-   * @return the attributes for the workflow
-   */
-  public List<WorkflowAttribute> getAttributes() {
-    return attributes;
   }
 
   /**
@@ -468,28 +413,6 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Retrieve the step with the specified code for the workflow.
-   *
-   * @param code the code for the step
-   * @return an Optional containing the step with the specified code for the workflow or an empty
-   *     Optional if the step could not be found
-   */
-  public Optional<WorkflowStep> getStepWithCode(String code) {
-    return steps.stream()
-        .filter(step -> StringUtil.equalsIgnoreCase(step.getCode(), code))
-        .findFirst();
-  }
-
-  /**
-   * Returns the steps for the workflow.
-   *
-   * @return the steps for the workflow
-   */
-  public List<WorkflowStep> getSteps() {
-    return steps;
-  }
-
-  /**
    * Returns the ID for the tenant the workflow is associated with.
    *
    * @return the ID for the tenant the workflow is associated with
@@ -524,36 +447,6 @@ public class Workflow implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
-  }
-
-  /**
-   * Remove the attribute with the specified code for the workflow.
-   *
-   * @param code the code for the attribute
-   */
-  public void removeAttributeWithCode(String code) {
-    attributes.removeIf(
-        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
-  }
-
-  /**
-   * Remove the step with the specified code for the workflow.
-   *
-   * @param code the code for the step
-   */
-  public void removeStepWithCode(String code) {
-    steps.removeIf(existingStep -> StringUtil.equalsIgnoreCase(existingStep.getCode(), code));
-  }
-
-  /**
-   * Set the attributes for the workflow.
-   *
-   * @param attributes the attributes for the workflow
-   */
-  public void setAttributes(List<WorkflowAttribute> attributes) {
-    attributes.forEach(attribute -> attribute.setWorkflow(this));
-    this.attributes.clear();
-    this.attributes.addAll(attributes);
   }
 
   /**
@@ -636,17 +529,6 @@ public class Workflow implements Serializable {
    */
   public void setStatus(WorkflowStatus status) {
     this.status = status;
-  }
-
-  /**
-   * Set the steps for the workflow.
-   *
-   * @param steps the steps for the workflow
-   */
-  public void setSteps(List<WorkflowStep> steps) {
-    steps.forEach(step -> step.setWorkflow(this));
-    this.steps.clear();
-    this.steps.addAll(steps);
   }
 
   /**

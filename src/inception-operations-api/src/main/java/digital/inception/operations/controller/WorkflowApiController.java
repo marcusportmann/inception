@@ -30,7 +30,7 @@ import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
-import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -74,76 +74,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // @el (isSecurityDisabled:
 // digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
 public interface WorkflowApiController {
-
-  /**
-   * Create the workflow.
-   *
-   * @param tenantId the ID for the tenant
-   * @param createWorkflowRequest the request to create the workflow
-   * @return the ID for the workflow
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
-   * @throws ServiceUnavailableException if the workflow could not be created
-   */
-  @Operation(summary = "Create the workflow", description = "Create the workflow")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "The workflow was created"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The workflow definition could not be found",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/create-workflow",
-      method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  UUID createWorkflow(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(
-              description = "The request to create the workflow",
-              required = true)
-          @RequestBody
-          CreateWorkflowRequest createWorkflowRequest)
-      throws InvalidArgumentException,
-          WorkflowDefinitionNotFoundException,
-          ServiceUnavailableException;
 
   /**
    * Create the workflow definition version.
@@ -1712,6 +1642,76 @@ public interface WorkflowApiController {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Initiate the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param initiateWorkflowRequest the request to initiate the workflow
+   * @return the ID for the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws ServiceUnavailableException if the workflow could not be initiated
+   */
+  @Operation(summary = "Initiate the workflow", description = "Initiate the workflow")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The workflow was initiated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/initiate-workflow",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  UUID initiateWorkflow(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to create the workflow",
+              required = true)
+          @RequestBody
+          InitiateWorkflowRequest initiateWorkflowRequest)
+      throws InvalidArgumentException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Update the workflow.
    *
    * @param tenantId the ID for the tenant
@@ -2069,4 +2069,76 @@ public interface WorkflowApiController {
           @RequestBody
           UpdateWorkflowNoteRequest updateWorkflowNoteRequest)
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
+
+
+
+
+  /**
+   * Initiate the workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param initiateWorkflowStepRequest the request to initiate the workflow step
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be initiated
+   */
+  @Operation(summary = "Initiate the workflow step", description = "Initiate the workflow step")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "200", description = "The workflow step was initiated"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The workflow definition could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/initiate-workflow",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  UUID initiateWorkflow(
+      @Parameter(
+          name = "Tenant-ID",
+          description = "The ID for the tenant",
+          example = "00000000-0000-0000-0000-000000000000")
+      @RequestHeader(
+          name = "Tenant-ID",
+          defaultValue = "00000000-0000-0000-0000-000000000000",
+          required = false)
+      UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+          description = "The request to create the workflow",
+          required = true)
+      @RequestBody
+      InitiateWorkflowRequest initiateWorkflowRequest)
+      throws InvalidArgumentException,
+      WorkflowDefinitionNotFoundException,
+      ServiceUnavailableException;
 }

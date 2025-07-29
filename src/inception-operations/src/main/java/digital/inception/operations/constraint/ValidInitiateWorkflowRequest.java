@@ -25,16 +25,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The {@code ValidCreateWorkflowRequest} annotation implements the custom constraint annotation
- * used to apply the validation to a request to update a workflow.
+ * The {@code ValidInitiateWorkflowRequest} annotation implements the custom constraint annotation
+ * used to apply the validation to a request to initiate a workflow.
  *
  * @author Marcus Portmann
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidCreateWorkflowRequestValidator.class)
+@Constraint(validatedBy = ValidInitiateWorkflowRequestValidator.class)
 @Documented
-public @interface ValidCreateWorkflowRequest {
+public @interface ValidInitiateWorkflowRequest {
 
   /**
    * The target groups.
@@ -49,7 +49,7 @@ public @interface ValidCreateWorkflowRequest {
    * @return the error message key
    */
   String message() default
-      "{digital.inception.operations.constraint.ValidCreateWorkflowRequest.invalidCreateWorkflowRequest.message}";
+      "{digital.inception.operations.constraint.ValidInitiateWorkflowRequest.invalidInitiateWorkflowRequest.message}";
 
   /**
    * The payload type.

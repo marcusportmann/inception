@@ -53,23 +53,19 @@ Complete the following steps to set up a development environment on MacOS.
    ```
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
-3. Install the latest OpenJDK by executing the following commands in a Terminal window.
+3. Install the required JDKs by executing the following commands in a Terminal window.
    ```
    brew install --cask zulu@8
    
    brew install --cask zulu@11
    
-   brew install openjdk@21
-   
-   brew pin openjdk@21
-   
-   sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
+   brew install --cask zulu@21   
    ```
 4. Configure the Java Environment Variables by adding the following lines to your shell configuration file (~/.zshrc for Zsh or ~/.bash_profile for Bash):
    ```
    export JAVA_8_HOME=$(/usr/libexec/java_home -v 1.8)
    export JAVA_11_HOME=$(/usr/libexec/java_home -v 11)
-   export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home"
+   export JAVA_HOME=$(/usr/libexec/java_home -v 21)
    export JDK_HOME=$JAVA_HOME
    ```
    Source the shell configuration file to apply the changes:
@@ -97,7 +93,7 @@ Complete the following steps to set up a development environment on MacOS.
    ```
    jenv add /Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/
    jenv add /Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home/
-   jenv add /Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home/
+   jenv add /Library/Java/JavaVirtualMachines/zulu-21.jdk/Contents/Home/
    ```
 7. Install liquibase by executing the following commands in a Terminal window.
    ```

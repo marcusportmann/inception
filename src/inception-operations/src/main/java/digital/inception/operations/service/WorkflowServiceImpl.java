@@ -30,7 +30,7 @@ import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
-import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -118,8 +118,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public Workflow createWorkflow(
-      UUID tenantId, CreateWorkflowRequest createWorkflowRequest, String createdBy)
+  public Workflow initiateWorkflow(
+      UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String createdBy)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
@@ -127,15 +127,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new InvalidArgumentException("tenantId");
     }
 
-    validateArgument("createWorkflowRequest", createWorkflowRequest);
+    validateArgument("initiateWorkflowRequest", initiateWorkflowRequest);
 
     try {
       Optional<WorkflowDefinition> workflowDefinitionOptional =
           workflowDefinitionRepository.findLatestVersionById(
-              createWorkflowRequest.getDefinitionId());
+              initiateWorkflowRequest.getDefinitionId());
 
       if (workflowDefinitionOptional.isEmpty()) {
-        throw new WorkflowDefinitionNotFoundException(createWorkflowRequest.getDefinitionId());
+        throw new WorkflowDefinitionNotFoundException(initiateWorkflowRequest.getDefinitionId());
       }
 
       WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
@@ -143,11 +143,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       Workflow workflow =
           new Workflow(
               tenantId,
-              createWorkflowRequest.getParentId(),
+              initiateWorkflowRequest.getParentId(),
               workflowDefinition.getId(),
               workflowDefinition.getVersion(),
-              WorkflowStatus.IN_PROGRESS,
-              createWorkflowRequest.getData(),
+              WorkflowStatus.ACTIVE,
+              initiateWorkflowRequest.getData(),
               OffsetDateTime.now(),
               createdBy);
 
@@ -157,7 +157,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to create the workflow ("
-              + createWorkflowRequest.getDefinitionId()
+              + initiateWorkflowRequest.getDefinitionId()
               + ") for the tenant ("
               + tenantId
               + ")",

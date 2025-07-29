@@ -16,7 +16,7 @@
 
 package digital.inception.operations.constraint;
 
-import digital.inception.operations.model.CreateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.service.WorkflowService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -25,41 +25,41 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The {@code ValidCreateWorkflowRequestValidator} class implements the custom constraint validator
- * for validating a request to create a workflow.
+ * The {@code ValidInitiateWorkflowRequestValidator} class implements the custom constraint validator
+ * for validating a request to initiate a workflow.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ValidCreateWorkflowRequestValidator
-    implements ConstraintValidator<ValidCreateWorkflowRequest, CreateWorkflowRequest> {
+public class ValidInitiateWorkflowRequestValidator
+    implements ConstraintValidator<ValidInitiateWorkflowRequest, InitiateWorkflowRequest> {
 
   /** The Workflow Service */
   private final WorkflowService workflowService;
 
   /**
-   * Constructs a new {@code ValidCreateWorkflowRequestValidator}.
+   * Constructs a new {@code ValidInitiateWorkflowRequestValidator}.
    *
    * @param workflowService the Workflow Service
    */
   @Autowired
-  public ValidCreateWorkflowRequestValidator(WorkflowService workflowService) {
+  public ValidInitiateWorkflowRequestValidator(WorkflowService workflowService) {
     this.workflowService = workflowService;
   }
 
-  /** Constructs a new {@code ValidCreateWorkflowRequestValidator}. */
-  public ValidCreateWorkflowRequestValidator() {
+  /** Constructs a new {@code ValidInitiateWorkflowRequestValidator}. */
+  public ValidInitiateWorkflowRequestValidator() {
     this.workflowService = null;
   }
 
   @Override
-  public void initialize(ValidCreateWorkflowRequest constraintAnnotation) {}
+  public void initialize(ValidInitiateWorkflowRequest constraintAnnotation) {}
 
   @Override
   public boolean isValid(
-      CreateWorkflowRequest createWorkflowRequest,
+      InitiateWorkflowRequest initiateWorkflowRequest,
       ConstraintValidatorContext constraintValidatorContext) {
-    if (createWorkflowRequest != null) {
+    if (initiateWorkflowRequest != null) {
       boolean isValid = true;
 
       // Disable the default constraint violation
@@ -73,7 +73,7 @@ public class ValidCreateWorkflowRequestValidator
         // TODO: IMPLEMENT VALIDATION
 
       } catch (Throwable e) {
-        throw new ValidationException("Failed to validate the create workflow request", e);
+        throw new ValidationException("Failed to validate the initiate workflow request", e);
       }
 
       return isValid;

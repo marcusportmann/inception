@@ -19,7 +19,7 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.operations.constraint.ValidCreateWorkflowRequest;
+import digital.inception.operations.constraint.ValidInitiateWorkflowRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,22 +33,22 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The {@code CreateWorkflowRequest} class represents a request to create a workflow.
+ * The {@code InitiateWorkflowRequest} class represents a request to initiate a workflow.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A request to create a workflow")
+@Schema(description = "A request to initiate a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"definitionId", "parentId", "externalReference", "data", "startWorkflow"})
-@XmlRootElement(name = "CreateWorkflowRequest", namespace = "https://inception.digital/operations")
+@JsonPropertyOrder({"definitionId", "parentId", "externalReference", "data"})
+@XmlRootElement(name = "InitiateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "CreateWorkflowRequest",
+    name = "InitiateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"definitionId", "parentId", "externalReference", "data", "startWorkflow"})
+    propOrder = {"definitionId", "parentId", "externalReference", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidCreateWorkflowRequest
+@ValidInitiateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class CreateWorkflowRequest implements Serializable {
+public class InitiateWorkflowRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -82,55 +82,49 @@ public class CreateWorkflowRequest implements Serializable {
   @XmlElement(name = "ParentId")
   private UUID parentId;
 
-  /** Should the workflow be started after it is created? */
-  @Schema(description = "Should the workflow be started after it is created")
-  @JsonProperty
-  @XmlElement(name = "StartWorkflow")
-  private Boolean startWorkflow;
-
-  /** Constructs a new {@code CreateWorkflowRequest}. */
-  public CreateWorkflowRequest() {}
+  /** Constructs a new {@code InitiateWorkflowRequest}. */
+  public InitiateWorkflowRequest() {}
 
   /**
-   * Constructs a new {@code CreateWorkflowRequest}.
+   * Constructs a new {@code InitiateWorkflowRequest}.
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param data the data for the workflow
    */
-  public CreateWorkflowRequest(String definitionId, String data) {
+  public InitiateWorkflowRequest(String definitionId, String data) {
     this.definitionId = definitionId;
     this.data = data;
   }
 
   /**
-   * Constructs a new {@code CreateWorkflowRequest}.
+   * Constructs a new {@code InitiateWorkflowRequest}.
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param externalReference the external reference used to link this workflow to an external
    *     system
    * @param data the data for the workflow
    */
-  public CreateWorkflowRequest(String definitionId, String externalReference, String data) {
+  public InitiateWorkflowRequest(String definitionId, String externalReference, String data) {
     this.definitionId = definitionId;
     this.externalReference = externalReference;
     this.data = data;
   }
 
   /**
-   * Constructs a new {@code CreateWorkflowRequest}.
+   * Constructs a new {@code InitiateWorkflowRequest}.
    *
    * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param data the data for the workflow
    */
-  public CreateWorkflowRequest(UUID parentId, String definitionId, String data) {
+  public InitiateWorkflowRequest(UUID parentId, String definitionId, String data) {
     this.parentId = parentId;
     this.definitionId = definitionId;
     this.data = data;
   }
 
   /**
-   * Constructs a new {@code CreateWorkflowRequest}.
+   * Constructs a new {@code InitiateWorkflowRequest}.
    *
    * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
@@ -138,7 +132,7 @@ public class CreateWorkflowRequest implements Serializable {
    *     system
    * @param data the data for the workflow
    */
-  public CreateWorkflowRequest(
+  public InitiateWorkflowRequest(
       UUID parentId, String definitionId, String externalReference, String data) {
     this.parentId = parentId;
     this.definitionId = definitionId;
@@ -183,16 +177,6 @@ public class CreateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns whether the workflow should be started after it is created.
-   *
-   * @return {@code true} if the workflow should be started after it is created or {@code false}
-   *     otherwise
-   */
-  public Boolean getStartWorkflow() {
-    return startWorkflow;
-  }
-
-  /**
    * Set the data for the workflow.
    *
    * @param data the data for the workflow
@@ -227,15 +211,5 @@ public class CreateWorkflowRequest implements Serializable {
    */
   public void setParentId(UUID parentId) {
     this.parentId = parentId;
-  }
-
-  /**
-   * Set whether the workflow should be started after it is created.
-   *
-   * @param startWorkflow {@code true} if the workflow should be started after it is created or
-   *     {@code false} otherwise
-   */
-  public void setStartWorkflow(Boolean startWorkflow) {
-    this.startWorkflow = startWorkflow;
   }
 }
