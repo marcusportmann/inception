@@ -28,12 +28,18 @@ import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowStep;
+import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
 import digital.inception.operations.persistence.jpa.WorkflowNoteRepository;
 import digital.inception.operations.persistence.jpa.WorkflowRepository;
+import digital.inception.operations.persistence.jpa.WorkflowStepRepository;
 import digital.inception.operations.persistence.jpa.WorkflowSummaryRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,22 +73,32 @@ public class InternalWorkflowStore implements WorkflowStore {
   /** The Workflow Repository. */
   private final WorkflowRepository workflowRepository;
 
+  /** The Workflow Step Repository. */
+  private final WorkflowStepRepository workflowStepRepository;
+
   /** The Workflow Summary Repository. */
   private final WorkflowSummaryRepository workflowSummaryRepository;
+
+  /* Entity Manager */
+  @PersistenceContext(unitName = "operations")
+  private EntityManager entityManager;
 
   /**
    * Constructs a new {@code InternalWorkflowStore}.
    *
    * @param workflowNoteRepository the Workflow Note Repository
    * @param workflowRepository the Workflow Repository
+   * @param workflowStepRepository the Workflow Step Repository
    * @param workflowSummaryRepository the Workflow Summary Repository
    */
   public InternalWorkflowStore(
       WorkflowNoteRepository workflowNoteRepository,
       WorkflowRepository workflowRepository,
+      WorkflowStepRepository workflowStepRepository,
       WorkflowSummaryRepository workflowSummaryRepository) {
     this.workflowNoteRepository = workflowNoteRepository;
     this.workflowRepository = workflowRepository;
+    this.workflowStepRepository = workflowStepRepository;
     this.workflowSummaryRepository = workflowSummaryRepository;
   }
 
@@ -419,6 +435,38 @@ public class InternalWorkflowStore implements WorkflowStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowStep initiateWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(workflowId);
+      }
+
+      // Obtain a proxy to the Workflow without fetching it
+      Workflow workflowRef = entityManager.getReference(Workflow.class, workflowId);
+
+      WorkflowStep workflowStep =
+          new WorkflowStep(workflowRef, step, WorkflowStepStatus.ACTIVE, OffsetDateTime.now());
+
+      workflowStepRepository.saveAndFlush(workflowStep);
+
+      return workflowStep;
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to initiate the workflow step ("
+              + step
+              + ") for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }

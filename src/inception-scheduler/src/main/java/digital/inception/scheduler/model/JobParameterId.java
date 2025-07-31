@@ -16,6 +16,7 @@
 
 package digital.inception.scheduler.model;
 
+import digital.inception.core.util.StringUtil;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -27,8 +28,8 @@ import java.util.Objects;
 @SuppressWarnings({"UnusedDeclaration"})
 public class JobParameterId implements Serializable {
 
-  /** The job the job parameter is associated with. */
-  private Job job;
+  /** The ID for the job the job parameter is associated with. */
+  private String jobId;
 
   /** The name of the job parameter. */
   private String name;
@@ -58,7 +59,7 @@ public class JobParameterId implements Serializable {
 
     JobParameterId other = (JobParameterId) object;
 
-    return Objects.equals(job, other.job) && Objects.equals(name, other.name);
+    return StringUtil.equalsIgnoreCase(jobId, other.jobId) && Objects.equals(name, other.name);
   }
 
   /**
@@ -68,7 +69,6 @@ public class JobParameterId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((job == null) || (job.getId() == null)) ? 0 : job.getId().hashCode())
-        + ((name == null) ? 0 : name.hashCode());
+    return ((jobId == null) ? 0 : jobId.hashCode()) + ((name == null) ? 0 : name.hashCode());
   }
 }

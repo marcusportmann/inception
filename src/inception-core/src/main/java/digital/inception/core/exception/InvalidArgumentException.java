@@ -53,7 +53,7 @@ public class InvalidArgumentException extends ServiceException {
    * @param parameter the name of the parameter associated with the invalid argument
    */
   public InvalidArgumentException(String parameter) {
-    this(parameter, null);
+    this(parameter, (List<ValidationError>) null);
   }
 
   /**
@@ -68,6 +68,22 @@ public class InvalidArgumentException extends ServiceException {
     this.invalidArgumentError =
         new InvalidArgumentError(
             "Invalid argument (" + parameter + ")", parameter, validationErrors);
+  }
+
+  /**
+   * Constructs a new <b>InvalidArgumentException</b>.
+   *
+   * @param parameter the name of the parameter associated with the invalid argument
+   * @param message the message for the parameter associated with the invalid argument
+   */
+  public InvalidArgumentException(String parameter, String message) {
+    super("Invalid argument (" + parameter + ")");
+
+    this.invalidArgumentError =
+        new InvalidArgumentError(
+            "Invalid argument (" + parameter + ")",
+            parameter,
+            List.of(new ValidationError(parameter, message)));
   }
 
   /**

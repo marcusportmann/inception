@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -40,7 +41,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code WorkflowEngineAttribute} class holds the information for an attribute for a workflow
@@ -78,6 +78,14 @@ public class WorkflowEngineAttribute implements Serializable {
   @Column(name = "code", length = 50, nullable = false)
   private String code;
 
+  /** The ID for the workflow engine the workflow engine attribute is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "engine_id", nullable = false)
+  private String engineId;
+
   /** The value for the workflow engine attribute. */
   @Schema(
       description = "The value for the workflow engine attribute",
@@ -93,9 +101,8 @@ public class WorkflowEngineAttribute implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("workflowEngineAttributeReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "engine_id")
+  @JoinColumn(name = "engine_id", insertable = false, updatable = false)
   private WorkflowEngine workflowEngine;
 
   /** Constructs a new {@code WorkflowEngineAttribute}. */
@@ -134,7 +141,7 @@ public class WorkflowEngineAttribute implements Serializable {
 
     WorkflowEngineAttribute other = (WorkflowEngineAttribute) object;
 
-    return Objects.equals(workflowEngine, other.workflowEngine)
+    return StringUtil.equalsIgnoreCase(engineId, other.engineId)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -173,7 +180,7 @@ public class WorkflowEngineAttribute implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((workflowEngine == null) ? 0 : workflowEngine.hashCode())
+    return ((engineId == null) ? 0 : engineId.hashCode())
         + ((code == null) ? 0 : code.hashCode());
   }
 
@@ -203,5 +210,10 @@ public class WorkflowEngineAttribute implements Serializable {
   @Schema(hidden = true)
   public void setWorkflowEngine(WorkflowEngine workflowEngine) {
     this.workflowEngine = workflowEngine;
+
+    if (workflowEngine != null) {
+      this.engineId = workflowEngine.getId();
+    } else
+      this.engineId = null;
   }
 }

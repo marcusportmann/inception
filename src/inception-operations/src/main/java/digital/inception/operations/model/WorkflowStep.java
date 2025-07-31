@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -29,11 +30,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -46,6 +47,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code WorkflowStep} class holds the information for a workflow step.
@@ -115,10 +117,17 @@ public class WorkflowStep implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("workflowStepReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({@JoinColumn(name = "workflow_id")})
+  @JoinColumn(name = "workflow_id", insertable = false, updatable = false)
   private Workflow workflow;
+
+  /** The ID for the workflow the workflow step is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "workflow_id", nullable = false)
+  private UUID workflowId;
 
   /** Constructs a new {@code WorkflowStep}. */
   public WorkflowStep() {}
@@ -126,11 +135,14 @@ public class WorkflowStep implements Serializable {
   /**
    * Constructs a new {@code WorkflowStep}.
    *
+   * @param workflow the workflow the workflow step is associated with
    * @param code the code for the workflow step
    * @param status the status of the workflow step
    * @param initiated the date and time the workflow was initiated
    */
-  public WorkflowStep(String code, WorkflowStepStatus status, OffsetDateTime initiated) {
+  public WorkflowStep(
+      Workflow workflow, String code, WorkflowStepStatus status, OffsetDateTime initiated) {
+    this.workflow = workflow;
     this.code = code;
     this.status = status;
     this.initiated = initiated;
@@ -158,7 +170,7 @@ public class WorkflowStep implements Serializable {
 
     WorkflowStep other = (WorkflowStep) object;
 
-    return Objects.equals(workflow, other.workflow)
+    return Objects.equals(workflowId, other.workflowId)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -215,7 +227,8 @@ public class WorkflowStep implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((workflow == null) ? 0 : workflow.hashCode()) + ((code == null) ? 0 : code.hashCode());
+    return ((workflowId == null) ? 0 : workflowId.hashCode())
+        + ((code == null) ? 0 : code.hashCode());
   }
 
   /**
@@ -262,5 +275,25 @@ public class WorkflowStep implements Serializable {
   @Schema(hidden = true)
   public void setWorkflow(Workflow workflow) {
     this.workflow = workflow;
+
+    if (workflow != null) {
+      this.workflowId = workflow.getId();
+    } else {
+      this.workflowId = null;
+    }
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Workflow parent) {
+      setWorkflow(parent);
+    }
   }
 }

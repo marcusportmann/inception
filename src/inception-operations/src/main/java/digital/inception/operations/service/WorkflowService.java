@@ -30,6 +30,7 @@ import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -42,6 +43,7 @@ import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
 import java.util.List;
 import java.util.UUID;
@@ -367,7 +369,7 @@ public interface WorkflowService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Initiate a new workflow.
+   * Initiate a workflow.
    *
    * @param tenantId the ID for the tenant
    * @param initiateWorkflowRequest the request to initiate a workflow
@@ -382,6 +384,20 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Initiate a workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param initiateWorkflowStepRequest the request to initiate a workflow step
+   * @return the workflow step
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be initiated
+   */
+  WorkflowStep initiateWorkflowStep(
+      UUID tenantId, InitiateWorkflowStepRequest initiateWorkflowStepRequest)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the workflow.

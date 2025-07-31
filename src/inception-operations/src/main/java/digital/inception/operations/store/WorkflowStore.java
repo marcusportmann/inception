@@ -29,6 +29,7 @@ import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
 import java.util.UUID;
 
@@ -166,6 +167,19 @@ public interface WorkflowStore {
       Integer pageSize,
       int maxResults)
       throws ServiceUnavailableException;
+
+  /**
+   * Initiate the workflow step with the specified code for the workflow with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param step the code for the workflow step
+   * @return the workflow step
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be initiated
+   */
+  WorkflowStep initiateWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the workflow.

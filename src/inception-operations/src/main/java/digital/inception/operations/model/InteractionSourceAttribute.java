@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -32,6 +33,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -41,6 +43,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code InteractionSourceAttribute} class holds the information for an attribute for an
@@ -82,10 +85,17 @@ public class InteractionSourceAttribute implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("interactionSourceAttributeReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "source_id")
+  @JoinColumn(name = "source_id", insertable = false, updatable = false)
   private InteractionSource interactionSource;
+
+  /** The ID for the interaction source the interaction source attribute is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "source_id", nullable = false)
+  private UUID sourceId;
 
   /** The value for the interaction source attribute. */
   @Schema(
@@ -134,7 +144,7 @@ public class InteractionSourceAttribute implements Serializable {
 
     InteractionSourceAttribute other = (InteractionSourceAttribute) object;
 
-    return Objects.equals(interactionSource, other.interactionSource)
+    return Objects.equals(sourceId, other.sourceId)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -173,8 +183,7 @@ public class InteractionSourceAttribute implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((interactionSource == null) ? 0 : interactionSource.hashCode())
-        + ((code == null) ? 0 : code.hashCode());
+    return ((sourceId == null) ? 0 : sourceId.hashCode()) + ((code == null) ? 0 : code.hashCode());
   }
 
   /**
@@ -195,6 +204,12 @@ public class InteractionSourceAttribute implements Serializable {
   @Schema(hidden = true)
   public void setInteractionSource(InteractionSource interactionSource) {
     this.interactionSource = interactionSource;
+
+    if (interactionSource != null) {
+      this.sourceId = interactionSource.getId();
+    } else {
+      this.sourceId = null;
+    }
   }
 
   /**
@@ -204,5 +219,19 @@ public class InteractionSourceAttribute implements Serializable {
    */
   public void setValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof InteractionSource parent) {
+      setInteractionSource(parent);
+    }
   }
 }

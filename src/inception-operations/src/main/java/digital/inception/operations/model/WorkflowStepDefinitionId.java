@@ -19,7 +19,6 @@ package digital.inception.operations.model;
 import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code WorkflowStepDefinitionId} class implements the ID class for the {@code
@@ -35,8 +34,11 @@ public class WorkflowStepDefinitionId implements Serializable {
   /** The code for the workflow step. */
   private String code;
 
-  /** The workflow definition the workflow step definition is associated with. */
-  private WorkflowDefinition workflowDefinition;
+  /** The ID for the workflow definition the workflow step definition is associated with. */
+  private String definitionId;
+
+  /** The version of the workflow definition the workflow step definition is associated with. */
+  private int definitionVersion;
 
   /** Constructs a new {@code WorkflowStepDefinitionId}. */
   public WorkflowStepDefinitionId() {}
@@ -63,7 +65,8 @@ public class WorkflowStepDefinitionId implements Serializable {
 
     WorkflowStepDefinitionId other = (WorkflowStepDefinitionId) object;
 
-    return Objects.equals(workflowDefinition, other.workflowDefinition)
+    return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
+        && definitionVersion == other.definitionVersion
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -74,7 +77,8 @@ public class WorkflowStepDefinitionId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((workflowDefinition == null) ? 0 : workflowDefinition.hashCode())
+    return ((definitionId == null) ? 0 : definitionId.hashCode())
+        + (Integer.hashCode(definitionVersion))
         + ((code == null) ? 0 : code.hashCode());
   }
 }

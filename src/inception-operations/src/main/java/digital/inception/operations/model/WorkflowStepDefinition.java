@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -33,6 +34,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -41,7 +43,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code WorkflowStepDefinition} class encapsulates the definition of a step within a workflow.
@@ -85,6 +86,22 @@ public class WorkflowStepDefinition implements Serializable {
   @Column(name = "code", length = 50, nullable = false)
   private String code;
 
+  /** The ID for the workflow definition the workflow step definition is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "definition_id", nullable = false)
+  private String definitionId;
+
+  /** The version of the workflow definition the workflow step definition is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "definition_version", nullable = false)
+  private int definitionVersion;
+
   /** The description for the workflow step. */
   @Schema(
       description = "The description for the workflow step",
@@ -111,9 +128,11 @@ public class WorkflowStepDefinition implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("workflowStepDefinitionReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({@JoinColumn(name = "definition_id"), @JoinColumn(name = "definition_version")})
+  @JoinColumns({
+    @JoinColumn(name = "definition_id", insertable = false, updatable = false),
+    @JoinColumn(name = "definition_version", insertable = false, updatable = false)
+  })
   private WorkflowDefinition workflowDefinition;
 
   /** Constructs a new {@code WorkflowStepDefinition}. */
@@ -154,7 +173,8 @@ public class WorkflowStepDefinition implements Serializable {
 
     WorkflowStepDefinition other = (WorkflowStepDefinition) object;
 
-    return Objects.equals(workflowDefinition, other.workflowDefinition)
+    return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
+        && (definitionVersion == other.definitionVersion)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -202,7 +222,8 @@ public class WorkflowStepDefinition implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((workflowDefinition == null) ? 0 : workflowDefinition.hashCode())
+    return ((definitionId == null) ? 0 : definitionId.hashCode())
+        + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
         + ((code == null) ? 0 : code.hashCode());
   }
 
@@ -242,5 +263,27 @@ public class WorkflowStepDefinition implements Serializable {
   @Schema(hidden = true)
   public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
     this.workflowDefinition = workflowDefinition;
+
+    if (workflowDefinition != null) {
+      this.definitionId = workflowDefinition.getId();
+      this.definitionVersion = workflowDefinition.getVersion();
+    } else {
+      this.definitionId = null;
+      this.definitionVersion = 0;
+    }
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof WorkflowDefinition parent) {
+      setWorkflowDefinition(parent);
+    }
   }
 }

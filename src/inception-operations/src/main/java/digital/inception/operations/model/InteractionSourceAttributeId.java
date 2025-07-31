@@ -16,10 +16,16 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import digital.inception.core.util.StringUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code InteractionSourceAttributeId} class implements the ID class for The {@code
@@ -35,8 +41,8 @@ public class InteractionSourceAttributeId implements Serializable {
   /** The code for the interaction source attribute. */
   private String code;
 
-  /** The interaction source the attribute is associated with. */
-  private InteractionSource interactionSource;
+  /** The ID for the interaction source the interaction source attribute is associated with. */
+  private UUID sourceId;
 
   /** Constructs a new {@code InteractionSourceAttributeId}. */
   public InteractionSourceAttributeId() {}
@@ -63,7 +69,7 @@ public class InteractionSourceAttributeId implements Serializable {
 
     InteractionSourceAttributeId other = (InteractionSourceAttributeId) object;
 
-    return Objects.equals(interactionSource, other.interactionSource)
+    return Objects.equals(sourceId, other.sourceId)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -74,7 +80,6 @@ public class InteractionSourceAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((interactionSource == null) ? 0 : interactionSource.hashCode())
-        + ((code == null) ? 0 : code.hashCode());
+    return ((sourceId == null) ? 0 : sourceId.hashCode()) + ((code == null) ? 0 : code.hashCode());
   }
 }

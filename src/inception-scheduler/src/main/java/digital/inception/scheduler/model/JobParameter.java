@@ -17,6 +17,7 @@
 package digital.inception.scheduler.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -31,6 +32,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -40,6 +42,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import org.springframework.util.StringUtils;
 
 /**
  * The {@code JobParameter} class holds the information for a job parameter.
@@ -67,8 +70,16 @@ public class JobParameter implements Serializable {
   @JsonBackReference("parameterReference")
   @XmlTransient
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "job_id")
+  @JoinColumn(name = "job_id", insertable = false, updatable = false)
   private Job job;
+
+  /** The ID for the job the job parameter is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "job_id", nullable = false)
+  private String jobId;
 
   /** The name of the job parameter. */
   @Schema(
@@ -129,7 +140,7 @@ public class JobParameter implements Serializable {
 
     JobParameter other = (JobParameter) object;
 
-    return Objects.equals(job, other.job) && Objects.equals(name, other.name);
+    return StringUtils.endsWithIgnoreCase(jobId, other.jobId) && Objects.equals(name, other.name);
   }
 
   /**
@@ -166,8 +177,7 @@ public class JobParameter implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((job == null) || (job.getId() == null)) ? 0 : job.getId().hashCode())
-        + ((name == null) ? 0 : name.hashCode());
+    return ((jobId == null) ? 0 : jobId.hashCode()) + ((name == null) ? 0 : name.hashCode());
   }
 
   /**
@@ -177,6 +187,12 @@ public class JobParameter implements Serializable {
    */
   public void setJob(Job job) {
     this.job = job;
+
+    if (job != null) {
+      this.jobId = job.getId();
+    } else {
+      this.jobId = null;
+    }
   }
 
   /**
@@ -195,5 +211,19 @@ public class JobParameter implements Serializable {
    */
   public void setValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Job parent) {
+      setJob(parent);
+    }
   }
 }

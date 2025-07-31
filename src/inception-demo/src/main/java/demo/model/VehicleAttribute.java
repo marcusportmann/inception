@@ -17,6 +17,7 @@
 package demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -31,6 +32,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -40,6 +42,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code VehicleAttribute} class holds the information for a vehicle attribute for a vehicle.
@@ -89,10 +92,17 @@ public class VehicleAttribute implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("vehicleAttributeReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "vehicle_id")
+  @JoinColumn(name = "vehicle_id", insertable = false, updatable = false)
   private VehicleBase vehicle;
+
+  /** The ID for the vehicle the vehicle attribute is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "vehicle_id", nullable = false)
+  private UUID vehicleId;
 
   /** Constructs a new {@code VehicleAttribute}. */
   public VehicleAttribute() {}
@@ -130,7 +140,7 @@ public class VehicleAttribute implements Serializable {
 
     VehicleAttribute other = (VehicleAttribute) object;
 
-    return Objects.equals(vehicle, other.vehicle) && Objects.equals(type, other.type);
+    return Objects.equals(vehicleId, other.vehicleId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -168,7 +178,7 @@ public class VehicleAttribute implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((vehicle == null) || (vehicle.getId() == null)) ? 0 : vehicle.getId().hashCode())
+    return ((vehicleId == null) ? 0 : vehicleId.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
@@ -198,5 +208,25 @@ public class VehicleAttribute implements Serializable {
   @Schema(hidden = true)
   public void setVehicle(VehicleBase vehicle) {
     this.vehicle = vehicle;
+
+    if (vehicle != null) {
+      this.vehicleId = vehicle.getId();
+    } else {
+      this.vehicleId = null;
+    }
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof VehicleBase parent) {
+      setVehicle(parent);
+    }
   }
 }

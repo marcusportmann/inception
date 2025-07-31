@@ -38,6 +38,7 @@ import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
@@ -144,6 +145,24 @@ public class WorkflowServiceTests {
 
     workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false);
 
+    workflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            "test_workflow_step_1",
+            "Test Workflow Step 1",
+            "The description for Test Workflow Step 1"));
+
+    workflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            "test_workflow_step_2",
+            "Test Workflow Step 2",
+            "The description for Test Workflow Step 2"));
+
+    workflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            "test_workflow_step_3",
+            "Test Workflow Step 3",
+            "The description for Test Workflow Step 3"));
+
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
 
@@ -164,7 +183,7 @@ public class WorkflowServiceTests {
             workflowDefinition.getId(), UUID.randomUUID().toString(), testWorkflowDataJson);
 
     Workflow workflow =
-        workflowService.createWorkflow(
+        workflowService.initiateWorkflow(
             TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowRequest, "TEST1");
 
     assertTrue(workflowService.workflowExists(TenantUtil.DEFAULT_TENANT_ID, workflow.getId()));
@@ -178,7 +197,7 @@ public class WorkflowServiceTests {
         workflowService.getWorkflowSummaries(
             TenantUtil.DEFAULT_TENANT_ID,
             workflow.getDefinitionId(),
-            WorkflowStatus.IN_PROGRESS,
+            WorkflowStatus.ACTIVE,
             null,
             WorkflowSortBy.DEFINITION_ID,
             SortDirection.ASCENDING,
@@ -275,6 +294,15 @@ public class WorkflowServiceTests {
     assertEquals(1, workflowNotes.getTotal());
 
     compareWorkflowNotes(updatedWorkflowNote, workflowNotes.getWorkflowNotes().getFirst());
+
+
+    InitiateWorkflowStepRequest initiateWorkflowStepRequest =
+        new InitiateWorkflowStepRequest(
+            workflow.getId(), "test_workflow_step_1");
+
+    workflowService.initiateWorkflowStep(TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowStepRequest);
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
 

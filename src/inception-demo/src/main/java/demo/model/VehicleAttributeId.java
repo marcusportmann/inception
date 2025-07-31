@@ -19,6 +19,7 @@ package demo.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code VehicleAttributeId} class implements the ID class for the {@code VehicleAttribute}
@@ -34,8 +35,8 @@ public class VehicleAttributeId implements Serializable {
   /** The code for the vehicle attribute type. */
   private String type;
 
-  /** The vehicle the vehicle attribute is associated with. */
-  private Vehicle vehicle;
+  /** The ID for the vehicle the vehicle attribute is associated with. */
+  private UUID vehicleId;
 
   /** Constructs a new {@code VehicleAttributeId}. */
   public VehicleAttributeId() {}
@@ -62,7 +63,7 @@ public class VehicleAttributeId implements Serializable {
 
     VehicleAttributeId other = (VehicleAttributeId) object;
 
-    return Objects.equals(vehicle, other.vehicle) && Objects.equals(type, other.type);
+    return Objects.equals(vehicleId, other.vehicleId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -72,6 +73,7 @@ public class VehicleAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((vehicle == null) ? 0 : vehicle.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((vehicleId == null) ? 0 : vehicleId.hashCode())
+        + ((type == null) ? 0 : type.hashCode());
   }
 }

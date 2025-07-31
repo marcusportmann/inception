@@ -31,6 +31,7 @@ import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
@@ -44,6 +45,7 @@ import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
@@ -115,54 +117,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     this.workflowDefinitionRepository = workflowDefinitionRepository;
     this.workflowDefinitionSummaryRepository = workflowDefinitionSummaryRepository;
     this.workflowEngineRepository = workflowEngineRepository;
-  }
-
-  @Override
-  public Workflow initiateWorkflow(
-      UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String createdBy)
-      throws InvalidArgumentException,
-          WorkflowDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    validateArgument("initiateWorkflowRequest", initiateWorkflowRequest);
-
-    try {
-      Optional<WorkflowDefinition> workflowDefinitionOptional =
-          workflowDefinitionRepository.findLatestVersionById(
-              initiateWorkflowRequest.getDefinitionId());
-
-      if (workflowDefinitionOptional.isEmpty()) {
-        throw new WorkflowDefinitionNotFoundException(initiateWorkflowRequest.getDefinitionId());
-      }
-
-      WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
-
-      Workflow workflow =
-          new Workflow(
-              tenantId,
-              initiateWorkflowRequest.getParentId(),
-              workflowDefinition.getId(),
-              workflowDefinition.getVersion(),
-              WorkflowStatus.ACTIVE,
-              initiateWorkflowRequest.getData(),
-              OffsetDateTime.now(),
-              createdBy);
-
-      return workflowStore.createWorkflow(tenantId, workflow);
-    } catch (WorkflowDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the workflow ("
-              + initiateWorkflowRequest.getDefinitionId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
   }
 
   @Override
@@ -735,6 +689,84 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Workflow initiateWorkflow(
+      UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String createdBy)
+      throws InvalidArgumentException,
+          WorkflowDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("initiateWorkflowRequest", initiateWorkflowRequest);
+
+    try {
+      Optional<WorkflowDefinition> workflowDefinitionOptional =
+          workflowDefinitionRepository.findLatestVersionById(
+              initiateWorkflowRequest.getDefinitionId());
+
+      if (workflowDefinitionOptional.isEmpty()) {
+        throw new WorkflowDefinitionNotFoundException(initiateWorkflowRequest.getDefinitionId());
+      }
+
+      WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
+
+      Workflow workflow =
+          new Workflow(
+              tenantId,
+              initiateWorkflowRequest.getParentId(),
+              workflowDefinition.getId(),
+              workflowDefinition.getVersion(),
+              WorkflowStatus.ACTIVE,
+              initiateWorkflowRequest.getData(),
+              OffsetDateTime.now(),
+              createdBy);
+
+      return workflowStore.createWorkflow(tenantId, workflow);
+    } catch (WorkflowDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to initiate the workflow ("
+              + initiateWorkflowRequest.getDefinitionId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowStep initiateWorkflowStep(
+      UUID tenantId, InitiateWorkflowStepRequest initiateWorkflowStepRequest)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("initiateWorkflowStepRequest", initiateWorkflowStepRequest);
+
+    try {
+      return workflowStore.initiateWorkflowStep(
+          tenantId,
+          initiateWorkflowStepRequest.getWorkflowId(),
+          initiateWorkflowStepRequest.getStep());
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to initiate the workflow step ("
+              + initiateWorkflowStepRequest.getStep()
+              + ") for the workflow ("
+              + initiateWorkflowStepRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
