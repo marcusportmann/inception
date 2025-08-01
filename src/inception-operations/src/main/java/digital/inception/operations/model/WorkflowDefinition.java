@@ -30,6 +30,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
@@ -104,12 +106,20 @@ public class WorkflowDefinition implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  @OneToMany(
-      mappedBy = "workflowDefinition",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("code")
+  @JoinColumns({
+    @JoinColumn(
+        name = "definition_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false),
+    @JoinColumn(
+        name = "definition_version",
+        referencedColumnName = "version",
+        insertable = false,
+        updatable = false)
+  })
   private final List<WorkflowDefinitionAttribute> attributes = new ArrayList<>();
 
   /** The document definitions associated with the workflow definition. */
@@ -121,12 +131,20 @@ public class WorkflowDefinition implements Serializable {
   @XmlElementWrapper(name = "DocumentDefinitions", required = true)
   @XmlElement(name = "DocumentDefinition", required = true)
   @Valid
-  @OneToMany(
-      mappedBy = "workflowDefinition",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("documentDefinitionId")
+  @JoinColumns({
+    @JoinColumn(
+        name = "workflow_definition_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false),
+    @JoinColumn(
+        name = "workflow_definition_version",
+        referencedColumnName = "version",
+        insertable = false,
+        updatable = false)
+  })
   private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
 
   /** The workflow step definitions for the workflow definition. */
@@ -136,12 +154,20 @@ public class WorkflowDefinition implements Serializable {
   @XmlElementWrapper(name = "StepDefinitions")
   @XmlElement(name = "StepDefinition")
   @Valid
-  @OneToMany(
-      mappedBy = "workflowDefinition",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("code")
+  @JoinColumns({
+    @JoinColumn(
+        name = "definition_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false),
+    @JoinColumn(
+        name = "definition_version",
+        referencedColumnName = "version",
+        insertable = false,
+        updatable = false)
+  })
   private final List<WorkflowStepDefinition> stepDefinitions = new ArrayList<>();
 
   /** The ID for the workflow definition category the workflow definition is associated with. */
@@ -855,5 +881,17 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setVersion(int version) {
     this.version = version;
+
+    // Update the version on the attributes
+    attributes.forEach(attribute -> attribute.setWorkflowDefinition(this));
+
+    // Update the version on the workflow definition document definitions
+    documentDefinitions.forEach(
+        workflowDefinitionDocumentDefinition ->
+            workflowDefinitionDocumentDefinition.setWorkflowDefinition(this));
+
+    // Update the version on the step definitions
+    stepDefinitions.forEach(
+        workflowStepDefinition -> workflowStepDefinition.setWorkflowDefinition(this));
   }
 }

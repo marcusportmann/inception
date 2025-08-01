@@ -81,14 +81,6 @@ public class InteractionSourceAttribute implements Serializable {
   @Column(name = "code", length = 50, nullable = false)
   private String code;
 
-  /** The interaction source the interaction source attribute is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("interactionSourceAttributeReference")
-  @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "source_id", insertable = false, updatable = false)
-  private InteractionSource interactionSource;
-
   /** The ID for the interaction source the interaction source attribute is associated with. */
   @Schema(hidden = true)
   @JsonIgnore
@@ -158,16 +150,6 @@ public class InteractionSourceAttribute implements Serializable {
   }
 
   /**
-   * Returns the interaction source the interaction source attribute is associated with.
-   *
-   * @return the interaction source the interaction source attribute is associated with
-   */
-  @Schema(hidden = true)
-  public InteractionSource getInteractionSource() {
-    return interactionSource;
-  }
-
-  /**
    * Returns the value for the interaction source attribute.
    *
    * @return the value for the interaction source attribute
@@ -201,10 +183,9 @@ public class InteractionSourceAttribute implements Serializable {
    * @param interactionSource the interaction source the interaction source attribute is associated
    *     with
    */
+  @JsonBackReference("interactionSourceAttributeReference")
   @Schema(hidden = true)
   public void setInteractionSource(InteractionSource interactionSource) {
-    this.interactionSource = interactionSource;
-
     if (interactionSource != null) {
       this.sourceId = interactionSource.getId();
     } else {

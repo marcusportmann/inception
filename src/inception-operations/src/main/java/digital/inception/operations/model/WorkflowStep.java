@@ -26,11 +26,8 @@ import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -113,14 +110,6 @@ public class WorkflowStep implements Serializable {
   @Column(name = "status", nullable = false)
   private WorkflowStepStatus status;
 
-  /** The workflow the workflow step is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("workflowStepReference")
-  @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "workflow_id", insertable = false, updatable = false)
-  private Workflow workflow;
-
   /** The ID for the workflow the workflow step is associated with. */
   @Schema(hidden = true)
   @JsonIgnore
@@ -142,7 +131,7 @@ public class WorkflowStep implements Serializable {
    */
   public WorkflowStep(
       Workflow workflow, String code, WorkflowStepStatus status, OffsetDateTime initiated) {
-    this.workflow = workflow;
+    this.workflowId = workflow.getId();
     this.code = code;
     this.status = status;
     this.initiated = initiated;
@@ -211,16 +200,6 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Returns the workflow the workflow step is associated with.
-   *
-   * @return the workflow the workflow step is associated with
-   */
-  @Schema(hidden = true)
-  public Workflow getWorkflow() {
-    return workflow;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -272,10 +251,9 @@ public class WorkflowStep implements Serializable {
    *
    * @param workflow the workflow the workflow step is associated with
    */
+  @JsonBackReference("workflowStepReference")
   @Schema(hidden = true)
   public void setWorkflow(Workflow workflow) {
-    this.workflow = workflow;
-
     if (workflow != null) {
       this.workflowId = workflow.getId();
     } else {

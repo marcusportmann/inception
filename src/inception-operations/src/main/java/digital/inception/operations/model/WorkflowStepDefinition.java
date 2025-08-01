@@ -25,12 +25,8 @@ import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -124,16 +120,7 @@ public class WorkflowStepDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The workflow definition the workflow step definition is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("workflowStepDefinitionReference")
-  @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({
-    @JoinColumn(name = "definition_id", insertable = false, updatable = false),
-    @JoinColumn(name = "definition_version", insertable = false, updatable = false)
-  })
-  private WorkflowDefinition workflowDefinition;
+
 
   /** Constructs a new {@code WorkflowStepDefinition}. */
   public WorkflowStepDefinition() {}
@@ -205,15 +192,6 @@ public class WorkflowStepDefinition implements Serializable {
     return name;
   }
 
-  /**
-   * Returns the workflow definition the workflow step definition is associated with.
-   *
-   * @return the workflow definition the workflow step definition is associated with
-   */
-  @Schema(hidden = true)
-  public WorkflowDefinition getWorkflowDefinition() {
-    return workflowDefinition;
-  }
 
   /**
    * Returns a hash code value for the object.
@@ -260,10 +238,9 @@ public class WorkflowStepDefinition implements Serializable {
    * @param workflowDefinition the workflow definition the workflow step definition is associated
    *     with
    */
+  @JsonBackReference("workflowStepDefinitionReference")
   @Schema(hidden = true)
   public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
-    this.workflowDefinition = workflowDefinition;
-
     if (workflowDefinition != null) {
       this.definitionId = workflowDefinition.getId();
       this.definitionVersion = workflowDefinition.getVersion();

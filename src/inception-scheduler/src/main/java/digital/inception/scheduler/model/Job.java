@@ -28,6 +28,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -102,10 +103,10 @@ public class Job implements Serializable {
   @XmlElement(name = "Parameter")
   @Valid
   @OneToMany(
-      mappedBy = "job",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @JoinColumn(name = "job_id", insertable = false, updatable = false)
   private final List<JobParameter> parameters = new ArrayList<>();
 
   /** Is the job enabled for execution? */

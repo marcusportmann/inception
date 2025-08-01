@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,15 +26,12 @@ import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -42,7 +40,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code WorkflowDefinitionDocumentDefinition} class holds the information for an association
@@ -79,6 +76,28 @@ import java.util.Objects;
 public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /**
+   * The ID for the workflow definition the workflow definition document definition is associated
+   * with.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "workflow_definition_id", nullable = false)
+  private String workflowDefinitionId;
+
+  /**
+   * The version of the workflow definition the workflow definition document definition is
+   * associated with.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "workflow_definition_version", nullable = false)
+  private int workflowDefinitionVersion;
 
   /** The ID for the document definition. */
   @Schema(
@@ -146,18 +165,6 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   @Column(name = "validity_period_unit")
   private TimeUnit validityPeriodUnit;
 
-  /** The workflow definition the workflow definition document definition is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("workflowDefinitionDocumentDefinitionReference")
-  @XmlTransient
-  @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({
-    @JoinColumn(name = "workflow_definition_id", referencedColumnName = "id"),
-    @JoinColumn(name = "workflow_definition_version", referencedColumnName = "version")
-  })
-  private WorkflowDefinition workflowDefinition;
-
   /** Constructs a new {@code WorkflowDefinitionDocumentDefinition}. */
   public WorkflowDefinitionDocumentDefinition() {}
 
@@ -177,7 +184,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
       String documentDefinitionId,
       boolean required,
       boolean singular) {
-    this.workflowDefinition = workflowDefinition;
+    this.workflowDefinitionId = workflowDefinition.getId();
+    this.workflowDefinitionVersion = workflowDefinition.getVersion();
     this.documentDefinitionId = documentDefinitionId;
     this.required = required;
     this.singular = singular;
@@ -207,7 +215,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
       boolean singular,
       TimeUnit validityPeriodUnit,
       Integer validityPeriodAmount) {
-    this.workflowDefinition = workflowDefinition;
+    this.workflowDefinitionId = workflowDefinition.getId();
+    this.workflowDefinitionVersion = workflowDefinition.getVersion();
     this.documentDefinitionId = documentDefinitionId;
     this.required = required;
     this.singular = singular;
@@ -237,7 +246,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
     WorkflowDefinitionDocumentDefinition other = (WorkflowDefinitionDocumentDefinition) object;
 
-    return Objects.equals(workflowDefinition, other.workflowDefinition)
+    return StringUtil.equalsIgnoreCase(workflowDefinitionId, other.workflowDefinitionId)
+        && workflowDefinitionVersion == other.workflowDefinitionVersion
         && StringUtil.equalsIgnoreCase(documentDefinitionId, other.documentDefinitionId);
   }
 
@@ -274,16 +284,6 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    */
   public TimeUnit getValidityPeriodUnit() {
     return validityPeriodUnit;
-  }
-
-  /**
-   * Returns the workflow definition the workflow definition document definition is associated with.
-   *
-   * @return the workflow definition the workflow definition document definition is associated with
-   */
-  @Schema(hidden = true)
-  public WorkflowDefinition getWorkflowDefinition() {
-    return workflowDefinition;
   }
 
   /**
@@ -374,8 +374,29 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * @param workflowDefinition the workflow definition the workflow definition document definition
    *     is associated with
    */
+  @JsonBackReference("workflowDefinitionDocumentDefinitionReference")
   @Schema(hidden = true)
   public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
-    this.workflowDefinition = workflowDefinition;
+    if (workflowDefinition != null) {
+      this.workflowDefinitionId = workflowDefinition.getId();
+      this.workflowDefinitionVersion = workflowDefinition.getVersion();
+    } else {
+      this.workflowDefinitionId = null;
+      this.workflowDefinitionVersion = 0;
+    }
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof WorkflowDefinition parent) {
+      setWorkflowDefinition(parent);
+    }
   }
 }

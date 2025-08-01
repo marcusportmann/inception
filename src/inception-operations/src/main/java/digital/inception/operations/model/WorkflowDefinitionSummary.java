@@ -28,6 +28,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
@@ -86,24 +88,48 @@ public class WorkflowDefinitionSummary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The summaries for the document definitions associated with the workflow definition. */
+//  /** The summaries for the document definitions associated with the workflow definition. */
+//  @Schema(
+//      description =
+//          "The summaries for the document definitions associated with the workflow definition",
+//      requiredMode = Schema.RequiredMode.REQUIRED)
+//  @JsonProperty(required = true)
+//  @JsonManagedReference("workflowDefinitionDocumentDefinitionSummaryReference")
+//  @XmlElementWrapper(name = "DocumentDefinitions", required = true)
+//  @XmlElement(name = "DocumentDefinition", required = true)
+//  @Valid
+//  @OneToMany(
+//      cascade = CascadeType.ALL,
+//      fetch = FetchType.EAGER,
+//      orphanRemoval = true)
+//  @OrderBy("documentDefinitionId")
+//  @JoinColumns({
+//      @JoinColumn(name = "definition_id", referencedColumnName = "id", insertable = false, updatable = false),
+//      @JoinColumn(name = "definition_version", referencedColumnName = "version", insertable = false, updatable = false)
+//  })
+//  private final List<WorkflowDefinitionDocumentDefinitionSummary> documentDefinitions =
+//      new ArrayList<>();
+
+  /** The document definitions associated with the workflow definition. */
   @Schema(
-      description =
-          "The summaries for the document definitions associated with the workflow definition",
+      description = "The document definitions associated with the workflow definition",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @JsonManagedReference("workflowDefinitionDocumentDefinitionSummaryReference")
+  @JsonManagedReference("workflowDefinitionDocumentDefinitionReference")
   @XmlElementWrapper(name = "DocumentDefinitions", required = true)
   @XmlElement(name = "DocumentDefinition", required = true)
   @Valid
   @OneToMany(
-      mappedBy = "workflowDefinitionSummary",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("documentDefinitionId")
-  private final List<WorkflowDefinitionDocumentDefinitionSummary> documentDefinitions =
-      new ArrayList<>();
+  @JoinColumns({
+      @JoinColumn(name = "workflow_definition_id", referencedColumnName = "id", insertable = false, updatable = false),
+      @JoinColumn(name = "workflow_definition_version", referencedColumnName = "version", insertable = false, updatable = false)
+  })
+  private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+
 
   /** The ID for the workflow definition category the workflow definition is associated with. */
   @Schema(
@@ -206,14 +232,24 @@ public class WorkflowDefinitionSummary implements Serializable {
     return categoryId;
   }
 
+//  /**
+//   * Returns the document definitions associated with the workflow definition.
+//   *
+//   * @return the document definitions associated with the workflow definition
+//   */
+//  public List<WorkflowDefinitionDocumentDefinitionSummary> getDocumentDefinitions() {
+//    return documentDefinitions;
+//  }
+
   /**
    * Returns the document definitions associated with the workflow definition.
    *
    * @return the document definitions associated with the workflow definition
    */
-  public List<WorkflowDefinitionDocumentDefinitionSummary> getDocumentDefinitions() {
+  public List<WorkflowDefinitionDocumentDefinition> getDocumentDefinitions() {
     return documentDefinitions;
   }
+
 
   /**
    * Returns the ID for the workflow engine the workflow definition is associated with.

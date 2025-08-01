@@ -30,6 +30,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
@@ -110,11 +111,11 @@ public class Workflow implements Serializable {
   @XmlElement(name = "Step")
   @Valid
   @OneToMany(
-      mappedBy = "workflow",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("initiated")
+  @JoinColumn(name = "workflow_id", insertable = false, updatable = false)
   private final List<WorkflowStep> steps = new ArrayList<>();
 
   /** The date and time the workflow was created. */

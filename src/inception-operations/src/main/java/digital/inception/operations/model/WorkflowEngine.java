@@ -27,6 +27,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
@@ -69,16 +70,15 @@ public class WorkflowEngine implements Serializable {
   /** The attributes for the workflow engine. */
   @Schema(description = "The attributes for the workflow engine")
   @JsonProperty
-  @JsonManagedReference("workflowEngineAttributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(
-      mappedBy = "workflowEngine",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("code")
+  @JoinColumn(name = "engine_id", insertable = false, updatable = false)
   private final List<WorkflowEngineAttribute> attributes = new ArrayList<>();
 
   /** The fully qualified name of the connector class for the workflow engine. */

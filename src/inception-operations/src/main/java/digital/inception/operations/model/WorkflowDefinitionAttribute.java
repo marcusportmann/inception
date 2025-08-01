@@ -110,17 +110,6 @@ public class WorkflowDefinitionAttribute implements Serializable {
   @Column(name = "value", length = 1000, nullable = false)
   private String value;
 
-  /** The workflow definition the workflow definition attribute is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("workflowDefinitionAttributeReference")
-  @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({
-    @JoinColumn(name = "definition_id", insertable = false, updatable = false),
-    @JoinColumn(name = "definition_version", insertable = false, updatable = false)
-  })
-  private WorkflowDefinition workflowDefinition;
-
   /** Constructs a new {@code WorkflowDefinitionAttribute}. */
   public WorkflowDefinitionAttribute() {}
 
@@ -181,16 +170,6 @@ public class WorkflowDefinitionAttribute implements Serializable {
   }
 
   /**
-   * Returns the workflow definition the workflow definition attribute is associated with.
-   *
-   * @return the workflow definition the workflow definition attribute is associated with
-   */
-  @Schema(hidden = true)
-  public WorkflowDefinition getWorkflowDefinition() {
-    return workflowDefinition;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -226,10 +205,9 @@ public class WorkflowDefinitionAttribute implements Serializable {
    * @param workflowDefinition the workflow definition the workflow definition attribute is
    *     associated with
    */
+  @JsonBackReference("workflowDefinitionAttributeReference")
   @Schema(hidden = true)
   public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
-    this.workflowDefinition = workflowDefinition;
-
     if (workflowDefinition != null) {
       this.definitionId = workflowDefinition.getId();
       this.definitionVersion = workflowDefinition.getVersion();

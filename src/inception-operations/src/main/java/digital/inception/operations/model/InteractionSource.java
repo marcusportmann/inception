@@ -27,6 +27,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
@@ -75,11 +76,11 @@ public class InteractionSource implements Serializable {
   @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(
-      mappedBy = "interactionSource",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   @OrderBy("code")
+  @JoinColumn(name = "source_id", insertable = false, updatable = false)
   private final List<InteractionSourceAttribute> attributes = new ArrayList<>();
 
   /** The ID for the interaction source. */

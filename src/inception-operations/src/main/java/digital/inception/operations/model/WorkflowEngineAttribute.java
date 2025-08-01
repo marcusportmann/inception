@@ -25,11 +25,8 @@ import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -97,14 +94,6 @@ public class WorkflowEngineAttribute implements Serializable {
   @Column(name = "value", length = 1000, nullable = false)
   private String value;
 
-  /** The workflow engine the workflow engine attribute is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("workflowEngineAttributeReference")
-  @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "engine_id", insertable = false, updatable = false)
-  private WorkflowEngine workflowEngine;
-
   /** Constructs a new {@code WorkflowEngineAttribute}. */
   public WorkflowEngineAttribute() {}
 
@@ -164,24 +153,13 @@ public class WorkflowEngineAttribute implements Serializable {
   }
 
   /**
-   * Returns the workflow engine the workflow engine attribute is associated with.
-   *
-   * @return the workflow engine the workflow engine attribute is associated with
-   */
-  @Schema(hidden = true)
-  public WorkflowEngine getWorkflowEngine() {
-    return workflowEngine;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
    */
   @Override
   public int hashCode() {
-    return ((engineId == null) ? 0 : engineId.hashCode())
-        + ((code == null) ? 0 : code.hashCode());
+    return ((engineId == null) ? 0 : engineId.hashCode()) + ((code == null) ? 0 : code.hashCode());
   }
 
   /**
@@ -207,13 +185,13 @@ public class WorkflowEngineAttribute implements Serializable {
    *
    * @param workflowEngine the workflow engine the workflow engine attribute is associated with
    */
+  @JsonBackReference("workflowEngineAttributeReference")
   @Schema(hidden = true)
   public void setWorkflowEngine(WorkflowEngine workflowEngine) {
-    this.workflowEngine = workflowEngine;
-
     if (workflowEngine != null) {
       this.engineId = workflowEngine.getId();
-    } else
+    } else {
       this.engineId = null;
+    }
   }
 }

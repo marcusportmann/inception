@@ -19,7 +19,6 @@ package digital.inception.operations.model;
 import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code WorkflowDefinitionDocumentDefinitionId} class implements the ID class for the {@code
@@ -35,8 +34,17 @@ public class WorkflowDefinitionDocumentDefinitionId implements Serializable {
   /** The ID for the document definition. */
   private String documentDefinitionId;
 
-  /** The workflow definition the workflow definition document definition is associated with. */
-  private WorkflowDefinition workflowDefinition;
+  /**
+   * The ID for the workflow definition the workflow definition document definition is associated
+   * with.
+   */
+  private String workflowDefinitionId;
+
+  /**
+   * The version of the workflow definition the workflow definition document definition is
+   * associated with.
+   */
+  private int workflowDefinitionVersion;
 
   /** Constructs a new {@code WorkflowDefinitionDocumentDefinitionId}. */
   public WorkflowDefinitionDocumentDefinitionId() {}
@@ -63,7 +71,8 @@ public class WorkflowDefinitionDocumentDefinitionId implements Serializable {
 
     WorkflowDefinitionDocumentDefinitionId other = (WorkflowDefinitionDocumentDefinitionId) object;
 
-    return Objects.equals(workflowDefinition, other.workflowDefinition)
+    return StringUtil.equalsIgnoreCase(workflowDefinitionId, other.workflowDefinitionId)
+        && workflowDefinitionVersion == other.workflowDefinitionVersion
         && StringUtil.equalsIgnoreCase(documentDefinitionId, other.documentDefinitionId);
   }
 
@@ -74,7 +83,8 @@ public class WorkflowDefinitionDocumentDefinitionId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((workflowDefinition == null) ? 0 : workflowDefinition.hashCode())
+    return ((workflowDefinitionId == null) ? 0 : workflowDefinitionId.hashCode())
+        + ((workflowDefinitionVersion == 0) ? 0 : Integer.hashCode(workflowDefinitionVersion))
         + ((documentDefinitionId == null) ? 0 : documentDefinitionId.hashCode());
   }
 }

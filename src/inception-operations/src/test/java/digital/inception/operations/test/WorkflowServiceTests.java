@@ -35,9 +35,9 @@ import digital.inception.operations.exception.WorkflowDefinitionNotFoundExceptio
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
-import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;

@@ -24,11 +24,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -65,13 +62,6 @@ import org.springframework.util.StringUtils;
 public class JobParameter implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The job the job parameter is associated with. */
-  @JsonBackReference("parameterReference")
-  @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "job_id", insertable = false, updatable = false)
-  private Job job;
 
   /** The ID for the job the job parameter is associated with. */
   @Schema(hidden = true)
@@ -144,15 +134,6 @@ public class JobParameter implements Serializable {
   }
 
   /**
-   * Returns the job the job parameter is associated with.
-   *
-   * @return the job the job parameter is associated with
-   */
-  public Job getJob() {
-    return job;
-  }
-
-  /**
    * Returns the name of the job parameter.
    *
    * @return the name of the job parameter
@@ -185,9 +166,8 @@ public class JobParameter implements Serializable {
    *
    * @param job the job the job parameter is associated with
    */
+  @JsonBackReference("parameterReference")
   public void setJob(Job job) {
-    this.job = job;
-
     if (job != null) {
       this.jobId = job.getId();
     } else {
