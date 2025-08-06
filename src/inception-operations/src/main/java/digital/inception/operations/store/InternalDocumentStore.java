@@ -136,7 +136,7 @@ public class InternalDocumentStore implements DocumentStore {
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
       if (!documentRepository.existsByTenantIdAndId(tenantId, documentId)) {
-        throw new DocumentNotFoundException(documentId);
+        throw new DocumentNotFoundException(tenantId, documentId);
       }
 
       documentRepository.deleteById(documentId);
@@ -154,7 +154,7 @@ public class InternalDocumentStore implements DocumentStore {
       throws DocumentNoteNotFoundException, ServiceUnavailableException {
     try {
       if (!documentNoteRepository.existsByTenantIdAndId(tenantId, documentNoteId)) {
-        throw new DocumentNoteNotFoundException(documentNoteId);
+        throw new DocumentNoteNotFoundException(tenantId, documentNoteId);
       }
 
       documentNoteRepository.deleteById(documentNoteId);
@@ -217,7 +217,7 @@ public class InternalDocumentStore implements DocumentStore {
           documentRepository.findByTenantIdAndId(tenantId, documentId);
 
       if (documentOptional.isEmpty()) {
-        throw new DocumentNotFoundException(documentId);
+        throw new DocumentNotFoundException(tenantId, documentId);
       }
 
       return documentOptional.get();
@@ -242,7 +242,7 @@ public class InternalDocumentStore implements DocumentStore {
           documentNoteRepository.findByTenantIdAndId(tenantId, documentNoteId);
 
       if (documentNoteOptional.isEmpty()) {
-        throw new DocumentNoteNotFoundException(documentNoteId);
+        throw new DocumentNoteNotFoundException(tenantId, documentNoteId);
       }
 
       return documentNoteOptional.get();
@@ -272,7 +272,7 @@ public class InternalDocumentStore implements DocumentStore {
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
       if (!documentRepository.existsByTenantIdAndId(tenantId, documentId)) {
-        throw new DocumentNotFoundException(documentId);
+        throw new DocumentNotFoundException(tenantId, documentId);
       }
 
       PageRequest pageRequest;
@@ -450,7 +450,7 @@ public class InternalDocumentStore implements DocumentStore {
       throws DocumentNotFoundException, ServiceUnavailableException {
     try {
       if (!documentRepository.existsByTenantIdAndId(tenantId, document.getId())) {
-        throw new DocumentNotFoundException(document.getId());
+        throw new DocumentNotFoundException(tenantId, document.getId());
       }
 
       return documentRepository.saveAndFlush(document);
@@ -474,7 +474,7 @@ public class InternalDocumentStore implements DocumentStore {
       throws DocumentNoteNotFoundException, ServiceUnavailableException {
     try {
       if (!documentNoteRepository.existsByTenantIdAndId(tenantId, documentNote.getId())) {
-        throw new DocumentNoteNotFoundException(documentNote.getId());
+        throw new DocumentNoteNotFoundException(tenantId, documentNote.getId());
       }
 
       return documentNoteRepository.saveAndFlush(documentNote);

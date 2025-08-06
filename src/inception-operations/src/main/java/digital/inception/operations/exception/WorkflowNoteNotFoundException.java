@@ -48,9 +48,15 @@ public class WorkflowNoteNotFoundException extends ServiceException {
   /**
    * Constructs a new {@code WorkflowNoteNotFoundException}.
    *
+   * @param tenantId the ID for the tenant the workflow note is associated with
    * @param workflowNoteId the ID for the workflow note
    */
-  public WorkflowNoteNotFoundException(UUID workflowNoteId) {
-    super("The workflow note (" + workflowNoteId + ") could not be found");
+  public WorkflowNoteNotFoundException(UUID tenantId, UUID workflowNoteId) {
+    super(
+        "The workflow note ("
+            + workflowNoteId
+            + ") could not be found for the tenant ("
+            + tenantId
+            + ")");
   }
 }

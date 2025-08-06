@@ -122,7 +122,7 @@ public interface InteractionRepository
    * @param when the date and time the interaction is locked for processing
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Interaction i set i.lockName = :lockName, i.status = digital.inception.operations.model.InteractionStatus.PROCESSING, "
           + "i.processingAttempts = i.processingAttempts + 1, i.lastProcessed = :when where i.id = :interactionId")
@@ -139,7 +139,7 @@ public interface InteractionRepository
    * @param lockName the lock name
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Interaction i set i.status = :newStatus, i.lockName = null "
           + "where i.lockName = :lockName and i.status = :status")
@@ -155,7 +155,7 @@ public interface InteractionRepository
    * @param status the status for the interaction
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Interaction i set i.status = :status, i.lockName = null where i.id = :interactionId")
   void unlockInteraction(

@@ -49,7 +49,7 @@ public interface UserRepository
    * @param passwordExpiry the password expiry
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update User u set u.password = :password, u.passwordAttempts = :passwordAttempts, "
           + "u.passwordExpiry = :passwordExpiry where u.id = :userId")
@@ -190,7 +190,7 @@ public interface UserRepository
    * @param userId the ID for the user
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update User u set u.passwordAttempts = u.passwordAttempts + 1 where u.id = :userId")
   void incrementPasswordAttempts(@Param("userId") UUID userId);
 
@@ -214,7 +214,7 @@ public interface UserRepository
    * @param passwordExpiry the password expiry
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update User u set u.password = :password, u.passwordAttempts = 0, "
           + "u.passwordExpiry = :passwordExpiry where u.id = :userId")
@@ -229,7 +229,7 @@ public interface UserRepository
    * @param userId the ID for the user
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value = "delete from security_users_password_history where user_id = :userId",
       nativeQuery = true)
@@ -243,7 +243,7 @@ public interface UserRepository
    * @param encodedPassword the encoded password
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value =
           "insert into security_users_password_history(id, user_id, changed, encoded_password) "

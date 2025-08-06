@@ -80,7 +80,7 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    * @return the number of code categories that were updated
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update CodeCategory cc set cc.data = :data, cc.lastModified = :lastModified "
           + "where cc.id = :codeCategoryId")

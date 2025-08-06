@@ -25,38 +25,33 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The {@code InteractionSourceNotFoundException} exception is thrown to indicate an error condition
- * as a result of an interaction source that could not be found.
+ * The {@code DuplicateWorkflowDocumentException} exception is thrown to indicate an error condition
+ * as a result of an attempt to create a duplicate workflow document, i.e. a workflow document with
+ * the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "https://inception.digital/problems/operations/interaction-source-not-found",
-    title = "The interaction source could not be found.",
-    status = 404)
+    type = "https://inception.digital/problems/operations/duplicate-workflow-document",
+    title = "A workflow document with the specified ID already exists.",
+    status = 409)
 @WebFault(
-    name = "InteractionSourceNotFoundException",
+    name = "DuplicateWorkflowDocumentException",
     targetNamespace = "https://inception.digital/operations",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class InteractionSourceNotFoundException extends ServiceException {
+public class DuplicateWorkflowDocumentException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new {@code InteractionSourceNotFoundException}.
+   * Constructs a new {@code DuplicateWorkflowDocumentException}.
    *
-   * @param tenantId the ID for the tenant the interaction source is associated with
-   * @param interactionSourceId the ID for the interaction source
+   * @param workflowDocumentId the ID for the workflow document
    */
-  public InteractionSourceNotFoundException(UUID tenantId, UUID interactionSourceId) {
-    super(
-        "The interaction source ("
-            + interactionSourceId
-            + ") could not be found for the tenant ("
-            + tenantId
-            + ")");
+  public DuplicateWorkflowDocumentException(UUID workflowDocumentId) {
+    super("The workflow document (" + workflowDocumentId + ") already exists");
   }
 }

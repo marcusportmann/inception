@@ -40,7 +40,7 @@ public enum DocumentNoteSortBy implements CodeEnum {
   @XmlEnumValue("CreatedBy")
   CREATED_BY("created_by", "Sort By Created By"),
 
-  /** Sort by updated at. */
+  /** Sort by updated. */
   @XmlEnumValue("Updated")
   UPDATED("updated", "Sort By Updated"),
 

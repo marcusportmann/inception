@@ -25,38 +25,38 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * The {@code InteractionSourceNotFoundException} exception is thrown to indicate an error condition
- * as a result of an interaction source that could not be found.
+ * The {@code WorkflowStepNotFoundException} exception is thrown to indicate an error condition as a
+ * result of a workflow step that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "https://inception.digital/problems/operations/interaction-source-not-found",
-    title = "The interaction source could not be found.",
+    type = "https://inception.digital/problems/operations/workflow-step-not-found",
+    title = "The workflow step could not be found.",
     status = 404)
 @WebFault(
-    name = "InteractionSourceNotFoundException",
+    name = "WorkflowStepNotFoundException",
     targetNamespace = "https://inception.digital/operations",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class InteractionSourceNotFoundException extends ServiceException {
+public class WorkflowStepNotFoundException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new {@code InteractionSourceNotFoundException}.
+   * Constructs a new {@code WorkflowStepNotFoundException}.
    *
-   * @param tenantId the ID for the tenant the interaction source is associated with
-   * @param interactionSourceId the ID for the interaction source
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param step the code for the workflow step
    */
-  public InteractionSourceNotFoundException(UUID tenantId, UUID interactionSourceId) {
+  public WorkflowStepNotFoundException(UUID workflowId, String step) {
     super(
-        "The interaction source ("
-            + interactionSourceId
-            + ") could not be found for the tenant ("
-            + tenantId
-            + ")");
+        "The workflow step ("
+            + step
+            + ") for the workflow ("
+            + workflowId
+            + ") could not be found");
   }
 }

@@ -77,7 +77,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @return the number of tokens reinstated
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update Token t set t.revocationDate = null where t.id = :tokenId")
   int reinstateToken(@Param("tokenId") String tokenId);
 
@@ -89,7 +89,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * @return the number of tokens revoked
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update Token t set t.revocationDate = :revoked where t.id = :tokenId")
   int revokeToken(@Param("tokenId") String tokenId, @Param("revoked") LocalDate revoked);
 }

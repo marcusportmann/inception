@@ -40,7 +40,7 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
    * @param codeId the ID for the code
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("delete from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
   void deleteByCodeCategoryIdAndId(
       @Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);

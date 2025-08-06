@@ -49,7 +49,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param executionTime the time taken to complete the current task step in milliseconds
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.step = :step, t.executionAttempts = 0, t.nextExecution = :nextExecution, "
@@ -71,7 +71,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param executionTime the time taken to complete the current task step in milliseconds
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.step = :step, t.data = :data, t.executionAttempts = 0, "
@@ -91,7 +91,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param batchId the ID for the batch
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELLED, "
           + "t.nextExecution = null, t.locked = null, t.lockName = null "
@@ -108,7 +108,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @return the number of affected rows
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELLED, "
           + "t.nextExecution = null, t.locked = null, t.lockName = null "
@@ -128,7 +128,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    *     task for a single step task in milliseconds
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.COMPLETED, "
           + "t.executed =:currentTimestamp, t.data = :data, t.nextExecution = null, "
@@ -149,7 +149,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    *     task for a single step task in milliseconds
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.COMPLETED, "
           + "t.executed =:currentTimestamp, t.nextExecution = null, "
@@ -189,7 +189,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param nextExecution the date and time the task will be executed
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.nextExecution = :nextExecution, t.locked = null, t.lockName = null "
@@ -202,7 +202,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    *
    * @param taskId the ID for the task
    */
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("delete from Task t where t.id = :taskId")
   void deleteTaskIfExists(@Param("taskId") UUID taskId);
 
@@ -214,7 +214,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param failure the description of the failure for the task
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.FAILED, "
           + "t.executed =:currentTimestamp, t.nextExecution = null, t.locked = null, "
@@ -313,7 +313,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param currentTimestamp the current date and time
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.locked = :currentTimestamp, t.lockName = :lockName, "
           + "t.status = digital.inception.executor.model.TaskStatus.EXECUTING, "
@@ -331,7 +331,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param nextExecution the date and time the task will be executed
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.locked = null, t.lockName = null, t.nextExecution = :nextExecution "
@@ -348,7 +348,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @return the number of hung tasks that were reset
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.locked = null, t.lockName = null "
@@ -366,7 +366,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @return the number of hung tasks that were reset
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.locked = null, t.lockName = null "
@@ -382,7 +382,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param lockName the lock name
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = :newStatus, t.locked = null, t.lockName = null "
           + "where t.lockName = :lockName and t.status = :status")
@@ -398,7 +398,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param status the status for the task
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update Task t set t.status = :status where t.id = :taskId")
   void setTaskStatus(@Param("taskId") UUID taskId, @Param("status") TaskStatus status);
 
@@ -408,7 +408,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param batchId the ID for the batch
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.SUSPENDED, "
           + "t.nextExecution = null, t.locked = null, t.lockName = null "
@@ -424,7 +424,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @return the number of affected rows
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.SUSPENDED, "
           + "t.nextExecution = null, t.locked = null, t.lockName = null "
@@ -440,7 +440,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param status the status for the task
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = :status, t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
@@ -454,7 +454,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param data the task data
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = :status, t.data = :data, t.locked = null, t.lockName = null "
           + "where t.id = :taskId")
@@ -468,7 +468,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @param currentTimestamp the current date and time
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.nextExecution = :currentTimestamp, t.locked = null, t.lockName = null "
@@ -485,7 +485,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * @return the number of affected rows
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Task t set t.status = digital.inception.executor.model.TaskStatus.QUEUED, "
           + "t.nextExecution = :currentTimestamp, t.locked = null, t.lockName = null "

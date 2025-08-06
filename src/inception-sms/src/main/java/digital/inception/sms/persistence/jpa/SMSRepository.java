@@ -59,7 +59,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param when the date and time the SMS is locked for sending
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update SMS s set s.lockName = :lockName, s.status = digital.inception.sms.model.SMSStatus.SENDING, "
           + "s.sendAttempts = s.sendAttempts + 1, s.lastProcessed = :when where s.id = :smsId")
@@ -76,7 +76,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param lockName the lock name
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update SMS s set s.status = :newStatus, s.lockName = null "
           + "where s.lockName = :lockName and s.status = :status")
@@ -92,7 +92,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param status the status for the SMS
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update SMS s set s.status = :status where s.id = :smsId")
   void setSMSStatus(@Param("smsId") UUID smsId, @Param("status") SMSStatus status);
 
@@ -103,7 +103,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
    * @param status the status for the SMS
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update SMS s set s.status = :status, s.lockName = null where s.id = :smsId")
   void unlockSMS(@Param("smsId") UUID smsId, @Param("status") SMSStatus status);
 }

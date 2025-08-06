@@ -70,10 +70,12 @@ import java.util.UUID;
   "externalReference",
   "steps",
   "data",
-  "created",
-  "createdBy",
+  "initiated",
+  "initiatedBy",
   "updated",
-  "updatedBy"
+  "updatedBy",
+  "finalized",
+  "finalizedBy"
 })
 @XmlRootElement(name = "Workflow", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -89,10 +91,12 @@ import java.util.UUID;
       "externalReference",
       "steps",
       "data",
-      "created",
-      "createdBy",
+      "initiated",
+      "initiatedBy",
       "updated",
-      "updatedBy"
+      "updatedBy",
+      "finalized",
+      "finalizedBy"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidWorkflow
@@ -110,36 +114,10 @@ public class Workflow implements Serializable {
   @XmlElementWrapper(name = "Steps")
   @XmlElement(name = "Step")
   @Valid
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("initiated")
   @JoinColumn(name = "workflow_id", insertable = false, updatable = false)
   private final List<WorkflowStep> steps = new ArrayList<>();
-
-  /** The date and time the workflow was created. */
-  @Schema(
-      description = "The date and time the workflow was created",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Created", required = true)
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column(name = "created", nullable = false)
-  private OffsetDateTime created;
-
-  /** The username for the user who created the workflow. */
-  @Schema(
-      description = "The username for the user who created the workflow",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "CreatedBy", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "created_by", length = 100, nullable = false)
-  private String createdBy;
 
   /** The data for the workflow. */
   @Schema(description = "The data for the workflow")
@@ -178,6 +156,23 @@ public class Workflow implements Serializable {
   @Column(name = "external_reference", length = 100)
   private String externalReference;
 
+  /** The date and time the workflow was finalized. */
+  @Schema(description = "The date and time the workflow was finalized")
+  @JsonProperty
+  @XmlElement(name = "Finalized")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "finalized")
+  private OffsetDateTime finalized;
+
+  /** The username for the user who finalized the workflow. */
+  @Schema(description = "The username for the user who finalized the workflow")
+  @JsonProperty
+  @XmlElement(name = "FinalizedBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "finalized_by", length = 100)
+  private String finalizedBy;
+
   /** The ID for the workflow. */
   @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -186,6 +181,29 @@ public class Workflow implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
+
+  /** The date and time the workflow was initiated. */
+  @Schema(
+      description = "The date and time the workflow was initiated",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Initiated", required = true)
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @NotNull
+  @Column(name = "initiated", nullable = false)
+  private OffsetDateTime initiated;
+
+  /** The username for the user who initiated the workflow. */
+  @Schema(
+      description = "The username for the user who initiated the workflow",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "InitiatedBy", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "initiated_by", length = 100, nullable = false)
+  private String initiatedBy;
 
   /** The ID for the parent workflow. */
   @Schema(description = "The ID for the parent workflow")
@@ -240,8 +258,8 @@ public class Workflow implements Serializable {
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
    * @param data the data for the workflow
-   * @param created the date and time the workflow was created
-   * @param createdBy the username for the user who created the workflow
+   * @param initiated the date and time the workflow was initiated
+   * @param initiatedBy the username for the user who initiated the workflow
    */
   public Workflow(
       UUID tenantId,
@@ -249,16 +267,16 @@ public class Workflow implements Serializable {
       int definitionVersion,
       WorkflowStatus status,
       String data,
-      OffsetDateTime created,
-      String createdBy) {
+      OffsetDateTime initiated,
+      String initiatedBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.definitionId = definitionId;
     this.definitionVersion = definitionVersion;
     this.status = status;
     this.data = data;
-    this.created = created;
-    this.createdBy = createdBy;
+    this.initiated = initiated;
+    this.initiatedBy = initiatedBy;
   }
 
   /**
@@ -270,8 +288,8 @@ public class Workflow implements Serializable {
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
    * @param data the data for the workflow
-   * @param created the date and time the workflow was created
-   * @param createdBy the username for the user who created the workflow
+   * @param initiated the date and time the workflow was initiated
+   * @param initiatedBy the username for the user who initiated the workflow
    */
   public Workflow(
       UUID tenantId,
@@ -280,8 +298,8 @@ public class Workflow implements Serializable {
       int definitionVersion,
       WorkflowStatus status,
       String data,
-      OffsetDateTime created,
-      String createdBy) {
+      OffsetDateTime initiated,
+      String initiatedBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.parentId = parentId;
@@ -289,8 +307,8 @@ public class Workflow implements Serializable {
     this.definitionVersion = definitionVersion;
     this.status = status;
     this.data = data;
-    this.created = created;
-    this.createdBy = createdBy;
+    this.initiated = initiated;
+    this.initiatedBy = initiatedBy;
   }
 
   /**
@@ -333,24 +351,6 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the date and time the workflow was created.
-   *
-   * @return the date and time the workflow was created
-   */
-  public OffsetDateTime getCreated() {
-    return created;
-  }
-
-  /**
-   * Returns the username for the user who created the workflow.
-   *
-   * @return the username for the user who created the workflow
-   */
-  public String getCreatedBy() {
-    return createdBy;
-  }
-
-  /**
    * Returns the data for the workflow.
    *
    * @return the data for the workflow
@@ -387,12 +387,48 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Returns the date and time the workflow was finalized.
+   *
+   * @return the date and time the workflow was finalized
+   */
+  public OffsetDateTime getFinalized() {
+    return finalized;
+  }
+
+  /**
+   * Returns the username for the user who finalized the workflow.
+   *
+   * @return the username for the user who finalized the workflow
+   */
+  public String getFinalizedBy() {
+    return finalizedBy;
+  }
+
+  /**
    * Returns the ID for the workflow.
    *
    * @return the ID for the workflow
    */
   public UUID getId() {
     return id;
+  }
+
+  /**
+   * Returns the date and time the workflow was initiated.
+   *
+   * @return the date and time the workflow was initiated
+   */
+  public OffsetDateTime getInitiated() {
+    return initiated;
+  }
+
+  /**
+   * Returns the username for the user who initiated the workflow.
+   *
+   * @return the username for the user who initiated the workflow
+   */
+  public String getInitiatedBy() {
+    return initiatedBy;
   }
 
   /**
@@ -411,6 +447,15 @@ public class Workflow implements Serializable {
    */
   public WorkflowStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Returns the workflow steps for the workflow.
+   *
+   * @return the workflow steps for the workflow
+   */
+  public List<WorkflowStep> getSteps() {
+    return steps;
   }
 
   /**
@@ -451,24 +496,6 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow was created.
-   *
-   * @param created the date and time the workflow was created
-   */
-  public void setCreated(OffsetDateTime created) {
-    this.created = created;
-  }
-
-  /**
-   * Set the username for the user who created the workflow.
-   *
-   * @param createdBy the username for the user who created the workflow
-   */
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  /**
    * Set the data for the workflow.
    *
    * @param data the data for the workflow
@@ -506,12 +533,48 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Set the date and time the workflow was finalized.
+   *
+   * @param finalized the date and time the workflow was finalized
+   */
+  public void setFinalized(OffsetDateTime finalized) {
+    this.finalized = finalized;
+  }
+
+  /**
+   * Set the username for the user who finalized the workflow.
+   *
+   * @param finalizedBy the username for the user who finalized the workflow
+   */
+  public void setFinalizedBy(String finalizedBy) {
+    this.finalizedBy = finalizedBy;
+  }
+
+  /**
    * Set the ID for the workflow.
    *
    * @param id the ID for the workflow
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the date and time the workflow was initiated.
+   *
+   * @param initiated the date and time the workflow was initiated
+   */
+  public void setInitiated(OffsetDateTime initiated) {
+    this.initiated = initiated;
+  }
+
+  /**
+   * Set the username for the user who initiated the workflow.
+   *
+   * @param initiatedBy the username for the user who initiated the workflow
+   */
+  public void setInitiatedBy(String initiatedBy) {
+    this.initiatedBy = initiatedBy;
   }
 
   /**
@@ -530,6 +593,17 @@ public class Workflow implements Serializable {
    */
   public void setStatus(WorkflowStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Set the workflow steps for the workflow.
+   *
+   * @param steps the workflow steps for the workflow
+   */
+  public void setSteps(List<WorkflowStep> steps) {
+    steps.forEach(step -> step.setWorkflow(this));
+    this.steps.clear();
+    this.steps.addAll(steps);
   }
 
   /**

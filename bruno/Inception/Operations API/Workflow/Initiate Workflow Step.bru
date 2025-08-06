@@ -1,11 +1,11 @@
 meta {
   name: Initiate Workflow Step
   type: http
-  seq: 23
+  seq: 24
 }
 
 post {
-  url: {{baseURL}}/api/operations/initiate-workflow
+  url: {{baseURL}}/api/operations/initiate-workflow-step
   body: json
   auth: inherit
 }
@@ -13,14 +13,12 @@ post {
 body:json {
   {
     "workflowId": "{{workflowId}}",
-    "externalReference": "external_reference",
-    "startWorkflow": true,
-    "data": "eyJuYW1lIjogInZhbHVlIn0="
+    "step": "test_workflow_step_1"
   }
 }
 
 vars:pre-request {
-  workflowId: XXX
+  workflowId: 019879ea-0a6f-7485-9bb5-8daaf4c3cc72
 }
 
 settings {

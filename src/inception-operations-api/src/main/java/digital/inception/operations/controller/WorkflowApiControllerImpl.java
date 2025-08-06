@@ -30,7 +30,10 @@ import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundE
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.FinalizeWorkflowRequest;
+import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
@@ -39,6 +42,8 @@ import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
+import digital.inception.operations.model.WorkflowDocumentSortBy;
+import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -300,11 +305,11 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     try {
       if (!workflowService.workflowExists(tenantId, workflowId)) {
-        throw new WorkflowNotFoundException(workflowId);
+        throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 
       if (!workflowService.workflowNoteExists(tenantId, workflowId, workflowNoteId)) {
-        throw new WorkflowNoteNotFoundException(workflowId);
+        throw new WorkflowNoteNotFoundException(tenantId, workflowId);
       }
     } catch (WorkflowNotFoundException | WorkflowNoteNotFoundException e) {
       throw e;
@@ -314,11 +319,77 @@ public class WorkflowApiControllerImpl extends SecureApiController
               + workflowNoteId
               + ") for the workflow ("
               + workflowId
-              + ")",
+              + ") for the tenant (" + tenantId + ")",
           e);
     }
 
     workflowService.deleteWorkflowNote(tenantId, workflowNoteId);
+  }
+
+  @Override
+  public void finalizeWorkflow(UUID tenantId, FinalizeWorkflowRequest finalizeWorkflowRequest)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, finalizeWorkflowRequest.getWorkflowId())) {
+        throw new WorkflowNotFoundException(tenantId, finalizeWorkflowRequest.getWorkflowId());
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to finalize the workflow ("
+              + finalizeWorkflowRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+
+    workflowService.finalizeWorkflow(tenantId, finalizeWorkflowRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void finalizeWorkflowStep(
+      UUID tenantId, FinalizeWorkflowStepRequest finalizeWorkflowStepRequest)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowStepNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, finalizeWorkflowStepRequest.getWorkflowId())) {
+        throw new WorkflowNotFoundException(tenantId, finalizeWorkflowStepRequest.getWorkflowId());
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to finalize the workflow step ("
+              + finalizeWorkflowStepRequest.getStep()
+              + ") for the workflow ("
+              + finalizeWorkflowStepRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+
+    workflowService.finalizeWorkflowStep(tenantId, finalizeWorkflowStepRequest);
   }
 
   @Override
@@ -477,6 +548,28 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public WorkflowDocuments getWorkflowDocuments(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      WorkflowDocumentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getWorkflowDocuments(
+        tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @Override
   public WorkflowEngine getWorkflowEngine(String workflowEngineId)
       throws InvalidArgumentException,
           WorkflowEngineNotFoundException,
@@ -507,11 +600,11 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     try {
       if (!workflowService.workflowExists(tenantId, workflowId)) {
-        throw new WorkflowNotFoundException(workflowId);
+        throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 
       if (!workflowService.workflowNoteExists(tenantId, workflowId, workflowNoteId)) {
-        throw new WorkflowNoteNotFoundException(workflowNoteId);
+        throw new WorkflowNoteNotFoundException(tenantId, workflowNoteId);
       }
     } catch (WorkflowNotFoundException | WorkflowNoteNotFoundException e) {
       throw e;
@@ -521,7 +614,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
               + workflowNoteId
               + ") for the workflow ("
               + workflowId
-              + ")",
+              + ") for the tenant (" + tenantId + ")",
           e);
     }
 
@@ -603,6 +696,24 @@ public class WorkflowApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.WorkflowAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, initiateWorkflowStepRequest.getWorkflowId())) {
+        throw new WorkflowNotFoundException(tenantId, initiateWorkflowStepRequest.getWorkflowId());
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to initiate the workflow step ("
+              + initiateWorkflowStepRequest.getStep()
+              + ") for the workflow ("
+              + initiateWorkflowStepRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
 
     WorkflowStep workflowStep =

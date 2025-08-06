@@ -48,9 +48,10 @@ public class DocumentNotFoundException extends ServiceException {
   /**
    * Constructs a new {@code DocumentNotFoundException}.
    *
+   * @param tenantId the ID for the tenant the document is associated with
    * @param documentId the ID for the document
    */
-  public DocumentNotFoundException(UUID documentId) {
-    super("The document (" + documentId + ") could not be found");
+  public DocumentNotFoundException(UUID tenantId, UUID documentId) {
+    super("The document (" + documentId + ") could not be found for the tenant (" + tenantId + ")");
   }
 }

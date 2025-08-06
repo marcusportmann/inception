@@ -1,7 +1,7 @@
 meta {
   name: Update Workflow Definition Version
   type: http
-  seq: 27
+  seq: 29
 }
 
 put {
@@ -37,6 +37,18 @@ body:json {
         "validityPeriodUnit": "months"
       }
     ],
+    "stepDefinitions": [
+      {
+        "code": "test_workflow_step_1",
+        "name": "Test Workflow Step 1",
+        "description": "The description for Test Workflow Step 1"
+      },
+      {
+        "code": "test_workflow_step_3",
+        "name": "Test Workflow Step 3",
+        "description": "The description for Test Workflow Step 3"
+      }
+    ],  
     "validationSchemaType": "json",
     "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"
   }

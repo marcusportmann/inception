@@ -41,7 +41,7 @@ public interface PersonRepository
    * @param id the ID for the person
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**

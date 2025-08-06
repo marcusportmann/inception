@@ -42,7 +42,7 @@ public interface PasswordResetRepository extends JpaRepository<PasswordReset, UU
    * @param requestedBefore the date and time to expire password resets after
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update PasswordReset pr set pr.expired = :currentTimestamp, "
           + "pr.status = digital.inception.security.model.PasswordResetStatus.EXPIRED "

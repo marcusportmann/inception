@@ -43,7 +43,7 @@ public interface TenantRepository
    * @param userDirectoryId the ID for the user directory
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value =
           "insert into security_user_directory_to_tenant_map(tenant_id, user_directory_id) "
@@ -102,7 +102,7 @@ public interface TenantRepository
    * @param userDirectoryId the ID for the user directory
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value =
           "delete from security_user_directory_to_tenant_map "

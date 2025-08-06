@@ -248,7 +248,9 @@ public class BackgroundInteractionProcessorImpl
     public void run() {
       try {
         if (log.isDebugEnabled()) {
-          log.debug("Processing the interaction (%s)".formatted(interaction.getId()));
+          log.debug(
+              "Processing the interaction (%s) for the tenant (%s)"
+                  .formatted(interaction.getId(), interaction.getTenantId()));
         }
 
         long startTime = System.currentTimeMillis();
@@ -259,9 +261,13 @@ public class BackgroundInteractionProcessorImpl
         long finishTime = System.currentTimeMillis();
 
         // Unlock the interaction and make it available for indexing.
-        interactionService.unlockInteraction(interaction.getId(), InteractionStatus.AVAILABLE);
+        interactionService.unlockInteraction(
+            interaction.getTenantId(), interaction.getId(), InteractionStatus.AVAILABLE);
       } catch (Throwable e) {
-        log.error("Failed to process the interaction (%s)".formatted(interaction.getId()), e);
+        log.error(
+            "Failed to process the interaction (%s) for the tenant (%s)"
+                .formatted(interaction.getId(), interaction.getTenantId()),
+            e);
 
         try {
           /*
@@ -272,17 +278,19 @@ public class BackgroundInteractionProcessorImpl
           if (interaction.getProcessingAttempts()
               >= interactionService.getMaximumInteractionProcessingAttempts()) {
             log.warn(
-                "The interaction (%s) has exceeded the maximum number of processing attempts and will be marked as AVAILABLE so it can be manually processed"
-                    .formatted(interaction.getId()));
+                "The interaction (%s) for the tenant (%s) has exceeded the maximum number of processing attempts and will be marked as AVAILABLE so it can be manually processed"
+                    .formatted(interaction.getId(), interaction.getTenantId()));
 
-            interactionService.unlockInteraction(interaction.getId(), InteractionStatus.AVAILABLE);
+            interactionService.unlockInteraction(
+                interaction.getTenantId(), interaction.getId(), InteractionStatus.AVAILABLE);
           } else {
-            interactionService.unlockInteraction(interaction.getId(), InteractionStatus.QUEUED);
+            interactionService.unlockInteraction(
+                interaction.getTenantId(), interaction.getId(), InteractionStatus.QUEUED);
           }
         } catch (Throwable f) {
           log.error(
-              "Failed to unlock and set the status for the interaction (%s)"
-                  .formatted(interaction.getId()),
+              "Failed to unlock and set the status for the interaction (%s) for the tenant (%s)"
+                  .formatted(interaction.getId(), interaction.getTenantId()),
               f);
         }
       }

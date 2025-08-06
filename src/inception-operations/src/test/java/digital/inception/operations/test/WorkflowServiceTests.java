@@ -17,11 +17,13 @@
 package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.time.TimeUnit;
 import digital.inception.core.util.ResourceUtil;
@@ -37,6 +39,7 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
@@ -47,6 +50,8 @@ import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
+import digital.inception.operations.model.WorkflowDocumentSortBy;
+import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
 import digital.inception.operations.model.WorkflowNote;
@@ -55,6 +60,7 @@ import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStepDefinition;
+import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
 import digital.inception.operations.service.DocumentService;
@@ -237,6 +243,22 @@ public class WorkflowServiceTests {
         workflowSummary.getTenantId(),
         "Invalid value for the \"tenantId\" workflow summary property");
 
+    WorkflowDocuments workflowDocuments =
+        workflowService.getWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID,
+            workflow.getId(),
+            "TEST1",
+            WorkflowDocumentSortBy.REQUESTED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    assertEquals(1, workflowDocuments.getTotal());
+    assertEquals(
+        documentDefinition.getId(),
+        workflowDocuments.getWorkflowDocuments().getFirst().getDocumentDefinitionId());
+    assertEquals("TEST1", workflowDocuments.getWorkflowDocuments().getFirst().getRequestedBy());
+
     testWorkflowData.setName(testWorkflowData.getName() + " Updated");
 
     testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
@@ -295,14 +317,36 @@ public class WorkflowServiceTests {
 
     compareWorkflowNotes(updatedWorkflowNote, workflowNotes.getWorkflowNotes().getFirst());
 
+    workflowService.initiateWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
 
-    InitiateWorkflowStepRequest initiateWorkflowStepRequest =
-        new InitiateWorkflowStepRequest(
-            workflow.getId(), "test_workflow_step_1");
-
-    workflowService.initiateWorkflowStep(TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowStepRequest);
+    assertThrows(
+        InvalidArgumentException.class,
+        () -> {
+          workflowService.initiateWorkflowStep(
+              TenantUtil.DEFAULT_TENANT_ID,
+              new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_invalid"));
+        });
 
     retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(1, retrievedWorkflow.getSteps().size());
+    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    assertEquals(WorkflowStepStatus.ACTIVE, retrievedWorkflow.getSteps().getFirst().getStatus());
+    assertNotNull(retrievedWorkflow.getSteps().getFirst().getInitiated());
+
+    workflowService.finalizeWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new FinalizeWorkflowStepRequest(
+            workflow.getId(), "test_workflow_step_1", WorkflowStepStatus.COMPLETED));
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(1, retrievedWorkflow.getSteps().size());
+    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    assertEquals(WorkflowStepStatus.COMPLETED, retrievedWorkflow.getSteps().getFirst().getStatus());
+    assertNotNull(retrievedWorkflow.getSteps().getFirst().getFinalized());
 
     workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
 
@@ -770,9 +814,7 @@ public class WorkflowServiceTests {
                   workflowDefinition2.getStepDefinitions().stream()
                       .anyMatch(
                           workflowStepDefinition2 ->
-                              Objects.equals(
-                                  workflowStepDefinition1,
-                                  workflowStepDefinition2));
+                              Objects.equals(workflowStepDefinition1, workflowStepDefinition2));
               if (!foundStepDefinition) {
                 fail(
                     "Failed to find the workflow step definition ("
@@ -850,12 +892,12 @@ public class WorkflowServiceTests {
 
   private void compareWorkflows(Workflow workflow1, Workflow workflow2) {
     assertEquals(
-        workflow1.getCreated(),
-        workflow2.getCreated(),
+        workflow1.getInitiated(),
+        workflow2.getInitiated(),
         "The created values for the workflows do not match");
     assertEquals(
-        workflow1.getCreatedBy(),
-        workflow2.getCreatedBy(),
+        workflow1.getInitiatedBy(),
+        workflow2.getInitiatedBy(),
         "The created by values for the workflows do not match");
     assertEquals(
         workflow1.getData(), workflow2.getData(), "The data values for the workflows do not match");

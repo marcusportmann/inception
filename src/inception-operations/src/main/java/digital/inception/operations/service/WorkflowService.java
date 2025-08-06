@@ -28,7 +28,10 @@ import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundE
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.FinalizeWorkflowRequest;
+import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
@@ -36,7 +39,10 @@ import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
+import digital.inception.operations.model.WorkflowDocumentSortBy;
+import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -193,6 +199,32 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
 
   /**
+   * Finalize a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param finalizeWorkflowRequest the request to finalize a workflow
+   * @param finalizedBy the username for the user finalizing the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be finalized
+   */
+  void finalizeWorkflow(
+      UUID tenantId, FinalizeWorkflowRequest finalizeWorkflowRequest, String finalizedBy)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Finalize a workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param finalizeWorkflowStepRequest the request to finalize a workflow step
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowStepNotFoundException if the workflow step could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be finalized
+   */
+  void finalizeWorkflowStep(UUID tenantId, FinalizeWorkflowStepRequest finalizeWorkflowStepRequest)
+      throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant
@@ -247,6 +279,22 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the composite {@link WorkflowDefinitionId} (id + version) for the workflow with the
+   * specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the composite {@link WorkflowDefinitionId} (id + version) for the workflow with the
+   *     specified ID
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the {@link WorkflowDefinitionId} (id + version) for the
+   *     workflow could not be retrieved
+   */
+  WorkflowDefinitionId getWorkflowDefinitionIdForWorkflow(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the summaries for the workflow definitions associated with the workflow definition
    * category with the specified ID.
    *
@@ -283,6 +331,31 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow documents for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow documents are associated with
+   * @param filter the filter to apply to the workflow documents
+   * @param sortBy the method used to sort the workflow documents, e.g. by created
+   * @param sortDirection the sort direction to apply to the workflow documents
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the workflow documents
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow documents could not be retrieved
+   */
+  WorkflowDocuments getWorkflowDocuments(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      WorkflowDocumentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the workflow engine.
@@ -373,14 +446,14 @@ public interface WorkflowService {
    *
    * @param tenantId the ID for the tenant
    * @param initiateWorkflowRequest the request to initiate a workflow
-   * @param createdBy the username for the user initiating the workflow
+   * @param initiatedBy the username for the user initiating the workflow
    * @return the workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws ServiceUnavailableException if the workflow could not be initiated
    */
   Workflow initiateWorkflow(
-      UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String createdBy)
+      UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String initiatedBy)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException;

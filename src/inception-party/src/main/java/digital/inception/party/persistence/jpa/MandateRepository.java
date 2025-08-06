@@ -43,7 +43,7 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
    * @param id the ID for the mandate
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**

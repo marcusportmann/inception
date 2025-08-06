@@ -77,6 +77,24 @@ public class WorkflowDefinitionId implements Serializable {
   }
 
   /**
+   * Returns the ID for the workflow definition.
+   *
+   * @return the ID for the workflow definition
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * Returns the version of the workflow definition.
+   *
+   * @return the version of the workflow definition
+   */
+  public int getVersion() {
+    return version;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -84,5 +102,23 @@ public class WorkflowDefinitionId implements Serializable {
   @Override
   public int hashCode() {
     return ((id == null) ? 0 : id.hashCode()) + version;
+  }
+
+  /**
+   * Set the ID for the workflow definition.
+   *
+   * @param id the ID for the workflow definition
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the version of the workflow definition.
+   *
+   * @param version the version of the workflow definition
+   */
+  public void setVersion(int version) {
+    this.version = version;
   }
 }

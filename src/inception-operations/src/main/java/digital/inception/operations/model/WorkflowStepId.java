@@ -42,6 +42,17 @@ public class WorkflowStepId implements Serializable {
   public WorkflowStepId() {}
 
   /**
+   * Constructs a new {@code WorkflowStepId}.
+   *
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param code the code for the workflow step
+   */
+  public WorkflowStepId(UUID workflowId, String code) {
+    this.workflowId = workflowId;
+    this.code = code;
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare

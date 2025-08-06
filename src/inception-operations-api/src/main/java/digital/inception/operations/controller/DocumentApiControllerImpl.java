@@ -250,11 +250,11 @@ public class DocumentApiControllerImpl extends SecureApiController
 
     try {
       if (!documentService.documentExists(tenantId, documentId)) {
-        throw new DocumentNotFoundException(documentId);
+        throw new DocumentNotFoundException(tenantId, documentId);
       }
 
       if (!documentService.documentNoteExists(tenantId, documentId, documentNoteId)) {
-        throw new DocumentNoteNotFoundException(documentId);
+        throw new DocumentNoteNotFoundException(tenantId, documentId);
       }
     } catch (DocumentNotFoundException | DocumentNoteNotFoundException e) {
       throw e;
@@ -264,6 +264,8 @@ public class DocumentApiControllerImpl extends SecureApiController
               + documentNoteId
               + ") for the document ("
               + documentId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -391,11 +393,11 @@ public class DocumentApiControllerImpl extends SecureApiController
 
     try {
       if (!documentService.documentExists(tenantId, documentId)) {
-        throw new DocumentNotFoundException(documentId);
+        throw new DocumentNotFoundException(tenantId, documentId);
       }
 
       if (!documentService.documentNoteExists(tenantId, documentId, documentNoteId)) {
-        throw new DocumentNoteNotFoundException(documentNoteId);
+        throw new DocumentNoteNotFoundException(tenantId, documentNoteId);
       }
     } catch (DocumentNotFoundException | DocumentNoteNotFoundException e) {
       throw e;
@@ -405,6 +407,8 @@ public class DocumentApiControllerImpl extends SecureApiController
               + documentNoteId
               + ") for the document ("
               + documentId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -413,8 +417,14 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public DocumentNotes getDocumentNotes(UUID tenantId, UUID documentId, String filter,
-      DocumentNoteSortBy sortBy, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+  public DocumentNotes getDocumentNotes(
+      UUID tenantId,
+      UUID documentId,
+      String filter,
+      DocumentNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
@@ -424,7 +434,8 @@ public class DocumentApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return documentService.getDocumentNotes(tenantId, documentId, filter, sortBy, sortDirection, pageIndex, pageSize);
+    return documentService.getDocumentNotes(
+        tenantId, documentId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -465,9 +476,14 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void updateDocumentDefinition(String documentDefinitionCategoryId,
-      String documentDefinitionId, DocumentDefinition documentDefinition)
-      throws InvalidArgumentException, DocumentDefinitionCategoryNotFoundException, DocumentDefinitionNotFoundException, ServiceUnavailableException {
+  public void updateDocumentDefinition(
+      String documentDefinitionCategoryId,
+      String documentDefinitionId,
+      DocumentDefinition documentDefinition)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
     /*
      * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
      *       in the API. It is actually used in the getDocumentDefinitions() method where
@@ -496,9 +512,11 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void updateDocumentDefinitionCategory(String documentDefinitionCategoryId,
-      DocumentDefinitionCategory documentDefinitionCategory)
-      throws InvalidArgumentException, DocumentDefinitionCategoryNotFoundException, ServiceUnavailableException {
+  public void updateDocumentDefinitionCategory(
+      String documentDefinitionCategoryId, DocumentDefinitionCategory documentDefinitionCategory)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
     /*
      * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
      *       in the API. It is actually used in the getDocumentDefinitionCategories() method where

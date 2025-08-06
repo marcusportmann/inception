@@ -18,20 +18,29 @@ package digital.inception.operations.store;
 
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowException;
 import digital.inception.operations.exception.DuplicateWorkflowNoteException;
+import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowDocument;
+import digital.inception.operations.model.WorkflowDocumentSortBy;
+import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
+import digital.inception.operations.model.WorkflowStepId;
 import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
+import digital.inception.operations.persistence.jpa.WorkflowDocumentRepository;
 import digital.inception.operations.persistence.jpa.WorkflowNoteRepository;
 import digital.inception.operations.persistence.jpa.WorkflowRepository;
 import digital.inception.operations.persistence.jpa.WorkflowStepRepository;
@@ -67,6 +76,9 @@ public class InternalWorkflowStore implements WorkflowStore {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(InternalWorkflowStore.class);
 
+  /** The Workflow Document Repository. */
+  private final WorkflowDocumentRepository workflowDocumentRepository;
+
   /** The Workflow Note Repository. */
   private final WorkflowNoteRepository workflowNoteRepository;
 
@@ -86,16 +98,19 @@ public class InternalWorkflowStore implements WorkflowStore {
   /**
    * Constructs a new {@code InternalWorkflowStore}.
    *
+   * @param workflowDocumentRepository the Workflow Document Repository
    * @param workflowNoteRepository the Workflow Note Repository
    * @param workflowRepository the Workflow Repository
    * @param workflowStepRepository the Workflow Step Repository
    * @param workflowSummaryRepository the Workflow Summary Repository
    */
   public InternalWorkflowStore(
+      WorkflowDocumentRepository workflowDocumentRepository,
       WorkflowNoteRepository workflowNoteRepository,
       WorkflowRepository workflowRepository,
       WorkflowStepRepository workflowStepRepository,
       WorkflowSummaryRepository workflowSummaryRepository) {
+    this.workflowDocumentRepository = workflowDocumentRepository;
     this.workflowNoteRepository = workflowNoteRepository;
     this.workflowRepository = workflowRepository;
     this.workflowStepRepository = workflowStepRepository;
@@ -121,6 +136,28 @@ public class InternalWorkflowStore implements WorkflowStore {
               + workflow.getDefinitionId()
               + ") and the definition version ("
               + workflow.getDefinitionVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowDocument createWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
+      throws DuplicateWorkflowDocumentException, ServiceUnavailableException {
+    try {
+      if (workflowDocumentRepository.existsById(workflowDocument.getId())) {
+        throw new DuplicateWorkflowDocumentException(workflowDocument.getId());
+      }
+
+      return workflowDocumentRepository.saveAndFlush(workflowDocument);
+    } catch (DuplicateWorkflowDocumentException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the workflow document ("
+              + workflowDocument.getId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -155,7 +192,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
       if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
-        throw new WorkflowNotFoundException(workflowId);
+        throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 
       workflowRepository.deleteById(workflowId);
@@ -173,7 +210,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowNoteNotFoundException, ServiceUnavailableException {
     try {
       if (!workflowNoteRepository.existsByTenantIdAndId(tenantId, workflowNoteId)) {
-        throw new WorkflowNoteNotFoundException(workflowNoteId);
+        throw new WorkflowNoteNotFoundException(tenantId, workflowNoteId);
       }
 
       workflowNoteRepository.deleteById(workflowNoteId);
@@ -183,6 +220,62 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw new ServiceUnavailableException(
           "Failed to delete the workflow note ("
               + workflowNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void finalizeWorkflow(
+      UUID tenantId, UUID workflowId, WorkflowStatus status, String finalizedBy)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      if (workflowRepository.finalizeWorkflow(
+              tenantId, workflowId, status, OffsetDateTime.now(), finalizedBy)
+          <= 0) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to finalize the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void finalizeWorkflowStep(
+      UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<WorkflowStep> workflowStepOptional =
+          workflowStepRepository.findById(new WorkflowStepId(workflowId, step));
+
+      if (!workflowStepOptional.isPresent()) {
+        throw new WorkflowStepNotFoundException(workflowId, step);
+      }
+
+      if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      WorkflowStep workflowStep = workflowStepOptional.get();
+
+      workflowStep.setFinalized(OffsetDateTime.now());
+      workflowStep.setStatus(status);
+
+      workflowStepRepository.saveAndFlush(workflowStep);
+    } catch (WorkflowStepNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to finalize the workflow step ("
+              + step
+              + ") for the workflow ("
+              + workflowId
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -202,7 +295,7 @@ public class InternalWorkflowStore implements WorkflowStore {
           workflowRepository.findByTenantIdAndId(tenantId, workflowId);
 
       if (workflowOptional.isEmpty()) {
-        throw new WorkflowNotFoundException(workflowId);
+        throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 
       return workflowOptional.get();
@@ -211,6 +304,167 @@ public class InternalWorkflowStore implements WorkflowStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowDefinitionId getWorkflowDefinitionIdForWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<WorkflowDefinitionId> workflowDefinitionIdOptional =
+          workflowRepository.findWorkflowDefinitionIdByWorkflowId(workflowId);
+
+      if (workflowDefinitionIdOptional.isEmpty()) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      } else {
+        return workflowDefinitionIdOptional.get();
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow definition ID and version for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowDocuments getWorkflowDocuments(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      WorkflowDocumentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      PageRequest pageRequest;
+
+      if (sortBy == WorkflowDocumentSortBy.REQUESTED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "requested");
+      } else if (sortBy == WorkflowDocumentSortBy.REQUESTED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "requestedBy");
+      } else if (sortBy == WorkflowDocumentSortBy.PROVIDED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "provided");
+      } else if (sortBy == WorkflowDocumentSortBy.PROVIDED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "providedBy");
+      } else if (sortBy == WorkflowDocumentSortBy.VERIFIED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "verified");
+      } else if (sortBy == WorkflowDocumentSortBy.VERIFIED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "verifiedBy");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "requested");
+      }
+
+      Page<WorkflowDocument> workflowDocumentPage =
+          workflowDocumentRepository.findAll(
+              (Specification<WorkflowDocument>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+                    predicates.add(criteriaBuilder.equal(root.get("workflowId"), workflowId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.or(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("documentDefinitionId")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("requestedBy")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("providedBy")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("verifiedBy")),
+                                  "%" + filter.toLowerCase() + "%")));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
+
+      return new WorkflowDocuments(
+          tenantId,
+          workflowId,
+          workflowDocumentPage.toList(),
+          workflowDocumentPage.getTotalElements(),
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered workflow documents for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
@@ -227,7 +481,7 @@ public class InternalWorkflowStore implements WorkflowStore {
           workflowNoteRepository.findByTenantIdAndId(tenantId, workflowNoteId);
 
       if (workflowNoteOptional.isEmpty()) {
-        throw new WorkflowNoteNotFoundException(workflowNoteId);
+        throw new WorkflowNoteNotFoundException(tenantId, workflowNoteId);
       }
 
       return workflowNoteOptional.get();
@@ -257,7 +511,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
       if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
-        throw new WorkflowNotFoundException(workflowId);
+        throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 
       PageRequest pageRequest;
@@ -280,8 +534,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
                 "createdBy");
-      }
-      if (sortBy == WorkflowNoteSortBy.UPDATED) {
+      } else if (sortBy == WorkflowNoteSortBy.UPDATED) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
@@ -290,8 +543,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
                 "updated");
-      }
-      if (sortBy == WorkflowNoteSortBy.UPDATED_BY) {
+      } else if (sortBy == WorkflowNoteSortBy.UPDATED_BY) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
@@ -382,6 +634,60 @@ public class InternalWorkflowStore implements WorkflowStore {
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
                 "definitionId");
+      } else if (sortBy == WorkflowSortBy.INITIATED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "initiated");
+      } else if (sortBy == WorkflowSortBy.INITIATED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "initiatedBy");
+      } else if (sortBy == WorkflowSortBy.UPDATED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "updated");
+      } else if (sortBy == WorkflowSortBy.UPDATED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "updatedBy");
+      } else if (sortBy == WorkflowSortBy.FINALIZED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "finalized");
+      } else if (sortBy == WorkflowSortBy.FINALIZED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "finalizedBy");
       } else {
         pageRequest =
             PageRequest.of(
@@ -410,12 +716,17 @@ public class InternalWorkflowStore implements WorkflowStore {
                     }
 
                     if (StringUtils.hasText(filter)) {
-                      //                      predicates.add(
-                      //                          criteriaBuilder.or(
-                      //                              criteriaBuilder.like(
-                      //
-                      // criteriaBuilder.lower(root.get("definitionId")),
-                      //                                  "%" + filter.toLowerCase() + "%")));
+                      predicates.add(
+                          criteriaBuilder.or(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("initiatedBy")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("updatedBy")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("finalizedBy")),
+                                  "%" + filter.toLowerCase() + "%")));
                     }
 
                     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
@@ -444,14 +755,11 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
       if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
-        throw new WorkflowNotFoundException(workflowId);
+        throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 
-      // Obtain a proxy to the Workflow without fetching it
-      Workflow workflowRef = entityManager.getReference(Workflow.class, workflowId);
-
       WorkflowStep workflowStep =
-          new WorkflowStep(workflowRef, step, WorkflowStepStatus.ACTIVE, OffsetDateTime.now());
+          new WorkflowStep(workflowId, step, WorkflowStepStatus.ACTIVE, OffsetDateTime.now());
 
       workflowStepRepository.saveAndFlush(workflowStep);
 
@@ -476,7 +784,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
       if (!workflowRepository.existsByTenantIdAndId(tenantId, workflow.getId())) {
-        throw new WorkflowNotFoundException(workflow.getId());
+        throw new WorkflowNotFoundException(tenantId, workflow.getId());
       }
 
       return workflowRepository.saveAndFlush(workflow);
@@ -498,11 +806,33 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public WorkflowDocument updateWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
+    try {
+      if (!workflowDocumentRepository.existsByTenantIdAndId(tenantId, workflowDocument.getId())) {
+        throw new WorkflowDocumentNotFoundException(workflowDocument.getId());
+      }
+
+      return workflowDocumentRepository.saveAndFlush(workflowDocument);
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the workflow document ("
+              + workflowDocument.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowNote updateWorkflowNote(UUID tenantId, WorkflowNote workflowNote)
       throws WorkflowNoteNotFoundException, ServiceUnavailableException {
     try {
       if (!workflowNoteRepository.existsByTenantIdAndId(tenantId, workflowNote.getId())) {
-        throw new WorkflowNoteNotFoundException(workflowNote.getId());
+        throw new WorkflowNoteNotFoundException(tenantId, workflowNote.getId());
       }
 
       return workflowNoteRepository.saveAndFlush(workflowNote);

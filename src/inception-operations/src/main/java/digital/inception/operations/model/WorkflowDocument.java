@@ -19,6 +19,7 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -50,6 +51,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
+  "tenantId",
   "workflowId",
   "documentDefinitionId",
   "documentId",
@@ -67,6 +69,7 @@ import java.util.UUID;
     namespace = "https://inception.digital/operations",
     propOrder = {
       "id",
+      "tenantId",
       "workflowId",
       "documentDefinitionId",
       "documentId",
@@ -164,6 +167,16 @@ public class WorkflowDocument implements Serializable {
   @Column(name = "status", nullable = false)
   private WorkflowDocumentStatus status;
 
+  /** The ID for the tenant the workflow document is associated with. */
+  @Schema(
+      description = "The ID for the tenant the workflow document is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
+
   /** The date and time the workflow document was verified. */
   @Schema(description = "The date and time the workflow document was verified")
   @JsonProperty
@@ -192,53 +205,58 @@ public class WorkflowDocument implements Serializable {
   /** Constructs a new {@code WorkflowDocument}. */
   public WorkflowDocument() {}
 
-  /**
-   * Constructs a new {@code WorkflowDocument}.
-   *
-   * @param id the ID for the workflow document
-   * @param workflowId the ID for the workflow
-   * @param documentDefinitionId the ID for the document definition the workflow document is
-   *     associated with
-   * @param documentId ID for the document
-   * @param status the status of the workflow document
-   * @param requested the date and time the workflow document was requested
-   * @param requestedBy the person or system that requested the workflow document
-   * @param provided the date and time the workflow document was provided
-   * @param providedBy the person or system that provided the workflow document
-   */
-  public WorkflowDocument(
-      UUID id,
-      UUID workflowId,
-      String documentDefinitionId,
-      UUID documentId,
-      WorkflowDocumentStatus status,
-      OffsetDateTime requested,
-      String requestedBy,
-      OffsetDateTime provided,
-      String providedBy) {
-    this.id = id;
-    this.workflowId = workflowId;
-    this.documentDefinitionId = documentDefinitionId;
-    this.documentId = documentId;
-    this.status = status;
-    this.requested = requested;
-    this.requestedBy = requestedBy;
-    this.provided = provided;
-    this.providedBy = providedBy;
-  }
+  // TODO: DELETE THIS CONSTRUCTOR -- MARCUS
+  //  /**
+  //   * Constructs a new {@code WorkflowDocument}.
+  //   *
+  //   * @param id the ID for the workflow document
+  //   * @param tenantId the ID for the tenant the workflow document is associated with
+  //   * @param workflowId the ID for the workflow
+  //   * @param documentDefinitionId the ID for the document definition the workflow document is
+  //   *     associated with
+  //   * @param documentId ID for the document
+  //   * @param status the status of the workflow document
+  //   * @param requested the date and time the workflow document was requested
+  //   * @param requestedBy the person or system that requested the workflow document
+  //   * @param provided the date and time the workflow document was provided
+  //   * @param providedBy the person or system that provided the workflow document
+  //   */
+  //  public WorkflowDocument(
+  //      UUID id,
+  //      UUID tenantId,
+  //      UUID workflowId,
+  //      String documentDefinitionId,
+  //      UUID documentId,
+  //      WorkflowDocumentStatus status,
+  //      OffsetDateTime requested,
+  //      String requestedBy,
+  //      OffsetDateTime provided,
+  //      String providedBy) {
+  //    this.id = id;
+  //    this.tenantId = tenantId;
+  //    this.workflowId = workflowId;
+  //    this.documentDefinitionId = documentDefinitionId;
+  //    this.documentId = documentId;
+  //    this.status = status;
+  //    this.requested = requested;
+  //    this.requestedBy = requestedBy;
+  //    this.provided = provided;
+  //    this.providedBy = providedBy;
+  //  }
 
   /**
    * Constructs a new {@code WorkflowDocument}.
    *
-   * @param id the ID for the workflow document
+   * @param tenantId the ID for the tenant the workflow document is associated with
    * @param workflowId the ID for the workflow
    * @param documentDefinitionId the ID for the document definition the workflow document is
    *     associated with
    * @param requestedBy the person or system that requested the workflow document
    */
   public WorkflowDocument(
-      UUID id, UUID workflowId, String documentDefinitionId, String requestedBy) {
-    this.id = id;
+      UUID tenantId, UUID workflowId, String documentDefinitionId, String requestedBy) {
+    this.id = UuidCreator.getTimeOrderedEpoch();
+    this.tenantId = tenantId;
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
     this.status = WorkflowDocumentStatus.REQUESTED;
@@ -345,6 +363,15 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
+   * Returns the ID for the tenant the workflow document is associated with.
+   *
+   * @return the ID for the tenant the workflow document is associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns the date and time the workflow document was verified.
    *
    * @return the date and time the workflow document was verified
@@ -442,6 +469,15 @@ public class WorkflowDocument implements Serializable {
    */
   public void setStatus(WorkflowDocumentStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Set the ID for the tenant the workflow document is associated with.
+   *
+   * @param tenantId the ID for the tenant the workflow document is associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

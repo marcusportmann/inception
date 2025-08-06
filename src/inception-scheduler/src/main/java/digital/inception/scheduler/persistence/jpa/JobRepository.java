@@ -104,7 +104,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
    * @param when the date and time the job is locked for execution
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Job j set j.lockName = :lockName, "
           + "j.status = digital.inception.scheduler.model.JobStatus.EXECUTING, "
@@ -123,7 +123,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
    * @param lockName the lock name
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Job j set j.status = :newStatus, j.lockName = null "
           + "where j.lockName = :lockName and j.status = :status")
@@ -139,7 +139,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
    * @param nextExecution the date and time the job is scheduled for execution
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       "update Job j set j.status = digital.inception.scheduler.model.JobStatus.SCHEDULED, "
           + "j.executionAttempts = 0, j.nextExecution = :nextExecution where j.id = :jobId")
@@ -153,7 +153,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
    * @param status the status for the job
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update Job j set j.status = :status where j.id = :jobId")
   void setJobStatus(@Param("jobId") String jobId, @Param("status") JobStatus status);
 
@@ -164,7 +164,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
    * @param status the status for the job
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("update Job j set j.status = :status, j.lockName = null where j.id = :jobId")
   void unlockJob(@Param("jobId") String jobId, @Param("status") JobStatus status);
 }

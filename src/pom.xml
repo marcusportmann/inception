@@ -143,7 +143,6 @@
     <swagger.version>2.2.30</swagger.version>
     <uuid-creator.version>6.0.0</uuid-creator.version>
     <wss4j-ws-security-common.version>3.0.4</wss4j-ws-security-common.version>
-    <xlsx-streamer.version>2.2.0</xlsx-streamer.version>
 
     <node.version>v21.7.3</node.version>
     <yarn.version>v1.22.22</yarn.version>
@@ -186,11 +185,6 @@
         <groupId>com.mattbertolini</groupId>
         <artifactId>liquibase-slf4j</artifactId>
         <version>${liquibase-slf4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.monitorjbl</groupId>
-        <artifactId>xlsx-streamer</artifactId>
-        <version>${xlsx-streamer.version}</version>
       </dependency>
       <dependency>
         <groupId>com.microsoft.sqlserver</groupId>

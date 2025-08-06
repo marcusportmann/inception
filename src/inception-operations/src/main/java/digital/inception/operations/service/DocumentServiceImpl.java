@@ -231,7 +231,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
     try {
       if (!documentExists(tenantId, createDocumentNoteRequest.getDocumentId())) {
-        throw new DocumentNotFoundException(createDocumentNoteRequest.getDocumentId());
+        throw new DocumentNotFoundException(tenantId, createDocumentNoteRequest.getDocumentId());
       }
 
       DocumentNote documentNote =

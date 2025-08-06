@@ -318,7 +318,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
     try {
       if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, interactionSourceId)) {
-        throw new InteractionSourceNotFoundException(interactionSourceId);
+        throw new InteractionSourceNotFoundException(tenantId, interactionSourceId);
       }
 
       interactionSourceRepository.deleteById(interactionSourceId);
@@ -409,7 +409,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
     try {
       if (!interactionStore.interactionExistsWithId(tenantId, interactionId)) {
-        throw new InteractionNotFoundException(interactionId);
+        throw new InteractionNotFoundException(tenantId, interactionId);
       }
 
       return interactionStore.getInteractionAttachmentSummaries(
@@ -461,7 +461,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       if (interactionSourceOptional.isPresent()) {
         return interactionSourceOptional.get();
       } else {
-        throw new InteractionSourceNotFoundException(interactionSourceId);
+        throw new InteractionSourceNotFoundException(tenantId, interactionSourceId);
       }
     } catch (InteractionSourceNotFoundException e) {
       throw e;
@@ -569,7 +569,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
     try {
       if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, sourceId)) {
-        throw new InteractionSourceNotFoundException(sourceId);
+        throw new InteractionSourceNotFoundException(tenantId, sourceId);
       }
 
       return interactionStore.getInteractionSummaries(
@@ -780,7 +780,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  public void unlockInteraction(UUID interactionId, InteractionStatus status)
+  public void unlockInteraction(UUID tenantId, UUID interactionId, InteractionStatus status)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
     if (interactionId == null) {
       throw new InvalidArgumentException("interactionId");
@@ -791,13 +791,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      interactionStore.unlockInteraction(interactionId, status);
+      interactionStore.unlockInteraction(tenantId, interactionId, status);
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to unlock and set the status for the interaction ("
               + interactionId
+              + ") for the tenant ("
+              + tenantId
               + ") to ("
               + status
               + ")",
@@ -861,7 +863,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
     try {
       if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, interactionSource.getId())) {
-        throw new InteractionSourceNotFoundException(interactionSource.getId());
+        throw new InteractionSourceNotFoundException(tenantId, interactionSource.getId());
       }
 
       interactionSourceRepository.saveAndFlush(interactionSource);

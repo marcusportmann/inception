@@ -48,9 +48,15 @@ public class DocumentNoteNotFoundException extends ServiceException {
   /**
    * Constructs a new {@code DocumentNoteNotFoundException}.
    *
+   * @param tenantId the ID for the tenant the document note is associated with
    * @param documentNoteId the ID for the document note
    */
-  public DocumentNoteNotFoundException(UUID documentNoteId) {
-    super("The document note (" + documentNoteId + ") could not be found");
+  public DocumentNoteNotFoundException(UUID tenantId, UUID documentNoteId) {
+    super(
+        "The document note ("
+            + documentNoteId
+            + ") could not be found for the tenant ("
+            + tenantId
+            + ")");
   }
 }

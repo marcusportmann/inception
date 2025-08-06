@@ -17,10 +17,17 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowStatus;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The {@code WorkflowRepository} interface provides the persistence operations for the {@link
@@ -47,6 +54,34 @@ public interface WorkflowRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID workflowId);
 
   /**
+   * Finalize a workflow instance.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param workflowId the workflow ID
+   * @param status the final status for the workflow
+   * @param finalized the date and time the workflow was finalized
+   * @param finalizedBy the username for the user who finalized the workflow
+   * @return the number of rows that were updated (0 or 1)
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      """
+      update Workflow w
+         set w.finalized   = :finalized,
+             w.finalizedBy = :finalizedBy,
+             w.status      = :status
+       where w.tenantId    = :tenantId
+         and w.id          = :workflowId
+      """)
+  int finalizeWorkflow(
+      @Param("tenantId") UUID tenantId,
+      @Param("workflowId") UUID workflowId,
+      @Param("status") WorkflowStatus status,
+      @Param("finalized") OffsetDateTime finalized,
+      @Param("finalizedBy") String finalizedBy);
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant the workflow is associated with
@@ -55,4 +90,24 @@ public interface WorkflowRepository
    *     found
    */
   Optional<Workflow> findByTenantIdAndId(UUID tenantId, UUID workflowId);
+
+  /**
+   * Returns the ID (composite key) of the workflow definition version for the workflow with the
+   * specified ID.
+   *
+   * @param workflowId the ID for the workflow
+   * @return the Optional containing the ID (composite key) of the workflow definition version for
+   *     the workflow with the specified ID or an empty Optional if the workflow could not be found
+   */
+  @Query(
+      """
+         select new digital.inception.operations.model.WorkflowDefinitionId(
+             w.definitionId,
+             w.definitionVersion
+         )
+         from Workflow w
+         where w.id = :workflowId
+         """)
+  Optional<WorkflowDefinitionId> findWorkflowDefinitionIdByWorkflowId(
+      @Param("workflowId") UUID workflowId);
 }

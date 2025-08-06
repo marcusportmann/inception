@@ -124,14 +124,14 @@ public class WorkflowStep implements Serializable {
   /**
    * Constructs a new {@code WorkflowStep}.
    *
-   * @param workflow the workflow the workflow step is associated with
+   * @param workflowId the ID for the workflow the workflow step is associated with
    * @param code the code for the workflow step
    * @param status the status of the workflow step
    * @param initiated the date and time the workflow was initiated
    */
   public WorkflowStep(
-      Workflow workflow, String code, WorkflowStepStatus status, OffsetDateTime initiated) {
-    this.workflowId = workflow.getId();
+      UUID workflowId, String code, WorkflowStepStatus status, OffsetDateTime initiated) {
+    this.workflowId = workflowId;
     this.code = code;
     this.status = status;
     this.initiated = initiated;

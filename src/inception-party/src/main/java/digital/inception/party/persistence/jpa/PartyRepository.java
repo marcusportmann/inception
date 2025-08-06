@@ -43,7 +43,7 @@ public interface PartyRepository
    * @param id the ID for the party
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**

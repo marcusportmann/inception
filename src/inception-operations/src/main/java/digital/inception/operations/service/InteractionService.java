@@ -385,13 +385,14 @@ public interface InteractionService {
   /**
    * Unlock a locked interaction.
    *
+   * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
    * @param status the new status for the unlocked interaction
    * @throws InvalidArgumentException if an argument is invalid
    * @throws InteractionNotFoundException if the interaction could not be found
    * @throws ServiceUnavailableException if the interaction could not be unlocked
    */
-  void unlockInteraction(UUID interactionId, InteractionStatus status)
+  void unlockInteraction(UUID tenantId, UUID interactionId, InteractionStatus status)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
 
   /**

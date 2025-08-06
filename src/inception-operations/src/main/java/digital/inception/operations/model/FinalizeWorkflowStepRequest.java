@@ -88,7 +88,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
    *
    * @param workflowId the ID for the workflow the workflow step is associated with
    * @param step the code for the workflow step
-   * @param staus the status for the workflow step
+   * @param status the status for the workflow step
    */
   public FinalizeWorkflowStepRequest(UUID workflowId, String step, WorkflowStepStatus status) {
     this.workflowId = workflowId;

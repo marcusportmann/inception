@@ -48,9 +48,15 @@ public class InteractionNotFoundException extends ServiceException {
   /**
    * Constructs a new {@code InteractionNotFoundException}.
    *
+   * @param tenantId the ID for the tenant the interaction is associated with
    * @param interactionId the ID for the interaction
    */
-  public InteractionNotFoundException(UUID interactionId) {
-    super("The interaction (" + interactionId + ") could not be found");
+  public InteractionNotFoundException(UUID tenantId, UUID interactionId) {
+    super(
+        "The interaction ("
+            + interactionId
+            + ") could not be found for the tenant ("
+            + tenantId
+            + ")");
   }
 }

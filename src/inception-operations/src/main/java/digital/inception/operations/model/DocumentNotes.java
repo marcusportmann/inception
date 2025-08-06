@@ -105,8 +105,8 @@ public class DocumentNotes implements Serializable {
   @XmlElement(name = "PageSize", required = true)
   private int pageSize;
 
-  /** The method used to sort the document notes e.g. by captured at. */
-  @Schema(description = "The method used to sort the document notes e.g. by captured at")
+  /** The method used to sort the document notes e.g. by created. */
+  @Schema(description = "The method used to sort the document notes e.g. by created")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private DocumentNoteSortBy sortBy;
@@ -144,7 +144,7 @@ public class DocumentNotes implements Serializable {
    * @param documentNotes the document notes
    * @param total the total number of document notes
    * @param filter the filter that was applied to the document notes
-   * @param sortBy the method used to sort the document notes e.g. by captured at
+   * @param sortBy the method used to sort the document notes e.g. by created
    * @param sortDirection the sort direction that was applied to the document notes
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -216,7 +216,7 @@ public class DocumentNotes implements Serializable {
   }
 
   /**
-   * Returns the method used to sort the document notes e.g. by captured at.
+   * Returns the method used to sort the document notes e.g. by created.
    *
    * @return the method used to sort the document notes
    */

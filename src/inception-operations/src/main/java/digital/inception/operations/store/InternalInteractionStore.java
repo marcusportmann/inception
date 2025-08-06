@@ -162,7 +162,7 @@ public class InternalInteractionStore implements InteractionStore {
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
       if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
-        throw new InteractionNotFoundException(interactionId);
+        throw new InteractionNotFoundException(tenantId, interactionId);
       }
 
       interactionRepository.deleteById(interactionId);
@@ -216,7 +216,7 @@ public class InternalInteractionStore implements InteractionStore {
       if (interactionOptional.isPresent()) {
         return interactionOptional.get();
       } else {
-        throw new InteractionNotFoundException(interactionId);
+        throw new InteractionNotFoundException(tenantId, interactionId);
       }
     } catch (InteractionNotFoundException e) {
       throw e;
@@ -548,11 +548,11 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
-  public void unlockInteraction(UUID interactionId, InteractionStatus status)
+  public void unlockInteraction(UUID tenantId, UUID interactionId, InteractionStatus status)
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
-      if (!interactionRepository.existsById(interactionId)) {
-        throw new InteractionNotFoundException(interactionId);
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
       }
 
       interactionRepository.unlockInteraction(interactionId, status);
@@ -562,6 +562,8 @@ public class InternalInteractionStore implements InteractionStore {
       throw new ServiceUnavailableException(
           "Failed to unlock and set the status for the interaction ("
               + interactionId
+              + ") for the tenant ("
+              + tenantId
               + ") to ("
               + status
               + ")",
@@ -574,7 +576,7 @@ public class InternalInteractionStore implements InteractionStore {
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
       if (!interactionRepository.existsByTenantIdAndId(tenantId, interaction.getId())) {
-        throw new InteractionNotFoundException(interaction.getId());
+        throw new InteractionNotFoundException(tenantId, interaction.getId());
       }
 
       interactionRepository.saveAndFlush(interaction);

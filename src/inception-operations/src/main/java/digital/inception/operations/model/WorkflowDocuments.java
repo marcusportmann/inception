@@ -33,47 +33,47 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The {@code WorkflowNotes} class holds the results of a request to retrieve a list of workflow
- * notes for a workflow.
+ * The {@code WorkflowDocuments} class holds the results of a request to retrieve a list of workflow
+ * documents for a workflow.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The results of a request to retrieve a list of workflow notes for a workflow")
+@Schema(description = "The results of a request to retrieve a list of workflow documents for a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
-  "workflowId",
-  "workflowNotes",
-  "total",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize",
-  "filter"
+    "tenantId",
+    "workflowId",
+    "workflowDocuments",
+    "total",
+    "sortBy",
+    "sortDirection",
+    "pageIndex",
+    "pageSize",
+    "filter"
 })
-@XmlRootElement(name = "WorkflowNotes", namespace = "https://inception.digital/operations")
+@XmlRootElement(name = "WorkflowDocuments", namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "WorkflowNotes",
+    name = "WorkflowDocuments",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "tenantId",
-      "workflowId",
-      "workflowNotes",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
+        "tenantId",
+        "workflowId",
+        "workflowDocuments",
+        "total",
+        "sortBy",
+        "sortDirection",
+        "pageIndex",
+        "pageSize",
+        "filter"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
-public class WorkflowNotes implements Serializable {
+public class WorkflowDocuments implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The filter that was applied to the workflow notes. */
-  @Schema(description = "The filter that was applied to the workflow notes")
+  /** The filter that was applied to the workflow documents. */
+  @Schema(description = "The filter that was applied to the workflow documents")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
@@ -90,78 +90,78 @@ public class WorkflowNotes implements Serializable {
   @XmlElement(name = "PageSize", required = true)
   private int pageSize;
 
-  /** The method used to sort the workflow notes e.g. by created. */
-  @Schema(description = "The method used to sort the workflow notes e.g. by created")
+  /** The method used to sort the workflow documents e.g. by created. */
+  @Schema(description = "The method used to sort the workflow documents e.g. by created")
   @JsonProperty
   @XmlElement(name = "SortBy")
-  private WorkflowNoteSortBy sortBy;
+  private WorkflowDocumentSortBy sortBy;
 
-  /** The sort direction that was applied to the workflow notes. */
-  @Schema(description = "The sort direction that was applied to the workflow notes")
+  /** The sort direction that was applied to the workflow documents. */
+  @Schema(description = "The sort direction that was applied to the workflow documents")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the workflow notes are associated with. */
+  /** The ID for the tenant the workflow documents are associated with. */
   @Schema(
-      description = "The ID for the tenant the workflow notes are associated with",
+      description = "The ID for the tenant the workflow documents are associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   private UUID tenantId;
 
-  /** The total number of workflow notes. */
+  /** The total number of workflow documents. */
   @Schema(
-      description = "The total number of workflow notes",
+      description = "The total number of workflow documents",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The ID for the workflow the workflow notes are associated with. */
+  /** The ID for the workflow the workflow documents are associated with. */
   @Schema(
-      description = "The ID for the workflow the workflow notes are associated with",
+      description = "The ID for the workflow the workflow documents are associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "WorkflowId", required = true)
   private UUID workflowId;
 
-  /** The workflow notes. */
-  @Schema(description = "The workflow notes", requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The workflow documents. */
+  @Schema(description = "The workflow documents", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElementWrapper(name = "WorkflowNotes", required = true)
-  @XmlElement(name = "WorkflowNote", required = true)
-  private List<WorkflowNote> workflowNotes;
+  @XmlElementWrapper(name = "WorkflowDocuments", required = true)
+  @XmlElement(name = "WorkflowDocument", required = true)
+  private List<WorkflowDocument> workflowDocuments;
 
-  /** Constructs a new {@code WorkflowNotes}. */
-  public WorkflowNotes() {}
+  /** Constructs a new {@code WorkflowDocuments}. */
+  public WorkflowDocuments() {}
 
   /**
-   * Constructs a new {@code WorkflowNotes}.
+   * Constructs a new {@code WorkflowDocuments}.
    *
-   * @param tenantId the ID for the tenant the workflow notes are associated with
-   * @param workflowId the ID for the workflow the workflow notes are associated with
-   * @param workflowNotes the workflow notes
-   * @param total the total number of workflow notes
-   * @param filter the filter that was applied to the workflow notes
-   * @param sortBy the method used to sort the workflow notes e.g. by created
-   * @param sortDirection the sort direction that was applied to the workflow notes
+   * @param tenantId the ID for the tenant the workflow documents are associated with
+   * @param workflowId the ID for the workflow the workflow documents are associated with
+   * @param workflowDocuments the workflow documents
+   * @param total the total number of workflow documents
+   * @param filter the filter that was applied to the workflow documents
+   * @param sortBy the method used to sort the workflow documents e.g. by created
+   * @param sortDirection the sort direction that was applied to the workflow documents
    * @param pageIndex the page index
    * @param pageSize the page size
    */
-  public WorkflowNotes(
+  public WorkflowDocuments(
       UUID tenantId,
       UUID workflowId,
-      List<WorkflowNote> workflowNotes,
+      List<WorkflowDocument> workflowDocuments,
       long total,
       String filter,
-      WorkflowNoteSortBy sortBy,
+      WorkflowDocumentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.tenantId = tenantId;
     this.workflowId = workflowId;
-    this.workflowNotes = workflowNotes;
+    this.workflowDocuments = workflowDocuments;
     this.total = total;
     this.filter = filter;
     this.sortBy = sortBy;
@@ -171,9 +171,9 @@ public class WorkflowNotes implements Serializable {
   }
 
   /**
-   * Returns the filter that was applied to the workflow notes.
+   * Returns the filter that was applied to the workflow documents.
    *
-   * @return the filter that was applied to the workflow notes
+   * @return the filter that was applied to the workflow documents
    */
   public String getFilter() {
     return filter;
@@ -198,63 +198,63 @@ public class WorkflowNotes implements Serializable {
   }
 
   /**
-   * Returns the method used to sort the workflow notes e.g. by created.
+   * Returns the method used to sort the workflow documents e.g. by created.
    *
-   * @return the method used to sort the workflow notes
+   * @return the method used to sort the workflow documents
    */
-  public WorkflowNoteSortBy getSortBy() {
+  public WorkflowDocumentSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the sort direction that was applied to the workflow notes.
+   * Returns the sort direction that was applied to the workflow documents.
    *
-   * @return the sort direction that was applied to the workflow notes
+   * @return the sort direction that was applied to the workflow documents
    */
   public SortDirection getSortDirection() {
     return sortDirection;
   }
 
   /**
-   * Returns the ID for the tenant the workflow notes are associated with.
+   * Returns the ID for the tenant the workflow documents are associated with.
    *
-   * @return the ID for the tenant the workflow notes are associated with
+   * @return the ID for the tenant the workflow documents are associated with
    */
   public UUID getTenantId() {
     return tenantId;
   }
 
   /**
-   * Returns the total number of workflow notes.
+   * Returns the total number of workflow documents.
    *
-   * @return the total number of workflow notes
+   * @return the total number of workflow documents
    */
   public long getTotal() {
     return total;
   }
 
   /**
-   * Returns the ID for the workflow the workflow notes are associated with.
+   * Returns the ID for the workflow the workflow documents are associated with.
    *
-   * @return the ID for the workflow the workflow notes are associated with
+   * @return the ID for the workflow the workflow documents are associated with
    */
   public UUID getWorkflowId() {
     return workflowId;
   }
 
   /**
-   * Returns the workflow notes.
+   * Returns the workflow documents.
    *
-   * @return the workflow notes
+   * @return the workflow documents
    */
-  public List<WorkflowNote> getWorkflowNotes() {
-    return workflowNotes;
+  public List<WorkflowDocument> getWorkflowDocuments() {
+    return workflowDocuments;
   }
 
   /**
-   * Set the ID for the workflow the workflow notes are associated with.
+   * Set the ID for the workflow the workflow documents are associated with.
    *
-   * @param workflowId the ID for the workflow the workflow notes are associated with
+   * @param workflowId the ID for the workflow the workflow documents are associated with
    */
   public void setWorkflowId(UUID workflowId) {
     this.workflowId = workflowId;

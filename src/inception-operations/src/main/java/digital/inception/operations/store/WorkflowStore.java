@@ -18,18 +18,26 @@ package digital.inception.operations.store;
 
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowException;
 import digital.inception.operations.exception.DuplicateWorkflowNoteException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
+import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowDocument;
+import digital.inception.operations.model.WorkflowDocumentSortBy;
+import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
+import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import java.util.UUID;
 
@@ -56,6 +64,18 @@ public interface WorkflowStore {
       throws WorkflowDefinitionVersionNotFoundException,
           DuplicateWorkflowException,
           ServiceUnavailableException;
+
+  /**
+   * Create the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocument the workflow document
+   * @return the workflow document
+   * @throws DuplicateWorkflowDocumentException if the workflow document already exists
+   * @throws ServiceUnavailableException if the workflow document could not be created
+   */
+  WorkflowDocument createWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
+      throws DuplicateWorkflowDocumentException, ServiceUnavailableException;
 
   /**
    * Create the workflow note.
@@ -92,6 +112,32 @@ public interface WorkflowStore {
       throws WorkflowNoteNotFoundException, ServiceUnavailableException;
 
   /**
+   * Finalize the workflow with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param status the final status for the workflow
+   * @param finalizedBy the username for the user finalizing the workflow
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be finalized
+   */
+  void finalizeWorkflow(UUID tenantId, UUID workflowId, WorkflowStatus status, String finalizedBy)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Finalize the workflow step with the specified code for the workflow with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param step the code for the workflow step
+   * @param status the final status for the workflow step
+   * @throws WorkflowStepNotFoundException if the workflow step could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be finalized
+   */
+  void finalizeWorkflowStep(UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant
@@ -101,6 +147,47 @@ public interface WorkflowStore {
    * @throws ServiceUnavailableException if the workflow could not be retrieved
    */
   Workflow getWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the composite {@link WorkflowDefinitionId} (id + version) for the workflow with the
+   * specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the composite {@link WorkflowDefinitionId} (id + version) for the workflow with the
+   *     specified ID
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the {@link WorkflowDefinitionId} (id + version) for the
+   *     workflow could not be retrieved
+   */
+  WorkflowDefinitionId getWorkflowDefinitionIdForWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow documents for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow documents are associated with
+   * @param filter the filter to apply to the workflow documents
+   * @param sortBy the method used to sort the workflow documents, e.g. by created
+   * @param sortDirection the sort direction to apply to the workflow documents
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param maxResults the maximum number of workflow documents that should be retrieved
+   * @return the workflow documents
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow documents could not be retrieved
+   */
+  WorkflowDocuments getWorkflowDocuments(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      WorkflowDocumentSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -192,6 +279,18 @@ public interface WorkflowStore {
    */
   Workflow updateWorkflow(UUID tenantId, Workflow workflow)
       throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Update the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocument the workflow document
+   * @return the updated workflow document
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be updated
+   */
+  WorkflowDocument updateWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the workflow note.

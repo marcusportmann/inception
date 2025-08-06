@@ -41,7 +41,7 @@ public interface OrganizationRepository
    * @param id the ID for the organization
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**

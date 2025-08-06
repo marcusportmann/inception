@@ -44,7 +44,7 @@ public interface GroupRepository
    * @param roleCode the code for the role
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value =
           "insert into security_role_to_group_map(role_code, group_id) values (:roleCode, :groupId)",
@@ -58,7 +58,7 @@ public interface GroupRepository
    * @param userId the ID for the user
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value =
           "insert into security_user_to_group_map(user_id, group_id) values (:userId, :groupId)",
@@ -229,7 +229,7 @@ public interface GroupRepository
    * @return the number of impacted role to group mappings
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value =
           "delete from security_role_to_group_map where group_id=:groupId and role_code = :roleCode",
@@ -243,7 +243,7 @@ public interface GroupRepository
    * @param userId the ID for the user
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
       value =
           "delete from security_user_to_group_map where group_id=:groupId and user_id = :userId",

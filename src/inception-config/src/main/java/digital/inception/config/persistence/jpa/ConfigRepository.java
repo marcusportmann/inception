@@ -39,7 +39,7 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
    * @param configId the ID for the config
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   void deleteByIdIgnoreCase(String configId);
 
   /**

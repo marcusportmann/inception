@@ -18,6 +18,7 @@ package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowStepDefinition;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +43,7 @@ public interface WorkflowDefinitionRepository
    * @param workflowDefinitionId the ID for the workflow definition
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("delete from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
   void deleteById(@Param("workflowDefinitionId") String workflowDefinitionId);
 
@@ -125,6 +126,29 @@ public interface WorkflowDefinitionRepository
       nativeQuery = true)
   Optional<WorkflowDefinition> findLatestVersionById(
       @Param("workflowDefinitionId") String workflowDefinitionId);
+
+  /**
+   * Retrieve the workflow step definitions for the workflow definition with the specified ID and
+   * version.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return the workflow step definitions for the workflow definition with the specified ID and
+   *     version or an empty list if the workflow definition with the specified ID and version could
+   *     not be found or has no associated workflow step definitions
+   */
+  @Query(
+      """
+       select wsd
+       from WorkflowDefinition wd
+       join wd.stepDefinitions wsd
+       where wd.id = :workflowDefinitionId
+         and wd.version = :workflowDefinitionVersion
+       order by wsd.code
+       """)
+  List<WorkflowStepDefinition> findStepDefinitionsByDefinitionIdAndVersion(
+      @Param("workflowDefinitionId") String workflowDefinitionId,
+      @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
 
   /**
    * Retrieve the next version of the workflow definition with the specified ID.

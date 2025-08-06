@@ -43,7 +43,7 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
    * @param id the ID for the association
    */
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
