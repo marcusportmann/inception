@@ -75,10 +75,7 @@ public class InteractionSource implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("code")
   @JoinColumn(name = "source_id", insertable = false, updatable = false)
   private final List<InteractionSourceAttribute> attributes = new ArrayList<>();

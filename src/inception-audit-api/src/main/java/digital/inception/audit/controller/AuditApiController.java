@@ -26,5 +26,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Tag(name = "Audit")
 @RequestMapping(value = "/api/audit")
-// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+// @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface AuditApiController {}

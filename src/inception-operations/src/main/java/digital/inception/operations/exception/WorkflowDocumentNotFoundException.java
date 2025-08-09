@@ -48,9 +48,15 @@ public class WorkflowDocumentNotFoundException extends ServiceException {
   /**
    * Constructs a new {@code WorkflowDocumentNotFoundException}.
    *
+   * @param tenantId the ID for the tenant the workflow document is associated with
    * @param workflowDocumentId the ID for the workflow document
    */
-  public WorkflowDocumentNotFoundException(UUID workflowDocumentId) {
-    super("The workflow document (" + workflowDocumentId + ") could not be found");
+  public WorkflowDocumentNotFoundException(UUID tenantId, UUID workflowDocumentId) {
+    super(
+        "The workflow document ("
+            + workflowDocumentId
+            + ") could not be found for the tenant ("
+            + tenantId
+            + ")");
   }
 }

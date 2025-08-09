@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -24,15 +25,12 @@ import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -42,6 +40,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code WorkflowAttribute} class holds the information for an attribute for a workflow.
@@ -87,14 +86,13 @@ public class WorkflowAttribute implements Serializable {
   @Column(name = "value", length = 1000, nullable = false)
   private String value;
 
-  /** The workflow the workflow attribute is associated with. */
+  /** The ID for the workflow the workflow attribute is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("workflowAttributeReference")
+  @JsonIgnore
   @XmlTransient
   @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({@JoinColumn(name = "workflow_id")})
-  private Workflow workflow;
+  @Column(name = "workflow_id", nullable = false)
+  private UUID workflowId;
 
   /** Constructs a new {@code WorkflowAttribute}. */
   public WorkflowAttribute() {}
@@ -132,7 +130,7 @@ public class WorkflowAttribute implements Serializable {
 
     WorkflowAttribute other = (WorkflowAttribute) object;
 
-    return Objects.equals(workflow, other.workflow)
+    return Objects.equals(workflowId, other.workflowId)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -155,23 +153,14 @@ public class WorkflowAttribute implements Serializable {
   }
 
   /**
-   * Returns the workflow the workflow attribute is associated with.
-   *
-   * @return the workflow the workflow attribute is associated with
-   */
-  @Schema(hidden = true)
-  public Workflow getWorkflow() {
-    return workflow;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
    */
   @Override
   public int hashCode() {
-    return ((workflow == null) ? 0 : workflow.hashCode()) + ((code == null) ? 0 : code.hashCode());
+    return ((workflowId == null) ? 0 : workflowId.hashCode())
+        + ((code == null) ? 0 : code.hashCode());
   }
 
   /**
@@ -197,8 +186,27 @@ public class WorkflowAttribute implements Serializable {
    *
    * @param workflow the workflow the workflow attribute is associated with
    */
+  @JsonBackReference("workflowAttributeReference")
   @Schema(hidden = true)
   public void setWorkflow(Workflow workflow) {
-    this.workflow = workflow;
+    if (workflow != null) {
+      this.workflowId = workflow.getId();
+    } else {
+      this.workflowId = null;
+    }
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Workflow parent) {
+      setWorkflow(parent);
+    }
   }
 }

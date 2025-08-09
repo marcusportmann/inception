@@ -120,8 +120,6 @@ public class WorkflowStepDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-
-
   /** Constructs a new {@code WorkflowStepDefinition}. */
   public WorkflowStepDefinition() {}
 
@@ -191,7 +189,6 @@ public class WorkflowStepDefinition implements Serializable {
   public String getName() {
     return name;
   }
-
 
   /**
    * Returns a hash code value for the object.

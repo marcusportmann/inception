@@ -20,6 +20,7 @@ import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code WorkflowAttributeId} class implements the ID class for the {@code WorkflowAttribute}
@@ -35,8 +36,8 @@ public class WorkflowAttributeId implements Serializable {
   /** The code for the workflow attribute. */
   private String code;
 
-  /** The workflow the workflow attribute is associated with. */
-  private Workflow workflow;
+  /** The ID for the workflow the workflow attribute is associated with. */
+  private UUID workflowId;
 
   /** Constructs a new {@code WorkflowAttributeId}. */
   public WorkflowAttributeId() {}
@@ -63,7 +64,7 @@ public class WorkflowAttributeId implements Serializable {
 
     WorkflowAttributeId other = (WorkflowAttributeId) object;
 
-    return Objects.equals(workflow, other.workflow)
+    return Objects.equals(workflowId, other.workflowId)
         && StringUtil.equalsIgnoreCase(code, other.code);
   }
 
@@ -74,6 +75,7 @@ public class WorkflowAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((workflow == null) ? 0 : workflow.hashCode()) + ((code == null) ? 0 : code.hashCode());
+    return ((workflowId == null) ? 0 : workflowId.hashCode())
+        + ((code == null) ? 0 : code.hashCode());
   }
 }

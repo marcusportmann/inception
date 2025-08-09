@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -24,7 +25,10 @@ import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,6 +37,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
@@ -42,12 +47,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code WorkflowDocument} class holds the information for an association of a document with a
- * workflow.
+ * The {@code WorkflowDocument} class holds the information for a workflow document.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "An association of a document with a workflow")
+@Schema(description = "A workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
@@ -60,6 +64,9 @@ import java.util.UUID;
   "requestedBy",
   "provided",
   "providedBy",
+  "rejected",
+  "rejectedBy",
+  "rejectionReason",
   "verified",
   "verifiedBy"
 })
@@ -78,6 +85,9 @@ import java.util.UUID;
       "requestedBy",
       "provided",
       "providedBy",
+      "rejected",
+      "rejectedBy",
+      "rejectionReason",
       "verified",
       "verifiedBy"
     })
@@ -87,6 +97,18 @@ import java.util.UUID;
 public class WorkflowDocument implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The document definition the workflow document is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(
+      name = "document_definition_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private DocumentDefinition documentDefinition;
 
   /** The ID for the document definition the workflow document is associated with. */
   @Schema(
@@ -133,6 +155,31 @@ public class WorkflowDocument implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "provided_by", length = 100)
   private String providedBy;
+
+  /** The date and time the workflow document was rejected. */
+  @Schema(description = "The date and time the workflow document was rejected")
+  @JsonProperty
+  @XmlElement(name = "Rejected")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "rejected")
+  private OffsetDateTime rejected;
+
+  /** The person or system that rejected the workflow document. */
+  @Schema(description = "The person or system that rejected the workflow document")
+  @JsonProperty
+  @XmlElement(name = "RejectedBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "rejected_by", length = 100)
+  private String rejectedBy;
+
+  /** The reason the workflow document was rejected. */
+  @Schema(description = "The reason the workflow document was rejected")
+  @JsonProperty
+  @XmlElement(name = "RejectionReason")
+  @Size(min = 1, max = 100)
+  @Column(name = "rejection_reason", length = 100)
+  private String rejectionReason;
 
   /** The date and time the workflow document was requested. */
   @Schema(
@@ -204,45 +251,6 @@ public class WorkflowDocument implements Serializable {
 
   /** Constructs a new {@code WorkflowDocument}. */
   public WorkflowDocument() {}
-
-  // TODO: DELETE THIS CONSTRUCTOR -- MARCUS
-  //  /**
-  //   * Constructs a new {@code WorkflowDocument}.
-  //   *
-  //   * @param id the ID for the workflow document
-  //   * @param tenantId the ID for the tenant the workflow document is associated with
-  //   * @param workflowId the ID for the workflow
-  //   * @param documentDefinitionId the ID for the document definition the workflow document is
-  //   *     associated with
-  //   * @param documentId ID for the document
-  //   * @param status the status of the workflow document
-  //   * @param requested the date and time the workflow document was requested
-  //   * @param requestedBy the person or system that requested the workflow document
-  //   * @param provided the date and time the workflow document was provided
-  //   * @param providedBy the person or system that provided the workflow document
-  //   */
-  //  public WorkflowDocument(
-  //      UUID id,
-  //      UUID tenantId,
-  //      UUID workflowId,
-  //      String documentDefinitionId,
-  //      UUID documentId,
-  //      WorkflowDocumentStatus status,
-  //      OffsetDateTime requested,
-  //      String requestedBy,
-  //      OffsetDateTime provided,
-  //      String providedBy) {
-  //    this.id = id;
-  //    this.tenantId = tenantId;
-  //    this.workflowId = workflowId;
-  //    this.documentDefinitionId = documentDefinitionId;
-  //    this.documentId = documentId;
-  //    this.status = status;
-  //    this.requested = requested;
-  //    this.requestedBy = requestedBy;
-  //    this.provided = provided;
-  //    this.providedBy = providedBy;
-  //  }
 
   /**
    * Constructs a new {@code WorkflowDocument}.
@@ -333,6 +341,33 @@ public class WorkflowDocument implements Serializable {
    */
   public String getProvidedBy() {
     return providedBy;
+  }
+
+  /**
+   * Returns the date and time the workflow document was rejected.
+   *
+   * @return the date and time the workflow document was rejected
+   */
+  public OffsetDateTime getRejected() {
+    return rejected;
+  }
+
+  /**
+   * Returns the person or system that rejected the workflow document.
+   *
+   * @return the person or system that rejected the workflow document
+   */
+  public String getRejectedBy() {
+    return rejectedBy;
+  }
+
+  /**
+   * Returns the reason the workflow document was rejected.
+   *
+   * @return the reason the workflow document was rejected
+   */
+  public String getRejectionReason() {
+    return rejectionReason;
   }
 
   /**
@@ -442,6 +477,33 @@ public class WorkflowDocument implements Serializable {
    */
   public void setProvidedBy(String providedBy) {
     this.providedBy = providedBy;
+  }
+
+  /**
+   * Set the date and time the workflow document was rejected.
+   *
+   * @param rejected the date and time the workflow document was rejected
+   */
+  public void setRejected(OffsetDateTime rejected) {
+    this.rejected = rejected;
+  }
+
+  /**
+   * Set the person or system that rejected the workflow document.
+   *
+   * @param rejectedBy the person or system that rejected the workflow document
+   */
+  public void setRejectedBy(String rejectedBy) {
+    this.rejectedBy = rejectedBy;
+  }
+
+  /**
+   * Set the reason the workflow document was rejected.
+   *
+   * @param rejectionReason the reason the workflow document was rejected
+   */
+  public void setRejectionReason(String rejectionReason) {
+    this.rejectionReason = rejectionReason;
   }
 
   /**

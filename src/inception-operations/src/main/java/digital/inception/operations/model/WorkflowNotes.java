@@ -38,7 +38,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The results of a request to retrieve a list of workflow notes for a workflow")
+@Schema(
+    description = "The results of a request to retrieve a list of workflow notes for a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "tenantId",

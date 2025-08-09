@@ -105,9 +105,9 @@ public class WorkflowNote implements Serializable {
   @Column(name = "created", nullable = false)
   private OffsetDateTime created;
 
-  /** The username for the user who created the workflow note. */
+  /** The person or system that created the workflow note. */
   @Schema(
-      description = "The username for the user who created the workflow note",
+      description = "The person or system that created the workflow note",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CreatedBy", required = true)
@@ -144,8 +144,8 @@ public class WorkflowNote implements Serializable {
   @Column(name = "updated")
   private OffsetDateTime updated;
 
-  /** The username for the user who last updated the workflow note. */
-  @Schema(description = "The username for the user who last updated the workflow note")
+  /** The person or system that last updated the workflow note. */
+  @Schema(description = "The person or system that last updated the workflow note")
   @JsonProperty
   @XmlElement(name = "UpdatedBy")
   @Size(min = 1, max = 100)
@@ -172,7 +172,7 @@ public class WorkflowNote implements Serializable {
    * @param workflowId the ID for the workflow the workflow note is associated with
    * @param content the content for the workflow note
    * @param created the date and time the workflow note was created
-   * @param createdBy the username for the user who created the workflow note
+   * @param createdBy the person or system that created the workflow note
    */
   public WorkflowNote(
       UUID tenantId, UUID workflowId, String content, OffsetDateTime created, String createdBy) {
@@ -228,9 +228,9 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Returns the username for the user who created the workflow note.
+   * Returns the person or system that created the workflow note.
    *
-   * @return the username for the user who created the workflow note
+   * @return the person or system that created the workflow note
    */
   public String getCreatedBy() {
     return createdBy;
@@ -264,9 +264,9 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Returns the username for the user who last updated the workflow note.
+   * Returns the person or system that last updated the workflow note.
    *
-   * @return the username for the user who last updated the workflow note
+   * @return the person or system that last updated the workflow note
    */
   public String getUpdatedBy() {
     return updatedBy;
@@ -310,9 +310,9 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the username for the user who created the workflow note.
+   * Set the person or system that created the workflow note.
    *
-   * @param createdBy the username for the user who created the workflow note
+   * @param createdBy the person or system that created the workflow note
    */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
@@ -346,9 +346,9 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the username for the user who last updated the workflow note.
+   * Set the person or system that last updated the workflow note.
    *
-   * @param updatedBy the username for the user who last updated the workflow note
+   * @param updatedBy the person or system that last updated the workflow note
    */
   public void setUpdatedBy(String updatedBy) {
     this.updatedBy = updatedBy;

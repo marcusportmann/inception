@@ -330,6 +330,8 @@
       <column name="status" type="nvarchar(50)" remarks="The code for the status of the workflow">
         <constraints nullable="false"/>
       </column>
+      <column name="party_id" type="uuid"
+        remarks="The ID for the party the workflow is associated with"/>
       <column name="external_reference" type="nvarchar(100)"
         remarks="The external reference for the workflow"/>
       <column name="data" type="clob"
@@ -339,17 +341,17 @@
         <constraints nullable="false"/>
       </column>
       <column name="initiated_by" type="nvarchar(100)"
-        remarks="The username for the user who initiated the workflow">
+        remarks="The person or system who initiated the workflow">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp with time zone"
         remarks="The date and time the workflow was last updated"/>
       <column name="updated_by" type="nvarchar(100)"
-        remarks="The username for the user who last updated the workflow"/>
+        remarks="The person or system who last updated the workflow"/>
       <column name="finalized" type="timestamp with time zone"
         remarks="The date and time the workflow was finalized"/>
       <column name="finalized_by" type="nvarchar(100)"
-        remarks="The username for the user who finalized the workflow"/>
+        remarks="The person or system who finalized the workflow"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflows_workflow_definition_fk"
       baseTableName="operations_workflows" baseColumnNames="definition_id,definition_version"
@@ -417,13 +419,13 @@
         <constraints nullable="false"/>
       </column>
       <column name="created_by" type="nvarchar(100)"
-        remarks="The username for the user who created the workflow note">
+        remarks="The person or system who created the workflow note">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp with time zone"
         remarks="The date and time the workflow note was last updated"/>
       <column name="updated_by" type="nvarchar(100)"
-        remarks="The username for the user who last updated the workflow note"/>
+        remarks="The person or system who last updated the workflow note"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflow_notes_workflow_fk"
       baseTableName="operations_workflow_notes" baseColumnNames="workflow_id"
@@ -500,13 +502,13 @@
         <constraints nullable="false"/>
       </column>
       <column name="created_by" type="nvarchar(100)"
-        remarks="The username for the user who created the document">
+        remarks="The person or system who created the document">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp with time zone"
         remarks="The date and time the document was last updated"/>
       <column name="updated_by" type="nvarchar(100)"
-        remarks="The username for the user who last updated the document"/>
+        remarks="The person or system who last updated the document"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_documents_document_definition_fk"
       baseTableName="operations_documents" baseColumnNames="definition_id"
@@ -545,13 +547,13 @@
         <constraints nullable="false"/>
       </column>
       <column name="created_by" type="nvarchar(100)"
-        remarks="The username for the user who created the document note">
+        remarks="The person or system who created the document note">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp with time zone"
         remarks="The date and time the document note was last updated"/>
       <column name="updated_by" type="nvarchar(100)"
-        remarks="The username for the user who last updated the document note"/>
+        remarks="The person or system who last updated the document note"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_document_notes_document_fk"
       baseTableName="operations_document_notes" baseColumnNames="document_id"
@@ -597,6 +599,12 @@
         remarks="The date and time the workflow document was provided"/>
       <column name="provided_by" type="nvarchar(100)"
         remarks="The person or system that provided the workflow document"/>
+      <column name="rejected" type="timestamp with time zone"
+        remarks="The date and time the workflow document was rejected"/>
+      <column name="rejected_by" type="nvarchar(100)"
+        remarks="The person or system that rejected the workflow document"/>
+      <column name="rejection_reason" type="nvarchar(500)"
+        remarks="The reason the workflow document was rejected"/>
       <column name="verified" type="timestamp with time zone"
         remarks="The date and time the workflow document was verified"/>
       <column name="verified_by" type="nvarchar(100)"

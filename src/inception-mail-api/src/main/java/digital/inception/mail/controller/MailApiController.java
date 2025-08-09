@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Tag(name = "Mail")
 @RequestMapping(value = "/api/mail")
-// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+// @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface MailApiController {
 
   /**

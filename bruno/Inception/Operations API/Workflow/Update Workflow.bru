@@ -1,7 +1,7 @@
 meta {
   name: Update Workflow
   type: http
-  seq: 27
+  seq: 34
 }
 
 post {
@@ -12,10 +12,14 @@ post {
 
 body:json {
   {
-    "workflowId": "019837d1-8c13-7205-a8c5-282bc3e0608e",
+    "workflowId": "{{workflowId}}",
     "status": "cancelled",
     "data": "eyJuYW1lIjogInVwZGF0ZWQgdmFsdWUifQ=="
   }
+}
+
+vars:pre-request {
+  workflowId: 019890c4-c4bc-775e-879c-e77f3d578ac4
 }
 
 settings {

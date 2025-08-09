@@ -33,7 +33,9 @@ import digital.inception.operations.persistence.jpa.DocumentNoteRepository;
 import digital.inception.operations.persistence.jpa.DocumentRepository;
 import digital.inception.operations.persistence.jpa.DocumentSummaryRepository;
 import jakarta.persistence.criteria.Predicate;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -83,6 +85,19 @@ public class InternalDocumentStore implements DocumentStore {
     this.documentNoteRepository = documentNoteRepository;
     this.documentRepository = documentRepository;
     this.documentSummaryRepository = documentSummaryRepository;
+  }
+
+  @Override
+  public String calculateDocumentDataHash(byte[] documentData) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+      digest.update(documentData);
+
+      return Base64.getEncoder().encodeToString(digest.digest());
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to calculate the SHA-256 hash for the document data", e);
+    }
   }
 
   @Override

@@ -105,9 +105,9 @@ public class DocumentNote implements Serializable {
   @Column(name = "created", nullable = false)
   private OffsetDateTime created;
 
-  /** The username for the user who created the document note. */
+  /** The person or system that created the document note. */
   @Schema(
-      description = "The username for the user who created the document note",
+      description = "The person or system that created the document note",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CreatedBy", required = true)
@@ -154,8 +154,8 @@ public class DocumentNote implements Serializable {
   @Column(name = "updated")
   private OffsetDateTime updated;
 
-  /** The username for the user who last updated the document note. */
-  @Schema(description = "The username for the user who last updated the document note")
+  /** The person or system that last updated the document note. */
+  @Schema(description = "The person or system that last updated the document note")
   @JsonProperty
   @XmlElement(name = "UpdatedBy")
   @Size(min = 1, max = 100)
@@ -172,7 +172,7 @@ public class DocumentNote implements Serializable {
    * @param documentId the ID for the document the document note is associated with
    * @param content the content for the document note
    * @param created the date and time the document note was created
-   * @param createdBy the username for the user who created the document note
+   * @param createdBy the person or system that created the document note
    */
   public DocumentNote(
       UUID tenantId, UUID documentId, String content, OffsetDateTime created, String createdBy) {
@@ -228,9 +228,9 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Returns the username for the user who created the document note.
+   * Returns the person or system that created the document note.
    *
-   * @return the username for the user who created the document note
+   * @return the person or system that created the document note
    */
   public String getCreatedBy() {
     return createdBy;
@@ -273,9 +273,9 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Returns the username for the user who last updated the document note.
+   * Returns the person or system that last updated the document note.
    *
-   * @return the username for the user who last updated the document note
+   * @return the person or system that last updated the document note
    */
   public String getUpdatedBy() {
     return updatedBy;
@@ -310,9 +310,9 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the username for the user who created the document note.
+   * Set the person or system that created the document note.
    *
-   * @param createdBy the username for the user who created the document note
+   * @param createdBy the person or system that created the document note
    */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
@@ -355,9 +355,9 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the username for the user who last updated the document note.
+   * Set the person or system that last updated the document note.
    *
-   * @param updatedBy the username for the user who last updated the document note
+   * @param updatedBy the person or system that last updated the document note
    */
   public void setUpdatedBy(String updatedBy) {
     this.updatedBy = updatedBy;

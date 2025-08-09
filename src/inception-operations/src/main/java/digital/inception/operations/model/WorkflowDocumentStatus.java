@@ -41,6 +41,10 @@ public enum WorkflowDocumentStatus implements CodeEnum {
   @XmlEnumValue("Provided")
   PROVIDED("provided", "Provided"),
 
+  /** Rejected. */
+  @XmlEnumValue("Rejected")
+  REJECTED("rejected", "Rejected"),
+
   /** Verified. */
   @XmlEnumValue("Verified")
   VERIFIED("verified", "Verified"),

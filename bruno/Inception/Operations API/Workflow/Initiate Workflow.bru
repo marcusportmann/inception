@@ -1,7 +1,7 @@
 meta {
   name: Initiate Workflow
   type: http
-  seq: 23
+  seq: 28
 }
 
 post {
@@ -15,6 +15,12 @@ body:json {
     "definitionId": "test_workflow_definition",
     "externalReference": "external_reference",
     "startWorkflow": true,
+    "attributes": [
+      {
+        "code": "test_attribute_code",
+        "value": "test_attribute_value"
+      }
+    ],
     "data": "eyJuYW1lIjogInZhbHVlIn0="
   }
 }

@@ -38,33 +38,35 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The results of a request to retrieve a list of workflow documents for a workflow")
+@Schema(
+    description =
+        "The results of a request to retrieve a list of workflow documents for a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "tenantId",
-    "workflowId",
-    "workflowDocuments",
-    "total",
-    "sortBy",
-    "sortDirection",
-    "pageIndex",
-    "pageSize",
-    "filter"
+  "tenantId",
+  "workflowId",
+  "workflowDocuments",
+  "total",
+  "sortBy",
+  "sortDirection",
+  "pageIndex",
+  "pageSize",
+  "filter"
 })
 @XmlRootElement(name = "WorkflowDocuments", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDocuments",
     namespace = "https://inception.digital/operations",
     propOrder = {
-        "tenantId",
-        "workflowId",
-        "workflowDocuments",
-        "total",
-        "sortBy",
-        "sortDirection",
-        "pageIndex",
-        "pageSize",
-        "filter"
+      "tenantId",
+      "workflowId",
+      "workflowDocuments",
+      "total",
+      "sortBy",
+      "sortDirection",
+      "pageIndex",
+      "pageSize",
+      "filter"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -118,6 +120,13 @@ public class WorkflowDocuments implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
+  /** The workflow documents. */
+  @Schema(description = "The workflow documents", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "WorkflowDocuments", required = true)
+  @XmlElement(name = "WorkflowDocument", required = true)
+  private List<WorkflowDocument> workflowDocuments;
+
   /** The ID for the workflow the workflow documents are associated with. */
   @Schema(
       description = "The ID for the workflow the workflow documents are associated with",
@@ -125,13 +134,6 @@ public class WorkflowDocuments implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "WorkflowId", required = true)
   private UUID workflowId;
-
-  /** The workflow documents. */
-  @Schema(description = "The workflow documents", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "WorkflowDocuments", required = true)
-  @XmlElement(name = "WorkflowDocument", required = true)
-  private List<WorkflowDocument> workflowDocuments;
 
   /** Constructs a new {@code WorkflowDocuments}. */
   public WorkflowDocuments() {}
@@ -234,21 +236,21 @@ public class WorkflowDocuments implements Serializable {
   }
 
   /**
-   * Returns the ID for the workflow the workflow documents are associated with.
-   *
-   * @return the ID for the workflow the workflow documents are associated with
-   */
-  public UUID getWorkflowId() {
-    return workflowId;
-  }
-
-  /**
    * Returns the workflow documents.
    *
    * @return the workflow documents
    */
   public List<WorkflowDocument> getWorkflowDocuments() {
     return workflowDocuments;
+  }
+
+  /**
+   * Returns the ID for the workflow the workflow documents are associated with.
+   *
+   * @return the ID for the workflow the workflow documents are associated with
+   */
+  public UUID getWorkflowId() {
+    return workflowId;
   }
 
   /**

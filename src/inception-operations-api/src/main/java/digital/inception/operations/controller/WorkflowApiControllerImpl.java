@@ -21,12 +21,14 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
+import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
+import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
@@ -36,12 +38,18 @@ import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.OutstandingWorkflowDocument;
+import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
+import digital.inception.operations.model.RejectWorkflowDocumentRequest;
+import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
+import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
+import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
@@ -319,7 +327,9 @@ public class WorkflowApiControllerImpl extends SecureApiController
               + workflowNoteId
               + ") for the workflow ("
               + workflowId
-              + ") for the tenant (" + tenantId + ")",
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
 
@@ -390,6 +400,21 @@ public class WorkflowApiControllerImpl extends SecureApiController
     }
 
     workflowService.finalizeWorkflowStep(tenantId, finalizeWorkflowStepRequest);
+  }
+
+  @Override
+  public List<OutstandingWorkflowDocument> getOutstandingWorkflowDocuments(
+      UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.getOutstandingWorkflowDocuments(tenantId, workflowId);
   }
 
   @Override
@@ -548,6 +573,41 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public WorkflowDocument getWorkflowDocument(UUID tenantId, UUID workflowId,
+      UUID workflowDocumentId)
+      throws InvalidArgumentException, WorkflowNotFoundException, WorkflowDocumentNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      if (!workflowService.workflowDocumentExists(tenantId, workflowId, workflowDocumentId)) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      }
+    } catch (WorkflowNotFoundException | WorkflowDocumentNotFoundException  e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow document (" + workflowDocumentId + ") for the workflow ("
+          + workflowId
+          + ") for the tenant ("
+          + tenantId
+          + ")",
+          e);
+    }
+
+    return workflowService.getWorkflowDocument(tenantId, workflowDocumentId);
+  }
+
+  @Override
   public WorkflowDocuments getWorkflowDocuments(
       UUID tenantId,
       UUID workflowId,
@@ -614,7 +674,9 @@ public class WorkflowApiControllerImpl extends SecureApiController
               + workflowNoteId
               + ") for the workflow ("
               + workflowId
-              + ") for the tenant (" + tenantId + ")",
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
 
@@ -718,6 +780,60 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     WorkflowStep workflowStep =
         workflowService.initiateWorkflowStep(tenantId, initiateWorkflowStepRequest);
+  }
+
+  @Override
+  public void provideWorkflowDocument(
+      UUID tenantId, ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    workflowService.provideWorkflowDocument(
+        tenantId, provideWorkflowDocumentRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void rejectWorkflowDocument(
+      UUID tenantId, RejectWorkflowDocumentRequest rejectWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    workflowService.rejectWorkflowDocument(
+        tenantId, rejectWorkflowDocumentRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void requestWorkflowDocument(
+      UUID tenantId, RequestWorkflowDocumentRequest requestWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    workflowService.requestWorkflowDocument(
+        tenantId, requestWorkflowDocumentRequest, getAuthenticationName());
   }
 
   @Override
@@ -835,5 +951,23 @@ public class WorkflowApiControllerImpl extends SecureApiController
     WorkflowNote workflowNote =
         workflowService.updateWorkflowNote(
             tenantId, updateWorkflowNoteRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void verifyWorkflowDocument(
+      UUID tenantId, VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    workflowService.verifyWorkflowDocument(
+        tenantId, verifyWorkflowDocumentRequest, getAuthenticationName());
   }
 }

@@ -112,9 +112,9 @@ public class Document implements Serializable {
   @Column(name = "created", nullable = false)
   private OffsetDateTime created;
 
-  /** The username for the user who created the document. */
+  /** The person or system that created the document. */
   @Schema(
-      description = "The username for the user who created the document",
+      description = "The person or system that created the document",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CreatedBy", required = true)
@@ -233,8 +233,8 @@ public class Document implements Serializable {
   @Column(name = "updated")
   private OffsetDateTime updated;
 
-  /** The username for the user who last updated the document. */
-  @Schema(description = "The username for the user who last updated the document")
+  /** The person or system that last updated the document. */
+  @Schema(description = "The person or system that last updated the document")
   @JsonProperty
   @XmlElement(name = "UpdatedBy")
   @Size(min = 1, max = 100)
@@ -289,9 +289,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Returns the username for the user who created the document.
+   * Returns the person or system that created the document.
    *
-   * @return the username for the user who created the document
+   * @return the person or system that created the document
    */
   public String getCreatedBy() {
     return createdBy;
@@ -406,9 +406,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Returns the username for the user who last updated the document.
+   * Returns the person or system that last updated the document.
    *
-   * @return the username for the user who last updated the document
+   * @return the person or system that last updated the document
    */
   public String getUpdatedBy() {
     return updatedBy;
@@ -424,9 +424,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the username for the user who created the document.
+   * Set the person or system that created the document.
    *
-   * @param createdBy the username for the user who created the document
+   * @param createdBy the person or system that created the document
    */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
@@ -542,9 +542,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the username for the user who last updated the document.
+   * Set the person or system that last updated the document.
    *
-   * @param updatedBy the username for the user who last updated the document
+   * @param updatedBy the person or system that last updated the document
    */
   public void setUpdatedBy(String updatedBy) {
     this.updatedBy = updatedBy;

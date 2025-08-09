@@ -16,13 +16,18 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,9 +35,15 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlSchemaType;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -50,7 +61,13 @@ import java.util.UUID;
   "definitionId",
   "definitionVersion",
   "status",
-  "externalReference"
+  "externalReference",
+  "initiated",
+  "initiatedBy",
+  "updated",
+  "updatedBy",
+  "finalized",
+  "finalizedBy"
 })
 @XmlRootElement(name = "WorkflowSummary", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -63,7 +80,13 @@ import java.util.UUID;
       "definitionId",
       "definitionVersion",
       "status",
-      "externalReference"
+      "externalReference",
+      "initiated",
+      "initiatedBy",
+      "updated",
+      "updatedBy",
+      "finalized",
+      "finalizedBy"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -72,6 +95,24 @@ import java.util.UUID;
 public class WorkflowSummary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /**
+   * The attributes for the workflow.
+   *
+   * <p>NOTE: This is only present so we can retrieve workflow summaries for workflows based on the
+   * values of the workflow attributes associated with the workflows.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @OneToMany
+  @OrderBy("code")
+  @JoinColumn(
+      name = "workflow_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private final List<WorkflowAttribute> attributes = new ArrayList<>();
 
   /** The ID for the workflow definition the workflow is associated with. */
   @Schema(
@@ -102,6 +143,23 @@ public class WorkflowSummary implements Serializable {
   @Column(name = "external_reference", length = 100)
   private String externalReference;
 
+  /** The date and time the workflow was finalized. */
+  @Schema(description = "The date and time the workflow was finalized")
+  @JsonProperty
+  @XmlElement(name = "Finalized")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "finalized")
+  private OffsetDateTime finalized;
+
+  /** The person or system that finalized the workflow. */
+  @Schema(description = "The person or system that finalized the workflow")
+  @JsonProperty
+  @XmlElement(name = "FinalizedBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "finalized_by", length = 100)
+  private String finalizedBy;
+
   /** The ID for the workflow. */
   @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -110,6 +168,29 @@ public class WorkflowSummary implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
+
+  /** The date and time the workflow was initiated. */
+  @Schema(
+      description = "The date and time the workflow was initiated",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Initiated", required = true)
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @NotNull
+  @Column(name = "initiated", nullable = false)
+  private OffsetDateTime initiated;
+
+  /** The person or system that initiated the workflow. */
+  @Schema(
+      description = "The person or system that initiated the workflow",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "InitiatedBy", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "initiated_by", length = 100, nullable = false)
+  private String initiatedBy;
 
   /** The ID for the parent workflow. */
   @Schema(description = "The ID for the parent workflow")
@@ -135,6 +216,23 @@ public class WorkflowSummary implements Serializable {
   @NotNull
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
+
+  /** The date and time the workflow was last updated. */
+  @Schema(description = "The date and time the workflow was last updated")
+  @JsonProperty
+  @XmlElement(name = "Updated")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "updated")
+  private OffsetDateTime updated;
+
+  /** The person or system that last updated the workflow. */
+  @Schema(description = "The person or system that last updated the workflow")
+  @JsonProperty
+  @XmlElement(name = "UpdatedBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "updated_by", length = 100)
+  private String updatedBy;
 
   /** Constructs a new {@code WorkflowSummary}. */
   public WorkflowSummary() {}
@@ -192,12 +290,48 @@ public class WorkflowSummary implements Serializable {
   }
 
   /**
+   * Returns the date and time the workflow was finalized.
+   *
+   * @return the date and time the workflow was finalized
+   */
+  public OffsetDateTime getFinalized() {
+    return finalized;
+  }
+
+  /**
+   * Returns the person or system that finalized the workflow.
+   *
+   * @return the person or system that finalized the workflow
+   */
+  public String getFinalizedBy() {
+    return finalizedBy;
+  }
+
+  /**
    * Returns the ID for the workflow.
    *
    * @return the ID for the workflow
    */
   public UUID getId() {
     return id;
+  }
+
+  /**
+   * Returns the date and time the workflow was initiated.
+   *
+   * @return the date and time the workflow was initiated
+   */
+  public OffsetDateTime getInitiated() {
+    return initiated;
+  }
+
+  /**
+   * Returns the person or system that initiated the workflow.
+   *
+   * @return the person or system that initiated the workflow
+   */
+  public String getInitiatedBy() {
+    return initiatedBy;
   }
 
   /**
@@ -225,6 +359,24 @@ public class WorkflowSummary implements Serializable {
    */
   public UUID getTenantId() {
     return tenantId;
+  }
+
+  /**
+   * Returns the date and time the workflow was last updated.
+   *
+   * @return the date and time the workflow was last updated
+   */
+  public OffsetDateTime getUpdated() {
+    return updated;
+  }
+
+  /**
+   * Returns the person or system that last updated the workflow.
+   *
+   * @return the person or system that last updated the workflow
+   */
+  public String getUpdatedBy() {
+    return updatedBy;
   }
 
   /**

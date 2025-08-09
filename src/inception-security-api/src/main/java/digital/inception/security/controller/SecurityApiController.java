@@ -101,7 +101,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Tag(name = "Security")
 @RequestMapping(value = "/api/security")
-// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+// @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface SecurityApiController {
 
   /**

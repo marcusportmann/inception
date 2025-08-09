@@ -66,8 +66,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Tag(name = "Document")
 @RequestMapping(value = "/api/operations")
-// @el (isSecurityDisabled:
-// digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+// @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface DocumentApiController {
 
   /**

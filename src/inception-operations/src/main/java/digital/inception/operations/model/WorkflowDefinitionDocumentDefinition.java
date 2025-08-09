@@ -77,28 +77,6 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID for the workflow definition the workflow definition document definition is associated
-   * with.
-   */
-  @Schema(hidden = true)
-  @JsonIgnore
-  @XmlTransient
-  @Id
-  @Column(name = "workflow_definition_id", nullable = false)
-  private String workflowDefinitionId;
-
-  /**
-   * The version of the workflow definition the workflow definition document definition is
-   * associated with.
-   */
-  @Schema(hidden = true)
-  @JsonIgnore
-  @XmlTransient
-  @Id
-  @Column(name = "workflow_definition_version", nullable = false)
-  private int workflowDefinitionVersion;
-
   /** The ID for the document definition. */
   @Schema(
       description = "The ID for the document definition",
@@ -164,6 +142,28 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   @XmlElement(name = "ValidityPeriodUnit")
   @Column(name = "validity_period_unit")
   private TimeUnit validityPeriodUnit;
+
+  /**
+   * The ID for the workflow definition the workflow definition document definition is associated
+   * with.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "workflow_definition_id", nullable = false)
+  private String workflowDefinitionId;
+
+  /**
+   * The version of the workflow definition the workflow definition document definition is
+   * associated with.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "workflow_definition_version", nullable = false)
+  private int workflowDefinitionVersion;
 
   /** Constructs a new {@code WorkflowDefinitionDocumentDefinition}. */
   public WorkflowDefinitionDocumentDefinition() {}

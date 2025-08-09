@@ -25,8 +25,8 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The {@code ValidInitiateWorkflowRequestValidator} class implements the custom constraint validator
- * for validating a request to initiate a workflow.
+ * The {@code ValidInitiateWorkflowRequestValidator} class implements the custom constraint
+ * validator for validating a request to initiate a workflow.
  *
  * @author Marcus Portmann
  */

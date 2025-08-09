@@ -1,0 +1,19 @@
+meta {
+  name: Get Outstanding Workflow Documents
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}/outstanding-documents
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  workflowId: 019890c4-c4bc-775e-879c-e77f3d578ac4
+}
+
+settings {
+  encodeUrl: true
+}

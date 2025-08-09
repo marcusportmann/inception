@@ -60,7 +60,7 @@ public interface WorkflowRepository
    * @param workflowId the workflow ID
    * @param status the final status for the workflow
    * @param finalized the date and time the workflow was finalized
-   * @param finalizedBy the username for the user who finalized the workflow
+   * @param finalizedBy the person or system that finalized the workflow
    * @return the number of rows that were updated (0 or 1)
    */
   @Transactional

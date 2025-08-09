@@ -96,7 +96,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Tag(name = "Party Reference")
 @RequestMapping(value = "/api/party/reference")
-// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
+// @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface PartyReferenceApiController {
 
   /**

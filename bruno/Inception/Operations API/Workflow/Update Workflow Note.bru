@@ -1,7 +1,7 @@
 meta {
   name: Update Workflow Note
   type: http
-  seq: 26
+  seq: 38
 }
 
 post {
@@ -12,9 +12,13 @@ post {
 
 body:json {
   {
-    "workflowNoteId": "01983909-dfc1-7384-bc01-5b3e9874661f",
+    "workflowNoteId": "{{workflowNoteId}}",
     "content": "The updated test workflow note content."
   }
+}
+
+vars:pre-request {
+  workflowNoteId: 019890d1-26f7-729f-b26a-9522c81b6dfc
 }
 
 settings {

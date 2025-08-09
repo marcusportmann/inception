@@ -51,6 +51,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -67,7 +68,9 @@ import java.util.UUID;
   "definitionId",
   "definitionVersion",
   "status",
+  "partyId",
   "externalReference",
+  "attributes",
   "steps",
   "data",
   "initiated",
@@ -88,7 +91,9 @@ import java.util.UUID;
       "definitionId",
       "definitionVersion",
       "status",
+      "partyId",
       "externalReference",
+      "attributes",
       "steps",
       "data",
       "initiated",
@@ -106,6 +111,22 @@ import java.util.UUID;
 public class Workflow implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the workflow. */
+  @Schema(description = "The attributes for the workflow")
+  @JsonProperty
+  @JsonManagedReference("workflowAttributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("code")
+  @JoinColumn(
+      name = "workflow_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private final List<WorkflowAttribute> attributes = new ArrayList<>();
 
   /** The workflow steps for the workflow. */
   @Schema(description = "The workflow steps for the workflow")
@@ -165,8 +186,8 @@ public class Workflow implements Serializable {
   @Column(name = "finalized")
   private OffsetDateTime finalized;
 
-  /** The username for the user who finalized the workflow. */
-  @Schema(description = "The username for the user who finalized the workflow")
+  /** The person or system that finalized the workflow. */
+  @Schema(description = "The person or system that finalized the workflow")
   @JsonProperty
   @XmlElement(name = "FinalizedBy")
   @Size(min = 1, max = 100)
@@ -194,9 +215,9 @@ public class Workflow implements Serializable {
   @Column(name = "initiated", nullable = false)
   private OffsetDateTime initiated;
 
-  /** The username for the user who initiated the workflow. */
+  /** The person or system that initiated the workflow. */
   @Schema(
-      description = "The username for the user who initiated the workflow",
+      description = "The person or system that initiated the workflow",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "InitiatedBy", required = true)
@@ -211,6 +232,13 @@ public class Workflow implements Serializable {
   @XmlElement(name = "ParentId")
   @Column(name = "parent_id")
   private UUID parentId;
+
+  /** The ID for the party the workflow is associated with. */
+  @Schema(description = "The ID for the party the workflow is associated with")
+  @JsonProperty
+  @XmlElement(name = "PartyId")
+  @Column(name = "party_id")
+  private UUID partyId;
 
   /** The status of the workflow. */
   @Schema(description = "The status of the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -239,8 +267,8 @@ public class Workflow implements Serializable {
   @Column(name = "updated")
   private OffsetDateTime updated;
 
-  /** The username for the user who last updated the workflow. */
-  @Schema(description = "The username for the user who last updated the workflow")
+  /** The person or system that last updated the workflow. */
+  @Schema(description = "The person or system that last updated the workflow")
   @JsonProperty
   @XmlElement(name = "UpdatedBy")
   @Size(min = 1, max = 100)
@@ -257,15 +285,17 @@ public class Workflow implements Serializable {
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
+   * @param attributes the attributes for the workflow
    * @param data the data for the workflow
    * @param initiated the date and time the workflow was initiated
-   * @param initiatedBy the username for the user who initiated the workflow
+   * @param initiatedBy the person or system that initiated the workflow
    */
   public Workflow(
       UUID tenantId,
       String definitionId,
       int definitionVersion,
       WorkflowStatus status,
+      List<WorkflowAttribute> attributes,
       String data,
       OffsetDateTime initiated,
       String initiatedBy) {
@@ -277,6 +307,10 @@ public class Workflow implements Serializable {
     this.data = data;
     this.initiated = initiated;
     this.initiatedBy = initiatedBy;
+
+    for (WorkflowAttribute attribute : attributes) {
+      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+    }
   }
 
   /**
@@ -287,9 +321,10 @@ public class Workflow implements Serializable {
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
+   * @param attributes the attributes for the workflow
    * @param data the data for the workflow
    * @param initiated the date and time the workflow was initiated
-   * @param initiatedBy the username for the user who initiated the workflow
+   * @param initiatedBy the person or system that initiated the workflow
    */
   public Workflow(
       UUID tenantId,
@@ -297,6 +332,7 @@ public class Workflow implements Serializable {
       String definitionId,
       int definitionVersion,
       WorkflowStatus status,
+      List<WorkflowAttribute> attributes,
       String data,
       OffsetDateTime initiated,
       String initiatedBy) {
@@ -309,6 +345,25 @@ public class Workflow implements Serializable {
     this.data = data;
     this.initiated = initiated;
     this.initiatedBy = initiatedBy;
+
+    for (WorkflowAttribute attribute : attributes) {
+      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+    }
+  }
+
+  /**
+   * Add the attribute for the workflow.
+   *
+   * @param attribute the attribute
+   */
+  public void addAttribute(WorkflowAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
+
+    attribute.setWorkflow(this);
+
+    attributes.add(attribute);
   }
 
   /**
@@ -348,6 +403,28 @@ public class Workflow implements Serializable {
     Workflow other = (Workflow) object;
 
     return Objects.equals(id, other.id);
+  }
+
+  /**
+   * Retrieve the attribute with the specified code for the workflow.
+   *
+   * @param code the code for the attribute
+   * @return an Optional containing the attribute with the specified code for the workflow or an
+   *     empty Optional if the attribute could not be found
+   */
+  public Optional<WorkflowAttribute> getAttributeWithCode(String code) {
+    return attributes.stream()
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
+        .findFirst();
+  }
+
+  /**
+   * Returns the attributes for the workflow.
+   *
+   * @return the attributes for the workflow
+   */
+  public List<WorkflowAttribute> getAttributes() {
+    return attributes;
   }
 
   /**
@@ -396,9 +473,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the username for the user who finalized the workflow.
+   * Returns the person or system that finalized the workflow.
    *
-   * @return the username for the user who finalized the workflow
+   * @return the person or system that finalized the workflow
    */
   public String getFinalizedBy() {
     return finalizedBy;
@@ -423,9 +500,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the username for the user who initiated the workflow.
+   * Returns the person or system that initiated the workflow.
    *
-   * @return the username for the user who initiated the workflow
+   * @return the person or system that initiated the workflow
    */
   public String getInitiatedBy() {
     return initiatedBy;
@@ -438,6 +515,15 @@ public class Workflow implements Serializable {
    */
   public UUID getParentId() {
     return parentId;
+  }
+
+  /**
+   * Returns the ID for the party the workflow is associated with.
+   *
+   * @return the ID for the party the workflow is associated with
+   */
+  public UUID getPartyId() {
+    return partyId;
   }
 
   /**
@@ -477,9 +563,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the username for the user who last updated the workflow.
+   * Returns the person or system that last updated the workflow.
    *
-   * @return the username for the user who last updated the workflow
+   * @return the person or system that last updated the workflow
    */
   public String getUpdatedBy() {
     return updatedBy;
@@ -493,6 +579,27 @@ public class Workflow implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Remove the attribute with the specified code for the workflow.
+   *
+   * @param code the code for the attribute
+   */
+  public void removeAttributeWithCode(String code) {
+    attributes.removeIf(
+        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
+  }
+
+  /**
+   * Set the attributes for the workflow.
+   *
+   * @param attributes the attributes for the workflow
+   */
+  public void setAttributes(List<WorkflowAttribute> attributes) {
+    attributes.forEach(attribute -> attribute.setWorkflow(this));
+    this.attributes.clear();
+    this.attributes.addAll(attributes);
   }
 
   /**
@@ -542,9 +649,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the username for the user who finalized the workflow.
+   * Set the person or system that finalized the workflow.
    *
-   * @param finalizedBy the username for the user who finalized the workflow
+   * @param finalizedBy the person or system that finalized the workflow
    */
   public void setFinalizedBy(String finalizedBy) {
     this.finalizedBy = finalizedBy;
@@ -569,9 +676,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the username for the user who initiated the workflow.
+   * Set the person or system that initiated the workflow.
    *
-   * @param initiatedBy the username for the user who initiated the workflow
+   * @param initiatedBy the person or system that initiated the workflow
    */
   public void setInitiatedBy(String initiatedBy) {
     this.initiatedBy = initiatedBy;
@@ -584,6 +691,15 @@ public class Workflow implements Serializable {
    */
   public void setParentId(UUID parentId) {
     this.parentId = parentId;
+  }
+
+  /**
+   * Set the ID for the party the workflow is associated with.
+   *
+   * @param partyId the ID for the party the workflow is associated with
+   */
+  public void setPartyId(UUID partyId) {
+    this.partyId = partyId;
   }
 
   /**
@@ -625,9 +741,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the username for the user who last updated the workflow.
+   * Set the person or system that last updated the workflow.
    *
-   * @param updatedBy the username for the user who last updated the workflow
+   * @param updatedBy the person or system that last updated the workflow
    */
   public void setUpdatedBy(String updatedBy) {
     this.updatedBy = updatedBy;

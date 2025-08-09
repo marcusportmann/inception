@@ -16,12 +16,7 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import digital.inception.core.util.StringUtil;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;

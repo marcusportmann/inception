@@ -17,13 +17,17 @@
 package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
+import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.time.TimeUnit;
 import digital.inception.core.util.ResourceUtil;
@@ -37,20 +41,30 @@ import digital.inception.operations.exception.WorkflowDefinitionNotFoundExceptio
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
+import digital.inception.operations.model.InitiateWorkflowAttribute;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.OutstandingWorkflowDocument;
+import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
+import digital.inception.operations.model.RejectWorkflowDocumentRequest;
+import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
+import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
+import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
+import digital.inception.operations.model.WorkflowDocumentStatus;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
@@ -119,12 +133,15 @@ public class WorkflowServiceTests {
   /** Test the JSON workflow functionality. */
   @Test
   public void jsonWorkflowTest() throws Exception {
+
+    // Create the document definition category
     DocumentDefinitionCategory documentDefinitionCategory =
         new DocumentDefinitionCategory(
             "test_document_definition_category_" + randomId(), "Test Document Definition Category");
 
     documentService.createDocumentDefinitionCategory(documentDefinitionCategory);
 
+    // Create the document definitions
     DocumentDefinition documentDefinition =
         new DocumentDefinition(
             "test_document_definition_" + randomId(),
@@ -133,12 +150,22 @@ public class WorkflowServiceTests {
 
     documentService.createDocumentDefinition(documentDefinition);
 
+    DocumentDefinition anotherDocumentDefinition =
+        new DocumentDefinition(
+            "another_test_document_definition_" + randomId(),
+            documentDefinitionCategory.getId(),
+            "Another Test Document Definition");
+
+    documentService.createDocumentDefinition(anotherDocumentDefinition);
+
+    // Create the workflow definition category
     WorkflowDefinitionCategory workflowDefinitionCategory =
         new WorkflowDefinitionCategory(
             "test_workflow_definition_category_" + randomId(), "Test Workflow Definition Category");
 
     workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
 
+    // Create the workflow definition
     WorkflowDefinition workflowDefinition =
         new WorkflowDefinition(
             "test_json_workflow_definition_" + randomId(),
@@ -150,6 +177,7 @@ public class WorkflowServiceTests {
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
     workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false);
+    workflowDefinition.addDocumentDefinition(anotherDocumentDefinition.getId(), false, true);
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -174,6 +202,7 @@ public class WorkflowServiceTests {
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 
+    // Initiate the workflow
     TestWorkflowData testWorkflowData =
         new TestWorkflowData(
             UUID.randomUUID(),
@@ -184,27 +213,37 @@ public class WorkflowServiceTests {
 
     String testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
 
+    List<InitiateWorkflowAttribute> initiateWorkflowAttributes =
+        List.of(
+            new InitiateWorkflowAttribute("test_workflow_attribute_name", "test_workflow_attribute_value"));
+
     InitiateWorkflowRequest initiateWorkflowRequest =
         new InitiateWorkflowRequest(
-            workflowDefinition.getId(), UUID.randomUUID().toString(), testWorkflowDataJson);
+            workflowDefinition.getId(),
+            UUID.randomUUID().toString(),
+            initiateWorkflowAttributes,
+            testWorkflowDataJson);
 
     Workflow workflow =
         workflowService.initiateWorkflow(
             TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowRequest, "TEST1");
 
+    // Verify the workflow exists
     assertTrue(workflowService.workflowExists(TenantUtil.DEFAULT_TENANT_ID, workflow.getId()));
 
+    // Retrieve the workflow
     Workflow retrievedWorkflow =
         workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     compareWorkflows(workflow, retrievedWorkflow);
 
+    // Retrieve the workflow summaries, matching on the workflow attribute value
     WorkflowSummaries workflowSummaries =
         workflowService.getWorkflowSummaries(
             TenantUtil.DEFAULT_TENANT_ID,
             workflow.getDefinitionId(),
             WorkflowStatus.ACTIVE,
-            null,
+            "test_workflow_attribute_value",
             WorkflowSortBy.DEFINITION_ID,
             SortDirection.ASCENDING,
             0,
@@ -212,6 +251,7 @@ public class WorkflowServiceTests {
 
     assertEquals(1, workflowSummaries.getTotal());
 
+    // Retrieve the workflow summaries
     WorkflowSummary workflowSummary = workflowSummaries.getWorkflowSummaries().getFirst();
 
     assertEquals(
@@ -243,7 +283,8 @@ public class WorkflowServiceTests {
         workflowSummary.getTenantId(),
         "Invalid value for the \"tenantId\" workflow summary property");
 
-    WorkflowDocuments workflowDocuments =
+    // Retrieve the workflow documents for the workflow
+    WorkflowDocuments retrievedWorkflowDocuments =
         workflowService.getWorkflowDocuments(
             TenantUtil.DEFAULT_TENANT_ID,
             workflow.getId(),
@@ -253,12 +294,24 @@ public class WorkflowServiceTests {
             0,
             10);
 
-    assertEquals(1, workflowDocuments.getTotal());
+    assertEquals(1, retrievedWorkflowDocuments.getTotal());
     assertEquals(
         documentDefinition.getId(),
-        workflowDocuments.getWorkflowDocuments().getFirst().getDocumentDefinitionId());
-    assertEquals("TEST1", workflowDocuments.getWorkflowDocuments().getFirst().getRequestedBy());
+        retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getDocumentDefinitionId());
+    assertEquals(
+        "TEST1", retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getRequestedBy());
 
+    // Retrieve the outstanding workflow documents for the workflow
+    List<OutstandingWorkflowDocument> outstandingWorkflowDocuments =
+        workflowService.getOutstandingWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(1, outstandingWorkflowDocuments.size());
+    assertEquals(
+        documentDefinition.getId(),
+        outstandingWorkflowDocuments.getFirst().getDocumentDefinitionId());
+
+    // Update the workflow
     testWorkflowData.setName(testWorkflowData.getName() + " Updated");
 
     testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
@@ -275,6 +328,134 @@ public class WorkflowServiceTests {
     assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
     assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
 
+    // Provide a workflow document
+    byte[] multiPagePdfData = ResourceUtil.getClasspathResource("MultiPagePdf.pdf");
+
+    ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest =
+        new ProvideWorkflowDocumentRequest(
+            retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getId(),
+            FileType.PDF,
+            "MultiPagePdf.pdf",
+            multiPagePdfData);
+
+    provideWorkflowDocumentRequest.setIssueDate(LocalDate.of(2015, 10, 10));
+    provideWorkflowDocumentRequest.setExpiryDate(LocalDate.of(2050, 11, 11));
+
+    workflowService.provideWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest, "TEST1");
+
+    WorkflowDocument retrievedWorkflowDocument =
+        workflowService.getWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest.getWorkflowDocumentId());
+
+    assertEquals(WorkflowDocumentStatus.PROVIDED, retrievedWorkflowDocument.getStatus());
+    assertEquals("TEST1", retrievedWorkflowDocument.getProvidedBy());
+    assertNotNull(retrievedWorkflowDocument.getProvided());
+
+    Document retrievedDocument =
+        documentService.getDocument(
+            TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getDocumentId());
+
+    UUID retrievedDocumentId = retrievedDocument.getId();
+
+    assertEquals(documentDefinition.getId(), retrievedDocument.getDefinitionId());
+    assertEquals("MultiPagePdf.pdf", retrievedDocument.getName());
+    assertEquals(FileType.PDF, retrievedDocument.getFileType());
+    assertEquals(multiPagePdfData.length, retrievedDocument.getData().length);
+    assertEquals(LocalDate.of(2015, 10, 10), retrievedDocument.getIssueDate());
+    assertEquals(LocalDate.of(2050, 11, 11), retrievedDocument.getExpiryDate());
+
+    // Provide the workflow document again, replacing the existing document
+    provideWorkflowDocumentRequest.setName("AnotherMultiPagePdf.pdf");
+    provideWorkflowDocumentRequest.setIssueDate(LocalDate.of(2016, 10, 10));
+    provideWorkflowDocumentRequest.setExpiryDate(LocalDate.of(2060, 11, 11));
+
+    workflowService.provideWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest, "TEST2");
+
+    retrievedWorkflowDocument =
+        workflowService.getWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest.getWorkflowDocumentId());
+
+    assertFalse(documentService.documentExists(TenantUtil.DEFAULT_TENANT_ID, retrievedDocumentId));
+
+    retrievedDocument =
+        documentService.getDocument(
+            TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getDocumentId());
+
+    assertNotEquals(retrievedDocumentId, retrievedDocument.getId());
+
+    assertEquals(documentDefinition.getId(), retrievedDocument.getDefinitionId());
+    assertEquals("AnotherMultiPagePdf.pdf", retrievedDocument.getName());
+    assertEquals(FileType.PDF, retrievedDocument.getFileType());
+    assertEquals(multiPagePdfData.length, retrievedDocument.getData().length);
+    assertEquals(LocalDate.of(2016, 10, 10), retrievedDocument.getIssueDate());
+    assertEquals(LocalDate.of(2060, 11, 11), retrievedDocument.getExpiryDate());
+
+    // Verify the workflow document
+    VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest =
+        new VerifyWorkflowDocumentRequest(retrievedWorkflowDocument.getId());
+
+    workflowService.verifyWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, verifyWorkflowDocumentRequest, "TEST1");
+
+    retrievedWorkflowDocument =
+        workflowService.getWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest.getWorkflowDocumentId());
+
+    assertEquals(WorkflowDocumentStatus.VERIFIED, retrievedWorkflowDocument.getStatus());
+    assertEquals("TEST1", retrievedWorkflowDocument.getVerifiedBy());
+    assertNotNull(retrievedWorkflowDocument.getVerified());
+    assertNull(retrievedWorkflowDocument.getRejected());
+    assertNull(retrievedWorkflowDocument.getRejectedBy());
+    assertNull(retrievedWorkflowDocument.getRejectionReason());
+
+    // Reject the workflow document
+    RejectWorkflowDocumentRequest rejectWorkflowDocumentRequest =
+        new RejectWorkflowDocumentRequest(
+            retrievedWorkflowDocument.getId(), "This is a test rejection reason.");
+
+    workflowService.rejectWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, rejectWorkflowDocumentRequest, "TEST2");
+
+    retrievedWorkflowDocument =
+        workflowService.getWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest.getWorkflowDocumentId());
+
+    assertEquals(WorkflowDocumentStatus.REJECTED, retrievedWorkflowDocument.getStatus());
+    assertEquals("TEST2", retrievedWorkflowDocument.getRejectedBy());
+    assertEquals(
+        "This is a test rejection reason.", retrievedWorkflowDocument.getRejectionReason());
+    assertNotNull(retrievedWorkflowDocument.getRejected());
+    assertNull(retrievedWorkflowDocument.getVerified());
+    assertNull(retrievedWorkflowDocument.getVerifiedBy());
+
+    // Request the workflow document
+    RequestWorkflowDocumentRequest requestWorkflowDocumentRequest =
+        new RequestWorkflowDocumentRequest(workflow.getId(), anotherDocumentDefinition.getId());
+
+    workflowService.requestWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
+
+    retrievedWorkflowDocuments =
+        workflowService.getWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID,
+            workflow.getId(),
+            "TEST1",
+            WorkflowDocumentSortBy.REQUESTED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    assertEquals(2, retrievedWorkflowDocuments.getTotal());
+
+    outstandingWorkflowDocuments =
+        workflowService.getOutstandingWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(2, outstandingWorkflowDocuments.size());
+
+    // Create a workflow note for the workflow
     CreateWorkflowNoteRequest createWorkflowNoteRequest =
         new CreateWorkflowNoteRequest(workflow.getId(), "This is the workflow note content.");
 
@@ -291,6 +472,7 @@ public class WorkflowServiceTests {
 
     compareWorkflowNotes(workflowNote, retrievedWorkflowNote);
 
+    // Update the workflow note for the workflow
     UpdateWorkflowNoteRequest updateWorkflowNoteRequest =
         new UpdateWorkflowNoteRequest(workflowNote.getId(), "This is the workflow note content.");
 
@@ -303,6 +485,7 @@ public class WorkflowServiceTests {
 
     compareWorkflowNotes(updatedWorkflowNote, retrievedWorkflowNote);
 
+    // Retrieve the workflow notes for the workflow
     WorkflowNotes workflowNotes =
         workflowService.getWorkflowNotes(
             TenantUtil.DEFAULT_TENANT_ID,
@@ -317,6 +500,7 @@ public class WorkflowServiceTests {
 
     compareWorkflowNotes(updatedWorkflowNote, workflowNotes.getWorkflowNotes().getFirst());
 
+    // Initiate the workflow step
     workflowService.initiateWorkflowStep(
         TenantUtil.DEFAULT_TENANT_ID,
         new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
@@ -336,6 +520,7 @@ public class WorkflowServiceTests {
     assertEquals(WorkflowStepStatus.ACTIVE, retrievedWorkflow.getSteps().getFirst().getStatus());
     assertNotNull(retrievedWorkflow.getSteps().getFirst().getInitiated());
 
+    // Finalize the workflow step
     workflowService.finalizeWorkflowStep(
         TenantUtil.DEFAULT_TENANT_ID,
         new FinalizeWorkflowStepRequest(
@@ -348,6 +533,19 @@ public class WorkflowServiceTests {
     assertEquals(WorkflowStepStatus.COMPLETED, retrievedWorkflow.getSteps().getFirst().getStatus());
     assertNotNull(retrievedWorkflow.getSteps().getFirst().getFinalized());
 
+    // Finalize the workflow
+    workflowService.finalizeWorkflow(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new FinalizeWorkflowRequest(workflow.getId(), WorkflowStatus.COMPLETED),
+        "TEST1");
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
+    assertNotNull(retrievedWorkflow.getFinalized());
+    assertEquals("TEST1", retrievedWorkflow.getFinalizedBy());
+
+    // Delete the workflow note
     workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
 
     assertThrows(
@@ -356,14 +554,23 @@ public class WorkflowServiceTests {
           workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
         });
 
+    // Delete the document linked to the workflow document
+    documentService.deleteDocument(
+        TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getDocumentId());
+
+    // Delete the workflow
     workflowService.deleteWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
+    // Delete the workflow definition
     workflowService.deleteWorkflowDefinition(workflowDefinition.getId());
 
+    // Delete the workflow definition category
     workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategory.getId());
 
+    // Delete the document definition
     documentService.deleteDocumentDefinition(documentDefinition.getId());
 
+    // Delete the document definition category
     documentService.deleteDocumentDefinitionCategory(documentDefinitionCategory.getId());
   }
 
@@ -842,6 +1049,10 @@ public class WorkflowServiceTests {
         workflowEngine1.getName(),
         workflowEngine2.getName(),
         "The name values for the workflow engines do not match");
+    assertEquals(
+        workflowEngine1.getAttributes().size(),
+        workflowEngine2.getAttributes().size(),
+        "The number of attributes for the workflow engines do not match");
 
     workflowEngine1
         .getAttributes()
@@ -924,6 +1135,10 @@ public class WorkflowServiceTests {
         workflow2.getStatus(),
         "The status values for the workflows do not match");
     assertEquals(
+        workflow1.getPartyId(),
+        workflow2.getPartyId(),
+        "The party ID values for the workflows do not match");
+    assertEquals(
         workflow1.getTenantId(),
         workflow2.getTenantId(),
         "The tenant ID values for the workflows do not match");
@@ -935,6 +1150,30 @@ public class WorkflowServiceTests {
         workflow1.getUpdatedBy(),
         workflow2.getUpdatedBy(),
         "The updated by values for the workflows do not match");
+
+    assertEquals(
+        workflow1.getAttributes().size(),
+        workflow2.getAttributes().size(),
+        "The number of attributes for the workflows do not match");
+
+    workflow1
+        .getAttributes()
+        .forEach(
+            workflowAttribute1 -> {
+              boolean foundAttribute =
+                  workflow2.getAttributes().stream()
+                      .anyMatch(
+                          workflowAttribute2 ->
+                              Objects.equals(workflowAttribute1, workflowAttribute2));
+              if (!foundAttribute) {
+                fail(
+                    "Failed to find the attribute ("
+                        + workflowAttribute1.getCode()
+                        + ") for the workflow ("
+                        + workflow1.getId()
+                        + ")");
+              }
+            });
   }
 
   private String randomId() {

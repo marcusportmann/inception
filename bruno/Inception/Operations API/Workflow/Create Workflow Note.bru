@@ -12,9 +12,13 @@ post {
 
 body:json {
   {
-    "workflowId": "01983d5f-705e-7c07-88b3-75d27aaa6bd6",
+    "workflowId": "{{workflowId}}",
     "content": "The test workflow note content."
   }
+}
+
+vars:pre-request {
+  workflowId: 019890c4-c4bc-775e-879c-e77f3d578ac4
 }
 
 settings {

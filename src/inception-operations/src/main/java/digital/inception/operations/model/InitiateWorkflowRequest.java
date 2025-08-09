@@ -21,15 +21,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.operations.constraint.ValidInitiateWorkflowRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -39,18 +43,35 @@ import java.util.UUID;
  */
 @Schema(description = "A request to initiate a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"definitionId", "parentId", "externalReference", "data"})
-@XmlRootElement(name = "InitiateWorkflowRequest", namespace = "https://inception.digital/operations")
+@JsonPropertyOrder({
+  "definitionId",
+  "parentId",
+  "partyId",
+  "externalReference",
+  "attributes",
+  "data"
+})
+@XmlRootElement(
+    name = "InitiateWorkflowRequest",
+    namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InitiateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"definitionId", "parentId", "externalReference", "data"})
+    propOrder = {"definitionId", "parentId", "partyId", "externalReference", "attributes", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidInitiateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class InitiateWorkflowRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the workflow. */
+  @Schema(description = "The attributes for the workflow")
+  @JsonProperty
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  @Valid
+  private List<InitiateWorkflowAttribute> attributes = new ArrayList<>();
 
   /** The data for the workflow. */
   @Schema(description = "The data for the workflow")
@@ -82,6 +103,12 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElement(name = "ParentId")
   private UUID parentId;
 
+  /** The ID for the party the workflow is associated with. */
+  @Schema(description = "The ID for the party the workflow is associated with")
+  @JsonProperty
+  @XmlElement(name = "PartyId")
+  private UUID partyId;
+
   /** Constructs a new {@code InitiateWorkflowRequest}. */
   public InitiateWorkflowRequest() {}
 
@@ -89,55 +116,82 @@ public class InitiateWorkflowRequest implements Serializable {
    * Constructs a new {@code InitiateWorkflowRequest}.
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param data the data for the workflow
-   */
-  public InitiateWorkflowRequest(String definitionId, String data) {
-    this.definitionId = definitionId;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
-   * @param data the data for the workflow
-   */
-  public InitiateWorkflowRequest(String definitionId, String externalReference, String data) {
-    this.definitionId = definitionId;
-    this.externalReference = externalReference;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param data the data for the workflow
-   */
-  public InitiateWorkflowRequest(UUID parentId, String definitionId, String data) {
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
+   * @param attributes the attributes for the workflow
    * @param data the data for the workflow
    */
   public InitiateWorkflowRequest(
-      UUID parentId, String definitionId, String externalReference, String data) {
+      String definitionId, List<InitiateWorkflowAttribute> attributes, String data) {
+    this.definitionId = definitionId;
+    this.attributes = attributes;
+    this.data = data;
+  }
+
+  /**
+   * Constructs a new {@code InitiateWorkflowRequest}.
+   *
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param externalReference the external reference used to link this workflow to an external
+   *     system
+   * @param attributes the attributes for the workflow
+   * @param data the data for the workflow
+   */
+  public InitiateWorkflowRequest(
+      String definitionId,
+      String externalReference,
+      List<InitiateWorkflowAttribute> attributes,
+      String data) {
+    this.definitionId = definitionId;
+    this.externalReference = externalReference;
+    this.attributes = attributes;
+    this.data = data;
+  }
+
+  /**
+   * Constructs a new {@code InitiateWorkflowRequest}.
+   *
+   * @param parentId the ID for the parent workflow
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param attributes the attributes for the workflow
+   * @param data the data for the workflow
+   */
+  public InitiateWorkflowRequest(
+      UUID parentId, String definitionId, List<InitiateWorkflowAttribute> attributes, String data) {
+    this.parentId = parentId;
+    this.definitionId = definitionId;
+    this.attributes = attributes;
+    this.data = data;
+  }
+
+  /**
+   * Constructs a new {@code InitiateWorkflowRequest}.
+   *
+   * @param parentId the ID for the parent workflow
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param externalReference the external reference used to link this workflow to an external
+   *     system
+   * @param attributes the attributes for the workflow
+   * @param data the data for the workflow
+   */
+  public InitiateWorkflowRequest(
+      UUID parentId,
+      String definitionId,
+      String externalReference,
+      List<InitiateWorkflowAttribute> attributes,
+      String data) {
     this.parentId = parentId;
     this.definitionId = definitionId;
     this.externalReference = externalReference;
+    this.attributes = attributes;
     this.data = data;
+  }
+
+  /**
+   * Returns the attributes for the workflow.
+   *
+   * @return the attributes for the workflow
+   */
+  public List<InitiateWorkflowAttribute> getAttributes() {
+    return attributes;
   }
 
   /**
@@ -177,6 +231,24 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
+   * Returns the ID for the party the workflow is associated with.
+   *
+   * @return the ID for the party the workflow is associated with
+   */
+  public UUID getPartyId() {
+    return partyId;
+  }
+
+  /**
+   * Set the attributes for the workflow.
+   *
+   * @param attributes the attributes for the workflow
+   */
+  public void setAttributes(List<InitiateWorkflowAttribute> attributes) {
+    this.attributes = attributes;
+  }
+
+  /**
    * Set the data for the workflow.
    *
    * @param data the data for the workflow
@@ -211,5 +283,14 @@ public class InitiateWorkflowRequest implements Serializable {
    */
   public void setParentId(UUID parentId) {
     this.parentId = parentId;
+  }
+
+  /**
+   * Set the ID for the party the workflow is associated with.
+   *
+   * @param partyId the ID for the party the workflow is associated with
+   */
+  public void setPartyId(UUID partyId) {
+    this.partyId = partyId;
   }
 }

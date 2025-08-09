@@ -51,7 +51,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Tag(name = "Codes")
 @RequestMapping(value = "/api/codes")
-// @el (isSecurityDisabled: digital.inception.api.SecureApiSecurityExpressionRoot.isSecurityEnabled)
+// @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface CodesApiController {
 
   /**
