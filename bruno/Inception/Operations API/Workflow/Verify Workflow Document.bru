@@ -5,15 +5,14 @@ meta {
 }
 
 post {
-  url: {{baseURL}}/api/operations/reject-workflow-document
+  url: {{baseURL}}/api/operations/verify-workflow-document
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "workflowDocumentId": "{{workflowDocumentId}}",
-    "rejectionReason": "This is the rejection reason."
+    "workflowDocumentId": "{{workflowDocumentId}}"
   }
 }
 
