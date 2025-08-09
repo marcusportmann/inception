@@ -87,6 +87,7 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class WorkflowServiceImpl extends AbstractServiceBase implements WorkflowService {
 
+  /** The Document Service. */
   private final DocumentService documentService;
 
   /** The Workflow Data Validation Service. */
@@ -131,6 +132,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    * @param workflowDefinitionRepository the Workflow Definition Repository
    * @param workflowDefinitionSummaryRepository the Workflow Definition Summary Repository
    * @param workflowEngineRepository the Workflow Engine Repository
+   * @param documentService the Document Service
+   * @param workflowDataValidationService the Workflow Data Validation Service
    */
   public WorkflowServiceImpl(
       ApplicationContext applicationContext,
