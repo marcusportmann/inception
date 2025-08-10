@@ -19,9 +19,13 @@ package digital.inception.operations.controller;
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceSummary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,6 +33,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,6 +54,73 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping(value = "/api/operations")
 // @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface InteractionApiController {
+
+  /**
+   * Create the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interaction the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateInteractionException if the interaction already exists
+   * @throws ServiceUnavailableException if the interaction could not be created
+   */
+  @Operation(summary = "Create the interaction", description = "Create the interaction")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The interaction was created"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "An interaction with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interactions",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void createInteraction(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The interaction to create",
+              required = true)
+          @RequestBody
+          Interaction interaction)
+      throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException;
 
   /**
    * Create the interaction source.
@@ -192,6 +264,267 @@ public interface InteractionApiController {
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source
+   * @return the interaction source
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the interaction source could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the interaction source",
+      description = "Retrieve the interaction source")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The interaction source was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction source could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interaction-sources/{interactionSourceId}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  InteractionSource getInteractionSource(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionSourceId",
+              description = "The ID for the interaction source",
+              required = true)
+          @PathVariable
+          UUID interactionSourceId)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the interaction sources.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the summaries for the interaction sources
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction source summaries could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the interaction source summaries",
+      description = "Retrieve the interaction source summaries")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The interaction source summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interaction-source-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  List<InteractionSourceSummary> getInteractionSourceSummaries(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the interaction sources.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the interaction sources
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction sources could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the interaction sources",
+      description = "Retrieve the interaction sources")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The interaction sources were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interaction-sources",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  List<InteractionSource> getInteractionSources(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Update the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param interaction the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be updated
+   */
+  @Operation(summary = "Update the interaction", description = "Update the interaction")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The interaction was updated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interactions/{interactionId}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void updateInteraction(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionId",
+              description = "The ID for the interaction",
+              required = true)
+          @PathVariable
+          UUID interactionId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The interaction to update",
+              required = true)
+          @RequestBody
+          Interaction interaction)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the interaction source.

@@ -55,12 +55,12 @@ import java.util.UUID;
  */
 @Schema(description = "An interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "tenantId", "type", "name"})
+@JsonPropertyOrder({"id", "tenantId", "name", "type", "permissions", "attributes"})
 @XmlRootElement(name = "InteractionSource", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionSource",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "tenantId", "type", "name"})
+    propOrder = {"id", "tenantId", "name", "type", "permissions", "attributes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_sources")
@@ -142,20 +142,20 @@ public class InteractionSource implements Serializable {
    *
    * @param id the ID for the interaction source
    * @param tenantId the ID for the tenant the interaction source is associated with
-   * @param type the interaction source type
    * @param name the name of the interaction source
+   * @param type the interaction source type
    * @param attributes the attributes for the interaction source
    */
   public InteractionSource(
       UUID id,
       UUID tenantId,
-      InteractionSourceType type,
       String name,
+      InteractionSourceType type,
       List<InteractionSourceAttribute> attributes) {
     this.id = id;
     this.tenantId = tenantId;
-    this.type = type;
     this.name = name;
+    this.type = type;
     setAttributes(attributes);
   }
 
@@ -194,8 +194,8 @@ public class InteractionSource implements Serializable {
     return new InteractionSource(
         id,
         tenantId,
-        InteractionSourceType.MAILBOX,
         name,
+        InteractionSourceType.MAILBOX,
         List.of(
             new InteractionSourceAttribute(
                 MailboxInteractionSourceAttributeName.PROTOCOL.code(), protocol.code()),
@@ -228,7 +228,7 @@ public class InteractionSource implements Serializable {
    */
   public static InteractionSource createVirtualInteractionSource(
       UUID id, UUID tenantId, String name) {
-    return new InteractionSource(id, tenantId, InteractionSourceType.VIRTUAL, name, List.of());
+    return new InteractionSource(id, tenantId, name, InteractionSourceType.VIRTUAL, List.of());
   }
 
   /**
@@ -245,8 +245,8 @@ public class InteractionSource implements Serializable {
     return new InteractionSource(
         id,
         tenantId,
-        InteractionSourceType.WHATSAPP,
         name,
+        InteractionSourceType.WHATSAPP,
         List.of(
             new InteractionSourceAttribute(
                 WhatsAppInteractionSourceAttributeName.DEBUG.code(), String.valueOf(debug))));

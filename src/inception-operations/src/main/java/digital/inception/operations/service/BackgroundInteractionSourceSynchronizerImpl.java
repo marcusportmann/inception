@@ -17,6 +17,7 @@
 package digital.inception.operations.service;
 
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceType;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -100,8 +101,10 @@ public class BackgroundInteractionSourceSynchronizerImpl
 
           if (running.get()) {
             for (InteractionSource interactionSource : interactionSources) {
-              numberOfNewInteractions +=
-                  interactionService.synchronizeInteractionSource(interactionSource);
+              if (interactionSource.getType() == InteractionSourceType.MAILBOX) {
+                numberOfNewInteractions +=
+                    interactionService.synchronizeInteractionSource(interactionSource);
+              }
             }
           }
         } catch (Throwable e) {

@@ -42,6 +42,7 @@ import digital.inception.operations.model.InteractionMimeType;
 import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
@@ -49,6 +50,7 @@ import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.MailboxInteractionSourceAttributeName;
 import digital.inception.operations.model.MailboxProtocol;
 import digital.inception.operations.persistence.jpa.InteractionSourceRepository;
+import digital.inception.operations.persistence.jpa.InteractionSourceSummaryRepository;
 import digital.inception.operations.store.InteractionStore;
 import digital.inception.operations.util.AttributeUtil;
 import digital.inception.operations.util.HtmlToSimplifiedHtml;
@@ -119,6 +121,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   /** The Interaction Source Repository. */
   private final InteractionSourceRepository interactionSourceRepository;
 
+  /** The Interaction Source Summary Repository. */
+  private final InteractionSourceSummaryRepository interactionSourceSummaryRepository;
+
   /** The Interaction Store. */
   private final InteractionStore interactionStore;
 
@@ -144,6 +149,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
    * @param applicationEventPublisher the Spring application event publisher
    * @param interactionStore the Interaction Store
    * @param interactionSourceRepository the Interaction Source Repository
+   * @param interactionSourceSummaryRepository the Interaction Source Summary Repository
    * @param interactionProcessor the Interaction Processor
    */
   public InteractionServiceImpl(
@@ -151,12 +157,14 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       ApplicationEventPublisher applicationEventPublisher,
       InteractionStore interactionStore,
       InteractionSourceRepository interactionSourceRepository,
+      InteractionSourceSummaryRepository interactionSourceSummaryRepository,
       InteractionProcessor interactionProcessor) {
     super(applicationContext);
 
     this.applicationEventPublisher = applicationEventPublisher;
     this.interactionStore = interactionStore;
     this.interactionSourceRepository = interactionSourceRepository;
+    this.interactionSourceSummaryRepository = interactionSourceSummaryRepository;
     this.interactionProcessor = interactionProcessor;
   }
 
@@ -470,6 +478,24 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           "Failed to retrieve the interaction source ("
               + interactionSourceId
               + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<InteractionSourceSummary> getInteractionSourceSummaries(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    try {
+      return interactionSourceSummaryRepository.findByTenantIdOrderByNameAsc(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the summaries for the interaction sources for the tenant ("
               + tenantId
               + ")",
           e);

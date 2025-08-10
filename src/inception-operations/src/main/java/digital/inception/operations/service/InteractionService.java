@@ -32,6 +32,7 @@ import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
@@ -200,6 +201,17 @@ public interface InteractionService {
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the interaction sources.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the summaries for the interaction sources
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction source summaries could not be retrieved
+   */
+  List<InteractionSourceSummary> getInteractionSourceSummaries(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve all the interaction sources.

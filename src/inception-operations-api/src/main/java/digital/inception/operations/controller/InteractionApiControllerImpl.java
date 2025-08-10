@@ -19,13 +19,20 @@ package digital.inception.operations.controller;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.util.TenantUtil;
+import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.service.InteractionService;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,10 +64,28 @@ public class InteractionApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void createInteraction(UUID tenantId, Interaction interaction)
+      throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    interactionService.createInteraction(tenantId, interaction);
+  }
+
+  @Override
   public void createInteractionSource(UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,
           DuplicateInteractionSourceException,
           ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     interactionService.createInteractionSource(tenantId, interactionSource);
   }
 
@@ -69,7 +94,71 @@ public class InteractionApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     interactionService.deleteInteractionSource(tenantId, interactionSourceId);
+  }
+
+  @Override
+  public InteractionSource getInteractionSource(UUID tenantId, UUID interactionSourceId)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return interactionService.getInteractionSource(tenantId, interactionSourceId);
+  }
+
+  @Override
+  public List<InteractionSourceSummary> getInteractionSourceSummaries(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return interactionService.getInteractionSourceSummaries(tenantId);
+  }
+
+  @Override
+  public List<InteractionSource> getInteractionSources(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return interactionService.getInteractionSources(tenantId);
+  }
+
+  @Override
+  public void updateInteraction(UUID tenantId, UUID interactionId, Interaction interaction)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    if (!Objects.equals(interactionId, interaction.getId())) {
+      throw new InvalidArgumentException("interaction.id");
+    }
+
+    interactionService.updateInteraction(tenantId, interaction);
   }
 
   @Override
@@ -78,6 +167,12 @@ public class InteractionApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     if (interactionSourceId == null) {
       throw new InvalidArgumentException("interactionSourceId");
     }
