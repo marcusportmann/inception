@@ -91,7 +91,6 @@ public interface WorkflowApiController {
   /**
    * Create the workflow definition version.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinition the workflow definition version
    * @throws InvalidArgumentException if an argument is invalid
@@ -155,15 +154,6 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinition(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "workflowDefinitionCategoryId",
               description = "The ID for the workflow definition category",
               required = true)
@@ -182,7 +172,6 @@ public interface WorkflowApiController {
   /**
    * Create the workflow definition category.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategory the workflow definition category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateWorkflowDefinitionCategoryException if the workflow definition category
@@ -235,15 +224,6 @@ public interface WorkflowApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinitionCategory(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The workflow definition category to create",
               required = true)
@@ -448,7 +428,6 @@ public interface WorkflowApiController {
   /**
    * Delete all versions of the workflow definition.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @throws InvalidArgumentException if an argument is invalid
@@ -504,15 +483,6 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinition(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "workflowDefinitionCategoryId",
               description = "The ID for the workflow definition category",
               required = true)
@@ -532,7 +502,6 @@ public interface WorkflowApiController {
   /**
    * Delete the workflow definition category.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
@@ -586,15 +555,6 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinitionCategory(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "workflowDefinitionCategoryId",
               description = "The ID for the workflow definition category",
               required = true)
@@ -607,7 +567,6 @@ public interface WorkflowApiController {
   /**
    * Delete the workflow definition version.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version of the workflow definition
@@ -668,15 +627,6 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinitionVersion(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "workflowDefinitionCategoryId",
               description = "The ID for the workflow definition category",
               required = true)
@@ -698,6 +648,82 @@ public interface WorkflowApiController {
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow document is associated with
+   * @param workflowDocumentId the ID for the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be deleted
+   */
+  @Operation(summary = "Delete the workflow document", description = "Delete the workflow document")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The workflow document was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow or workflow document could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflows/{workflowId}/documents/{workflowDocumentId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void deleteWorkflowDocument(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
+          @PathVariable
+          UUID workflowId,
+      @Parameter(
+              name = "workflowDocumentId",
+              description = "The ID for the workflow document",
+              required = true)
+          @PathVariable
+          UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowDocumentNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -1006,13 +1032,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The workflow could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1113,7 +1139,6 @@ public interface WorkflowApiController {
   /**
    * Retrieve the latest version of the workflow definition.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @return the latest version of the workflow definition
@@ -1172,15 +1197,6 @@ public interface WorkflowApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   WorkflowDefinition getWorkflowDefinition(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
       @Parameter(
               name = "workflowDefinitionCategoryId",
               description = "The ID for the workflow definition category",
@@ -1260,7 +1276,6 @@ public interface WorkflowApiController {
   /**
    * Retrieve the workflow definition category.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @return the workflow definition category
    * @throws InvalidArgumentException if an argument is invalid
@@ -1315,15 +1330,6 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   WorkflowDefinitionCategory getWorkflowDefinitionCategory(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "workflowDefinitionCategoryId",
               description = "The ID for the workflow definition category",
               required = true)
@@ -1369,13 +1375,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The workflow definition category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow definition category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1416,7 +1422,6 @@ public interface WorkflowApiController {
   /**
    * Retrieve the workflow definition version.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version of the workflow definition
@@ -1478,15 +1483,6 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   WorkflowDefinition getWorkflowDefinitionVersion(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "workflowDefinitionCategoryId",
               description = "The ID for the workflow definition category",
               required = true)
@@ -1542,13 +1538,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The workflow or workflow document could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow or workflow document could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1626,13 +1622,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The workflow could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1902,13 +1898,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The workflow could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -2822,94 +2818,4 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowDocumentNotFoundException,
           ServiceUnavailableException;
-
-
-
-
-
-
-
-
-
-  /**
-   * Delete the workflow document.
-   *
-   * @param tenantId the ID for the tenant
-   * @param workflowId the ID for the workflow the workflow document is associated with
-   * @param workflowDocumentId the ID for the workflow document
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowNotFoundException if the workflow could not be found
-   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
-   * @throws ServiceUnavailableException if the workflow document could not be deleted
-   */
-  @Operation(
-      summary = "Delete the workflow document",
-      description = "Delete the workflow document")
-  @ApiResponses(
-      value = {
-          @ApiResponse(responseCode = "200", description = "The workflow document was deleted"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The workflow or workflow document could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/workflows/{workflowId}/documents/{workflowDocumentId}",
-      method = RequestMethod.DELETE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  void deleteWorkflowDocument(
-      @Parameter(
-          name = "Tenant-ID",
-          description = "The ID for the tenant",
-          example = "00000000-0000-0000-0000-000000000000")
-      @RequestHeader(
-          name = "Tenant-ID",
-          defaultValue = "00000000-0000-0000-0000-000000000000",
-          required = false)
-      UUID tenantId,
-      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
-      @PathVariable
-      UUID workflowId,
-      @Parameter(
-          name = "workflowDocumentId",
-          description = "The ID for the workflow document",
-          required = true)
-      @PathVariable
-      UUID workflowDocumentId)
-      throws InvalidArgumentException,
-      WorkflowNotFoundException,
-      WorkflowDocumentNotFoundException,
-      ServiceUnavailableException;
-
-
-
-
 }

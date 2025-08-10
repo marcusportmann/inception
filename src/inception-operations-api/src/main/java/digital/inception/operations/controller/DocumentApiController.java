@@ -142,7 +142,6 @@ public interface DocumentApiController {
   /**
    * Create the document definition.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
@@ -203,15 +202,6 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentDefinition(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "documentDefinitionCategoryId",
               description = "The ID for the document definition category",
               required = true)
@@ -230,7 +220,6 @@ public interface DocumentApiController {
   /**
    * Create the document definition category.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionCategory the document definition category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateDocumentDefinitionCategoryException if the document definition category
@@ -283,15 +272,6 @@ public interface DocumentApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentDefinitionCategory(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The document definition category to create",
               required = true)
@@ -437,7 +417,6 @@ public interface DocumentApiController {
   /**
    * Delete the document definition.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category
    * @param documentDefinitionId the ID for the document definition
    * @throws InvalidArgumentException if an argument is invalid
@@ -493,15 +472,6 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentDefinition(
       @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
               name = "documentDefinitionCategoryId",
               description = "The ID for the document definition category",
               required = true)
@@ -521,7 +491,6 @@ public interface DocumentApiController {
   /**
    * Delete the document definition category.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
@@ -574,15 +543,6 @@ public interface DocumentApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentDefinitionCategory(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
       @Parameter(
               name = "documentDefinitionCategoryId",
               description = "The ID for the document definition category",
@@ -738,7 +698,6 @@ public interface DocumentApiController {
   /**
    * Retrieve the document definition.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category
    * @param documentDefinitionId the ID for the document definition
    * @return the document definition
@@ -794,15 +753,6 @@ public interface DocumentApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   DocumentDefinition getDocumentDefinition(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
       @Parameter(
               name = "documentDefinitionCategoryId",
               description = "The ID for the document definition category",
@@ -882,7 +832,6 @@ public interface DocumentApiController {
   /**
    * Retrieve the document definition category.
    *
-   * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category
    * @return the document definition category
    * @throws InvalidArgumentException if an argument is invalid
@@ -936,15 +885,6 @@ public interface DocumentApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   DocumentDefinitionCategory getDocumentDefinitionCategory(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
       @Parameter(
               name = "documentDefinitionCategoryId",
               description = "The ID for the document definition category",

@@ -99,19 +99,11 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public void createWorkflowDefinition(
-      UUID tenantId, String workflowDefinitionCategoryId, WorkflowDefinition workflowDefinition)
+      String workflowDefinitionCategoryId, WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
-     *       The ability to create or update workflow definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }
@@ -125,18 +117,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public void createWorkflowDefinitionCategory(
-      UUID tenantId, WorkflowDefinitionCategory workflowDefinitionCategory)
+      WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionCategoryException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
-     *       The ability to create or update workflow definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
     workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
   }
 
@@ -182,19 +166,11 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public void deleteWorkflowDefinition(
-      UUID tenantId, String workflowDefinitionCategoryId, String workflowDefinitionId)
+      String workflowDefinitionCategoryId, String workflowDefinitionId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
-     *       The ability to create or update workflow definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     if (workflowDefinitionCategoryId == null) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }
@@ -224,24 +200,15 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void deleteWorkflowDefinitionCategory(UUID tenantId, String workflowDefinitionCategoryId)
+  public void deleteWorkflowDefinitionCategory(String workflowDefinitionCategoryId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
-     *       The ability to create or update workflow definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
     workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategoryId);
   }
 
   @Override
   public void deleteWorkflowDefinitionVersion(
-      UUID tenantId,
       String workflowDefinitionCategoryId,
       String workflowDefinitionId,
       int workflowDefinitionVersion)
@@ -250,14 +217,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
           WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
-     *       The ability to create or update workflow definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     try {
       if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
         throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
@@ -472,19 +431,11 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public WorkflowDefinition getWorkflowDefinition(
-      UUID tenantId, String workflowDefinitionCategoryId, String workflowDefinitionId)
+      String workflowDefinitionCategoryId, String workflowDefinitionId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
-     *       The ability to create or update workflow definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     try {
       if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
         throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
@@ -525,27 +476,11 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public WorkflowDefinitionCategory getWorkflowDefinitionCategory(
-      UUID tenantId, String workflowDefinitionCategoryId)
+      String workflowDefinitionCategoryId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
-     *       The ability to create or update workflow definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
-    WorkflowDefinitionCategory workflowDefinitionCategory =
-        workflowService.getWorkflowDefinitionCategory(workflowDefinitionCategoryId);
-
-    if ((workflowDefinitionCategory.getTenantId() != null)
-        && (!workflowDefinitionCategory.getTenantId().equals(tenantId))) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    return workflowDefinitionCategory;
+    return workflowService.getWorkflowDefinitionCategory(workflowDefinitionCategoryId);
   }
 
   @Override
@@ -567,7 +502,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public WorkflowDefinition getWorkflowDefinitionVersion(
-      UUID tenantId,
       String workflowDefinitionCategoryId,
       String workflowDefinitionId,
       int workflowDefinitionVersion)
@@ -576,14 +510,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
           WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
-     *       The ability to create or update workflow definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     try {
       if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
         throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
@@ -905,14 +831,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definitions.
-     *       The ability to create or update workflow definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }
@@ -946,14 +864,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getWorkflowDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" workflow definition categories.
-     *       The ability to create or update workflow definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }

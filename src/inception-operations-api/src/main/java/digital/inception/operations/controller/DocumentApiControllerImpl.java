@@ -98,19 +98,11 @@ public class DocumentApiControllerImpl extends SecureApiController
 
   @Override
   public void createDocumentDefinition(
-      UUID tenantId, String documentDefinitionCategoryId, DocumentDefinition documentDefinition)
+      String documentDefinitionCategoryId, DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definitions.
-     *       The ability to create or update document definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     if (!StringUtils.hasText(documentDefinitionCategoryId)) {
       throw new InvalidArgumentException("documentDefinitionCategoryId");
     }
@@ -124,18 +116,10 @@ public class DocumentApiControllerImpl extends SecureApiController
 
   @Override
   public void createDocumentDefinitionCategory(
-      UUID tenantId, DocumentDefinitionCategory documentDefinitionCategory)
+      DocumentDefinitionCategory documentDefinitionCategory)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionCategoryException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definition categories.
-     *       The ability to create or update document definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
     documentService.createDocumentDefinitionCategory(documentDefinitionCategory);
   }
 
@@ -173,19 +157,11 @@ public class DocumentApiControllerImpl extends SecureApiController
 
   @Override
   public void deleteDocumentDefinition(
-      UUID tenantId, String documentDefinitionCategoryId, String documentDefinitionId)
+      String documentDefinitionCategoryId, String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definitions.
-     *       The ability to create or update document definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     if (documentDefinitionCategoryId == null) {
       throw new InvalidArgumentException("documentDefinitionCategoryId");
     }
@@ -215,18 +191,10 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void deleteDocumentDefinitionCategory(UUID tenantId, String documentDefinitionCategoryId)
+  public void deleteDocumentDefinitionCategory(String documentDefinitionCategoryId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definition categories.
-     *       The ability to create or update document definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
     documentService.deleteDocumentDefinitionCategory(documentDefinitionCategoryId);
   }
 
@@ -289,19 +257,11 @@ public class DocumentApiControllerImpl extends SecureApiController
 
   @Override
   public DocumentDefinition getDocumentDefinition(
-      UUID tenantId, String documentDefinitionCategoryId, String documentDefinitionId)
+      String documentDefinitionCategoryId, String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definitions.
-     *       The ability to create or update document definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     try {
       if (!documentService.documentDefinitionCategoryExists(documentDefinitionCategoryId)) {
         throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
@@ -342,22 +302,11 @@ public class DocumentApiControllerImpl extends SecureApiController
 
   @Override
   public DocumentDefinitionCategory getDocumentDefinitionCategory(
-      UUID tenantId, String documentDefinitionCategoryId)
+      String documentDefinitionCategoryId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definition categories.
-     *       The ability to create or update document definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
-    DocumentDefinitionCategory documentDefinitionCategory =
-        documentService.getDocumentDefinitionCategory(documentDefinitionCategoryId);
-
-    return documentDefinitionCategory;
+    return documentService.getDocumentDefinitionCategory(documentDefinitionCategoryId);
   }
 
   @Override
@@ -484,14 +433,6 @@ public class DocumentApiControllerImpl extends SecureApiController
           DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitions() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definitions.
-     *       The ability to create or update document definitions is an administrative function and
-     *       is not assigned to a user for a particular tenant.
-     */
-
     if (!StringUtils.hasText(documentDefinitionCategoryId)) {
       throw new InvalidArgumentException("documentDefinitionCategoryId");
     }
@@ -517,14 +458,6 @@ public class DocumentApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    /*
-     * NOTE: We do not reference the tenantId in this method. It is included to ensure consistency
-     *       in the API. It is actually used in the getDocumentDefinitionCategories() method where
-     *       we want to retrieve the "global" and "tenant-specific" document definition categories.
-     *       The ability to create or update document definition categories is an administrative
-     *       function and is not assigned to a user for a particular tenant.
-     */
-
     if (!StringUtils.hasText(documentDefinitionCategoryId)) {
       throw new InvalidArgumentException("documentDefinitionCategoryId");
     }
