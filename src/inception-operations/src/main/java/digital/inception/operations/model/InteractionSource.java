@@ -80,6 +80,18 @@ public class InteractionSource implements Serializable {
   @JoinColumn(name = "source_id", insertable = false, updatable = false)
   private final List<InteractionSourceAttribute> attributes = new ArrayList<>();
 
+  /** The permissions for the interaction source. */
+  @Schema(description = "The permissions for the interaction source")
+  @JsonProperty
+  @JsonManagedReference("interactionSourcePermissionReference")
+  @XmlElementWrapper(name = "Permissions")
+  @XmlElement(name = "Permission")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("roleCode")
+  @JoinColumn(name = "source_id", insertable = false, updatable = false)
+  private final List<InteractionSourcePermission> permissions = new ArrayList<>();
+
   /** The ID for the interaction source. */
   @Schema(
       description = "The ID for the interaction source",
@@ -122,8 +134,6 @@ public class InteractionSource implements Serializable {
 
   /** Constructs a new {@code InteractionSource}. */
   public InteractionSource() {}
-
-  // TODO: ADD ROLE MAPPING LIKE GROUP IN SECURITY MODEL
 
   // TODO: ADD AUDIT CAPABILIGTIES For all interaction-related operations
 
@@ -258,6 +268,22 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Add the permission for the interaction source.
+   *
+   * @param permission the permission
+   */
+  public void addPermission(InteractionSourcePermission permission) {
+    permissions.removeIf(
+        existingPermission ->
+            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), permission.getRoleCode())
+                && existingPermission.getType() == permission.getType()));
+
+    permission.setInteractionSource(this);
+
+    permissions.add(permission);
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -323,6 +349,15 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Returns the permissions for the interaction source.
+   *
+   * @return the permissions for the interaction source
+   */
+  public List<InteractionSourcePermission> getPermissions() {
+    return permissions;
+  }
+
+  /**
    * Returns the ID for the tenant the interaction source is associated with.
    *
    * @return the ID for the tenant the interaction source is associated with
@@ -373,6 +408,20 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Remove the permission with the specified role code and interaction source permission type for
+   * the interaction source.
+   *
+   * @param roleCode the role code for the permission
+   * @param type the interaction source permission type
+   */
+  public void removePermission(String roleCode, InteractionSourcePermissionType type) {
+    permissions.removeIf(
+        existingPermission ->
+            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), roleCode)
+                && (existingPermission.getType() == type)));
+  }
+
+  /**
    * Set the attributes for the interaction source.
    *
    * @param attributes the attributes for the interaction source
@@ -402,6 +451,17 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Set the permissions for the interaction source.
+   *
+   * @param permissions the permissions for the interaction source
+   */
+  public void setPermissions(List<InteractionSourcePermission> permissions) {
+    permissions.forEach(permission -> permission.setInteractionSource(this));
+    this.permissions.clear();
+    this.permissions.addAll(permissions);
+  }
+
+  /**
    * Set the ID for the tenant the interaction source is associated with.
    *
    * @param tenantId the ID for the tenant the interaction source is associated with
@@ -409,16 +469,6 @@ public class InteractionSource implements Serializable {
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
   }
-
-  /**
-   * Constructs a new {@code InteractionSource}.
-   *
-   * @param id the ID for the interaction source
-   * @param tenantId the ID for the tenant the interaction source is associated with
-   * @param type the interaction source type
-   * @param name the name of the interaction source
-   * @param attributes the attributes for the interaction source
-   */
 
   /**
    * Set the interaction source type.

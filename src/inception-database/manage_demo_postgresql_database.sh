@@ -141,9 +141,9 @@ CHANGELOGS=(
 
   "../inception-sms/src/main/resources/db/inception-sms.changelog.xml"
 
-  "../inception-demo/src/main/resources/db/inception-demo.changelog.xml"
-  "../inception-demo/src/main/resources/db/inception-demo-data.changelog.xml"
-  "../inception-demo/src/main/resources/db/inception-demo-party-data.changelog.xml"
+  "../inception-demo/src/main/resources/db/demo.changelog.xml"
+  "../inception-demo/src/main/resources/db/demo-data.changelog.xml"
+  "../inception-demo/src/main/resources/db/demo-party-data.changelog.xml"
 )
 
 # ----------------------------------------------------------------------------------

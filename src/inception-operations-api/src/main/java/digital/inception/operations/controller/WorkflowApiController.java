@@ -1006,6 +1006,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The workflow could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1362,6 +1369,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The workflow definition category could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1528,6 +1542,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The workflow or workflow document could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1605,6 +1626,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The workflow could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1874,6 +1902,13 @@ public interface WorkflowApiController {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The workflow could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -2787,4 +2822,94 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowDocumentNotFoundException,
           ServiceUnavailableException;
+
+
+
+
+
+
+
+
+
+  /**
+   * Delete the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow document is associated with
+   * @param workflowDocumentId the ID for the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be deleted
+   */
+  @Operation(
+      summary = "Delete the workflow document",
+      description = "Delete the workflow document")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "200", description = "The workflow document was deleted"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The workflow or workflow document could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflows/{workflowId}/documents/{workflowDocumentId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void deleteWorkflowDocument(
+      @Parameter(
+          name = "Tenant-ID",
+          description = "The ID for the tenant",
+          example = "00000000-0000-0000-0000-000000000000")
+      @RequestHeader(
+          name = "Tenant-ID",
+          defaultValue = "00000000-0000-0000-0000-000000000000",
+          required = false)
+      UUID tenantId,
+      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
+      @PathVariable
+      UUID workflowId,
+      @Parameter(
+          name = "workflowDocumentId",
+          description = "The ID for the workflow document",
+          required = true)
+      @PathVariable
+      UUID workflowDocumentId)
+      throws InvalidArgumentException,
+      WorkflowNotFoundException,
+      WorkflowDocumentNotFoundException,
+      ServiceUnavailableException;
+
+
+
+
 }

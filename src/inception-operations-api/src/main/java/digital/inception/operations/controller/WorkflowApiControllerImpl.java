@@ -286,6 +286,45 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void deleteWorkflowDocument(UUID tenantId, UUID workflowId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      if (!workflowService.workflowDocumentExists(tenantId, workflowId, workflowDocumentId)) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      }
+    } catch (WorkflowNotFoundException | WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow document ("
+              + workflowDocumentId
+              + ") for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+
+    workflowService.deleteWorkflowDocument(tenantId, workflowDocumentId);
+  }
+
+  @Override
   public void deleteWorkflowEngine(String workflowEngineId)
       throws InvalidArgumentException,
           WorkflowEngineNotFoundException,
@@ -573,9 +612,12 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public WorkflowDocument getWorkflowDocument(UUID tenantId, UUID workflowId,
-      UUID workflowDocumentId)
-      throws InvalidArgumentException, WorkflowNotFoundException, WorkflowDocumentNotFoundException, ServiceUnavailableException {
+  public WorkflowDocument getWorkflowDocument(
+      UUID tenantId, UUID workflowId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
@@ -592,15 +634,17 @@ public class WorkflowApiControllerImpl extends SecureApiController
       if (!workflowService.workflowDocumentExists(tenantId, workflowId, workflowDocumentId)) {
         throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
       }
-    } catch (WorkflowNotFoundException | WorkflowDocumentNotFoundException  e) {
+    } catch (WorkflowNotFoundException | WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the workflow document (" + workflowDocumentId + ") for the workflow ("
-          + workflowId
-          + ") for the tenant ("
-          + tenantId
-          + ")",
+          "Failed to retrieve the workflow document ("
+              + workflowDocumentId
+              + ") for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
 

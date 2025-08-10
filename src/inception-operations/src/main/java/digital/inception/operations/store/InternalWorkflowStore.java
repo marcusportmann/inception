@@ -223,6 +223,31 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public void deleteWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
+    try {
+      /*
+       * NOTE: The search by both tenant ID and workflow document ID includes a security check to
+       * ensure that the workflow document not only exists, but is also associated with the
+       * specified tenant.
+       */
+      if (workflowDocumentRepository.deleteByTenantIdAndId(tenantId, workflowDocumentId) == 0) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      }
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow document ("
+              + workflowDocumentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void deleteWorkflowNote(UUID tenantId, UUID workflowNoteId)
       throws WorkflowNoteNotFoundException, ServiceUnavailableException {
     try {
@@ -378,8 +403,9 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
     try {
       /*
-       * NOTE: The search by both tenant ID and workflow document ID includes a security check to ensure
-       * that the workflow document not only exists, but is also associated with the specified tenant.
+       * NOTE: The search by both tenant ID and workflow document ID includes a security check to
+       * ensure that the workflow document not only exists, but is also associated with the
+       * specified tenant.
        */
       Optional<WorkflowDocument> workflowDocumentOptional =
           workflowDocumentRepository.findByTenantIdAndId(tenantId, workflowDocumentId);

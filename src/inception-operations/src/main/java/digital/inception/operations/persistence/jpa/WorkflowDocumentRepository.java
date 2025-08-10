@@ -51,6 +51,16 @@ public interface WorkflowDocumentRepository
   long countByDocumentId(UUID documentId);
 
   /**
+   * Delete the workflow document.
+   *
+   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the number of workflow documents deleted
+   */
+  @Transactional
+  int deleteByTenantIdAndId(UUID tenantId, UUID workflowDocumentId);
+
+  /**
    * Returns whether a workflow document with the specified tenant ID and ID exists.
    *
    * @param tenantId the ID for the tenant the workflow document is associated with

@@ -15,8 +15,8 @@
   <property name="now" value="sysdate" dbms="oracle"/>
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
-  <changeSet id="inception-party-demo-data-1.0.0" author="Marcus Portmann">
-    <comment>inception-party-demo-data-1.0.0</comment>
+  <changeSet id="demo-party-data-1.0.0" author="Marcus Portmann">
+    <comment>demo-party-data-1.0.0</comment>
 
     <!--    ____   _    ____ _______   __     -->
     <!--    |  _ \ / \  |  _ \_   _\ \ / /    -->

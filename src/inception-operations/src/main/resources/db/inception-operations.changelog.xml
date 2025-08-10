@@ -146,39 +146,6 @@
       <column name="definition_version"/>
     </createIndex>
 
-    <createTable tableName="operations_workflow_attribute_definitions"
-      remarks="Workflow Attribute Definitions">
-      <column name="definition_id" type="nvarchar(50)"
-        remarks="The ID for the workflow definition the workflow attribute definition is associated with">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="definition_version" type="integer"
-        remarks="The version of the workflow definition the workflow attribute definition is associated with">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="name" type="nvarchar(100)" remarks="The name of the workflow attribute">
-        <constraints nullable="false"/>
-      </column>
-      <column name="description" type="nvarchar(200)" defaultValue=""
-        remarks="The description for the workflow attribute">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-    <addForeignKeyConstraint
-      constraintName="operations_workflow_attribute_definitions_workflow_definition_fk"
-      baseTableName="operations_workflow_attribute_definitions"
-      baseColumnNames="definition_id,definition_version"
-      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version"
-      onDelete="CASCADE"/>
-    <createIndex indexName="operations_workflow_attribute_definitions_definition_ix"
-      tableName="operations_workflow_attribute_definitions">
-      <column name="definition_id"/>
-      <column name="definition_version"/>
-    </createIndex>
-
     <createTable tableName="operations_workflow_step_definitions"
       remarks="Workflow Step Definitions">
       <column name="definition_id" type="nvarchar(50)"
@@ -687,6 +654,31 @@
       <column name="source_id"/>
     </createIndex>
 
+    <createTable tableName="operations_interaction_source_permissions"
+      remarks="Interaction Source Permissions">
+      <column name="source_id" type="uuid"
+        remarks="The ID for the interaction source the interaction source permission is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="role_code" type="nvarchar(100)"
+        remarks="The code for the role the interaction source permission is assigned to">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)"
+        remarks="The code for the interaction source permission type for the interaction source permission">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      constraintName="operations_interaction_source_permissions_interaction_source_fk"
+      baseTableName="operations_interaction_source_permissions" baseColumnNames="source_id"
+      referencedTableName="operations_interaction_sources" referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="operations_interaction_source_permissions_source_id_ix"
+      tableName="operations_interaction_source_permissions">
+      <column name="source_id"/>
+    </createIndex>
+
     <createTable tableName="operations_interactions" remarks="Interactions">
       <column name="id" type="uuid" remarks="The ID for the interaction">
         <constraints primaryKey="true" nullable="false"/>
@@ -884,10 +876,11 @@
 
       <dropAllForeignKeyConstraints baseTableName="operations_interactions"/>
       <dropIndex tableName="operations_interactions"
-        indexName="operations_interactions_timestamp_ix"/>
+        indexName="operations_interactions_occurred_ix"/>
       <dropIndex tableName="operations_interactions"
         indexName="operations_interactions_tenant_id_ix"/>
-      <dropIndex tableName="operations_interactions" indexName="operations_interactions_status_ix"/>
+      <dropIndex tableName="operations_interactions"
+        indexName="operations_interactions_status_ix"/>
       <dropIndex tableName="operations_interactions"
         indexName="operations_interactions_source_id_source_reference_ix"/>
       <dropIndex tableName="operations_interactions"
@@ -899,6 +892,11 @@
       <dropIndex tableName="operations_interactions"
         indexName="operations_interactions_assigned_to_ix"/>
       <dropTable tableName="operations_interactions"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_interaction_source_permissions"/>
+      <dropIndex tableName="operations_interaction_source_permissions"
+        indexName="operations_interaction_source_permissions_source_id_ix"/>
+      <dropTable tableName="operations_interaction_source_permissions"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_interaction_source_attributes"/>
       <dropIndex tableName="operations_interaction_source_attributes"
@@ -923,21 +921,50 @@
         indexName="operations_workflow_documents_document_definition_id_ix"/>
       <dropTable tableName="operations_workflow_documents"/>
 
+      <dropAllForeignKeyConstraints baseTableName="operations_document_notes"/>
+      <dropIndex tableName="operations_document_notes"
+        indexName="operations_document_notes_tenant_id_ix"/>
+      <dropIndex tableName="operations_document_notes"
+        indexName="operations_document_notes_document_id_ix"/>
+      <dropTable tableName="operations_document_notes"/>
+
       <dropAllForeignKeyConstraints baseTableName="operations_documents"/>
-      <dropIndex tableName="operations_documents" indexName="operations_documents_tenant_id_ix"/>
+      <dropIndex tableName="operations_documents"
+        indexName="operations_documents_tenant_id_ix"/>
       <dropIndex tableName="operations_documents"
         indexName="operations_documents_external_reference_ix"/>
       <dropIndex tableName="operations_documents"
         indexName="operations_documents_definition_id_ix"/>
       <dropTable tableName="operations_documents"/>
 
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_steps"/>
+      <dropIndex tableName="operations_workflow_steps"
+        indexName="operations_workflow_steps_workflow_id_ix"/>
+      <dropTable tableName="operations_workflow_steps"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_notes"/>
+      <dropIndex tableName="operations_workflow_notes"
+        indexName="operations_workflow_notes_tenant_id_ix"/>
+      <dropIndex tableName="operations_workflow_notes"
+        indexName="operations_workflow_notes_workflow_id_ix"/>
+      <dropTable tableName="operations_workflow_notes"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_attributes"/>
+      <dropIndex tableName="operations_workflow_attributes"
+        indexName="operations_workflow_attributes_workflow_id_ix"/>
+      <dropTable tableName="operations_workflow_attributes"/>
+
       <dropAllForeignKeyConstraints baseTableName="operations_workflows"/>
-      <dropIndex tableName="operations_workflows" indexName="operations_workflows_tenant_id_ix"/>
-      <dropIndex tableName="operations_workflows" indexName="operations_workflows_parent_id_ix"/>
+      <dropIndex tableName="operations_workflows"
+        indexName="operations_workflows_tenant_id_ix"/>
+      <dropIndex tableName="operations_workflows"
+        indexName="operations_workflows_parent_id_ix"/>
       <dropIndex tableName="operations_workflows"
         indexName="operations_workflows_external_reference_ix"/>
-      <dropIndex tableName="operations_workflows" indexName="operations_workflow_definition_id_ix"/>
-      <dropIndex tableName="operations_workflows" indexName="operations_workflow_definition_ix"/>
+      <dropIndex tableName="operations_workflows"
+        indexName="operations_workflow_definition_id_ix"/>
+      <dropIndex tableName="operations_workflows"
+        indexName="operations_workflow_definition_ix"/>
       <dropTable tableName="operations_workflows"/>
 
       <dropAllForeignKeyConstraints
@@ -959,6 +986,16 @@
       <dropIndex tableName="operations_document_definition_categories"
         indexName="operations_document_definition_categories_tenant_id_ix"/>
       <dropTable tableName="operations_document_definition_categories"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_step_definitions"/>
+      <dropIndex tableName="operations_workflow_step_definitions"
+        indexName="operations_workflow_step_definitions_definition_ix"/>
+      <dropTable tableName="operations_workflow_step_definitions"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_definition_attributes"/>
+      <dropIndex tableName="operations_workflow_definition_attributes"
+        indexName="operations_workflow_definition_attributes_definition_ix"/>
+      <dropTable tableName="operations_workflow_definition_attributes"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_definitions"/>
       <dropIndex tableName="operations_workflow_definitions"

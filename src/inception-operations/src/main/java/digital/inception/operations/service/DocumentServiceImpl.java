@@ -52,9 +52,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-// TODO: Add methods to link and unlink documents from a workflow, i.e. manage workflow documents
-// (WorkflowDocument).
-
 /**
  * The {@code DocumentServiceImpl} class provides the Document Service implementation.
  *

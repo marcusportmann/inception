@@ -324,9 +324,6 @@ public class Interaction implements Serializable {
   @Column(name = "type", nullable = false)
   private InteractionType type;
 
-  //   TODO: ADD STATE MANAGEMENT TO AN INTERATION TO INDICATE STATUS OF SUBSEQUENT PROCESSING E.G.
-  //   AUTO DOCUMENT CLASSIFICATION WITH LOCK MANAGEMENT
-
   /** Constructs a new {@code Interaction}. */
   public Interaction() {}
 

@@ -385,6 +385,34 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public void deleteWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (workflowDocumentId == null) {
+      throw new InvalidArgumentException("workflowDocumentId");
+    }
+
+    try {
+      workflowStore.deleteWorkflowDocument(tenantId, workflowDocumentId);
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow document ("
+              + workflowDocumentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void deleteWorkflowEngine(String workflowEngineId)
       throws InvalidArgumentException,
           WorkflowEngineNotFoundException,

@@ -108,6 +108,17 @@ public interface WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
+   * Delete the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be deleted
+   */
+  void deleteWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
+
+  /**
    * Delete the workflow note.
    *
    * @param tenantId the ID for the tenant

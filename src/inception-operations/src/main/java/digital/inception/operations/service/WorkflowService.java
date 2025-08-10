@@ -184,6 +184,20 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Delete the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be deleted
+   */
+  void deleteWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Delete the workflow engine.
    *
    * @param workflowEngineId the ID for the workflow engine

@@ -215,7 +215,8 @@ public class WorkflowServiceTests {
 
     List<InitiateWorkflowAttribute> initiateWorkflowAttributes =
         List.of(
-            new InitiateWorkflowAttribute("test_workflow_attribute_name", "test_workflow_attribute_value"));
+            new InitiateWorkflowAttribute(
+                "test_workflow_attribute_name", "test_workflow_attribute_value"));
 
     InitiateWorkflowRequest initiateWorkflowRequest =
         new InitiateWorkflowRequest(
@@ -454,6 +455,27 @@ public class WorkflowServiceTests {
             TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     assertEquals(2, outstandingWorkflowDocuments.size());
+
+    // Delete the workflow document
+    workflowService.deleteWorkflowDocument(TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getId());
+
+    retrievedWorkflowDocuments =
+        workflowService.getWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID,
+            workflow.getId(),
+            "TEST1",
+            WorkflowDocumentSortBy.REQUESTED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    assertEquals(1, retrievedWorkflowDocuments.getTotal());
+
+    outstandingWorkflowDocuments =
+        workflowService.getOutstandingWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(1, outstandingWorkflowDocuments.size());
 
     // Create a workflow note for the workflow
     CreateWorkflowNoteRequest createWorkflowNoteRequest =
