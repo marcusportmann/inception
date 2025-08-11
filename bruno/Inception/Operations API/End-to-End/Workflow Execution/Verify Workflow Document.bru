@@ -1,0 +1,21 @@
+meta {
+  name: Verify Workflow Document
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseURL}}/api/operations/verify-workflow-document
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "workflowDocumentId": "{{workflowDocumentId}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

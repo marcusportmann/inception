@@ -1,0 +1,22 @@
+meta {
+  name: Update Document Note
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseURL}}/api/operations/update-document-note
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "documentNoteId": "{{documentNoteId}}",
+    "content": "The updated test document note content."
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Provide Workflow Document
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseURL}}/api/operations/provide-workflow-document
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "workflowDocumentId": "{{workflowDocumentId}}",
+    "fileType": "text",
+    "name": "test.txt",
+    "externalReference": "test_external_reference",
+    "data": "VGhpcyBpcyBzb21lIHRlc3QgdGV4dC4="
+  }
+}
+
+settings {
+  encodeUrl: true
+}
