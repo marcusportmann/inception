@@ -10,8 +10,8 @@ get {
   auth: inherit
 }
 
-vars:pre-request {
-  workflowId: 0198953a-0600-7fdf-89bf-2969c6fa538e
+vars:post-response {
+  workflowDocumentId: res.body.workflowDocuments[0].id
 }
 
 settings {

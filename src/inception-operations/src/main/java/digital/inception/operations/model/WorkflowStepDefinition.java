@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
+import digital.inception.core.validation.constraint.ValidISO8601DurationOrPeriod;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,6 +40,8 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Duration;
+import org.springframework.boot.convert.DurationStyle;
 
 /**
  * The {@code WorkflowStepDefinition} class encapsulates the definition of a step within a workflow.
@@ -56,12 +59,12 @@ import java.io.Serializable;
  */
 @Schema(description = "A workflow step definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "name", "description"})
+@JsonPropertyOrder({"sequence", "code", "name", "description", "timeToComplete"})
 @XmlRootElement(name = "WorkflowStepDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowStepDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "name", "description"})
+    propOrder = {"sequence", "code", "name", "description", "timeToComplete"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_step_definitions")
@@ -120,17 +123,54 @@ public class WorkflowStepDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The sequence number for the workflow step. */
+  @Schema(
+      description = "The sequence number for the workflow step",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Sequence", required = true)
+  @NotNull
+  @Column(name = "sequence", nullable = false)
+  private Integer sequence;
+
+  /** The ISO-8601 duration format amount of time to complete the workflow step. */
+  @Schema(description = "The ISO-8601 duration format amount of time to complete the workflow step")
+  @JsonProperty
+  @XmlElement(name = "TimeToComplete")
+  @ValidISO8601DurationOrPeriod
+  @Column(name = "time_to_complete", length = 50)
+  private String timeToComplete;
+
   /** Constructs a new {@code WorkflowStepDefinition}. */
   public WorkflowStepDefinition() {}
 
   /**
    * Constructs a new {@code WorkflowStepDefinition}.
    *
+   * @param sequence the sequence number for the workflow step
    * @param code the code for the workflow step
    * @param name the name of the workflow step
    * @param description the description for the workflow step
    */
-  public WorkflowStepDefinition(String code, String name, String description) {
+  public WorkflowStepDefinition(int sequence, String code, String name, String description) {
+    this.sequence = sequence;
+    this.code = code;
+    this.name = name;
+    this.description = description;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowStepDefinition}.
+   *
+   * @param sequence the sequence number for the workflow step
+   * @param code the code for the workflow step
+   * @param name the name of the workflow step
+   * @param description the description for the workflow step
+   * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
+   */
+  public WorkflowStepDefinition(
+      int sequence, String code, String name, String description, String timeToComplete) {
+    this.sequence = sequence;
     this.code = code;
     this.name = name;
     this.description = description;
@@ -191,6 +231,41 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
+   * Returns the sequence number for the workflow step.
+   *
+   * @return the sequence number for the workflow step
+   */
+  public Integer getSequence() {
+    return sequence;
+  }
+
+  /**
+   * Returns the ISO-8601 duration format amount of time to complete the workflow step.
+   *
+   * @return the ISO-8601 duration format amount of time to complete the workflow step
+   */
+  public String getTimeToComplete() {
+    return timeToComplete;
+  }
+
+  /**
+   * Returns the {@code Duration} for the ISO-8601 duration format amount of time to complete the
+   * workflow step.
+   *
+   * @return the {@code Duration} for the ISO-8601 duration format amount of time to complete the
+   *     workflow step or {@code null} if no validity period has been specified
+   */
+  @JsonIgnore
+  @XmlTransient
+  public Duration getTimeToCompleteAsDuration() {
+    if (this.timeToComplete == null) {
+      return null;
+    } else {
+      return DurationStyle.detectAndParse(timeToComplete);
+    }
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -227,6 +302,24 @@ public class WorkflowStepDefinition implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the sequence number for the workflow step.
+   *
+   * @param sequence the sequence number for the workflow step
+   */
+  public void setSequence(Integer sequence) {
+    this.sequence = sequence;
+  }
+
+  /**
+   * Set the ISO-8601 duration format amount of time to complete the workflow step.
+   *
+   * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
+   */
+  public void setTimeToComplete(String timeToComplete) {
+    this.timeToComplete = timeToComplete;
   }
 
   /**

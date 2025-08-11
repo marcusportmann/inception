@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.core.time.TimeUnit;
 import digital.inception.core.util.StringUtil;
+import digital.inception.core.validation.constraint.ValidISO8601DurationOrPeriod;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +40,8 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Duration;
+import org.springframework.boot.convert.DurationStyle;
 
 /**
  * The {@code WorkflowDefinitionDocumentDefinition} class holds the information for an association
@@ -49,26 +51,14 @@ import java.io.Serializable;
  */
 @Schema(description = "An association of a document definition with a workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "documentDefinitionId",
-  "required",
-  "singular",
-  "validityPeriodUnit",
-  "validityPeriodAmount"
-})
+@JsonPropertyOrder({"documentDefinitionId", "required", "singular", "verifiable", "validityPeriod"})
 @XmlRootElement(
     name = "WorkflowDefinitionDocumentDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinitionDocumentDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "documentDefinitionId",
-      "required",
-      "singular",
-      "validityPeriodUnit",
-      "validityPeriodAmount"
-    })
+    propOrder = {"documentDefinitionId", "required", "singular", "verifiable", "validityPeriod"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_definition_document_definitions")
@@ -118,30 +108,32 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   private boolean singular;
 
   /**
-   * The validity period from a document's issue date during which the document, with the document
-   * definition ID, can be associated with a workflow with the workflow definition ID and workflow
-   * definition version.
+   * The ISO-8601 duration format validity period from a document's issue date during which the
+   * document, with the document definition ID, can be associated with a workflow with the workflow
+   * definition ID and workflow definition version.
    */
   @Schema(
       description =
-          "The validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version")
+          "The ISO-8601 duration format validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version")
   @JsonProperty
-  @XmlElement(name = "ValidityPeriodAmount")
-  @Column(name = "validity_period_amount")
-  private Integer validityPeriodAmount;
+  @XmlElement(name = "ValidityPeriod")
+  @ValidISO8601DurationOrPeriod
+  @Column(name = "validity_period", length = 50)
+  private String validityPeriod;
 
   /**
-   * The unit of measurement of time for the validity period from a document's issue date during
-   * which the document, with the document definition ID, can be associated with a workflow with the
-   * workflow definition ID and workflow definition version.
+   * Should a document with the document definition ID be manually or automatically verified after
+   * being provided for a workflow with the workflow definition ID and workflow definition version.
    */
   @Schema(
       description =
-          "The unit of measurement of time for the validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version")
-  @JsonProperty
-  @XmlElement(name = "ValidityPeriodUnit")
-  @Column(name = "validity_period_unit")
-  private TimeUnit validityPeriodUnit;
+          "Should a document with the document definition ID be manually or automatically verified after being provided for a workflow with the workflow definition ID and workflow definition version",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Verifiable", required = true)
+  @NotNull
+  @Column(name = "verifiable", nullable = false)
+  private boolean verifiable;
 
   /**
    * The ID for the workflow definition the workflow definition document definition is associated
@@ -178,17 +170,22 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    *     workflow definition ID and workflow definition version
    * @param singular is a workflow with the workflow definition ID and workflow definition version
    *     limited to a single document with the document definition ID
+   * @param verifiable should a document with the document definition ID be manually or
+   *     automatically verified after being provided for a workflow with the workflow definition ID
+   *     and workflow definition version
    */
   public WorkflowDefinitionDocumentDefinition(
       WorkflowDefinition workflowDefinition,
       String documentDefinitionId,
       boolean required,
-      boolean singular) {
+      boolean singular,
+      boolean verifiable) {
     this.workflowDefinitionId = workflowDefinition.getId();
     this.workflowDefinitionVersion = workflowDefinition.getVersion();
     this.documentDefinitionId = documentDefinitionId;
     this.required = required;
     this.singular = singular;
+    this.verifiable = verifiable;
   }
 
   /**
@@ -201,27 +198,27 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    *     workflow definition ID and workflow definition version
    * @param singular is a workflow with the workflow definition ID and workflow definition version
    *     limited to a single document with the document definition ID
-   * @param validityPeriodUnit the unit of measurement of time for the validity period from a
-   *     document's issue date during which the document, with the document definition ID, can be
-   *     associated with a workflow with the workflow definition ID and workflow definition version
-   * @param validityPeriodAmount the validity period from a document's issue date during which the
-   *     document, with the document definition ID, can be associated with a workflow with the
-   *     workflow definition ID and workflow definition version
+   * @param verifiable should a document with the document definition ID be manually or
+   *     automatically verified after being provided for a workflow with the workflow definition ID
+   *     and workflow definition version
+   * @param validityPeriod the ISO-8601 duration format validity period from a document's issue date
+   *     during which the document, with the document definition ID, can be associated with a
+   *     workflow with the workflow definition ID and workflow definition version
    */
   public WorkflowDefinitionDocumentDefinition(
       WorkflowDefinition workflowDefinition,
       String documentDefinitionId,
       boolean required,
       boolean singular,
-      TimeUnit validityPeriodUnit,
-      Integer validityPeriodAmount) {
+      boolean verifiable,
+      String validityPeriod) {
     this.workflowDefinitionId = workflowDefinition.getId();
     this.workflowDefinitionVersion = workflowDefinition.getVersion();
     this.documentDefinitionId = documentDefinitionId;
     this.required = required;
     this.singular = singular;
-    this.validityPeriodUnit = validityPeriodUnit;
-    this.validityPeriodAmount = validityPeriodAmount;
+    this.verifiable = verifiable;
+    this.validityPeriod = validityPeriod;
   }
 
   /**
@@ -261,29 +258,36 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
-   * Returns the validity period from a document's issue date during which the document, with the
-   * document definition ID, can be associated with a workflow with the workflow definition ID and
-   * workflow definition version.
+   * Returns the ISO-8601 duration format validity period from a document's issue date during which
+   * the document, with the document definition ID, can be associated with a workflow with the
+   * workflow definition ID and workflow definition version.
    *
-   * @return the validity period from a document's issue date during which the document, with the
-   *     document definition ID, can be associated with a workflow with the workflow definition ID
-   *     and workflow definition version
+   * @return the ISO-8601 duration format validity period from a document's issue date during which
+   *     the document, with the document definition ID, can be associated with a workflow with the
+   *     workflow definition ID and workflow definition version
    */
-  public Integer getValidityPeriodAmount() {
-    return validityPeriodAmount;
+  public String getValidityPeriod() {
+    return validityPeriod;
   }
 
   /**
-   * Returns the unit of measurement of time for the validity period from a document's issue date
-   * during which the document, with the document definition ID, can be associated with a workflow
-   * with the workflow definition ID and workflow definition version.
+   * Returns the {@code Duration} for the validity period from a document's issue date during which
+   * the document, with the document definition ID, can be associated with a workflow with the
+   * workflow definition ID and workflow definition version.
    *
-   * @return the unit of measurement of time for the validity period from a document's issue date
-   *     during which the document, with the document definition ID, can be associated with a
-   *     workflow with the workflow definition ID and workflow definition version
+   * @return the {@code Duration} for the validity period from a document's issue date during which
+   *     the document, with the document definition ID, can be associated with a workflow with the
+   *     workflow definition ID and workflow definition version or {@code null} if no validity
+   *     period has been specified
    */
-  public TimeUnit getValidityPeriodUnit() {
-    return validityPeriodUnit;
+  @JsonIgnore
+  @XmlTransient
+  public Duration getValidityPeriodAsDuration() {
+    if (this.validityPeriod == null) {
+      return null;
+    } else {
+      return DurationStyle.detectAndParse(validityPeriod);
+    }
   }
 
   /**
@@ -307,6 +311,19 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    */
   public boolean isSingular() {
     return singular;
+  }
+
+  /**
+   * Returns whether a document with the document definition ID should be manually or automatically
+   * verified after being provided for a workflow with the workflow definition ID and workflow
+   * definition version.
+   *
+   * @return {@code true} if a document with the document definition ID should be manually or
+   *     automatically verified after being provided for a workflow with the workflow definition ID
+   *     and workflow definition version or {@code false otherwise}
+   */
+  public boolean isVerifiable() {
+    return verifiable;
   }
 
   /**
@@ -343,29 +360,29 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the validity period from a document's issue date during which the document, with the
-   * document definition ID, can be associated with a workflow with the workflow definition ID and
-   * workflow definition version.
+   * Set the ISO-8601 duration format validity period from a document's issue date during which the
+   * document, with the document definition ID, can be associated with a workflow with the workflow
+   * definition ID and workflow definition version.
    *
-   * @param validityPeriodAmount the validity period from a document's issue date during which the
-   *     document, with the document definition ID, can be associated with a workflow with the
-   *     workflow definition ID and workflow definition version
+   * @param validityPeriod the ISO-8601 duration format validity period from a document's issue date
+   *     during which the document, with the document definition ID, can be associated with a
+   *     workflow with the workflow definition ID and workflow definition version
    */
-  public void setValidityPeriodAmount(Integer validityPeriodAmount) {
-    this.validityPeriodAmount = validityPeriodAmount;
+  public void setValidityPeriod(String validityPeriod) {
+    this.validityPeriod = validityPeriod;
   }
 
   /**
-   * Set the unit of measurement of time for the validity period from a document's issue date during
-   * which the document, with the document definition ID, can be associated with a workflow with the
-   * workflow definition ID and workflow definition version.
+   * Set whether a document with the document definition ID should be manually or automatically
+   * verified after being provided for a workflow with the workflow definition ID and workflow
+   * definition version.
    *
-   * @param validityPeriodUnit the unit of measurement of time for the validity period from a
-   *     document's issue date during which the document, with the document definition ID, can be
-   *     associated with a workflow with the workflow definition ID and workflow definition version
+   * @param verifiable {@code true} if a document with the document definition ID should be manually
+   *     or automatically verified after being provided for a workflow with the workflow definition
+   *     ID and workflow definition version or {@code false otherwise}
    */
-  public void setValidityPeriodUnit(TimeUnit validityPeriodUnit) {
-    this.validityPeriodUnit = validityPeriodUnit;
+  public void setVerifiable(boolean verifiable) {
+    this.verifiable = verifiable;
   }
 
   /**

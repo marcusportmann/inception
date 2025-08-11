@@ -56,16 +56,21 @@ import digital.inception.operations.persistence.jpa.WorkflowStepRepository;
 import digital.inception.operations.persistence.jpa.WorkflowSummaryRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -109,9 +114,13 @@ public class InternalWorkflowStore implements WorkflowStore {
   @PersistenceContext(unitName = "operations")
   private EntityManager entityManager;
 
+  /** Are we using Oracle? */
+  private boolean usingOracle;
+
   /**
    * Constructs a new {@code InternalWorkflowStore}.
    *
+   * @param dataSource the application data source
    * @param workflowDocumentRepository the Workflow Document Repository
    * @param workflowNoteRepository the Workflow Note Repository
    * @param workflowRepository the Workflow Repository
@@ -120,6 +129,7 @@ public class InternalWorkflowStore implements WorkflowStore {
    * @param documentStore the Document Store
    */
   public InternalWorkflowStore(
+      @Qualifier("applicationDataSource") DataSource dataSource,
       WorkflowDocumentRepository workflowDocumentRepository,
       WorkflowNoteRepository workflowNoteRepository,
       WorkflowRepository workflowRepository,
@@ -132,6 +142,21 @@ public class InternalWorkflowStore implements WorkflowStore {
     this.workflowStepRepository = workflowStepRepository;
     this.workflowSummaryRepository = workflowSummaryRepository;
     this.documentStore = documentStore;
+
+    try {
+      try (Connection connection = dataSource.getConnection()) {
+        DatabaseMetaData metaData = connection.getMetaData();
+
+        String databaseProductName = metaData.getDatabaseProductName();
+        String url = metaData.getURL();
+        usingOracle =
+            (databaseProductName != null && databaseProductName.toLowerCase().contains("oracle"))
+                || (url != null && url.toLowerCase().startsWith("jdbc:oracle:"));
+      }
+    } catch (Throwable e) {
+      log.warn("Failed to check if we are using Oracle", e);
+      usingOracle = false;
+    }
   }
 
   @Override
@@ -815,18 +840,43 @@ public class InternalWorkflowStore implements WorkflowStore {
                     }
 
                     if (StringUtils.hasText(filter)) {
-                      String filterValue = "%" + filter.toLowerCase() + "%";
+                      String likeValue = "%" + filter.toLowerCase() + "%";
+
+                      // Common LIKEs for non-text-indexed columns
+                      Predicate initiatedByLike =
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("initiatedBy")), likeValue);
+                      Predicate updatedByLike =
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("updatedBy")), likeValue);
+                      Predicate finalizedByLike =
+                          criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("finalizedBy")), likeValue);
+
+                      Predicate attributeValuePredicate;
+                      if (usingOracle) {
+                        // Oracle Text: CONTAINS(value, '*term*', 1) > 0
+                        // Render contains(value, '*foo*', 1)
+                        Expression<Integer> containsExpr =
+                            criteriaBuilder.function(
+                                "contains",
+                                Integer.class,
+                                attributesJoin.get("value"),
+                                criteriaBuilder.literal("*" + filter + "*"),
+                                criteriaBuilder.literal(1));
+                        attributeValuePredicate = criteriaBuilder.greaterThan(containsExpr, 0);
+                      } else {
+                        attributeValuePredicate =
+                            criteriaBuilder.like(
+                                criteriaBuilder.lower(attributesJoin.get("value")), likeValue);
+                      }
 
                       predicates.add(
                           criteriaBuilder.or(
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(attributesJoin.get("value")), filterValue),
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("initiatedBy")), filterValue),
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("updatedBy")), filterValue),
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("finalizedBy")), filterValue)));
+                              attributeValuePredicate,
+                              initiatedByLike,
+                              updatedByLike,
+                              finalizedByLike));
                     }
 
                     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
@@ -929,7 +979,7 @@ public class InternalWorkflowStore implements WorkflowStore {
 
       /*
        * Associate the new document with the workflow document, set the workflow document status to
-       * PROVIDED and clear the rejection and verification attributes.
+       * PROVIDED or VERIFIABLE depending on whether the workflow document is verifiable.
        */
       workflowDocument.setDocumentId(document.getId());
       workflowDocument.setProvided(OffsetDateTime.now());
@@ -937,9 +987,17 @@ public class InternalWorkflowStore implements WorkflowStore {
       workflowDocument.setRejected(null);
       workflowDocument.setRejectedBy(null);
       workflowDocument.setRejectionReason(null);
-      workflowDocument.setStatus(WorkflowDocumentStatus.PROVIDED);
       workflowDocument.setVerified(null);
       workflowDocument.setVerifiedBy(null);
+
+      boolean verifiable =
+          workflowDocumentRepository.isWorkflowDocumentVerifiable(workflowDocument.getId());
+
+      if (verifiable) {
+        workflowDocument.setStatus(WorkflowDocumentStatus.VERIFIABLE);
+      } else {
+        workflowDocument.setStatus(WorkflowDocumentStatus.PROVIDED);
+      }
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
     } catch (WorkflowDocumentNotFoundException e) {

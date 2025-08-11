@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.core.time.TimeUnit;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -155,7 +154,7 @@ public class WorkflowDefinition implements Serializable {
   @XmlElement(name = "StepDefinition")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("sequence")
   @JoinColumns({
     @JoinColumn(
         name = "definition_id",
@@ -518,16 +517,19 @@ public class WorkflowDefinition implements Serializable {
    *     associated with the workflow definition
    * @param singular is a workflow associated with the workflow definition limited to a single
    *     document with the document definition ID
+   * @param verifiable should a document with the document definition ID be manually or
+   *     automatically verified after being provided for a workflow with the workflow definition ID
+   *     and workflow definition version
    */
   public void addDocumentDefinition(
-      String documentDefinitionId, boolean required, boolean singular) {
+      String documentDefinitionId, boolean required, boolean singular, boolean verifiable) {
     documentDefinitions.removeIf(
         existingDocumentDefinition ->
             StringUtil.equalsIgnoreCase(
                 existingDocumentDefinition.getDocumentDefinitionId(), documentDefinitionId));
 
     documentDefinitions.add(
-        new WorkflowDefinitionDocumentDefinition(this, documentDefinitionId, required, singular));
+        new WorkflowDefinitionDocumentDefinition(this, documentDefinitionId, required, singular, verifiable));
   }
 
   /**
@@ -538,19 +540,15 @@ public class WorkflowDefinition implements Serializable {
    *     associated with the workflow definition
    * @param singular is a workflow associated with the workflow definition limited to a single
    *     document with the document definition ID
-   * @param validityPeriodUnit the unit of measurement of time for the validity period from a
-   *     document's issue date during which the document, with the document definition ID, can be
-   *     associated with a workflow associated with the workflow definition
-   * @param validityPeriodAmount the validity period from a document's issue date during which the
-   *     document, with the document definition ID, can be associated with a workflow associated
-   *     with the workflow definition
+   * @param verifiable should a document with the document definition ID be manually or
+   *     automatically verified after being provided for a workflow with the workflow definition ID
+   *     and workflow definition version
+   * @param validityPeriod the ISO-8601 duration format validity period from a document's issue date
+   *     during which the document, with the document definition ID, can be associated with a
+   *     workflow with the workflow definition ID and workflow definition version
    */
   public void addDocumentDefinition(
-      String documentDefinitionId,
-      boolean required,
-      boolean singular,
-      TimeUnit validityPeriodUnit,
-      Integer validityPeriodAmount) {
+      String documentDefinitionId, boolean required, boolean singular, boolean verifiable, String validityPeriod) {
     documentDefinitions.removeIf(
         existingDocumentDefinition ->
             StringUtil.equalsIgnoreCase(
@@ -558,12 +556,7 @@ public class WorkflowDefinition implements Serializable {
 
     documentDefinitions.add(
         new WorkflowDefinitionDocumentDefinition(
-            this,
-            documentDefinitionId,
-            required,
-            singular,
-            validityPeriodUnit,
-            validityPeriodAmount));
+            this, documentDefinitionId, required, singular, verifiable, validityPeriod));
   }
 
   /**

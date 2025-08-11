@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.time.TimeUnit;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.util.TenantUtil;
@@ -61,6 +60,7 @@ import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
@@ -176,23 +176,27 @@ public class WorkflowServiceTests {
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
-    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false);
-    workflowDefinition.addDocumentDefinition(anotherDocumentDefinition.getId(), false, true);
+    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true);
+    workflowDefinition.addDocumentDefinition(anotherDocumentDefinition.getId(), false, true, false);
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
+            1,
             "test_workflow_step_1",
             "Test Workflow Step 1",
             "The description for Test Workflow Step 1"));
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
+            2,
             "test_workflow_step_2",
             "Test Workflow Step 2",
-            "The description for Test Workflow Step 2"));
+            "The description for Test Workflow Step 2",
+            "XXX"));
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
+            3,
             "test_workflow_step_3",
             "Test Workflow Step 3",
             "The description for Test Workflow Step 3"));
@@ -349,7 +353,7 @@ public class WorkflowServiceTests {
         workflowService.getWorkflowDocument(
             TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest.getWorkflowDocumentId());
 
-    assertEquals(WorkflowDocumentStatus.PROVIDED, retrievedWorkflowDocument.getStatus());
+    assertEquals(WorkflowDocumentStatus.VERIFIABLE, retrievedWorkflowDocument.getStatus());
     assertEquals("TEST1", retrievedWorkflowDocument.getProvidedBy());
     assertNotNull(retrievedWorkflowDocument.getProvided());
 
@@ -457,7 +461,8 @@ public class WorkflowServiceTests {
     assertEquals(2, outstandingWorkflowDocuments.size());
 
     // Delete the workflow document
-    workflowService.deleteWorkflowDocument(TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getId());
+    workflowService.deleteWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getId());
 
     retrievedWorkflowDocuments =
         workflowService.getWorkflowDocuments(
@@ -716,7 +721,7 @@ public class WorkflowServiceTests {
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
-    sharedWorkflowDefinition.addDocumentDefinition(sharedDocumentDefinition.getId(), true, true);
+    sharedWorkflowDefinition.addDocumentDefinition(sharedDocumentDefinition.getId(), true, true, true);
 
     workflowService.createWorkflowDefinition(sharedWorkflowDefinition);
 
@@ -749,25 +754,28 @@ public class WorkflowServiceTests {
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
+            1,
             "test_workflow_step_1",
             "Test Workflow Step 1",
             "The description for Test Workflow Step 1"));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
+            2,
             "test_workflow_step_2",
             "Test Workflow Step 2",
             "The description for Test Workflow Step 2"));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
+            3,
             "test_workflow_step_3",
             "Test Workflow Step 3",
             "The description for Test Workflow Step 3"));
 
-    tenantWorkflowDefinition.addDocumentDefinition(tenantDocumentDefinition.getId(), true, false);
+    tenantWorkflowDefinition.addDocumentDefinition(tenantDocumentDefinition.getId(), true, false, true);
     tenantWorkflowDefinition.addDocumentDefinition(
-        sharedDocumentDefinition.getId(), true, true, TimeUnit.MONTHS, 6);
+        sharedDocumentDefinition.getId(), true, true, true, "P3M");
 
     workflowService.createWorkflowDefinition(tenantWorkflowDefinition);
 
@@ -937,6 +945,29 @@ public class WorkflowServiceTests {
         "The tenant ID values for the workflow definition categories do not match");
   }
 
+  private void compareWorkflowDefinitionDocumentDefinitions(WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition1, WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition2) {
+    assertEquals(
+        workflowDefinitionDocumentDefinition1.getDocumentDefinitionId(),
+        workflowDefinitionDocumentDefinition2.getDocumentDefinitionId(),
+        "The document definition ID values for the workflow definition document definitions do not match");
+    assertEquals(
+        workflowDefinitionDocumentDefinition1.isRequired(),
+        workflowDefinitionDocumentDefinition2.isRequired(),
+        "The required values for the workflow definition document definitions do not match");
+    assertEquals(
+        workflowDefinitionDocumentDefinition1.isSingular(),
+        workflowDefinitionDocumentDefinition2.isSingular(),
+        "The singular values for the workflow definition document definitions do not match");
+    assertEquals(
+        workflowDefinitionDocumentDefinition1.getValidityPeriod(),
+        workflowDefinitionDocumentDefinition2.getValidityPeriod(),
+        "The validity period values for the workflow definition document definitions do not match");
+    assertEquals(
+        workflowDefinitionDocumentDefinition1.isVerifiable(),
+        workflowDefinitionDocumentDefinition2.isVerifiable(),
+        "The verifiable values for the workflow definition document definitions do not match");
+  }
+
   private void compareWorkflowDefinitions(
       WorkflowDefinition workflowDefinition1, WorkflowDefinition workflowDefinition2) {
     assertEquals(
@@ -1029,12 +1060,23 @@ public class WorkflowServiceTests {
                         + ")");
               }
             });
+    workflowDefinition1
+        .getDocumentDefinitions()
+        .forEach(workflowDefinitionDocumentDefinition1 -> {
+
+          workflowDefinition2
+              .getDocumentDefinitions()
+              .forEach(workflowDefinitionDocumentDefinition2 -> {
+                if (Objects.equals(workflowDefinitionDocumentDefinition1, workflowDefinitionDocumentDefinition2)) {
+                  compareWorkflowDefinitionDocumentDefinitions(workflowDefinitionDocumentDefinition1, workflowDefinitionDocumentDefinition2);
+                }
+              });
+        });
 
     assertEquals(
         workflowDefinition1.getStepDefinitions().size(),
         workflowDefinition2.getStepDefinitions().size(),
         "The number of step definitions for the workflow definitions do not match");
-
     workflowDefinition1
         .getStepDefinitions()
         .forEach(
@@ -1055,6 +1097,18 @@ public class WorkflowServiceTests {
                         + ")");
               }
             });
+    workflowDefinition1
+        .getStepDefinitions()
+        .forEach(workflowStepDefinition1 -> {
+
+          workflowDefinition2
+              .getStepDefinitions()
+              .forEach(workflowStepDefinition2 -> {
+                if (Objects.equals(workflowStepDefinition1, workflowStepDefinition2)) {
+                  compareWorkflowStepDefinitions(workflowStepDefinition1, workflowStepDefinition2);
+                }
+              });
+        });
   }
 
   private void compareWorkflowEngines(
@@ -1121,6 +1175,30 @@ public class WorkflowServiceTests {
         workflowNote1.getUpdatedBy(),
         workflowNote2.getUpdatedBy(),
         "The updated by values for the workflow notes do not match");
+  }
+
+  private void compareWorkflowStepDefinitions(
+      WorkflowStepDefinition workflowStepDefinition1, WorkflowStepDefinition workflowStepDefinition2) {
+    assertEquals(
+        workflowStepDefinition1.getCode(),
+        workflowStepDefinition2.getCode(),
+        "The code values for the workflow step definitions do not match");
+    assertEquals(
+        workflowStepDefinition1.getDescription(),
+        workflowStepDefinition2.getDescription(),
+        "The description values for the workflow step definitions do not match");
+    assertEquals(
+        workflowStepDefinition1.getName(),
+        workflowStepDefinition2.getName(),
+        "The name values for the workflow step definitions do not match");
+    assertEquals(
+        workflowStepDefinition1.getSequence(),
+        workflowStepDefinition2.getSequence(),
+        "The sequence values for the workflow step definitions do not match");
+    assertEquals(
+        workflowStepDefinition1.getTimeToComplete(),
+        workflowStepDefinition2.getTimeToComplete(),
+        "The time to complete values for the workflow step definitions do not match");
   }
 
   private void compareWorkflows(Workflow workflow1, Workflow workflow2) {

@@ -159,6 +159,9 @@
       <column name="code" type="nvarchar(50)" remarks="The code for the workflow step">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="sequence" type="integer" remarks="The sequence number for the workflow step">
+        <constraints nullable="false"/>
+      </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the workflow step">
         <constraints nullable="false"/>
       </column>
@@ -166,6 +169,8 @@
         remarks="The description for the workflow step">
         <constraints nullable="false"/>
       </column>
+      <column name="time_to_complete" type="nvarchar(50)"
+        remarks="The ISO-8601 duration format amount of time to complete the workflow step"/>
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_workflow_step_definitions_workflow_definition_fk"
@@ -248,10 +253,12 @@
         remarks="Is a workflow with the workflow definition ID and workflow definition version limited to a single document with the document definition ID">
         <constraints nullable="false"/>
       </column>
-      <column name="validity_period_amount" type="integer"
-        remarks="The validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
-      <column name="validity_period_unit" type="nvarchar(50)"
-        remarks="The unit of measurement of time for the validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
+      <column name="verifiable" type="boolean"
+        remarks="Should a document with the document definition ID be manually or automatically verified after being provided for a workflow with the workflow definition ID and workflow definition version">
+        <constraints nullable="false"/>
+      </column>
+      <column name="validity_period" type="nvarchar(50)"
+        remarks="The ISO-8601 duration format validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_workflow_definition_document_definitions_workflow_definition_fk"
@@ -364,6 +371,10 @@
     <createIndex indexName="operations_workflow_attributes_workflow_id_ix"
       tableName="operations_workflow_attributes">
       <column name="workflow_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_attributes_valued_ix"
+      tableName="operations_workflow_attributes">
+      <column name="value"/>
     </createIndex>
 
     <createTable tableName="operations_workflow_notes" remarks="Workflow Notes">
@@ -1018,4 +1029,69 @@
       <dropTable tableName="operations_workflow_engines"/>
     </rollback>
   </changeSet>
+
+  <changeSet id="inception-operations-postgresql-1.0.0" author="Marcus Portmann" dbms="postgresql" runInTransaction="false">
+    <comment>inception-operations-postgresql-oracle-1.0.0</comment>
+
+    <!-- Enable pg_trgm (safe if already present) -->
+    <sql>CREATE EXTENSION IF NOT EXISTS pg_trgm;</sql>
+
+    <!-- Trigram GIN index on lower(value); CONCURRENTLY requires autocommit -->
+    <sql>
+      CREATE INDEX CONCURRENTLY IF NOT EXISTS operations_workflow_attributes_value_trgm_ix
+        ON operations_workflow_attributes
+          USING gin (lower(value) gin_trgm_ops);
+    </sql>
+
+    <rollback>
+      <sql>DROP INDEX IF EXISTS operations_workflow_attributes_value_trgm_ix;</sql>
+      <!-- Typically keep the extension; omit dropping pg_trgm -->
+    </rollback>
+  </changeSet>
+
+  <changeSet id="inception-operations-oracle-1.0.0" author="Marcus Portmann" dbms="oracle">
+    <comment>inception-operations-oracle-1.0.0</comment>
+
+    <!-- Create/replace a wordlist that enables leading/trailing wildcard & k-gram index -->
+    <sql><![CDATA[
+      DECLARE
+        v_exists NUMBER;
+      BEGIN
+        -- Drop if exists to allow idempotence across environments
+        SELECT COUNT(*) INTO v_exists
+        FROM ctx_preferences
+        WHERE PRE_NAME = 'OPERATIONS_WORKFLOW_ATTRIBUTES_VALUE_WORDLIST';
+        IF v_exists > 0 THEN
+          ctx_ddl.drop_preference('operations_workflow_attributes_value_wordlist');
+        END IF;
+
+        ctx_ddl.create_preference('operations_workflow_attributes_value_wordlist', 'BASIC_WORDLIST');
+        ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'SUBSTRING_INDEX', 'TRUE');
+        ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'WILDCARD_INDEX', 'TRUE');
+        -- Optional guardrails:
+        -- ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'WILDCARD_MAXTERMS', '5000');
+      END;
+      ]]></sql>
+
+    <!-- CONTEXT index on VALUE; ON COMMIT keeps it up to date -->
+    <sql><![CDATA[
+      CREATE INDEX operations_workflow_attributes_value_ctx_idx
+        ON operations_workflow_attributes(value)
+        INDEXTYPE IS CTXSYS.CONTEXT
+        PARAMETERS (
+        'WORDLIST operations_workflow_attributes_value_wordlist
+         SYNC (ON COMMIT)'
+        );
+      ]]></sql>
+
+    <rollback>
+      <sql>DROP INDEX operations_workflow_attributes_value_ctx_idx</sql>
+      <sql><![CDATA[
+      BEGIN
+        ctx_ddl.drop_preference('operations_workflow_attributes_value_wordlist');
+      END;
+    ]]></sql>
+    </rollback>
+  </changeSet>
+
 </databaseChangeLog>

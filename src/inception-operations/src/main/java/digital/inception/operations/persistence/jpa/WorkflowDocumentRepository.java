@@ -121,6 +121,26 @@ public interface WorkflowDocumentRepository
       @Param("workflowId") UUID workflowId);
 
   /**
+   * Returns whether the workflow document is verifiable.
+   *
+   * @param workflowDocumentId the workflow document ID
+   * @return {@code true} if the workflow document is verifiable or {@code false} otherwise
+   */
+  @Query(
+      """
+    select (count(wddd) > 0)
+    from WorkflowDocument wd
+      join Workflow w on w.id = wd.workflowId
+      join WorkflowDefinitionDocumentDefinition wddd
+           on wddd.workflowDefinitionId = w.definitionId
+          and wddd.workflowDefinitionVersion = w.definitionVersion
+          and wddd.documentDefinitionId = wd.documentDefinitionId
+          and wddd.verifiable = true
+    where wd.id = :workflowDocumentId
+  """)
+  boolean isWorkflowDocumentVerifiable(@Param("workflowDocumentId") UUID workflowDocumentId);
+
+  /**
    * Reject the workflow document.
    *
    * @param workflowDocumentId the ID for the workflow document

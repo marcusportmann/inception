@@ -29,22 +29,25 @@ body:json {
         "documentDefinitionId": "test_document_definition",
         "required": true,
         "singular": true,
-        "validityPeriodAmount": 3,
-        "validityPeriodUnit": "months"
+        "verifiable": true,
+        "validityPeriod": "P3M"
       }
     ],
     "stepDefinitions": [
       {
+        "sequence": 1,
         "code": "test_workflow_step_1",
         "name": "Test Workflow Step 1",
         "description": "The description for Test Workflow Step 1"
       },
-          {
+      {
+        "sequence": 2,
         "code": "test_workflow_step_2",
         "name": "Test Workflow Step 2",
         "description": "The description for Test Workflow Step 2"
       },
       {
+        "sequence": 3,
         "code": "test_workflow_step_3",
         "name": "Test Workflow Step 3",
         "description": "The description for Test Workflow Step 3"
