@@ -128,6 +128,21 @@ public class Workflow implements Serializable {
       updatable = false)
   private final List<WorkflowAttribute> attributes = new ArrayList<>();
 
+  /** The interaction links for the workflow. */
+  @Schema(description = "The interaction links for the workflow")
+  @JsonProperty
+  @JsonManagedReference("workflowInteractionLinkReference")
+  @XmlElementWrapper(name = "InteractionLinks")
+  @XmlElement(name = "InteractionLink")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(
+      name = "workflow_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private final List<WorkflowInteractionLink> interactionLinks = new ArrayList<>();
+
   /** The workflow steps for the workflow. */
   @Schema(description = "The workflow steps for the workflow")
   @JsonProperty
@@ -367,6 +382,22 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Add the interaction link for the workflow.
+   *
+   * @param interactionLink the interaction link
+   */
+  public void addInteractionLink(WorkflowInteractionLink interactionLink) {
+    interactionLinks.removeIf(
+        existingInteractionLink ->
+            Objects.equals(
+                existingInteractionLink.getInteractionId(), interactionLink.getInteractionId()));
+
+    interactionLink.setWorkflow(this);
+
+    interactionLinks.add(interactionLink);
+  }
+
+  /**
    * Add the workflow step for the workflow.
    *
    * @param step the workflow step
@@ -509,6 +540,15 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Returns the interaction links for the workflow.
+   *
+   * @return the interaction links for the workflow
+   */
+  public List<WorkflowInteractionLink> getInteractionLinks() {
+    return interactionLinks;
+  }
+
+  /**
    * Returns the ID for the parent workflow.
    *
    * @return the ID for the parent workflow
@@ -586,9 +626,20 @@ public class Workflow implements Serializable {
    *
    * @param code the code for the attribute
    */
-  public void removeAttributeWithCode(String code) {
+  public void removeAttribute(String code) {
     attributes.removeIf(
         existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
+  }
+
+  /**
+   * Remove the interaction link with the specified ID for the workflow.
+   *
+   * @param interactionId the ID for the interaction
+   */
+  public void removeInteractionLink(UUID interactionId) {
+    interactionLinks.removeIf(
+        existingInteractionLink ->
+            Objects.equals(existingInteractionLink.getInteractionId(), interactionId));
   }
 
   /**
@@ -682,6 +733,17 @@ public class Workflow implements Serializable {
    */
   public void setInitiatedBy(String initiatedBy) {
     this.initiatedBy = initiatedBy;
+  }
+
+  /**
+   * Set the interaction links for the workflow.
+   *
+   * @param interactionLinks the interaction links for the workflow
+   */
+  public void setInteractionLinks(List<WorkflowInteractionLink> interactionLinks) {
+    interactionLinks.forEach(interactionLink -> interactionLink.setWorkflow(this));
+    this.interactionLinks.clear();
+    this.interactionLinks.addAll(interactionLinks);
   }
 
   /**

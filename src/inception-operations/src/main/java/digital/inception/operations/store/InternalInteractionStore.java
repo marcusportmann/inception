@@ -21,19 +21,25 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
+import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionAttachmentSummary;
+import digital.inception.operations.model.InteractionNote;
+import digital.inception.operations.model.InteractionNoteSortBy;
+import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionSummary;
 import digital.inception.operations.persistence.jpa.InteractionAttachmentRepository;
 import digital.inception.operations.persistence.jpa.InteractionAttachmentSummaryRepository;
+import digital.inception.operations.persistence.jpa.InteractionNoteRepository;
 import digital.inception.operations.persistence.jpa.InteractionRepository;
 import digital.inception.operations.persistence.jpa.InteractionSummaryRepository;
 import jakarta.persistence.EntityManager;
@@ -79,6 +85,9 @@ public class InternalInteractionStore implements InteractionStore {
   /** The Interaction Attachment Summary Repository. */
   private final InteractionAttachmentSummaryRepository interactionAttachmentSummaryRepository;
 
+  /** The Interaction Note Repository. */
+  private final InteractionNoteRepository interactionNoteRepository;
+
   /** The Interaction Repository. */
   private final InteractionRepository interactionRepository;
 
@@ -94,15 +103,18 @@ public class InternalInteractionStore implements InteractionStore {
    *
    * @param interactionAttachmentRepository the Interaction Attachment Repository
    * @param interactionAttachmentSummaryRepository the Interaction Attachment Summary Repository
+   * @param interactionNoteRepository the Interaction Note Repository
    * @param interactionRepository the Interaction Repository
    * @param interactionSummaryRepository the Interaction Summary Repository
    */
   public InternalInteractionStore(
       InteractionAttachmentRepository interactionAttachmentRepository,
+      InteractionNoteRepository interactionNoteRepository,
       InteractionAttachmentSummaryRepository interactionAttachmentSummaryRepository,
       InteractionRepository interactionRepository,
       InteractionSummaryRepository interactionSummaryRepository) {
     this.interactionAttachmentRepository = interactionAttachmentRepository;
+    this.interactionNoteRepository = interactionNoteRepository;
     this.interactionAttachmentSummaryRepository = interactionAttachmentSummaryRepository;
     this.interactionRepository = interactionRepository;
     this.interactionSummaryRepository = interactionSummaryRepository;
@@ -158,6 +170,28 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
+  public InteractionNote createInteractionNote(UUID tenantId, InteractionNote interactionNote)
+      throws DuplicateInteractionNoteException, ServiceUnavailableException {
+    try {
+      if (interactionNoteRepository.existsById(interactionNote.getId())) {
+        throw new DuplicateInteractionNoteException(interactionNote.getId());
+      }
+
+      return interactionNoteRepository.saveAndFlush(interactionNote);
+    } catch (DuplicateInteractionNoteException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the interaction note ("
+              + interactionNote.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void deleteInteraction(UUID tenantId, UUID interactionId)
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
@@ -195,6 +229,28 @@ public class InternalInteractionStore implements InteractionStore {
       throw new ServiceUnavailableException(
           "Failed to delete the interaction attachment ("
               + interactionAttachmentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InteractionNoteNotFoundException, ServiceUnavailableException {
+    try {
+      if (!interactionNoteRepository.existsByTenantIdAndId(tenantId, interactionNoteId)) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
+      }
+
+      interactionNoteRepository.deleteById(interactionNoteId);
+    } catch (InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the interaction note ("
+              + interactionNoteId
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -378,6 +434,147 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
+  public InteractionNote getInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InteractionNoteNotFoundException, ServiceUnavailableException {
+    try {
+      /*
+       * NOTE: The search by both tenant ID and interaction note ID includes a security check to ensure
+       * that the interaction note not only exists, but is also associated with the specified tenant.
+       */
+      Optional<InteractionNote> interactionNoteOptional =
+          interactionNoteRepository.findByTenantIdAndId(tenantId, interactionNoteId);
+
+      if (interactionNoteOptional.isEmpty()) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
+      }
+
+      return interactionNoteOptional.get();
+    } catch (InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction note ("
+              + interactionNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public InteractionNotes getInteractionNotes(
+      UUID tenantId,
+      UUID interactionId,
+      String filter,
+      InteractionNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InteractionNotFoundException, ServiceUnavailableException {
+    try {
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      PageRequest pageRequest;
+
+      if (sortBy == InteractionNoteSortBy.CREATED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "created");
+      } else if (sortBy == InteractionNoteSortBy.CREATED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "createdBy");
+      } else if (sortBy == InteractionNoteSortBy.UPDATED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "updated");
+      } else if (sortBy == InteractionNoteSortBy.UPDATED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "updatedBy");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "created");
+      }
+
+      Page<InteractionNote> interactionNotePage =
+          interactionNoteRepository.findAll(
+              (Specification<InteractionNote>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+                    predicates.add(criteriaBuilder.equal(root.get("interactionId"), interactionId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.or(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("createdBy")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("updatedBy")),
+                                  "%" + filter.toLowerCase() + "%")));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
+
+      return new InteractionNotes(
+          tenantId,
+          interactionId,
+          interactionNotePage.toList(),
+          interactionNotePage.getTotalElements(),
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered interaction notes for the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public InteractionSummaries getInteractionSummaries(
       UUID tenantId,
       UUID sourceId,
@@ -517,7 +714,7 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
-  public boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
+  public boolean interactionExists(UUID tenantId, UUID interactionId)
       throws ServiceUnavailableException {
     try {
       return interactionRepository.existsByTenantIdAndId(tenantId, interactionId);
@@ -527,7 +724,27 @@ public class InternalInteractionStore implements InteractionStore {
               + interactionId
               + ") exists for the tenant ("
               + tenantId
-              + ")");
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean interactionNoteExists(UUID tenantId, UUID interactionId, UUID interactionNoteId)
+      throws ServiceUnavailableException {
+    try {
+      return interactionNoteRepository.existsByTenantIdAndInteractionIdAndId(
+          tenantId, interactionId, interactionNoteId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the interaction note ("
+              + interactionNoteId
+              + ") exists for the interaction ("
+              + interactionId
+              + ") and tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -614,6 +831,28 @@ public class InternalInteractionStore implements InteractionStore {
       throw new ServiceUnavailableException(
           "Failed to update the interaction attachment ("
               + interactionAttachment.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public InteractionNote updateInteractionNote(UUID tenantId, InteractionNote interactionNote)
+      throws InteractionNoteNotFoundException, ServiceUnavailableException {
+    try {
+      if (!interactionNoteRepository.existsByTenantIdAndId(tenantId, interactionNote.getId())) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNote.getId());
+      }
+
+      return interactionNoteRepository.saveAndFlush(interactionNote);
+    } catch (InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the interaction note ("
+              + interactionNote.getId()
               + ") for the tenant ("
               + tenantId
               + ")",

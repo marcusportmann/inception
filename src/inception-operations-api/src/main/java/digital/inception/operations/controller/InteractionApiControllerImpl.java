@@ -19,14 +19,21 @@ package digital.inception.operations.controller;
 import digital.inception.api.SecureApiController;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
 import digital.inception.operations.exception.InteractionNotFoundException;
+import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
+import digital.inception.operations.model.InteractionNote;
+import digital.inception.operations.model.InteractionNoteSortBy;
+import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceSummary;
+import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.InteractionService;
 import java.util.List;
 import java.util.Objects;
@@ -68,11 +75,32 @@ public class InteractionApiControllerImpl extends SecureApiController
       throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
     interactionService.createInteraction(tenantId, interaction);
+  }
+
+  @Override
+  public UUID createInteractionNote(
+      UUID tenantId, CreateInteractionNoteRequest createInteractionNoteRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    InteractionNote interactionNote =
+        interactionService.createInteractionNote(
+            tenantId, createInteractionNoteRequest, getAuthenticationName());
+
+    return interactionNote.getId();
   }
 
   @Override
@@ -82,7 +110,9 @@ public class InteractionApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
@@ -96,11 +126,75 @@ public class InteractionApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
     interactionService.deleteInteractionSource(tenantId, interactionSourceId);
+  }
+
+  @Override
+  public InteractionNote getInteractionNote(
+      UUID tenantId, UUID interactionId, UUID interactionNoteId)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionNoteNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!interactionService.interactionExists(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      if (!interactionService.interactionNoteExists(tenantId, interactionId, interactionNoteId)) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
+      }
+    } catch (InteractionNotFoundException | InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction note ("
+              + interactionNoteId
+              + ") for the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+
+    return interactionService.getInteractionNote(tenantId, interactionNoteId);
+  }
+
+  @Override
+  public InteractionNotes getInteractionNotes(
+      UUID tenantId,
+      UUID interactionId,
+      String filter,
+      InteractionNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return interactionService.getInteractionNotes(
+        tenantId, interactionId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -110,7 +204,9 @@ public class InteractionApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
@@ -122,7 +218,9 @@ public class InteractionApiControllerImpl extends SecureApiController
       throws InvalidArgumentException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
@@ -134,7 +232,9 @@ public class InteractionApiControllerImpl extends SecureApiController
       throws InvalidArgumentException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
@@ -146,7 +246,9 @@ public class InteractionApiControllerImpl extends SecureApiController
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
@@ -162,6 +264,25 @@ public class InteractionApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void updateInteractionNote(
+      UUID tenantId, UpdateInteractionNoteRequest updateInteractionNoteRequest)
+      throws InvalidArgumentException,
+          InteractionNoteNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    InteractionNote interactionNote =
+        interactionService.updateInteractionNote(
+            tenantId, updateInteractionNoteRequest, getAuthenticationName());
+  }
+
+  @Override
   public void updateInteractionSource(
       UUID tenantId, UUID interactionSourceId, InteractionSource interactionSource)
       throws InvalidArgumentException,
@@ -169,7 +290,9 @@ public class InteractionApiControllerImpl extends SecureApiController
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(tenantId)) {
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 

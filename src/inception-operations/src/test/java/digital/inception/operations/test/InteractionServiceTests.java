@@ -36,10 +36,14 @@ import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionMimeType;
+import digital.inception.operations.model.InteractionNote;
+import digital.inception.operations.model.InteractionNoteSortBy;
+import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceAttribute;
@@ -48,6 +52,7 @@ import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.InteractionService;
 import digital.inception.operations.util.MessageUtil;
@@ -128,7 +133,7 @@ public class InteractionServiceTests {
 
   private GreenMail greenMail;
 
-  /** The Operations Service. */
+  /** The Interaction Service. */
   @Autowired private InteractionService interactionService;
 
   /** Test sending and receiving a multipart/mixed message using the GreenMail server. */
@@ -370,8 +375,7 @@ public class InteractionServiceTests {
     assertEquals(0, retrievedInteractionSummaries.getInteractionSummaries().size());
 
     assertTrue(
-        interactionService.interactionExistsWithId(
-            TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId));
+        interactionService.interactionExists(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId));
 
     Interaction retrievedInteraction =
         interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
@@ -510,6 +514,58 @@ public class InteractionServiceTests {
             retrievedInteraction.getId(),
             retrievedInteractionAttachment.getHash()));
 
+    // Create a interaction note for the interaction
+    CreateInteractionNoteRequest createInteractionNoteRequest =
+        new CreateInteractionNoteRequest(
+            retrievedInteraction.getId(), "This is the interaction note content.");
+
+    InteractionNote interactionNote =
+        interactionService.createInteractionNote(
+            TenantUtil.DEFAULT_TENANT_ID, createInteractionNoteRequest, "TEST1");
+
+    assertTrue(
+        interactionService.interactionNoteExists(
+            TenantUtil.DEFAULT_TENANT_ID,
+            interactionNote.getInteractionId(),
+            interactionNote.getId()));
+
+    InteractionNote retrievedInteractionNote =
+        interactionService.getInteractionNote(
+            TenantUtil.DEFAULT_TENANT_ID, interactionNote.getId());
+
+    compareInteractionNotes(interactionNote, retrievedInteractionNote);
+
+    // Update the interaction note for the interaction
+    UpdateInteractionNoteRequest updateInteractionNoteRequest =
+        new UpdateInteractionNoteRequest(
+            interactionNote.getId(), "This is the interaction note content.");
+
+    InteractionNote updatedInteractionNote =
+        interactionService.updateInteractionNote(
+            TenantUtil.DEFAULT_TENANT_ID, updateInteractionNoteRequest, "TEST2");
+
+    retrievedInteractionNote =
+        interactionService.getInteractionNote(
+            TenantUtil.DEFAULT_TENANT_ID, updatedInteractionNote.getId());
+
+    compareInteractionNotes(updatedInteractionNote, retrievedInteractionNote);
+
+    // Retrieve the interaction notes for the interaction
+    InteractionNotes interactionNotes =
+        interactionService.getInteractionNotes(
+            TenantUtil.DEFAULT_TENANT_ID,
+            retrievedInteraction.getId(),
+            "TEST2",
+            InteractionNoteSortBy.CREATED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    assertEquals(1, interactionNotes.getTotal());
+
+    compareInteractionNotes(
+        updatedInteractionNote, interactionNotes.getInteractionNotes().getFirst());
+
     interactionService.deleteInteractionAttachment(
         TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);
 
@@ -611,6 +667,33 @@ public class InteractionServiceTests {
   protected void tearDown() {
     // Stop the GreenMail server
     greenMail.stop();
+  }
+
+  private void compareInteractionNotes(InteractionNote interactionNote1, InteractionNote interactionNote2) {
+    assertEquals(
+        interactionNote1.getId(),
+        interactionNote2.getId(),
+        "The ID values for the interaction notes do not match");
+    assertEquals(
+        interactionNote1.getContent(),
+        interactionNote2.getContent(),
+        "The content values for the interaction notes do not match");
+    assertEquals(
+        interactionNote1.getCreated(),
+        interactionNote2.getCreated(),
+        "The created values for the interaction notes do not match");
+    assertEquals(
+        interactionNote1.getCreatedBy(),
+        interactionNote2.getCreatedBy(),
+        "The created by values for the interaction notes do not match");
+    assertEquals(
+        interactionNote1.getUpdated(),
+        interactionNote2.getUpdated(),
+        "The updated values for the interaction notes do not match");
+    assertEquals(
+        interactionNote1.getUpdatedBy(),
+        interactionNote2.getUpdatedBy(),
+        "The updated by values for the interaction notes do not match");
   }
 
   private void compareInteractionSources(
@@ -949,7 +1032,7 @@ public class InteractionServiceTests {
   private String randomId() {
     return String.format("%04X", secureRandom.nextInt(0x10000));
   }
-
+  
   private void waitForInteractionToProcess(UUID tenantId, UUID interactionId) throws Exception {
     for (int i = 0; i < 50; i++) {
       Interaction interaction = interactionService.getInteraction(tenantId, interactionId);
@@ -968,4 +1051,5 @@ public class InteractionServiceTests {
             + tenantId
             + ") to process");
   }
+
 }

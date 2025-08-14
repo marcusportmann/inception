@@ -38,19 +38,23 @@ body:json {
         "sequence": 1,
         "code": "test_workflow_step_1",
         "name": "Test Workflow Step 1",
-        "description": "The description for Test Workflow Step 1"
+        "description": "The description for Test Workflow Step 1",
+        "internal": false
       },
       {
         "sequence": 2,
         "code": "test_workflow_step_2",
         "name": "Test Workflow Step 2",
-        "description": "The description for Test Workflow Step 2"
+        "description": "The description for Test Workflow Step 2",
+        "internal": true,
+        "timeToComplete": "P1D"
       },
       {
         "sequence": 3,      
         "code": "test_workflow_step_3",
         "name": "Test Workflow Step 3",
-        "description": "The description for Test Workflow Step 3"
+        "description": "The description for Test Workflow Step 3",
+        "internal": false
       }
     ],
     "validationSchemaType": "json",

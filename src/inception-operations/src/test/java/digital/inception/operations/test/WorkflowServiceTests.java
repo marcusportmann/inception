@@ -192,7 +192,8 @@ public class WorkflowServiceTests {
             "test_workflow_step_2",
             "Test Workflow Step 2",
             "The description for Test Workflow Step 2",
-            "XXX"));
+            true,
+            "P1D"));
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -721,7 +722,8 @@ public class WorkflowServiceTests {
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
-    sharedWorkflowDefinition.addDocumentDefinition(sharedDocumentDefinition.getId(), true, true, true);
+    sharedWorkflowDefinition.addDocumentDefinition(
+        sharedDocumentDefinition.getId(), true, true, true);
 
     workflowService.createWorkflowDefinition(sharedWorkflowDefinition);
 
@@ -773,7 +775,8 @@ public class WorkflowServiceTests {
             "Test Workflow Step 3",
             "The description for Test Workflow Step 3"));
 
-    tenantWorkflowDefinition.addDocumentDefinition(tenantDocumentDefinition.getId(), true, false, true);
+    tenantWorkflowDefinition.addDocumentDefinition(
+        tenantDocumentDefinition.getId(), true, false, true);
     tenantWorkflowDefinition.addDocumentDefinition(
         sharedDocumentDefinition.getId(), true, true, true, "P3M");
 
@@ -830,7 +833,7 @@ public class WorkflowServiceTests {
     tenantWorkflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("attribute_name", "updated_attribute_value"));
 
-    tenantWorkflowDefinition.removeAttributeWithCode("another_attribute_name");
+    tenantWorkflowDefinition.removeAttribute("another_attribute_name");
 
     tenantWorkflowDefinition.removeStepDefinitionWithCode("test_workflow_step_2");
 
@@ -945,7 +948,9 @@ public class WorkflowServiceTests {
         "The tenant ID values for the workflow definition categories do not match");
   }
 
-  private void compareWorkflowDefinitionDocumentDefinitions(WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition1, WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition2) {
+  private void compareWorkflowDefinitionDocumentDefinitions(
+      WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition1,
+      WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition2) {
     assertEquals(
         workflowDefinitionDocumentDefinition1.getDocumentDefinitionId(),
         workflowDefinitionDocumentDefinition2.getDocumentDefinitionId(),
@@ -1062,16 +1067,21 @@ public class WorkflowServiceTests {
             });
     workflowDefinition1
         .getDocumentDefinitions()
-        .forEach(workflowDefinitionDocumentDefinition1 -> {
-
-          workflowDefinition2
-              .getDocumentDefinitions()
-              .forEach(workflowDefinitionDocumentDefinition2 -> {
-                if (Objects.equals(workflowDefinitionDocumentDefinition1, workflowDefinitionDocumentDefinition2)) {
-                  compareWorkflowDefinitionDocumentDefinitions(workflowDefinitionDocumentDefinition1, workflowDefinitionDocumentDefinition2);
-                }
-              });
-        });
+        .forEach(
+            workflowDefinitionDocumentDefinition1 -> {
+              workflowDefinition2
+                  .getDocumentDefinitions()
+                  .forEach(
+                      workflowDefinitionDocumentDefinition2 -> {
+                        if (Objects.equals(
+                            workflowDefinitionDocumentDefinition1,
+                            workflowDefinitionDocumentDefinition2)) {
+                          compareWorkflowDefinitionDocumentDefinitions(
+                              workflowDefinitionDocumentDefinition1,
+                              workflowDefinitionDocumentDefinition2);
+                        }
+                      });
+            });
 
     assertEquals(
         workflowDefinition1.getStepDefinitions().size(),
@@ -1099,16 +1109,18 @@ public class WorkflowServiceTests {
             });
     workflowDefinition1
         .getStepDefinitions()
-        .forEach(workflowStepDefinition1 -> {
-
-          workflowDefinition2
-              .getStepDefinitions()
-              .forEach(workflowStepDefinition2 -> {
-                if (Objects.equals(workflowStepDefinition1, workflowStepDefinition2)) {
-                  compareWorkflowStepDefinitions(workflowStepDefinition1, workflowStepDefinition2);
-                }
-              });
-        });
+        .forEach(
+            workflowStepDefinition1 -> {
+              workflowDefinition2
+                  .getStepDefinitions()
+                  .forEach(
+                      workflowStepDefinition2 -> {
+                        if (Objects.equals(workflowStepDefinition1, workflowStepDefinition2)) {
+                          compareWorkflowStepDefinitions(
+                              workflowStepDefinition1, workflowStepDefinition2);
+                        }
+                      });
+            });
   }
 
   private void compareWorkflowEngines(
@@ -1178,7 +1190,8 @@ public class WorkflowServiceTests {
   }
 
   private void compareWorkflowStepDefinitions(
-      WorkflowStepDefinition workflowStepDefinition1, WorkflowStepDefinition workflowStepDefinition2) {
+      WorkflowStepDefinition workflowStepDefinition1,
+      WorkflowStepDefinition workflowStepDefinition2) {
     assertEquals(
         workflowStepDefinition1.getCode(),
         workflowStepDefinition2.getCode(),

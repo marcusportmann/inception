@@ -20,12 +20,17 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
+import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
+import digital.inception.operations.model.InteractionNote;
+import digital.inception.operations.model.InteractionNoteSortBy;
+import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
@@ -66,6 +71,18 @@ public interface InteractionStore {
       throws DuplicateInteractionAttachmentException, ServiceUnavailableException;
 
   /**
+   * Create the interaction note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionNote the interaction note
+   * @return the interaction note
+   * @throws DuplicateInteractionNoteException if the interaction note already exists
+   * @throws ServiceUnavailableException if the interaction note could not be created
+   */
+  InteractionNote createInteractionNote(UUID tenantId, InteractionNote interactionNote)
+      throws DuplicateInteractionNoteException, ServiceUnavailableException;
+
+  /**
    * Delete the interaction.
    *
    * @param tenantId the ID for the tenant
@@ -86,6 +103,17 @@ public interface InteractionStore {
    */
   void deleteInteractionAttachment(UUID tenantId, UUID interactionAttachmentId)
       throws InteractionAttachmentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the interaction note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionNoteId the ID for the interaction note
+   * @throws InteractionNoteNotFoundException if the interaction note could not be found
+   * @throws ServiceUnavailableException if the interaction note could not be deleted
+   */
+  void deleteInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InteractionNoteNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the interaction.
@@ -170,6 +198,44 @@ public interface InteractionStore {
       UUID tenantId, UUID sourceId, String sourceReference) throws ServiceUnavailableException;
 
   /**
+   * Retrieve the interaction note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionNoteId the ID for the interaction note
+   * @return the interaction note
+   * @throws InteractionNoteNotFoundException if the interaction note could not be found
+   * @throws ServiceUnavailableException if the interaction note could not be retrieved
+   */
+  InteractionNote getInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InteractionNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the interaction notes for the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction the interaction notes are associated with
+   * @param filter the filter to apply to the interaction notes
+   * @param sortBy the method used to sort the interaction notes e.g. by created
+   * @param sortDirection the sort direction to apply to the interaction notes
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param maxResults the maximum number of interaction notes that should be retrieved
+   * @return the interaction notes
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction notes could not be retrieved
+   */
+  InteractionNotes getInteractionNotes(
+      UUID tenantId,
+      UUID interactionId,
+      String filter,
+      InteractionNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize,
+      int maxResults)
+      throws InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the summaries for the interactions for the interaction source with the specified ID.
    *
    * @param tenantId the ID for the tenant
@@ -221,14 +287,28 @@ public interface InteractionStore {
       throws ServiceUnavailableException;
 
   /**
-   * Returns whether an interaction with the specified ID exists.
+   * Check whether the interaction with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant
+   * @param tenantId the ID for the tenant the interaction is associated with
    * @param interactionId the ID for the interaction
-   * @return {@code true} if an interaction with the specified ID exists or {@code false} otherwise
-   * @throws ServiceUnavailableException if the check for the interaction failed
+   * @return {@code true} if the interaction with the specified tenant ID and ID exists or {@code
+   *     false} otherwise
+   * @throws ServiceUnavailableException if the existence of the interaction could not be determined
    */
-  boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
+  boolean interactionExists(UUID tenantId, UUID interactionId) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the interaction note with the specified tenant ID, interaction ID and ID exists.
+   *
+   * @param tenantId the ID for the tenant the interaction note is associated with
+   * @param interactionId the ID for the interaction the interaction note is associated with
+   * @param interactionNoteId the ID for the interaction note
+   * @return {@code true} if the interaction note with the specified tenant ID, interaction ID and
+   *     ID exists or {@code false} otherwise
+   * @throws ServiceUnavailableException if the existence of the interaction note could not be
+   *     determined
+   */
+  boolean interactionNoteExists(UUID tenantId, UUID interactionId, UUID interactionNoteId)
       throws ServiceUnavailableException;
 
   /**
@@ -277,4 +357,16 @@ public interface InteractionStore {
   InteractionAttachment updateInteractionAttachment(
       UUID tenantId, InteractionAttachment interactionAttachment)
       throws InteractionAttachmentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Update the interaction note.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionNote the interaction note
+   * @return the updated interaction note
+   * @throws InteractionNoteNotFoundException if the interaction note could not be found
+   * @throws ServiceUnavailableException if the interaction note could not be updated
+   */
+  InteractionNote updateInteractionNote(UUID tenantId, InteractionNote interactionNote)
+      throws InteractionNoteNotFoundException, ServiceUnavailableException;
 }

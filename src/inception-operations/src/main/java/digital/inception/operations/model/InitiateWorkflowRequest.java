@@ -48,6 +48,7 @@ import java.util.UUID;
   "parentId",
   "partyId",
   "externalReference",
+  "pendWorkflow",
   "attributes",
   "data"
 })
@@ -57,7 +58,15 @@ import java.util.UUID;
 @XmlType(
     name = "InitiateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"definitionId", "parentId", "partyId", "externalReference", "attributes", "data"})
+    propOrder = {
+      "definitionId",
+      "parentId",
+      "partyId",
+      "externalReference",
+      "pendWorkflow",
+      "attributes",
+      "data"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidInitiateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -108,6 +117,16 @@ public class InitiateWorkflowRequest implements Serializable {
   @JsonProperty
   @XmlElement(name = "PartyId")
   private UUID partyId;
+
+  /**
+   * Pend the workflow.
+   *
+   * <p>A pended workflow will be created with the PENDING state, but not started.
+   */
+  @Schema(description = "Pend the workflow")
+  @JsonProperty
+  @XmlElement(name = "PendWorkflow")
+  private boolean pendWorkflow;
 
   /** Constructs a new {@code InitiateWorkflowRequest}. */
   public InitiateWorkflowRequest() {}
@@ -240,6 +259,16 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
+   * Returns whether the workflow should be created in a PENDING state.
+   *
+   * @return {@code true} if the workflow should be created in a PENDING state or {@code false}
+   *     otherwise
+   */
+  public boolean getPendWorkflow() {
+    return pendWorkflow;
+  }
+
+  /**
    * Set the attributes for the workflow.
    *
    * @param attributes the attributes for the workflow
@@ -292,5 +321,15 @@ public class InitiateWorkflowRequest implements Serializable {
    */
   public void setPartyId(UUID partyId) {
     this.partyId = partyId;
+  }
+
+  /**
+   * Set whether the workflow should be created in a PENDING state.
+   *
+   * @param pendWorkflow {@code true} if the workflow should be created in a PENDING state or {@code
+   *     false} otherwise
+   */
+  public void setPendWorkflow(boolean pendWorkflow) {
+    this.pendWorkflow = pendWorkflow;
   }
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.validation.ValidationSchemaType;
+import digital.inception.core.validation.constraint.ValidISO8601DurationOrPeriod;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -67,6 +68,7 @@ import org.springframework.util.StringUtils;
   "tenantId",
   "name",
   "engineId",
+  "timeToComplete",
   "attributes",
   "documentDefinitions",
   "stepDefinitions",
@@ -84,6 +86,7 @@ import org.springframework.util.StringUtils;
       "tenantId",
       "name",
       "engineId",
+      "timeToComplete",
       "attributes",
       "documentDefinitions",
       "stepDefinitions",
@@ -221,6 +224,19 @@ public class WorkflowDefinition implements Serializable {
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
   private UUID tenantId;
+
+  /**
+   * The ISO-8601 duration format amount of time to complete a workflow associated with the workflow
+   * definition.
+   */
+  @Schema(
+      description =
+          "The ISO-8601 duration format amount of time to complete a workflow associated with the workflow definition")
+  @JsonProperty
+  @XmlElement(name = "TimeToComplete")
+  @ValidISO8601DurationOrPeriod
+  @Column(name = "time_to_complete", length = 50)
+  private String timeToComplete;
 
   /** The XML (XSD) or JSON validation schema for the workflow definition. */
   @Schema(description = "The XML (XSD) or JSON validation schema for the workflow definition")
@@ -529,7 +545,8 @@ public class WorkflowDefinition implements Serializable {
                 existingDocumentDefinition.getDocumentDefinitionId(), documentDefinitionId));
 
     documentDefinitions.add(
-        new WorkflowDefinitionDocumentDefinition(this, documentDefinitionId, required, singular, verifiable));
+        new WorkflowDefinitionDocumentDefinition(
+            this, documentDefinitionId, required, singular, verifiable));
   }
 
   /**
@@ -548,7 +565,11 @@ public class WorkflowDefinition implements Serializable {
    *     workflow with the workflow definition ID and workflow definition version
    */
   public void addDocumentDefinition(
-      String documentDefinitionId, boolean required, boolean singular, boolean verifiable, String validityPeriod) {
+      String documentDefinitionId,
+      boolean required,
+      boolean singular,
+      boolean verifiable,
+      String validityPeriod) {
     documentDefinitions.removeIf(
         existingDocumentDefinition ->
             StringUtil.equalsIgnoreCase(
@@ -686,6 +707,17 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the ISO-8601 duration format amount of time to complete a workflow associated with the
+   * workflow definition.
+   *
+   * @return the ISO-8601 duration format amount of time to complete a workflow associated with the
+   *     workflow definition
+   */
+  public String getTimeToComplete() {
+    return timeToComplete;
+  }
+
+  /**
    * Returns the XML (XSD) or JSON validation schema for the workflow definition.
    *
    * @return the XML (XSD) or JSON validation schema for the workflow definition
@@ -727,7 +759,7 @@ public class WorkflowDefinition implements Serializable {
    *
    * @param code the code for the attribute
    */
-  public void removeAttributeWithCode(String code) {
+  public void removeAttribute(String code) {
     attributes.removeIf(
         existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
   }
@@ -847,6 +879,17 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
+  }
+
+  /**
+   * Set the ISO-8601 duration format amount of time to complete a workflow associated with the
+   * workflow definition.
+   *
+   * @param timeToComplete the ISO-8601 duration format amount of time to complete a workflow
+   *     associated with the workflow definition
+   */
+  public void setTimeToComplete(String timeToComplete) {
+    this.timeToComplete = timeToComplete;
   }
 
   /**

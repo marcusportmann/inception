@@ -321,7 +321,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       Optional<WorkflowStep> workflowStepOptional =
           workflowStepRepository.findById(new WorkflowStepId(workflowId, step));
 
-      if (!workflowStepOptional.isPresent()) {
+      if (workflowStepOptional.isEmpty()) {
         throw new WorkflowStepNotFoundException(workflowId, step);
       }
 

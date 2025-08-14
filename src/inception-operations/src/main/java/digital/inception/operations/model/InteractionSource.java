@@ -402,7 +402,7 @@ public class InteractionSource implements Serializable {
    *
    * @param code the code for the attribute
    */
-  public void removeAttributeWithCode(String code) {
+  public void removeAttribute(String code) {
     attributes.removeIf(
         existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
   }

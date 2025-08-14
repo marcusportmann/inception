@@ -261,7 +261,7 @@ public class WorkflowEngine implements Serializable {
    *
    * @param code the code for the attribute
    */
-  public void removeAttributeWithCode(String code) {
+  public void removeAttribute(String code) {
     attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getCode(), code));
   }
 

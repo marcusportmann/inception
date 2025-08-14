@@ -33,12 +33,17 @@ import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
+import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionMimeType;
+import digital.inception.operations.model.InteractionNote;
+import digital.inception.operations.model.InteractionNoteSortBy;
+import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
@@ -49,6 +54,7 @@ import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.MailboxInteractionSourceAttributeName;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.persistence.jpa.InteractionSourceRepository;
 import digital.inception.operations.persistence.jpa.InteractionSourceSummaryRepository;
 import digital.inception.operations.store.InteractionStore;
@@ -131,6 +137,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   /** The internal reference to the Interaction Service to enable caching. */
   private InteractionService InteractionService;
+
+  /** The maximum number of filtered interaction notes that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-interaction-notes:#{100}}")
+  private int maxFilteredInteractionNotes;
 
   /** The maximum number of processing attempts for an interaction. */
   @Value("${inception.operations.maximum-interaction-processing-attempts:#{100}}")
@@ -240,6 +250,48 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  public InteractionNote createInteractionNote(
+      UUID tenantId, CreateInteractionNoteRequest createInteractionNoteRequest, String createdBy)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("createInteractionNoteRequest", createInteractionNoteRequest);
+
+    if (!StringUtils.hasText(createdBy)) {
+      throw new InvalidArgumentException("createdBy");
+    }
+
+    try {
+      if (!interactionExists(tenantId, createInteractionNoteRequest.getInteractionId())) {
+        throw new InteractionNotFoundException(
+            tenantId, createInteractionNoteRequest.getInteractionId());
+      }
+
+      InteractionNote interactionNote =
+          new InteractionNote(
+              tenantId,
+              createInteractionNoteRequest.getInteractionId(),
+              createInteractionNoteRequest.getContent(),
+              OffsetDateTime.now(),
+              createdBy);
+
+      return interactionStore.createInteractionNote(tenantId, interactionNote);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the interaction note for the interaction ("
+              + createInteractionNoteRequest.getInteractionId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   @Transactional
   @CachePut(cacheNames = "interactionSources", key = "#interactionSource.id")
   public InteractionSource createInteractionSource(
@@ -308,6 +360,34 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     interactionStore.deleteInteractionAttachment(tenantId, interactionAttachmentId);
+  }
+
+  @Override
+  public void deleteInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InvalidArgumentException,
+          InteractionNoteNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionNoteId == null) {
+      throw new InvalidArgumentException("interactionNoteId");
+    }
+
+    try {
+      interactionStore.deleteInteractionNote(tenantId, interactionNoteId);
+    } catch (InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the interaction note ("
+              + interactionNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -416,7 +496,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      if (!interactionStore.interactionExistsWithId(tenantId, interactionId)) {
+      if (!interactionStore.interactionExists(tenantId, interactionId)) {
         throw new InteractionNotFoundException(tenantId, interactionId);
       }
 
@@ -434,6 +514,75 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the interaction attachments for the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public InteractionNote getInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InvalidArgumentException,
+          InteractionNoteNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionNoteId == null) {
+      throw new InvalidArgumentException("interactionNoteId");
+    }
+
+    try {
+      return interactionStore.getInteractionNote(tenantId, interactionNoteId);
+    } catch (InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction note ("
+              + interactionNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public InteractionNotes getInteractionNotes(
+      UUID tenantId,
+      UUID interactionId,
+      String filter,
+      InteractionNoteSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    try {
+      return interactionStore.getInteractionNotes(
+          tenantId,
+          interactionId,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize,
+          maxFilteredInteractionNotes);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered interaction notes for the interaction ("
               + interactionId
               + ") for the tenant ("
               + tenantId
@@ -686,7 +835,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  public boolean interactionExistsWithId(UUID tenantId, UUID interactionId)
+  public boolean interactionExists(UUID tenantId, UUID interactionId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -696,7 +845,17 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interactionId");
     }
 
-    return interactionStore.interactionExistsWithId(tenantId, interactionId);
+    try {
+      return interactionStore.interactionExists(tenantId, interactionId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the interaction ("
+              + interactionId
+              + ") exists for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -726,6 +885,36 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + ") and source reference ("
               + sourceReference
               + ") exists for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean interactionNoteExists(UUID tenantId, UUID interactionId, UUID interactionNoteId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    if (interactionNoteId == null) {
+      throw new InvalidArgumentException("interactionNoteId");
+    }
+
+    try {
+      return interactionStore.interactionNoteExists(tenantId, interactionId, interactionNoteId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the interaction note ("
+              + interactionNoteId
+              + ") exists for the interaction ("
+              + interactionId
+              + ") and tenant ("
               + tenantId
               + ")",
           e);
@@ -868,6 +1057,41 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     return interactionStore.updateInteractionAttachment(tenantId, interactionAttachment);
+  }
+
+  @Override
+  public InteractionNote updateInteractionNote(
+      UUID tenantId, UpdateInteractionNoteRequest updateInteractionNoteRequest, String updatedBy)
+      throws InvalidArgumentException,
+          InteractionNoteNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("updateInteractionNoteRequest", updateInteractionNoteRequest);
+
+    try {
+      InteractionNote interactionNote =
+          interactionStore.getInteractionNote(
+              tenantId, updateInteractionNoteRequest.getInteractionNoteId());
+
+      interactionNote.setContent(updateInteractionNoteRequest.getContent());
+      interactionNote.setUpdated(OffsetDateTime.now());
+      interactionNote.setUpdatedBy(updatedBy);
+
+      return interactionStore.updateInteractionNote(tenantId, interactionNote);
+    } catch (InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the interaction note ("
+              + updateInteractionNoteRequest.getInteractionNoteId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override

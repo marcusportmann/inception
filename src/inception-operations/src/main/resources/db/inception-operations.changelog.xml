@@ -92,6 +92,8 @@
         remarks="The ID for the workflow engine the workflow definition is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="time_to_complete" type="nvarchar(50)"
+        remarks="The ISO-8601 duration format amount of time to complete a workflow associated with the workflow definition"/>
       <column name="validation_schema_type" type="nvarchar(50)"
         remarks="The schema type for the workflow definition"/>
       <column name="validation_schema" type="clob"
@@ -167,6 +169,10 @@
       </column>
       <column name="description" type="nvarchar(200)" defaultValue=""
         remarks="The description for the workflow step">
+        <constraints nullable="false"/>
+      </column>
+      <column name="internal" type="boolean"
+        remarks="Is this workflow step internal-only and excluded for external users">
         <constraints nullable="false"/>
       </column>
       <column name="time_to_complete" type="nvarchar(50)"
@@ -860,6 +866,71 @@
       <column name="tenant_id"/>
     </createIndex>
 
+    <createTable tableName="operations_interaction_notes" remarks="Interaction Notes">
+      <column name="id" type="uuid" remarks="The ID for the interaction note">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid"
+        remarks="The ID for the tenant the interaction note is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="interaction_id" type="uuid"
+        remarks="The ID for the interaction the interaction note is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="content" type="nvarchar(2000)" remarks="The content for the interaction note">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp with time zone"
+        remarks="The date and time the interaction note was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="nvarchar(100)"
+        remarks="The person or system who created the interaction note">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp with time zone"
+        remarks="The date and time the interaction note was last updated"/>
+      <column name="updated_by" type="nvarchar(100)"
+        remarks="The person or system who last updated the interaction note"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_interaction_notes_interaction_fk"
+      baseTableName="operations_interaction_notes" baseColumnNames="interaction_id"
+      referencedTableName="operations_interactions" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_interaction_notes_interaction_id_ix"
+      tableName="operations_interaction_notes">
+      <column name="interaction_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interaction_notes_tenant_id_ix"
+      tableName="operations_interaction_notes">
+      <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_interaction_links" remarks="Workflow Interaction Links">
+      <column name="workflow_id" type="uuid"
+        remarks="The ID for the workflow the workflow interaction link is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="interaction_id" type="uuid"
+        remarks="The ID for the interaction the workflow interaction link is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_interaction_links_workflow_fk"
+      baseTableName="operations_workflow_interaction_links" baseColumnNames="workflow_id"
+      referencedTableName="operations_workflows" referencedColumnNames="id" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="operations_workflow_interaction_links_interaction_fk"
+      baseTableName="operations_workflow_interaction_links" baseColumnNames="interaction_id"
+      referencedTableName="operations_interactions" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_interaction_links_workflow_id_ix"
+      tableName="operations_workflow_interaction_links">
+      <column name="workflow_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_interaction_links_interaction_id_ix"
+      tableName="operations_workflow_interaction_links">
+      <column name="interaction_id"/>
+    </createIndex>
+
     <insert tableName="operations_workflow_engines">
       <column name="id" value="flowable_embedded"/>
       <column name="name" value="Flowable Embedded"/>
@@ -871,6 +942,20 @@
       <delete tableName="operations_workflow_engines">
         <where>id = 'flowable_embedded'</where>
       </delete>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_interaction_links"/>
+      <dropIndex tableName="operations_workflow_interaction_links"
+        indexName="operations_workflow_interaction_links_interaction_id_ix"/>
+      <dropIndex tableName="operations_workflow_interaction_links"
+        indexName="operations_workflow_interaction_links_workflow_id_ix"/>
+      <dropTable tableName="operations_workflow_interaction_links"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_interaction_notes"/>
+      <dropIndex tableName="operations_interaction_notes"
+        indexName="operations_interaction_notes_tenant_id_ix"/>
+      <dropIndex tableName="operations_interaction_notes"
+        indexName="operations_interaction_notes_note_id_ix"/>
+      <dropTable tableName="operations_interaction_notes"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_interaction_attachments"/>
       <dropIndex tableName="operations_interaction_attachments"

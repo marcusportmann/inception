@@ -23,6 +23,7 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
@@ -40,6 +41,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
@@ -575,6 +577,23 @@ public interface WorkflowService {
       String requestedBy)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Start an existing workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param startWorkflowRequest the request to start a workflow
+   * @param startedBy the person or system starting the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InvalidWorkflowStatusException the status of the workflow is invalid for the operation
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be started
+   */
+  void startWorkflow(UUID tenantId, StartWorkflowRequest startWorkflowRequest, String startedBy)
+      throws InvalidArgumentException,
+          InvalidWorkflowStatusException,
+          WorkflowNotFoundException,
           ServiceUnavailableException;
 
   /**
