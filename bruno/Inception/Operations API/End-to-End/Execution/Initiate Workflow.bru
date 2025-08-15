@@ -1,0 +1,39 @@
+meta {
+  name: Initiate Workflow
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseURL}}/api/operations/initiate-workflow
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "definitionId": "test_workflow_definition",
+    "externalReference": "external_reference",
+    "startWorkflow": true,
+    "attributes": [
+      {
+        "code": "test_attribute_code",
+        "value": "test_attribute_value"
+      }
+    ],
+    "interactionLinks": [
+      {
+        "interactionId": "3fa85f64-5717-4562-b3fc-2c963f66a777"
+      }
+    ],
+    "data": "eyJuYW1lIjogInZhbHVlIn0="
+  }
+}
+
+vars:post-response {
+  workflowId: res.body
+}
+
+settings {
+  encodeUrl: true
+}

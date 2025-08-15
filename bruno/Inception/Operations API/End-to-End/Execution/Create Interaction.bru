@@ -1,0 +1,42 @@
+meta {
+  name: Create Interaction
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseURL}}/api/operations/interactions
+  body: json
+  auth: inherit
+}
+
+headers {
+  Tenant-ID: 00000000-0000-0000-0000-000000000000
+}
+
+body:json {
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66a777",
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "status": "available",
+    "sourceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "type": "email",
+    "direction": "inbound",
+    "sender": "sender@test.com",
+    "recipients": [
+      "recipient@test.com"
+    ],
+    "subject": "This is a test subject",
+    "mimeType": "text/plain",
+    "content": "This is a test interaction.",
+    "occurred": "2025-01-20T11:25:11.505+02:00"
+  }
+}
+
+vars:pre-request {
+  interactionId: 3fa85f64-5717-4562-b3fc-2c963f66a777
+}
+
+settings {
+  encodeUrl: true
+}

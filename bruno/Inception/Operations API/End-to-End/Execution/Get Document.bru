@@ -1,0 +1,15 @@
+meta {
+  name: Get Document
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

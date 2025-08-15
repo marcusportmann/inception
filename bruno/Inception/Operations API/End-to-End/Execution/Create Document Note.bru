@@ -1,0 +1,26 @@
+meta {
+  name: Create Document Note
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseURL}}/api/operations/create-document-note
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "documentId": "{{documentId}}",
+    "content": "The test document note content."
+  }
+}
+
+vars:post-response {
+  documentNoteId: res.body
+}
+
+settings {
+  encodeUrl: true
+}

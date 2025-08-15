@@ -1,0 +1,15 @@
+meta {
+  name: Get Document Note copy
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}/notes/{{documentNoteId}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

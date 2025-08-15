@@ -1,0 +1,19 @@
+meta {
+  name: Get Workflow
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}
+  body: none
+  auth: inherit
+}
+
+vars:post-response {
+  : 
+}
+
+settings {
+  encodeUrl: true
+}

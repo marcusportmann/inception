@@ -1,0 +1,19 @@
+meta {
+  name: Get Workflow Documents
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}/documents
+  body: none
+  auth: inherit
+}
+
+vars:post-response {
+  workflowDocumentId: res.body.workflowDocuments[0].id
+}
+
+settings {
+  encodeUrl: true
+}
