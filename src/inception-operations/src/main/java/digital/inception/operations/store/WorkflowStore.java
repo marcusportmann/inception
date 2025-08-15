@@ -22,8 +22,10 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowException;
 import digital.inception.operations.exception.DuplicateWorkflowNoteException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
 import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
+import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
@@ -130,7 +132,25 @@ public interface WorkflowStore {
       throws WorkflowNoteNotFoundException, ServiceUnavailableException;
 
   /**
-   * Finalize the workflow with the specified ID.
+   * Delink an interaction from a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param interactionId the ID for the interaction
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowInteractionLinkNotFoundException if the workflow interaction link could not be
+   *     found
+   * @throws ServiceUnavailableException if the interaction could not be delinked from the workflow
+   */
+  void delinkInteractionFromWorkflow(UUID tenantId, UUID workflowId, UUID interactionId)
+      throws InteractionNotFoundException,
+          WorkflowNotFoundException,
+          WorkflowInteractionLinkNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Finalize the workflow.
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
@@ -143,7 +163,7 @@ public interface WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
-   * Finalize the workflow step with the specified code for the workflow with the specified ID.
+   * Finalize the workflow step.
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow step is associated with
@@ -154,6 +174,19 @@ public interface WorkflowStore {
    */
   void finalizeWorkflowStep(UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status)
       throws WorkflowStepNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the document definition ID for the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the document definition ID for the workflow document
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the document definition ID could not be retrieved for
+   *     the workflow document
+   */
+  String getDocumentDefinitionIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the outstanding workflow documents for the workflow.
@@ -182,8 +215,7 @@ public interface WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the composite {@link WorkflowDefinitionId} (id + version) for the workflow with the
-   * specified ID.
+   * Retrieve the composite {@link WorkflowDefinitionId} (id + version) for the workflow.
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
@@ -300,7 +332,7 @@ public interface WorkflowStore {
       throws ServiceUnavailableException;
 
   /**
-   * Initiate the workflow step with the specified code for the workflow with the specified ID.
+   * Initiate the workflow step.
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow step is associated with
@@ -311,6 +343,21 @@ public interface WorkflowStore {
    */
   WorkflowStep initiateWorkflowStep(UUID tenantId, UUID workflowId, String step)
       throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Link an interaction to a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param interactionId the ID for the interaction
+   * @param linkedBy the person or system linking the interaction to the workflow
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the interaction could not be linked to the workflow
+   */
+  void linkInteractionToWorkflow(
+      UUID tenantId, UUID workflowId, UUID interactionId, String linkedBy)
+      throws InteractionNotFoundException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Provide a workflow document.

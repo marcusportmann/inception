@@ -38,6 +38,18 @@ public class WorkflowInteractionLinkId implements Serializable {
   /** The ID for the workflow the workflow interaction link is associated with. */
   private UUID workflowId;
 
+  /**
+   * Constructs a new {@code WorkflowInteractionLinkId}.
+   *
+   * @param workflowId the ID for the workflow the workflow interaction link is associated with
+   * @param interactionId the ID for the interaction the workflow interaction link is associated
+   *     with
+   */
+  public WorkflowInteractionLinkId(UUID workflowId, UUID interactionId) {
+    this.workflowId = workflowId;
+    this.interactionId = interactionId;
+  }
+
   /** Constructs a new {@code WorkflowInteractionLinkId}. */
   public WorkflowInteractionLinkId() {}
 

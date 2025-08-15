@@ -26,6 +26,7 @@ import digital.inception.operations.exception.InteractionAttachmentNotFoundExcep
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
@@ -53,6 +54,18 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public interface InteractionService {
+
+  /**
+   * Assign an interaction to a user.
+   *
+   * @param tenantId the ID for the tenant
+   * @param assignInteractionRequest the request to assign an interaction to a user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be assigned to the user
+   */
+  void assignInteraction(UUID tenantId, AssignInteractionRequest assignInteractionRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
 
   /**
    * Create the interaction.

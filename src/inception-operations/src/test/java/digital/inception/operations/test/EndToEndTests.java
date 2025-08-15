@@ -17,66 +17,65 @@
 package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetupTest;
 import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.util.MimeData;
 import digital.inception.core.util.ResourceUtil;
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.util.TenantUtil;
+import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
-import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
-import digital.inception.operations.exception.InteractionNotFoundException;
-import digital.inception.operations.exception.InteractionSourceNotFoundException;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.DocumentDefinition;
+import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentDefinitionSummary;
+import digital.inception.operations.model.InitiateWorkflowAttribute;
+import digital.inception.operations.model.InitiateWorkflowInteractionLink;
+import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.Interaction;
-import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionAttachmentSummary;
-import digital.inception.operations.model.InteractionMimeType;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
-import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
-import digital.inception.operations.model.InteractionSourceAttribute;
-import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
-import digital.inception.operations.model.InteractionType;
+import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.OutstandingWorkflowDocument;
+import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
+import digital.inception.operations.model.RejectWorkflowDocumentRequest;
+import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
+import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowDefinition;
+import digital.inception.operations.model.WorkflowDefinitionAttribute;
+import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionSummary;
+import digital.inception.operations.model.WorkflowDocument;
+import digital.inception.operations.model.WorkflowDocumentSortBy;
+import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
+import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.InteractionService;
-import digital.inception.operations.util.MessageUtil;
+import digital.inception.operations.service.WorkflowService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
-import jakarta.activation.DataHandler;
-import jakarta.mail.BodyPart;
-import jakarta.mail.Folder;
 import jakarta.mail.Message;
-import jakarta.mail.Multipart;
-import jakarta.mail.Session;
-import jakarta.mail.Store;
 import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeBodyPart;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
-import jakarta.mail.util.ByteArrayDataSource;
-import java.nio.charset.StandardCharsets;
+import java.math.BigDecimal;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,7 +89,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.util.StringUtils;
 
 /**
  * The {@code EndToEndTests} class.
@@ -104,21 +102,25 @@ import org.springframework.util.StringUtils;
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class EndToEndTests {
 
   private static final boolean ENABLE_GREEN_MAIL_SECURITY = false;
 
-  private static final String FROM_EMAIL_ADDRESS = "bsmith@example.com";
+  private static final String FIRST_FROM_EMAIL_ADDRESS = "bsmith@example.com";
 
-  private static final String FROM_NAME = "Bob Smith";
+  private static final String FIRST_FROM_NAME = "Bob Smith";
 
-  private static final String TO_EMAIL_ADDRESS = "service@fitlife.com";
+  private static final String FIRST_TO_EMAIL_ADDRESS = "service@fitlife.com";
 
-  private static final String TO_NAME = "FitLife Customer Service";
+  private static final String FIRST_TO_NAME = "FitLife Customer Service";
+
+  private static final String SECOND_FROM_EMAIL_ADDRESS = "sbloggs@example.com";
+
+  private static final String SECOND_FROM_NAME = "Sally Bloggs";
 
   private static final String TO_PASSWORD = "Password1";
 
@@ -131,45 +133,166 @@ public class EndToEndTests {
   @Autowired
   private BackgroundInteractionSourceSynchronizer backgroundInteractionSourceSynchronizer;
 
+  /** The Document Service. */
+  @Autowired private DocumentService documentService;
+
   private GreenMail greenMail;
 
   /** The Interaction Service. */
   @Autowired private InteractionService interactionService;
 
+  /** The Jackson Object Mapper. */
+  @Autowired private ObjectMapper objectMapper;
+
+  /** The Workflow Service. */
+  @Autowired private WorkflowService workflowService;
+
   /** The end-to-end test. */
   @Test
   public void endToEndTest() throws Exception {
+    //   ___       _                      _   _               ____       _
+    //  |_ _|_ __ | |_ ___ _ __ __ _  ___| |_(_) ___  _ __   / ___|  ___| |_ _   _ _ __
+    //   | || '_ \| __/ _ \ '__/ _` |/ __| __| |/ _ \| '_ \  \___ \ / _ \ __| | | | '_ \
+    //   | || | | | ||  __/ | | (_| | (__| |_| | (_) | | | |  ___) |  __/ |_| |_| | |_) |
+    //  |___|_| |_|\__\___|_|  \__,_|\___|\__|_|\___/|_| |_| |____/ \___|\__|\__,_| .__/
+    //                                                                            |_|
 
     /*
      * Create the mailbox interaction source, which will consume email messages from the in-memory
      * GreenMail mail server and turn them into interactions with associated interaction
      * attachments.
      */
-    InteractionSource mailboxInteractionSource =
-        getFitLifeCustomerServiceMailboxInteractionSource();
+    InteractionSource interactionSource = getFitLifeCustomerServiceMailboxInteractionSource();
 
-    interactionService.createInteractionSource(
-        TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource);
+    interactionService.createInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource);
 
-    // Create the Original Outlook HTML Message With Image
-    Message originalOutlookHTMLMessageWithImage =
-        getOriginalOutlookHTMLMessageWithImage(greenMail.getSmtp().createSession());
+    // Create the first message
+    Message firstMessage =
+        OperationsTestUtil.getOriginalOutlookHTMLMessageWithEmbeddedImage(
+            greenMail.getSmtp().createSession(),
+            FIRST_FROM_EMAIL_ADDRESS,
+            FIRST_FROM_NAME,
+            FIRST_TO_EMAIL_ADDRESS,
+            FIRST_TO_NAME);
 
-    // Send the message
-    Transport.send(originalOutlookHTMLMessageWithImage);
+    // Send the first message
+    Transport.send(firstMessage);
+
+    // Create the second message
+    Message secondMessage =
+        OperationsTestUtil.getOriginalOutlookHTMLMessageWithEmbeddedImage(
+            greenMail.getSmtp().createSession(),
+            SECOND_FROM_EMAIL_ADDRESS,
+            SECOND_FROM_NAME,
+            FIRST_TO_EMAIL_ADDRESS,
+            FIRST_TO_NAME);
+
+    // Send the second message
+    Transport.send(secondMessage);
 
     // Wait for mail to arrive
-    assertTrue(greenMail.waitForIncomingEmail(5000, 1));
+    assertTrue(greenMail.waitForIncomingEmail(5000, 2));
 
     Integer numberOfNewInteractions =
         backgroundInteractionSourceSynchronizer.synchronizeInteractionSources();
 
-    assertEquals(1, numberOfNewInteractions);
+    assertEquals(2, numberOfNewInteractions);
 
-    InteractionSummaries retrievedInteractionSummaries =
+    //   ____                                        _     ____       _
+    //  |  _ \  ___   ___ _   _ _ __ ___   ___ _ __ | |_  / ___|  ___| |_ _   _ _ __
+    //  | | | |/ _ \ / __| | | | '_ ` _ \ / _ \ '_ \| __| \___ \ / _ \ __| | | | '_ \
+    //  | |_| | (_) | (__| |_| | | | | | |  __/ | | | |_   ___) |  __/ |_| |_| | |_) |
+    //  |____/ \___/ \___|\__,_|_| |_| |_|\___|_| |_|\__| |____/ \___|\__|\__,_| .__/
+    //                                                                         |_|
+    // Create the document definition category
+    DocumentDefinitionCategory documentDefinitionCategory =
+        new DocumentDefinitionCategory(
+            "test_document_definition_category_" + randomId(), "Test Document Definition Category");
+
+    documentService.createDocumentDefinitionCategory(documentDefinitionCategory);
+
+    // Create the document definitions
+    DocumentDefinition documentDefinition =
+        new DocumentDefinition(
+            "test_document_definition_" + randomId(),
+            documentDefinitionCategory.getId(),
+            "Test Document Definition");
+
+    documentService.createDocumentDefinition(documentDefinition);
+
+    DocumentDefinition anotherDocumentDefinition =
+        new DocumentDefinition(
+            "another_test_document_definition_" + randomId(),
+            documentDefinitionCategory.getId(),
+            "Another Test Document Definition");
+
+    documentService.createDocumentDefinition(anotherDocumentDefinition);
+
+    //  __        __         _     __ _                 ____       _
+    //  \ \      / /__  _ __| | __/ _| | _____      __ / ___|  ___| |_ _   _ _ __
+    //   \ \ /\ / / _ \| '__| |/ / |_| |/ _ \ \ /\ / / \___ \ / _ \ __| | | | '_ \
+    //    \ V  V / (_) | |  |   <|  _| | (_) \ V  V /   ___) |  __/ |_| |_| | |_) |
+    //     \_/\_/ \___/|_|  |_|\_\_| |_|\___/ \_/\_/   |____/ \___|\__|\__,_| .__/
+    //                                                                      |_|
+    // Create the workflow definition category
+    WorkflowDefinitionCategory workflowDefinitionCategory =
+        new WorkflowDefinitionCategory(
+            "test_workflow_definition_category_" + randomId(), "Test Workflow Definition Category");
+
+    workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
+
+    // Create the workflow definition
+    WorkflowDefinition workflowDefinition =
+        new WorkflowDefinition(
+            "test_json_workflow_definition_" + randomId(),
+            1,
+            workflowDefinitionCategory.getId(),
+            "Test JSON Workflow Definition",
+            "flowable_embedded",
+            ValidationSchemaType.JSON,
+            ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+
+    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true);
+    workflowDefinition.addDocumentDefinition(anotherDocumentDefinition.getId(), false, true, false);
+
+    workflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            1,
+            "test_workflow_step_1",
+            "Test Workflow Step 1",
+            "The description for Test Workflow Step 1"));
+
+    workflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            2,
+            "test_workflow_step_2",
+            "Test Workflow Step 2",
+            "The description for Test Workflow Step 2",
+            true,
+            "P1D"));
+
+    workflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            3,
+            "test_workflow_step_3",
+            "Test Workflow Step 3",
+            "The description for Test Workflow Step 3"));
+
+    workflowDefinition.addAttribute(
+        new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
+
+    workflowService.createWorkflowDefinition(workflowDefinition);
+
+    //   ___       _                      _   _               _____         _
+    //  |_ _|_ __ | |_ ___ _ __ __ _  ___| |_(_) ___  _ __   |_   _|__  ___| |_
+    //   | || '_ \| __/ _ \ '__/ _` |/ __| __| |/ _ \| '_ \    | |/ _ \/ __| __|
+    //   | || | | | ||  __/ | | (_| | (__| |_| | (_) | | | |   | |  __/\__ \ |_
+    //  |___|_| |_|\__\___|_|  \__,_|\___|\__|_|\___/|_| |_|   |_|\___||___/\__|
+    //
+    InteractionSummaries interactionSummaries =
         interactionService.getInteractionSummaries(
             TenantUtil.DEFAULT_TENANT_ID,
-            mailboxInteractionSource.getId(),
+            interactionSource.getId(),
             null,
             null,
             null,
@@ -177,30 +300,33 @@ public class EndToEndTests {
             null,
             null);
 
-    assertEquals(1, retrievedInteractionSummaries.getInteractionSummaries().size());
+    assertEquals(2, interactionSummaries.getInteractionSummaries().size());
 
-    UUID retrievedInteractionId =
-        retrievedInteractionSummaries.getInteractionSummaries().getFirst().getId();
+    UUID firstInteractionId = interactionSummaries.getInteractionSummaries().getFirst().getId();
+    UUID secondInteractionId = interactionSummaries.getInteractionSummaries().get(1).getId();
 
-    Interaction retrievedInteraction =
-        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
+    Interaction interaction =
+        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, firstInteractionId);
 
-    InteractionAttachmentSummaries retrievedInteractionAttachmentSummaries =
+    InteractionAttachmentSummaries interactionAttachmentSummaries =
         interactionService.getInteractionAttachmentSummaries(
-            TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId, null, null, null, null, null);
+            TenantUtil.DEFAULT_TENANT_ID, firstInteractionId, null, null, null, null, null);
 
-    assertEquals(
-        10, retrievedInteractionAttachmentSummaries.getInteractionAttachmentSummaries().size());
+    assertEquals(10, interactionAttachmentSummaries.getInteractionAttachmentSummaries().size());
+
+    List<UUID> interactionAttachmentIds =
+        interactionAttachmentSummaries.getInteractionAttachmentSummaries().stream()
+            .map(InteractionAttachmentSummary::getId)
+            .toList();
 
     // Create a interaction note for the interaction
     CreateInteractionNoteRequest createInteractionNoteRequest =
         new CreateInteractionNoteRequest(
-            retrievedInteraction.getId(), "This is the interaction note content.");
+            interaction.getId(), "This is the interaction note content.");
 
     InteractionNote interactionNote =
         interactionService.createInteractionNote(
             TenantUtil.DEFAULT_TENANT_ID, createInteractionNoteRequest, "TEST1");
-
 
     // Update the interaction note for the interaction
     UpdateInteractionNoteRequest updateInteractionNoteRequest =
@@ -215,7 +341,7 @@ public class EndToEndTests {
     InteractionNotes interactionNotes =
         interactionService.getInteractionNotes(
             TenantUtil.DEFAULT_TENANT_ID,
-            retrievedInteraction.getId(),
+            interaction.getId(),
             null,
             InteractionNoteSortBy.CREATED,
             SortDirection.ASCENDING,
@@ -224,24 +350,371 @@ public class EndToEndTests {
 
     assertEquals(1, interactionNotes.getTotal());
 
+    //  __        __         _     __ _                 _____         _
+    //  \ \      / /__  _ __| | __/ _| | _____      __ |_   _|__  ___| |_
+    //   \ \ /\ / / _ \| '__| |/ / |_| |/ _ \ \ /\ / /   | |/ _ \/ __| __|
+    //    \ V  V / (_) | |  |   <|  _| | (_) \ V  V /    | |  __/\__ \ |_
+    //     \_/\_/ \___/|_|  |_|\_\_| |_|\___/ \_/\_/     |_|\___||___/\__|
+    //
 
+    // Initiate the workflow
+    TestWorkflowData workflowData =
+        new TestWorkflowData(
+            UUID.randomUUID(),
+            "This is name " + randomId(),
+            LocalDate.of(1976, 3, 7),
+            new BigDecimal("1234.56"),
+            OffsetDateTime.now());
 
+    String workflowDataJson = objectMapper.writeValueAsString(workflowData);
 
+    List<InitiateWorkflowAttribute> initiateWorkflowAttributes =
+        List.of(
+            new InitiateWorkflowAttribute(
+                "test_workflow_attribute_name", "test_workflow_attribute_value"));
 
-    interactionService.deleteInteractionNote(TenantUtil.DEFAULT_TENANT_ID, interactionNote.getId());
+    InitiateWorkflowRequest initiateWorkflowRequest =
+        new InitiateWorkflowRequest(
+            workflowDefinition.getId(),
+            UUID.randomUUID().toString(),
+            initiateWorkflowAttributes,
+            List.of(new InitiateWorkflowInteractionLink(firstInteractionId)),
+            workflowDataJson);
 
-    for (InteractionAttachmentSummary interactionAttachmentSummary : retrievedInteractionAttachmentSummaries.getInteractionAttachmentSummaries()) {
-      interactionService.deleteInteractionAttachment(
-          TenantUtil.DEFAULT_TENANT_ID, interactionAttachmentSummary.getId());
+    Workflow workflow =
+        workflowService.initiateWorkflow(
+            TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowRequest, "TEST1");
+
+    // Request the additional workflow document
+    RequestWorkflowDocumentRequest requestWorkflowDocumentRequest =
+        new RequestWorkflowDocumentRequest(workflow.getId(), anotherDocumentDefinition.getId());
+
+    workflowService.requestWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
+
+    // Retrieve the outstanding workflow documents for the workflow
+    List<OutstandingWorkflowDocument> outstandingWorkflowDocuments =
+        workflowService.getOutstandingWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(2, outstandingWorkflowDocuments.size());
+
+    // Provide the workflow documents
+    byte[] multiPagePdfData = ResourceUtil.getClasspathResource("MultiPagePdf.pdf");
+
+    for (OutstandingWorkflowDocument outstandingWorkflowDocument : outstandingWorkflowDocuments) {
+      ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest =
+          new ProvideWorkflowDocumentRequest(
+              outstandingWorkflowDocument.getId(),
+              FileType.PDF,
+              "MultiPagePdf.pdf",
+              multiPagePdfData);
+
+      workflowService.provideWorkflowDocument(
+          TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest, "TEST1");
     }
 
-    interactionService.deleteInteraction(TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionId);
+    outstandingWorkflowDocuments =
+        workflowService.getOutstandingWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
+    assertEquals(0, outstandingWorkflowDocuments.size());
+
+    WorkflowDocuments workflowDocuments =
+        workflowService.getWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID,
+            workflow.getId(),
+            null,
+            WorkflowDocumentSortBy.REQUESTED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    List<UUID> documentIds =
+        workflowDocuments.getWorkflowDocuments().stream()
+            .map(WorkflowDocument::getDocumentId)
+            .toList();
+
+    // Verify the first workflow document
+    VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest =
+        new VerifyWorkflowDocumentRequest(
+            workflowDocuments.getWorkflowDocuments().getFirst().getId());
+
+    workflowService.verifyWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, verifyWorkflowDocumentRequest, "TEST1");
+
+    // Reject the second workflow document
+    RejectWorkflowDocumentRequest rejectWorkflowDocumentRequest =
+        new RejectWorkflowDocumentRequest(
+            workflowDocuments.getWorkflowDocuments().get(1).getId(),
+            "This is a test rejection reason.");
+
+    workflowService.rejectWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, rejectWorkflowDocumentRequest, "TEST2");
+
+    //
+    //
+    //    workflowDocuments =
+    //        workflowService.getWorkflowDocuments(
+    //            TenantUtil.DEFAULT_TENANT_ID,
+    //            workflow.getId(),
+    //            "TEST1",
+    //            WorkflowDocumentSortBy.REQUESTED,
+    //            SortDirection.ASCENDING,
+    //            0,
+    //            10);
+    //
+    //    assertEquals(2, workflowDocuments.getTotal());
+    //
+    //    outstandingWorkflowDocuments =
+    //        workflowService.getOutstandingWorkflowDocuments(
+    //            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+    //
+    //    assertEquals(2, outstandingWorkflowDocuments.size());
+    //
+    //    // Delete the workflow document
+    //    workflowService.deleteWorkflowDocument(
+    //        TenantUtil.DEFAULT_TENANT_ID, workflowDocument.getId());
+    //
+    //    workflowDocuments =
+    //        workflowService.getWorkflowDocuments(
+    //            TenantUtil.DEFAULT_TENANT_ID,
+    //            workflow.getId(),
+    //            "TEST1",
+    //            WorkflowDocumentSortBy.REQUESTED,
+    //            SortDirection.ASCENDING,
+    //            0,
+    //            10);
+    //
+    //    assertEquals(1, workflowDocuments.getTotal());
+    //
+    //    outstandingWorkflowDocuments =
+    //        workflowService.getOutstandingWorkflowDocuments(
+    //            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+    //
+    //    assertEquals(1, outstandingWorkflowDocuments.size());
+    //
+    //    // Create a workflow note for the workflow
+    //    CreateWorkflowNoteRequest createWorkflowNoteRequest =
+    //        new CreateWorkflowNoteRequest(workflow.getId(), "This is the workflow note content.");
+    //
+    //    WorkflowNote workflowNote =
+    //        workflowService.createWorkflowNote(
+    //            TenantUtil.DEFAULT_TENANT_ID, createWorkflowNoteRequest, "TEST1");
+    //
+    //    assertTrue(
+    //        workflowService.workflowNoteExists(
+    //            TenantUtil.DEFAULT_TENANT_ID, workflowNote.getWorkflowId(),
+    // workflowNote.getId()));
+    //
+    //    WorkflowNote retrievedWorkflowNote =
+    //        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+    //
+    //    compareWorkflowNotes(workflowNote, retrievedWorkflowNote);
+    //
+    //    // Update the workflow note for the workflow
+    //    UpdateWorkflowNoteRequest updateWorkflowNoteRequest =
+    //        new UpdateWorkflowNoteRequest(workflowNote.getId(), "This is the workflow note
+    // content.");
+    //
+    //    WorkflowNote updatedWorkflowNote =
+    //        workflowService.updateWorkflowNote(
+    //            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowNoteRequest, "TEST2");
+    //
+    //    retrievedWorkflowNote =
+    //        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID,
+    // updatedWorkflowNote.getId());
+    //
+    //    compareWorkflowNotes(updatedWorkflowNote, retrievedWorkflowNote);
+    //
+    //    // Retrieve the workflow notes for the workflow
+    //    WorkflowNotes workflowNotes =
+    //        workflowService.getWorkflowNotes(
+    //            TenantUtil.DEFAULT_TENANT_ID,
+    //            workflow.getId(),
+    //            "TEST2",
+    //            WorkflowNoteSortBy.CREATED,
+    //            SortDirection.ASCENDING,
+    //            0,
+    //            10);
+    //
+    //    assertEquals(1, workflowNotes.getTotal());
+    //
+    //    compareWorkflowNotes(updatedWorkflowNote, workflowNotes.getWorkflowNotes().getFirst());
+    //
+    //    // Initiate the workflow step
+    //    workflowService.initiateWorkflowStep(
+    //        TenantUtil.DEFAULT_TENANT_ID,
+    //        new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
+    //
+    //    assertThrows(
+    //        InvalidArgumentException.class,
+    //        () -> {
+    //          workflowService.initiateWorkflowStep(
+    //              TenantUtil.DEFAULT_TENANT_ID,
+    //              new InitiateWorkflowStepRequest(workflow.getId(),
+    // "test_workflow_step_invalid"));
+    //        });
+    //
+    //    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID,
+    // workflow.getId());
+    //
+    //    assertEquals(1, retrievedWorkflow.getSteps().size());
+    //    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    //    assertEquals(WorkflowStepStatus.ACTIVE,
+    // retrievedWorkflow.getSteps().getFirst().getStatus());
+    //    assertNotNull(retrievedWorkflow.getSteps().getFirst().getInitiated());
+    //
+    //    // Finalize the workflow step
+    //    workflowService.finalizeWorkflowStep(
+    //        TenantUtil.DEFAULT_TENANT_ID,
+    //        new FinalizeWorkflowStepRequest(
+    //            workflow.getId(), "test_workflow_step_1", WorkflowStepStatus.COMPLETED));
+    //
+    //    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID,
+    // workflow.getId());
+    //
+    //    assertEquals(1, retrievedWorkflow.getSteps().size());
+    //    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    //    assertEquals(WorkflowStepStatus.COMPLETED,
+    // retrievedWorkflow.getSteps().getFirst().getStatus());
+    //    assertNotNull(retrievedWorkflow.getSteps().getFirst().getFinalized());
+    //
+    //    // Finalize the workflow
+    //    workflowService.finalizeWorkflow(
+    //        TenantUtil.DEFAULT_TENANT_ID,
+    //        new FinalizeWorkflowRequest(workflow.getId(), WorkflowStatus.COMPLETED),
+    //        "TEST1");
+    //
+    //    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID,
+    // workflow.getId());
+    //
+    //    assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
+    //    assertNotNull(retrievedWorkflow.getFinalized());
+    //    assertEquals("TEST1", retrievedWorkflow.getFinalizedBy());
+    //
+    //    // Delete the workflow note
+    //    workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+
+    LinkInteractionToWorkflowRequest linkInteractionToWorkflowRequest =
+        new LinkInteractionToWorkflowRequest(workflow.getId(), secondInteractionId);
+
+    workflowService.linkInteractionToWorkflow(
+        TenantUtil.DEFAULT_TENANT_ID, linkInteractionToWorkflowRequest, "TEST2");
+
+    workflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(secondInteractionId, workflow.getInteractionLinks().get(1).getInteractionId());
+    assertEquals("TEST2", workflow.getInteractionLinks().get(1).getLinkedBy());
+
+    DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest =
+        new DelinkInteractionFromWorkflowRequest(workflow.getId(), secondInteractionId);
+
+    workflowService.delinkInteractionFromWorkflow(
+        TenantUtil.DEFAULT_TENANT_ID, delinkInteractionFromWorkflowRequest);
+
+    workflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(1, workflow.getInteractionLinks().size());
+
+    assertEquals(firstInteractionId, workflow.getInteractionLinks().getFirst().getInteractionId());
+    assertEquals("TEST1", workflow.getInteractionLinks().getFirst().getLinkedBy());
+
+    int xxx = 0;
+    xxx++;
+
+    //  __        __         _     __ _                  ____ _
+    //  \ \      / /__  _ __| | __/ _| | _____      __  / ___| | ___  __ _ _ __  _   _ _ __
+    //   \ \ /\ / / _ \| '__| |/ / |_| |/ _ \ \ /\ / / | |   | |/ _ \/ _` | '_ \| | | | '_ \
+    //    \ V  V / (_) | |  |   <|  _| | (_) \ V  V /  | |___| |  __/ (_| | | | | |_| | |_) |
+    //     \_/\_/ \___/|_|  |_|\_\_| |_|\___/ \_/\_/    \____|_|\___|\__,_|_| |_|\__,_| .__/
+    //                                                                                |_|
+    // Delete the workflows
+    workflowService.deleteWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    for (String workflowDefinitionCategoryId : List.of(workflowDefinitionCategory.getId())) {
+      List<WorkflowDefinitionSummary> workflowDefinitionSummaries =
+          workflowService.getWorkflowDefinitionSummaries(
+              TenantUtil.DEFAULT_TENANT_ID, workflowDefinitionCategoryId);
+
+      // Delete the workflow definitions
+      for (String workflowDefinitionId :
+          workflowDefinitionSummaries.stream().map(WorkflowDefinitionSummary::getId).toList()) {
+        workflowService.deleteWorkflowDefinition(workflowDefinitionId);
+      }
+
+      // Delete the workflow definition category
+      workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategoryId);
+    }
+
+    //   ____                                        _      ____ _
+    //  |  _ \  ___   ___ _   _ _ __ ___   ___ _ __ | |_   / ___| | ___  __ _ _ __  _   _ _ __
+    //  | | | |/ _ \ / __| | | | '_ ` _ \ / _ \ '_ \| __| | |   | |/ _ \/ _` | '_ \| | | | '_ \
+    //  | |_| | (_) | (__| |_| | | | | | |  __/ | | | |_  | |___| |  __/ (_| | | | | |_| | |_) |
+    //  |____/ \___/ \___|\__,_|_| |_| |_|\___|_| |_|\__|  \____|_|\___|\__,_|_| |_|\__,_| .__/
+    //                                                                                   |_|
+    for (UUID documentId : documentIds) {
+      documentService.deleteDocument(TenantUtil.DEFAULT_TENANT_ID, documentId);
+    }
+
+    for (String documentDefinitionCategoryId : List.of(documentDefinitionCategory.getId())) {
+      List<DocumentDefinitionSummary> documentDefinitionSummaries =
+          documentService.getDocumentDefinitionSummaries(
+              TenantUtil.DEFAULT_TENANT_ID, documentDefinitionCategoryId);
+
+      // Delete the document definitions
+      for (String documentDefinitionId :
+          documentDefinitionSummaries.stream().map(DocumentDefinitionSummary::getId).toList()) {
+
+        documentService.deleteDocumentDefinition(documentDefinitionId);
+      }
+
+      // Delete the document definition category
+      documentService.deleteDocumentDefinitionCategory(documentDefinitionCategoryId);
+    }
+
+    //   ___       _                      _   _                ____ _
+    //  |_ _|_ __ | |_ ___ _ __ __ _  ___| |_(_) ___  _ __    / ___| | ___  __ _ _ __  _   _ _ __
+    //   | || '_ \| __/ _ \ '__/ _` |/ __| __| |/ _ \| '_ \  | |   | |/ _ \/ _` | '_ \| | | | '_ \
+    //   | || | | | ||  __/ | | (_| | (__| |_| | (_) | | | | | |___| |  __/ (_| | | | | |_| | |_) |
+    //  |___|_| |_|\__\___|_|  \__,_|\___|\__|_|\___/|_| |_|  \____|_|\___|\__,_|_| |_|\__,_| .__/
+    //                                                                                      |_|
+
+    // Delete the interaction notes
+    for (UUID interactionNoteId : List.of(interactionNote.getId())) {
+      interactionService.deleteInteractionNote(TenantUtil.DEFAULT_TENANT_ID, interactionNoteId);
+    }
+
+    // Delete the interaction attachments
+    for (UUID interactionAttachmentId : interactionAttachmentIds) {
+      interactionService.deleteInteractionAttachment(
+          TenantUtil.DEFAULT_TENANT_ID, interactionAttachmentId);
+    }
+
+    // Delete the interaction
+    for (UUID interactionId : List.of(firstInteractionId, secondInteractionId)) {
+      interactionService.deleteInteraction(TenantUtil.DEFAULT_TENANT_ID, interactionId);
+    }
+
+    // Delete the interaction source
     interactionService.deleteInteractionSource(
-        TenantUtil.DEFAULT_TENANT_ID, mailboxInteractionSource.getId());
+        TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
   }
 
+  @BeforeEach
+  protected void setUp() {
+    // Start a GreenMail server with the IMAP protocol
+    if (ENABLE_GREEN_MAIL_SECURITY) {
+      greenMail = new GreenMail(ServerSetupTest.SMTPS_IMAPS);
+    } else {
+      greenMail = new GreenMail(ServerSetupTest.SMTP_IMAP);
+    }
 
+    GreenMailUser greenMailUser =
+        greenMail.setUser(FIRST_TO_EMAIL_ADDRESS, TO_USERNAME, TO_PASSWORD);
+
+    greenMail.start();
+  }
 
   @AfterEach
   protected void tearDown() {
@@ -249,6 +722,33 @@ public class EndToEndTests {
     greenMail.stop();
   }
 
+  private String documentSetUp() throws Exception {
+    // Create the document definition category
+    DocumentDefinitionCategory documentDefinitionCategory =
+        new DocumentDefinitionCategory(
+            "test_document_definition_category_" + randomId(), "Test Document Definition Category");
+
+    documentService.createDocumentDefinitionCategory(documentDefinitionCategory);
+
+    // Create the document definitions
+    DocumentDefinition documentDefinition =
+        new DocumentDefinition(
+            "test_document_definition_" + randomId(),
+            documentDefinitionCategory.getId(),
+            "Test Document Definition");
+
+    documentService.createDocumentDefinition(documentDefinition);
+
+    DocumentDefinition anotherDocumentDefinition =
+        new DocumentDefinition(
+            "another_test_document_definition_" + randomId(),
+            documentDefinitionCategory.getId(),
+            "Another Test Document Definition");
+
+    documentService.createDocumentDefinition(anotherDocumentDefinition);
+
+    return documentDefinitionCategory.getId();
+  }
 
   private InteractionSource getFitLifeCustomerServiceMailboxInteractionSource() {
     return InteractionSource.createMailboxInteractionSource(
@@ -260,183 +760,10 @@ public class EndToEndTests {
         ENABLE_GREEN_MAIL_SECURITY ? 3993 : 3143,
         TO_USERNAME,
         TO_PASSWORD,
-        TO_EMAIL_ADDRESS,
+        FIRST_TO_EMAIL_ADDRESS,
         true,
         false,
         true);
-  }
-
-  private Message getOriginalOutlookHTMLMessageWithImage(Session session) throws Exception {
-    MimeMessage message = new MimeMessage(session);
-
-    message.setFrom(new InternetAddress(FROM_EMAIL_ADDRESS, FROM_NAME));
-
-    message.addRecipient(Message.RecipientType.TO, new InternetAddress(TO_EMAIL_ADDRESS, TO_NAME));
-
-    message.setSubject("This is the test subject");
-
-    // Create the HTML body part
-    MimeBodyPart htmlBodyPart = new MimeBodyPart();
-    htmlBodyPart.setContent(
-        new String(
-            ResourceUtil.getClasspathResource("OriginalOutlookHtmlMessage.html"),
-            StandardCharsets.UTF_8),
-        "text/html");
-
-    // Create the embedded image body part
-    BodyPart imageBodyPart = new MimeBodyPart();
-    imageBodyPart.setFileName("image001.jpg");
-    imageBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Image.jpeg"), "image/jpeg; name=image001.jpg")));
-    imageBodyPart.setHeader("Content-ID", "<image001.jpg>");
-    imageBodyPart.setDisposition(MimeBodyPart.INLINE);
-
-    // Combine the HTML and image into a multipart/related mime multipart
-    Multipart relatedMultiPart = new MimeMultipart("related");
-    relatedMultiPart.addBodyPart(htmlBodyPart);
-    relatedMultiPart.addBodyPart(imageBodyPart);
-
-    // Create a wrapper for the multipart/related mime multipart
-    MimeBodyPart relatedBodyPart = new MimeBodyPart();
-    relatedBodyPart.setContent(relatedMultiPart);
-
-    // Create the PDF attachment body part
-    BodyPart pdfBodyPart = new MimeBodyPart();
-    pdfBodyPart.setFileName("MultiPagePdf.pdf");
-    pdfBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("MultiPagePdf.pdf"),
-                "application/pdf; name=MultiPagePdf.pdf")));
-    pdfBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the TIFF attachment body part
-    BodyPart tiffBodyPart = new MimeBodyPart();
-    tiffBodyPart.setFileName("MultiPageTiff.tif");
-    tiffBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("MultiPageTiff.tif"),
-                "image/tiff; name=MultiPageTiff.tif")));
-    tiffBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the BMP attachment body part
-    BodyPart bmpBodyPart = new MimeBodyPart();
-    bmpBodyPart.setFileName("Test.bmp");
-    bmpBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.bmp"), "image/bmp; name=Test.bmp")));
-    bmpBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the GIF attachment body part
-    BodyPart gifBodyPart = new MimeBodyPart();
-    gifBodyPart.setFileName("Test.gif");
-    gifBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.gif"), "image/gif; name=Test.gif")));
-    gifBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the JPEG attachment body part
-    BodyPart jpgBodyPart = new MimeBodyPart();
-    jpgBodyPart.setFileName("Test.jpg");
-    jpgBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.jpg"), "image/jpeg; name=Test.jpg")));
-    jpgBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the PNG attachment body part
-    BodyPart pngBodyPart = new MimeBodyPart();
-    pngBodyPart.setFileName("Test.png");
-    pngBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.png"), "image/png; name=Test.png")));
-    pngBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the WEBP attachment body part
-    BodyPart webpBodyPart = new MimeBodyPart();
-    webpBodyPart.setFileName("Test.webp");
-    webpBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.webp"), "image/webp; name=Test.webp")));
-    webpBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the Microsoft Word attachment body part
-    BodyPart microsoftWordBodyPart = new MimeBodyPart();
-    microsoftWordBodyPart.setFileName("Test.docx");
-    microsoftWordBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.docx"),
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document; name=Test.docx")));
-    microsoftWordBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the Microsoft PowerPoint attachment body part
-    BodyPart microsoftPowerPointBodyPart = new MimeBodyPart();
-    microsoftPowerPointBodyPart.setFileName("Test.pptx");
-    microsoftPowerPointBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.pptx"),
-                "application/vnd.openxmlformats-officedocument.presentationml.presentation; name=Test.pptx")));
-    microsoftPowerPointBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the Microsoft Excel attachment body part
-    BodyPart microsoftExcelBodyPart = new MimeBodyPart();
-    microsoftExcelBodyPart.setFileName("Test.xlsx");
-    microsoftExcelBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.xlsx"),
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; name=Test.xlsx")));
-    microsoftExcelBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the text attachment body part
-    BodyPart textBodyPart = new MimeBodyPart();
-    textBodyPart.setFileName("Test.txt");
-    textBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.txt"), "text/plain; name=Test.txt")));
-    textBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the CSV attachment body part
-    BodyPart csvBodyPart = new MimeBodyPart();
-    csvBodyPart.setFileName("Test.csv");
-    csvBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.csv"), "text/csv; name=Test.csv")));
-    csvBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    /*
-     * Combine the multipart/related body part and the attachment body parts into a multipart/mixed mime multipart
-     */
-    Multipart mixedMultipart = new MimeMultipart("mixed");
-    mixedMultipart.addBodyPart(relatedBodyPart);
-    mixedMultipart.addBodyPart(pdfBodyPart);
-    mixedMultipart.addBodyPart(tiffBodyPart);
-    mixedMultipart.addBodyPart(bmpBodyPart);
-    mixedMultipart.addBodyPart(gifBodyPart);
-    mixedMultipart.addBodyPart(jpgBodyPart);
-    mixedMultipart.addBodyPart(pngBodyPart);
-    mixedMultipart.addBodyPart(webpBodyPart);
-    mixedMultipart.addBodyPart(microsoftWordBodyPart);
-    mixedMultipart.addBodyPart(microsoftPowerPointBodyPart);
-    mixedMultipart.addBodyPart(microsoftExcelBodyPart);
-    mixedMultipart.addBodyPart(textBodyPart);
-    mixedMultipart.addBodyPart(csvBodyPart);
-
-    // Send the complete message parts
-    message.setContent(mixedMultipart);
-
-    return message;
   }
 
   private String randomId() {
@@ -456,24 +783,11 @@ public class EndToEndTests {
 
     throw new RuntimeException(
         "Timed out waiting for the interaction ("
-        + interactionId
-        + ") for tenant ("
-        + tenantId
-        + ") to process");
+            + interactionId
+            + ") for tenant ("
+            + tenantId
+            + ") to process");
   }
 
-  @BeforeEach
-  protected void setUp() {
-    // Start a GreenMail server with the IMAP protocol
-    if (ENABLE_GREEN_MAIL_SECURITY) {
-      greenMail = new GreenMail(ServerSetupTest.SMTPS_IMAPS);
-    } else {
-      greenMail = new GreenMail(ServerSetupTest.SMTP_IMAP);
-    }
-
-    GreenMailUser greenMailUser = greenMail.setUser(TO_EMAIL_ADDRESS, TO_USERNAME, TO_PASSWORD);
-
-    greenMail.start();
-  }
-
+  private void workflowSetUp() throws Exception {}
 }

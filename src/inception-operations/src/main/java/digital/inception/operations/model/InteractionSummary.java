@@ -59,8 +59,9 @@ import java.util.UUID;
   "conversationId",
   "partyId",
   "type",
-  "from",
-  "to",
+  "direction",
+  "sender",
+  "recipients",
   "subject",
   "mimeType",
   "occurred",
@@ -79,8 +80,9 @@ import java.util.UUID;
       "conversationId",
       "partyId",
       "type",
-      "from",
-      "to",
+      "direction",
+      "sender",
+      "recipients",
       "subject",
       "mimeType",
       "occurred",
@@ -119,6 +121,16 @@ public class InteractionSummary implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "conversation_id", length = 30)
   private String conversationId;
+
+  /** The direction for the interaction, i.e., inbound or outbound. */
+  @Schema(
+      description = "The direction for the interaction, i.e., inbound or outbound",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Direction", required = true)
+  @NotNull
+  @Column(name = "direction", nullable = false)
+  private InteractionDirection direction;
 
   /** The ID for the interaction. */
   @Schema(description = "The ID for the interaction", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -294,6 +306,15 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
+   * Returns the direction for the interaction, i.e., inbound or outbound.
+   *
+   * @return the direction for the interaction, i.e., inbound or outbound
+   */
+  public InteractionDirection getDirection() {
+    return direction;
+  }
+
+  /**
    * Returns the ID for the interaction.
    *
    * @return the ID for the interaction
@@ -404,5 +425,14 @@ public class InteractionSummary implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Set the direction for the interaction, i.e., inbound or outbound.
+   *
+   * @param direction the direction for the interaction, i.e., inbound or outbound
+   */
+  public void setDirection(InteractionDirection direction) {
+    this.direction = direction;
   }
 }

@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package digital.inception.party.persistence.jpa;
+package digital.inception.operations.persistence.jpa;
 
 import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
-import digital.inception.party.model.MeasurementUnit;
+import digital.inception.operations.model.InteractionDirection;
 import jakarta.persistence.Converter;
 
 /**
- * The {@code MeasurementUnitAttributeConverter} class implements the custom JPA attribute converter
- * for the {@code MeasurementUnit} enumeration.
+ * The {@code InteractionDirectionAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code InteractionDirection} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class MeasurementUnitAttributeConverter
-    extends AbstractCodeEnumAttributeConverter<MeasurementUnit> {
+public class InteractionDirectionAttributeConverter
+    extends AbstractCodeEnumAttributeConverter<InteractionDirection> {
 
-  /** Constructs a new {@code MeasurementUnitAttributeConverter}. */
-  public MeasurementUnitAttributeConverter() {
-    super(MeasurementUnit.class);
+  /** Constructs a new {@code InteractionDirectionAttributeConverter}. */
+  public InteractionDirectionAttributeConverter() {
+    super(InteractionDirection.class);
   }
 }

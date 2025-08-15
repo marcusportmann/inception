@@ -136,6 +136,7 @@ public class Workflow implements Serializable {
   @XmlElement(name = "InteractionLink")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("linked")
   @JoinColumn(
       name = "workflow_id",
       referencedColumnName = "id",

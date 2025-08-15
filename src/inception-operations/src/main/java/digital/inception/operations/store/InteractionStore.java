@@ -46,6 +46,18 @@ import java.util.UUID;
 public interface InteractionStore {
 
   /**
+   * Assign the interaction to a user.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param assignedTo the username for the user the interaction should be assigned to
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be assigned to the user
+   */
+  void assignInteraction(UUID tenantId, UUID interactionId, String assignedTo)
+      throws InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
    * Create the interaction.
    *
    * @param tenantId the ID for the tenant
@@ -156,8 +168,7 @@ public interface InteractionStore {
       UUID tenantId, UUID interactionId, String hash) throws ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the interaction attachments for the interaction with the specified
-   * ID.
+   * Retrieve the summaries for the interaction attachments for the interaction.
    *
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction the interaction attachments are associated with
@@ -236,7 +247,7 @@ public interface InteractionStore {
       throws InteractionNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the interactions for the interaction source with the specified ID.
+   * Retrieve the summaries for the interactions for the interaction source.
    *
    * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interactions are associated with
@@ -275,7 +286,7 @@ public interface InteractionStore {
   Optional<Interaction> getNextInteractionQueuedForProcessing() throws ServiceUnavailableException;
 
   /**
-   * Returns whether an interaction attachment with the specified ID exists.
+   * Check whether an interaction attachment with the specified ID exists.
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachmentId the ID for the interaction attachment

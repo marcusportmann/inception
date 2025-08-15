@@ -22,7 +22,7 @@ import jakarta.persistence.Converter;
 
 /**
  * The {@code InteractionTypeAttributeConverter} class implements the custom JPA attribute converter
- * for the {@code InteractionTypeAttribute} enumeration.
+ * for the {@code InteractionType} enumeration.
  *
  * @author Marcus Portmann
  */

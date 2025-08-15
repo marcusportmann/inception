@@ -712,6 +712,10 @@
         remarks="The code for the interaction type for the interaction">
         <constraints nullable="false"/>
       </column>
+      <column name="direction" type="nvarchar(50)"
+        remarks="The code for the interaction direction for the interaction">
+        <constraints nullable="false"/>
+      </column>
       <column name="source_id" type="uuid"
         remarks="The ID for the interaction source the interaction is associated with">
         <constraints nullable="false"/>
@@ -776,6 +780,10 @@
     <createIndex indexName="operations_interactions_conversation_id_ix"
       tableName="operations_interactions">
       <column name="conversation_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_direction_ix"
+      tableName="operations_interactions">
+      <column name="direction"/>
     </createIndex>
     <createIndex indexName="operations_interactions_party_id_ix"
       tableName="operations_interactions">
@@ -915,6 +923,14 @@
         remarks="The ID for the interaction the workflow interaction link is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="linked" type="timestamp with time zone"
+        remarks="The date and time the interaction was linked to the workflow">
+        <constraints nullable="false"/>
+      </column>
+      <column name="linked_by" type="nvarchar(100)"
+        remarks="The person or system who linked the interaction to the workflow">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflow_interaction_links_workflow_fk"
       baseTableName="operations_workflow_interaction_links" baseColumnNames="workflow_id"
@@ -983,6 +999,8 @@
         indexName="operations_interactions_source_id_ix"/>
       <dropIndex tableName="operations_interactions"
         indexName="operations_interactions_party_id_ix"/>
+      <dropIndex tableName="operations_interactions"
+        indexName="operations_interactions_direction_ix"/>
       <dropIndex tableName="operations_interactions"
         indexName="operations_interactions_conversation_id_ix"/>
       <dropIndex tableName="operations_interactions"

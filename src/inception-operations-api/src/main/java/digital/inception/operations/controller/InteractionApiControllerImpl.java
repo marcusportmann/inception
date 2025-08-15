@@ -26,6 +26,7 @@ import digital.inception.operations.exception.DuplicateInteractionSourceExceptio
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionNote;
@@ -68,6 +69,20 @@ public class InteractionApiControllerImpl extends SecureApiController
     super(applicationContext);
 
     this.interactionService = interactionService;
+  }
+
+  @Override
+  public void assignInteraction(UUID tenantId, AssignInteractionRequest assignInteractionRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    interactionService.assignInteraction(tenantId, assignInteractionRequest);
   }
 
   @Override
@@ -133,6 +148,20 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     interactionService.deleteInteractionSource(tenantId, interactionSourceId);
+  }
+
+  @Override
+  public Interaction getInteraction(UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return interactionService.getInteraction(tenantId, interactionId);
   }
 
   @Override

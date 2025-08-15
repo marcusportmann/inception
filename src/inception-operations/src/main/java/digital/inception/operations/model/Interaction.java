@@ -66,6 +66,7 @@ import org.springframework.util.StringUtils;
   "conversationId",
   "partyId",
   "type",
+  "direction",
   "sender",
   "recipients",
   "subject",
@@ -94,6 +95,7 @@ import org.springframework.util.StringUtils;
       "conversationId",
       "partyId",
       "type",
+      "direction",
       "sender",
       "recipients",
       "subject",
@@ -152,6 +154,16 @@ public class Interaction implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "conversation_id", length = 30)
   private String conversationId;
+
+  /** The direction for the interaction, i.e., inbound or outbound. */
+  @Schema(
+      description = "The direction for the interaction, i.e., inbound or outbound",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Direction", required = true)
+  @NotNull
+  @Column(name = "direction", nullable = false)
+  private InteractionDirection direction;
 
   /** The ID for the interaction. */
   @Schema(description = "The ID for the interaction", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -334,6 +346,7 @@ public class Interaction implements Serializable {
    * @param tenantId the ID for the tenant the interaction is associated with
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param type the type of interaction
+   * @param direction the direction for the interaction, i.e., inbound or outbound
    * @param sender the identifier representing who the interaction is from, e.g. an email address, a
    *     mobile number, etc
    * @param recipients the identifiers representing the recipients for the interaction, e.g. email
@@ -348,6 +361,7 @@ public class Interaction implements Serializable {
       UUID tenantId,
       UUID sourceId,
       InteractionType type,
+      InteractionDirection direction,
       String sender,
       List<String> recipients,
       String subject,
@@ -358,6 +372,7 @@ public class Interaction implements Serializable {
     this.tenantId = tenantId;
     this.sourceId = sourceId;
     this.type = type;
+    this.direction = direction;
     this.sender = sender;
     this.recipients = recipients;
     this.subject = subject;
@@ -375,6 +390,7 @@ public class Interaction implements Serializable {
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference for the interaction
    * @param type the type of interaction
+   * @param direction the direction for the interaction, i.e., inbound or outbound
    * @param sender the identifier representing who the interaction is from, e.g. an email address, a
    *     mobile number, etc
    * @param recipients the identifiers representing the recipients for the interaction, e.g. email
@@ -390,6 +406,7 @@ public class Interaction implements Serializable {
       UUID sourceId,
       String sourceReference,
       InteractionType type,
+      InteractionDirection direction,
       String sender,
       List<String> recipients,
       String subject,
@@ -401,6 +418,7 @@ public class Interaction implements Serializable {
     this.sourceId = sourceId;
     this.sourceReference = sourceReference;
     this.type = type;
+    this.direction = direction;
     this.sender = sender;
     this.recipients = recipients;
     this.subject = subject;
@@ -470,6 +488,15 @@ public class Interaction implements Serializable {
    */
   public String getConversationId() {
     return conversationId;
+  }
+
+  /**
+   * Returns the direction for the interaction, i.e., inbound or outbound.
+   *
+   * @return the direction for the interaction, i.e., inbound or outbound
+   */
+  public InteractionDirection getDirection() {
+    return direction;
   }
 
   /**
@@ -744,6 +771,15 @@ public class Interaction implements Serializable {
    */
   public void setConversationId(String conversationId) {
     this.conversationId = conversationId;
+  }
+
+  /**
+   * Set the direction for the interaction, i.e., inbound or outbound.
+   *
+   * @param direction the direction for the interaction, i.e., inbound or outbound
+   */
+  public void setDirection(InteractionDirection direction) {
+    this.direction = direction;
   }
 
   /**

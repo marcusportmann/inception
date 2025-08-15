@@ -36,10 +36,12 @@ import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
+import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionMimeType;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
@@ -58,19 +60,11 @@ import digital.inception.operations.service.InteractionService;
 import digital.inception.operations.util.MessageUtil;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
-import jakarta.activation.DataHandler;
-import jakarta.mail.BodyPart;
 import jakarta.mail.Folder;
 import jakarta.mail.Message;
-import jakarta.mail.Multipart;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
 import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeBodyPart;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
-import jakarta.mail.util.ByteArrayDataSource;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.List;
@@ -141,10 +135,14 @@ public class InteractionServiceTests {
   public void greenMailMultipartMixedTest() throws Exception {
     // Create the Original Outlook HTML Message With Image
     Message originalOutlookHTMLMessageWithImage =
-        getOriginalOutlookHTMLMessageWithImage(
+        OperationsTestUtil.getOriginalOutlookHTMLMessageWithEmbeddedImage(
             ENABLE_GREEN_MAIL_SECURITY
                 ? greenMail.getSmtps().createSession()
-                : greenMail.getSmtp().createSession());
+                : greenMail.getSmtp().createSession(),
+            FROM_EMAIL_ADDRESS,
+            FROM_NAME,
+            TO_EMAIL_ADDRESS,
+            TO_NAME);
 
     // Send the message
     Transport.send(originalOutlookHTMLMessageWithImage);
@@ -225,6 +223,7 @@ public class InteractionServiceTests {
             TenantUtil.DEFAULT_TENANT_ID,
             interactionSource.getId(),
             InteractionType.OTHER,
+            InteractionDirection.INBOUND,
             "test_sender",
             List.of("test_recipient"),
             "Test subject " + randomId(),
@@ -238,6 +237,17 @@ public class InteractionServiceTests {
         interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
 
     compareInteractions(interaction, retrievedInteraction);
+
+    AssignInteractionRequest assignInteractionRequest =
+        new AssignInteractionRequest(interaction.getId(), "TEST2");
+
+    interactionService.assignInteraction(TenantUtil.DEFAULT_TENANT_ID, assignInteractionRequest);
+
+    retrievedInteraction =
+        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
+
+    assertNotNull(retrievedInteraction.getAssigned());
+    assertEquals("TEST2", retrievedInteraction.getAssignedTo());
 
     interactionService.deleteInteraction(
         TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getId());
@@ -299,7 +309,12 @@ public class InteractionServiceTests {
 
     // Create the Original Outlook HTML Message With Image
     Message originalOutlookHTMLMessageWithImage =
-        getOriginalOutlookHTMLMessageWithImage(greenMail.getSmtp().createSession());
+        OperationsTestUtil.getOriginalOutlookHTMLMessageWithEmbeddedImage(
+            greenMail.getSmtp().createSession(),
+            FROM_EMAIL_ADDRESS,
+            FROM_NAME,
+            TO_EMAIL_ADDRESS,
+            TO_NAME);
 
     // Send the message
     Transport.send(originalOutlookHTMLMessageWithImage);
@@ -669,7 +684,8 @@ public class InteractionServiceTests {
     greenMail.stop();
   }
 
-  private void compareInteractionNotes(InteractionNote interactionNote1, InteractionNote interactionNote2) {
+  private void compareInteractionNotes(
+      InteractionNote interactionNote1, InteractionNote interactionNote2) {
     assertEquals(
         interactionNote1.getId(),
         interactionNote2.getId(),
@@ -856,183 +872,10 @@ public class InteractionServiceTests {
         true);
   }
 
-  private Message getOriginalOutlookHTMLMessageWithImage(Session session) throws Exception {
-    MimeMessage message = new MimeMessage(session);
-
-    message.setFrom(new InternetAddress(FROM_EMAIL_ADDRESS, FROM_NAME));
-
-    message.addRecipient(Message.RecipientType.TO, new InternetAddress(TO_EMAIL_ADDRESS, TO_NAME));
-
-    message.setSubject("This is the test subject");
-
-    // Create the HTML body part
-    MimeBodyPart htmlBodyPart = new MimeBodyPart();
-    htmlBodyPart.setContent(
-        new String(
-            ResourceUtil.getClasspathResource("OriginalOutlookHtmlMessage.html"),
-            StandardCharsets.UTF_8),
-        "text/html");
-
-    // Create the embedded image body part
-    BodyPart imageBodyPart = new MimeBodyPart();
-    imageBodyPart.setFileName("image001.jpg");
-    imageBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Image.jpeg"), "image/jpeg; name=image001.jpg")));
-    imageBodyPart.setHeader("Content-ID", "<image001.jpg>");
-    imageBodyPart.setDisposition(MimeBodyPart.INLINE);
-
-    // Combine the HTML and image into a multipart/related mime multipart
-    Multipart relatedMultiPart = new MimeMultipart("related");
-    relatedMultiPart.addBodyPart(htmlBodyPart);
-    relatedMultiPart.addBodyPart(imageBodyPart);
-
-    // Create a wrapper for the multipart/related mime multipart
-    MimeBodyPart relatedBodyPart = new MimeBodyPart();
-    relatedBodyPart.setContent(relatedMultiPart);
-
-    // Create the PDF attachment body part
-    BodyPart pdfBodyPart = new MimeBodyPart();
-    pdfBodyPart.setFileName("MultiPagePdf.pdf");
-    pdfBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("MultiPagePdf.pdf"),
-                "application/pdf; name=MultiPagePdf.pdf")));
-    pdfBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the TIFF attachment body part
-    BodyPart tiffBodyPart = new MimeBodyPart();
-    tiffBodyPart.setFileName("MultiPageTiff.tif");
-    tiffBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("MultiPageTiff.tif"),
-                "image/tiff; name=MultiPageTiff.tif")));
-    tiffBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the BMP attachment body part
-    BodyPart bmpBodyPart = new MimeBodyPart();
-    bmpBodyPart.setFileName("Test.bmp");
-    bmpBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.bmp"), "image/bmp; name=Test.bmp")));
-    bmpBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the GIF attachment body part
-    BodyPart gifBodyPart = new MimeBodyPart();
-    gifBodyPart.setFileName("Test.gif");
-    gifBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.gif"), "image/gif; name=Test.gif")));
-    gifBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the JPEG attachment body part
-    BodyPart jpgBodyPart = new MimeBodyPart();
-    jpgBodyPart.setFileName("Test.jpg");
-    jpgBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.jpg"), "image/jpeg; name=Test.jpg")));
-    jpgBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the PNG attachment body part
-    BodyPart pngBodyPart = new MimeBodyPart();
-    pngBodyPart.setFileName("Test.png");
-    pngBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.png"), "image/png; name=Test.png")));
-    pngBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the WEBP attachment body part
-    BodyPart webpBodyPart = new MimeBodyPart();
-    webpBodyPart.setFileName("Test.webp");
-    webpBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.webp"), "image/webp; name=Test.webp")));
-    webpBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the Microsoft Word attachment body part
-    BodyPart microsoftWordBodyPart = new MimeBodyPart();
-    microsoftWordBodyPart.setFileName("Test.docx");
-    microsoftWordBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.docx"),
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document; name=Test.docx")));
-    microsoftWordBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the Microsoft PowerPoint attachment body part
-    BodyPart microsoftPowerPointBodyPart = new MimeBodyPart();
-    microsoftPowerPointBodyPart.setFileName("Test.pptx");
-    microsoftPowerPointBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.pptx"),
-                "application/vnd.openxmlformats-officedocument.presentationml.presentation; name=Test.pptx")));
-    microsoftPowerPointBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the Microsoft Excel attachment body part
-    BodyPart microsoftExcelBodyPart = new MimeBodyPart();
-    microsoftExcelBodyPart.setFileName("Test.xlsx");
-    microsoftExcelBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.xlsx"),
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; name=Test.xlsx")));
-    microsoftExcelBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the text attachment body part
-    BodyPart textBodyPart = new MimeBodyPart();
-    textBodyPart.setFileName("Test.txt");
-    textBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.txt"), "text/plain; name=Test.txt")));
-    textBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    // Create the CSV attachment body part
-    BodyPart csvBodyPart = new MimeBodyPart();
-    csvBodyPart.setFileName("Test.csv");
-    csvBodyPart.setDataHandler(
-        new DataHandler(
-            new ByteArrayDataSource(
-                ResourceUtil.getClasspathResource("Test.csv"), "text/csv; name=Test.csv")));
-    csvBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
-
-    /*
-     * Combine the multipart/related body part and the attachment body parts into a multipart/mixed mime multipart
-     */
-    Multipart mixedMultipart = new MimeMultipart("mixed");
-    mixedMultipart.addBodyPart(relatedBodyPart);
-    mixedMultipart.addBodyPart(pdfBodyPart);
-    mixedMultipart.addBodyPart(tiffBodyPart);
-    mixedMultipart.addBodyPart(bmpBodyPart);
-    mixedMultipart.addBodyPart(gifBodyPart);
-    mixedMultipart.addBodyPart(jpgBodyPart);
-    mixedMultipart.addBodyPart(pngBodyPart);
-    mixedMultipart.addBodyPart(webpBodyPart);
-    mixedMultipart.addBodyPart(microsoftWordBodyPart);
-    mixedMultipart.addBodyPart(microsoftPowerPointBodyPart);
-    mixedMultipart.addBodyPart(microsoftExcelBodyPart);
-    mixedMultipart.addBodyPart(textBodyPart);
-    mixedMultipart.addBodyPart(csvBodyPart);
-
-    // Send the complete message parts
-    message.setContent(mixedMultipart);
-
-    return message;
-  }
-
   private String randomId() {
     return String.format("%04X", secureRandom.nextInt(0x10000));
   }
-  
+
   private void waitForInteractionToProcess(UUID tenantId, UUID interactionId) throws Exception {
     for (int i = 0; i < 50; i++) {
       Interaction interaction = interactionService.getInteraction(tenantId, interactionId);
@@ -1051,5 +894,4 @@ public class InteractionServiceTests {
             + tenantId
             + ") to process");
   }
-
 }

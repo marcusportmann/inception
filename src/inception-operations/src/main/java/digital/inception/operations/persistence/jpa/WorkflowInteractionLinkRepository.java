@@ -16,22 +16,18 @@
 
 package digital.inception.operations.persistence.jpa;
 
-import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
-import digital.inception.operations.model.InteractionStatus;
-import jakarta.persistence.Converter;
+import digital.inception.operations.model.WorkflowInteractionLink;
+import digital.inception.operations.model.WorkflowInteractionLinkId;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The {@code InteractionStatusAttributeConverter} class implements the custom JPA attribute
- * converter for the {@code InteractionStatus} enumeration.
+ * The {@code WorkflowInteractionLinkRepository} interface provides the persistence operations for
+ * the {@link WorkflowInteractionLink} domain type.
+ *
+ * <p>This repository extends {@code JpaRepository} to provide standard CRUD (Create, Read, Update,
+ * Delete) operations.
  *
  * @author Marcus Portmann
  */
-@Converter(autoApply = true)
-public class InteractionStatusAttributeConverter
-    extends AbstractCodeEnumAttributeConverter<InteractionStatus> {
-
-  /** Constructs a new {@code InteractionStatusAttributeConverter}. */
-  public InteractionStatusAttributeConverter() {
-    super(InteractionStatus.class);
-  }
-}
+public interface WorkflowInteractionLinkRepository
+    extends JpaRepository<WorkflowInteractionLink, WorkflowInteractionLinkId> {}

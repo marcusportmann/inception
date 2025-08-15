@@ -259,16 +259,21 @@ public class WorkflowDocument implements Serializable {
    * @param workflowId the ID for the workflow
    * @param documentDefinitionId the ID for the document definition the workflow document is
    *     associated with
+   * @param requested the date and time the workflow document was requested
    * @param requestedBy the person or system that requested the workflow document
    */
   public WorkflowDocument(
-      UUID tenantId, UUID workflowId, String documentDefinitionId, String requestedBy) {
+      UUID tenantId,
+      UUID workflowId,
+      String documentDefinitionId,
+      OffsetDateTime requested,
+      String requestedBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
     this.status = WorkflowDocumentStatus.REQUESTED;
-    this.requested = OffsetDateTime.now();
+    this.requested = requested;
     this.requestedBy = requestedBy;
   }
 

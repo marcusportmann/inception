@@ -25,24 +25,31 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
 import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
+import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
+import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
@@ -58,6 +65,7 @@ import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
+import digital.inception.operations.model.WorkflowInteractionLink;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
@@ -456,6 +464,42 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new ServiceUnavailableException(
           "Failed to delete the workflow note ("
               + workflowNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void delinkInteractionFromWorkflow(
+      UUID tenantId, DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          WorkflowNotFoundException,
+          WorkflowInteractionLinkNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("delinkInteractionFromWorkflowRequest", delinkInteractionFromWorkflowRequest);
+
+    try {
+      workflowStore.delinkInteractionFromWorkflow(
+          tenantId,
+          delinkInteractionFromWorkflowRequest.getWorkflowId(),
+          delinkInteractionFromWorkflowRequest.getInteractionId());
+    } catch (InteractionNotFoundException
+        | WorkflowNotFoundException
+        | WorkflowInteractionLinkNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delink the interaction ("
+              + delinkInteractionFromWorkflowRequest.getInteractionId()
+              + ") from the workflow ("
+              + delinkInteractionFromWorkflowRequest.getWorkflowId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -972,6 +1016,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("initiateWorkflowRequest", initiateWorkflowRequest);
 
     try {
+      OffsetDateTime now = OffsetDateTime.now();
+
       Optional<WorkflowDefinition> workflowDefinitionOptional =
           workflowDefinitionRepository.findLatestVersionById(
               initiateWorkflowRequest.getDefinitionId());
@@ -1013,8 +1059,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                   : WorkflowStatus.ACTIVE,
               workflowAttributes,
               initiateWorkflowRequest.getData(),
-              OffsetDateTime.now(),
+              now,
               initiatedBy);
+
+      for (InitiateWorkflowInteractionLink initiateWorkflowInteractionLink :
+          initiateWorkflowRequest.getInteractionLinks()) {
+        workflow.addInteractionLink(
+            new WorkflowInteractionLink(
+                initiateWorkflowInteractionLink.getInteractionId(), now, initiatedBy));
+      }
 
       workflow.setExternalReference(initiateWorkflowRequest.getExternalReference());
       workflow.setPartyId(initiateWorkflowRequest.getPartyId());
@@ -1029,6 +1082,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                   tenantId,
                   workflow.getId(),
                   documentDefinition.getDocumentDefinitionId(),
+                  now,
                   initiatedBy);
 
           workflowStore.createWorkflowDocument(tenantId, workflowDocument);
@@ -1105,6 +1159,46 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public void linkInteractionToWorkflow(
+      UUID tenantId,
+      LinkInteractionToWorkflowRequest linkInteractionToWorkflowRequest,
+      String linkedBy)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          WorkflowNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (!StringUtils.hasText(linkedBy)) {
+      throw new InvalidArgumentException("linkedBy");
+    }
+
+    validateArgument("linkInteractionToWorkflowRequest", linkInteractionToWorkflowRequest);
+
+    try {
+      workflowStore.linkInteractionToWorkflow(
+          tenantId,
+          linkInteractionToWorkflowRequest.getWorkflowId(),
+          linkInteractionToWorkflowRequest.getInteractionId(),
+          linkedBy);
+    } catch (InteractionNotFoundException | WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to link the interaction ("
+              + linkInteractionToWorkflowRequest.getInteractionId()
+              + ") to the workflow ("
+              + linkInteractionToWorkflowRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void provideWorkflowDocument(
       UUID tenantId,
       ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest,
@@ -1123,6 +1217,37 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("provideWorkflowDocumentRequest", provideWorkflowDocumentRequest);
 
     try {
+      String documentDefinitionId =
+          workflowStore.getDocumentDefinitionIdForWorkflowDocument(
+              tenantId, provideWorkflowDocumentRequest.getWorkflowDocumentId());
+
+      DocumentDefinition documentDefinition =
+          documentService.getDocumentDefinition(documentDefinitionId);
+
+      if (documentDefinition.getRequiredDocumentAttributes() != null) {
+        for (RequiredDocumentAttribute requiredDocumentAttribute :
+            documentDefinition.getRequiredDocumentAttributes()) {
+          switch (requiredDocumentAttribute) {
+            case EXPIRY_DATE -> {
+              if (provideWorkflowDocumentRequest.getExpiryDate() == null) {
+                throw new InvalidArgumentException("provideWorkflowDocumentRequest.expiryDate");
+              }
+            }
+            case EXTERNAL_REFERENCE -> {
+              if (provideWorkflowDocumentRequest.getExternalReference() == null) {
+                throw new InvalidArgumentException(
+                    "provideWorkflowDocumentRequest.externalReference");
+              }
+            }
+            case ISSUE_DATE -> {
+              if (provideWorkflowDocumentRequest.getIssueDate() == null) {
+                throw new InvalidArgumentException("provideWorkflowDocumentRequest.issueDate");
+              }
+            }
+          }
+        }
+      }
+
       workflowStore.provideWorkflowDocument(tenantId, provideWorkflowDocumentRequest, providedBy);
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;

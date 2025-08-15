@@ -23,20 +23,24 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
 import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
+import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -221,6 +225,27 @@ public interface WorkflowService {
    */
   void deleteWorkflowNote(UUID tenantId, UUID workflowNoteId)
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delink an interaction from a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param delinkInteractionFromWorkflowRequest the request to delink an interaction from a
+   *     workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowInteractionLinkNotFoundException if the workflow interaction link could not be
+   *     found
+   * @throws ServiceUnavailableException if the interaction could not be delinked from the workflow
+   */
+  void delinkInteractionFromWorkflow(
+      UUID tenantId, DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          WorkflowNotFoundException,
+          WorkflowInteractionLinkNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Finalize a workflow.
@@ -526,6 +551,26 @@ public interface WorkflowService {
   WorkflowStep initiateWorkflowStep(
       UUID tenantId, InitiateWorkflowStepRequest initiateWorkflowStepRequest)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Link an interaction to a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param linkInteractionToWorkflowRequest the request to link an interaction to a workflow
+   * @param linkedBy the person or system linking the interaction to the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the interaction could not be linked to the workflow
+   */
+  void linkInteractionToWorkflow(
+      UUID tenantId,
+      LinkInteractionToWorkflowRequest linkInteractionToWorkflowRequest,
+      String linkedBy)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          WorkflowNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Provide a workflow document.

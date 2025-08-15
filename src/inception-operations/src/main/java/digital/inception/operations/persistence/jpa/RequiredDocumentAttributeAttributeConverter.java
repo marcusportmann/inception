@@ -22,7 +22,7 @@ import jakarta.persistence.Converter;
 
 /**
  * The {@code RequiredDocumentAttributeAttributeConverter} class implements the custom JPA attribute
- * converter for the {@code RequiredDocumentAttributeAttribute} enumeration.
+ * converter for the {@code RequiredDocumentAttribute} enumeration.
  *
  * @author Marcus Portmann
  */

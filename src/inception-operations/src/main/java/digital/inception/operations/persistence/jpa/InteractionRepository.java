@@ -42,6 +42,23 @@ public interface InteractionRepository
     extends JpaRepository<Interaction, UUID>, JpaSpecificationExecutor<Interaction> {
 
   /**
+   * Assign the interaction to a user.
+   *
+   * @param interactionId the ID for the interaction
+   * @param assigned the date and time the interaction was assigned
+   * @param assignedTo the username for the user the interaction was assigned to
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      "update Interaction i set i.assigned = :assigned, i.assignedTo = :assignedTo "
+          + "where i.id = :interactionId")
+  void assignInteraction(
+      @Param("interactionId") UUID interactionId,
+      @Param("assigned") OffsetDateTime assigned,
+      @Param("assignedTo") String assignedTo);
+
+  /**
    * Returns whether an interaction with the specified source reference for the interaction source
    * with the specified source ID exists.
    *

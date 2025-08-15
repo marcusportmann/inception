@@ -41,23 +41,27 @@ public enum InteractionSourcePermissionType implements CodeEnum {
 
   /** Claim Interaction. */
   @XmlEnumValue("ClaimInteraction")
-  CLAIM_INTERACTIONS("claim_interaction", "Claim Interaction"),
+  CLAIM_INTERACTION("claim_interaction", "Claim Interaction"),
+
+  /** Create Interaction. */
+  @XmlEnumValue("CreateInteraction")
+  CREATE_INTERACTION("create_interaction", "Create Interaction"),
 
   /** Delete Interaction. */
   @XmlEnumValue("DeleteInteraction")
-  DELETE_INTERACTIONS("delete_interaction", "Delete Interaction"),
+  DELETE_INTERACTION("delete_interaction", "Delete Interaction"),
 
-  /** Edit Interaction. */
-  @XmlEnumValue("EditInteraction")
-  EDIT_INTERACTIONS("edit_interaction", "Edit Interaction"),
-
-  /** Read Interaction. */
-  @XmlEnumValue("ReadInteraction")
-  READ_INTERACTION("read_interaction", "Read Interaction"),
+  /** Retrieve Interaction. */
+  @XmlEnumValue("RetrieveInteraction")
+  RETRIEVE_INTERACTION("retrieve_interaction", "Retrieve Interaction"),
 
   /** Transfer Interaction. */
   @XmlEnumValue("TransferInteraction")
-  TRANSFER_INTERACTION("transfer_interaction", "Transfer Interaction");
+  TRANSFER_INTERACTION("transfer_interaction", "Transfer Interaction"),
+
+  /** Update Interaction. */
+  @XmlEnumValue("UpdateInteraction")
+  UPDATE_INTERACTION("update_interaction", "Update Interaction");
 
   private final String code;
 

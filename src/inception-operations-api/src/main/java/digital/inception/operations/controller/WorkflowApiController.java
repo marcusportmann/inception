@@ -24,20 +24,24 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
 import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
+import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -860,6 +864,85 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowNotFoundException,
           WorkflowNoteNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delink an interaction from a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param delinkInteractionFromWorkflowRequest the request to delink an interaction from a
+   *     workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowInteractionLinkNotFoundException if the workflow interaction link could not be
+   *     found
+   * @throws ServiceUnavailableException if the interaction could not be delinked from the workflow
+   */
+  @Operation(
+      summary = "Delink an interaction from a workflow",
+      description = "Delink an interaction from a workflow")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The interaction was delinked from the workflow"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction, workflow or workflow interaction link could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/delink-interaction-from-workflow",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void delinkInteractionFromWorkflow(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to delink an interaction from a workflow",
+              required = true)
+          @RequestBody
+          DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest)
+      throws InvalidArgumentException,
+      InteractionNotFoundException,
+      WorkflowNotFoundException,
+          WorkflowInteractionLinkNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -2185,6 +2268,81 @@ public interface WorkflowApiController {
           @RequestBody
           InitiateWorkflowStepRequest initiateWorkflowStepRequest)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Link an interaction to a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param linkInteractionToWorkflowRequest the request to link an interaction to a workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the interaction could not be linked to the workflow
+   */
+  @Operation(
+      summary = "Link an interaction to a workflow",
+      description = "Link an interaction to a workflow")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The interaction was linked to the workflow"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction or workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/link-interaction-to-workflow",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void linkInteractionToWorkflow(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to link an interaction to a workflow",
+              required = true)
+          @RequestBody
+          LinkInteractionToWorkflowRequest linkInteractionToWorkflowRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          WorkflowNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Provide a workflow document.

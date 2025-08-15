@@ -22,7 +22,9 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowException;
 import digital.inception.operations.exception.DuplicateWorkflowNoteException;
+import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
+import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
@@ -39,6 +41,8 @@ import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocumentStatus;
 import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowInteractionLink;
+import digital.inception.operations.model.WorkflowInteractionLinkId;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
@@ -50,6 +54,7 @@ import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
 import digital.inception.operations.persistence.jpa.WorkflowDocumentRepository;
+import digital.inception.operations.persistence.jpa.WorkflowInteractionLinkRepository;
 import digital.inception.operations.persistence.jpa.WorkflowNoteRepository;
 import digital.inception.operations.persistence.jpa.WorkflowRepository;
 import digital.inception.operations.persistence.jpa.WorkflowStepRepository;
@@ -95,8 +100,14 @@ public class InternalWorkflowStore implements WorkflowStore {
   /** The Document Store. */
   private final DocumentStore documentStore;
 
+  /** The Interaction Store. */
+  private final InteractionStore interactionStore;
+
   /** The Workflow Document Repository. */
   private final WorkflowDocumentRepository workflowDocumentRepository;
+
+  /** The Workflow Interaction Link Repository. */
+  private final WorkflowInteractionLinkRepository workflowInteractionLinkRepository;
 
   /** The Workflow Note Repository. */
   private final WorkflowNoteRepository workflowNoteRepository;
@@ -122,26 +133,32 @@ public class InternalWorkflowStore implements WorkflowStore {
    *
    * @param dataSource the application data source
    * @param workflowDocumentRepository the Workflow Document Repository
+   * @param workflowInteractionLinkRepository the Workflow Interaction Link Repository
    * @param workflowNoteRepository the Workflow Note Repository
    * @param workflowRepository the Workflow Repository
    * @param workflowStepRepository the Workflow Step Repository
    * @param workflowSummaryRepository the Workflow Summary Repository
    * @param documentStore the Document Store
+   * @param interactionStore the Interaction Store
    */
   public InternalWorkflowStore(
       @Qualifier("applicationDataSource") DataSource dataSource,
       WorkflowDocumentRepository workflowDocumentRepository,
+      WorkflowInteractionLinkRepository workflowInteractionLinkRepository,
       WorkflowNoteRepository workflowNoteRepository,
       WorkflowRepository workflowRepository,
       WorkflowStepRepository workflowStepRepository,
       WorkflowSummaryRepository workflowSummaryRepository,
-      DocumentStore documentStore) {
+      DocumentStore documentStore,
+      InteractionStore interactionStore) {
     this.workflowDocumentRepository = workflowDocumentRepository;
+    this.workflowInteractionLinkRepository = workflowInteractionLinkRepository;
     this.workflowNoteRepository = workflowNoteRepository;
     this.workflowRepository = workflowRepository;
     this.workflowStepRepository = workflowStepRepository;
     this.workflowSummaryRepository = workflowSummaryRepository;
     this.documentStore = documentStore;
+    this.interactionStore = interactionStore;
 
     try {
       try (Connection connection = dataSource.getConnection()) {
@@ -295,6 +312,45 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public void delinkInteractionFromWorkflow(UUID tenantId, UUID workflowId, UUID interactionId)
+      throws InteractionNotFoundException,
+          WorkflowNotFoundException,
+          WorkflowInteractionLinkNotFoundException,
+          ServiceUnavailableException {
+    try {
+      if (!interactionStore.interactionExists(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      if (!workflowExists(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      if (!workflowInteractionLinkRepository.existsById(
+          new WorkflowInteractionLinkId(workflowId, interactionId))) {
+        throw new WorkflowInteractionLinkNotFoundException(workflowId, interactionId);
+      }
+
+      workflowInteractionLinkRepository.deleteById(
+          new WorkflowInteractionLinkId(workflowId, interactionId));
+    } catch (InteractionNotFoundException
+        | WorkflowNotFoundException
+        | WorkflowInteractionLinkNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delink the interaction ("
+              + interactionId
+              + ") from the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void finalizeWorkflow(
       UUID tenantId, UUID workflowId, WorkflowStatus status, String finalizedBy)
       throws WorkflowNotFoundException, ServiceUnavailableException {
@@ -345,6 +401,30 @@ public class InternalWorkflowStore implements WorkflowStore {
               + workflowId
               + ") for the tenant ("
               + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public String getDocumentDefinitionIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<String> documentDefinitionIdOptional =
+          workflowDocumentRepository.findDocumentDefinitionIdByTenantIdAndId(
+              tenantId, workflowDocumentId);
+
+      if (documentDefinitionIdOptional.isEmpty()) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      } else {
+        return documentDefinitionIdOptional.get();
+      }
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document definition ID for the workflow document ("
+              + workflowDocumentId
               + ")",
           e);
     }
@@ -930,6 +1010,41 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public void linkInteractionToWorkflow(
+      UUID tenantId, UUID workflowId, UUID interactionId, String linkedBy)
+      throws InteractionNotFoundException, WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      if (workflowInteractionLinkRepository.existsById(
+          new WorkflowInteractionLinkId(workflowId, interactionId))) {
+        return;
+      }
+
+      if (!interactionStore.interactionExists(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      if (!workflowExists(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      workflowInteractionLinkRepository.saveAndFlush(
+          new WorkflowInteractionLink(workflowId, interactionId, OffsetDateTime.now(), linkedBy));
+    } catch (InteractionNotFoundException | WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to link the interaction ("
+              + interactionId
+              + ") to the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void provideWorkflowDocument(
       UUID tenantId,
       ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest,
@@ -1067,6 +1182,7 @@ public class InternalWorkflowStore implements WorkflowStore {
               tenantId,
               requestWorkflowDocumentRequest.getWorkflowId(),
               requestWorkflowDocumentRequest.getDocumentDefinitionId(),
+              OffsetDateTime.now(),
               requestedBy);
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);

@@ -35,11 +35,13 @@ import digital.inception.operations.exception.InteractionAttachmentNotFoundExcep
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
+import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionMimeType;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
@@ -176,6 +178,35 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     this.interactionSourceRepository = interactionSourceRepository;
     this.interactionSourceSummaryRepository = interactionSourceSummaryRepository;
     this.interactionProcessor = interactionProcessor;
+  }
+
+  @Override
+  public void assignInteraction(UUID tenantId, AssignInteractionRequest assignInteractionRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("assignInteractionRequest", assignInteractionRequest);
+
+    try {
+      interactionStore.assignInteraction(
+          tenantId,
+          assignInteractionRequest.getInteractionId(),
+          assignInteractionRequest.getUsername());
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to assign the interaction ("
+              + assignInteractionRequest.getInteractionId()
+              + ") to the user ("
+              + assignInteractionRequest.getUsername()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -1159,6 +1190,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       }
 
       interaction.setType(InteractionType.EMAIL);
+      interaction.setDirection(InteractionDirection.INBOUND);
       interaction.setSender(message.getFrom()[0].toString());
       interaction.setRecipients(
           Arrays.stream(message.getAllRecipients())

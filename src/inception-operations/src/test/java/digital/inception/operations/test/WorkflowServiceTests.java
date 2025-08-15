@@ -146,7 +146,11 @@ public class WorkflowServiceTests {
         new DocumentDefinition(
             "test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            "Test Document Definition");
+            "Test Document Definition",
+            List.of(
+                RequiredDocumentAttribute.EXPIRY_DATE,
+                RequiredDocumentAttribute.EXTERNAL_REFERENCE,
+                RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(documentDefinition);
 
@@ -257,7 +261,7 @@ public class WorkflowServiceTests {
 
     assertEquals(1, workflowSummaries.getTotal());
 
-    // Retrieve the workflow summaries
+    // Retrieve the workflow summary
     WorkflowSummary workflowSummary = workflowSummaries.getWorkflowSummaries().getFirst();
 
     assertEquals(
@@ -344,6 +348,7 @@ public class WorkflowServiceTests {
             "MultiPagePdf.pdf",
             multiPagePdfData);
 
+    provideWorkflowDocumentRequest.setExternalReference(UUID.randomUUID().toString());
     provideWorkflowDocumentRequest.setIssueDate(LocalDate.of(2015, 10, 10));
     provideWorkflowDocumentRequest.setExpiryDate(LocalDate.of(2050, 11, 11));
 

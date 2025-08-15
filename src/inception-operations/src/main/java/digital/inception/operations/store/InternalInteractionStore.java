@@ -121,6 +121,30 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
+  public void assignInteraction(UUID tenantId, UUID interactionId, String assignedTo)
+      throws InteractionNotFoundException, ServiceUnavailableException {
+    try {
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      interactionRepository.assignInteraction(interactionId, OffsetDateTime.now(), assignedTo);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to assign the interaction ("
+              + interactionId
+              + ") to the user ("
+              + assignedTo
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public Interaction createInteraction(UUID tenantId, Interaction interaction)
       throws DuplicateInteractionException, ServiceUnavailableException {
     try {
