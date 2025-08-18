@@ -1,0 +1,37 @@
+meta {
+  name: Update Workflow Engine
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseURL}}/api/operations/workflow-engines/{{workflowEngineId}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "test_workflow_engine",
+    "name": "Updated Test Workflow Engine",
+    "connectorClassName": "digital.inception.operations.connector.DummyWorkflowEngineConnector",
+    "attributes": [
+      {
+        "code": "test_name",
+        "value": "updated_test_value"
+      },
+      {
+        "code": "another_test_name",
+        "value": "another_test_value"
+      }    
+    ]
+  }
+}
+
+vars:pre-request {
+  workflowEngineId: test_workflow_engine
+}
+
+settings {
+  encodeUrl: true
+}

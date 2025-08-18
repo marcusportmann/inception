@@ -1,0 +1,19 @@
+meta {
+  name: Clear Variables
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseURL}}/swagger-ui.html
+  body: none
+  auth: inherit
+}
+
+script:pre-request {
+  bru.deleteAllVars();
+}
+
+settings {
+  encodeUrl: true
+}

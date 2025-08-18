@@ -1,0 +1,23 @@
+meta {
+  name: Get Interaction Source
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseURL}}/api/operations/interaction-sources/{{interactionSourceId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Tenant-ID: 00000000-0000-0000-0000-000000000000
+}
+
+vars:pre-request {
+  interactionSourceId: 11111111-1111-1111-1111-111111111111
+}
+
+settings {
+  encodeUrl: true
+}

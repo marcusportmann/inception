@@ -1,0 +1,15 @@
+meta {
+  name: Delete Workflow Document
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}/documents/{{workflowDocumentId}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

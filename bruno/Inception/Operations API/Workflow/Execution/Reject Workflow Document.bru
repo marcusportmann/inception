@@ -1,0 +1,22 @@
+meta {
+  name: Reject Workflow Document
+  type: http
+  seq: 28
+}
+
+post {
+  url: {{baseURL}}/api/operations/reject-workflow-document
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "workflowDocumentId": "{{workflowDocumentId}}",
+    "rejectionReason": "This is the rejection reason."
+  }
+}
+
+settings {
+  encodeUrl: true
+}

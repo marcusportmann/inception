@@ -1,0 +1,74 @@
+meta {
+  name: Create Workflow Definition
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseURL}}/api/operations/workflow-definition-categories/{{workflowDefinitionCategoryId}}/workflow-definitions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "test_workflow_definition",
+    "version": 1,
+    "categoryId": "test_workflow_definition_category",
+    "name": "Test Workflow Definition",
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "engineId": "test_workflow_engine",
+    "attributes": [
+      {
+        "code": "process_id",
+        "value": "test_process"
+      }
+    ],
+    "documentDefinitions": [
+      {
+        "documentDefinitionId": "test_document_definition",
+        "required": true,
+        "singular": true,
+        "verifiable": true,
+        "validityPeriod": "P3M"
+      }
+    ],
+    "stepDefinitions": [
+      {
+        "sequence": 1,
+        "code": "test_workflow_step_1",
+        "name": "Test Workflow Step 1",
+        "description": "The description for Test Workflow Step 1",
+        "external": false,
+        "internal": false
+      },
+      {
+        "sequence": 2,
+        "code": "test_workflow_step_2",
+        "name": "Test Workflow Step 2",
+        "description": "The description for Test Workflow Step 2",
+        "external": false,
+        "internal": true,
+        "timeToComplete": "P1D"
+      },
+      {
+        "sequence": 3,      
+        "code": "test_workflow_step_3",
+        "name": "Test Workflow Step 3",
+        "description": "The description for Test Workflow Step 3",
+        "external": false,
+        "internal": false
+      }
+    ],
+    "validationSchemaType": "json",
+    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"
+  }
+}
+
+vars:pre-request {
+  workflowDefinitionCategoryId: test_workflow_definition_category
+}
+
+settings {
+  encodeUrl: true
+}

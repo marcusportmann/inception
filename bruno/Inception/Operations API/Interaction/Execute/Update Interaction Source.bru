@@ -1,0 +1,60 @@
+meta {
+  name: Update Interaction Source
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseURL}}/api/operations/interaction-sources/{{interactionSourceId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Tenant-ID: 00000000-0000-0000-0000-000000000000
+}
+
+body:json {
+  {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "name": "Updated Test Interaction Source",
+    "type": "virtual",
+    "attributes": [
+      {
+        "code": "test_attribute_code",
+        "value": "updated_test_attribute_value"
+      }
+    ],
+    "permissions": [
+      {
+        "roleCode": "Administrator",
+        "type": "assign_interaction"
+      },
+      {
+        "roleCode": "Administrator",
+        "type": "claim_interaction"
+      },
+      {
+        "roleCode": "Administrator",
+        "type": "retrieve_interaction"
+      },
+      {
+        "roleCode": "Administrator",
+        "type": "transfer_interaction"
+      },
+      {
+        "roleCode": "Administrator",
+        "type": "update_interaction"
+      }
+    ]
+  }
+}
+
+vars:pre-request {
+  interactionSourceId: 11111111-1111-1111-1111-111111111111
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Initiate Workflow Step
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseURL}}/api/operations/initiate-workflow-step
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "workflowId": "{{workflowId}}",
+    "step": "test_workflow_step_1"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

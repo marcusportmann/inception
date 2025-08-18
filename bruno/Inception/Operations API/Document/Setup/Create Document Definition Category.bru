@@ -1,0 +1,23 @@
+meta {
+  name: Create Document Definition Category
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseURL}}/api/operations/document-definition-categories
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "test_document_definition_category",
+    "name": "Test Document Definition Category",
+    "tenantId": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Get Workflow Notes
+  type: http
+  seq: 20
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}/notes
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

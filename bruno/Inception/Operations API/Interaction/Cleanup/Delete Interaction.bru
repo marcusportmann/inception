@@ -1,0 +1,23 @@
+meta {
+  name: Delete Interaction
+  type: http
+  seq: 1
+}
+
+delete {
+  url: {{baseURL}}/api/operations/interactions/{{interactionId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Tenant-ID: 00000000-0000-0000-0000-000000000000
+}
+
+vars:pre-request {
+  interactionId: 22222222-2222-2222-2222-222222222222
+}
+
+settings {
+  encodeUrl: true
+}

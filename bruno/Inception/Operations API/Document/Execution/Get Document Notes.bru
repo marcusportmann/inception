@@ -1,0 +1,20 @@
+meta {
+  name: Get Document Notes
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}/notes?sortBy=created&sortDirection=asc
+  body: none
+  auth: inherit
+}
+
+params:query {
+  sortBy: created
+  sortDirection: asc
+}
+
+settings {
+  encodeUrl: true
+}

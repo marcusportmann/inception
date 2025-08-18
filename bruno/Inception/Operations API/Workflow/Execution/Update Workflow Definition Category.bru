@@ -1,0 +1,27 @@
+meta {
+  name: Update Workflow Definition Category
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseURL}}/api/operations/workflow-definition-categories/{{workflowDefinitionCategoryId}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "test_workflow_definition_category",
+    "name": "Updated Test Workflow Definition Category",
+    "tenantId": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+vars:pre-request {
+  workflowDefinitionCategoryId: test_workflow_definition_category
+}
+
+settings {
+  encodeUrl: true
+}

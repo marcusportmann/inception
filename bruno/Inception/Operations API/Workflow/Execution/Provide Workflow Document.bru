@@ -1,0 +1,27 @@
+meta {
+  name: Provide Workflow Document
+  type: http
+  seq: 22
+}
+
+post {
+  url: {{baseURL}}/api/operations/provide-workflow-document
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "workflowDocumentId": "{{workflowDocumentId}}",
+    "fileType": "text",
+    "name": "test.txt",
+    "externalReference": "test_external_reference",
+    "issueDate": "2015-10-10",
+    "expiryDate": "2030-03-07",
+    "data": "VGhpcyBpcyBzb21lIHRlc3QgdGV4dC4="
+  }
+}
+
+settings {
+  encodeUrl: true
+}

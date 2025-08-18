@@ -1,0 +1,25 @@
+meta {
+  name: Update Document
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseURL}}/api/operations/update-document
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "documentId": "{{documentId}}",
+    "fileType": "text",
+    "name": "test.txt",
+    "externalReference": "test_external_reference_updated",
+    "data": "VGhpcyBpcyBzb21lIHVwZGF0ZWQgdGVzdCB0ZXh0Lg=="
+  }
+}
+
+settings {
+  encodeUrl: true
+}

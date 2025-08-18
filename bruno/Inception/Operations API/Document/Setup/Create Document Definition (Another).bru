@@ -1,0 +1,29 @@
+meta {
+  name: Create Document Definition (Another)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseURL}}/api/operations/document-definition-categories/{{documentDefinitionCategoryId}}/document-definitions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  
+  {
+    "id": "another_test_document_definition",
+    "categoryId": "test_document_definition_category",
+    "name": "Another Test Document Definition",
+    "tenantId": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+vars:pre-request {
+  documentDefinitionCategoryId: test_document_definition_category
+}
+
+settings {
+  encodeUrl: true
+}
