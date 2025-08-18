@@ -26,8 +26,8 @@ import java.util.UUID;
 
 /**
  * The {@code DuplicateInteractionException} exception is thrown to indicate an error condition as a
- * result of an attempt to create a duplicate interaction, i.e. an interaction with the specified ID
- * already exists.
+ * result of an attempt to create a duplicate interaction, i.e., an interaction with the specified
+ * ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

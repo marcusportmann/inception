@@ -90,7 +90,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Returns the base MIME type for the data, i.e. the MIME type without parameters.
+   * Returns the base MIME type for the data, i.e., the MIME type without parameters.
    *
    * @return the base MIME type for the data
    */

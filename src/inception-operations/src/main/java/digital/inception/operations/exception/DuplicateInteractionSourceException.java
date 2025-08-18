@@ -26,8 +26,8 @@ import java.util.UUID;
 
 /**
  * The {@code DuplicateInteractionSourceException} exception is thrown to indicate an error
- * condition as a result of an attempt to create a duplicate interaction source, i.e. an interaction
- * source with the specified ID already exists.
+ * condition as a result of an attempt to create a duplicate interaction source, i.e., an
+ * interaction source with the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

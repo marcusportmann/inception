@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * The {@code DuplicateReportDefinitionException} exception is thrown to indicate an error condition
- * as a result of an attempt to create a duplicate report definition, i.e. a report definition with
+ * as a result of an attempt to create a duplicate report definition, i.e., a report definition with
  * the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

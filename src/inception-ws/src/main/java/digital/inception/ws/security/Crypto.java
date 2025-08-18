@@ -341,10 +341,10 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   }
 
   /**
-   * Get the identifier for the X.509 certificate i.e. the key store alias.
+   * Get the identifier for the X.509 certificate, i.e., the key store alias.
    *
    * @param certificate the X.509 certificate
-   * @return the identifier for the X.509 certificate i.e. the key store alias or {@code null} if
+   * @return the identifier for the X.509 certificate, i.e., the key store alias or {@code null} if
    *     the X.509 certificate could not be found
    */
   @Override

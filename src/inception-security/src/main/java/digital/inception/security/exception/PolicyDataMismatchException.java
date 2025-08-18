@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * A {@code PolicyDataMismatchException} exception is thrown to indicate that a security operation
- * failed as a result of a policy data mismatch error, i.e. where the policy ID or version does not
+ * failed as a result of a policy data mismatch error, i.e., where the policy ID or version does not
  * match the policy data.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

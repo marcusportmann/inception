@@ -21,15 +21,18 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
+import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
@@ -483,5 +486,73 @@ public class DocumentApiControllerImpl extends SecureApiController
     DocumentNote documentNote =
         documentService.updateDocumentNote(
             tenantId, updateDocumentNoteRequest, getAuthenticationName());
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @Override
+  public void createDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException, DuplicateDocumentAttributeDefinitionException, ServiceUnavailableException {
+    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
+  }
+
+  @Override
+  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
+      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinitionCode);
+  }
+
+  @Override
+  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentAttributeDefinitions(tenantId);
+  }
+
+  @Override
+  public DocumentAttributeDefinition getDocumentAttributeDefinition(
+      String documentAttributeDefinitionCode)
+      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    return documentService.getDocumentAttributeDefinition(documentAttributeDefinitionCode);
+  }
+
+  @Override
+  public void updateDocumentAttributeDefinition(String documentAttributeDefinitionCode,
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("documentAttributeDefinitionCode");
+    }
+
+    if (!Objects.equals(documentAttributeDefinitionCode, documentAttributeDefinition.getCode())) {
+      throw new InvalidArgumentException("documentAttributeDefinition.code");
+    }
+
+    documentService.updateDocumentAttributeDefinition(documentAttributeDefinition);
   }
 }

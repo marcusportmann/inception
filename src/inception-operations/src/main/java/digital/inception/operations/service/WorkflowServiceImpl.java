@@ -21,12 +21,16 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.StringUtil;
+import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
+import digital.inception.operations.exception.DuplicateWorkflowAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
+import digital.inception.operations.exception.WorkflowAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
@@ -38,6 +42,7 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
@@ -58,6 +63,7 @@ import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
+import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
@@ -76,6 +82,7 @@ import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowSummaries;
+import digital.inception.operations.persistence.jpa.WorkflowAttributeDefinitionRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionSummaryRepository;
@@ -103,6 +110,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   private final DocumentService documentService;
 
   private final InteractionService interactionService;
+
+  /** The Workflow Attribute Definition Repository. */
+  private final WorkflowAttributeDefinitionRepository workflowAttributeDefinitionRepository;
 
   /** The Workflow Data Validation Service. */
   private final WorkflowDataValidationService workflowDataValidationService;
@@ -142,6 +152,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    *
    * @param applicationContext the Spring application context
    * @param workflowStore the Workflow Store
+   * @param workflowAttributeDefinitionRepository the Workflow Attribute Definition Repository
    * @param workflowDefinitionCategoryRepository the Workflow Definition Category Repository
    * @param workflowDefinitionRepository the Workflow Definition Repository
    * @param workflowDefinitionSummaryRepository the Workflow Definition Summary Repository
@@ -153,6 +164,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   public WorkflowServiceImpl(
       ApplicationContext applicationContext,
       WorkflowStore workflowStore,
+      WorkflowAttributeDefinitionRepository workflowAttributeDefinitionRepository,
       WorkflowDefinitionCategoryRepository workflowDefinitionCategoryRepository,
       WorkflowDefinitionRepository workflowDefinitionRepository,
       WorkflowDefinitionSummaryRepository workflowDefinitionSummaryRepository,
@@ -163,6 +175,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     super(applicationContext);
 
     this.workflowStore = workflowStore;
+    this.workflowAttributeDefinitionRepository = workflowAttributeDefinitionRepository;
     this.workflowDefinitionCategoryRepository = workflowDefinitionCategoryRepository;
     this.workflowDefinitionRepository = workflowDefinitionRepository;
     this.workflowDefinitionSummaryRepository = workflowDefinitionSummaryRepository;
@@ -1853,4 +1866,126 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     return workflowService;
   }
+
+
+
+
+
+
+
+
+
+
+  @Override
+  public void createWorkflowAttributeDefinition(
+      WorkflowAttributeDefinition workflowAttributeDefinition)
+      throws InvalidArgumentException, DuplicateWorkflowAttributeDefinitionException, ServiceUnavailableException {
+    validateArgument("workflowAttributeDefinition", workflowAttributeDefinition);
+
+    try {
+      if (workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinition.getCode())) {
+        throw new DuplicateWorkflowAttributeDefinitionException(workflowAttributeDefinition.getCode());
+      }
+
+      workflowAttributeDefinitionRepository.saveAndFlush(workflowAttributeDefinition);
+    } catch (DuplicateWorkflowAttributeDefinitionException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the workflow attribute definition ("
+          + workflowAttributeDefinition.getCode()
+          + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteWorkflowAttributeDefinition(String workflowAttributeDefinitionCode)
+      throws InvalidArgumentException, WorkflowAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("workflowAttributeDefinitionCode");
+    }
+
+    try {
+      if (!workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinitionCode)) {
+        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinitionCode);
+      }
+
+      workflowAttributeDefinitionRepository.deleteById(workflowAttributeDefinitionCode);
+    } catch (WorkflowAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow attribute definition ("
+          + workflowAttributeDefinitionCode
+          + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      return workflowAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow attribute definitions for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowAttributeDefinition getWorkflowAttributeDefinition(
+      String workflowAttributeDefinitionCode)
+      throws InvalidArgumentException, WorkflowAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("workflowAttributeDefinitionCode");
+    }
+
+    try {
+      Optional<WorkflowAttributeDefinition> workflowAttributeDefinitionOptional =
+          workflowAttributeDefinitionRepository.findById(workflowAttributeDefinitionCode);
+
+      if (workflowAttributeDefinitionOptional.isEmpty()) {
+        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinitionCode);
+      }
+
+      return workflowAttributeDefinitionOptional.get();
+    } catch (WorkflowAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow attribute definition ("
+          + workflowAttributeDefinitionCode
+          + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void updateWorkflowAttributeDefinition(
+      WorkflowAttributeDefinition workflowAttributeDefinition)
+      throws InvalidArgumentException, WorkflowAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    validateArgument("workflowAttributeDefinition", workflowAttributeDefinition);
+
+    try {
+      if (!workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinition.getCode())) {
+        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinition.getCode());
+      }
+
+      workflowAttributeDefinitionRepository.saveAndFlush(workflowAttributeDefinition);
+    } catch (WorkflowAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the workflow attribute definition ("
+          + workflowAttributeDefinition.getCode()
+          + ")",
+          e);
+    }
+  }
+
+
+
 }

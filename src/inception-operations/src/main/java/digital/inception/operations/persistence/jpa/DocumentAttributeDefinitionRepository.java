@@ -40,10 +40,8 @@ public interface DocumentAttributeDefinitionRepository
    *       global (the document attribute definition’s {@code documentDefinitionId} is {@code
    *       null}).
    *   <li>specific to the given tenant ({@code tenantId} matches), or global (the document
-   *       attribute definition’s {@code tenantId} is {@code null}) or
+   *       attribute definition’s {@code tenantId} is {@code null}).
    * </ul>
-   *
-   * associated with
    *
    * @param documentDefinitionId the ID for the document definition
    * @param tenantId the ID for the tenant
@@ -59,4 +57,21 @@ public interface DocumentAttributeDefinitionRepository
          """)
   List<DocumentAttributeDefinition> findForDocumentDefinitionAndTenantOrGlobal(
       @Param("documentDefinitionId") String documentDefinitionId, @Param("tenantId") UUID tenantId);
+
+  /**
+   * Returns all the document attribute definitions that are specific to the given tenant ({@code
+   * tenantId} matches), or global (the document attribute definition’s {@code tenantId} is {@code
+   * null}).
+   *
+   * @param tenantId the ID for the tenant
+   * @return the matching document attribute definitions, ordered by code
+   */
+  @Query(
+      """
+         select dad
+           from DocumentAttributeDefinition dad
+          where (dad.tenantId = :tenantId or dad.tenantId is null)
+          order by dad.code
+         """)
+  List<DocumentAttributeDefinition> findForTenantOrGlobal(@Param("tenantId") UUID tenantId);
 }

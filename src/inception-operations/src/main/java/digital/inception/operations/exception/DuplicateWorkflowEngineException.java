@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * The {@code DuplicateWorkflowEngineException} exception is thrown to indicate an error condition
- * as a result of an attempt to create a duplicate workflow engine, i.e. a workflow engine with the
+ * as a result of an attempt to create a duplicate workflow engine, i.e., a workflow engine with the
  * specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

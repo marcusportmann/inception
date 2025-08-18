@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * The {@code DuplicateCodeException} exception is thrown to indicate an error condition as a result
- * of an attempt to create a duplicate code, i.e. a code with the specified ID already exists for
+ * of an attempt to create a duplicate code, i.e., a code with the specified ID already exists for
  * the code category.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

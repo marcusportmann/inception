@@ -26,7 +26,7 @@ import java.util.UUID;
 
 /**
  * The {@code DuplicateDocumentException} exception is thrown to indicate an error condition as a
- * result of an attempt to create a duplicate document, i.e. a document with the specified ID
+ * result of an attempt to create a duplicate document, i.e., a document with the specified ID
  * already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

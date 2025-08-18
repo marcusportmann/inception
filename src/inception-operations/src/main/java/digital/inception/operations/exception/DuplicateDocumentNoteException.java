@@ -26,7 +26,7 @@ import java.util.UUID;
 
 /**
  * The {@code DuplicateDocumentNoteException} exception is thrown to indicate an error condition as
- * a result of an attempt to create a duplicate document note, i.e. a document note with the
+ * a result of an attempt to create a duplicate document note, i.e., a document note with the
  * specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

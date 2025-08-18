@@ -22,36 +22,38 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.ws.WebFault;
 import java.io.Serial;
-import java.util.UUID;
 
 /**
- * The {@code DuplicateWorkflowDocumentException} exception is thrown to indicate an error condition
- * as a result of an attempt to create a duplicate workflow document, i.e., a workflow document with
- * the specified ID already exists.
+ * The {@code DuplicateWorkflowAttributeDefinitionException} exception is thrown to indicate an
+ * error condition as a result of an attempt to create a duplicate workflow attribute definition,
+ * i.e., a workflow attribute definition with the specified code already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "https://inception.digital/problems/operations/duplicate-workflow-document",
-    title = "A workflow document with the specified ID already exists.",
+    type = "https://inception.digital/problems/operations/duplicate-workflow-attribute-definition",
+    title = "A workflow attribute definition with the specified code already exists.",
     status = 409)
 @WebFault(
-    name = "DuplicateWorkflowDocumentException",
+    name = "DuplicateWorkflowAttributeDefinitionException",
     targetNamespace = "https://inception.digital/operations",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class DuplicateWorkflowDocumentException extends ServiceException {
+public class DuplicateWorkflowAttributeDefinitionException extends ServiceException {
 
   @Serial private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new {@code DuplicateWorkflowDocumentException}.
+   * Constructs a new {@code DuplicateWorkflowAttributeDefinitionException}.
    *
-   * @param workflowDocumentId the ID for the workflow document
+   * @param workflowAttributeDefinitionCode the code for the workflow attribute definition
    */
-  public DuplicateWorkflowDocumentException(UUID workflowDocumentId) {
-    super("The workflow document (" + workflowDocumentId + ") already exists");
+  public DuplicateWorkflowAttributeDefinitionException(String workflowAttributeDefinitionCode) {
+    super(
+        "The workflow attribute definition ("
+            + workflowAttributeDefinitionCode
+            + ") already exists");
   }
 }

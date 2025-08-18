@@ -20,15 +20,18 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
@@ -39,6 +42,7 @@ import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
+import digital.inception.operations.persistence.jpa.DocumentAttributeDefinitionRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionSummaryRepository;
@@ -59,6 +63,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class DocumentServiceImpl extends AbstractServiceBase implements DocumentService {
+
+  /** The Document Attribute Definition Repository. */
+  private final DocumentAttributeDefinitionRepository documentAttributeDefinitionRepository;
 
   /** The Document Definition Category Repository. */
   private final DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository;
@@ -85,6 +92,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
    *
    * @param applicationContext the Spring application context
    * @param documentStore the Document Store
+   * @param documentAttributeDefinitionRepository the Document Attribute Definition Repository
    * @param documentDefinitionCategoryRepository the Document Definition Category Repository
    * @param documentDefinitionRepository the Document Definition Repository
    * @param documentDefinitionSummaryRepository the Document Definition Summary Repository
@@ -92,12 +100,14 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   public DocumentServiceImpl(
       ApplicationContext applicationContext,
       DocumentStore documentStore,
+      DocumentAttributeDefinitionRepository documentAttributeDefinitionRepository,
       DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository,
       DocumentDefinitionRepository documentDefinitionRepository,
       DocumentDefinitionSummaryRepository documentDefinitionSummaryRepository) {
     super(applicationContext);
 
     this.documentStore = documentStore;
+    this.documentAttributeDefinitionRepository = documentAttributeDefinitionRepository;
     this.documentDefinitionCategoryRepository = documentDefinitionCategoryRepository;
     this.documentDefinitionRepository = documentDefinitionRepository;
     this.documentDefinitionSummaryRepository = documentDefinitionSummaryRepository;
@@ -795,4 +805,130 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
           e);
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @Override
+  public void createDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException, DuplicateDocumentAttributeDefinitionException, ServiceUnavailableException {
+    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
+
+    try {
+      if (documentAttributeDefinitionRepository.existsById(documentAttributeDefinition.getCode())) {
+        throw new DuplicateDocumentAttributeDefinitionException(documentAttributeDefinition.getCode());
+      }
+
+      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
+    } catch (DuplicateDocumentAttributeDefinitionException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document attribute definition ("
+          + documentAttributeDefinition.getCode()
+          + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
+      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("documentAttributeDefinitionCode");
+    }
+
+    try {
+      if (!documentAttributeDefinitionRepository.existsById(documentAttributeDefinitionCode)) {
+        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
+      }
+
+      documentAttributeDefinitionRepository.deleteById(documentAttributeDefinitionCode);
+    } catch (DocumentAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document attribute definition ("
+          + documentAttributeDefinitionCode
+          + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      return documentAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document attribute definitions for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentAttributeDefinition getDocumentAttributeDefinition(
+      String documentAttributeDefinitionCode)
+      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("documentAttributeDefinitionCode");
+    }
+
+    try {
+      Optional<DocumentAttributeDefinition> documentAttributeDefinitionOptional =
+          documentAttributeDefinitionRepository.findById(documentAttributeDefinitionCode);
+
+      if (documentAttributeDefinitionOptional.isEmpty()) {
+        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
+      }
+
+      return documentAttributeDefinitionOptional.get();
+    } catch (DocumentAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document attribute definition ("
+          + documentAttributeDefinitionCode
+          + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void updateDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
+    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
+
+    try {
+      if (!documentAttributeDefinitionRepository.existsById(documentAttributeDefinition.getCode())) {
+        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinition.getCode());
+      }
+
+      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
+    } catch (DocumentAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the document attribute definition ("
+          + documentAttributeDefinition.getCode()
+          + ")",
+          e);
+    }
+  }
+
+
 }

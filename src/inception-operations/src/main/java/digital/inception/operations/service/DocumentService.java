@@ -16,18 +16,22 @@
 
 package digital.inception.operations.service;
 
+import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
+import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
@@ -38,8 +42,22 @@ import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The {@code DocumentService} interface defines the functionality provided by a Document Service
@@ -439,4 +457,100 @@ public interface DocumentService {
   DocumentNote updateDocumentNote(
       UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /**
+   * Create the document attribute definition.
+   *
+   * @param documentAttributeDefinition the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateDocumentAttributeDefinitionException if the document attribute definition
+   *     already exists
+   * @throws ServiceUnavailableException if the document attribute definition could not be created
+   */
+  void createDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+      DuplicateDocumentAttributeDefinitionException,
+      ServiceUnavailableException;
+
+  /**
+   * Delete the document attribute definition.
+   *
+   * @param documentAttributeDefinitionCode the code for the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
+   *     not be found
+   * @throws ServiceUnavailableException if the document attribute definition could not be deleted
+   */
+  void deleteDocumentAttributeDefinition(
+      String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+      DocumentAttributeDefinitionNotFoundException,
+      ServiceUnavailableException;
+
+
+
+  /**
+   * Retrieve the document attribute definitions.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the document attribute definitions
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the document attribute definitions could not be
+   *     retrieved
+   */
+  List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(
+      UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+
+  /**
+   * Retrieve the document attribute definition.
+   *
+   * @param documentAttributeDefinitionCode the code for the document attribute definition
+   * @return the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
+   *     not be found
+   * @throws ServiceUnavailableException if the document attribute definition could not be retrieved
+   */
+  DocumentAttributeDefinition getDocumentAttributeDefinition(
+      String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+      DocumentAttributeDefinitionNotFoundException,
+      ServiceUnavailableException;
+
+
+  /**
+   * Update the document attribute definition.
+   *
+   * @param documentAttributeDefinition the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
+   *     not be found
+   * @throws ServiceUnavailableException if the document attribute definition could not be updated
+   */
+  void updateDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+      DocumentAttributeDefinitionNotFoundException,
+      ServiceUnavailableException;
+
+
+
 }

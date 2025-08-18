@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * The {@code DuplicateWorkflowDefinitionCategoryException} exception is thrown to indicate an error
- * condition as a result of an attempt to create a duplicate workflow definition category, i.e. a
+ * condition as a result of an attempt to create a duplicate workflow definition category, i.e., a
  * workflow definition category with the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

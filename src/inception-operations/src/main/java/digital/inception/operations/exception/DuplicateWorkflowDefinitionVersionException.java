@@ -25,7 +25,7 @@ import java.io.Serial;
 
 /**
  * The {@code DuplicateWorkflowDefinitionVersionException} exception is thrown to indicate an error
- * condition as a result of an attempt to create a duplicate workflow definition version, i.e. a
+ * condition as a result of an attempt to create a duplicate workflow definition version, i.e., a
  * workflow definition with the specified ID and version already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.

@@ -1416,7 +1416,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
   }
 
   /**
-   * Is the password a historical password that cannot be reused for a period of time i.e. was the
+   * Is the password a historical password that cannot be reused for a period of time, i.e., was the
    * password used previously in the last X months.
    *
    * @param userId the ID for the user

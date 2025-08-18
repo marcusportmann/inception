@@ -26,7 +26,7 @@ import java.util.UUID;
 
 /**
  * The {@code DuplicateInteractionNoteException} exception is thrown to indicate an error condition
- * as a result of an attempt to create a duplicate interaction note, i.e. an interaction note with
+ * as a result of an attempt to create a duplicate interaction note, i.e., an interaction note with
  * the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
