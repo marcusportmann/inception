@@ -1136,7 +1136,7 @@ public interface DocumentApiController {
    * Retrieve the summaries for the documents.
    *
    * @param tenantId the ID for the tenant
-   * @param definitionId the document definition ID filter to apply to the document summaries
+   * @param documentDefinitionId the document definition ID filter to apply to the document summaries
    * @param filter the filter to apply to the document summaries
    * @param sortBy the method used to sort the document summaries e.g. by definition ID
    * @param sortDirection the sort direction to apply to the document summaries
@@ -1193,10 +1193,10 @@ public interface DocumentApiController {
               required = false)
           UUID tenantId,
       @Parameter(
-              name = "definitionId",
+              name = "documentDefinitionId",
               description = "The document definition ID filter to apply to the document summaries")
-          @RequestParam(value = "definitionId", required = false)
-          String definitionId,
+          @RequestParam(value = "documentDefinitionId", required = false)
+          String documentDefinitionId,
       @Parameter(name = "filter", description = "The filter to apply to the document summaries")
           @RequestParam(value = "filter", required = false)
           String filter,

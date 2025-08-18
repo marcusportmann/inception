@@ -32,9 +32,18 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "WorkflowSortBy", namespace = "https://inception.digital/operations")
 public enum WorkflowSortBy implements CodeEnum {
+
   /** Sort by definition ID. */
   @XmlEnumValue("DefinitionId")
   DEFINITION_ID("definition_id", "Sort By Definition ID"),
+
+  /** Sort by finalized. */
+  @XmlEnumValue("Finalized")
+  FINALIZED("finalized", "Sort By Finalized"),
+
+  /** Sort by finalized by. */
+  @XmlEnumValue("FinalizedBy")
+  FINALIZED_BY("finalized_by", "Sort By Finalized By"),
 
   /** Sort by initiated. */
   @XmlEnumValue("Initiated")
@@ -50,15 +59,7 @@ public enum WorkflowSortBy implements CodeEnum {
 
   /** Sort by updated by. */
   @XmlEnumValue("UpdatedBy")
-  UPDATED_BY("updated_by", "Sort By Updated By"),
-
-  /** Sort by finalized. */
-  @XmlEnumValue("Finalized")
-  FINALIZED("finalized", "Sort By Finalized"),
-
-  /** Sort by finalized by. */
-  @XmlEnumValue("FinalizedBy")
-  FINALIZED_BY("finalized_by", "Sort By Finalized By");
+  UPDATED_BY("updated_by", "Sort By Updated By");
 
   private final String code;
 

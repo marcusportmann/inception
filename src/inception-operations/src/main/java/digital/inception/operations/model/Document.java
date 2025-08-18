@@ -18,23 +18,32 @@ package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.file.FileType;
+import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import digital.inception.operations.constraint.ValidDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
@@ -43,7 +52,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -99,6 +111,22 @@ import java.util.UUID;
 public class Document implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the document. */
+  @Schema(description = "The attributes for the document")
+  @JsonProperty
+  @JsonManagedReference("documentAttributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("code")
+  @JoinColumn(
+      name = "document_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private final List<DocumentAttribute> attributes = new ArrayList<>();
 
   /** The date and time the document was created. */
   @Schema(
@@ -255,6 +283,21 @@ public class Document implements Serializable {
   }
 
   /**
+   * Add the attribute for the document.
+   *
+   * @param attribute the attribute
+   */
+  public void addAttribute(DocumentAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
+
+    attribute.setDocument(this);
+
+    attributes.add(attribute);
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -277,6 +320,28 @@ public class Document implements Serializable {
     Document other = (Document) object;
 
     return Objects.equals(id, other.id);
+  }
+
+  /**
+   * Retrieve the attribute with the specified code for the document.
+   *
+   * @param code the code for the attribute
+   * @return an Optional containing the attribute with the specified code for the document or an
+   *     empty Optional if the attribute could not be found
+   */
+  public Optional<DocumentAttribute> getAttribute(String code) {
+    return attributes.stream()
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
+        .findFirst();
+  }
+
+  /**
+   * Returns the attributes for the document.
+   *
+   * @return the attributes for the document
+   */
+  public List<DocumentAttribute> getAttributes() {
+    return attributes;
   }
 
   /**
@@ -412,6 +477,27 @@ public class Document implements Serializable {
    */
   public String getUpdatedBy() {
     return updatedBy;
+  }
+
+  /**
+   * Remove the attribute with the specified code for the workflow.
+   *
+   * @param code the code for the attribute
+   */
+  public void removeAttribute(String code) {
+    attributes.removeIf(
+        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
+  }
+
+  /**
+   * Set the attributes for the document.
+   *
+   * @param attributes the attributes for the document
+   */
+  public void setAttributes(List<DocumentAttribute> attributes) {
+    attributes.forEach(attribute -> attribute.setDocument(this));
+    this.attributes.clear();
+    this.attributes.addAll(attributes);
   }
 
   /**

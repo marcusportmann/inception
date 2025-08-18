@@ -74,7 +74,7 @@ public class ValidDocumentValidator implements ConstraintValidator<ValidDocument
               .addMessageParameter("documentDefinitionId", document.getDefinitionId())
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.operations.constraint.ValidDocument.invalidDocumentDefinition.message}")
-              .addPropertyNode("definitionId")
+              .addPropertyNode("documentDefinitionId")
               .addConstraintViolation();
 
           isValid = false;

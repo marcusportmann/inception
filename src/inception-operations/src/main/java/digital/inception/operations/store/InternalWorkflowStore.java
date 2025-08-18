@@ -29,6 +29,7 @@ import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -813,7 +814,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   @Override
   public WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
-      String definitionId,
+      String workflowDefinitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
@@ -825,7 +826,7 @@ public class InternalWorkflowStore implements WorkflowStore {
     try {
       PageRequest pageRequest;
 
-      if (sortBy == WorkflowSortBy.DEFINITION_ID) {
+      if (sortBy == WorkflowSortBy.FINALIZED) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
@@ -833,7 +834,16 @@ public class InternalWorkflowStore implements WorkflowStore {
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "definitionId");
+                "finalized");
+      } else if (sortBy == WorkflowSortBy.FINALIZED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxResults),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "finalizedBy");
       } else if (sortBy == WorkflowSortBy.INITIATED) {
         pageRequest =
             PageRequest.of(
@@ -870,7 +880,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
                 "updatedBy");
-      } else if (sortBy == WorkflowSortBy.FINALIZED) {
+      } else if (sortBy == WorkflowSortBy.DEFINITION_ID) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
@@ -878,16 +888,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "finalized");
-      } else if (sortBy == WorkflowSortBy.FINALIZED_BY) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "finalizedBy");
+                "definitionId");
       } else {
         pageRequest =
             PageRequest.of(
@@ -896,7 +897,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "created");
+                "initiated");
       }
 
       Page<WorkflowSummary> workflowSummaryPage =
@@ -911,8 +912,9 @@ public class InternalWorkflowStore implements WorkflowStore {
 
                     predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
 
-                    if (StringUtils.hasText(definitionId)) {
-                      predicates.add(criteriaBuilder.equal(root.get("definitionId"), definitionId));
+                    if (StringUtils.hasText(workflowDefinitionId)) {
+                      predicates.add(
+                          criteriaBuilder.equal(root.get("definitionId"), workflowDefinitionId));
                     }
 
                     if (status != null) {
@@ -967,6 +969,7 @@ public class InternalWorkflowStore implements WorkflowStore {
           tenantId,
           workflowSummaryPage.toList(),
           workflowSummaryPage.getTotalElements(),
+          workflowDefinitionId,
           status,
           filter,
           sortBy,
@@ -1075,8 +1078,14 @@ public class InternalWorkflowStore implements WorkflowStore {
         }
       }
 
+      List<DocumentAttribute> documentAttributes =
+          provideWorkflowDocumentRequest.getAttributes().stream()
+              .map(attr -> new DocumentAttribute(attr.getCode(), attr.getValue()))
+              .toList();
+
       // Create the new document
       document = new Document(workflowDocument.getDocumentDefinitionId());
+      document.setAttributes(documentAttributes);
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(providedBy);
       document.setData(provideWorkflowDocumentRequest.getData());
@@ -1170,7 +1179,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
-  public void requestWorkflowDocument(
+  public UUID requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
@@ -1186,6 +1195,8 @@ public class InternalWorkflowStore implements WorkflowStore {
               requestedBy);
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
+
+      return workflowDocument.getWorkflowId();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to request the workflow document with the document definition ("

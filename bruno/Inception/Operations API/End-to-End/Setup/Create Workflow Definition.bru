@@ -1,7 +1,7 @@
 meta {
   name: Create Workflow Definition
   type: http
-  seq: 6
+  seq: 7
 }
 
 post {
@@ -17,7 +17,7 @@ body:json {
     "categoryId": "test_workflow_definition_category",
     "name": "Test Workflow Definition",
     "tenantId": "00000000-0000-0000-0000-000000000000",
-    "engineId": "flowable_embedded",
+    "engineId": "test_workflow_engine",
     "timeToComplete": "P14D",
     "attributes": [
       {
@@ -40,6 +40,7 @@ body:json {
         "code": "test_workflow_step_1",
         "name": "Test Workflow Step 1",
         "description": "The description for Test Workflow Step 1",
+        "external": false,
         "internal": false
       },
       {
@@ -47,6 +48,7 @@ body:json {
         "code": "test_workflow_step_2",
         "name": "Test Workflow Step 2",
         "description": "The description for Test Workflow Step 2",
+        "external": true,
         "internal": true,
         "timeToComplete": "P1D"
       },
@@ -55,6 +57,7 @@ body:json {
         "code": "test_workflow_step_3",
         "name": "Test Workflow Step 3",
         "description": "The description for Test Workflow Step 3",
+        "external": false,
         "internal": false
       }
     ],

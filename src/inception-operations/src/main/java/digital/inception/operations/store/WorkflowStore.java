@@ -308,7 +308,8 @@ public interface WorkflowStore {
    * Retrieve the summaries for the workflows.
    *
    * @param tenantId the ID for the tenant
-   * @param definitionId the workflow definition ID filter to apply to the workflow summaries
+   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflow
+   *     summaries
    * @param status the status filter to apply to the workflow summaries
    * @param filter the filter to apply to the workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
@@ -321,7 +322,7 @@ public interface WorkflowStore {
    */
   WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
-      String definitionId,
+      String workflowDefinitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
@@ -393,10 +394,11 @@ public interface WorkflowStore {
    * @param tenantId the ID for the tenant
    * @param requestWorkflowDocumentRequest the request to request a workflow document
    * @param requestedBy the person or system requesting the workflow document
+   * @return the ID for the workflow document
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the workflow document could not be requested
    */
-  void requestWorkflowDocument(
+  UUID requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)

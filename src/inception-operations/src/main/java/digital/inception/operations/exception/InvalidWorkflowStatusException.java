@@ -51,6 +51,8 @@ public class InvalidWorkflowStatusException extends ServiceException {
    * @param workflowId the ID for the workflow
    */
   public InvalidWorkflowStatusException(UUID workflowId) {
-    super("The status of the workflow (%s) is invalid for the requested operation".formatted(workflowId));
+    super(
+        "The status of the workflow (%s) is invalid for the requested operation"
+            .formatted(workflowId));
   }
 }

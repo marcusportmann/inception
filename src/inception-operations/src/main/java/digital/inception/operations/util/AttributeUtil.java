@@ -43,7 +43,7 @@ public final class AttributeUtil {
    */
   public static String getAttributeValue(InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(InteractionSourceAttribute::getValue)
         .orElse(null);
   }
@@ -58,10 +58,7 @@ public final class AttributeUtil {
    *     be found or has no value
    */
   public static String getAttributeValue(WorkflowEngine workflowEngine, String code) {
-    return workflowEngine
-        .getAttributeWithCode(code)
-        .map(WorkflowEngineAttribute::getValue)
-        .orElse(null);
+    return workflowEngine.getAttribute(code).map(WorkflowEngineAttribute::getValue).orElse(null);
   }
 
   /**
@@ -76,7 +73,7 @@ public final class AttributeUtil {
   public static Boolean getAttributeValueAsBoolean(
       InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -106,7 +103,7 @@ public final class AttributeUtil {
    */
   public static Boolean getAttributeValueAsBoolean(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {
@@ -136,7 +133,7 @@ public final class AttributeUtil {
    */
   public static Double getAttributeValueAsDouble(InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -166,7 +163,7 @@ public final class AttributeUtil {
    */
   public static Double getAttributeValueAsDouble(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {
@@ -197,7 +194,7 @@ public final class AttributeUtil {
   public static Integer getAttributeValueAsInteger(
       InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -227,7 +224,7 @@ public final class AttributeUtil {
    */
   public static Integer getAttributeValueAsInteger(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {
@@ -257,7 +254,7 @@ public final class AttributeUtil {
    */
   public static Long getAttributeValueAsLong(InteractionSource interactionSource, String code) {
     return interactionSource
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(InteractionSourceAttribute::getValue)
         .map(
             value -> {
@@ -287,7 +284,7 @@ public final class AttributeUtil {
    */
   public static Long getAttributeValueAsLong(WorkflowEngine workflowEngine, String code) {
     return workflowEngine
-        .getAttributeWithCode(code)
+        .getAttribute(code)
         .map(WorkflowEngineAttribute::getValue)
         .map(
             value -> {

@@ -135,6 +135,20 @@ public class InteractionApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void deleteInteraction(UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    interactionService.deleteInteraction(tenantId, interactionId);
+  }
+
+  @Override
   public void deleteInteractionSource(UUID tenantId, UUID interactionSourceId)
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,

@@ -171,7 +171,8 @@ public interface DocumentStore {
    * Retrieve the summaries for the documents.
    *
    * @param tenantId the ID for the tenant
-   * @param definitionId the document definition ID filter to apply to the document summaries
+   * @param documentDefinitionId the document definition ID filter to apply to the document
+   *     summaries
    * @param filter the filter to apply to the document summaries
    * @param sortBy the method used to sort the document summaries e.g. by definition ID
    * @param sortDirection the sort direction to apply to the document summaries
@@ -183,7 +184,7 @@ public interface DocumentStore {
    */
   DocumentSummaries getDocumentSummaries(
       UUID tenantId,
-      String definitionId,
+      String documentDefinitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,

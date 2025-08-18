@@ -107,8 +107,7 @@ public interface WorkflowDocumentRepository
          where wd.tenantId = :tenantId and wd.id = :workflowDocumentId
          """)
   Optional<String> findDocumentDefinitionIdByTenantIdAndId(
-      @Param("tenantId") UUID tenantId,
-      @Param("workflowDocumentId") UUID workflowDocumentId);
+      @Param("tenantId") UUID tenantId, @Param("workflowDocumentId") UUID workflowDocumentId);
 
   /**
    * Retrieve the outstanding workflow documents for the workflow.

@@ -73,8 +73,8 @@ public class ValidWorkflowValidator implements ConstraintValidator<ValidWorkflow
               .addMessageParameter("workflowDefinitionVersion", workflow.getDefinitionVersion())
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.operations.constraint.ValidWorkflow.invalidWorkflowDefinitionVersion.message}")
-              .addPropertyNode("definitionId")
-              .addPropertyNode("definitionVersion")
+              .addPropertyNode("workflowDefinitionId")
+              .addPropertyNode("workflowDefinitionVersion")
               .addConstraintViolation();
 
           isValid = false;

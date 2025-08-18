@@ -19,7 +19,6 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.operations.constraint.ValidInitiateWorkflowRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -68,7 +67,6 @@ import java.util.UUID;
       "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidInitiateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class InitiateWorkflowRequest implements Serializable {
 

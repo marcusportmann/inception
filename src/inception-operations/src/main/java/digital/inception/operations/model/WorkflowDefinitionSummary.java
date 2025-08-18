@@ -88,30 +88,6 @@ public class WorkflowDefinitionSummary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  //  /** The summaries for the document definitions associated with the workflow definition. */
-  //  @Schema(
-  //      description =
-  //          "The summaries for the document definitions associated with the workflow definition",
-  //      requiredMode = Schema.RequiredMode.REQUIRED)
-  //  @JsonProperty(required = true)
-  //  @JsonManagedReference("workflowDefinitionDocumentDefinitionSummaryReference")
-  //  @XmlElementWrapper(name = "DocumentDefinitions", required = true)
-  //  @XmlElement(name = "DocumentDefinition", required = true)
-  //  @Valid
-  //  @OneToMany(
-  //      cascade = CascadeType.ALL,
-  //      fetch = FetchType.EAGER,
-  //      orphanRemoval = true)
-  //  @OrderBy("documentDefinitionId")
-  //  @JoinColumns({
-  //      @JoinColumn(name = "definition_id", referencedColumnName = "id", insertable = false,
-  // updatable = false),
-  //      @JoinColumn(name = "definition_version", referencedColumnName = "version", insertable =
-  // false, updatable = false)
-  //  })
-  //  private final List<WorkflowDefinitionDocumentDefinitionSummary> documentDefinitions =
-  //      new ArrayList<>();
-
   /** The document definitions associated with the workflow definition. */
   @Schema(
       description = "The document definitions associated with the workflow definition",
@@ -237,15 +213,6 @@ public class WorkflowDefinitionSummary implements Serializable {
   public String getCategoryId() {
     return categoryId;
   }
-
-  //  /**
-  //   * Returns the document definitions associated with the workflow definition.
-  //   *
-  //   * @return the document definitions associated with the workflow definition
-  //   */
-  //  public List<WorkflowDefinitionDocumentDefinitionSummary> getDocumentDefinitions() {
-  //    return documentDefinitions;
-  //  }
 
   /**
    * Returns the document definitions associated with the workflow definition.

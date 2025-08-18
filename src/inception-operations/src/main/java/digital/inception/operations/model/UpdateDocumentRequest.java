@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
 import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.operations.constraint.ValidUpdateDocumentRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -72,7 +71,6 @@ import java.util.UUID;
       "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidUpdateDocumentRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UpdateDocumentRequest implements Serializable {
 

@@ -85,12 +85,15 @@ public interface WorkflowService {
    *     exists
    * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
    *     not be found
+   * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
+   *     * definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be created
    */
   void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -499,7 +502,8 @@ public interface WorkflowService {
    * Retrieve the summaries for the workflows.
    *
    * @param tenantId the ID for the tenant
-   * @param definitionId the workflow definition ID filter to apply to the workflow summaries
+   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflow
+   *     summaries
    * @param status the status filter to apply to the workflow summaries
    * @param filter the filter to apply to the workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
@@ -512,7 +516,7 @@ public interface WorkflowService {
    */
   WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
-      String definitionId,
+      String workflowDefinitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
@@ -530,12 +534,15 @@ public interface WorkflowService {
    * @return the workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws InteractionNotFoundException if an interaction linked to the workflow could not be
+   *     found
    * @throws ServiceUnavailableException if the workflow could not be initiated
    */
   Workflow initiateWorkflow(
       UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String initiatedBy)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
+          InteractionNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -551,6 +558,20 @@ public interface WorkflowService {
   WorkflowStep initiateWorkflowStep(
       UUID tenantId, InitiateWorkflowStepRequest initiateWorkflowStepRequest)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Check whether a workflow attribute with the specified code is valid for a workflow.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param workflowDefinitionId the ID for the workflow definition the workflow is associated with
+   * @param attributeCode the code for the workflow attribute
+   * @return {@code true} if a workflow attribute with the specified code is valid or {@code false}
+   *     otherwise
+   * @throws ServiceUnavailableException if the validity of the workflow attribute code could not be
+   *     verified
+   */
+  boolean isValidWorkflowAttribute(UUID tenantId, String workflowDefinitionId, String attributeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Link an interaction to a workflow.
@@ -612,11 +633,12 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param requestWorkflowDocumentRequest the request to request a workflow document
    * @param requestedBy the person or system requesting the workflow document
+   * @return the ID for the workflow document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the workflow document could not be requested
    */
-  void requestWorkflowDocument(
+  UUID requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
@@ -665,12 +687,15 @@ public interface WorkflowService {
    *     not be found
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
    *     be found
+   * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
+   *     * definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be updated
    */
   void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
   /**

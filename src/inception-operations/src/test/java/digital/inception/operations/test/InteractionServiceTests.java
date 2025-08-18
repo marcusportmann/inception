@@ -890,7 +890,7 @@ public class InteractionServiceTests {
     throw new RuntimeException(
         "Timed out waiting for the interaction ("
             + interactionId
-            + ") for tenant ("
+            + ") for the tenant ("
             + tenantId
             + ") to process");
   }

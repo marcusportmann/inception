@@ -444,7 +444,7 @@ public class Workflow implements Serializable {
    * @return an Optional containing the attribute with the specified code for the workflow or an
    *     empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowAttribute> getAttributeWithCode(String code) {
+  public Optional<WorkflowAttribute> getAttribute(String code) {
     return attributes.stream()
         .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();

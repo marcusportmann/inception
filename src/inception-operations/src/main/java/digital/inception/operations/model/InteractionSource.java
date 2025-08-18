@@ -315,7 +315,7 @@ public class InteractionSource implements Serializable {
    * @return an Optional containing the attribute with the specified code for the interaction source
    *     or an empty Optional if the attribute could not be found
    */
-  public Optional<InteractionSourceAttribute> getAttributeWithCode(String code) {
+  public Optional<InteractionSourceAttribute> getAttribute(String code) {
     return attributes.stream()
         .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();
@@ -382,7 +382,7 @@ public class InteractionSource implements Serializable {
    * @return {@code true} if the interaction source has an attribute with the specified code or
    *     {@code false} otherwise
    */
-  public boolean hasAttributeWithCode(String code) {
+  public boolean hasAttribute(String code) {
     return attributes.stream()
         .anyMatch(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code));
   }

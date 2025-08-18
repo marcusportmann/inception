@@ -340,6 +340,74 @@ public interface InteractionApiController {
           ServiceUnavailableException;
 
   /**
+   * Delete the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be deleted
+   */
+  @Operation(summary = "Delete the interaction", description = "Delete the interaction")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The interaction was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interactions/{interactionId}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+  void deleteInteraction(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionId",
+              description = "The ID for the interaction",
+              required = true)
+          @PathVariable
+          UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
    * Delete the interaction source.
    *
    * @param tenantId the ID for the tenant

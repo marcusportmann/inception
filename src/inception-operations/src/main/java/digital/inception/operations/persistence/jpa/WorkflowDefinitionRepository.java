@@ -146,7 +146,7 @@ public interface WorkflowDefinitionRepository
          and wd.version = :workflowDefinitionVersion
        order by wsd.code
        """)
-  List<WorkflowStepDefinition> findStepDefinitionsByDefinitionIdAndVersion(
+  List<WorkflowStepDefinition> findStepDefinitionsByWorkflowDefinitionIdAndVersion(
       @Param("workflowDefinitionId") String workflowDefinitionId,
       @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
 

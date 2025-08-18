@@ -389,7 +389,7 @@ public class InternalDocumentStore implements DocumentStore {
   @Override
   public DocumentSummaries getDocumentSummaries(
       UUID tenantId,
-      String definitionId,
+      String documentDefinitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
@@ -417,7 +417,7 @@ public class InternalDocumentStore implements DocumentStore {
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "created");
+                "requested");
       }
 
       Page<DocumentSummary> documentSummaryPage =
@@ -428,8 +428,9 @@ public class InternalDocumentStore implements DocumentStore {
 
                     predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
 
-                    if (StringUtils.hasText(definitionId)) {
-                      predicates.add(criteriaBuilder.equal(root.get("definitionId"), definitionId));
+                    if (StringUtils.hasText(documentDefinitionId)) {
+                      predicates.add(
+                          criteriaBuilder.equal(root.get("definitionId"), documentDefinitionId));
                     }
 
                     if (StringUtils.hasText(filter)) {
@@ -448,6 +449,7 @@ public class InternalDocumentStore implements DocumentStore {
           tenantId,
           documentSummaryPage.toList(),
           documentSummaryPage.getTotalElements(),
+          documentDefinitionId,
           filter,
           sortBy,
           sortDirection,

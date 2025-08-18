@@ -34,9 +34,12 @@ import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
+import digital.inception.operations.model.FinalizeWorkflowRequest;
+import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowAttribute;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
+import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionAttachmentSummary;
@@ -62,7 +65,9 @@ import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStepDefinition;
+import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.InteractionService;
@@ -260,7 +265,9 @@ public class EndToEndTests {
             1,
             "test_workflow_step_1",
             "Test Workflow Step 1",
-            "The description for Test Workflow Step 1"));
+            "The description for Test Workflow Step 1",
+            false,
+            false));
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -268,6 +275,7 @@ public class EndToEndTests {
             "test_workflow_step_2",
             "Test Workflow Step 2",
             "The description for Test Workflow Step 2",
+            false,
             true,
             "P1D"));
 
@@ -276,7 +284,9 @@ public class EndToEndTests {
             3,
             "test_workflow_step_3",
             "Test Workflow Step 3",
-            "The description for Test Workflow Step 3"));
+            "The description for Test Workflow Step 3",
+            false,
+            false));
 
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
@@ -452,150 +462,13 @@ public class EndToEndTests {
     workflowService.rejectWorkflowDocument(
         TenantUtil.DEFAULT_TENANT_ID, rejectWorkflowDocumentRequest, "TEST2");
 
-    //
-    //
-    //    workflowDocuments =
-    //        workflowService.getWorkflowDocuments(
-    //            TenantUtil.DEFAULT_TENANT_ID,
-    //            workflow.getId(),
-    //            "TEST1",
-    //            WorkflowDocumentSortBy.REQUESTED,
-    //            SortDirection.ASCENDING,
-    //            0,
-    //            10);
-    //
-    //    assertEquals(2, workflowDocuments.getTotal());
-    //
-    //    outstandingWorkflowDocuments =
-    //        workflowService.getOutstandingWorkflowDocuments(
-    //            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
-    //
-    //    assertEquals(2, outstandingWorkflowDocuments.size());
-    //
-    //    // Delete the workflow document
-    //    workflowService.deleteWorkflowDocument(
-    //        TenantUtil.DEFAULT_TENANT_ID, workflowDocument.getId());
-    //
-    //    workflowDocuments =
-    //        workflowService.getWorkflowDocuments(
-    //            TenantUtil.DEFAULT_TENANT_ID,
-    //            workflow.getId(),
-    //            "TEST1",
-    //            WorkflowDocumentSortBy.REQUESTED,
-    //            SortDirection.ASCENDING,
-    //            0,
-    //            10);
-    //
-    //    assertEquals(1, workflowDocuments.getTotal());
-    //
-    //    outstandingWorkflowDocuments =
-    //        workflowService.getOutstandingWorkflowDocuments(
-    //            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
-    //
-    //    assertEquals(1, outstandingWorkflowDocuments.size());
-    //
-    //    // Create a workflow note for the workflow
-    //    CreateWorkflowNoteRequest createWorkflowNoteRequest =
-    //        new CreateWorkflowNoteRequest(workflow.getId(), "This is the workflow note content.");
-    //
-    //    WorkflowNote workflowNote =
-    //        workflowService.createWorkflowNote(
-    //            TenantUtil.DEFAULT_TENANT_ID, createWorkflowNoteRequest, "TEST1");
-    //
-    //    assertTrue(
-    //        workflowService.workflowNoteExists(
-    //            TenantUtil.DEFAULT_TENANT_ID, workflowNote.getWorkflowId(),
-    // workflowNote.getId()));
-    //
-    //    WorkflowNote retrievedWorkflowNote =
-    //        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
-    //
-    //    compareWorkflowNotes(workflowNote, retrievedWorkflowNote);
-    //
-    //    // Update the workflow note for the workflow
-    //    UpdateWorkflowNoteRequest updateWorkflowNoteRequest =
-    //        new UpdateWorkflowNoteRequest(workflowNote.getId(), "This is the workflow note
-    // content.");
-    //
-    //    WorkflowNote updatedWorkflowNote =
-    //        workflowService.updateWorkflowNote(
-    //            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowNoteRequest, "TEST2");
-    //
-    //    retrievedWorkflowNote =
-    //        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID,
-    // updatedWorkflowNote.getId());
-    //
-    //    compareWorkflowNotes(updatedWorkflowNote, retrievedWorkflowNote);
-    //
-    //    // Retrieve the workflow notes for the workflow
-    //    WorkflowNotes workflowNotes =
-    //        workflowService.getWorkflowNotes(
-    //            TenantUtil.DEFAULT_TENANT_ID,
-    //            workflow.getId(),
-    //            "TEST2",
-    //            WorkflowNoteSortBy.CREATED,
-    //            SortDirection.ASCENDING,
-    //            0,
-    //            10);
-    //
-    //    assertEquals(1, workflowNotes.getTotal());
-    //
-    //    compareWorkflowNotes(updatedWorkflowNote, workflowNotes.getWorkflowNotes().getFirst());
-    //
-    //    // Initiate the workflow step
-    //    workflowService.initiateWorkflowStep(
-    //        TenantUtil.DEFAULT_TENANT_ID,
-    //        new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
-    //
-    //    assertThrows(
-    //        InvalidArgumentException.class,
-    //        () -> {
-    //          workflowService.initiateWorkflowStep(
-    //              TenantUtil.DEFAULT_TENANT_ID,
-    //              new InitiateWorkflowStepRequest(workflow.getId(),
-    // "test_workflow_step_invalid"));
-    //        });
-    //
-    //    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID,
-    // workflow.getId());
-    //
-    //    assertEquals(1, retrievedWorkflow.getSteps().size());
-    //    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
-    //    assertEquals(WorkflowStepStatus.ACTIVE,
-    // retrievedWorkflow.getSteps().getFirst().getStatus());
-    //    assertNotNull(retrievedWorkflow.getSteps().getFirst().getInitiated());
-    //
-    //    // Finalize the workflow step
-    //    workflowService.finalizeWorkflowStep(
-    //        TenantUtil.DEFAULT_TENANT_ID,
-    //        new FinalizeWorkflowStepRequest(
-    //            workflow.getId(), "test_workflow_step_1", WorkflowStepStatus.COMPLETED));
-    //
-    //    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID,
-    // workflow.getId());
-    //
-    //    assertEquals(1, retrievedWorkflow.getSteps().size());
-    //    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
-    //    assertEquals(WorkflowStepStatus.COMPLETED,
-    // retrievedWorkflow.getSteps().getFirst().getStatus());
-    //    assertNotNull(retrievedWorkflow.getSteps().getFirst().getFinalized());
-    //
-    //    // Finalize the workflow
-    //    workflowService.finalizeWorkflow(
-    //        TenantUtil.DEFAULT_TENANT_ID,
-    //        new FinalizeWorkflowRequest(workflow.getId(), WorkflowStatus.COMPLETED),
-    //        "TEST1");
-    //
-    //    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID,
-    // workflow.getId());
-    //
-    //    assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
-    //    assertNotNull(retrievedWorkflow.getFinalized());
-    //    assertEquals("TEST1", retrievedWorkflow.getFinalizedBy());
-    //
-    //    // Delete the workflow note
-    //    workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+    outstandingWorkflowDocuments =
+        workflowService.getOutstandingWorkflowDocuments(
+            TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
+    assertEquals(1, outstandingWorkflowDocuments.size());
+
+    // Link an interaction to the workflow
     LinkInteractionToWorkflowRequest linkInteractionToWorkflowRequest =
         new LinkInteractionToWorkflowRequest(workflow.getId(), secondInteractionId);
 
@@ -607,6 +480,7 @@ public class EndToEndTests {
     assertEquals(secondInteractionId, workflow.getInteractionLinks().get(1).getInteractionId());
     assertEquals("TEST2", workflow.getInteractionLinks().get(1).getLinkedBy());
 
+    // Delink an interaction form the workflow
     DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest =
         new DelinkInteractionFromWorkflowRequest(workflow.getId(), secondInteractionId);
 
@@ -620,8 +494,46 @@ public class EndToEndTests {
     assertEquals(firstInteractionId, workflow.getInteractionLinks().getFirst().getInteractionId());
     assertEquals("TEST1", workflow.getInteractionLinks().getFirst().getLinkedBy());
 
-    int xxx = 0;
-    xxx++;
+    // Initiate the first workflow step
+    workflowService.initiateWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
+
+    // Finalize the first workflow step
+    workflowService.finalizeWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new FinalizeWorkflowStepRequest(
+            workflow.getId(), "test_workflow_step_1", WorkflowStepStatus.COMPLETED));
+
+    // Initiate the second workflow step
+    workflowService.initiateWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_2"));
+
+    // Finalize the second workflow step
+    workflowService.finalizeWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new FinalizeWorkflowStepRequest(
+            workflow.getId(), "test_workflow_step_2", WorkflowStepStatus.COMPLETED));
+
+    // Initiate the third workflow step
+    workflowService.initiateWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_3"));
+
+    // Finalize the third workflow step
+    workflowService.finalizeWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new FinalizeWorkflowStepRequest(
+            workflow.getId(), "test_workflow_step_3", WorkflowStepStatus.COMPLETED));
+
+    // Finalize the workflow
+    workflowService.finalizeWorkflow(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new FinalizeWorkflowRequest(workflow.getId(), WorkflowStatus.COMPLETED),
+        "TEST1");
+
+    workflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     //  __        __         _     __ _                  ____ _
     //  \ \      / /__  _ __| | __/ _| | _____      __  / ___| | ___  __ _ _ __  _   _ _ __
@@ -784,7 +696,7 @@ public class EndToEndTests {
     throw new RuntimeException(
         "Timed out waiting for the interaction ("
             + interactionId
-            + ") for tenant ("
+            + ") for the tenant ("
             + tenantId
             + ") to process");
   }

@@ -59,12 +59,28 @@ import org.springframework.boot.convert.DurationStyle;
  */
 @Schema(description = "A workflow step definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"sequence", "code", "name", "description", "internal", "timeToComplete"})
+@JsonPropertyOrder({
+  "sequence",
+  "code",
+  "name",
+  "description",
+  "external",
+  "internal",
+  "timeToComplete"
+})
 @XmlRootElement(name = "WorkflowStepDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowStepDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"sequence", "code", "name", "description", "internal", "timeToComplete"})
+    propOrder = {
+      "sequence",
+      "code",
+      "name",
+      "description",
+      "external",
+      "internal",
+      "timeToComplete"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_step_definitions")
@@ -112,6 +128,16 @@ public class WorkflowStepDefinition implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
+  /** Is this workflow step completed by one or more external users? */
+  @Schema(
+      description = "Is this workflow step completed by one or more external users",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "External", required = true)
+  @NotNull
+  @Column(name = "external", nullable = false)
+  private Boolean external;
+
   /** Is this workflow step internal-only and excluded for external users? */
   @Schema(
       description = "Is this workflow step internal-only and excluded for external users",
@@ -120,7 +146,7 @@ public class WorkflowStepDefinition implements Serializable {
   @XmlElement(name = "Internal", required = true)
   @NotNull
   @Column(name = "internal", nullable = false)
-  private boolean internal;
+  private Boolean internal;
 
   /** The name of the workflow step. */
   @Schema(
@@ -161,49 +187,21 @@ public class WorkflowStepDefinition implements Serializable {
    * @param code the code for the workflow step
    * @param name the name of the workflow step
    * @param description the description for the workflow step
-   */
-  public WorkflowStepDefinition(int sequence, String code, String name, String description) {
-    this.sequence = sequence;
-    this.code = code;
-    this.name = name;
-    this.description = description;
-    this.internal = false;
-  }
-
-  /**
-   * Constructs a new {@code WorkflowStepDefinition}.
-   *
-   * @param sequence the sequence number for the workflow step
-   * @param code the code for the workflow step
-   * @param name the name of the workflow step
-   * @param description the description for the workflow step
-   * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
-   */
-  public WorkflowStepDefinition(
-      int sequence, String code, String name, String description, String timeToComplete) {
-    this.sequence = sequence;
-    this.code = code;
-    this.name = name;
-    this.description = description;
-    this.internal = false;
-    this.timeToComplete = timeToComplete;
-  }
-
-  /**
-   * Constructs a new {@code WorkflowStepDefinition}.
-   *
-   * @param sequence the sequence number for the workflow step
-   * @param code the code for the workflow step
-   * @param name the name of the workflow step
-   * @param description the description for the workflow step
+   * @param external is this workflow step completed by one or more external users
    * @param internal is this workflow step internal-only and excluded for external users
    */
   public WorkflowStepDefinition(
-      int sequence, String code, String name, String description, boolean internal) {
+      int sequence,
+      String code,
+      String name,
+      String description,
+      boolean external,
+      boolean internal) {
     this.sequence = sequence;
     this.code = code;
     this.name = name;
     this.description = description;
+    this.external = external;
     this.internal = internal;
   }
 
@@ -214,6 +212,7 @@ public class WorkflowStepDefinition implements Serializable {
    * @param code the code for the workflow step
    * @param name the name of the workflow step
    * @param description the description for the workflow step
+   * @param external is this workflow step completed by one or more external users
    * @param internal is this workflow step internal-only and excluded for external users
    * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
    */
@@ -222,12 +221,14 @@ public class WorkflowStepDefinition implements Serializable {
       String code,
       String name,
       String description,
+      boolean external,
       boolean internal,
       String timeToComplete) {
     this.sequence = sequence;
     this.code = code;
     this.name = name;
     this.description = description;
+    this.external = external;
     this.internal = internal;
     this.timeToComplete = timeToComplete;
   }
@@ -275,6 +276,16 @@ public class WorkflowStepDefinition implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns whether this workflow step is completed by one or more external users.
+   *
+   * @return {@code true} if this workflow step is completed by one or more external users or {@code
+   *     false otherwise}
+   */
+  public Boolean getExternal() {
+    return external;
   }
 
   /**
@@ -359,6 +370,16 @@ public class WorkflowStepDefinition implements Serializable {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Set whether this workflow step is completed by one or more external users.
+   *
+   * @param external {@code true} if this workflow step is completed by one or more external users
+   *     or {@code false} otherwise
+   */
+  public void setExternal(Boolean external) {
+    this.external = external;
   }
 
   /**

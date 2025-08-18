@@ -192,7 +192,7 @@ public class WorkflowEngine implements Serializable {
    * @return an Optional containing the attribute with the specified code for the workflow engine or
    *     an empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowEngineAttribute> getAttributeWithCode(String code) {
+  public Optional<WorkflowEngineAttribute> getAttribute(String code) {
     return attributes.stream()
         .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();
@@ -241,7 +241,7 @@ public class WorkflowEngine implements Serializable {
    * @return {@code true} if the workflow engine has an attribute with the specified code or {@code
    *     false} otherwise
    */
-  public boolean hasAttributeWithCode(String code) {
+  public boolean hasAttribute(String code) {
     return attributes.stream()
         .anyMatch(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code));
   }

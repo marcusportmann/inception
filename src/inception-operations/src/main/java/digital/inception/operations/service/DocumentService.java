@@ -345,7 +345,8 @@ public interface DocumentService {
    * Retrieve the summaries for the documents.
    *
    * @param tenantId the ID for the tenant
-   * @param definitionId the document definition ID filter to apply to the document summaries
+   * @param documentDefinitionId the document definition ID filter to apply to the document
+   *     summaries
    * @param filter the filter to apply to the document summaries
    * @param sortBy the method used to sort the document summaries e.g. by definition ID
    * @param sortDirection the sort direction to apply to the document summaries
@@ -357,13 +358,27 @@ public interface DocumentService {
    */
   DocumentSummaries getDocumentSummaries(
       UUID tenantId,
-      String definitionId,
+      String documentDefinitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Check whether a document attribute with the specified code is valid for a document.
+   *
+   * @param tenantId the ID for the tenant the document is associated with
+   * @param documentDefinitionId the ID for the document definition the document is associated with
+   * @param attributeCode the code for the document attribute
+   * @return {@code true} if a document attribute with the specified code is valid or {@code false}
+   *     otherwise
+   * @throws ServiceUnavailableException if the validity of the document attribute code could not be
+   *     verified
+   */
+  boolean isValidDocumentAttribute(UUID tenantId, String documentDefinitionId, String attributeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Update the document.

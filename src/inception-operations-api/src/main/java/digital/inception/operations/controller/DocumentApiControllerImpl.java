@@ -108,7 +108,7 @@ public class DocumentApiControllerImpl extends SecureApiController
     }
 
     if (!Objects.equals(documentDefinitionCategoryId, documentDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("documentDefinition.categoryId");
+      throw new InvalidArgumentException("documentDefinition.documentDefinitionCategoryId");
     }
 
     documentService.createDocumentDefinition(documentDefinition);
@@ -390,7 +390,7 @@ public class DocumentApiControllerImpl extends SecureApiController
   @Override
   public DocumentSummaries getDocumentSummaries(
       UUID tenantId,
-      String definitionId,
+      String documentDefinitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
@@ -406,7 +406,7 @@ public class DocumentApiControllerImpl extends SecureApiController
     }
 
     return documentService.getDocumentSummaries(
-        tenantId, definitionId, filter, sortBy, sortDirection, pageIndex, pageSize);
+        tenantId, documentDefinitionId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -442,7 +442,7 @@ public class DocumentApiControllerImpl extends SecureApiController
     }
 
     if (!Objects.equals(documentDefinitionCategoryId, documentDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("documentDefinition.categoryId");
+      throw new InvalidArgumentException("documentDefinition.documentDefinitionCategoryId");
     }
 
     if (!Objects.equals(documentDefinitionId, documentDefinition.getId())) {

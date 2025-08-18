@@ -19,7 +19,6 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.operations.constraint.ValidUpdateWorkflowRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -46,7 +45,6 @@ import java.util.UUID;
     namespace = "https://inception.digital/operations",
     propOrder = {"workflowId", "status", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidUpdateWorkflowRequest
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UpdateWorkflowRequest implements Serializable {
 

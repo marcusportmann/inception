@@ -41,11 +41,13 @@ import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
+import digital.inception.operations.model.InitiateWorkflowAttribute;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
+import digital.inception.operations.model.ProvideWorkflowDocumentAttribute;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
@@ -100,6 +102,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   /** The Document Service. */
   private final DocumentService documentService;
 
+  private final InteractionService interactionService;
+
   /** The Workflow Data Validation Service. */
   private final WorkflowDataValidationService workflowDataValidationService;
 
@@ -144,6 +148,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    * @param workflowEngineRepository the Workflow Engine Repository
    * @param documentService the Document Service
    * @param workflowDataValidationService the Workflow Data Validation Service
+   * @param interactionService the Interaction Service
    */
   public WorkflowServiceImpl(
       ApplicationContext applicationContext,
@@ -153,7 +158,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowDefinitionSummaryRepository workflowDefinitionSummaryRepository,
       WorkflowEngineRepository workflowEngineRepository,
       DocumentService documentService,
-      WorkflowDataValidationService workflowDataValidationService) {
+      WorkflowDataValidationService workflowDataValidationService,
+      InteractionService interactionService) {
     super(applicationContext);
 
     this.workflowStore = workflowStore;
@@ -163,6 +169,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     this.workflowEngineRepository = workflowEngineRepository;
     this.documentService = documentService;
     this.workflowDataValidationService = workflowDataValidationService;
+    this.interactionService = interactionService;
   }
 
   @Override
@@ -170,6 +177,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     validateArgument("workflowDefinition", workflowDefinition);
 
@@ -184,9 +192,19 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             workflowDefinition.getId(), workflowDefinition.getVersion());
       }
 
+      for (WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition :
+          workflowDefinition.getDocumentDefinitions()) {
+        if (!documentService.documentDefinitionExists(
+            workflowDefinitionDocumentDefinition.getDocumentDefinitionId())) {
+          throw new DocumentDefinitionNotFoundException(
+              workflowDefinitionDocumentDefinition.getDocumentDefinitionId());
+        }
+      }
+
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
     } catch (DuplicateWorkflowDefinitionVersionException
-        | WorkflowDefinitionCategoryNotFoundException e) {
+        | WorkflowDefinitionCategoryNotFoundException
+        | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -957,7 +975,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   @Override
   public WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
-      String definitionId,
+      String workflowDefinitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
@@ -988,7 +1006,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       return workflowStore.getWorkflowSummaries(
           tenantId,
-          definitionId,
+          workflowDefinitionId,
           status,
           filter,
           sortBy,
@@ -1008,6 +1026,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String initiatedBy)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
+          InteractionNotFoundException,
           ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -1028,6 +1047,28 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
 
+      // Validate the workflow attributes
+      for (InitiateWorkflowAttribute initiateWorkflowAttribute :
+          initiateWorkflowRequest.getAttributes()) {
+        if (!isValidWorkflowAttribute(
+            tenantId, workflowDefinition.getId(), initiateWorkflowAttribute.getCode())) {
+          log.warn(
+              "Invalid workflow attribute ("
+                  + initiateWorkflowAttribute.getCode()
+                  + ") provided when initiating a workflow with the workflow definition ("
+                  + workflowDefinition.getId()
+                  + ") version ("
+                  + workflowDefinition.getVersion()
+                  + ") for the tenant ("
+                  + tenantId
+                  + ")");
+
+          throw new InvalidArgumentException(
+              "initiateWorkflowRequest.attributes.code",
+              "the workflow attribute (" + initiateWorkflowAttribute.getCode() + ") is invalid");
+        }
+      }
+
       // Validate the workflow data if we have a validation schema
       if ((workflowDefinition.getValidationSchemaType() != null)
           && (StringUtils.hasText(workflowDefinition.getValidationSchema()))) {
@@ -1036,6 +1077,16 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             workflowDefinition.getValidationSchema(),
             initiateWorkflowRequest.getData())) {
           throw new InvalidArgumentException("initiateWorkflowRequest.data");
+        }
+      }
+
+      // Validation the interaction links
+      for (InitiateWorkflowInteractionLink initiateWorkflowInteractionLink :
+          initiateWorkflowRequest.getInteractionLinks()) {
+        if (!interactionService.interactionExists(
+            tenantId, initiateWorkflowInteractionLink.getInteractionId())) {
+          throw new InteractionNotFoundException(
+              tenantId, initiateWorkflowInteractionLink.getInteractionId());
         }
       }
 
@@ -1094,7 +1145,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       }
 
       return workflow;
-    } catch (InvalidArgumentException | WorkflowDefinitionNotFoundException e) {
+    } catch (InvalidArgumentException
+        | WorkflowDefinitionNotFoundException
+        | InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -1123,7 +1176,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               tenantId, initiateWorkflowStepRequest.getWorkflowId());
 
       List<WorkflowStepDefinition> stepDefinitions =
-          workflowDefinitionRepository.findStepDefinitionsByDefinitionIdAndVersion(
+          workflowDefinitionRepository.findStepDefinitionsByWorkflowDefinitionIdAndVersion(
               workflowDefinitionId.getId(), workflowDefinitionId.getVersion());
 
       boolean foundWorkflowStepDefinition = false;
@@ -1151,6 +1204,25 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + initiateWorkflowStepRequest.getStep()
               + ") for the workflow ("
               + initiateWorkflowStepRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean isValidWorkflowAttribute(
+      UUID tenantId, String workflowDefinitionId, String attributeCode)
+      throws ServiceUnavailableException {
+    try {
+      return true;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to validate the workflow attribute ("
+              + attributeCode
+              + ") for the workflow with the workflow definition ("
+              + workflowDefinitionId
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -1221,6 +1293,30 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.getDocumentDefinitionIdForWorkflowDocument(
               tenantId, provideWorkflowDocumentRequest.getWorkflowDocumentId());
 
+      // Validate the document attributes
+      for (ProvideWorkflowDocumentAttribute provideWorkflowDocumentAttribute :
+          provideWorkflowDocumentRequest.getAttributes()) {
+        if (!documentService.isValidDocumentAttribute(
+            tenantId, documentDefinitionId, provideWorkflowDocumentAttribute.getCode())) {
+          log.warn(
+              "Invalid document attribute ("
+                  + provideWorkflowDocumentAttribute.getCode()
+                  + ") provided for workflow document ("
+                  + provideWorkflowDocumentRequest.getWorkflowDocumentId()
+                  + ") for the tenant ("
+                  + tenantId
+                  + ")");
+
+          throw new InvalidArgumentException(
+              "provideWorkflowDocumentRequest.attributes.code",
+              "the document attribute ("
+                  + provideWorkflowDocumentAttribute.getCode()
+                  + ") is invalid");
+        }
+      }
+
+      // TODO: Check that required document attributes have been specified -- MARCUS
+
       DocumentDefinition documentDefinition =
           documentService.getDocumentDefinition(documentDefinitionId);
 
@@ -1249,7 +1345,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       }
 
       workflowStore.provideWorkflowDocument(tenantId, provideWorkflowDocumentRequest, providedBy);
-    } catch (WorkflowDocumentNotFoundException e) {
+    } catch (InvalidArgumentException | WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to provide the workflow document", e);
@@ -1288,7 +1384,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public void requestWorkflowDocument(
+  public UUID requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
@@ -1312,7 +1408,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             requestWorkflowDocumentRequest.getDocumentDefinitionId());
       }
 
-      workflowStore.requestWorkflowDocument(tenantId, requestWorkflowDocumentRequest, requestedBy);
+      return workflowStore.requestWorkflowDocument(
+          tenantId, requestWorkflowDocumentRequest, requestedBy);
     } catch (DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {

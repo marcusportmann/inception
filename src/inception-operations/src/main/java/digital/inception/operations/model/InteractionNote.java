@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.operations.constraint.ValidInteractionNote;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,7 +73,6 @@ import java.util.UUID;
       "updatedBy"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidInteractionNote
 @Entity
 @Table(name = "operations_interaction_notes")
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -117,13 +115,25 @@ public class InteractionNote implements Serializable {
   private String createdBy;
 
   /** The ID for the interaction note. */
-  @Schema(description = "The ID for the interaction note", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(
+      description = "The ID for the interaction note",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
+
+  /** The ID for the interaction the interaction note is associated with. */
+  @Schema(
+      description = "The ID for the interaction the interaction note is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "InteractionId", required = true)
+  @NotNull
+  @Column(name = "interaction_id", length = 50, nullable = false)
+  private UUID interactionId;
 
   /** The ID for the tenant the interaction note is associated with. */
   @Schema(
@@ -151,16 +161,6 @@ public class InteractionNote implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "updated_by", length = 100)
   private String updatedBy;
-
-  /** The ID for the interaction the interaction note is associated with. */
-  @Schema(
-      description = "The ID for the interaction the interaction note is associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "InteractionId", required = true)
-  @NotNull
-  @Column(name = "interaction_id", length = 50, nullable = false)
-  private UUID interactionId;
 
   /** Constructs a new {@code InteractionNote}. */
   public InteractionNote() {}
@@ -246,6 +246,15 @@ public class InteractionNote implements Serializable {
   }
 
   /**
+   * Returns the ID for the interaction the interaction note is associated with.
+   *
+   * @return the ID for the interaction the interaction note is associated with
+   */
+  public UUID getInteractionId() {
+    return interactionId;
+  }
+
+  /**
    * Returns the ID for the tenant the interaction note is associated with.
    *
    * @return the ID for the tenant the interaction note is associated with
@@ -270,15 +279,6 @@ public class InteractionNote implements Serializable {
    */
   public String getUpdatedBy() {
     return updatedBy;
-  }
-
-  /**
-   * Returns the ID for the interaction the interaction note is associated with.
-   *
-   * @return the ID for the interaction the interaction note is associated with
-   */
-  public UUID getInteractionId() {
-    return interactionId;
   }
 
   /**
@@ -328,6 +328,15 @@ public class InteractionNote implements Serializable {
   }
 
   /**
+   * Set the ID for the interaction the interaction note is associated with.
+   *
+   * @param interactionId the ID for the interaction the interaction note is associated with
+   */
+  public void setInteractionId(UUID interactionId) {
+    this.interactionId = interactionId;
+  }
+
+  /**
    * Set the ID for the tenant the interaction note is associated with.
    *
    * @param tenantId the ID for the tenant the interaction note is associated with
@@ -352,14 +361,5 @@ public class InteractionNote implements Serializable {
    */
   public void setUpdatedBy(String updatedBy) {
     this.updatedBy = updatedBy;
-  }
-
-  /**
-   * Set the ID for the interaction the interaction note is associated with.
-   *
-   * @param interactionId the ID for the interaction the interaction note is associated with
-   */
-  public void setInteractionId(UUID interactionId) {
-    this.interactionId = interactionId;
   }
 }

@@ -109,13 +109,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }
 
     if (!Objects.equals(workflowDefinitionCategoryId, workflowDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("workflowDefinition.categoryId");
+      throw new InvalidArgumentException("workflowDefinition.workflowDefinitionCategoryId");
     }
 
     workflowService.createWorkflowDefinition(workflowDefinition);
@@ -703,7 +704,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
   @Override
   public WorkflowSummaries getWorkflowSummaries(
       UUID tenantId,
-      String definitionId,
+      String workflowDefinitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
@@ -720,13 +721,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
     }
 
     return workflowService.getWorkflowSummaries(
-        tenantId, definitionId, status, filter, sortBy, sortDirection, pageIndex, pageSize);
+        tenantId, workflowDefinitionId, status, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
   public UUID initiateWorkflow(UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
+          InteractionNotFoundException,
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
@@ -833,7 +835,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void requestWorkflowDocument(
+  public UUID requestWorkflowDocument(
       UUID tenantId, RequestWorkflowDocumentRequest requestWorkflowDocumentRequest)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
@@ -846,7 +848,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    workflowService.requestWorkflowDocument(
+    return workflowService.requestWorkflowDocument(
         tenantId, requestWorkflowDocumentRequest, getAuthenticationName());
   }
 
@@ -891,6 +893,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
@@ -905,7 +908,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
     }
 
     if (!Objects.equals(workflowDefinitionCategoryId, workflowDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("workflowDefinition.categoryId");
+      throw new InvalidArgumentException("workflowDefinition.workflowDefinitionCategoryId");
     }
 
     if (!Objects.equals(workflowDefinitionId, workflowDefinition.getId())) {

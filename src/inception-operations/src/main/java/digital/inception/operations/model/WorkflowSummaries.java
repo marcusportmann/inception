@@ -48,6 +48,7 @@ import java.util.UUID;
   "sortDirection",
   "pageIndex",
   "pageSize",
+  "workflowDefinitionId",
   "status",
   "filter"
 })
@@ -63,6 +64,7 @@ import java.util.UUID;
       "sortDirection",
       "pageIndex",
       "pageSize",
+      "workflowDefinitionId",
       "status",
       "filter"
     })
@@ -124,6 +126,13 @@ public class WorkflowSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
+  /** The workflow definition ID filter that was applied to the workflow summaries. */
+  @Schema(
+      description = "The workflow definition ID filter that was applied to the workflow summaries")
+  @JsonProperty
+  @XmlElement(name = "WorkflowDefinitionId")
+  private String workflowDefinitionId;
+
   /** The workflow summaries. */
   @Schema(description = "The workflow summaries", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -140,6 +149,8 @@ public class WorkflowSummaries implements Serializable {
    * @param tenantId the ID for the tenant the workflow summaries are associated with
    * @param workflowSummaries the workflow summaries
    * @param total the total number of workflow summaries
+   * @param workflowDefinitionId the workflow definition ID filter that was applied to the workflow
+   *     summaries
    * @param status the status filter that was applied to the workflow summaries
    * @param filter the filter that was applied to the workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
@@ -151,6 +162,7 @@ public class WorkflowSummaries implements Serializable {
       UUID tenantId,
       List<WorkflowSummary> workflowSummaries,
       long total,
+      String workflowDefinitionId,
       WorkflowStatus status,
       String filter,
       WorkflowSortBy sortBy,
@@ -160,6 +172,7 @@ public class WorkflowSummaries implements Serializable {
     this.tenantId = tenantId;
     this.workflowSummaries = workflowSummaries;
     this.total = total;
+    this.workflowDefinitionId = workflowDefinitionId;
     this.status = status;
     this.filter = filter;
     this.sortBy = sortBy;
@@ -238,6 +251,15 @@ public class WorkflowSummaries implements Serializable {
    */
   public long getTotal() {
     return total;
+  }
+
+  /**
+   * Returns the workflow definition ID filter that was applied to the workflow summaries.
+   *
+   * @return the workflow definition ID filter that was applied to the workflow summaries
+   */
+  public String getWorkflowDefinitionId() {
+    return workflowDefinitionId;
   }
 
   /**

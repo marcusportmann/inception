@@ -628,7 +628,7 @@ public class WorkflowDefinition implements Serializable {
    * @return an Optional containing the attribute with the specified code for the workflow
    *     definition or an empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowDefinitionAttribute> getAttributeWithCode(String code) {
+  public Optional<WorkflowDefinitionAttribute> getAttribute(String code) {
     return attributes.stream()
         .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
         .findFirst();
@@ -793,7 +793,7 @@ public class WorkflowDefinition implements Serializable {
    *
    * @param code the code for the workflow step definition
    */
-  public void removeStepDefinitionWithCode(String code) {
+  public void removeStepDefinition(String code) {
     stepDefinitions.removeIf(
         existingStepDefinition ->
             StringUtil.equalsIgnoreCase(existingStepDefinition.getCode(), code));

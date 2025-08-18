@@ -63,7 +63,9 @@ public class UpdateInteractionNoteRequest implements Serializable {
   private String content;
 
   /** The ID for the interaction note. */
-  @Schema(description = "The ID for the interaction note", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(
+      description = "The ID for the interaction note",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "InteractionNoteId", required = true)
   @NotNull

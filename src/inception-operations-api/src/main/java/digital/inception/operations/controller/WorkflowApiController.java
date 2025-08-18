@@ -104,6 +104,8 @@ public interface WorkflowApiController {
    *     exists
    * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
    *     not be found
+   * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
+   *     definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be created
    */
   @Operation(
@@ -130,7 +132,8 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The workflow definition category could not be found",
+            description =
+                "The workflow definition category or a document definition reference by the workflow definition version could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -173,6 +176,7 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -903,7 +907,8 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The interaction, workflow or workflow interaction link could not be found",
+            description =
+                "The interaction, workflow or workflow interaction link could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -940,8 +945,8 @@ public interface WorkflowApiController {
           @RequestBody
           DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest)
       throws InvalidArgumentException,
-      InteractionNotFoundException,
-      WorkflowNotFoundException,
+          InteractionNotFoundException,
+          WorkflowNotFoundException,
           WorkflowInteractionLinkNotFoundException,
           ServiceUnavailableException;
 
@@ -2044,7 +2049,8 @@ public interface WorkflowApiController {
    * Retrieve the summaries for the workflows.
    *
    * @param tenantId the ID for the tenant
-   * @param definitionId the workflow definition ID filter to apply to the workflow summaries
+   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflow
+   *     summaries
    * @param status the status filter to apply to the workflow summaries
    * @param filter the filter to apply to the workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
@@ -2102,10 +2108,10 @@ public interface WorkflowApiController {
               required = false)
           UUID tenantId,
       @Parameter(
-              name = "definitionId",
+              name = "workflowDefinitionId",
               description = "The workflow definition ID filter to apply to the workflow summaries")
-          @RequestParam(value = "definitionId", required = false)
-          String definitionId,
+          @RequestParam(value = "workflowDefinitionId", required = false)
+          String workflowDefinitionId,
       @Parameter(
               name = "status",
               description = "The status filter to apply to the workflow summaries")
@@ -2140,6 +2146,8 @@ public interface WorkflowApiController {
    * @return the ID for the workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
+   * @throws InteractionNotFoundException if an interaction linked to the workflow could not be
+   *     found
    * @throws ServiceUnavailableException if the workflow could not be initiated
    */
   @Operation(summary = "Initiate a workflow", description = "Initiate a workflow")
@@ -2162,7 +2170,8 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The workflow definition could not be found",
+            description =
+                "The workflow definition or an interaction linked to the workflow could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -2200,6 +2209,7 @@ public interface WorkflowApiController {
           InitiateWorkflowRequest initiateWorkflowRequest)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
+          InteractionNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -2487,6 +2497,7 @@ public interface WorkflowApiController {
    *
    * @param tenantId the ID for the tenant
    * @param requestWorkflowDocumentRequest the request to request a workflow document
+   * @return the ID for the workflow document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the workflow document could not be requested
@@ -2529,10 +2540,10 @@ public interface WorkflowApiController {
       value = "/request-workflow-document",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  void requestWorkflowDocument(
+  UUID requestWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",
@@ -2708,6 +2719,8 @@ public interface WorkflowApiController {
    *     not be found
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
    *     be found
+   * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
+   *     definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be updated
    */
   @Operation(
@@ -2735,7 +2748,7 @@ public interface WorkflowApiController {
         @ApiResponse(
             responseCode = "404",
             description =
-                "The workflow definition category or workflow definition version could not be found",
+                "The workflow definition category, workflow definition version or a document definition referenced by the workflow definition version could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -2784,6 +2797,7 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
   /**

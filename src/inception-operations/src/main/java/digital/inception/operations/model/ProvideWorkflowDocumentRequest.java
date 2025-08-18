@@ -23,11 +23,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
 import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
@@ -35,6 +37,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -53,6 +57,7 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
+  "attributes",
   "data"
 })
 @XmlRootElement(
@@ -69,6 +74,7 @@ import java.util.UUID;
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
+      "attributes",
       "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -76,6 +82,14 @@ import java.util.UUID;
 public class ProvideWorkflowDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the document. */
+  @Schema(description = "The attributes for the document")
+  @JsonProperty
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  @Valid
+  private List<ProvideWorkflowDocumentAttribute> attributes = new ArrayList<>();
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -158,8 +172,39 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
     this.data = data;
   }
 
+  /**
+   * Constructs a new {@code ProvideWorkflowDocumentRequest}.
+   *
+   * @param workflowDocumentId the ID for the workflow document
+   * @param fileType the file type for the document
+   * @param name the name of the document
+   * @param attributes the attributes for the document
+   * @param data the data for the document
+   */
+  public ProvideWorkflowDocumentRequest(
+      UUID workflowDocumentId,
+      FileType fileType,
+      String name,
+      List<ProvideWorkflowDocumentAttribute> attributes,
+      byte[] data) {
+    this.workflowDocumentId = workflowDocumentId;
+    this.fileType = fileType;
+    this.name = name;
+    this.attributes = attributes;
+    this.data = data;
+  }
+
   /** Constructs a new {@code ProvideWorkflowDocumentRequest}. */
   public ProvideWorkflowDocumentRequest() {}
+
+  /**
+   * Returns the attributes for the document.
+   *
+   * @return the attributes for the document
+   */
+  public List<ProvideWorkflowDocumentAttribute> getAttributes() {
+    return attributes;
+  }
 
   /**
    * Returns the data for the document.
@@ -231,6 +276,15 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
    */
   public UUID getWorkflowDocumentId() {
     return workflowDocumentId;
+  }
+
+  /**
+   * Set the attributes for the document.
+   *
+   * @param attributes the attributes for the document
+   */
+  public void setAttributes(List<ProvideWorkflowDocumentAttribute> attributes) {
+    this.attributes = attributes;
   }
 
   /**

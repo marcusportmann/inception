@@ -612,7 +612,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public DocumentSummaries getDocumentSummaries(
       UUID tenantId,
-      String definitionId,
+      String documentDefinitionId,
       String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
@@ -642,7 +642,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     try {
       return documentStore.getDocumentSummaries(
           tenantId,
-          definitionId,
+          documentDefinitionId,
           filter,
           sortBy,
           sortDirection,
@@ -652,6 +652,25 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean isValidDocumentAttribute(
+      UUID tenantId, String documentDefinitionId, String attributeCode)
+      throws ServiceUnavailableException {
+    try {
+      return true;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to validate the document attribute ("
+              + attributeCode
+              + ") for the document with the document definition ("
+              + documentDefinitionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }

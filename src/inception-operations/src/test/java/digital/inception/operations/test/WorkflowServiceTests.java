@@ -49,6 +49,7 @@ import digital.inception.operations.model.InitiateWorkflowAttribute;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
+import digital.inception.operations.model.ProvideWorkflowDocumentAttribute;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
@@ -188,7 +189,9 @@ public class WorkflowServiceTests {
             1,
             "test_workflow_step_1",
             "Test Workflow Step 1",
-            "The description for Test Workflow Step 1"));
+            "The description for Test Workflow Step 1",
+            false,
+            false));
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -196,6 +199,7 @@ public class WorkflowServiceTests {
             "test_workflow_step_2",
             "Test Workflow Step 2",
             "The description for Test Workflow Step 2",
+            false,
             true,
             "P1D"));
 
@@ -204,7 +208,9 @@ public class WorkflowServiceTests {
             3,
             "test_workflow_step_3",
             "Test Workflow Step 3",
-            "The description for Test Workflow Step 3"));
+            "The description for Test Workflow Step 3",
+            false,
+            false));
 
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
@@ -254,7 +260,7 @@ public class WorkflowServiceTests {
             workflow.getDefinitionId(),
             WorkflowStatus.ACTIVE,
             "test_workflow_attribute_value",
-            WorkflowSortBy.DEFINITION_ID,
+            WorkflowSortBy.INITIATED,
             SortDirection.ASCENDING,
             0,
             10);
@@ -267,11 +273,11 @@ public class WorkflowServiceTests {
     assertEquals(
         retrievedWorkflow.getDefinitionId(),
         workflowSummary.getDefinitionId(),
-        "Invalid value for the \"definitionId\" workflow summary property");
+        "Invalid value for the \"workflowDefinitionId\" workflow summary property");
     assertEquals(
         retrievedWorkflow.getDefinitionVersion(),
         workflowSummary.getDefinitionVersion(),
-        "Invalid value for the \"definitionVersion\" workflow summary property");
+        "Invalid value for the \"workflowDefinitionVersion\" workflow summary property");
     assertEquals(
         retrievedWorkflow.getExternalReference(),
         workflowSummary.getExternalReference(),
@@ -341,11 +347,17 @@ public class WorkflowServiceTests {
     // Provide a workflow document
     byte[] multiPagePdfData = ResourceUtil.getClasspathResource("MultiPagePdf.pdf");
 
+    List<ProvideWorkflowDocumentAttribute> provideWorkflowDocumentAttributes =
+        List.of(
+            new ProvideWorkflowDocumentAttribute(
+                "test_document_attribute_name", "test_document_attribute_value"));
+
     ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest =
         new ProvideWorkflowDocumentRequest(
             retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getId(),
             FileType.PDF,
             "MultiPagePdf.pdf",
+            provideWorkflowDocumentAttributes,
             multiPagePdfData);
 
     provideWorkflowDocumentRequest.setExternalReference(UUID.randomUUID().toString());
@@ -375,6 +387,11 @@ public class WorkflowServiceTests {
     assertEquals(multiPagePdfData.length, retrievedDocument.getData().length);
     assertEquals(LocalDate.of(2015, 10, 10), retrievedDocument.getIssueDate());
     assertEquals(LocalDate.of(2050, 11, 11), retrievedDocument.getExpiryDate());
+    assertEquals(1, retrievedDocument.getAttributes().size());
+    assertEquals(
+        "test_document_attribute_name", retrievedDocument.getAttributes().getFirst().getCode());
+    assertEquals(
+        "test_document_attribute_value", retrievedDocument.getAttributes().getFirst().getValue());
 
     // Provide the workflow document again, replacing the existing document
     provideWorkflowDocumentRequest.setName("AnotherMultiPagePdf.pdf");
@@ -764,21 +781,27 @@ public class WorkflowServiceTests {
             1,
             "test_workflow_step_1",
             "Test Workflow Step 1",
-            "The description for Test Workflow Step 1"));
+            "The description for Test Workflow Step 1",
+            false,
+            false));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
             2,
             "test_workflow_step_2",
             "Test Workflow Step 2",
-            "The description for Test Workflow Step 2"));
+            "The description for Test Workflow Step 2",
+            false,
+            false));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
             3,
             "test_workflow_step_3",
             "Test Workflow Step 3",
-            "The description for Test Workflow Step 3"));
+            "The description for Test Workflow Step 3",
+            false,
+            false));
 
     tenantWorkflowDefinition.addDocumentDefinition(
         tenantDocumentDefinition.getId(), true, false, true);
@@ -840,7 +863,7 @@ public class WorkflowServiceTests {
 
     tenantWorkflowDefinition.removeAttribute("another_attribute_name");
 
-    tenantWorkflowDefinition.removeStepDefinitionWithCode("test_workflow_step_2");
+    tenantWorkflowDefinition.removeStepDefinition("test_workflow_step_2");
 
     workflowService.updateWorkflowDefinition(tenantWorkflowDefinition);
 
@@ -991,7 +1014,7 @@ public class WorkflowServiceTests {
     assertEquals(
         workflowDefinition1.getEngineId(),
         workflowDefinition2.getEngineId(),
-        "The engine ID values for the workflow definitions do not match");
+        "The workflow engine ID values for the workflow definitions do not match");
     assertEquals(
         workflowDefinition1.getId(),
         workflowDefinition2.getId(),
