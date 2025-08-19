@@ -1,0 +1,25 @@
+meta {
+  name: Create Document Attribute Definition
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseURL}}/api/operations/document-attribute-definitions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "code": "test_document_attribute_code",
+    "description": "Test Document Attribute",
+    "documentDefinitionId": "test_document_definition",
+    "required": true,
+    "tenantId": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Get Document Attribute Definition
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseURL}}/api/operations/document-attribute-definitions/{{documentAttributeDefinitionCode}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  documentAttributeDefinitionCode: test_document_attribute_code
+}
+
+settings {
+  encodeUrl: true
+}

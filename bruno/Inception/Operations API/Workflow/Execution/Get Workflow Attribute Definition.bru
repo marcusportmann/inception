@@ -1,0 +1,19 @@
+meta {
+  name: Get Workflow Attribute Definition
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflow-attribute-definitions/{{workflowAttributeDefinitionCode}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  workflowAttributeDefinitionCode: test_workflow_attribute_code
+}
+
+settings {
+  encodeUrl: true
+}
