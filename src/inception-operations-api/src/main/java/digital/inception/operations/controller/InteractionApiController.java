@@ -28,11 +28,15 @@ import digital.inception.operations.exception.InteractionSourceNotFoundException
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
+import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
+import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceSummary;
+import digital.inception.operations.model.InteractionStatus;
+import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -913,6 +917,119 @@ public interface InteractionApiController {
               required = false)
           UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the interactions for the interaction source with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source the interactions are associated
+   *     with
+   * @param status the status filter to apply to the interaction summaries
+   * @param direction the direction filter to apply to the interaction summaries, i.e., inbound or
+   *     outbound
+   * @param filter the filter to apply to the interaction summaries
+   * @param sortBy the method used to sort the interaction summaries e.g. by occurred
+   * @param sortDirection the sort direction to apply to the interaction summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the interactions
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the interaction summaries could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the summaries for the interactions for the interaction source",
+      description = "Retrieve the summaries for the interactions for the interaction source")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The interaction summaries were retrieved for the interaction source"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction source could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interaction-sources/{interactionSourceId}/interaction-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  InteractionSummaries getInteractionSummaries(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionSourceId",
+              description = "The ID for the interaction source",
+              required = true)
+          @PathVariable
+          UUID interactionSourceId,
+      @Parameter(
+              name = "status",
+              description = "The status filter to apply to the interaction summaries")
+          @RequestParam(value = "status", required = false)
+          InteractionStatus status,
+      @Parameter(
+              name = "direction",
+              description = "The direction filter to apply to the interaction summaries")
+          @RequestParam(value = "direction", required = false)
+          InteractionDirection direction,
+      @Parameter(name = "filter", description = "The filter to apply to the interaction summaries")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The method used to sort the interaction summaries e.g. by occurred")
+          @RequestParam(value = "sortBy", required = false)
+          InteractionSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the interaction summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the interaction.

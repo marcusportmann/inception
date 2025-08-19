@@ -68,7 +68,9 @@ public interface WorkflowRepository
   @Query(
       """
       update Workflow w
-         set w.finalized   = :finalized,
+         set w.suspended   = null,
+             w.suspendedBy = null,
+             w.finalized   = :finalized,
              w.finalizedBy = :finalizedBy,
              w.status      = :status
        where w.tenantId    = :tenantId
@@ -110,4 +112,54 @@ public interface WorkflowRepository
          """)
   Optional<WorkflowDefinitionId> findWorkflowDefinitionIdByWorkflowId(
       @Param("workflowId") UUID workflowId);
+
+  /**
+   * Suspend a workflow instance.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param workflowId the workflow ID
+   * @param suspended the date and time the workflow was suspended
+   * @param suspendedBy the person or system that suspended the workflow
+   * @return the number of rows that were updated (0 or 1)
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      """
+      update Workflow w
+         set w.suspended   = :suspended,
+             w.suspendedBy = :suspendedBy,
+             w.finalized   = null,
+             w.finalizedBy = null,
+             w.status      = digital.inception.operations.model.WorkflowStatus.SUSPENDED
+       where w.tenantId    = :tenantId
+         and w.id          = :workflowId
+      """)
+  int suspendWorkflow(
+      @Param("tenantId") UUID tenantId,
+      @Param("workflowId") UUID workflowId,
+      @Param("suspended") OffsetDateTime suspended,
+      @Param("suspendedBy") String suspendedBy);
+
+  /**
+   * Unsuspend a workflow instance.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param workflowId the workflow ID
+   * @return the number of rows that were updated (0 or 1)
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      """
+      update Workflow w
+         set w.suspended   = null,
+             w.suspendedBy = null,
+             w.finalized   = null,
+             w.finalizedBy = null,
+             w.status      = digital.inception.operations.model.WorkflowStatus.ACTIVE
+       where w.tenantId    = :tenantId
+         and w.id          = :workflowId
+      """)
+  int unsuspendWorkflow(@Param("tenantId") UUID tenantId, @Param("workflowId") UUID workflowId);
 }

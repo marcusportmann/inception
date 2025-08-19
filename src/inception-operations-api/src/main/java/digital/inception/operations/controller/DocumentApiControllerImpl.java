@@ -100,6 +100,15 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void createDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+          DuplicateDocumentAttributeDefinitionException,
+          ServiceUnavailableException {
+    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
+  }
+
+  @Override
   public void createDocumentDefinition(
       String documentDefinitionCategoryId, DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
@@ -156,6 +165,14 @@ public class DocumentApiControllerImpl extends SecureApiController
     }
 
     documentService.deleteDocument(tenantId, documentId);
+  }
+
+  @Override
+  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinitionCode);
   }
 
   @Override
@@ -256,6 +273,29 @@ public class DocumentApiControllerImpl extends SecureApiController
     }
 
     return documentService.getDocument(tenantId, documentId);
+  }
+
+  @Override
+  public DocumentAttributeDefinition getDocumentAttributeDefinition(
+      String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    return documentService.getDocumentAttributeDefinition(documentAttributeDefinitionCode);
+  }
+
+  @Override
+  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentAttributeDefinitions(tenantId);
   }
 
   @Override
@@ -428,6 +468,24 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void updateDocumentAttributeDefinition(
+      String documentAttributeDefinitionCode,
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("documentAttributeDefinitionCode");
+    }
+
+    if (!Objects.equals(documentAttributeDefinitionCode, documentAttributeDefinition.getCode())) {
+      throw new InvalidArgumentException("documentAttributeDefinition.code");
+    }
+
+    documentService.updateDocumentAttributeDefinition(documentAttributeDefinition);
+  }
+
+  @Override
   public void updateDocumentDefinition(
       String documentDefinitionCategoryId,
       String documentDefinitionId,
@@ -486,73 +544,5 @@ public class DocumentApiControllerImpl extends SecureApiController
     DocumentNote documentNote =
         documentService.updateDocumentNote(
             tenantId, updateDocumentNoteRequest, getAuthenticationName());
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  @Override
-  public void createDocumentAttributeDefinition(
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException, DuplicateDocumentAttributeDefinitionException, ServiceUnavailableException {
-    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
-  }
-
-  @Override
-  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
-      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinitionCode);
-  }
-
-  @Override
-  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
-
-    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.DocumentAdministration"))
-        && (!hasAccessToTenant(tenantId))) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    return documentService.getDocumentAttributeDefinitions(tenantId);
-  }
-
-  @Override
-  public DocumentAttributeDefinition getDocumentAttributeDefinition(
-      String documentAttributeDefinitionCode)
-      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    return documentService.getDocumentAttributeDefinition(documentAttributeDefinitionCode);
-  }
-
-  @Override
-  public void updateDocumentAttributeDefinition(String documentAttributeDefinitionCode,
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("documentAttributeDefinitionCode");
-    }
-
-    if (!Objects.equals(documentAttributeDefinitionCode, documentAttributeDefinition.getCode())) {
-      throw new InvalidArgumentException("documentAttributeDefinition.code");
-    }
-
-    documentService.updateDocumentAttributeDefinition(documentAttributeDefinition);
   }
 }

@@ -308,6 +308,7 @@ public class EndToEndTests {
             null,
             null,
             null,
+            null,
             null);
 
     assertEquals(2, interactionSummaries.getInteractionSummaries().size());

@@ -405,6 +405,53 @@ public interface WorkflowStore {
       throws DocumentDefinitionNotFoundException, ServiceUnavailableException;
 
   /**
+   * Suspend the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param suspendedBy the person or system suspending the workflow
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be suspended
+   */
+  void suspendWorkflow(UUID tenantId, UUID workflowId, String suspendedBy)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Suspend the workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param step the code for the workflow step
+   * @throws WorkflowStepNotFoundException if the workflow step could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be suspended
+   */
+  void suspendWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Unsuspend the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be unsuspended
+   */
+  void unsuspendWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Unsuspend the workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param step the code for the workflow step
+   * @throws WorkflowStepNotFoundException if the workflow step could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be unsuspended
+   */
+  void unsuspendWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException;
+
+  /**
    * Update the workflow.
    *
    * @param tenantId the ID for the tenant

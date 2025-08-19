@@ -336,6 +336,7 @@ public class InteractionServiceTests {
             null,
             null,
             null,
+            null,
             null);
 
     assertEquals(1, retrievedInteractionSummaries.getInteractionSummaries().size());
@@ -355,6 +356,7 @@ public class InteractionServiceTests {
             TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
             InteractionStatus.AVAILABLE,
+            InteractionDirection.INBOUND,
             "test",
             InteractionSortBy.OCCURRED,
             SortDirection.ASCENDING,
@@ -368,6 +370,7 @@ public class InteractionServiceTests {
             TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
             InteractionStatus.AVAILABLE,
+            InteractionDirection.INBOUND,
             "bob",
             InteractionSortBy.OCCURRED,
             SortDirection.ASCENDING,
@@ -381,6 +384,7 @@ public class InteractionServiceTests {
             TenantUtil.DEFAULT_TENANT_ID,
             mailboxInteractionSource.getId(),
             InteractionStatus.AVAILABLE,
+            InteractionDirection.INBOUND,
             "xxx",
             InteractionSortBy.OCCURRED,
             SortDirection.ASCENDING,

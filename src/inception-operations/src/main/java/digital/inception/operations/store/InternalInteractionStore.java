@@ -30,6 +30,7 @@ import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionAttachmentSummary;
+import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
@@ -601,8 +602,9 @@ public class InternalInteractionStore implements InteractionStore {
   @Override
   public InteractionSummaries getInteractionSummaries(
       UUID tenantId,
-      UUID sourceId,
+      UUID interactionSourceId,
       InteractionStatus status,
+      InteractionDirection direction,
       String filter,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
@@ -641,10 +643,14 @@ public class InternalInteractionStore implements InteractionStore {
 
                     predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
 
-                    predicates.add(criteriaBuilder.equal(root.get("sourceId"), sourceId));
+                    predicates.add(criteriaBuilder.equal(root.get("sourceId"), interactionSourceId));
 
                     if (status != null) {
                       predicates.add(criteriaBuilder.equal(root.get("status"), status));
+                    }
+
+                    if (direction != null) {
+                      predicates.add(criteriaBuilder.equal(root.get("direction"), direction));
                     }
 
                     if (StringUtils.hasText(filter)) {
@@ -666,7 +672,7 @@ public class InternalInteractionStore implements InteractionStore {
           tenantId,
           interactionSummaryPage.toList(),
           interactionSummaryPage.getTotalElements(),
-          sourceId,
+          interactionSourceId,
           filter,
           sortBy,
           sortDirection,
@@ -675,10 +681,10 @@ public class InternalInteractionStore implements InteractionStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered interaction summaries for the interaction source ("
-              + sourceId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
+          + interactionSourceId
+          + ") for the tenant ("
+          + tenantId
+          + ")",
           e);
     }
   }

@@ -29,11 +29,15 @@ import digital.inception.operations.exception.InteractionSourceNotFoundException
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.Interaction;
+import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
+import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceSummary;
+import digital.inception.operations.model.InteractionStatus;
+import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.InteractionService;
 import java.util.List;
@@ -282,6 +286,44 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     return interactionService.getInteractionSources(tenantId);
+  }
+
+  @Override
+  public InteractionSummaries getInteractionSummaries(
+      UUID tenantId,
+      UUID interactionSourceId,
+      InteractionStatus status,
+      InteractionDirection direction,
+      String filter,
+      InteractionSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (interactionSourceId == null) {
+      throw new InvalidArgumentException("interactionSourceId");
+    }
+
+    return interactionService.getInteractionSummaries(
+        tenantId,
+        interactionSourceId,
+        status,
+        direction,
+        filter,
+        sortBy,
+        sortDirection,
+        pageIndex,
+        pageSize);
   }
 
   @Override

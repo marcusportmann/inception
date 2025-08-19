@@ -143,6 +143,70 @@ public interface DocumentApiController {
           ServiceUnavailableException;
 
   /**
+   * Create the document attribute definition.
+   *
+   * @param documentAttributeDefinition the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateDocumentAttributeDefinitionException if the document attribute definition
+   *     already exists
+   * @throws ServiceUnavailableException if the document attribute definition could not be created
+   */
+  @Operation(
+      summary = "Create the document attribute definition",
+      description = "Create the document attribute definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The document attribute definition was created"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A document attribute definition with the specified code already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/document-attribute-definitions",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void createDocumentAttributeDefinition(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The document attribute definition to create",
+              required = true)
+          @RequestBody
+          DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+          DuplicateDocumentAttributeDefinitionException,
+          ServiceUnavailableException;
+
+  /**
    * Create the document definition.
    *
    * @param documentDefinitionCategoryId the ID for the document definition category
@@ -416,6 +480,71 @@ public interface DocumentApiController {
           @PathVariable
           UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the document attribute definition.
+   *
+   * @param documentAttributeDefinitionCode the code for the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
+   *     not be found
+   * @throws ServiceUnavailableException if the document attribute definition could not be deleted
+   */
+  @Operation(
+      summary = "Delete the document attribute definition",
+      description = "Delete the document attribute definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The document attribute definition was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document attribute definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/document-attribute-definitions/{documentAttributeDefinitionCode}",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void deleteDocumentAttributeDefinition(
+      @Parameter(
+              name = "documentAttributeDefinitionCode",
+              description = "The code for the document attribute definition",
+              required = true)
+          @PathVariable
+          String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Delete the document definition.
@@ -697,6 +826,131 @@ public interface DocumentApiController {
           @PathVariable
           UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the document attribute definition.
+   *
+   * @param documentAttributeDefinitionCode the code for the document attribute definition
+   * @return the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
+   *     not be found
+   * @throws ServiceUnavailableException if the document attribute definition could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the document attribute definition",
+      description = "Retrieve the document attribute definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document attribute definition was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document attribute definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/document-attribute-definitions/{documentAttributeDefinitionCode}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  DocumentAttributeDefinition getDocumentAttributeDefinition(
+      @Parameter(
+              name = "documentAttributeDefinitionCode",
+              description = "The code for the document attribute definition",
+              required = true)
+          @PathVariable
+          String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the document attribute definitions.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the document attribute definitions
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the document attribute definitions could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the document attribute definitions",
+      description = "Retrieve the document attribute definitions")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document attribute definitions were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/document-attribute-definitions",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the document definition.
@@ -1139,7 +1393,8 @@ public interface DocumentApiController {
    * Retrieve the summaries for the documents.
    *
    * @param tenantId the ID for the tenant
-   * @param documentDefinitionId the document definition ID filter to apply to the document summaries
+   * @param documentDefinitionId the document definition ID filter to apply to the document
+   *     summaries
    * @param filter the filter to apply to the document summaries
    * @param sortBy the method used to sort the document summaries e.g. by definition ID
    * @param sortDirection the sort direction to apply to the document summaries
@@ -1287,6 +1542,77 @@ public interface DocumentApiController {
           @RequestBody
           UpdateDocumentRequest updateDocumentRequest)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Update the document attribute definition.
+   *
+   * @param documentAttributeDefinitionCode the code for the document attribute definition
+   * @param documentAttributeDefinition the document attribute definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
+   *     not be found
+   * @throws ServiceUnavailableException if the document attribute definition could not be updated
+   */
+  @Operation(
+      summary = "Update the document attribute definition",
+      description = "Update the document attribute definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The document attribute definition was updated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document attribute definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/document-attribute-definitions/{documentAttributeDefinitionCode}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void updateDocumentAttributeDefinition(
+      @Parameter(
+              name = "documentAttributeDefinitionCode",
+              description = "The code for the document attribute definition",
+              required = true)
+          @PathVariable
+          String documentAttributeDefinitionCode,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The document attribute definition",
+              required = true)
+          @RequestBody
+          DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the document definition.
@@ -1505,351 +1831,4 @@ public interface DocumentApiController {
           @RequestBody
           UpdateDocumentNoteRequest updateDocumentNoteRequest)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
-
-
-
-
-
-
-
-
-
-  /**
-   * Create the document attribute definition.
-   *
-   * @param documentAttributeDefinition the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DuplicateDocumentAttributeDefinitionException if the document attribute definition
-   *     already exists
-   * @throws ServiceUnavailableException if the document attribute definition could not be created
-   */
-  @Operation(
-      summary = "Create the document attribute definition",
-      description = "Create the document attribute definition")
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The document attribute definition was created"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "A document attribute definition with the specified code already exists",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/document-attribute-definitions",
-      method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
-  void createDocumentAttributeDefinition(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "The document attribute definition to create",
-          required = true)
-      @RequestBody
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-      DuplicateDocumentAttributeDefinitionException,
-      ServiceUnavailableException;
-
-
-
-  /**
-   * Delete the document attribute definition.
-   *
-   * @param documentAttributeDefinitionCode the code for the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
-   *     not be found
-   * @throws ServiceUnavailableException if the document attribute definition could not be deleted
-   */
-  @Operation(
-      summary = "Delete the document attribute definition",
-      description = "Delete the document attribute definition")
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The document attribute definition was deleted"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document attribute definition could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/document-attribute-definitions/{documentAttributeDefinitionCode}",
-      method = RequestMethod.DELETE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
-  void deleteDocumentAttributeDefinition(
-      @Parameter(
-          name = "documentAttributeDefinitionCode",
-          description = "The code for the document attribute definition",
-          required = true)
-      @PathVariable
-      String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-      DocumentAttributeDefinitionNotFoundException,
-      ServiceUnavailableException;
-
-
-
-  /**
-   * Retrieve the document attribute definitions.
-   *
-   * @param tenantId the ID for the tenant
-   * @return the document attribute definitions
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the document attribute definitions could not be
-   *     retrieved
-   */
-  @Operation(
-      summary = "Retrieve the document attribute definitions",
-      description = "Retrieve the document attribute definitions")
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "200",
-              description = "The document attribute definitions were retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/document-attribute-definitions",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(
-      @Parameter(
-          name = "Tenant-ID",
-          description = "The ID for the tenant",
-          example = "00000000-0000-0000-0000-000000000000")
-      @RequestHeader(
-          name = "Tenant-ID",
-          defaultValue = "00000000-0000-0000-0000-000000000000",
-          required = false)
-      UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-
-
-
-
-  /**
-   * Retrieve the document attribute definition.
-   *
-   * @param documentAttributeDefinitionCode the code for the document attribute definition
-   * @return the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
-   *     not be found
-   * @throws ServiceUnavailableException if the document attribute definition could not be retrieved
-   */
-  @Operation(
-      summary = "Retrieve the document attribute definition",
-      description = "Retrieve the document attribute definition")
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "200",
-              description = "The document attribute definition was retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document attribute definition could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/document-attribute-definitions/{documentAttributeDefinitionCode}",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
-  DocumentAttributeDefinition getDocumentAttributeDefinition(
-      @Parameter(
-          name = "documentAttributeDefinitionCode",
-          description = "The code for the document attribute definition",
-          required = true)
-      @PathVariable
-      String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-      DocumentAttributeDefinitionNotFoundException,
-      ServiceUnavailableException;
-
-
-
-
-
-  /**
-   * Update the document attribute definition.
-   *
-   * @param documentAttributeDefinitionCode the code for the document attribute definition
-   * @param documentAttributeDefinition the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
-   *     not be found
-   * @throws ServiceUnavailableException if the document attribute definition could not be updated
-   */
-  @Operation(
-      summary = "Update the document attribute definition",
-      description = "Update the document attribute definition")
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The document attribute definition was updated"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document attribute definition could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/document-attribute-definitions/{documentAttributeDefinitionCode}",
-      method = RequestMethod.PUT,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
-  void updateDocumentAttributeDefinition(
-      @Parameter(
-          name = "documentAttributeDefinitionCode",
-          description = "The code for the document attribute definition",
-          required = true)
-      @PathVariable
-      String documentAttributeDefinitionCode,
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "The document attribute definition",
-          required = true)
-      @RequestBody
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-      DocumentAttributeDefinitionNotFoundException,
-      ServiceUnavailableException;
-  
-  
 }

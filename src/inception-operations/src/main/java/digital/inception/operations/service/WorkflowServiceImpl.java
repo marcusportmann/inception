@@ -21,9 +21,7 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.StringUtil;
-import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
-import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
@@ -42,7 +40,6 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
-import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
@@ -58,6 +55,10 @@ import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.StartWorkflowRequest;
+import digital.inception.operations.model.SuspendWorkflowRequest;
+import digital.inception.operations.model.SuspendWorkflowStepRequest;
+import digital.inception.operations.model.UnsuspendWorkflowRequest;
+import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
@@ -183,6 +184,32 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     this.documentService = documentService;
     this.workflowDataValidationService = workflowDataValidationService;
     this.interactionService = interactionService;
+  }
+
+  @Override
+  public void createWorkflowAttributeDefinition(
+      WorkflowAttributeDefinition workflowAttributeDefinition)
+      throws InvalidArgumentException,
+          DuplicateWorkflowAttributeDefinitionException,
+          ServiceUnavailableException {
+    validateArgument("workflowAttributeDefinition", workflowAttributeDefinition);
+
+    try {
+      if (workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinition.getCode())) {
+        throw new DuplicateWorkflowAttributeDefinitionException(
+            workflowAttributeDefinition.getCode());
+      }
+
+      workflowAttributeDefinitionRepository.saveAndFlush(workflowAttributeDefinition);
+    } catch (DuplicateWorkflowAttributeDefinitionException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the workflow attribute definition ("
+              + workflowAttributeDefinition.getCode()
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -335,6 +362,32 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to delete the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteWorkflowAttributeDefinition(String workflowAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          WorkflowAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("workflowAttributeDefinitionCode");
+    }
+
+    try {
+      if (!workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinitionCode)) {
+        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinitionCode);
+      }
+
+      workflowAttributeDefinitionRepository.deleteById(workflowAttributeDefinitionCode);
+    } catch (WorkflowAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow attribute definition ("
+              + workflowAttributeDefinitionCode
+              + ")",
           e);
     }
   }
@@ -643,6 +696,48 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowAttributeDefinition getWorkflowAttributeDefinition(
+      String workflowAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          WorkflowAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("workflowAttributeDefinitionCode");
+    }
+
+    try {
+      Optional<WorkflowAttributeDefinition> workflowAttributeDefinitionOptional =
+          workflowAttributeDefinitionRepository.findById(workflowAttributeDefinitionCode);
+
+      if (workflowAttributeDefinitionOptional.isEmpty()) {
+        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinitionCode);
+      }
+
+      return workflowAttributeDefinitionOptional.get();
+    } catch (WorkflowAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow attribute definition ("
+              + workflowAttributeDefinitionCode
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      return workflowAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow attribute definitions for the tenant (" + tenantId + ")",
           e);
     }
   }
@@ -1474,6 +1569,115 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public void suspendWorkflow(
+      UUID tenantId, SuspendWorkflowRequest suspendWorkflowRequest, String suspendedBy)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("suspendWorkflowRequest", suspendWorkflowRequest);
+
+    try {
+      workflowStore.suspendWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId(), suspendedBy);
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to suspend the workflow ("
+              + suspendWorkflowRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void suspendWorkflowStep(
+      UUID tenantId, SuspendWorkflowStepRequest suspendWorkflowStepRequest)
+      throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("suspendWorkflowStepRequest", suspendWorkflowStepRequest);
+
+    try {
+      workflowStore.suspendWorkflowStep(
+          tenantId,
+          suspendWorkflowStepRequest.getWorkflowId(),
+          suspendWorkflowStepRequest.getStep());
+    } catch (WorkflowStepNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to suspend the workflow step ("
+              + suspendWorkflowStepRequest.getStep()
+              + ") for the workflow ("
+              + suspendWorkflowStepRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void unsuspendWorkflow(UUID tenantId, UnsuspendWorkflowRequest unsuspendWorkflowRequest)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("unsuspendWorkflowRequest", unsuspendWorkflowRequest);
+
+    try {
+      workflowStore.unsuspendWorkflow(tenantId, unsuspendWorkflowRequest.getWorkflowId());
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to unsuspend the workflow ("
+              + unsuspendWorkflowRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void unsuspendWorkflowStep(
+      UUID tenantId, UnsuspendWorkflowStepRequest unsuspendWorkflowStepRequest)
+      throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("unsuspendWorkflowStepRequest", unsuspendWorkflowStepRequest);
+
+    try {
+      workflowStore.unsuspendWorkflowStep(
+          tenantId,
+          unsuspendWorkflowStepRequest.getWorkflowId(),
+          unsuspendWorkflowStepRequest.getStep());
+    } catch (WorkflowStepNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to unsuspend the workflow step ("
+              + unsuspendWorkflowStepRequest.getStep()
+              + ") for the workflow ("
+              + unsuspendWorkflowStepRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public Workflow updateWorkflow(
       UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
@@ -1521,6 +1725,33 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + updateWorkflowRequest.getWorkflowId()
               + ") for the tenant ("
               + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void updateWorkflowAttributeDefinition(
+      WorkflowAttributeDefinition workflowAttributeDefinition)
+      throws InvalidArgumentException,
+          WorkflowAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("workflowAttributeDefinition", workflowAttributeDefinition);
+
+    try {
+      if (!workflowAttributeDefinitionRepository.existsById(
+          workflowAttributeDefinition.getCode())) {
+        throw new WorkflowAttributeDefinitionNotFoundException(
+            workflowAttributeDefinition.getCode());
+      }
+
+      workflowAttributeDefinitionRepository.saveAndFlush(workflowAttributeDefinition);
+    } catch (WorkflowAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the workflow attribute definition ("
+              + workflowAttributeDefinition.getCode()
               + ")",
           e);
     }
@@ -1866,126 +2097,4 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     return workflowService;
   }
-
-
-
-
-
-
-
-
-
-
-  @Override
-  public void createWorkflowAttributeDefinition(
-      WorkflowAttributeDefinition workflowAttributeDefinition)
-      throws InvalidArgumentException, DuplicateWorkflowAttributeDefinitionException, ServiceUnavailableException {
-    validateArgument("workflowAttributeDefinition", workflowAttributeDefinition);
-
-    try {
-      if (workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinition.getCode())) {
-        throw new DuplicateWorkflowAttributeDefinitionException(workflowAttributeDefinition.getCode());
-      }
-
-      workflowAttributeDefinitionRepository.saveAndFlush(workflowAttributeDefinition);
-    } catch (DuplicateWorkflowAttributeDefinitionException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the workflow attribute definition ("
-          + workflowAttributeDefinition.getCode()
-          + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void deleteWorkflowAttributeDefinition(String workflowAttributeDefinitionCode)
-      throws InvalidArgumentException, WorkflowAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(workflowAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("workflowAttributeDefinitionCode");
-    }
-
-    try {
-      if (!workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinitionCode)) {
-        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinitionCode);
-      }
-
-      workflowAttributeDefinitionRepository.deleteById(workflowAttributeDefinitionCode);
-    } catch (WorkflowAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the workflow attribute definition ("
-          + workflowAttributeDefinitionCode
-          + ")",
-          e);
-    }
-  }
-
-  @Override
-  public List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    try {
-      return workflowAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the workflow attribute definitions for the tenant (" + tenantId + ")",
-          e);
-    }
-  }
-
-  @Override
-  public WorkflowAttributeDefinition getWorkflowAttributeDefinition(
-      String workflowAttributeDefinitionCode)
-      throws InvalidArgumentException, WorkflowAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(workflowAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("workflowAttributeDefinitionCode");
-    }
-
-    try {
-      Optional<WorkflowAttributeDefinition> workflowAttributeDefinitionOptional =
-          workflowAttributeDefinitionRepository.findById(workflowAttributeDefinitionCode);
-
-      if (workflowAttributeDefinitionOptional.isEmpty()) {
-        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinitionCode);
-      }
-
-      return workflowAttributeDefinitionOptional.get();
-    } catch (WorkflowAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the workflow attribute definition ("
-          + workflowAttributeDefinitionCode
-          + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void updateWorkflowAttributeDefinition(
-      WorkflowAttributeDefinition workflowAttributeDefinition)
-      throws InvalidArgumentException, WorkflowAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    validateArgument("workflowAttributeDefinition", workflowAttributeDefinition);
-
-    try {
-      if (!workflowAttributeDefinitionRepository.existsById(workflowAttributeDefinition.getCode())) {
-        throw new WorkflowAttributeDefinitionNotFoundException(workflowAttributeDefinition.getCode());
-      }
-
-      workflowAttributeDefinitionRepository.saveAndFlush(workflowAttributeDefinition);
-    } catch (WorkflowAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the workflow attribute definition ("
-          + workflowAttributeDefinition.getCode()
-          + ")",
-          e);
-    }
-  }
-
-
-
 }

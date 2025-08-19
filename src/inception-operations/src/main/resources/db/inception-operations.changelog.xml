@@ -380,14 +380,18 @@
         remarks="The person or system who initiated the workflow">
         <constraints nullable="false"/>
       </column>
-      <column name="updated" type="timestamp with time zone"
-        remarks="The date and time the workflow was last updated"/>
-      <column name="updated_by" type="nvarchar(100)"
-        remarks="The person or system who last updated the workflow"/>
+      <column name="suspended" type="timestamp with time zone"
+        remarks="The date and time the workflow was suspended"/>
+      <column name="suspended_by" type="nvarchar(100)"
+        remarks="The person or system who suspended the workflow"/>
       <column name="finalized" type="timestamp with time zone"
         remarks="The date and time the workflow was finalized"/>
       <column name="finalized_by" type="nvarchar(100)"
         remarks="The person or system who finalized the workflow"/>
+      <column name="updated" type="timestamp with time zone"
+        remarks="The date and time the workflow was last updated"/>
+      <column name="updated_by" type="nvarchar(100)"
+        remarks="The person or system who last updated the workflow"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflows_workflow_definition_fk"
       baseTableName="operations_workflows" baseColumnNames="definition_id,definition_version"
@@ -495,6 +499,8 @@
         remarks="The date and time the workflow step was initiated">
         <constraints nullable="false"/>
       </column>
+      <column name="suspended" type="timestamp with time zone"
+        remarks="The date and time the workflow step was suspended"/>
       <column name="finalized" type="timestamp with time zone"
         remarks="The date and time the workflow step was finalized"/>
     </createTable>

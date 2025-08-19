@@ -75,10 +75,12 @@ import java.util.UUID;
   "data",
   "initiated",
   "initiatedBy",
-  "updated",
-  "updatedBy",
+  "suspended",
+  "suspendedBy",
   "finalized",
-  "finalizedBy"
+  "finalizedBy",
+  "updated",
+  "updatedBy"
 })
 @XmlRootElement(name = "Workflow", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -98,10 +100,12 @@ import java.util.UUID;
       "data",
       "initiated",
       "initiatedBy",
-      "updated",
-      "updatedBy",
+      "suspended",
+      "suspendedBy",
       "finalized",
-      "finalizedBy"
+      "finalizedBy",
+      "updated",
+      "updatedBy"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidWorkflow
@@ -263,6 +267,23 @@ public class Workflow implements Serializable {
   @NotNull
   @Column(name = "status", nullable = false)
   private WorkflowStatus status;
+
+  /** The date and time the workflow was suspended. */
+  @Schema(description = "The date and time the workflow was suspended")
+  @JsonProperty
+  @XmlElement(name = "Suspended")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "suspended")
+  private OffsetDateTime suspended;
+
+  /** The person or system that suspended the workflow. */
+  @Schema(description = "The person or system that suspended the workflow")
+  @JsonProperty
+  @XmlElement(name = "SuspendedBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "suspended_by", length = 100)
+  private String suspendedBy;
 
   /** The ID for the tenant the workflow is associated with. */
   @Schema(
@@ -586,6 +607,24 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Returns the date and time the workflow was suspended.
+   *
+   * @return the date and time the workflow was suspended
+   */
+  public OffsetDateTime getSuspended() {
+    return suspended;
+  }
+
+  /**
+   * Returns the person or system that suspended the workflow.
+   *
+   * @return the person or system that suspended the workflow
+   */
+  public String getSuspendedBy() {
+    return suspendedBy;
+  }
+
+  /**
    * Returns the ID for the tenant the workflow is associated with.
    *
    * @return the ID for the tenant the workflow is associated with
@@ -783,6 +822,24 @@ public class Workflow implements Serializable {
     steps.forEach(step -> step.setWorkflow(this));
     this.steps.clear();
     this.steps.addAll(steps);
+  }
+
+  /**
+   * Set the date and time the workflow was suspended.
+   *
+   * @param suspended the date and time the workflow was suspended
+   */
+  public void setSuspended(OffsetDateTime suspended) {
+    this.suspended = suspended;
+  }
+
+  /**
+   * Set the person or system that suspended the workflow.
+   *
+   * @param suspendedBy the person or system that suspended the workflow
+   */
+  public void setSuspendedBy(String suspendedBy) {
+    this.suspendedBy = suspendedBy;
   }
 
   /**

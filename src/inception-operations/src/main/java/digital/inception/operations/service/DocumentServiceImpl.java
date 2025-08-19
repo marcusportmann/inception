@@ -167,6 +167,32 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public void createDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+          DuplicateDocumentAttributeDefinitionException,
+          ServiceUnavailableException {
+    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
+
+    try {
+      if (documentAttributeDefinitionRepository.existsById(documentAttributeDefinition.getCode())) {
+        throw new DuplicateDocumentAttributeDefinitionException(
+            documentAttributeDefinition.getCode());
+      }
+
+      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
+    } catch (DuplicateDocumentAttributeDefinitionException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document attribute definition ("
+              + documentAttributeDefinition.getCode()
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
@@ -270,6 +296,32 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     documentStore.deleteDocument(tenantId, documentId);
+  }
+
+  @Override
+  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("documentAttributeDefinitionCode");
+    }
+
+    try {
+      if (!documentAttributeDefinitionRepository.existsById(documentAttributeDefinitionCode)) {
+        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
+      }
+
+      documentAttributeDefinitionRepository.deleteById(documentAttributeDefinitionCode);
+    } catch (DocumentAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document attribute definition ("
+              + documentAttributeDefinitionCode
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -452,6 +504,48 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     return documentStore.getDocument(tenantId, documentId);
+  }
+
+  @Override
+  public DocumentAttributeDefinition getDocumentAttributeDefinition(
+      String documentAttributeDefinitionCode)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
+      throw new InvalidArgumentException("documentAttributeDefinitionCode");
+    }
+
+    try {
+      Optional<DocumentAttributeDefinition> documentAttributeDefinitionOptional =
+          documentAttributeDefinitionRepository.findById(documentAttributeDefinitionCode);
+
+      if (documentAttributeDefinitionOptional.isEmpty()) {
+        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
+      }
+
+      return documentAttributeDefinitionOptional.get();
+    } catch (DocumentAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document attribute definition ("
+              + documentAttributeDefinitionCode
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      return documentAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document attribute definitions for the tenant (" + tenantId + ")",
+          e);
+    }
   }
 
   @Override
@@ -724,6 +818,33 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public void updateDocumentAttributeDefinition(
+      DocumentAttributeDefinition documentAttributeDefinition)
+      throws InvalidArgumentException,
+          DocumentAttributeDefinitionNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
+
+    try {
+      if (!documentAttributeDefinitionRepository.existsById(
+          documentAttributeDefinition.getCode())) {
+        throw new DocumentAttributeDefinitionNotFoundException(
+            documentAttributeDefinition.getCode());
+      }
+
+      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
+    } catch (DocumentAttributeDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the document attribute definition ("
+              + documentAttributeDefinition.getCode()
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
@@ -805,130 +926,4 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
           e);
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  @Override
-  public void createDocumentAttributeDefinition(
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException, DuplicateDocumentAttributeDefinitionException, ServiceUnavailableException {
-    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
-
-    try {
-      if (documentAttributeDefinitionRepository.existsById(documentAttributeDefinition.getCode())) {
-        throw new DuplicateDocumentAttributeDefinitionException(documentAttributeDefinition.getCode());
-      }
-
-      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
-    } catch (DuplicateDocumentAttributeDefinitionException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the document attribute definition ("
-          + documentAttributeDefinition.getCode()
-          + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
-      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("documentAttributeDefinitionCode");
-    }
-
-    try {
-      if (!documentAttributeDefinitionRepository.existsById(documentAttributeDefinitionCode)) {
-        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
-      }
-
-      documentAttributeDefinitionRepository.deleteById(documentAttributeDefinitionCode);
-    } catch (DocumentAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the document attribute definition ("
-          + documentAttributeDefinitionCode
-          + ")",
-          e);
-    }
-  }
-
-  @Override
-  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    try {
-      return documentAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the document attribute definitions for the tenant (" + tenantId + ")",
-          e);
-    }
-  }
-
-  @Override
-  public DocumentAttributeDefinition getDocumentAttributeDefinition(
-      String documentAttributeDefinitionCode)
-      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("documentAttributeDefinitionCode");
-    }
-
-    try {
-      Optional<DocumentAttributeDefinition> documentAttributeDefinitionOptional =
-          documentAttributeDefinitionRepository.findById(documentAttributeDefinitionCode);
-
-      if (documentAttributeDefinitionOptional.isEmpty()) {
-        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
-      }
-
-      return documentAttributeDefinitionOptional.get();
-    } catch (DocumentAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the document attribute definition ("
-          + documentAttributeDefinitionCode
-          + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void updateDocumentAttributeDefinition(
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException, DocumentAttributeDefinitionNotFoundException, ServiceUnavailableException {
-    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
-
-    try {
-      if (!documentAttributeDefinitionRepository.existsById(documentAttributeDefinition.getCode())) {
-        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinition.getCode());
-      }
-
-      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
-    } catch (DocumentAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the document attribute definition ("
-          + documentAttributeDefinition.getCode()
-          + ")",
-          e);
-    }
-  }
-
-
 }

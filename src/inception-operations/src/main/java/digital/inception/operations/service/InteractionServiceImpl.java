@@ -731,8 +731,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   @Override
   public InteractionSummaries getInteractionSummaries(
       UUID tenantId,
-      UUID sourceId,
+      UUID interactionSourceId,
       InteractionStatus status,
+      InteractionDirection direction,
       String filter,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
@@ -745,7 +746,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("tenantId");
     }
 
-    if (sourceId == null) {
+    if (interactionSourceId == null) {
       throw new InvalidArgumentException("sourceId");
     }
 
@@ -774,14 +775,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, sourceId)) {
-        throw new InteractionSourceNotFoundException(tenantId, sourceId);
+      if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, interactionSourceId)) {
+        throw new InteractionSourceNotFoundException(tenantId, interactionSourceId);
       }
 
       return interactionStore.getInteractionSummaries(
           tenantId,
-          sourceId,
+          interactionSourceId,
           status,
+          direction,
           filter,
           sortBy,
           sortDirection,
@@ -793,10 +795,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the interactions for the interaction source ("
-              + sourceId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
+          + interactionSourceId
+          + ") for the tenant ("
+          + tenantId
+          + ")",
           e);
     }
   }

@@ -53,12 +53,12 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow step")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "status", "initiated", "finalized"})
+@JsonPropertyOrder({"code", "status", "initiated", "pended", "finalized"})
 @XmlRootElement(name = "WorkflowStep", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowStep",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "status", "initiated", "finalized"})
+    propOrder = {"code", "status", "initiated", "pended", "finalized"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_steps")
@@ -109,6 +109,15 @@ public class WorkflowStep implements Serializable {
   @NotNull
   @Column(name = "status", nullable = false)
   private WorkflowStepStatus status;
+
+  /** The date and time the workflow step was suspended. */
+  @Schema(description = "The date and time the workflow step was suspended")
+  @JsonProperty
+  @XmlElement(name = "Suspended")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "suspended")
+  private OffsetDateTime suspended;
 
   /** The ID for the workflow the workflow step is associated with. */
   @Schema(hidden = true)
@@ -200,6 +209,15 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
+   * Returns the date and time the workflow step was suspended.
+   *
+   * @return the date and time the workflow step was suspended
+   */
+  public OffsetDateTime getSuspended() {
+    return suspended;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -244,6 +262,15 @@ public class WorkflowStep implements Serializable {
    */
   public void setStatus(WorkflowStepStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Set the date and time the workflow step was suspended.
+   *
+   * @param pended the date and time the workflow step was suspended
+   */
+  public void setSuspended(OffsetDateTime pended) {
+    this.suspended = pended;
   }
 
   /**

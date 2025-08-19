@@ -54,6 +54,10 @@ import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
+import digital.inception.operations.model.SuspendWorkflowRequest;
+import digital.inception.operations.model.SuspendWorkflowStepRequest;
+import digital.inception.operations.model.UnsuspendWorkflowRequest;
+import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
@@ -569,6 +573,56 @@ public class WorkflowServiceTests {
     assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
     assertEquals(WorkflowStepStatus.ACTIVE, retrievedWorkflow.getSteps().getFirst().getStatus());
     assertNotNull(retrievedWorkflow.getSteps().getFirst().getInitiated());
+
+    // Suspend the workflow step
+    workflowService.suspendWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new SuspendWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(1, retrievedWorkflow.getSteps().size());
+    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    assertEquals(WorkflowStepStatus.SUSPENDED, retrievedWorkflow.getSteps().getFirst().getStatus());
+    assertNotNull(retrievedWorkflow.getSteps().getFirst().getSuspended());
+
+    // Unsuspend the workflow step
+    workflowService.unsuspendWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new UnsuspendWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(1, retrievedWorkflow.getSteps().size());
+    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    assertEquals(WorkflowStepStatus.ACTIVE, retrievedWorkflow.getSteps().getFirst().getStatus());
+    assertNull(retrievedWorkflow.getSteps().getFirst().getSuspended());
+
+    // Suspend the workflow
+    workflowService.suspendWorkflow(
+        TenantUtil.DEFAULT_TENANT_ID, new SuspendWorkflowRequest(workflow.getId()), "TEST1");
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(WorkflowStatus.SUSPENDED, retrievedWorkflow.getStatus());
+    assertNotNull(retrievedWorkflow.getSuspended());
+    assertEquals(1, retrievedWorkflow.getSteps().size());
+    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    assertEquals(WorkflowStepStatus.SUSPENDED, retrievedWorkflow.getSteps().getFirst().getStatus());
+    assertNotNull(retrievedWorkflow.getSteps().getFirst().getSuspended());
+
+    // Unsuspend the workflow
+    workflowService.unsuspendWorkflow(
+        TenantUtil.DEFAULT_TENANT_ID, new UnsuspendWorkflowRequest(workflow.getId()));
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(WorkflowStatus.ACTIVE, retrievedWorkflow.getStatus());
+    assertNull(retrievedWorkflow.getSuspended());
+    assertEquals(1, retrievedWorkflow.getSteps().size());
+    assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
+    assertEquals(WorkflowStepStatus.ACTIVE, retrievedWorkflow.getSteps().getFirst().getStatus());
+    assertNull(retrievedWorkflow.getSteps().getFirst().getSuspended());
 
     // Finalize the workflow step
     workflowService.finalizeWorkflowStep(

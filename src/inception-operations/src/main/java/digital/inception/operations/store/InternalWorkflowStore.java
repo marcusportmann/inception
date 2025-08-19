@@ -50,7 +50,6 @@ import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
-import digital.inception.operations.model.WorkflowStepId;
 import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
@@ -375,23 +374,11 @@ public class InternalWorkflowStore implements WorkflowStore {
       UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status)
       throws WorkflowStepNotFoundException, ServiceUnavailableException {
     try {
-      Optional<WorkflowStep> workflowStepOptional =
-          workflowStepRepository.findById(new WorkflowStepId(workflowId, step));
-
-      if (workflowStepOptional.isEmpty()) {
+      if (workflowStepRepository.finalizeWorkflowStep(
+              workflowId, step, status, OffsetDateTime.now())
+          <= 0) {
         throw new WorkflowStepNotFoundException(workflowId, step);
       }
-
-      if (!workflowRepository.existsByTenantIdAndId(tenantId, workflowId)) {
-        throw new WorkflowNotFoundException(tenantId, workflowId);
-      }
-
-      WorkflowStep workflowStep = workflowStepOptional.get();
-
-      workflowStep.setFinalized(OffsetDateTime.now());
-      workflowStep.setStatus(status);
-
-      workflowStepRepository.saveAndFlush(workflowStep);
     } catch (WorkflowStepNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1203,6 +1190,102 @@ public class InternalWorkflowStore implements WorkflowStore {
               + requestWorkflowDocumentRequest.getDocumentDefinitionId()
               + ") for the workflow ("
               + requestWorkflowDocumentRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void suspendWorkflow(UUID tenantId, UUID workflowId, String suspendedBy)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      OffsetDateTime now = OffsetDateTime.now();
+
+      if (workflowRepository.suspendWorkflow(tenantId, workflowId, now, suspendedBy) <= 0) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      // Suspend all the active workflow steps
+      List<WorkflowStep> activeWorkflowSteps =
+          workflowStepRepository.findByWorkflowIdAndStatus(workflowId, WorkflowStepStatus.ACTIVE);
+
+      for (WorkflowStep activeWorkflowStep : activeWorkflowSteps) {
+        workflowStepRepository.suspendWorkflowStep(workflowId, activeWorkflowStep.getCode(), now);
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to suspend the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void suspendWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException {
+    try {
+      if (workflowStepRepository.suspendWorkflowStep(workflowId, step, OffsetDateTime.now()) <= 0) {
+        throw new WorkflowStepNotFoundException(workflowId, step);
+      }
+    } catch (WorkflowStepNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to suspend the workflow step ("
+              + step
+              + ") for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void unsuspendWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      if (workflowRepository.unsuspendWorkflow(tenantId, workflowId) <= 0) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      // Unsuspend all the suspended workflow steps
+      List<WorkflowStep> suspendedWorkflowSteps =
+          workflowStepRepository.findByWorkflowIdAndStatus(
+              workflowId, WorkflowStepStatus.SUSPENDED);
+
+      for (WorkflowStep suspendedWorkflowStep : suspendedWorkflowSteps) {
+        workflowStepRepository.unsuspendWorkflowStep(workflowId, suspendedWorkflowStep.getCode());
+      }
+
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to unsuspend the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void unsuspendWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException {
+    try {
+      if (workflowStepRepository.unsuspendWorkflowStep(workflowId, step) <= 0) {
+        throw new WorkflowStepNotFoundException(workflowId, step);
+      }
+    } catch (WorkflowStepNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to unsuspend the workflow step ("
+              + step
+              + ") for the workflow ("
+              + workflowId
               + ") for the tenant ("
               + tenantId
               + ")",

@@ -28,6 +28,7 @@ import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
+import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
@@ -250,10 +251,12 @@ public interface InteractionStore {
    * Retrieve the summaries for the interactions for the interaction source.
    *
    * @param tenantId the ID for the tenant
-   * @param sourceId the ID for the interaction source the interactions are associated with
+   * @param interactionSourceId the ID for the interaction source the interactions are associated with
    * @param status the status filter to apply to the interaction summaries
+   * @param direction the direction filter to apply to the interaction summaries, i.e., inbound or
+   *     outbound
    * @param filter the filter to apply to the interaction summaries
-   * @param sortBy the method used to sort the interaction summaries e.g. by timestamp
+   * @param sortBy the method used to sort the interaction summaries e.g. by occurred
    * @param sortDirection the sort direction to apply to the interaction summaries
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -263,8 +266,9 @@ public interface InteractionStore {
    */
   InteractionSummaries getInteractionSummaries(
       UUID tenantId,
-      UUID sourceId,
+      UUID interactionSourceId,
       InteractionStatus status,
+      InteractionDirection direction,
       String filter,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
