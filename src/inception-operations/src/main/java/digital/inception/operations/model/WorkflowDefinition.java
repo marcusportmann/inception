@@ -72,6 +72,7 @@ import org.springframework.util.StringUtils;
   "attributes",
   "documentDefinitions",
   "stepDefinitions",
+  "permissions",
   "validationSchemaType",
   "validationSchema"
 })
@@ -90,6 +91,7 @@ import org.springframework.util.StringUtils;
       "attributes",
       "documentDefinitions",
       "stepDefinitions",
+      "permissions",
       "validationSchemaType",
       "validationSchema"
     })
@@ -148,6 +150,29 @@ public class WorkflowDefinition implements Serializable {
         updatable = false)
   })
   private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+
+  /** The permissions for the workflow definition. */
+  @Schema(description = "The permissions for the workflow definition")
+  @JsonProperty
+  @JsonManagedReference("workflowDefinitionPermissionReference")
+  @XmlElementWrapper(name = "Permissions")
+  @XmlElement(name = "Permission")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("roleCode")
+  @JoinColumns({
+    @JoinColumn(
+        name = "definition_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false),
+    @JoinColumn(
+        name = "definition_version",
+        referencedColumnName = "version",
+        insertable = false,
+        updatable = false)
+  })
+  private final List<WorkflowDefinitionPermission> permissions = new ArrayList<>();
 
   /** The workflow step definitions for the workflow definition. */
   @Schema(description = "The workflow step definitions for the workflow definition")
@@ -581,6 +606,22 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Add the permission for the workflow definition.
+   *
+   * @param permission the permission
+   */
+  public void addPermission(WorkflowDefinitionPermission permission) {
+    permissions.removeIf(
+        existingPermission ->
+            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), permission.getRoleCode())
+                && existingPermission.getType() == permission.getType()));
+
+    permission.setWorkflowDefinition(this);
+
+    permissions.add(permission);
+  }
+
+  /**
    * Add the workflow step definition for the workflow definition.
    *
    * @param stepDefinition the workflow step definition
@@ -689,6 +730,15 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the permissions for the workflow definition.
+   *
+   * @return the permissions for the workflow definition
+   */
+  public List<WorkflowDefinitionPermission> getPermissions() {
+    return permissions;
+  }
+
+  /**
    * Returns the workflow step definitions for the workflow definition.
    *
    * @return the workflow step definitions for the workflow definition
@@ -789,6 +839,20 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Remove the permission with the specified role code and workflow definition permission type for
+   * the workflow definition.
+   *
+   * @param roleCode the role code for the permission
+   * @param type the workflow definition permission type
+   */
+  public void removePermission(String roleCode, WorkflowDefinitionPermissionType type) {
+    permissions.removeIf(
+        existingPermission ->
+            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), roleCode)
+                && (existingPermission.getType() == type)));
+  }
+
+  /**
    * Remove the workflow step definition with the specified code for the workflow definition.
    *
    * @param code the code for the workflow step definition
@@ -859,6 +923,17 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the permissions for the workflow definition.
+   *
+   * @param permissions the permissions for the workflow definition
+   */
+  public void setPermissions(List<WorkflowDefinitionPermission> permissions) {
+    permissions.forEach(permission -> permission.setWorkflowDefinition(this));
+    this.permissions.clear();
+    this.permissions.addAll(permissions);
   }
 
   /**

@@ -148,6 +148,36 @@
       <column name="definition_version"/>
     </createIndex>
 
+    <createTable tableName="operations_workflow_definition_permissions"
+      remarks="Workflow Definition Permissions">
+      <column name="definition_id" type="nvarchar(50)"
+        remarks="The ID for the workflow definition the workflow definition permission is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="definition_version" type="integer"
+        remarks="The version of the workflow definition the workflow definition permission is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="role_code" type="nvarchar(100)"
+        remarks="The code for the role the workflow definition permission is assigned to">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)"
+        remarks="The code for the workflow definition permission type for the workflow definition permission">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      constraintName="operations_workflow_definition_permissions_workflow_definition_fk"
+      baseTableName="operations_workflow_definition_permissions" baseColumnNames="definition_id,definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version"
+      onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_definition_permissions_definition_ix"
+      tableName="operations_workflow_definition_permissions">
+      <column name="definition_id"/>
+      <column name="definition_version"/>
+    </createIndex>
+
     <createTable tableName="operations_workflow_attribute_definitions" remarks="Workflow Attribute Definitions">
       <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
         <constraints primaryKey="true" nullable="false"/>
@@ -1205,7 +1235,12 @@
       <dropIndex tableName="operations_workflow_attribute_definitions"
         indexName="operations_workflow_attribute_definitions_workflow_definition_id_ix"/>
       <dropTable tableName="operations_workflow_attribute_definitions"/>
-      
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_definition_permissions"/>
+      <dropIndex tableName="operations_workflow_definition_permissions"
+        indexName="operations_workflow_definition_permissions_source_id_ix"/>
+      <dropTable tableName="operations_workflow_definition_permissions"/>
+
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_definition_attributes"/>
       <dropIndex tableName="operations_workflow_definition_attributes"
         indexName="operations_workflow_definition_attributes_workflow_definition_ix"/>

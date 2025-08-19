@@ -55,12 +55,12 @@ import java.util.UUID;
  */
 @Schema(description = "An interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "tenantId", "name", "type", "permissions", "attributes"})
+@JsonPropertyOrder({"id", "tenantId", "name", "type", "attributes", "permissions"})
 @XmlRootElement(name = "InteractionSource", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionSource",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "tenantId", "name", "type", "permissions", "attributes"})
+    propOrder = {"id", "tenantId", "name", "type", "attributes", "permissions"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_sources")

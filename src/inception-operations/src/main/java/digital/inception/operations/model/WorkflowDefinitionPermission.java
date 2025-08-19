@@ -39,36 +39,52 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
- * The {@code InteractionSourcePermission} class holds the information for an interaction source
+ * The {@code WorkflowDefinitionPermission} class holds the information for a workflow definition
  * permission.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "An interaction source permission")
+@Schema(description = "A workflow definition permission")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"role_code", "type"})
 @XmlRootElement(
-    name = "InteractionSourcePermission",
+    name = "WorkflowDefinitionPermission",
     namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "InteractionSourcePermission",
+    name = "WorkflowDefinitionPermission",
     namespace = "https://inception.digital/operations",
     propOrder = {"role_code", "type"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "operations_interaction_source_permissions")
-@IdClass(InteractionSourcePermissionId.class)
-public class InteractionSourcePermission implements Serializable {
+@Table(name = "operations_workflow_definition_permissions")
+@IdClass(WorkflowDefinitionPermissionId.class)
+public class WorkflowDefinitionPermission implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the role the interaction source permission is assigned to. */
+  /** The ID for the workflow definition the workflow definition permission is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "definition_id", nullable = false)
+  private String definitionId;
+
+  /**
+   * The version of the workflow definition the workflow definition permission is associated with.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "definition_version", nullable = false)
+  private int definitionVersion;
+
+  /** The code for the role the workflow definition permission is assigned to. */
   @Schema(
-      description = "The code for the role the interaction source permission is assigned to",
+      description = "The code for the role the workflow definition permission is assigned to",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "RoleCode", required = true)
@@ -78,35 +94,27 @@ public class InteractionSourcePermission implements Serializable {
   @Column(name = "role_code", length = 100, nullable = false)
   private String roleCode;
 
-  /** The ID for the interaction source the interaction source permission is associated with. */
-  @Schema(hidden = true)
-  @JsonIgnore
-  @XmlTransient
-  @Id
-  @Column(name = "source_id", nullable = false)
-  private UUID sourceId;
-
-  /** The interaction source permission type. */
+  /** The workflow definition permission type. */
   @Schema(
-      description = "The interaction source permission type",
+      description = "The workflow definition permission type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Id
   @Column(name = "type", length = 50, nullable = false)
-  private InteractionSourcePermissionType type;
+  private WorkflowDefinitionPermissionType type;
 
-  /** Constructs a new {@code InteractionSourcePermission}. */
-  public InteractionSourcePermission() {}
+  /** Constructs a new {@code WorkflowDefinitionPermission}. */
+  public WorkflowDefinitionPermission() {}
 
   /**
-   * Constructs a new {@code InteractionSourcePermission}.
+   * Constructs a new {@code WorkflowDefinitionPermission}.
    *
-   * @param roleCode the code for the role the interaction source permission is assigned to
-   * @param type the interaction source permission type
+   * @param roleCode the code for the role the workflow definition permission is assigned to
+   * @param type the workflow definition permission type
    */
-  public InteractionSourcePermission(String roleCode, InteractionSourcePermissionType type) {
+  public WorkflowDefinitionPermission(String roleCode, WorkflowDefinitionPermissionType type) {
     this.roleCode = roleCode;
     this.type = type;
   }
@@ -131,28 +139,29 @@ public class InteractionSourcePermission implements Serializable {
       return false;
     }
 
-    InteractionSourcePermission other = (InteractionSourcePermission) object;
+    WorkflowDefinitionPermission other = (WorkflowDefinitionPermission) object;
 
-    return Objects.equals(sourceId, other.sourceId)
+    return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
+        && definitionVersion == other.definitionVersion
         && StringUtil.equalsIgnoreCase(roleCode, other.roleCode)
         && type == other.type;
   }
 
   /**
-   * Returns the code for the role the interaction source permission is assigned to.
+   * Returns the code for the role the workflow definition permission is assigned to.
    *
-   * @return the code for the role the interaction source permission is assigned to
+   * @return the code for the role the workflow definition permission is assigned to
    */
   public String getRoleCode() {
     return roleCode;
   }
 
   /**
-   * Returns the interaction source permission type.
+   * Returns the workflow definition permission type.
    *
-   * @return the interaction source permission type
+   * @return the workflow definition permission type
    */
-  public InteractionSourcePermissionType getType() {
+  public WorkflowDefinitionPermissionType getType() {
     return type;
   }
 
@@ -163,43 +172,46 @@ public class InteractionSourcePermission implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((sourceId == null) ? 0 : sourceId.hashCode())
+    return ((definitionId == null) ? 0 : definitionId.hashCode())
+        + definitionVersion
         + ((roleCode == null) ? 0 : roleCode.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
   /**
-   * Set the interaction source the interaction source permission type is associated with.
+   * Set the code for the role the workflow definition permission is assigned to.
    *
-   * @param interactionSource the interaction source the interaction source permission type is
-   *     associated with
-   */
-  @JsonBackReference("interactionSourcePermissionReference")
-  @Schema(hidden = true)
-  public void setInteractionSource(InteractionSource interactionSource) {
-    if (interactionSource != null) {
-      this.sourceId = interactionSource.getId();
-    } else {
-      this.sourceId = null;
-    }
-  }
-
-  /**
-   * Set the code for the role the interaction source permission is assigned to.
-   *
-   * @param roleCode the code for the role the interaction source permission is assigned to
+   * @param roleCode the code for the role the workflow definition permission is assigned to
    */
   public void setRoleCode(String roleCode) {
     this.roleCode = roleCode;
   }
 
   /**
-   * Set the interaction source permission type.
+   * Set the workflow definition permission type.
    *
-   * @param type the interaction source permission type
+   * @param type the workflow definition permission type
    */
-  public void setType(InteractionSourcePermissionType type) {
+  public void setType(WorkflowDefinitionPermissionType type) {
     this.type = type;
+  }
+
+  /**
+   * Set the workflow definition the workflow definition permission type is associated with.
+   *
+   * @param workflowDefinition the workflow definition the workflow definition permission type is
+   *     associated with
+   */
+  @JsonBackReference("workflowDefinitionPermissionReference")
+  @Schema(hidden = true)
+  public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
+    if (workflowDefinition != null) {
+      this.definitionId = workflowDefinition.getId();
+      this.definitionVersion = workflowDefinition.getVersion();
+    } else {
+      this.definitionId = null;
+      this.definitionVersion = 0;
+    }
   }
 
   /**
@@ -211,8 +223,8 @@ public class InteractionSourcePermission implements Serializable {
    */
   @SuppressWarnings("unused")
   private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
-    if (parentObject instanceof InteractionSource parent) {
-      setInteractionSource(parent);
+    if (parentObject instanceof WorkflowDefinition parent) {
+      setWorkflowDefinition(parent);
     }
   }
 }
