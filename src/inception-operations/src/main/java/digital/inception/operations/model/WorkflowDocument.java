@@ -204,6 +204,13 @@ public class WorkflowDocument implements Serializable {
   @Column(name = "requested_by", length = 100, nullable = false)
   private String requestedBy;
 
+  /** The ID for the party the workflow document was requested from. */
+  @Schema(description = "The ID for the party the workflow document was requested from")
+  @JsonProperty
+  @XmlElement(name = "RequestedFromPartyId")
+  @Column(name = "requested_from_party_id")
+  private UUID requestedFromPartyId;
+
   /** The status of the workflow document. */
   @Schema(
       description = "The status of the workflow document",
@@ -275,6 +282,34 @@ public class WorkflowDocument implements Serializable {
     this.status = WorkflowDocumentStatus.REQUESTED;
     this.requested = requested;
     this.requestedBy = requestedBy;
+  }
+
+  /**
+   * Constructs a new {@code WorkflowDocument}.
+   *
+   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param workflowId the ID for the workflow
+   * @param documentDefinitionId the ID for the document definition the workflow document is
+   *     associated with
+   * @param requested the date and time the workflow document was requested
+   * @param requestedBy the person or system that requested the workflow document
+   * @param requestedFromPartyId the ID for the party the workflow document was requested from
+   */
+  public WorkflowDocument(
+      UUID tenantId,
+      UUID workflowId,
+      String documentDefinitionId,
+      OffsetDateTime requested,
+      String requestedBy,
+      UUID requestedFromPartyId) {
+    this.id = UuidCreator.getTimeOrderedEpoch();
+    this.tenantId = tenantId;
+    this.workflowId = workflowId;
+    this.documentDefinitionId = documentDefinitionId;
+    this.status = WorkflowDocumentStatus.REQUESTED;
+    this.requested = requested;
+    this.requestedBy = requestedBy;
+    this.requestedFromPartyId = requestedFromPartyId;
   }
 
   /**
@@ -391,6 +426,15 @@ public class WorkflowDocument implements Serializable {
    */
   public String getRequestedBy() {
     return requestedBy;
+  }
+
+  /**
+   * Returns the ID for the party the workflow document was requested from.
+   *
+   * @return the ID for the party the workflow document was requested from
+   */
+  public UUID getRequestedFromPartyId() {
+    return requestedFromPartyId;
   }
 
   /**
@@ -527,6 +571,15 @@ public class WorkflowDocument implements Serializable {
    */
   public void setRequestedBy(String requestedBy) {
     this.requestedBy = requestedBy;
+  }
+
+  /**
+   * Set the ID for the party the workflow document was requested from.
+   *
+   * @param requestedFromPartyId the ID for the party the workflow document was requested from
+   */
+  public void setRequestedFromPartyId(UUID requestedFromPartyId) {
+    this.requestedFromPartyId = requestedFromPartyId;
   }
 
   /**

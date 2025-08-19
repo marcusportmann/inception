@@ -695,6 +695,8 @@
         remarks="The person or system that requested the workflow document">
         <constraints nullable="false"/>
       </column>
+      <column name="requested_from_party_id" type="uuid"
+        remarks="The ID for the party the workflow document was requested from"/>
       <column name="provided" type="timestamp with time zone"
         remarks="The date and time the workflow document was provided"/>
       <column name="provided_by" type="nvarchar(100)"

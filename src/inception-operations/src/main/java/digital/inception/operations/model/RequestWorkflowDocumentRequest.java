@@ -64,6 +64,12 @@ public class RequestWorkflowDocumentRequest implements Serializable {
   @Size(min = 1, max = 50)
   private String documentDefinitionId;
 
+  /** The ID for the party the workflow document was requested from. */
+  @Schema(description = "The ID for the party the workflow document was requested from")
+  @JsonProperty
+  @XmlElement(name = "RequestedFromPartyId")
+  private UUID requestedFromPartyId;
+
   /** The ID for the workflow. */
   @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -87,12 +93,36 @@ public class RequestWorkflowDocumentRequest implements Serializable {
   }
 
   /**
+   * Constructs a new {@code RequestWorkflowDocumentRequest}.
+   *
+   * @param workflowId the ID for the workflow
+   * @param documentDefinitionId the ID for the document definition the workflow document will be
+   *     associated with
+   * @param requestedFromPartyId the ID for the party the workflow document was requested from
+   */
+  public RequestWorkflowDocumentRequest(
+      UUID workflowId, String documentDefinitionId, UUID requestedFromPartyId) {
+    this.workflowId = workflowId;
+    this.documentDefinitionId = documentDefinitionId;
+    this.requestedFromPartyId = requestedFromPartyId;
+  }
+
+  /**
    * Returns the ID for the document definition the workflow document will be associated with.
    *
    * @return the ID for the document definition the workflow document will be associated with
    */
   public String getDocumentDefinitionId() {
     return documentDefinitionId;
+  }
+
+  /**
+   * Returns the ID for the party the workflow document was requested from.
+   *
+   * @return the ID for the party the workflow document was requested from
+   */
+  public UUID getRequestedFromPartyId() {
+    return requestedFromPartyId;
   }
 
   /**
@@ -112,6 +142,15 @@ public class RequestWorkflowDocumentRequest implements Serializable {
    */
   public void setDocumentDefinitionId(String documentDefinitionId) {
     this.documentDefinitionId = documentDefinitionId;
+  }
+
+  /**
+   * Set the ID for the party the workflow document was requested from.
+   *
+   * @param requestedFromPartyId the ID for the party the workflow document was requested from
+   */
+  public void setRequestedFromPartyId(UUID requestedFromPartyId) {
+    this.requestedFromPartyId = requestedFromPartyId;
   }
 
   /**

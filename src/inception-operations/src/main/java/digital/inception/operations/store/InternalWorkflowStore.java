@@ -1179,7 +1179,8 @@ public class InternalWorkflowStore implements WorkflowStore {
               requestWorkflowDocumentRequest.getWorkflowId(),
               requestWorkflowDocumentRequest.getDocumentDefinitionId(),
               OffsetDateTime.now(),
-              requestedBy);
+              requestedBy,
+              requestWorkflowDocumentRequest.getRequestedFromPartyId());
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
 
