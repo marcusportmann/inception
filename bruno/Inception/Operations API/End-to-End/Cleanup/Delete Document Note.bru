@@ -1,0 +1,15 @@
+meta {
+  name: Delete Document Note
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}/notes/{{documentNoteId}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
