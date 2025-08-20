@@ -175,13 +175,13 @@ public class InteractionApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void delinkPartyFromInteraction(UUID tenantId,
-      DelinkPartyFromInteractionRequest delinkPartyFromInteractionRequest)
+  public void delinkPartyFromInteraction(
+      UUID tenantId, DelinkPartyFromInteractionRequest delinkPartyFromInteractionRequest)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
@@ -200,7 +200,17 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return interactionService.getInteraction(tenantId, interactionId);
+    Interaction interaction = interactionService.getInteraction(tenantId, interactionId);
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interaction.getSourceId(), InteractionPermissionType.RETRIEVE_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interaction.getSourceId() + ")");
+    }
+
+    return interaction;
   }
 
   @Override
@@ -344,13 +354,21 @@ public class InteractionApiControllerImpl extends SecureApiController
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
     if (interactionSourceId == null) {
       throw new InvalidArgumentException("interactionSourceId");
+    }
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.RETRIEVE_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
     return interactionService.getInteractionSummaries(
@@ -375,7 +393,7 @@ public class InteractionApiControllerImpl extends SecureApiController
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
