@@ -66,6 +66,7 @@ import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
+import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
@@ -76,6 +77,7 @@ import digital.inception.operations.model.WorkflowEngineAttribute;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
+import digital.inception.operations.model.WorkflowPermissionType;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStepDefinition;
@@ -367,6 +369,7 @@ public class WorkflowServiceTests {
     provideWorkflowDocumentRequest.setExternalReference(UUID.randomUUID().toString());
     provideWorkflowDocumentRequest.setIssueDate(LocalDate.of(2015, 10, 10));
     provideWorkflowDocumentRequest.setExpiryDate(LocalDate.of(2050, 11, 11));
+    provideWorkflowDocumentRequest.setDescription("The provide workflow document description.");
 
     workflowService.provideWorkflowDocument(
         TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest, "TEST1");
@@ -378,6 +381,13 @@ public class WorkflowServiceTests {
     assertEquals(WorkflowDocumentStatus.VERIFIABLE, retrievedWorkflowDocument.getStatus());
     assertEquals("TEST1", retrievedWorkflowDocument.getProvidedBy());
     assertNotNull(retrievedWorkflowDocument.getProvided());
+    assertEquals(
+        "The provide workflow document description.", retrievedWorkflowDocument.getDescription());
+
+    assertEquals(
+        retrievedWorkflowDocument.getWorkflowId(),
+        workflowService.getWorkflowIdForWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getId()));
 
     Document retrievedDocument =
         documentService.getDocument(
@@ -426,7 +436,8 @@ public class WorkflowServiceTests {
 
     // Verify the workflow document
     VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest =
-        new VerifyWorkflowDocumentRequest(retrievedWorkflowDocument.getId());
+        new VerifyWorkflowDocumentRequest(
+            retrievedWorkflowDocument.getId(), "The verify workflow document description.");
 
     workflowService.verifyWorkflowDocument(
         TenantUtil.DEFAULT_TENANT_ID, verifyWorkflowDocumentRequest, "TEST1");
@@ -441,11 +452,15 @@ public class WorkflowServiceTests {
     assertNull(retrievedWorkflowDocument.getRejected());
     assertNull(retrievedWorkflowDocument.getRejectedBy());
     assertNull(retrievedWorkflowDocument.getRejectionReason());
+    assertEquals(
+        "The verify workflow document description.", retrievedWorkflowDocument.getDescription());
 
     // Reject the workflow document
     RejectWorkflowDocumentRequest rejectWorkflowDocumentRequest =
         new RejectWorkflowDocumentRequest(
-            retrievedWorkflowDocument.getId(), "This is a test rejection reason.");
+            retrievedWorkflowDocument.getId(),
+            "This is a test rejection reason.",
+            "The reject workflow document description.");
 
     workflowService.rejectWorkflowDocument(
         TenantUtil.DEFAULT_TENANT_ID, rejectWorkflowDocumentRequest, "TEST2");
@@ -461,10 +476,15 @@ public class WorkflowServiceTests {
     assertNotNull(retrievedWorkflowDocument.getRejected());
     assertNull(retrievedWorkflowDocument.getVerified());
     assertNull(retrievedWorkflowDocument.getVerifiedBy());
+    assertEquals(
+        "The reject workflow document description.", retrievedWorkflowDocument.getDescription());
 
     // Request the workflow document
     RequestWorkflowDocumentRequest requestWorkflowDocumentRequest =
-        new RequestWorkflowDocumentRequest(workflow.getId(), anotherDocumentDefinition.getId());
+        new RequestWorkflowDocumentRequest(
+            workflow.getId(),
+            anotherDocumentDefinition.getId(),
+            "The request workflow document description.");
 
     workflowService.requestWorkflowDocument(
         TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
@@ -862,12 +882,23 @@ public class WorkflowServiceTests {
     tenantWorkflowDefinition.addDocumentDefinition(
         sharedDocumentDefinition.getId(), true, true, true, "P3M");
 
+    tenantWorkflowDefinition.setPermissions(
+        List.of(
+            new WorkflowDefinitionPermission(
+                "Administrator", WorkflowPermissionType.INITIATE_WORKFLOW)));
+
     workflowService.createWorkflowDefinition(tenantWorkflowDefinition);
 
     retrievedWorkflowDefinition =
         workflowService.getWorkflowDefinition(tenantWorkflowDefinition.getId());
 
     compareWorkflowDefinitions(tenantWorkflowDefinition, retrievedWorkflowDefinition);
+
+    List<WorkflowDefinitionPermission> retrievedWorkflowDefinitionPermissions =
+        workflowService.getWorkflowDefinitionPermissions(
+            tenantWorkflowDefinition.getId(), tenantWorkflowDefinition.getVersion());
+
+    assertEquals(1, retrievedWorkflowDefinitionPermissions.size());
 
     List<WorkflowDefinitionSummary> workflowDefinitionSummaries =
         workflowService.getWorkflowDefinitionSummaries(

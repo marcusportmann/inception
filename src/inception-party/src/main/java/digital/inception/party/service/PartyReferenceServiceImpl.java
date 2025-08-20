@@ -636,7 +636,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   }
 
   @Override
-  @Cacheable(cacheNames = "attributeTypesValueTypes", key = "#attributeTypeCode")
+  @Cacheable(cacheNames = "attributeTypesValueType", key = "#attributeTypeCode")
   public Optional<ValueType> getAttributeTypeValueType(String attributeTypeCode)
       throws ServiceUnavailableException {
     try {

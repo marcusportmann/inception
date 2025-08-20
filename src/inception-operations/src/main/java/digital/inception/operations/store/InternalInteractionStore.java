@@ -25,6 +25,7 @@ import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
+import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
@@ -276,6 +277,26 @@ public class InternalInteractionStore implements InteractionStore {
       throw new ServiceUnavailableException(
           "Failed to delete the interaction note ("
               + interactionNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void delinkPartyFromInteraction(UUID tenantId, UUID interactionId)
+      throws InteractionNotFoundException, ServiceUnavailableException {
+    try {
+      if (interactionRepository.delinkPartyFromInteraction(tenantId, interactionId) <= 0) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delink the party from the interaction ("
+              + interactionId
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -643,7 +664,8 @@ public class InternalInteractionStore implements InteractionStore {
 
                     predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
 
-                    predicates.add(criteriaBuilder.equal(root.get("sourceId"), interactionSourceId));
+                    predicates.add(
+                        criteriaBuilder.equal(root.get("sourceId"), interactionSourceId));
 
                     if (status != null) {
                       predicates.add(criteriaBuilder.equal(root.get("status"), status));
@@ -681,10 +703,10 @@ public class InternalInteractionStore implements InteractionStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered interaction summaries for the interaction source ("
-          + interactionSourceId
-          + ") for the tenant ("
-          + tenantId
-          + ")",
+              + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
@@ -772,6 +794,28 @@ public class InternalInteractionStore implements InteractionStore {
               + ") exists for the interaction ("
               + interactionId
               + ") and tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void linkPartyToInteraction(UUID tenantId, UUID interactionId, UUID partyId)
+      throws InteractionNotFoundException, PartyNotFoundException, ServiceUnavailableException {
+    try {
+      if (interactionRepository.linkPartyToInteraction(tenantId, interactionId, partyId) <= 0) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to link the party ("
+              + partyId
+              + ") to the interaction ("
+              + interactionId
+              + ") for the tenant ("
               + tenantId
               + ")",
           e);

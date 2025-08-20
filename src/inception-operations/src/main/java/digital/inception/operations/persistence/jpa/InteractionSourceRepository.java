@@ -17,11 +17,14 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourcePermission;
 import digital.inception.operations.model.InteractionSourceType;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The {@code InteractionSourceRepository} interface declares the persistence for the {@code
@@ -68,4 +71,21 @@ public interface InteractionSourceRepository extends JpaRepository<InteractionSo
    * @return the interaction sources ordered by name ascending
    */
   List<InteractionSource> findByTenantIdOrderByNameAsc(UUID tenantId);
+
+  /**
+   * Retrieve the interaction source permissions for the interaction source with the specified ID.
+   *
+   * @param interactionSourceId the ID for the interaction source
+   * @return the interaction source permissions for the interaction source with the specified ID
+   */
+  @Query(
+      """
+         select p
+         from InteractionSource is
+           join is.permissions p
+         where is.id = :interactionSourceId
+         order by p.roleCode
+         """)
+  List<InteractionSourcePermission> findPermissionsBySourceId(
+      @Param("interactionSourceId") UUID interactionSourceId);
 }

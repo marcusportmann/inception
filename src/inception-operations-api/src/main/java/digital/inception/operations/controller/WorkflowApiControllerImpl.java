@@ -61,6 +61,8 @@ import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
@@ -69,11 +71,13 @@ import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
+import digital.inception.operations.model.WorkflowPermissionType;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.service.WorkflowService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -570,7 +574,19 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return workflowService.getWorkflowDefinitionSummaries(tenantId, workflowDefinitionCategoryId);
+    List<WorkflowDefinitionSummary> filteredWorkflowDefinitionSummaries = new ArrayList<>();
+
+    for (WorkflowDefinitionSummary workflowDefinitionSummary :
+        workflowService.getWorkflowDefinitionSummaries(tenantId, workflowDefinitionCategoryId)) {
+      if (hasWorkflowDefinitionPermission(
+          workflowDefinitionSummary.getId(),
+          workflowDefinitionSummary.getVersion(),
+          WorkflowPermissionType.INITIATE_WORKFLOW)) {
+        filteredWorkflowDefinitionSummaries.add(workflowDefinitionSummary);
+      }
+    }
+
+    return filteredWorkflowDefinitionSummaries;
   }
 
   @Override
@@ -1182,7 +1198,111 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
+    //    UUID workflowId =
+    //        workflowService.getWorkflowIdForWorkflowDocument(
+    //            tenantId, verifyWorkflowDocumentRequest.getWorkflowDocumentId());
+    //
+    //    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+    //        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+    //        && (!hasWorkflowDefinitionPermission(
+    //            tenantId, workflowId, WorkflowPermissionType.INITIATE_WORKFLOW))) {
+    //      throw new AccessDeniedException(
+    //          "No permission ("
+    //              + WorkflowPermissionType.INITIATE_WORKFLOW
+    //              + ") for workflow ("
+    //              + workflowId
+    //              + ")");
+    //    }
+
     workflowService.verifyWorkflowDocument(
         tenantId, verifyWorkflowDocumentRequest, getAuthenticationName());
+  }
+
+  /**
+   * Confirm that the user associated with the authenticated request has the specified permission
+   * for the workflow definition with the specified ID and version.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @param permissionType the workflow permission type
+   * @return {@code true} if the user associated with the authenticated request has the specified
+   *     permission for the workflow definition with the specified ID and version or {@code false}
+   *     otherwise
+   */
+  private boolean hasWorkflowDefinitionPermission(
+      String workflowDefinitionId,
+      int workflowDefinitionVersion,
+      WorkflowPermissionType permissionType)
+      throws ServiceUnavailableException {
+    if (isSecurityDisabled()) {
+      return true;
+    }
+
+    try {
+      List<WorkflowDefinitionPermission> workflowDefinitionPermissions =
+          workflowService.getWorkflowDefinitionPermissions(
+              workflowDefinitionId, workflowDefinitionVersion);
+
+      // If no permissions have been defined for the workflow definition, allow access by default
+      // TODO: Verify if we should deny by default here instead -- MARCUS
+      if (workflowDefinitionPermissions.isEmpty()) {
+        return true;
+      }
+
+      for (WorkflowDefinitionPermission workflowDefinitionPermission :
+          workflowDefinitionPermissions) {
+        if (workflowDefinitionPermission.getType().equals(permissionType)) {
+          if (hasRole(workflowDefinitionPermission.getRoleCode())) {
+            return true;
+          }
+        }
+      }
+    } catch (WorkflowDefinitionVersionNotFoundException e) {
+      // Do nothing, we will return false below
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to verify whether the user associated with the authenticated request has the permission ("
+              + permissionType.code()
+              + ") for the workflow definition ("
+              + workflowDefinitionId
+              + ")",
+          e);
+    }
+
+    return false;
+  }
+
+  /**
+   * Confirm that the user associated with the authenticated request has the specified permission
+   * for the workflow with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param permissionType the workflow permission type
+   * @return {@code true} if the user associated with the authenticated request has the specified
+   *     permission for the workflow with the specified ID or {@code false} otherwise
+   */
+  private boolean hasWorkflowDefinitionPermission(
+      UUID tenantId, UUID workflowId, WorkflowPermissionType permissionType)
+      throws ServiceUnavailableException {
+    try {
+      WorkflowDefinitionId workflowDefinitionId =
+          workflowService.getWorkflowDefinitionIdForWorkflow(tenantId, workflowId);
+
+      return hasWorkflowDefinitionPermission(
+          workflowDefinitionId.getId(), workflowDefinitionId.getVersion(), permissionType);
+    } catch (WorkflowNotFoundException e) {
+      // Do nothing, we will return false below
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to verify whether the user associated with the authenticated request has the permission ("
+              + permissionType.code()
+              + ") for the workflow ("
+              + workflowId
+              + ")",
+          e);
+    }
+
+    return false;
   }
 }

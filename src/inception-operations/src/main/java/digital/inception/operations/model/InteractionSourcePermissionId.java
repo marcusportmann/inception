@@ -39,8 +39,8 @@ public class InteractionSourcePermissionId implements Serializable {
   /** The ID for the interaction source the interaction source permission is associated with. */
   private UUID sourceId;
 
-  /** The interaction source permission type. */
-  private InteractionSourcePermissionType type;
+  /** The interaction permission type. */
+  private InteractionPermissionType type;
 
   /** Constructs a new {@code InteractionSourcePermissionId}. */
   public InteractionSourcePermissionId() {}

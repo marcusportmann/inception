@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -38,19 +39,26 @@ import java.util.UUID;
  */
 @Schema(description = "A request to verify a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowDocumentId"})
+@JsonPropertyOrder({"workflowDocumentId", "description"})
 @XmlRootElement(
     name = "VerifyWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "VerifyWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowDocumentId"})
+    propOrder = {"workflowDocumentId", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class VerifyWorkflowDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The description for the workflow document. */
+  @Schema(description = "The description for the workflow document")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  private String description;
 
   /** The ID for the workflow document. */
   @Schema(
@@ -74,12 +82,41 @@ public class VerifyWorkflowDocumentRequest implements Serializable {
   }
 
   /**
+   * Constructs a new {@code VerifyWorkflowDocumentRequest}.
+   *
+   * @param workflowDocumentId the ID for the workflow document
+   * @param description the description for the workflow document
+   */
+  public VerifyWorkflowDocumentRequest(UUID workflowDocumentId, String description) {
+    this.workflowDocumentId = workflowDocumentId;
+    this.description = description;
+  }
+
+  /**
+   * Returns the description for the workflow document.
+   *
+   * @return the description for the workflow document
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
    * Returns the ID for the workflow document.
    *
    * @return the ID for the workflow document
    */
   public UUID getWorkflowDocumentId() {
     return workflowDocumentId;
+  }
+
+  /**
+   * Set the description for the workflow document.
+   *
+   * @param description the description for the workflow document
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

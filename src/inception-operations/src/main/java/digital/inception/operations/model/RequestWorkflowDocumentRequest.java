@@ -39,19 +39,26 @@ import java.util.UUID;
  */
 @Schema(description = "A request to request a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "documentDefinitionId"})
+@JsonPropertyOrder({"workflowId", "documentDefinitionId", "description"})
 @XmlRootElement(
     name = "RequestWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "RequestWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "documentDefinitionId"})
+    propOrder = {"workflowId", "documentDefinitionId", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class RequestWorkflowDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The description for the workflow document. */
+  @Schema(description = "The description for the workflow document")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  private String description;
 
   /** The ID for the document definition the workflow document will be associated with. */
   @Schema(
@@ -98,6 +105,21 @@ public class RequestWorkflowDocumentRequest implements Serializable {
    * @param workflowId the ID for the workflow
    * @param documentDefinitionId the ID for the document definition the workflow document will be
    *     associated with
+   * @param description the description for the workflow document
+   */
+  public RequestWorkflowDocumentRequest(
+      UUID workflowId, String documentDefinitionId, String description) {
+    this.workflowId = workflowId;
+    this.documentDefinitionId = documentDefinitionId;
+    this.description = description;
+  }
+
+  /**
+   * Constructs a new {@code RequestWorkflowDocumentRequest}.
+   *
+   * @param workflowId the ID for the workflow
+   * @param documentDefinitionId the ID for the document definition the workflow document will be
+   *     associated with
    * @param requestedFromPartyId the ID for the party the workflow document was requested from
    */
   public RequestWorkflowDocumentRequest(
@@ -105,6 +127,15 @@ public class RequestWorkflowDocumentRequest implements Serializable {
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
     this.requestedFromPartyId = requestedFromPartyId;
+  }
+
+  /**
+   * Returns the description for the workflow document.
+   *
+   * @return the description for the workflow document
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -132,6 +163,15 @@ public class RequestWorkflowDocumentRequest implements Serializable {
    */
   public UUID getWorkflowId() {
     return workflowId;
+  }
+
+  /**
+   * Set the description for the workflow document.
+   *
+   * @param description the description for the workflow document
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

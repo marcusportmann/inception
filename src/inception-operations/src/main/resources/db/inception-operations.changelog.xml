@@ -163,7 +163,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(50)"
-        remarks="The code for the workflow definition permission type for the workflow definition permission">
+        remarks="The code for the workflow permission type for the workflow definition permission">
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>
@@ -711,6 +711,8 @@
         remarks="The date and time the workflow document was verified"/>
       <column name="verified_by" type="nvarchar(100)"
         remarks="The person or system that verified the workflow document"/>
+      <column name="description" type="nvarchar(500)"
+        remarks="The description for the workflow document"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflow_documents_workflow_fk"
       baseTableName="operations_workflow_documents" baseColumnNames="workflow_id"
@@ -800,7 +802,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(50)"
-        remarks="The code for the interaction source permission type for the interaction source permission">
+        remarks="The code for the interaction permission type for the interaction source permission">
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>

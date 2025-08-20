@@ -110,7 +110,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   }
 
   @Override
-  @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
+  @CachePut(cacheNames = "mailTemplate", key = "#mailTemplate.id")
   public MailTemplate createMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException {
     validateArgument("mailTemplate", mailTemplate);
@@ -130,7 +130,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   }
 
   @Override
-  @CacheEvict(cacheNames = "mailTemplates", key = "#mailTemplateId")
+  @CacheEvict(cacheNames = "mailTemplate", key = "#mailTemplateId")
   public void deleteMailTemplate(String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
@@ -159,7 +159,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   }
 
   @Override
-  @Cacheable(cacheNames = "mailTemplates", key = "#mailTemplateId")
+  @Cacheable(cacheNames = "mailTemplate", key = "#mailTemplateId")
   public MailTemplate getMailTemplate(String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
@@ -395,7 +395,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   }
 
   @Override
-  @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
+  @CachePut(cacheNames = "mailTemplate", key = "#mailTemplate.id")
   public MailTemplate updateMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     validateArgument("mailTemplate", mailTemplate);

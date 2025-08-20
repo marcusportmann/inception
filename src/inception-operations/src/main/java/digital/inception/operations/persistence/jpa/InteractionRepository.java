@@ -59,6 +59,25 @@ public interface InteractionRepository
       @Param("assignedTo") String assignedTo);
 
   /**
+   * Delink the party from the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @return the number of rows that were updated (0 or 1)
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      """
+      update Interaction i
+         set i.partyId  = null
+       where i.tenantId = :tenantId
+         and i.id       = :interactionId
+      """)
+  int delinkPartyFromInteraction(
+      @Param("tenantId") UUID tenantId, @Param("interactionId") UUID interactionId);
+
+  /**
    * Returns whether an interaction with the specified source reference for the interaction source
    * with the specified source ID exists.
    *
@@ -130,6 +149,28 @@ public interface InteractionRepository
    */
   @Query("select i.subject from Interaction i where i.id = :interactionId")
   Optional<String> getSubjectById(@Param("interactionId") UUID interactionId);
+
+  /**
+   * Link the party to the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param partyId the ID for the party
+   * @return the number of rows that were updated (0 or 1)
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      """
+      update Interaction i
+         set i.partyId  = :partyId
+       where i.tenantId = :tenantId
+         and i.id       = :interactionId
+      """)
+  int linkPartyToInteraction(
+      @Param("tenantId") UUID tenantId,
+      @Param("interactionId") UUID interactionId,
+      @Param("partyId") UUID partyId);
 
   /**
    * Lock the interaction for processing.

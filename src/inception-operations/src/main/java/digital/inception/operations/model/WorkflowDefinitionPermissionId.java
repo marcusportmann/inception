@@ -19,8 +19,6 @@ package digital.inception.operations.model;
 import digital.inception.core.util.StringUtil;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code WorkflowDefinitionPermissionId} class implements the ID class for The {@code
@@ -33,17 +31,19 @@ public class WorkflowDefinitionPermissionId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the role the workflow definition permission is assigned to. */
-  private String roleCode;
-
   /** The ID for the workflow definition the workflow definition permission is associated with. */
   private String definitionId;
 
-  /** The version of the workflow definition the workflow definition permission is associated with. */
+  /**
+   * The version of the workflow definition the workflow definition permission is associated with.
+   */
   private int definitionVersion;
 
-  /** The workflow definition permission type. */
-  private WorkflowDefinitionPermissionType type;
+  /** The code for the role the workflow definition permission is assigned to. */
+  private String roleCode;
+
+  /** The workflow permission type. */
+  private WorkflowPermissionType type;
 
   /** Constructs a new {@code WorkflowDefinitionPermissionId}. */
   public WorkflowDefinitionPermissionId() {}
@@ -71,9 +71,9 @@ public class WorkflowDefinitionPermissionId implements Serializable {
     WorkflowDefinitionPermissionId other = (WorkflowDefinitionPermissionId) object;
 
     return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
-           && definitionVersion == other.definitionVersion
-           && StringUtil.equalsIgnoreCase(roleCode, other.roleCode)
-           && type == other.type;
+        && definitionVersion == other.definitionVersion
+        && StringUtil.equalsIgnoreCase(roleCode, other.roleCode)
+        && type == other.type;
   }
 
   /**
@@ -84,8 +84,8 @@ public class WorkflowDefinitionPermissionId implements Serializable {
   @Override
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
-           + definitionVersion
-           + ((roleCode == null) ? 0 : roleCode.hashCode())
-           + ((type == null) ? 0 : type.hashCode());
+        + definitionVersion
+        + ((roleCode == null) ? 0 : roleCode.hashCode())
+        + ((type == null) ? 0 : type.hashCode());
   }
 }

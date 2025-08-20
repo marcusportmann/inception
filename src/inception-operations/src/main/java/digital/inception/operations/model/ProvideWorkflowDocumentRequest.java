@@ -58,6 +58,7 @@ import java.util.UUID;
   "issueDate",
   "expiryDate",
   "attributes",
+  "description",
   "data"
 })
 @XmlRootElement(
@@ -75,6 +76,7 @@ import java.util.UUID;
       "issueDate",
       "expiryDate",
       "attributes",
+      "description",
       "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -98,6 +100,13 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   @NotNull
   @Size(min = 1, max = 41943040)
   private byte[] data;
+
+  /** The description for the workflow document. */
+  @Schema(description = "The description for the workflow document")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  private String description;
 
   /** The expiry date for the document. */
   @Schema(description = "The ISO 8601 format expiry date for the document")
@@ -194,6 +203,49 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
     this.data = data;
   }
 
+  /**
+   * Constructs a new {@code ProvideWorkflowDocumentRequest}.
+   *
+   * @param workflowDocumentId the ID for the workflow document
+   * @param fileType the file type for the document
+   * @param name the name of the document
+   * @param data the data for the document
+   * @param description the description for the workflow document
+   */
+  public ProvideWorkflowDocumentRequest(
+      UUID workflowDocumentId, FileType fileType, String name, byte[] data, String description) {
+    this.workflowDocumentId = workflowDocumentId;
+    this.fileType = fileType;
+    this.name = name;
+    this.data = data;
+    this.description = description;
+  }
+
+  /**
+   * Constructs a new {@code ProvideWorkflowDocumentRequest}.
+   *
+   * @param workflowDocumentId the ID for the workflow document
+   * @param fileType the file type for the document
+   * @param name the name of the document
+   * @param attributes the attributes for the document
+   * @param data the data for the document
+   * @param description the description for the workflow document
+   */
+  public ProvideWorkflowDocumentRequest(
+      UUID workflowDocumentId,
+      FileType fileType,
+      String name,
+      List<ProvideWorkflowDocumentAttribute> attributes,
+      byte[] data,
+      String description) {
+    this.workflowDocumentId = workflowDocumentId;
+    this.fileType = fileType;
+    this.name = name;
+    this.attributes = attributes;
+    this.data = data;
+    this.description = description;
+  }
+
   /** Constructs a new {@code ProvideWorkflowDocumentRequest}. */
   public ProvideWorkflowDocumentRequest() {}
 
@@ -213,6 +265,15 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
    */
   public byte[] getData() {
     return data;
+  }
+
+  /**
+   * Returns the description for the workflow document.
+   *
+   * @return the description for the workflow document
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -294,6 +355,15 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
    */
   public void setData(byte[] data) {
     this.data = data;
+  }
+
+  /**
+   * Set the description for the workflow document.
+   *
+   * @param description the description for the workflow document
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

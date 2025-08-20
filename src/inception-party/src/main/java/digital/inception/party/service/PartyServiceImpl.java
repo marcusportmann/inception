@@ -151,7 +151,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @CachePut(cacheNames = "organizations", key = "#organization.id")
+  @CachePut(cacheNames = "organization", key = "#organization.id")
   public Organization createOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -168,7 +168,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @CachePut(cacheNames = "persons", key = "#person.id")
+  @CachePut(cacheNames = "person", key = "#person.id")
   public Person createPerson(UUID tenantId, Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -386,7 +386,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @Cacheable(cacheNames = "organizations", key = "#organizationId")
+  @Cacheable(cacheNames = "organization", key = "#organizationId")
   public Organization getOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -492,7 +492,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @Cacheable(cacheNames = "persons", key = "#personId")
+  @Cacheable(cacheNames = "person", key = "#personId")
   public Person getPerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -590,7 +590,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @Cacheable(cacheNames = "partyTenantIds", key = "#partyId")
+  @Cacheable(cacheNames = "partyTenantId", key = "#partyId")
   public Optional<UUID> getTenantIdForParty(UUID partyId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (partyId == null) {
@@ -601,7 +601,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @Cacheable(cacheNames = "partyTypes", key = "#partyId")
+  @Cacheable(cacheNames = "partyType", key = "#partyId")
   public Optional<PartyType> getTypeForParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -654,7 +654,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @CachePut(cacheNames = "organizations", key = "#organization.id")
+  @CachePut(cacheNames = "organization", key = "#organization.id")
   public Organization updateOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -671,7 +671,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   }
 
   @Override
-  @CachePut(cacheNames = "persons", key = "#person.id")
+  @CachePut(cacheNames = "person", key = "#person.id")
   public Person updatePerson(UUID tenantId, Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {

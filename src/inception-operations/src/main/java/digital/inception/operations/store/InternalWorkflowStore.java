@@ -658,6 +658,31 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public UUID getWorkflowIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<UUID> workflowIdOptional =
+          workflowDocumentRepository.findWorkflowIdByTenantIdAndId(tenantId, workflowDocumentId);
+
+      if (workflowIdOptional.isEmpty()) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      } else {
+        return workflowIdOptional.get();
+      }
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow ID for the workflow document ("
+              + workflowDocumentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowNote getWorkflowNote(UUID tenantId, UUID workflowNoteId)
       throws WorkflowNoteNotFoundException, ServiceUnavailableException {
     try {
@@ -1101,6 +1126,10 @@ public class InternalWorkflowStore implements WorkflowStore {
       workflowDocument.setVerified(null);
       workflowDocument.setVerifiedBy(null);
 
+      if (provideWorkflowDocumentRequest.getDescription() != null) {
+        workflowDocument.setDescription(provideWorkflowDocumentRequest.getDescription());
+      }
+
       boolean verifiable =
           workflowDocumentRepository.isWorkflowDocumentVerifiable(workflowDocument.getId());
 
@@ -1152,6 +1181,12 @@ public class InternalWorkflowStore implements WorkflowStore {
         throw new WorkflowDocumentNotFoundException(
             tenantId, rejectWorkflowDocumentRequest.getWorkflowDocumentId());
       }
+
+      if (rejectWorkflowDocumentRequest.getDescription() != null) {
+        workflowDocumentRepository.updateWorkflowDocumentDescription(
+            rejectWorkflowDocumentRequest.getWorkflowDocumentId(),
+            rejectWorkflowDocumentRequest.getDescription());
+      }
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1181,6 +1216,10 @@ public class InternalWorkflowStore implements WorkflowStore {
               OffsetDateTime.now(),
               requestedBy,
               requestWorkflowDocumentRequest.getRequestedFromPartyId());
+
+      if (requestWorkflowDocumentRequest.getDescription() != null) {
+        workflowDocument.setDescription(requestWorkflowDocumentRequest.getDescription());
+      }
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
 
@@ -1376,6 +1415,12 @@ public class InternalWorkflowStore implements WorkflowStore {
           == 0) {
         throw new WorkflowDocumentNotFoundException(
             tenantId, verifyWorkflowDocumentRequest.getWorkflowDocumentId());
+      }
+
+      if (verifyWorkflowDocumentRequest.getDescription() != null) {
+        workflowDocumentRepository.updateWorkflowDocumentDescription(
+            verifyWorkflowDocumentRequest.getWorkflowDocumentId(),
+            verifyWorkflowDocumentRequest.getDescription());
       }
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;

@@ -25,8 +25,10 @@ import digital.inception.operations.exception.DuplicateInteractionSourceExceptio
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionNote;
@@ -37,6 +39,7 @@ import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
+import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -254,7 +257,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID createInteractionNote(
       @Parameter(
               name = "Tenant-ID",
@@ -484,6 +487,77 @@ public interface InteractionApiController {
           ServiceUnavailableException;
 
   /**
+   * Delink the party from the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param delinkPartyFromInteractionRequest the request to delink the party from the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the party could not be delinked from the interaction
+   */
+  @Operation(
+      summary = "Delink the party from the interaction",
+      description = "Delink the party from the interaction")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The party was delinked from the interaction"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/delink-party-from-interaction",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionPartyLinkAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void delinkPartyFromInteraction(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to delink a party from the interaction",
+              required = true)
+          @RequestBody
+          DelinkPartyFromInteractionRequest delinkPartyFromInteractionRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the interaction.
    *
    * @param tenantId the ID for the tenant
@@ -606,7 +680,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionNote getInteractionNote(
       @Parameter(
               name = "Tenant-ID",
@@ -693,7 +767,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionNotes getInteractionNotes(
       @Parameter(
               name = "Tenant-ID",
@@ -1032,6 +1106,79 @@ public interface InteractionApiController {
           ServiceUnavailableException;
 
   /**
+   * Link a party to an interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param linkPartyToInteractionRequest the request to link a party to an interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the party could not be linked to the interaction
+   */
+  @Operation(
+      summary = "Link a party to an interaction",
+      description = "Link a party to an interaction")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The party was linked to the interaction"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction or party could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/link-party-to-interaction",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionPartyLinkAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void linkPartyToInteraction(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to link a party to an interaction",
+              required = true)
+          @RequestBody
+          LinkPartyToInteractionRequest linkPartyToInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          PartyNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Update the interaction.
    *
    * @param tenantId the ID for the tenant
@@ -1154,7 +1301,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void updateInteractionNote(
       @Parameter(
               name = "Tenant-ID",

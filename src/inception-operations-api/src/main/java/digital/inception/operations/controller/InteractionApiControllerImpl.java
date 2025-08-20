@@ -26,20 +26,26 @@ import digital.inception.operations.exception.DuplicateInteractionSourceExceptio
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
+import digital.inception.operations.model.InteractionPermissionType;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourcePermission;
 import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
+import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.InteractionService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -169,6 +175,21 @@ public class InteractionApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void delinkPartyFromInteraction(UUID tenantId,
+      DelinkPartyFromInteractionRequest delinkPartyFromInteractionRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    interactionService.delinkPartyFromInteraction(tenantId, delinkPartyFromInteractionRequest);
+  }
+
+  @Override
   public Interaction getInteraction(UUID tenantId, UUID interactionId)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
@@ -271,7 +292,19 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return interactionService.getInteractionSourceSummaries(tenantId);
+    List<InteractionSourceSummary> filteredInteractionSourceSummaries = new ArrayList<>();
+
+    for (InteractionSourceSummary interactionSourceSummary :
+        interactionService.getInteractionSourceSummaries(tenantId)) {
+      if (hasInteractionSourcePermission(
+          tenantId,
+          interactionSourceSummary.getId(),
+          InteractionPermissionType.RETRIEVE_INTERACTION)) {
+        filteredInteractionSourceSummaries.add(interactionSourceSummary);
+      }
+    }
+
+    return filteredInteractionSourceSummaries;
   }
 
   @Override
@@ -285,7 +318,13 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return interactionService.getInteractionSources(tenantId);
+    List<InteractionSource> filteredInteractionSources = new ArrayList<>();
+    for (InteractionSource interactionSource : interactionService.getInteractionSources(tenantId)) {
+      if (hasInteractionSourcePermission(
+          tenantId, interactionSource.getId(), InteractionPermissionType.RETRIEVE_INTERACTION)) {}
+    }
+
+    return filteredInteractionSources;
   }
 
   @Override
@@ -324,6 +363,24 @@ public class InteractionApiControllerImpl extends SecureApiController
         sortDirection,
         pageIndex,
         pageSize);
+  }
+
+  @Override
+  public void linkPartyToInteraction(
+      UUID tenantId, LinkPartyToInteractionRequest linkPartyToInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          PartyNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    interactionService.linkPartyToInteraction(tenantId, linkPartyToInteractionRequest);
   }
 
   @Override
@@ -390,5 +447,54 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     interactionService.updateInteractionSource(tenantId, interactionSource);
+  }
+
+  /**
+   * Confirm that the user associated with the authenticated request has the specified permission
+   * for the interaction source with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source
+   * @param permissionType the interaction permission type
+   * @return {@code true} if the user associated with the authenticated request has the specified
+   *     permission for the interaction source with the specified ID or {@code false} otherwise
+   */
+  private boolean hasInteractionSourcePermission(
+      UUID tenantId, UUID interactionSourceId, InteractionPermissionType permissionType)
+      throws ServiceUnavailableException {
+    if (isSecurityDisabled()) {
+      return true;
+    }
+
+    try {
+      List<InteractionSourcePermission> interactionSourcePermissions =
+          interactionService.getInteractionSourcePermissions(tenantId, interactionSourceId);
+
+      // If no permissions have been defined for the interaction source, allow access by default
+      // TODO: Verify if we should deny by default here instead -- MARCUS
+      if (interactionSourcePermissions.isEmpty()) {
+        return true;
+      }
+
+      for (InteractionSourcePermission interactionSourcePermission : interactionSourcePermissions) {
+        if (interactionSourcePermission.getType().equals(permissionType)) {
+          if (hasRole(interactionSourcePermission.getRoleCode())) {
+            return true;
+          }
+        }
+      }
+    } catch (InteractionSourceNotFoundException e) {
+      // Do nothing, we will return false below
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to verify whether the user associated with the authenticated request has the permission ("
+              + permissionType.code()
+              + ") for the interaction source ("
+              + interactionSourceId
+              + ")",
+          e);
+    }
+
+    return false;
   }
 }

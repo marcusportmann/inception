@@ -408,13 +408,13 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Remove the permission with the specified role code and interaction source permission type for
-   * the interaction source.
+   * Remove the permission with the specified role code and interaction permission type for the
+   * interaction source.
    *
    * @param roleCode the role code for the permission
-   * @param type the interaction source permission type
+   * @param type the interaction permission type
    */
-  public void removePermission(String roleCode, InteractionSourcePermissionType type) {
+  public void removePermission(String roleCode, InteractionPermissionType type) {
     permissions.removeIf(
         existingPermission ->
             (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), roleCode)

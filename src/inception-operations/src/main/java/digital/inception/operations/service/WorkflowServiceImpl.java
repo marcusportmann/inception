@@ -69,6 +69,7 @@ import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
@@ -94,6 +95,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -187,6 +192,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @CacheEvict(cacheNames = "workflowAttributeDefinitions", allEntries = true)
   public void createWorkflowAttributeDefinition(
       WorkflowAttributeDefinition workflowAttributeDefinition)
       throws InvalidArgumentException,
@@ -213,6 +219,21 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Caching(
+      put = {
+        @CachePut(
+            cacheNames = "workflowDefinition",
+            key = "#workflowDefinition.id + '-' + #workflowDefinition.version")
+      },
+      evict = {
+        @CacheEvict(cacheNames = "latestWorkflowDefinition", key = "#workflowDefinition.id"),
+        @CacheEvict(
+            cacheNames = "workflowDefinitionPermissions",
+            key = "#workflowDefinition.id + '-' + #workflowDefinition.version"),
+        @CacheEvict(
+            cacheNames = {"workflowDefinitions", "workflowDefinitionSummaries"},
+            key = "#workflowDefinition.categoryId")
+      })
   public void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
@@ -258,6 +279,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @CacheEvict(cacheNames = "workflowDefinitionCategories", allEntries = true)
   public void createWorkflowDefinitionCategory(
       WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,
@@ -367,6 +389,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @CacheEvict(cacheNames = "workflowAttributeDefinitions", allEntries = true)
   public void deleteWorkflowAttributeDefinition(String workflowAttributeDefinitionCode)
       throws InvalidArgumentException,
           WorkflowAttributeDefinitionNotFoundException,
@@ -393,6 +416,17 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Caching(
+      evict = {
+        @CacheEvict(
+            cacheNames = {
+              "latestWorkflowDefinition",
+              "workflowDefinition",
+              "workflowDefinitions",
+              "workflowDefinitionSummaries"
+            },
+            allEntries = true)
+      })
   public void deleteWorkflowDefinition(String workflowDefinitionId)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
@@ -416,6 +450,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @CacheEvict(cacheNames = "workflowDefinitionCategories", allEntries = true)
   public void deleteWorkflowDefinitionCategory(String workflowDefinitionCategoryId)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
@@ -441,6 +476,16 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
   }
 
+  @Caching(
+      evict = {
+        @CacheEvict(cacheNames = "latestWorkflowDefinition", key = "#workflowDefinitionId"),
+        @CacheEvict(
+            cacheNames = {"workflowDefinition", "workflowDefinitionPermissions"},
+            key = "#workflowDefinitionId + '-' + #workflowDefinitionVersion"),
+        @CacheEvict(
+            cacheNames = {"workflowDefinitions", "workflowDefinitionSummaries"},
+            allEntries = true)
+      })
   @Override
   public void deleteWorkflowDefinitionVersion(
       String workflowDefinitionId, int workflowDefinitionVersion)
@@ -731,6 +776,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Cacheable(cacheNames = "workflowAttributeDefinitions", key = "'ALL'")
   public List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
     try {
@@ -743,6 +789,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Cacheable(cacheNames = "latestWorkflowDefinition", key = "#workflowDefinitionId")
   public WorkflowDefinition getWorkflowDefinition(String workflowDefinitionId)
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
@@ -772,6 +819,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Cacheable(cacheNames = "workflowDefinitionCategories", key = "#tenantId")
   public List<WorkflowDefinitionCategory> getWorkflowDefinitionCategories(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -842,6 +890,42 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Cacheable(
+      cacheNames = "workflowDefinitionPermissions",
+      key = "#workflowDefinitionId + '-' + #workflowDefinitionVersion")
+  public List<WorkflowDefinitionPermission> getWorkflowDefinitionPermissions(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowDefinitionId)) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    try {
+      if (!workflowDefinitionRepository.existsById(
+          new WorkflowDefinitionId(workflowDefinitionId, workflowDefinitionVersion))) {
+        throw new WorkflowDefinitionVersionNotFoundException(
+            workflowDefinitionId, workflowDefinitionVersion);
+      }
+
+      return workflowDefinitionRepository.findPermissionsByIdAndVersion(
+          workflowDefinitionId, workflowDefinitionVersion);
+    } catch (WorkflowDefinitionVersionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow definition permissions for the workflow definition ("
+              + workflowDefinitionId
+              + ") version ("
+              + workflowDefinitionVersion
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "workflowDefinitionSummaries", key = "#workflowDefinitionCategoryId")
   public List<WorkflowDefinitionSummary> getWorkflowDefinitionSummaries(
       UUID tenantId, String workflowDefinitionCategoryId)
       throws InvalidArgumentException,
@@ -872,6 +956,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Cacheable(
+      cacheNames = "workflowDefinition",
+      key = "#workflowDefinitionId + '-' + #workflowDefinitionVersion")
   public WorkflowDefinition getWorkflowDefinitionVersion(
       String workflowDefinitionId, int workflowDefinitionVersion)
       throws InvalidArgumentException,
@@ -1010,6 +1097,34 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       return workflowEngineRepository.findAll();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the workflow engines", e);
+    }
+  }
+
+  @Override
+  public UUID getWorkflowIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (workflowDocumentId == null) {
+      throw new InvalidArgumentException("workflowDocumentId");
+    }
+
+    try {
+      return workflowStore.getWorkflowIdForWorkflowDocument(tenantId, workflowDocumentId);
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow ID for the workflow document ("
+              + workflowDocumentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -1731,6 +1846,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @CacheEvict(cacheNames = "workflowAttributeDefinitions", allEntries = true)
   public void updateWorkflowAttributeDefinition(
       WorkflowAttributeDefinition workflowAttributeDefinition)
       throws InvalidArgumentException,
@@ -1758,6 +1874,21 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Caching(
+      put = {
+        @CachePut(
+            cacheNames = "workflowDefinition",
+            key = "#workflowDefinition.id + '-' + #workflowDefinition.version")
+      },
+      evict = {
+        @CacheEvict(cacheNames = "latestWorkflowDefinition", key = "#workflowDefinition.id"),
+        @CacheEvict(
+            cacheNames = "workflowDefinitionPermissions",
+            key = "#workflowDefinition.id + '-' + #workflowDefinition.version"),
+        @CacheEvict(
+            cacheNames = {"workflowDefinitions", "workflowDefinitionSummaries"},
+            key = "#workflowDefinition.categoryId")
+      })
   public void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
@@ -1792,6 +1923,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @CacheEvict(cacheNames = "workflowDefinitionCategories", allEntries = true)
   public void updateWorkflowDefinitionCategory(
       WorkflowDefinitionCategory workflowDefinitionCategory)
       throws InvalidArgumentException,

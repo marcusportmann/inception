@@ -68,7 +68,8 @@ import java.util.UUID;
   "rejectedBy",
   "rejectionReason",
   "verified",
-  "verifiedBy"
+  "verifiedBy",
+  "description"
 })
 @XmlRootElement(name = "WorkflowDocument", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -89,7 +90,8 @@ import java.util.UUID;
       "rejectedBy",
       "rejectionReason",
       "verified",
-      "verifiedBy"
+      "verifiedBy",
+      "description"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -97,6 +99,14 @@ import java.util.UUID;
 public class WorkflowDocument implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The description for the workflow document. */
+  @Schema(description = "The description for the workflow document")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  @Column(name = "description", length = 500)
+  private String description;
 
   /** The document definition the workflow document is associated with. */
   @Schema(hidden = true)
@@ -339,6 +349,15 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
+   * Returns the description for the workflow document.
+   *
+   * @return the description for the workflow document
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
    * Returns the ID for the document definition the workflow document is associated with.
    *
    * @return the ID for the document definition the workflow document is associated with
@@ -480,6 +499,15 @@ public class WorkflowDocument implements Serializable {
    */
   public UUID getWorkflowId() {
     return workflowId;
+  }
+
+  /**
+   * Set the description for the workflow document.
+   *
+   * @param description the description for the workflow document
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

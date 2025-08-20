@@ -26,8 +26,10 @@ import digital.inception.operations.exception.InteractionAttachmentNotFoundExcep
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
@@ -39,10 +41,12 @@ import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourcePermission;
 import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
+import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import java.util.List;
 import java.util.Optional;
@@ -182,6 +186,19 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
+   * Delink the party from the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param delinkPartyFromInteractionRequest the request to delink the party from the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the party could not be delinked from the interaction
+   */
+  void delinkPartyFromInteraction(
+      UUID tenantId, DelinkPartyFromInteractionRequest delinkPartyFromInteractionRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the interaction.
    *
    * @param tenantId the ID for the tenant
@@ -287,6 +304,23 @@ public interface InteractionService {
    * @throws ServiceUnavailableException if the interaction source could not be retrieved
    */
   InteractionSource getInteractionSource(UUID tenantId, UUID interactionSourceId)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the permissions for the interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source
+   * @return the permissions for the interaction source
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the permissions for the interaction source could not be
+   *     retrieved
+   */
+  List<InteractionSourcePermission> getInteractionSourcePermissions(
+      UUID tenantId, UUID interactionSourceId)
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;
@@ -418,12 +452,11 @@ public interface InteractionService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether the interaction with the specified tenant ID and ID exists.
+   * Check whether the interaction exists.
    *
-   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
-   * @return {@code true} if the interaction with the specified tenant ID and ID exists or {@code
-   *     false} otherwise
+   * @return {@code true} if the interaction exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the existence of the interaction could not be determined
    */
@@ -447,19 +480,35 @@ public interface InteractionService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether the interaction note with the specified tenant ID, interaction ID and ID exists.
+   * Check whether the interaction note exists.
    *
-   * @param tenantId the ID for the tenant the interaction note is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction the interaction note is associated with
    * @param interactionNoteId the ID for the interaction note
-   * @return {@code true} if the interaction note with the specified tenant ID, interaction ID and
-   *     ID exists or {@code false} otherwise
+   * @return {@code true} if the interaction note exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the existence of the interaction note could not be
    *     determined
    */
   boolean interactionNoteExists(UUID tenantId, UUID interactionId, UUID interactionNoteId)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Link a party to an interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param linkPartyToInteractionRequest the request to link a party to an interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the party could not be linked to the interaction
+   */
+  void linkPartyToInteraction(
+      UUID tenantId, LinkPartyToInteractionRequest linkPartyToInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          PartyNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Process the interaction.

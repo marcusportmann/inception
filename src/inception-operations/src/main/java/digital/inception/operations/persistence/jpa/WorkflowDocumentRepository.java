@@ -138,6 +138,19 @@ public interface WorkflowDocumentRepository
       @Param("workflowId") UUID workflowId);
 
   /**
+   * Retrieve the workflow ID for the workflow document.
+   *
+   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param workflowDocumentId the workflow document ID
+   * @return an Optional containing the ID for workflow for the workflow document with the specified
+   *     tenant ID and ID or an empty Optional if the workflow document could not be found
+   */
+  @Query(
+      "select wd.workflowId from WorkflowDocument wd where wd.tenantId = :tenantId and wd.id = :workflowDocumentId")
+  Optional<UUID> findWorkflowIdByTenantIdAndId(
+      @Param("tenantId") UUID tenantId, @Param("workflowDocumentId") UUID workflowDocumentId);
+
+  /**
    * Returns whether the workflow document is verifiable.
    *
    * @param workflowDocumentId the workflow document ID
@@ -182,6 +195,23 @@ public interface WorkflowDocumentRepository
       @Param("rejected") OffsetDateTime rejected,
       @Param("rejectedBy") String rejectedBy,
       @Param("rejectionReason") String rejectionReason);
+
+  /**
+   * Update the description for the workflow document.
+   *
+   * @param workflowDocumentId the ID for the workflow document
+   * @param description the description for the workflow document
+   * @return the number of rows that were updated (0 or 1)
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      "update WorkflowDocument wd "
+          + "set wd.description = :description "
+          + "where wd.id = :workflowDocumentId")
+  int updateWorkflowDocumentDescription(
+      @Param("workflowDocumentId") UUID workflowDocumentId,
+      @Param("description") String description);
 
   /**
    * Verify the workflow document.

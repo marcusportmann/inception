@@ -17,6 +17,7 @@
 package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +32,7 @@ import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
@@ -50,6 +52,7 @@ import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
+import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.MailboxProtocol;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
@@ -330,7 +333,7 @@ public class EndToEndTests {
             .map(InteractionAttachmentSummary::getId)
             .toList();
 
-    // Create a interaction note for the interaction
+    // Create an interaction note for the interaction
     CreateInteractionNoteRequest createInteractionNoteRequest =
         new CreateInteractionNoteRequest(
             interaction.getId(), "This is the interaction note content.");
@@ -360,6 +363,28 @@ public class EndToEndTests {
             10);
 
     assertEquals(1, interactionNotes.getTotal());
+
+    // Link the interaction to a party
+    UUID partyId = UUID.randomUUID();
+
+    interactionService.linkPartyToInteraction(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new LinkPartyToInteractionRequest(firstInteractionId, partyId));
+
+    interaction =
+        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, firstInteractionId);
+
+    assertEquals(partyId, interaction.getPartyId());
+
+    // Delink the party from the interaction
+    interactionService.delinkPartyFromInteraction(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new DelinkPartyFromInteractionRequest(firstInteractionId));
+
+    interaction =
+        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, firstInteractionId);
+
+    assertNull(interaction.getPartyId());
 
     //  __        __         _     __ _                 _____         _
     //  \ \      / /__  _ __| | __/ _| | _____      __ |_   _|__  ___| |_
@@ -481,7 +506,7 @@ public class EndToEndTests {
     assertEquals(secondInteractionId, workflow.getInteractionLinks().get(1).getInteractionId());
     assertEquals("TEST2", workflow.getInteractionLinks().get(1).getLinkedBy());
 
-    // Delink an interaction form the workflow
+    // Delink an interaction from the workflow
     DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest =
         new DelinkInteractionFromWorkflowRequest(workflow.getId(), secondInteractionId);
 

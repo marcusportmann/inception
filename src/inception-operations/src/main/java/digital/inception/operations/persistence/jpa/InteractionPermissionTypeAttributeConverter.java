@@ -17,21 +17,21 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
-import digital.inception.operations.model.InteractionSourcePermissionType;
+import digital.inception.operations.model.InteractionPermissionType;
 import jakarta.persistence.Converter;
 
 /**
- * The {@code InteractionSourcePermissionTypeAttributeConverter} class implements the custom JPA
- * attribute converter for the {@code InteractionSourcePermissionType} enumeration.
+ * The {@code InteractionPermissionTypeAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code InteractionPermissionType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class InteractionSourcePermissionTypeAttributeConverter
-    extends AbstractCodeEnumAttributeConverter<InteractionSourcePermissionType> {
+public class InteractionPermissionTypeAttributeConverter
+    extends AbstractCodeEnumAttributeConverter<InteractionPermissionType> {
 
-  /** Constructs a new {@code InteractionSourcePermissionTypeAttributeConverter}. */
-  public InteractionSourcePermissionTypeAttributeConverter() {
-    super(InteractionSourcePermissionType.class);
+  /** Constructs a new {@code InteractionPermissionTypeAttributeConverter}. */
+  public InteractionPermissionTypeAttributeConverter() {
+    super(InteractionPermissionType.class);
   }
 }

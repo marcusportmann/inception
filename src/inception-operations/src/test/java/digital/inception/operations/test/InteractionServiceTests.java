@@ -46,9 +46,11 @@ import digital.inception.operations.model.InteractionMimeType;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
+import digital.inception.operations.model.InteractionPermissionType;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceAttribute;
+import digital.inception.operations.model.InteractionSourcePermission;
 import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
@@ -209,6 +211,23 @@ public class InteractionServiceTests {
             TenantUtil.DEFAULT_TENANT_ID,
             "Virtual Interaction Source " + randomId());
 
+    interactionSource.setPermissions(
+        List.of(
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.ASSIGN_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.CLAIM_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.CREATE_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.DELETE_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.RETRIEVE_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.TRANSFER_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.UPDATE_INTERACTION)));
+
     interactionService.createInteractionSource(TenantUtil.DEFAULT_TENANT_ID, interactionSource);
 
     InteractionSource retrievedInteractionSource =
@@ -216,6 +235,12 @@ public class InteractionServiceTests {
             TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
 
     compareInteractionSources(interactionSource, retrievedInteractionSource);
+
+    List<InteractionSourcePermission> retrievedInteractionSourcePermissions =
+        interactionService.getInteractionSourcePermissions(
+            TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
+
+    assertEquals(7, retrievedInteractionSourcePermissions.size());
 
     Interaction interaction =
         new Interaction(

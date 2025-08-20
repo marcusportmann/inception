@@ -18,6 +18,7 @@ package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowStepDefinition;
 import java.util.List;
 import java.util.Optional;
@@ -126,6 +127,28 @@ public interface WorkflowDefinitionRepository
       nativeQuery = true)
   Optional<WorkflowDefinition> findLatestVersionById(
       @Param("workflowDefinitionId") String workflowDefinitionId);
+
+  /**
+   * Retrieve the workflow definition permissions for the workflow definition with the specified ID
+   * and version.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return the workflow definition permissions for the workflow definition with the specified ID
+   *     and version
+   */
+  @Query(
+      """
+         select p
+         from WorkflowDefinition wd
+           join wd.permissions p
+         where wd.id = :workflowDefinitionId
+           and wd.version = :workflowDefinitionVersion
+         order by p.roleCode
+         """)
+  List<WorkflowDefinitionPermission> findPermissionsByIdAndVersion(
+      @Param("workflowDefinitionId") String workflowDefinitionId,
+      @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
 
   /**
    * Retrieve the workflow step definitions for the workflow definition with the specified ID and

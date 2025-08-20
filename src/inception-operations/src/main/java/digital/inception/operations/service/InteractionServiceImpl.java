@@ -35,8 +35,10 @@ import digital.inception.operations.exception.InteractionAttachmentNotFoundExcep
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
+import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
@@ -49,11 +51,13 @@ import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
+import digital.inception.operations.model.InteractionSourcePermission;
 import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
+import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.MailboxInteractionSourceAttributeName;
 import digital.inception.operations.model.MailboxProtocol;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
@@ -84,8 +88,10 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -324,7 +330,14 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   @Override
   @Transactional
-  @CachePut(cacheNames = "interactionSources", key = "#interactionSource.id")
+  @Caching(
+      put = {@CachePut(cacheNames = "interactionSource", key = "#interactionSource.id")},
+      evict = {
+        @CacheEvict(cacheNames = "interactionSourcePermissions", key = "#interactionSource.id"),
+        @CacheEvict(
+            cacheNames = {"interactionSources", "interactionSourceSummaries"},
+            key = "#tenantId")
+      })
   public InteractionSource createInteractionSource(
       UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,
@@ -423,6 +436,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   @Override
   @Transactional
+  @Caching(
+      evict = {
+        @CacheEvict(
+            cacheNames = {"interactionSource", "interactionSourcePermissions"},
+            key = "#interactionSourceId"),
+        @CacheEvict(
+            cacheNames = {"interactionSources", "interactionSourceSummaries"},
+            key = "#tenantId")
+      })
   public void deleteInteractionSource(UUID tenantId, UUID interactionSourceId)
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
@@ -447,6 +469,32 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new ServiceUnavailableException(
           "Failed to delete the interaction source ("
               + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void delinkPartyFromInteraction(
+      UUID tenantId, DelinkPartyFromInteractionRequest delinkPartyFromInteractionRequest)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("delinkPartyFromInteractionRequest", delinkPartyFromInteractionRequest);
+
+    try {
+      interactionStore.delinkPartyFromInteraction(
+          tenantId, delinkPartyFromInteractionRequest.getInteractionId());
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delink the party from the interaction ("
+              + delinkPartyFromInteractionRequest.getInteractionId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -623,7 +671,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  @Cacheable(cacheNames = "interactionSources", key = "#interactionSourceId")
+  @Cacheable(cacheNames = "interactionSource", key = "#interactionSourceId")
   public InteractionSource getInteractionSource(UUID tenantId, UUID interactionSourceId)
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
@@ -665,6 +713,42 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  @Cacheable(cacheNames = "interactionSourcePermissions", key = "#interactionSourceId")
+  public List<InteractionSourcePermission> getInteractionSourcePermissions(
+      UUID tenantId, UUID interactionSourceId)
+      throws InvalidArgumentException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionSourceId == null) {
+      throw new InvalidArgumentException("interactionSourceId");
+    }
+
+    try {
+      if (!interactionSourceRepository.existsByTenantIdAndId(tenantId, interactionSourceId)) {
+        throw new InteractionSourceNotFoundException(tenantId, interactionSourceId);
+      }
+
+      return interactionSourceRepository.findPermissionsBySourceId(interactionSourceId);
+    } catch (InteractionSourceNotFoundException e) {
+      throw e;
+
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction source permissions for the interaction source ("
+              + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "interactionSourceSummaries", key = "#tenantId")
   public List<InteractionSourceSummary> getInteractionSourceSummaries(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -683,6 +767,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  @Cacheable(cacheNames = "interactionSources", key = "#tenantId")
   public List<InteractionSource> getInteractionSources(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -795,10 +880,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the interactions for the interaction source ("
-          + interactionSourceId
-          + ") for the tenant ("
-          + tenantId
-          + ")",
+              + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
@@ -948,6 +1033,39 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + ") exists for the interaction ("
               + interactionId
               + ") and tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void linkPartyToInteraction(
+      UUID tenantId, LinkPartyToInteractionRequest linkPartyToInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          PartyNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("linkPartyToInteractionRequest", linkPartyToInteractionRequest);
+
+    try {
+      interactionStore.linkPartyToInteraction(
+          tenantId,
+          linkPartyToInteractionRequest.getInteractionId(),
+          linkPartyToInteractionRequest.getPartyId());
+    } catch (InteractionNotFoundException | PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to link the party ("
+              + linkPartyToInteractionRequest.getPartyId()
+              + ") to the interaction ("
+              + linkPartyToInteractionRequest.getInteractionId()
+              + ") for the tenant ("
               + tenantId
               + ")",
           e);
@@ -1128,7 +1246,14 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  @CachePut(cacheNames = "interactionSources", key = "#interactionSource.id")
+  @Caching(
+      put = {@CachePut(cacheNames = "interactionSource", key = "#interactionSource.id")},
+      evict = {
+        @CacheEvict(cacheNames = "interactionSourcePermissions", key = "#interactionSource.id"),
+        @CacheEvict(
+            cacheNames = {"interactionSources", "interactionSourceSummaries"},
+            key = "#tenantId")
+      })
   public InteractionSource updateInteractionSource(
       UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,

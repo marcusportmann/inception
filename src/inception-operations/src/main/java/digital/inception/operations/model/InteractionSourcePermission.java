@@ -50,14 +50,14 @@ import java.util.UUID;
  */
 @Schema(description = "An interaction source permission")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"role_code", "type"})
+@JsonPropertyOrder({"roleCode", "type"})
 @XmlRootElement(
     name = "InteractionSourcePermission",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionSourcePermission",
     namespace = "https://inception.digital/operations",
-    propOrder = {"role_code", "type"})
+    propOrder = {"roleCode", "type"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_source_permissions")
@@ -86,16 +86,16 @@ public class InteractionSourcePermission implements Serializable {
   @Column(name = "source_id", nullable = false)
   private UUID sourceId;
 
-  /** The interaction source permission type. */
+  /** The interaction permission type. */
   @Schema(
-      description = "The interaction source permission type",
+      description = "The interaction permission type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Id
   @Column(name = "type", length = 50, nullable = false)
-  private InteractionSourcePermissionType type;
+  private InteractionPermissionType type;
 
   /** Constructs a new {@code InteractionSourcePermission}. */
   public InteractionSourcePermission() {}
@@ -104,9 +104,9 @@ public class InteractionSourcePermission implements Serializable {
    * Constructs a new {@code InteractionSourcePermission}.
    *
    * @param roleCode the code for the role the interaction source permission is assigned to
-   * @param type the interaction source permission type
+   * @param type the interaction permission type
    */
-  public InteractionSourcePermission(String roleCode, InteractionSourcePermissionType type) {
+  public InteractionSourcePermission(String roleCode, InteractionPermissionType type) {
     this.roleCode = roleCode;
     this.type = type;
   }
@@ -148,11 +148,11 @@ public class InteractionSourcePermission implements Serializable {
   }
 
   /**
-   * Returns the interaction source permission type.
+   * Returns the interaction permission type.
    *
-   * @return the interaction source permission type
+   * @return the interaction permission type
    */
-  public InteractionSourcePermissionType getType() {
+  public InteractionPermissionType getType() {
     return type;
   }
 
@@ -169,10 +169,10 @@ public class InteractionSourcePermission implements Serializable {
   }
 
   /**
-   * Set the interaction source the interaction source permission type is associated with.
+   * Set the interaction source the interaction permission type is associated with.
    *
-   * @param interactionSource the interaction source the interaction source permission type is
-   *     associated with
+   * @param interactionSource the interaction source the interaction permission type is associated
+   *     with
    */
   @JsonBackReference("interactionSourcePermissionReference")
   @Schema(hidden = true)
@@ -194,11 +194,11 @@ public class InteractionSourcePermission implements Serializable {
   }
 
   /**
-   * Set the interaction source permission type.
+   * Set the interaction permission type.
    *
-   * @param type the interaction source permission type
+   * @param type the interaction permission type
    */
-  public void setType(InteractionSourcePermissionType type) {
+  public void setType(InteractionPermissionType type) {
     this.type = type;
   }
 

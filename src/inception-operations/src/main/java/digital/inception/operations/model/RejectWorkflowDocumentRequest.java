@@ -39,19 +39,26 @@ import java.util.UUID;
  */
 @Schema(description = "A request to reject a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowDocumentId", "rejectionReason"})
+@JsonPropertyOrder({"workflowDocumentId", "rejectionReason", "description"})
 @XmlRootElement(
     name = "RejectWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "RejectWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowDocumentId", "rejectionReason"})
+    propOrder = {"workflowDocumentId", "rejectionReason", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class RejectWorkflowDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The description for the workflow document. */
+  @Schema(description = "The description for the workflow document")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  private String description;
 
   /** The reason the workflow document was rejected. */
   @Schema(description = "The reason the workflow document was rejected")
@@ -85,6 +92,29 @@ public class RejectWorkflowDocumentRequest implements Serializable {
   }
 
   /**
+   * Constructs a new {@code RejectWorkflowDocumentRequest}.
+   *
+   * @param workflowDocumentId the ID for the workflow document
+   * @param rejectionReason the reason the workflow document was rejected
+   * @param description the description for the workflow document
+   */
+  public RejectWorkflowDocumentRequest(
+      UUID workflowDocumentId, String rejectionReason, String description) {
+    this.workflowDocumentId = workflowDocumentId;
+    this.rejectionReason = rejectionReason;
+    this.description = description;
+  }
+
+  /**
+   * Returns the description for the workflow document.
+   *
+   * @return the description for the workflow document
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
    * Returns the reason the workflow document was rejected.
    *
    * @return the reason the workflow document was rejected
@@ -100,6 +130,15 @@ public class RejectWorkflowDocumentRequest implements Serializable {
    */
   public UUID getWorkflowDocumentId() {
     return workflowDocumentId;
+  }
+
+  /**
+   * Set the description for the workflow document.
+   *
+   * @param description the description for the workflow document
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

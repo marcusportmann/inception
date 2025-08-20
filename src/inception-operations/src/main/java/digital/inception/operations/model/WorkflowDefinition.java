@@ -839,13 +839,13 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Remove the permission with the specified role code and workflow definition permission type for
-   * the workflow definition.
+   * Remove the permission with the specified role code and workflow permission type for the
+   * workflow definition.
    *
    * @param roleCode the role code for the permission
-   * @param type the workflow definition permission type
+   * @param type the workflow permission type
    */
-  public void removePermission(String roleCode, WorkflowDefinitionPermissionType type) {
+  public void removePermission(String roleCode, WorkflowPermissionType type) {
     permissions.removeIf(
         existingPermission ->
             (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), roleCode)

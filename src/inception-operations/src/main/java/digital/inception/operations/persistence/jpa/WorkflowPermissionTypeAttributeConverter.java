@@ -17,21 +17,21 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
-import digital.inception.operations.model.WorkflowDefinitionPermissionType;
+import digital.inception.operations.model.WorkflowPermissionType;
 import jakarta.persistence.Converter;
 
 /**
- * The {@code WorkflowDefinitionPermissionTypeAttributeConverter} class implements the custom JPA
- * attribute converter for the {@code WorkflowDefinitionPermissionType} enumeration.
+ * The {@code WorkflowPermissionTypeAttributeConverter} class implements the custom JPA attribute
+ * converter for the {@code WorkflowPermissionType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class WorkflowDefinitionPermissionTypeAttributeConverter
-    extends AbstractCodeEnumAttributeConverter<WorkflowDefinitionPermissionType> {
+public class WorkflowPermissionTypeAttributeConverter
+    extends AbstractCodeEnumAttributeConverter<WorkflowPermissionType> {
 
-  /** Constructs a new {@code WorkflowDefinitionPermissionTypeAttributeConverter}. */
-  public WorkflowDefinitionPermissionTypeAttributeConverter() {
-    super(WorkflowDefinitionPermissionType.class);
+  /** Constructs a new {@code WorkflowPermissionTypeAttributeConverter}. */
+  public WorkflowPermissionTypeAttributeConverter() {
+    super(WorkflowPermissionType.class);
   }
 }

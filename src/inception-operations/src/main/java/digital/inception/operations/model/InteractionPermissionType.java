@@ -23,17 +23,15 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code InteractionSourcePermissionType} enumeration defines the possible interaction source
- * permission types.
+ * The {@code InteractionPermissionType} enumeration defines the possible interaction permission
+ * types.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The interaction source permission type")
+@Schema(description = "The interaction permission type")
 @XmlEnum
-@XmlType(
-    name = "InteractionSourcePermissionType",
-    namespace = "https://inception.digital/operations")
-public enum InteractionSourcePermissionType implements CodeEnum {
+@XmlType(name = "InteractionPermissionType", namespace = "https://inception.digital/operations")
+public enum InteractionPermissionType implements CodeEnum {
 
   /** Assign Interaction. */
   @XmlEnumValue("AssignInteraction")
@@ -67,24 +65,24 @@ public enum InteractionSourcePermissionType implements CodeEnum {
 
   private final String description;
 
-  InteractionSourcePermissionType(String code, String description) {
+  InteractionPermissionType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the interaction source permission type.
+   * Returns the code for the interaction permission type.
    *
-   * @return the code for the interaction source permission type
+   * @return the code for the interaction permission type
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the interaction source permission type.
+   * Returns the description for the interaction permission type.
    *
-   * @return the description for the interaction source permission type
+   * @return the description for the interaction permission type
    */
   public String description() {
     return description;

@@ -31,24 +31,24 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The {@code LinkInteractionToWorkflowRequest} class represents a request to link an interaction to
- * a workflow.
+ * The {@code DelinkPartyFromInteractionRequest} class represents a request to delink the party from
+ * an interaction.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A request to link an interaction to a workflow")
+@Schema(description = "A request to delink the party from an interaction")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "interactionId"})
+@JsonPropertyOrder({"interactionId"})
 @XmlRootElement(
-    name = "LinkInteractionToWorkflowRequest",
+    name = "DelinkPartyFromInteractionRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "LinkInteractionToWorkflowRequest",
+    name = "DelinkPartyFromInteractionRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "interactionId"})
+    propOrder = {"interactionId"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class LinkInteractionToWorkflowRequest implements Serializable {
+public class DelinkPartyFromInteractionRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -59,24 +59,15 @@ public class LinkInteractionToWorkflowRequest implements Serializable {
   @NotNull
   private UUID interactionId;
 
-  /** The ID for the workflow. */
-  @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "WorkflowId", required = true)
-  @NotNull
-  private UUID workflowId;
-
-  /** Constructs a new {@code LinkInteractionToWorkflowRequest}. */
-  public LinkInteractionToWorkflowRequest() {}
+  /** Constructs a new {@code DelinkPartyFromInteractionRequest}. */
+  public DelinkPartyFromInteractionRequest() {}
 
   /**
-   * Constructs a new {@code LinkInteractionToWorkflowRequest}.
+   * Constructs a new {@code DelinkPartyFromInteractionRequest}.
    *
-   * @param workflowId the ID for the workflow
    * @param interactionId the ID for the interaction
    */
-  public LinkInteractionToWorkflowRequest(UUID workflowId, UUID interactionId) {
-    this.workflowId = workflowId;
+  public DelinkPartyFromInteractionRequest(UUID interactionId) {
     this.interactionId = interactionId;
   }
 
@@ -90,29 +81,11 @@ public class LinkInteractionToWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the ID for the workflow.
-   *
-   * @return the ID for the workflow
-   */
-  public UUID getWorkflowId() {
-    return workflowId;
-  }
-
-  /**
    * Set the ID for the interaction.
    *
    * @param interactionId the ID for the interaction
    */
   public void setInteractionId(UUID interactionId) {
     this.interactionId = interactionId;
-  }
-
-  /**
-   * Set the ID for the workflow.
-   *
-   * @param workflowId the ID for the workflow
-   */
-  public void setWorkflowId(UUID workflowId) {
-    this.workflowId = workflowId;
   }
 }

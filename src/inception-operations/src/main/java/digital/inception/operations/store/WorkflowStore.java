@@ -267,6 +267,19 @@ public interface WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow ID for the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the workflow ID for the workflow document
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow ID could not be retrieved for the workflow
+   *     document
+   */
+  UUID getWorkflowIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow note.
    *
    * @param tenantId the ID for the tenant
@@ -501,13 +514,12 @@ public interface WorkflowStore {
       throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
 
   /**
-   * Check whether the workflow document with the specified tenant ID, workflow ID and ID exists.
+   * Check whether the workflow document exists.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow document is associated with
    * @param workflowDocumentId the ID for the workflow document
-   * @return {@code true} if the workflow document with the specified tenant ID, workflow ID and ID
-   *     exists or {@code false} otherwise
+   * @return {@code true} if the workflow document exists or {@code false} otherwise
    * @throws ServiceUnavailableException if the existence of the workflow document could not be
    *     determined
    */
@@ -515,24 +527,22 @@ public interface WorkflowStore {
       throws ServiceUnavailableException;
 
   /**
-   * Check whether the workflow with the specified tenant ID and ID exists.
+   * Check whether the workflow exists.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
-   * @return {@code true} if the workflow with the specified tenant ID and ID exists or {@code
-   *     false} otherwise
+   * @return {@code true} if the workflow exists or {@code false} otherwise
    * @throws ServiceUnavailableException if the existence of the workflow could not be determined
    */
   boolean workflowExists(UUID tenantId, UUID workflowId) throws ServiceUnavailableException;
 
   /**
-   * Check whether the workflow note with the specified tenant ID, workflow ID and ID exists.
+   * Check whether the workflow note exists.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow note is associated with
    * @param workflowNoteId the ID for the workflow note
-   * @return {@code true} if the workflow note with the specified tenant ID, workflow ID and ID
-   *     exists or {@code false} otherwise
+   * @return {@code true} if the workflow note exists or {@code false} otherwise
    * @throws ServiceUnavailableException if the existence of the workflow note could not be
    *     determined
    */

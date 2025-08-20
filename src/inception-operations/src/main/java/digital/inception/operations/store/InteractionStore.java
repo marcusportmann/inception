@@ -24,6 +24,7 @@ import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
+import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
@@ -127,6 +128,17 @@ public interface InteractionStore {
    */
   void deleteInteractionNote(UUID tenantId, UUID interactionNoteId)
       throws InteractionNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delink the party from an interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the party could not be delinked from the interaction
+   */
+  void delinkPartyFromInteraction(UUID tenantId, UUID interactionId)
+      throws InteractionNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the interaction.
@@ -251,7 +263,8 @@ public interface InteractionStore {
    * Retrieve the summaries for the interactions for the interaction source.
    *
    * @param tenantId the ID for the tenant
-   * @param interactionSourceId the ID for the interaction source the interactions are associated with
+   * @param interactionSourceId the ID for the interaction source the interactions are associated
+   *     with
    * @param status the status filter to apply to the interaction summaries
    * @param direction the direction filter to apply to the interaction summaries, i.e., inbound or
    *     outbound
@@ -302,29 +315,40 @@ public interface InteractionStore {
       throws ServiceUnavailableException;
 
   /**
-   * Check whether the interaction with the specified tenant ID and ID exists.
+   * Check whether the interaction exists.
    *
-   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
-   * @return {@code true} if the interaction with the specified tenant ID and ID exists or {@code
-   *     false} otherwise
+   * @return {@code true} if the interaction exists or {@code false} otherwise
    * @throws ServiceUnavailableException if the existence of the interaction could not be determined
    */
   boolean interactionExists(UUID tenantId, UUID interactionId) throws ServiceUnavailableException;
 
   /**
-   * Check whether the interaction note with the specified tenant ID, interaction ID and ID exists.
+   * Check whether the interaction note exists.
    *
-   * @param tenantId the ID for the tenant the interaction note is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction the interaction note is associated with
    * @param interactionNoteId the ID for the interaction note
-   * @return {@code true} if the interaction note with the specified tenant ID, interaction ID and
-   *     ID exists or {@code false} otherwise
+   * @return {@code true} if the interaction note exists or {@code false} otherwise
    * @throws ServiceUnavailableException if the existence of the interaction note could not be
    *     determined
    */
   boolean interactionNoteExists(UUID tenantId, UUID interactionId, UUID interactionNoteId)
       throws ServiceUnavailableException;
+
+  /**
+   * Link a party to an interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param partyId the ID for the party
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the party could not be linked to the interaction
+   */
+  void linkPartyToInteraction(UUID tenantId, UUID interactionId, UUID partyId)
+      throws InteractionNotFoundException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Reset the interaction locks.

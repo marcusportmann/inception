@@ -23,17 +23,14 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code WorkflowDefinitionPermissionType} enumeration defines the possible workflow definition
- * permission types.
+ * The {@code WorkflowPermissionType} enumeration defines the possible workflow permission types.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The workflow definition permission type")
+@Schema(description = "The workflow permission type")
 @XmlEnum
-@XmlType(
-    name = "WorkflowDefinitionPermissionType",
-    namespace = "https://inception.digital/operations")
-public enum WorkflowDefinitionPermissionType implements CodeEnum {
+@XmlType(name = "WorkflowPermissionType", namespace = "https://inception.digital/operations")
+public enum WorkflowPermissionType implements CodeEnum {
 
   /** Initiate Workflow. */
   @XmlEnumValue("InitiateWorkflow")
@@ -43,24 +40,24 @@ public enum WorkflowDefinitionPermissionType implements CodeEnum {
 
   private final String description;
 
-  WorkflowDefinitionPermissionType(String code, String description) {
+  WorkflowPermissionType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the workflow definition permission type.
+   * Returns the code for the workflow permission type.
    *
-   * @return the code for the workflow definition permission type
+   * @return the code for the workflow permission type
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the workflow definition permission type.
+   * Returns the description for the workflow permission type.
    *
-   * @return the description for the workflow definition permission type
+   * @return the description for the workflow permission type
    */
   public String description() {
     return description;

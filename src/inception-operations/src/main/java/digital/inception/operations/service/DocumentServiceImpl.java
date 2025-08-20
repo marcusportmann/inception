@@ -52,6 +52,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -167,6 +169,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @CacheEvict(cacheNames = "documentAttributeDefinitions", allEntries = true)
   public void createDocumentAttributeDefinition(
       DocumentAttributeDefinition documentAttributeDefinition)
       throws InvalidArgumentException,
@@ -299,6 +302,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @CacheEvict(cacheNames = "documentAttributeDefinitions", allEntries = true)
   public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
       throws InvalidArgumentException,
           DocumentAttributeDefinitionNotFoundException,
@@ -537,6 +541,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @Cacheable(cacheNames = "documentAttributeDefinitions", key = "'ALL'")
   public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
     try {
@@ -818,6 +823,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @CacheEvict(cacheNames = "documentAttributeDefinitions", allEntries = true)
   public void updateDocumentAttributeDefinition(
       DocumentAttributeDefinition documentAttributeDefinition)
       throws InvalidArgumentException,

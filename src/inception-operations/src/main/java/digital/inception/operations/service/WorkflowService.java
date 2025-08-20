@@ -60,6 +60,7 @@ import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
@@ -92,11 +93,10 @@ public interface WorkflowService {
    *     already exists
    * @throws ServiceUnavailableException if the workflow attribute definition could not be created
    */
-  void createWorkflowAttributeDefinition(
-      WorkflowAttributeDefinition workflowAttributeDefinition)
+  void createWorkflowAttributeDefinition(WorkflowAttributeDefinition workflowAttributeDefinition)
       throws InvalidArgumentException,
-      DuplicateWorkflowAttributeDefinitionException,
-      ServiceUnavailableException;
+          DuplicateWorkflowAttributeDefinitionException,
+          ServiceUnavailableException;
 
   /**
    * Create the workflow definition version.
@@ -181,11 +181,10 @@ public interface WorkflowService {
    *     not be found
    * @throws ServiceUnavailableException if the workflow attribute definition could not be deleted
    */
-  void deleteWorkflowAttributeDefinition(
-      String workflowAttributeDefinitionCode)
+  void deleteWorkflowAttributeDefinition(String workflowAttributeDefinitionCode)
       throws InvalidArgumentException,
-      WorkflowAttributeDefinitionNotFoundException,
-      ServiceUnavailableException;
+          WorkflowAttributeDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Delete all versions of the workflow definition.
@@ -351,11 +350,10 @@ public interface WorkflowService {
    *     not be found
    * @throws ServiceUnavailableException if the workflow attribute definition could not be retrieved
    */
-  WorkflowAttributeDefinition getWorkflowAttributeDefinition(
-      String workflowAttributeDefinitionCode)
+  WorkflowAttributeDefinition getWorkflowAttributeDefinition(String workflowAttributeDefinitionCode)
       throws InvalidArgumentException,
-      WorkflowAttributeDefinitionNotFoundException,
-      ServiceUnavailableException;
+          WorkflowAttributeDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the workflow attribute definitions.
@@ -366,8 +364,7 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the workflow attribute definitions could not be
    *     retrieved
    */
-  List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(
-      UUID tenantId)
+  List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -427,6 +424,24 @@ public interface WorkflowService {
    */
   WorkflowDefinitionId getWorkflowDefinitionIdForWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the permissions for the workflow definition.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version for the workflow definition
+   * @return the permissions for the workflow definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws ServiceUnavailableException if the permissions for the workflow definition could not be
+   *     retrieved
+   */
+  List<WorkflowDefinitionPermission> getWorkflowDefinitionPermissions(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the summaries for the workflow definitions associated with the workflow definition
@@ -525,6 +540,22 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the workflow engines could not be retrieved
    */
   List<WorkflowEngine> getWorkflowEngines() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow ID for the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the workflow ID for the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow ID could not be retrieved for the workflow
+   *     document
+   */
+  UUID getWorkflowIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the workflow note.
@@ -628,7 +659,7 @@ public interface WorkflowService {
   /**
    * Check whether a workflow attribute with the specified code is valid for a workflow.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowDefinitionId the ID for the workflow definition the workflow is associated with
    * @param attributeCode the code for the workflow attribute
    * @return {@code true} if a workflow attribute with the specified code is valid or {@code false}
@@ -740,9 +771,7 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the workflow could not be suspended
    */
   void suspendWorkflow(
-      UUID tenantId,
-      SuspendWorkflowRequest suspendWorkflowRequest,
-      String suspendedBy)
+      UUID tenantId, SuspendWorkflowRequest suspendWorkflowRequest, String suspendedBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -755,13 +784,11 @@ public interface WorkflowService {
    * @throws WorkflowStepNotFoundException if the workflow step could not be found
    * @throws ServiceUnavailableException if the workflow step could not be suspended
    */
-  void suspendWorkflowStep(
-      UUID tenantId,
-      SuspendWorkflowStepRequest suspendWorkflowStepRequest)
+  void suspendWorkflowStep(UUID tenantId, SuspendWorkflowStepRequest suspendWorkflowStepRequest)
       throws InvalidArgumentException,
-      WorkflowNotFoundException,
-      WorkflowStepNotFoundException,
-      ServiceUnavailableException;
+          WorkflowNotFoundException,
+          WorkflowStepNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Unsuspend a workflow.
@@ -772,9 +799,7 @@ public interface WorkflowService {
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws ServiceUnavailableException if the workflow could not be unsuspended
    */
-  void unsuspendWorkflow(
-      UUID tenantId,
-      UnsuspendWorkflowRequest unsuspendWorkflowRequest)
+  void unsuspendWorkflow(UUID tenantId, UnsuspendWorkflowRequest unsuspendWorkflowRequest)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -788,12 +813,11 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the workflow step could not be unsuspended
    */
   void unsuspendWorkflowStep(
-      UUID tenantId,
-      UnsuspendWorkflowStepRequest unsuspendWorkflowStepRequest)
+      UUID tenantId, UnsuspendWorkflowStepRequest unsuspendWorkflowStepRequest)
       throws InvalidArgumentException,
-      WorkflowNotFoundException,
-      WorkflowStepNotFoundException,
-      ServiceUnavailableException;
+          WorkflowNotFoundException,
+          WorkflowStepNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the workflow.
@@ -819,11 +843,10 @@ public interface WorkflowService {
    *     not be found
    * @throws ServiceUnavailableException if the workflow attribute definition could not be updated
    */
-  void updateWorkflowAttributeDefinition(
-      WorkflowAttributeDefinition workflowAttributeDefinition)
+  void updateWorkflowAttributeDefinition(WorkflowAttributeDefinition workflowAttributeDefinition)
       throws InvalidArgumentException,
-      WorkflowAttributeDefinitionNotFoundException,
-      ServiceUnavailableException;
+          WorkflowAttributeDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the workflow definition version.
@@ -950,13 +973,12 @@ public interface WorkflowService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether the workflow document with the specified tenant ID, workflow ID and ID exists.
+   * Check whether the workflow document exists.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow document is associated with
    * @param workflowDocumentId the ID for the workflow document
-   * @return {@code true} if the workflow document with the specified tenant ID, workflow ID and ID
-   *     exists or {@code false} otherwise
+   * @return {@code true} if the workflow document exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the existence of the workflow document could not be
    *     determined
@@ -976,12 +998,11 @@ public interface WorkflowService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether the workflow with the specified tenant ID and ID exists.
+   * Check whether the workflow exists.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
-   * @return {@code true} if the workflow with the specified tenant ID and ID exists or {@code
-   *     false} otherwise
+   * @return {@code true} if the workflow exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the existence of the workflow could not be determined
    */
@@ -989,19 +1010,16 @@ public interface WorkflowService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether the workflow note with the specified tenant ID, workflow ID and ID exists.
+   * Check whether the workflow note exists.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow note is associated with
    * @param workflowNoteId the ID for the workflow note
-   * @return {@code true} if the workflow note with the specified tenant ID, workflow ID and ID
-   *     exists or {@code false} otherwise
+   * @return {@code true} if the workflow note exists or {@code false} otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the existence of the workflow note could not be
    *     determined
    */
   boolean workflowNoteExists(UUID tenantId, UUID workflowId, UUID workflowNoteId)
       throws InvalidArgumentException, ServiceUnavailableException;
-
-
 }

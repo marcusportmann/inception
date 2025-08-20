@@ -48,14 +48,14 @@ import java.io.Serializable;
  */
 @Schema(description = "A workflow definition permission")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"role_code", "type"})
+@JsonPropertyOrder({"roleCode", "type"})
 @XmlRootElement(
     name = "WorkflowDefinitionPermission",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinitionPermission",
     namespace = "https://inception.digital/operations",
-    propOrder = {"role_code", "type"})
+    propOrder = {"roleCode", "type"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_definition_permissions")
@@ -94,16 +94,14 @@ public class WorkflowDefinitionPermission implements Serializable {
   @Column(name = "role_code", length = 100, nullable = false)
   private String roleCode;
 
-  /** The workflow definition permission type. */
-  @Schema(
-      description = "The workflow definition permission type",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The workflow permission type. */
+  @Schema(description = "The workflow permission type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Id
   @Column(name = "type", length = 50, nullable = false)
-  private WorkflowDefinitionPermissionType type;
+  private WorkflowPermissionType type;
 
   /** Constructs a new {@code WorkflowDefinitionPermission}. */
   public WorkflowDefinitionPermission() {}
@@ -112,9 +110,9 @@ public class WorkflowDefinitionPermission implements Serializable {
    * Constructs a new {@code WorkflowDefinitionPermission}.
    *
    * @param roleCode the code for the role the workflow definition permission is assigned to
-   * @param type the workflow definition permission type
+   * @param type the workflow permission type
    */
-  public WorkflowDefinitionPermission(String roleCode, WorkflowDefinitionPermissionType type) {
+  public WorkflowDefinitionPermission(String roleCode, WorkflowPermissionType type) {
     this.roleCode = roleCode;
     this.type = type;
   }
@@ -157,11 +155,11 @@ public class WorkflowDefinitionPermission implements Serializable {
   }
 
   /**
-   * Returns the workflow definition permission type.
+   * Returns the workflow permission type.
    *
-   * @return the workflow definition permission type
+   * @return the workflow permission type
    */
-  public WorkflowDefinitionPermissionType getType() {
+  public WorkflowPermissionType getType() {
     return type;
   }
 
@@ -188,19 +186,19 @@ public class WorkflowDefinitionPermission implements Serializable {
   }
 
   /**
-   * Set the workflow definition permission type.
+   * Set the workflow permission type.
    *
-   * @param type the workflow definition permission type
+   * @param type the workflow permission type
    */
-  public void setType(WorkflowDefinitionPermissionType type) {
+  public void setType(WorkflowPermissionType type) {
     this.type = type;
   }
 
   /**
-   * Set the workflow definition the workflow definition permission type is associated with.
+   * Set the workflow definition the workflow permission type is associated with.
    *
-   * @param workflowDefinition the workflow definition the workflow definition permission type is
-   *     associated with
+   * @param workflowDefinition the workflow definition the workflow permission type is associated
+   *     with
    */
   @JsonBackReference("workflowDefinitionPermissionReference")
   @Schema(hidden = true)
