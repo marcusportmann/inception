@@ -70,6 +70,7 @@ import java.util.UUID;
   "status",
   "partyId",
   "externalReference",
+  "engineInstanceId",
   "attributes",
   "steps",
   "data",
@@ -79,6 +80,9 @@ import java.util.UUID;
   "suspendedBy",
   "finalized",
   "finalizedBy",
+  "canceled",
+  "canceledBy",
+  "cancellationReason",
   "updated",
   "updatedBy"
 })
@@ -95,6 +99,7 @@ import java.util.UUID;
       "status",
       "partyId",
       "externalReference",
+      "engineInstanceId",
       "attributes",
       "steps",
       "data",
@@ -104,6 +109,9 @@ import java.util.UUID;
       "suspendedBy",
       "finalized",
       "finalizedBy",
+      "canceled",
+      "canceledBy",
+      "cancellationReason",
       "updated",
       "updatedBy"
     })
@@ -160,8 +168,33 @@ public class Workflow implements Serializable {
   @JoinColumn(name = "workflow_id", insertable = false, updatable = false)
   private final List<WorkflowStep> steps = new ArrayList<>();
 
-  /** The data for the workflow. */
-  @Schema(description = "The data for the workflow")
+  /** The date and time the workflow was canceled. */
+  @Schema(description = "The date and time the workflow was canceled")
+  @JsonProperty
+  @XmlElement(name = "Canceled")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "canceled")
+  private OffsetDateTime canceled;
+
+  /** The person or system who canceled the workflow. */
+  @Schema(description = "The person or system who canceled the workflow")
+  @JsonProperty
+  @XmlElement(name = "CanceledBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "canceled_by", length = 100)
+  private String canceledBy;
+
+  /** The reason the workflow was canceled. */
+  @Schema(description = "The reason the workflow was canceled")
+  @JsonProperty
+  @XmlElement(name = "CancellationReason")
+  @Size(max = 200)
+  @Column(name = "cancellation_reason", length = 200)
+  private String cancellationReason;
+
+  /** The XML or JSON data for the workflow. */
+  @Schema(description = "The XML or JSON data for the workflow")
   @JsonProperty
   @XmlElement(name = "Data")
   @Size(max = 10485760)
@@ -188,6 +221,15 @@ public class Workflow implements Serializable {
   @NotNull
   @Column(name = "definition_version", nullable = false)
   private int definitionVersion;
+
+  /** The ID of the corresponding process or case instance in the workflow engine. */
+  @Schema(
+      description = "The ID of the corresponding process or case instance in the workflow engine")
+  @JsonProperty
+  @XmlElement(name = "EngineInstanceId")
+  @Size(min = 1, max = 100)
+  @Column(name = "engine_instance_id", length = 100)
+  private String engineInstanceId;
 
   /** The external reference used to link this workflow to an external system. */
   @Schema(description = "The external reference used to link this workflow to an external system")
@@ -323,7 +365,7 @@ public class Workflow implements Serializable {
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
    * @param attributes the attributes for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    * @param initiated the date and time the workflow was initiated
    * @param initiatedBy the person or system that initiated the workflow
    */
@@ -359,7 +401,7 @@ public class Workflow implements Serializable {
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
    * @param attributes the attributes for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    * @param initiated the date and time the workflow was initiated
    * @param initiatedBy the person or system that initiated the workflow
    */
@@ -481,9 +523,36 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the data for the workflow.
+   * Returns the date and time the workflow was canceled.
    *
-   * @return the data for the workflow
+   * @return the date and time the workflow was canceled
+   */
+  public OffsetDateTime getCanceled() {
+    return canceled;
+  }
+
+  /**
+   * Returns the person or system who canceled the workflow.
+   *
+   * @return the person or system who canceled the workflow
+   */
+  public String getCanceledBy() {
+    return canceledBy;
+  }
+
+  /**
+   * Returns the reason the workflow was canceled.
+   *
+   * @return the reason the workflow was canceled
+   */
+  public String getCancellationReason() {
+    return cancellationReason;
+  }
+
+  /**
+   * Returns the XML or JSON data for the workflow.
+   *
+   * @return the XML or JSON data for the workflow
    */
   public String getData() {
     return data;
@@ -505,6 +574,15 @@ public class Workflow implements Serializable {
    */
   public int getDefinitionVersion() {
     return definitionVersion;
+  }
+
+  /**
+   * Returns the ID of the corresponding process or case instance in the workflow engine.
+   *
+   * @return the ID of the corresponding process or case instance in the workflow engine
+   */
+  public String getEngineInstanceId() {
+    return engineInstanceId;
   }
 
   /**
@@ -694,9 +772,36 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the data for the workflow.
+   * Set the date and time the workflow was canceled.
    *
-   * @param data the data for the workflow
+   * @param canceled the date and time the workflow was canceled
+   */
+  public void setCanceled(OffsetDateTime canceled) {
+    this.canceled = canceled;
+  }
+
+  /**
+   * Set the person or system who canceled the workflow.
+   *
+   * @param canceledBy the person or system who canceled the workflow
+   */
+  public void setCanceledBy(String canceledBy) {
+    this.canceledBy = canceledBy;
+  }
+
+  /**
+   * Set the reason the workflow was canceled.
+   *
+   * @param cancellationReason the reason the workflow was canceled
+   */
+  public void setCancellationReason(String cancellationReason) {
+    this.cancellationReason = cancellationReason;
+  }
+
+  /**
+   * Set the XML or JSON data for the workflow.
+   *
+   * @param data the XML or JSON data for the workflow
    */
   public void setData(String data) {
     this.data = data;
@@ -718,6 +823,16 @@ public class Workflow implements Serializable {
    */
   public void setDefinitionVersion(int definitionVersion) {
     this.definitionVersion = definitionVersion;
+  }
+
+  /**
+   * Set the ID of the corresponding process or case instance in the workflow engine.
+   *
+   * @param engineInstanceId the ID of the corresponding process or case instance in the workflow
+   *     engine
+   */
+  public void setEngineInstanceId(String engineInstanceId) {
+    this.engineInstanceId = engineInstanceId;
   }
 
   /**

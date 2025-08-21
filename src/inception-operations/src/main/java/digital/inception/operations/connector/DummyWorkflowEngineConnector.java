@@ -16,13 +16,135 @@
 
 package digital.inception.operations.connector;
 
+import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowAttribute;
+import digital.inception.operations.model.WorkflowDefinition;
+import digital.inception.operations.model.WorkflowEngine;
+import digital.inception.operations.model.WorkflowFormType;
+import java.util.List;
+import java.util.UUID;
+import org.springframework.context.ApplicationContext;
+
 /**
  * The {@code DummyWorkflowEngineConnector} class provides the dummy workflow engine connector.
  *
  * @author Marcus Portmann
  */
-public class DummyWorkflowEngineConnector implements WorkflowEngineConnector {
+public class DummyWorkflowEngineConnector extends AbstractWorkflowEngineConnectorBase
+    implements WorkflowEngineConnector {
 
-  /** Constructs a new {@code DummyWorkflowEngineConnector}. */
-  public DummyWorkflowEngineConnector() {}
+  /**
+   * Constructs a {@code DummyWorkflowEngineConnector}.
+   *
+   * @param applicationContext the Spring application context
+   * @param workflowEngine the workflow engine the workflow engine connector is associated with
+   */
+  public DummyWorkflowEngineConnector(
+      ApplicationContext applicationContext, WorkflowEngine workflowEngine) {
+    super(applicationContext, workflowEngine);
+  }
+
+  @Override
+  public void cancelWorkflow(
+      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+      throws WorkflowEngineConnectorException {
+    log.info(
+        "Cancelling the workflow ("
+            + workflow.getId()
+            + ") with the workflow definition ("
+            + workflowDefinition.getId()
+            + ") version ("
+            + workflowDefinition.getVersion()
+            + ") for the tenant ("
+            + tenantId
+            + ")");
+  }
+
+  @Override
+  public byte[] getWorkflowData(
+      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+      throws WorkflowEngineConnectorException {
+    return new byte[0];
+  }
+
+  @Override
+  public byte[] getWorkflowForm(
+      UUID tenantId,
+      WorkflowDefinition workflowDefinition,
+      Workflow workflow,
+      WorkflowFormType workflowFormType)
+      throws WorkflowEngineConnectorException {
+    return new byte[0];
+  }
+
+  @Override
+  public String initiateWorkflow(
+      UUID tenantId,
+      WorkflowDefinition workflowDefinition,
+      List<WorkflowAttribute> attributes,
+      String data)
+      throws WorkflowEngineConnectorException {
+    String engineWorkflowId = UUID.randomUUID().toString();
+
+    log.info(
+        "Initiated the workflow ("
+            + engineWorkflowId
+            + ") with the workflow definition ("
+            + workflowDefinition.getId()
+            + ") version ("
+            + workflowDefinition.getVersion()
+            + ") for the tenant ("
+            + tenantId
+            + ")");
+
+    return engineWorkflowId;
+  }
+
+  @Override
+  public void suspendWorkflow(
+      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+      throws WorkflowEngineConnectorException {
+    log.info(
+        "Suspending the workflow ("
+            + workflow.getId()
+            + ") with the workflow definition ("
+            + workflowDefinition.getId()
+            + ") version ("
+            + workflowDefinition.getVersion()
+            + ") for the tenant ("
+            + tenantId
+            + ")");
+  }
+
+  @Override
+  public void unsuspendWorkflow(
+      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+      throws WorkflowEngineConnectorException {
+    log.info(
+        "Unsuspending the workflow ("
+            + workflow.getId()
+            + ") with the workflow definition ("
+            + workflowDefinition.getId()
+            + ") version ("
+            + workflowDefinition.getVersion()
+            + ") for the tenant ("
+            + tenantId
+            + ")");
+  }
+
+  @Override
+  public void updateWorkflowData(
+      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow, String data)
+      throws WorkflowEngineConnectorException {
+    log.info(
+        "Updating the data for the workflow ("
+            + workflow.getId()
+            + ") with the workflow definition ("
+            + workflowDefinition.getId()
+            + ") version ("
+            + workflowDefinition.getVersion()
+            + ") for the tenant ("
+            + tenantId
+            + ")");
+  }
 }

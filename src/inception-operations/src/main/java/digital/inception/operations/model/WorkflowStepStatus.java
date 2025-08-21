@@ -44,9 +44,9 @@ public enum WorkflowStepStatus implements CodeEnum {
   @XmlEnumValue("Completed")
   COMPLETED("completed", "Completed"),
 
-  /** Cancelled. */
-  @XmlEnumValue("Cancelled")
-  CANCELLED("cancelled", "Cancelled"),
+  /** Canceled. */
+  @XmlEnumValue("Canceled")
+  CANCELED("canceled", "Canceled"),
 
   /** Terminated. */
   @XmlEnumValue("Terminated")

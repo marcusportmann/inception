@@ -38,6 +38,7 @@ import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundExc
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
+import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
@@ -112,6 +113,36 @@ public class WorkflowApiControllerImpl extends SecureApiController
     super(applicationContext);
 
     this.workflowService = workflowService;
+  }
+
+  @Override
+  public void cancelWorkflow(UUID tenantId, CancelWorkflowRequest cancelWorkflowRequest)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, cancelWorkflowRequest.getWorkflowId())) {
+        throw new WorkflowNotFoundException(tenantId, cancelWorkflowRequest.getWorkflowId());
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to cancel the workflow ("
+              + cancelWorkflowRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+
+    workflowService.cancelWorkflow(tenantId, cancelWorkflowRequest, getAuthenticationName());
   }
 
   @Override
@@ -578,10 +609,14 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     for (WorkflowDefinitionSummary workflowDefinitionSummary :
         workflowService.getWorkflowDefinitionSummaries(tenantId, workflowDefinitionCategoryId)) {
-      if (hasWorkflowDefinitionPermission(
-          workflowDefinitionSummary.getId(),
-          workflowDefinitionSummary.getVersion(),
-          WorkflowPermissionType.INITIATE_WORKFLOW)) {
+
+      if ((hasAccessToFunction("Operations.OperationsAdministration"))
+          || (hasAccessToFunction("Operations.WorkflowAdministration"))
+          || (hasWorkflowDefinitionPermission(
+              workflowDefinitionSummary.getId(),
+              workflowDefinitionSummary.getVersion(),
+              WorkflowPermissionType.INITIATE_WORKFLOW))) {
+
         filteredWorkflowDefinitionSummaries.add(workflowDefinitionSummary);
       }
     }

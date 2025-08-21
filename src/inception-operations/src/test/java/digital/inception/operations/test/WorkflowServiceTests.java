@@ -40,6 +40,7 @@ import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFound
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttribute;
@@ -140,6 +141,95 @@ public class WorkflowServiceTests {
   /** The Workflow Service. */
   @Autowired private WorkflowService workflowService;
 
+  /** Test the canceled workflow functionality. */
+  @Test
+  public void canceledWorkflowTest() throws Exception {
+    // Create the workflow definition category
+    WorkflowDefinitionCategory workflowDefinitionCategory =
+        new WorkflowDefinitionCategory(
+            "test_workflow_definition_category_" + randomId(), "Test Workflow Definition Category");
+
+    workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
+
+    // Create the workflow definition
+    WorkflowDefinition workflowDefinition =
+        new WorkflowDefinition(
+            "test_workflow_definition_" + randomId(),
+            1,
+            workflowDefinitionCategory.getId(),
+            "Test Workflow Definition",
+            "dummy",
+            ValidationSchemaType.JSON,
+            ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+
+    workflowDefinition.addStepDefinition(
+        new WorkflowStepDefinition(
+            1,
+            "test_workflow_step_1",
+            "Test Workflow Step 1",
+            "The description for Test Workflow Step 1",
+            false,
+            false));
+
+    workflowDefinition.addAttribute(
+        new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
+
+    workflowService.createWorkflowDefinition(workflowDefinition);
+
+    // Initiate the workflow
+    TestWorkflowData testWorkflowData =
+        new TestWorkflowData(
+            UUID.randomUUID(),
+            "This is name " + randomId(),
+            LocalDate.of(1976, 3, 7),
+            new BigDecimal("1234.56"),
+            OffsetDateTime.now());
+
+    String testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
+
+    InitiateWorkflowRequest initiateWorkflowRequest =
+        new InitiateWorkflowRequest(
+            workflowDefinition.getId(),
+            UUID.randomUUID().toString(),
+            List.of(),
+            testWorkflowDataJson);
+
+    Workflow workflow =
+        workflowService.initiateWorkflow(
+            TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowRequest, "TEST1");
+
+    // Initiate the workflow step
+    workflowService.initiateWorkflowStep(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_1"));
+
+    // Cancel the workflow
+    CancelWorkflowRequest cancelWorkflowRequest =
+        new CancelWorkflowRequest(workflow.getId(), "This is the cancellation reason");
+
+    workflowService.cancelWorkflow(TenantUtil.DEFAULT_TENANT_ID, cancelWorkflowRequest, "TEST1");
+
+    // Retrieve the workflow
+    Workflow retrievedWorkflow =
+        workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertNotNull(retrievedWorkflow.getCanceled());
+    assertEquals("TEST1", retrievedWorkflow.getCanceledBy());
+    assertEquals("This is the cancellation reason", retrievedWorkflow.getCancellationReason());
+    assertEquals(WorkflowStatus.CANCELED, retrievedWorkflow.getStatus());
+    assertNotNull(retrievedWorkflow.getSteps().getFirst().getCanceled());
+    assertEquals(WorkflowStepStatus.CANCELED, retrievedWorkflow.getSteps().getFirst().getStatus());
+
+    // Delete the workflow
+    workflowService.deleteWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    // Delete the workflow definition
+    workflowService.deleteWorkflowDefinition(workflowDefinition.getId());
+
+    // Delete the workflow definition category
+    workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategory.getId());
+  }
+
   /** Test the JSON workflow functionality. */
   @Test
   public void jsonWorkflowTest() throws Exception {
@@ -207,7 +297,7 @@ public class WorkflowServiceTests {
             1,
             workflowDefinitionCategory.getId(),
             "Test JSON Workflow Definition",
-            "flowable_embedded",
+            "dummy",
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
@@ -793,9 +883,9 @@ public class WorkflowServiceTests {
 
     List<WorkflowEngine> workflowEngines = workflowService.getWorkflowEngines();
 
-    assertEquals(2, workflowEngines.size());
+    assertEquals(3, workflowEngines.size());
 
-    compareWorkflowEngines(workflowEngine, workflowEngines.get(1));
+    compareWorkflowEngines(workflowEngine, workflowEngines.get(2));
 
     DocumentDefinitionCategory sharedDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
@@ -1428,13 +1518,27 @@ public class WorkflowServiceTests {
 
   private void compareWorkflows(Workflow workflow1, Workflow workflow2) {
     assertEquals(
+        workflow1.getCancellationReason(),
+        workflow2.getCancellationReason(),
+        "The cancellation reason values for the workflows do not match");
+    assertEquals(
+        workflow1.getCanceled(),
+        workflow2.getCanceled(),
+        "The canceled values for the workflows do not match");
+    assertEquals(
+        workflow1.getCanceledBy(),
+        workflow2.getCanceledBy(),
+        "The canceled by values for the workflows do not match");
+    assertEquals(
+        workflow1.getId(), workflow2.getId(), "The ID values for the workflows do not match");
+    assertEquals(
         workflow1.getInitiated(),
         workflow2.getInitiated(),
-        "The created values for the workflows do not match");
+        "The initiated values for the workflows do not match");
     assertEquals(
         workflow1.getInitiatedBy(),
         workflow2.getInitiatedBy(),
-        "The created by values for the workflows do not match");
+        "The initiated by values for the workflows do not match");
     assertEquals(
         workflow1.getData(), workflow2.getData(), "The data values for the workflows do not match");
     assertEquals(
@@ -1446,9 +1550,21 @@ public class WorkflowServiceTests {
         workflow2.getDefinitionVersion(),
         "The definition version values for the workflows do not match");
     assertEquals(
+        workflow1.getEngineInstanceId(),
+        workflow2.getEngineInstanceId(),
+        "The engine instance ID values for the workflows do not match");
+    assertEquals(
         workflow1.getExternalReference(),
         workflow2.getExternalReference(),
         "The external reference values for the workflows do not match");
+    assertEquals(
+        workflow1.getFinalized(),
+        workflow2.getFinalized(),
+        "The finalized values for the workflows do not match");
+    assertEquals(
+        workflow1.getFinalizedBy(),
+        workflow2.getFinalizedBy(),
+        "The finalized by values for the workflows do not match");
     assertEquals(
         workflow1.getId(), workflow2.getId(), "The ID values for the workflows do not match");
     assertEquals(
@@ -1456,13 +1572,21 @@ public class WorkflowServiceTests {
         workflow2.getParentId(),
         "The parent ID values for the workflows do not match");
     assertEquals(
+        workflow1.getPartyId(),
+        workflow2.getPartyId(),
+        "The party ID values for the workflows do not match");
+    assertEquals(
         workflow1.getStatus(),
         workflow2.getStatus(),
         "The status values for the workflows do not match");
     assertEquals(
-        workflow1.getPartyId(),
-        workflow2.getPartyId(),
-        "The party ID values for the workflows do not match");
+        workflow1.getSuspended(),
+        workflow2.getSuspended(),
+        "The suspended values for the workflows do not match");
+    assertEquals(
+        workflow1.getSuspendedBy(),
+        workflow2.getSuspendedBy(),
+        "The suspended by values for the workflows do not match");
     assertEquals(
         workflow1.getTenantId(),
         workflow2.getTenantId(),
@@ -1480,7 +1604,6 @@ public class WorkflowServiceTests {
         workflow1.getAttributes().size(),
         workflow2.getAttributes().size(),
         "The number of attributes for the workflows do not match");
-
     workflow1
         .getAttributes()
         .forEach(

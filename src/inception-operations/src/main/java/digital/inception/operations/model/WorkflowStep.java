@@ -53,12 +53,12 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow step")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "status", "initiated", "pended", "finalized"})
+@JsonPropertyOrder({"code", "status", "initiated", "pended", "finalized", "canceled"})
 @XmlRootElement(name = "WorkflowStep", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowStep",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "status", "initiated", "pended", "finalized"})
+    propOrder = {"code", "status", "initiated", "pended", "finalized", "canceled"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_steps")
@@ -66,6 +66,15 @@ import java.util.UUID;
 public class WorkflowStep implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The date and time the workflow step was canceled. */
+  @Schema(description = "The date and time the workflow step was canceled")
+  @JsonProperty
+  @XmlElement(name = "Canceled")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "canceled")
+  private OffsetDateTime canceled;
 
   /** The code for the workflow step. */
   @Schema(
@@ -173,6 +182,15 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
+   * Returns the date and time the workflow step was canceled.
+   *
+   * @return the date and time the workflow step was canceled
+   */
+  public OffsetDateTime getCanceled() {
+    return canceled;
+  }
+
+  /**
    * Returns the code for the workflow step.
    *
    * @return the code for the workflow step
@@ -226,6 +244,15 @@ public class WorkflowStep implements Serializable {
   public int hashCode() {
     return ((workflowId == null) ? 0 : workflowId.hashCode())
         + ((code == null) ? 0 : code.hashCode());
+  }
+
+  /**
+   * Set the date and time the workflow step was canceled.
+   *
+   * @param canceled the date and time the workflow step was canceled
+   */
+  public void setCanceled(OffsetDateTime canceled) {
+    this.canceled = canceled;
   }
 
   /**

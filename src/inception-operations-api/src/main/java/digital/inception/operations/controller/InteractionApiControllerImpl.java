@@ -306,10 +306,12 @@ public class InteractionApiControllerImpl extends SecureApiController
 
     for (InteractionSourceSummary interactionSourceSummary :
         interactionService.getInteractionSourceSummaries(tenantId)) {
-      if (hasInteractionSourcePermission(
-          tenantId,
-          interactionSourceSummary.getId(),
-          InteractionPermissionType.RETRIEVE_INTERACTION)) {
+      if ((hasAccessToFunction("Operations.OperationsAdministration"))
+          || (hasAccessToFunction("Operations.InteractionAdministration"))
+          || (hasInteractionSourcePermission(
+              tenantId,
+              interactionSourceSummary.getId(),
+              InteractionPermissionType.RETRIEVE_INTERACTION))) {
         filteredInteractionSourceSummaries.add(interactionSourceSummary);
       }
     }
@@ -329,9 +331,17 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     List<InteractionSource> filteredInteractionSources = new ArrayList<>();
+
     for (InteractionSource interactionSource : interactionService.getInteractionSources(tenantId)) {
-      if (hasInteractionSourcePermission(
-          tenantId, interactionSource.getId(), InteractionPermissionType.RETRIEVE_INTERACTION)) {}
+      if ((hasAccessToFunction("Operations.OperationsAdministration"))
+          || (hasAccessToFunction("Operations.InteractionAdministration"))
+          || (hasInteractionSourcePermission(
+              tenantId,
+              interactionSource.getId(),
+              InteractionPermissionType.RETRIEVE_INTERACTION))) {
+
+        filteredInteractionSources.add(interactionSource);
+      }
     }
 
     return filteredInteractionSources;

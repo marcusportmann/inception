@@ -37,10 +37,6 @@ public enum InteractionPermissionType implements CodeEnum {
   @XmlEnumValue("AssignInteraction")
   ASSIGN_INTERACTION("assign_interaction", "Assign Interaction"),
 
-  /** Claim Interaction. */
-  @XmlEnumValue("ClaimInteraction")
-  CLAIM_INTERACTION("claim_interaction", "Claim Interaction"),
-
   /** Create Interaction. */
   @XmlEnumValue("CreateInteraction")
   CREATE_INTERACTION("create_interaction", "Create Interaction"),

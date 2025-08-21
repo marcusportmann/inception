@@ -37,6 +37,31 @@ import org.springframework.transaction.annotation.Transactional;
 public interface WorkflowStepRepository extends JpaRepository<WorkflowStep, WorkflowStepId> {
 
   /**
+   * Cancel a workflow step.
+   *
+   * @param workflowId the workflow ID
+   * @param code the code for the workflow step
+   * @param canceled the date and time the workflow step was canceled
+   * @return the number of rows that were updated (0 or 1)
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      """
+      update WorkflowStep ws
+         set ws.finalized   = null,
+             ws.suspended   = null,
+             ws.canceled    = :canceled,
+             ws.status      = digital.inception.operations.model.WorkflowStepStatus.CANCELED
+       where ws.workflowId  = :workflowId
+         and ws.code        = :code
+      """)
+  int cancelWorkflowStep(
+      @Param("workflowId") UUID workflowId,
+      @Param("code") String code,
+      @Param("canceled") OffsetDateTime canceled);
+
+  /**
    * Finalize a workflow step.
    *
    * @param workflowId the workflow ID
@@ -52,6 +77,7 @@ public interface WorkflowStepRepository extends JpaRepository<WorkflowStep, Work
       update WorkflowStep ws
          set ws.suspended   = null,
              ws.finalized   = :finalized,
+             ws.canceled    = null,
              ws.status      = :status
        where ws.workflowId  = :workflowId
          and ws.code        = :code
@@ -86,6 +112,7 @@ public interface WorkflowStepRepository extends JpaRepository<WorkflowStep, Work
       update WorkflowStep ws
          set ws.finalized   = null,
              ws.suspended   = :suspended,
+             ws.canceled    = null,
              ws.status      = digital.inception.operations.model.WorkflowStepStatus.SUSPENDED
        where ws.workflowId  = :workflowId
          and ws.code        = :code
@@ -109,6 +136,7 @@ public interface WorkflowStepRepository extends JpaRepository<WorkflowStep, Work
       update WorkflowStep ws
          set ws.finalized   = null,
              ws.suspended   = null,
+             ws.canceled    = null,
              ws.status      = digital.inception.operations.model.WorkflowStepStatus.ACTIVE
        where ws.workflowId  = :workflowId
          and ws.code        = :code

@@ -29,7 +29,6 @@ import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -173,6 +172,32 @@ public class InternalWorkflowStore implements WorkflowStore {
     } catch (Throwable e) {
       log.warn("Failed to check if we are using Oracle", e);
       usingOracle = false;
+    }
+  }
+
+  @Override
+  public void cancelWorkflow(UUID tenantId, UUID workflowId, String canceledBy, String cancellationReason)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      OffsetDateTime now = OffsetDateTime.now();
+
+      if (workflowRepository.cancelWorkflow(tenantId, workflowId, now, canceledBy, cancellationReason) <= 0) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      // Cancel all the active workflow steps
+      List<WorkflowStep> activeWorkflowSteps =
+          workflowStepRepository.findByWorkflowIdAndStatus(workflowId, WorkflowStepStatus.ACTIVE);
+
+      for (WorkflowStep activeWorkflowStep : activeWorkflowSteps) {
+        workflowStepRepository.cancelWorkflowStep(workflowId, activeWorkflowStep.getCode(), now);
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to cancel the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
+          e);
     }
   }
 

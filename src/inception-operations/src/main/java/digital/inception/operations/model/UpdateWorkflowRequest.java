@@ -62,8 +62,8 @@ public class UpdateWorkflowRequest implements Serializable {
   @Valid
   private List<WorkflowAttribute> attributes = new ArrayList<>();
 
-  /** The updated data for the workflow. */
-  @Schema(description = "The updated data for the workflow")
+  /** The updated XML or JSON data for the workflow. */
+  @Schema(description = "The updated XML or JSON data for the workflow")
   @JsonProperty
   @XmlElement(name = "Data")
   @Size(min = 1, max = 10485760)
@@ -89,7 +89,7 @@ public class UpdateWorkflowRequest implements Serializable {
    * Constructs a new {@code UpdateWorkflowRequest}.
    *
    * @param workflowId the ID for the workflow
-   * @param data the updated data for the workflow
+   * @param data the updated XML or JSON data for the workflow
    */
   public UpdateWorkflowRequest(UUID workflowId, String data) {
     this.workflowId = workflowId;
@@ -124,7 +124,7 @@ public class UpdateWorkflowRequest implements Serializable {
    * @param workflowId the ID for the workflow
    * @param status the updated status of the workflow
    * @param attributes the attributes for the workflow
-   * @param data the updated data for the workflow
+   * @param data the updated XML or JSON data for the workflow
    */
   public UpdateWorkflowRequest(
       UUID workflowId, WorkflowStatus status, List<WorkflowAttribute> attributes, String data) {
@@ -144,9 +144,9 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the updated data for the workflow.
+   * Returns the updated XML or JSON data for the workflow.
    *
-   * @return the updated data for the workflow
+   * @return the updated XML or JSON data for the workflow
    */
   public String getData() {
     return data;
@@ -180,9 +180,9 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the updated data for the workflow.
+   * Set the updated XML or JSON data for the workflow.
    *
-   * @param data the updated data for the workflow
+   * @param data the updated XML or JSON data for the workflow
    */
   public void setData(String data) {
     this.data = data;

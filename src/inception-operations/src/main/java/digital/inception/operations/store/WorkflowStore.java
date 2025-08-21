@@ -59,6 +59,19 @@ import java.util.UUID;
 public interface WorkflowStore {
 
   /**
+   * Cancel the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param canceledBy the person or system canceling the workflow
+   * @param cancellationReason the reason the workflow was canceled
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be canceled
+   */
+  void cancelWorkflow(UUID tenantId, UUID workflowId, String canceledBy, String cancellationReason)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
    * Create the workflow.
    *
    * @param tenantId the ID for the tenant

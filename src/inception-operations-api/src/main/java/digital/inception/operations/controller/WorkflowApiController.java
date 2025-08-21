@@ -37,6 +37,7 @@ import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundExc
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
+import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
@@ -100,6 +101,73 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping(value = "/api/operations")
 // @el (isSecurityDisabled: PolicyDecisionPointSecurityExpressionRoot.isSecurityDisabled)
 public interface WorkflowApiController {
+
+  /**
+   * Cancel a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param cancelWorkflowRequest the request to cancel a workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be canceled
+   */
+  @Operation(summary = "Cancel a workflow", description = "Cancel a workflow")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow was canceled"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/cancel-workflow",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+  void cancelWorkflow(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to cancel the workflow",
+              required = true)
+          @RequestBody
+          CancelWorkflowRequest cancelWorkflowRequest)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Create the workflow attribute definition.

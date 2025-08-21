@@ -145,7 +145,7 @@ public class ExecutorServiceTests {
     TestSimpleTaskData retrievedTestSimpleTaskData =
         deserializeTaskData(retrievedTask.getData(), TestSimpleTaskData.class);
 
-    assertEquals(TaskStatus.CANCELLED, retrievedTask.getStatus());
+    assertEquals(TaskStatus.CANCELED, retrievedTask.getStatus());
   }
 
   /** Test the cancel task functionality. */
@@ -180,7 +180,7 @@ public class ExecutorServiceTests {
 
     retrievedTask = executorService.getTask(taskId);
 
-    assertEquals(TaskStatus.CANCELLED, retrievedTask.getStatus());
+    assertEquals(TaskStatus.CANCELED, retrievedTask.getStatus());
   }
 
   /** Test the delayed task functionality. */

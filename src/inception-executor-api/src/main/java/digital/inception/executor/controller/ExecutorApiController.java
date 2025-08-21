@@ -67,12 +67,12 @@ public interface ExecutorApiController {
    * @param batchId the ID for the batch
    * @throws InvalidArgumentException if an argument is invalid
    * @throws BatchTasksNotFoundException if no tasks could be found for the batch
-   * @throws ServiceUnavailableException if the batch could not be cancelled
+   * @throws ServiceUnavailableException if the batch could not be canceled
    */
   @Operation(summary = "Cancel the batch", description = "Cancel the batch")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The batch was successfully cancelled"),
+        @ApiResponse(responseCode = "204", description = "The batch was successfully canceled"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -123,12 +123,12 @@ public interface ExecutorApiController {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TaskNotFoundException if the task could not be found
    * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
-   * @throws ServiceUnavailableException if the task could not be cancelled
+   * @throws ServiceUnavailableException if the task could not be canceled
    */
   @Operation(summary = "Cancel the task", description = "Cancel the task")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The task was successfully cancelled"),
+        @ApiResponse(responseCode = "204", description = "The task was successfully canceled"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

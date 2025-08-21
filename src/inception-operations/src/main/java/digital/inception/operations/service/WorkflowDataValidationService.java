@@ -31,7 +31,7 @@ public interface WorkflowDataValidationService {
    *
    * @param validationSchemaType the validation schema type
    * @param validationSchema the XML (XSD) or JSON validation schema
-   * @param workflowData the JSON or XML data for the workflow
+   * @param workflowData the XML or JSON data for the workflow
    * @return {@code true} if the workflow data was validated successfully or {@code false} otherwise
    */
   boolean validateWorkflowData(

@@ -283,7 +283,7 @@ public class EndToEndTests {
             1,
             workflowDefinitionCategory.getId(),
             "Test JSON Workflow Definition",
-            "flowable_embedded",
+            "dummy",
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 

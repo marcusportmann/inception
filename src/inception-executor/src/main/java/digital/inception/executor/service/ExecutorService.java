@@ -62,7 +62,7 @@ public interface ExecutorService {
    * @param batchId the ID for the batch
    * @throws InvalidArgumentException if an argument is invalid
    * @throws BatchTasksNotFoundException if no tasks could be found for the batch
-   * @throws ServiceUnavailableException if the batch could not be cancelled
+   * @throws ServiceUnavailableException if the batch could not be canceled
    */
   void cancelBatch(String batchId)
       throws InvalidArgumentException, BatchTasksNotFoundException, ServiceUnavailableException;
@@ -74,7 +74,7 @@ public interface ExecutorService {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TaskNotFoundException if the task could not be found
    * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
-   * @throws ServiceUnavailableException if the task could not be cancelled
+   * @throws ServiceUnavailableException if the task could not be canceled
    */
   void cancelTask(UUID taskId)
       throws InvalidArgumentException,

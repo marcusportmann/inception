@@ -48,9 +48,9 @@ public enum TaskStatus implements CodeEnum {
   @XmlEnumValue("Failed")
   FAILED("failed", "Failed"),
 
-  /** Cancelled. */
-  @XmlEnumValue("Cancelled")
-  CANCELLED("cancelled", "Cancelled"),
+  /** Canceled. */
+  @XmlEnumValue("Canceled")
+  CANCELED("canceled", "Canceled"),
 
   /** Suspended. */
   @XmlEnumValue("Suspended")

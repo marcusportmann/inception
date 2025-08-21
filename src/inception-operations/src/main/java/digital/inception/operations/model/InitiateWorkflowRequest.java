@@ -80,8 +80,8 @@ public class InitiateWorkflowRequest implements Serializable {
   @Valid
   private List<WorkflowAttribute> attributes = new ArrayList<>();
 
-  /** The data for the workflow. */
-  @Schema(description = "The data for the workflow")
+  /** The XML or JSON data for the workflow. */
+  @Schema(description = "The XML or JSON data for the workflow")
   @JsonProperty
   @XmlElement(name = "Data")
   @Size(min = 1, max = 10485760)
@@ -142,7 +142,7 @@ public class InitiateWorkflowRequest implements Serializable {
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param attributes the attributes for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       String definitionId, List<WorkflowAttribute> attributes, String data) {
@@ -158,7 +158,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param externalReference the external reference used to link this workflow to an external
    *     system
    * @param attributes the attributes for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       String definitionId,
@@ -177,7 +177,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param attributes the attributes for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       UUID parentId, String definitionId, List<WorkflowAttribute> attributes, String data) {
@@ -195,7 +195,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param externalReference the external reference used to link this workflow to an external
    *     system
    * @param attributes the attributes for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       UUID parentId,
@@ -216,7 +216,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param attributes the attributes for the workflow
    * @param interactionLinks the interaction links for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       String definitionId,
@@ -237,7 +237,7 @@ public class InitiateWorkflowRequest implements Serializable {
    *     system
    * @param attributes the attributes for the workflow
    * @param interactionLinks the interaction links for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       String definitionId,
@@ -259,7 +259,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param attributes the attributes for the workflow
    * @param interactionLinks the interaction links for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       UUID parentId,
@@ -283,7 +283,7 @@ public class InitiateWorkflowRequest implements Serializable {
    *     system
    * @param attributes the attributes for the workflow
    * @param interactionLinks the interaction links for the workflow
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
       UUID parentId,
@@ -310,9 +310,9 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the data for the workflow.
+   * Returns the XML or JSON data for the workflow.
    *
-   * @return the data for the workflow
+   * @return the XML or JSON data for the workflow
    */
   public String getData() {
     return data;
@@ -383,9 +383,9 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the data for the workflow.
+   * Set the XML or JSON data for the workflow.
    *
-   * @param data the data for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public void setData(String data) {
     this.data = data;

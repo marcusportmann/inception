@@ -21,6 +21,7 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.StringUtil;
+import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
@@ -38,6 +39,7 @@ import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundExc
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
+import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentAttribute;
@@ -89,10 +91,13 @@ import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionSummaryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowEngineRepository;
 import digital.inception.operations.store.WorkflowStore;
+import java.lang.reflect.Constructor;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -130,6 +135,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
   /** The Workflow Definition Summary Repository. */
   private final WorkflowDefinitionSummaryRepository workflowDefinitionSummaryRepository;
+
+  /** The workflow engine connectors. */
+  private final Map<String, WorkflowEngineConnector> workflowEngineConnectors =
+      new ConcurrentHashMap<>();
 
   /** The Workflow Engine Repository. */
   private final WorkflowEngineRepository workflowEngineRepository;
@@ -191,6 +200,45 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public void cancelWorkflow(
+      UUID tenantId, CancelWorkflowRequest cancelWorkflowRequest, String canceledBy)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("cancelWorkflowRequest", cancelWorkflowRequest);
+
+    try {
+      Workflow workflow = getWorkflow(tenantId, cancelWorkflowRequest.getWorkflowId());
+
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(
+                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
+
+      getWorkflowEngineConnector(workflowDefinition.getEngineId())
+          .cancelWorkflow(tenantId, workflowDefinition, workflow);
+
+      workflowStore.cancelWorkflow(
+          tenantId,
+          cancelWorkflowRequest.getWorkflowId(),
+          canceledBy,
+          cancelWorkflowRequest.getCancellationReason());
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to cancel the workflow ("
+              + cancelWorkflowRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   @CacheEvict(cacheNames = "workflowAttributeDefinitions", allEntries = true)
   public void createWorkflowAttributeDefinition(
       WorkflowAttributeDefinition workflowAttributeDefinition)
@@ -231,7 +279,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             key = "#workflowDefinition.id + '-' + #workflowDefinition.version"),
         @CacheEvict(
             cacheNames = {"workflowDefinitions", "workflowDefinitionSummaries"},
-            key = "#workflowDefinition.categoryId")
+            allEntries = true)
       })
   public void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
@@ -1287,15 +1335,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       OffsetDateTime now = OffsetDateTime.now();
 
-      Optional<WorkflowDefinition> workflowDefinitionOptional =
-          workflowDefinitionRepository.findLatestVersionById(
-              initiateWorkflowRequest.getDefinitionId());
-
-      if (workflowDefinitionOptional.isEmpty()) {
-        throw new WorkflowDefinitionNotFoundException(initiateWorkflowRequest.getDefinitionId());
-      }
-
-      WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService().getWorkflowDefinition(initiateWorkflowRequest.getDefinitionId());
 
       // Validate the workflow attributes
       for (WorkflowAttribute workflowAttribute : initiateWorkflowRequest.getAttributes()) {
@@ -1336,7 +1377,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
-      // Validation the interaction links
+      // Validate the interaction links
       for (InitiateWorkflowInteractionLink initiateWorkflowInteractionLink :
           initiateWorkflowRequest.getInteractionLinks()) {
         if (!interactionService.interactionExists(
@@ -1370,6 +1411,18 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       workflow.setExternalReference(initiateWorkflowRequest.getExternalReference());
       workflow.setPartyId(initiateWorkflowRequest.getPartyId());
 
+      if (!initiateWorkflowRequest.getPendWorkflow()) {
+        String engineInstanceId =
+            getWorkflowEngineConnector(workflowDefinition.getEngineId())
+                .initiateWorkflow(
+                    tenantId,
+                    workflowDefinition,
+                    initiateWorkflowRequest.getAttributes(),
+                    initiateWorkflowRequest.getData());
+
+        workflow.setEngineInstanceId(engineInstanceId);
+      }
+
       workflow = workflowStore.createWorkflow(tenantId, workflow);
 
       for (WorkflowDefinitionDocumentDefinition documentDefinition :
@@ -1385,10 +1438,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
           workflowStore.createWorkflowDocument(tenantId, workflowDocument);
         }
-      }
-
-      if (!initiateWorkflowRequest.getPendWorkflow()) {
-        // TODO: Start the workflow
       }
 
       return workflow;
@@ -1736,6 +1785,16 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("suspendWorkflowRequest", suspendWorkflowRequest);
 
     try {
+      Workflow workflow = getWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId());
+
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(
+                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
+
+      getWorkflowEngineConnector(workflowDefinition.getEngineId())
+          .suspendWorkflow(tenantId, workflowDefinition, workflow);
+
       workflowStore.suspendWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId(), suspendedBy);
     } catch (WorkflowNotFoundException e) {
       throw e;
@@ -1790,6 +1849,16 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("unsuspendWorkflowRequest", unsuspendWorkflowRequest);
 
     try {
+      Workflow workflow = getWorkflow(tenantId, unsuspendWorkflowRequest.getWorkflowId());
+
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(
+                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
+
+      getWorkflowEngineConnector(workflowDefinition.getEngineId())
+          .suspendWorkflow(tenantId, workflowDefinition, workflow);
+
       workflowStore.unsuspendWorkflow(tenantId, unsuspendWorkflowRequest.getWorkflowId());
     } catch (WorkflowNotFoundException e) {
       throw e;
@@ -1875,6 +1944,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       if (StringUtils.hasText(updateWorkflowRequest.getData())) {
         workflow.setData(updateWorkflowRequest.getData());
+
+        getWorkflowEngineConnector(workflowDefinition.getEngineId())
+            .updateWorkflowData(
+                tenantId, workflowDefinition, workflow, updateWorkflowRequest.getData());
       }
 
       if (updateWorkflowRequest.getStatus() != null) {
@@ -1940,7 +2013,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             key = "#workflowDefinition.id + '-' + #workflowDefinition.version"),
         @CacheEvict(
             cacheNames = {"workflowDefinitions", "workflowDefinitionSummaries"},
-            key = "#workflowDefinition.categoryId")
+            allEntries = true)
       })
   public void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
@@ -2313,6 +2386,58 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + ")",
           e);
     }
+  }
+
+  private WorkflowEngineConnector getWorkflowEngineConnector(String engineId)
+      throws ServiceUnavailableException {
+    WorkflowEngineConnector workflowEngineConnector = workflowEngineConnectors.get(engineId);
+
+    if (workflowEngineConnector == null) {
+      try {
+        WorkflowEngine workflowEngine = getWorkflowEngine(engineId);
+
+        Class<?> clazz =
+            Thread.currentThread()
+                .getContextClassLoader()
+                .loadClass(workflowEngine.getConnectorClassName());
+
+        Constructor<?> constructor;
+
+        try {
+          constructor = clazz.getConstructor(ApplicationContext.class, WorkflowEngine.class);
+        } catch (NoSuchMethodException e) {
+          constructor = null;
+        }
+
+        if (constructor != null) {
+          // Create an instance of the workflow engine connector
+          workflowEngineConnector =
+              (WorkflowEngineConnector)
+                  constructor.newInstance(getApplicationContext(), workflowEngine);
+
+          // Perform dependency injection on the workflow engine connector
+          getApplicationContext()
+              .getAutowireCapableBeanFactory()
+              .autowireBean(workflowEngineConnector);
+
+          // Cache the workflow engine connector
+          workflowEngineConnectors.put(engineId, workflowEngineConnector);
+        } else {
+          throw new RuntimeException(
+              "Failed to initialize the workflow engine connector for the workflow engine ("
+                  + engineId
+                  + "): The workflow engine connector class does not provide a constructor with the required signature");
+        }
+      } catch (Throwable e) {
+        throw new ServiceUnavailableException(
+            "Failed to retrieve the workflow engine connector for the workflow engine ("
+                + engineId
+                + ")",
+            e);
+      }
+    }
+
+    return workflowEngineConnector;
   }
 
   /**

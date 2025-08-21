@@ -78,7 +78,7 @@ public class ExecutorWebService extends AbstractWebServiceBase {
    * @param batchId the ID for the batch
    * @throws InvalidArgumentException if an argument is invalid
    * @throws BatchTasksNotFoundException if no tasks could be found for the batch
-   * @throws ServiceUnavailableException if the batch could not be cancelled
+   * @throws ServiceUnavailableException if the batch could not be canceled
    */
   @WebMethod(operationName = "CancelBatch")
   public void cancelBatch(@WebParam(name = "BatchId") @XmlElement(required = true) String batchId)
@@ -93,7 +93,7 @@ public class ExecutorWebService extends AbstractWebServiceBase {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TaskNotFoundException if the task could not be found
    * @throws InvalidTaskStatusException if the status of the task is invalid for the operation
-   * @throws ServiceUnavailableException if the task could not be cancelled
+   * @throws ServiceUnavailableException if the task could not be canceled
    */
   @WebMethod(operationName = "CancelTask")
   public void cancelTask(@WebParam(name = "TaskId") @XmlElement(required = true) UUID taskId)

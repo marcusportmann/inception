@@ -216,8 +216,6 @@ public class InteractionServiceTests {
             new InteractionSourcePermission(
                 "Administrator", InteractionPermissionType.ASSIGN_INTERACTION),
             new InteractionSourcePermission(
-                "Administrator", InteractionPermissionType.CLAIM_INTERACTION),
-            new InteractionSourcePermission(
                 "Administrator", InteractionPermissionType.CREATE_INTERACTION),
             new InteractionSourcePermission(
                 "Administrator", InteractionPermissionType.DELETE_INTERACTION),
@@ -240,7 +238,7 @@ public class InteractionServiceTests {
         interactionService.getInteractionSourcePermissions(
             TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
 
-    assertEquals(7, retrievedInteractionSourcePermissions.size());
+    assertEquals(6, retrievedInteractionSourcePermissions.size());
 
     Interaction interaction =
         new Interaction(

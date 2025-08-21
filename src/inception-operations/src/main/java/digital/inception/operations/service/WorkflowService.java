@@ -36,6 +36,7 @@ import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundExc
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
+import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
@@ -84,6 +85,19 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public interface WorkflowService {
+
+  /**
+   * Cancel a workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param cancelWorkflowRequest the request to cancel a workflow
+   * @param canceledBy the person or system who canceled the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be canceled
+   */
+  void cancelWorkflow(UUID tenantId, CancelWorkflowRequest cancelWorkflowRequest, String canceledBy)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Create the workflow attribute definition.

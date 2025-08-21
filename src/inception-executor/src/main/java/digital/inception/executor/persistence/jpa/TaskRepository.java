@@ -93,10 +93,10 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
-      "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELLED, "
+      "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELED, "
           + "t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.batchId = :batchId and "
-          + "((t.status = digital.inception.executor.model.TaskStatus.CANCELLED) or "
+          + "((t.status = digital.inception.executor.model.TaskStatus.CANCELED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.QUEUED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.SUSPENDED))")
   void cancelBatch(@Param("batchId") String batchId);
@@ -110,10 +110,10 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query(
-      "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELLED, "
+      "update Task t set t.status = digital.inception.executor.model.TaskStatus.CANCELED, "
           + "t.nextExecution = null, t.locked = null, t.lockName = null "
           + "where t.id = :taskId and "
-          + "((t.status = digital.inception.executor.model.TaskStatus.CANCELLED) or "
+          + "((t.status = digital.inception.executor.model.TaskStatus.CANCELED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.QUEUED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.SUSPENDED))")
   int cancelTask(@Param("taskId") UUID taskId);
@@ -291,7 +291,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       "SELECT t FROM Task t WHERE (t.executed <= :executedBefore) and "
           + "((t.status = digital.inception.executor.model.TaskStatus.COMPLETED) or "
           + "(t.status = digital.inception.executor.model.TaskStatus.FAILED) or "
-          + "(t.status = digital.inception.executor.model.TaskStatus.CANCELLED))")
+          + "(t.status = digital.inception.executor.model.TaskStatus.CANCELED))")
   Page<Task> findTasksToArchiveAndDelete(
       @Param("executedBefore") OffsetDateTime executedBefore, Pageable pageable);
 
