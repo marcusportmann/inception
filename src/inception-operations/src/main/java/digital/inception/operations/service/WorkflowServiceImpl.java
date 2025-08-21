@@ -1318,6 +1318,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
+      // Validate the required workflow attributes
+      validateRequiredWorkflowAttributes(
+          tenantId,
+          "initiateWorkflowRequest.attributes",
+          initiateWorkflowRequest.getDefinitionId(),
+          initiateWorkflowRequest.getAttributes());
+
       // Validate the workflow data if we have a validation schema
       if ((workflowDefinition.getValidationSchemaType() != null)
           && (StringUtils.hasText(workflowDefinition.getValidationSchema()))) {
@@ -1568,7 +1575,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
-      // TODO: Check that required document attributes have been specified -- MARCUS
+      // Validate the required document attributes
+      documentService.validateRequiredDocumentAttributes(
+          tenantId,
+          "provideWorkflowDocumentRequest.attributes",
+          documentDefinitionId,
+          provideWorkflowDocumentRequest.getAttributes());
 
       DocumentDefinition documentDefinition =
           documentService.getDocumentDefinition(documentDefinitionId);
@@ -1850,6 +1862,17 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
+      if (updateWorkflowRequest.getAttributes() != null) {
+        // Validate the required workflow attributes
+        validateRequiredWorkflowAttributes(
+            tenantId,
+            "updateWorkflowRequest.attributes",
+            workflowDefinition.getId(),
+            updateWorkflowRequest.getAttributes());
+
+        workflow.setAttributes(updateWorkflowRequest.getAttributes());
+      }
+
       if (StringUtils.hasText(updateWorkflowRequest.getData())) {
         workflow.setData(updateWorkflowRequest.getData());
       }
@@ -2026,6 +2049,51 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + updateWorkflowNoteRequest.getWorkflowNoteId()
               + ") for the tenant ("
               + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void validateRequiredWorkflowAttributes(
+      UUID tenantId,
+      String parameter,
+      String workflowDefinitionId,
+      List<WorkflowAttribute> workflowAttributes)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      List<WorkflowAttributeDefinition> requiredWorkflowAttributeDefinitions =
+          getWorkflowService().getRequiredWorkflowAttributeDefinitions(tenantId);
+
+      for (WorkflowAttributeDefinition requiredWorkflowAttributeDefinition :
+          requiredWorkflowAttributeDefinitions) {
+        if ((requiredWorkflowAttributeDefinition.getWorkflowDefinitionId() == null)
+            || (StringUtil.equalsIgnoreCase(
+                requiredWorkflowAttributeDefinition.getWorkflowDefinitionId(),
+                workflowDefinitionId))) {
+          if ((requiredWorkflowAttributeDefinition.getTenantId() == null)
+              || (requiredWorkflowAttributeDefinition.getTenantId().equals(tenantId))) {
+            if (workflowAttributes.stream()
+                .noneMatch(
+                    workflowAttribute ->
+                        StringUtil.equalsIgnoreCase(
+                            requiredWorkflowAttributeDefinition.getCode(),
+                            workflowAttribute.getCode()))) {
+              throw new InvalidArgumentException(
+                  parameter,
+                  "the workflow attribute ("
+                      + requiredWorkflowAttributeDefinition.getCode()
+                      + ") is required");
+            }
+          }
+        }
+      }
+    } catch (InvalidArgumentException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to validate the required workflow attributes for the workflow definition ("
+              + workflowDefinitionId
               + ")",
           e);
     }

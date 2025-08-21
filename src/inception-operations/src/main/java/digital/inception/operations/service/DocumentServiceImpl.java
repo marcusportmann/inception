@@ -165,6 +165,13 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         }
       }
 
+      // Validate the required document attributes
+      validateRequiredDocumentAttributes(
+          tenantId,
+          "createDocumentRequest.attributes",
+          createDocumentRequest.getDefinitionId(),
+          createDocumentRequest.getAttributes());
+
       Document document = new Document(createDocumentRequest.getDefinitionId());
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(createdBy);
@@ -887,6 +894,13 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         }
       }
 
+      // Validate the required document attributes
+      validateRequiredDocumentAttributes(
+          tenantId,
+          "updateDocumentRequest.attributes",
+          document.getDefinitionId(),
+          updateDocumentRequest.getAttributes());
+
       document.setData(updateDocumentRequest.getData());
       document.setExpiryDate(updateDocumentRequest.getExpiryDate());
       document.setExternalReference(updateDocumentRequest.getExternalReference());
@@ -1017,6 +1031,51 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + updateDocumentNoteRequest.getDocumentNoteId()
               + ") for the tenant ("
               + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void validateRequiredDocumentAttributes(
+      UUID tenantId,
+      String parameter,
+      String documentDefinitionId,
+      List<DocumentAttribute> documentAttributes)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      List<DocumentAttributeDefinition> requiredDocumentAttributeDefinitions =
+          getDocumentService().getRequiredDocumentAttributeDefinitions(tenantId);
+
+      for (DocumentAttributeDefinition requiredDocumentAttributeDefinition :
+          requiredDocumentAttributeDefinitions) {
+        if ((requiredDocumentAttributeDefinition.getDocumentDefinitionId() == null)
+            || (StringUtil.equalsIgnoreCase(
+                requiredDocumentAttributeDefinition.getDocumentDefinitionId(),
+                documentDefinitionId))) {
+          if ((requiredDocumentAttributeDefinition.getTenantId() == null)
+              || (requiredDocumentAttributeDefinition.getTenantId().equals(tenantId))) {
+            if (documentAttributes.stream()
+                .noneMatch(
+                    documentAttribute ->
+                        StringUtil.equalsIgnoreCase(
+                            requiredDocumentAttributeDefinition.getCode(),
+                            documentAttribute.getCode()))) {
+              throw new InvalidArgumentException(
+                  parameter,
+                  "the document attribute ("
+                      + requiredDocumentAttributeDefinition.getCode()
+                      + ") is required");
+            }
+          }
+        }
+      }
+    } catch (InvalidArgumentException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to validate the required document attributes for the document definition ("
+              + documentDefinitionId
               + ")",
           e);
     }

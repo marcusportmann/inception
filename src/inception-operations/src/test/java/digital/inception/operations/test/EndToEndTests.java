@@ -33,6 +33,7 @@ import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
+import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
@@ -404,8 +405,7 @@ public class EndToEndTests {
 
     // Delink the party from the interaction
     interactionService.delinkPartyFromInteraction(
-        TenantUtil.DEFAULT_TENANT_ID,
-        new DelinkPartyFromInteractionRequest(firstInteractionId));
+        TenantUtil.DEFAULT_TENANT_ID, new DelinkPartyFromInteractionRequest(firstInteractionId));
 
     interaction =
         interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, firstInteractionId);
@@ -467,6 +467,9 @@ public class EndToEndTests {
               outstandingWorkflowDocument.getId(),
               FileType.PDF,
               "MultiPagePdf.pdf",
+              List.of(
+                  new DocumentAttribute(
+                      "test_document_attribute_code", "test_document_attribute_value")),
               multiPagePdfData);
 
       workflowService.provideWorkflowDocument(

@@ -360,7 +360,13 @@ public class WorkflowServiceTests {
     testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
 
     UpdateWorkflowRequest updateWorkflowRequest =
-        new UpdateWorkflowRequest(workflow.getId(), WorkflowStatus.COMPLETED, testWorkflowDataJson);
+        new UpdateWorkflowRequest(
+            workflow.getId(),
+            WorkflowStatus.COMPLETED,
+            List.of(
+                new WorkflowAttribute(
+                    "test_workflow_attribute_code", "test_workflow_attribute_value_updated")),
+            testWorkflowDataJson);
 
     Workflow updatedWorkflow =
         workflowService.updateWorkflow(
@@ -370,6 +376,9 @@ public class WorkflowServiceTests {
 
     assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
     assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
+    assertEquals(
+        "test_workflow_attribute_value_updated",
+        retrievedWorkflow.getAttributes().getFirst().getValue());
 
     // Provide a workflow document
     byte[] multiPagePdfData = ResourceUtil.getClasspathResource("MultiPagePdf.pdf");

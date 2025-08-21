@@ -56,6 +56,7 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -919,6 +920,25 @@ public interface WorkflowService {
   WorkflowNote updateWorkflowNote(
       UUID tenantId, UpdateWorkflowNoteRequest updateWorkflowNoteRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Validate whether the required workflow attributes have been provided for the workflow
+   * definition.
+   *
+   * @param tenantId the ID for the tenant
+   * @param parameter the parameter path to the attributes being validated, e.g.
+   *     initiateWorkflowRequest.attributes
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowAttributes the workflow attributes to validate
+   * @throws InvalidArgumentException if a required workflow attribute has not been provided
+   * @throws ServiceUnavailableException if the required workflow attributes could not be validated
+   */
+  void validateRequiredWorkflowAttributes(
+      UUID tenantId,
+      String parameter,
+      String workflowDefinitionId,
+      List<WorkflowAttribute> workflowAttributes)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Verify a workflow document.

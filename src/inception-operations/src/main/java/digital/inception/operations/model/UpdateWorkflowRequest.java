@@ -20,15 +20,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -38,17 +42,25 @@ import java.util.UUID;
  */
 @Schema(description = "A request to update a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "status", "data"})
+@JsonPropertyOrder({"workflowId", "status", "attributes", "data"})
 @XmlRootElement(name = "UpdateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "UpdateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "status", "data"})
+    propOrder = {"workflowId", "status", "attributes", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UpdateWorkflowRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the workflow. */
+  @Schema(description = "The attributes for the workflow")
+  @JsonProperty
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  @Valid
+  private List<WorkflowAttribute> attributes = new ArrayList<>();
 
   /** The updated data for the workflow. */
   @Schema(description = "The updated data for the workflow")
@@ -99,13 +111,36 @@ public class UpdateWorkflowRequest implements Serializable {
    * Constructs a new {@code UpdateWorkflowRequest}.
    *
    * @param workflowId the ID for the workflow
+   * @param attributes the attributes for the workflow
+   */
+  public UpdateWorkflowRequest(UUID workflowId, List<WorkflowAttribute> attributes) {
+    this.workflowId = workflowId;
+    this.attributes = attributes;
+  }
+
+  /**
+   * Constructs a new {@code UpdateWorkflowRequest}.
+   *
+   * @param workflowId the ID for the workflow
    * @param status the updated status of the workflow
+   * @param attributes the attributes for the workflow
    * @param data the updated data for the workflow
    */
-  public UpdateWorkflowRequest(UUID workflowId, WorkflowStatus status, String data) {
+  public UpdateWorkflowRequest(
+      UUID workflowId, WorkflowStatus status, List<WorkflowAttribute> attributes, String data) {
     this.workflowId = workflowId;
     this.status = status;
+    this.attributes = attributes;
     this.data = data;
+  }
+
+  /**
+   * Returns the attributes for the workflow.
+   *
+   * @return the attributes for the workflow
+   */
+  public List<WorkflowAttribute> getAttributes() {
+    return attributes;
   }
 
   /**
@@ -133,6 +168,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public UUID getWorkflowId() {
     return workflowId;
+  }
+
+  /**
+   * Set the attributes for the workflow.
+   *
+   * @param attributes the attributes for the workflow
+   */
+  public void setAttributes(List<WorkflowAttribute> attributes) {
+    this.attributes = attributes;
   }
 
   /**
