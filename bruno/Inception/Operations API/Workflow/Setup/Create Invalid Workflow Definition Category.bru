@@ -1,0 +1,20 @@
+meta {
+  name: Create Invalid Workflow Definition Category
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseURL}}/api/operations/workflow-definition-categories
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+  }
+}
+
+settings {
+  encodeUrl: true
+}
