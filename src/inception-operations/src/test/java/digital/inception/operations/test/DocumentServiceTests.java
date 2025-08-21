@@ -28,6 +28,7 @@ import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.OperationsConfiguration;
+import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
@@ -38,6 +39,7 @@ import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttribute;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
@@ -101,6 +103,40 @@ public class DocumentServiceTests {
   /** Test the document service functionality. */
   @Test
   public void documentServiceTest() throws Exception {
+    DocumentAttributeDefinition documentAttributeDefinition =
+        new DocumentAttributeDefinition(
+            "test_document_attribute_code",
+            "Test Document Attribute",
+            true,
+            null,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
+
+    DocumentAttributeDefinition retrievedDocumentAttributeDefinition =
+        documentService.getDocumentAttributeDefinition(documentAttributeDefinition.getCode());
+
+    compareDocumentAttributeDefinitions(
+        documentAttributeDefinition, retrievedDocumentAttributeDefinition);
+
+    List<DocumentAttributeDefinition> documentAttributeDefinitions =
+        documentService.getDocumentAttributeDefinitions(TenantUtil.DEFAULT_TENANT_ID);
+
+    assertEquals(1, documentAttributeDefinitions.size());
+
+    compareDocumentAttributeDefinitions(
+        documentAttributeDefinition, documentAttributeDefinitions.getFirst());
+
+    documentAttributeDefinition.setDescription("Updated Test Document Attribute");
+
+    documentService.updateDocumentAttributeDefinition(documentAttributeDefinition);
+
+    retrievedDocumentAttributeDefinition =
+        documentService.getDocumentAttributeDefinition(documentAttributeDefinition.getCode());
+
+    compareDocumentAttributeDefinitions(
+        documentAttributeDefinition, retrievedDocumentAttributeDefinition);
+
     DocumentDefinitionCategory sharedDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
             "test_shared_document_definition_category_" + randomId(),
@@ -425,6 +461,39 @@ public class DocumentServiceTests {
         () -> {
           documentService.getDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
         });
+
+    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinition.getCode());
+
+    assertThrows(
+        DocumentAttributeDefinitionNotFoundException.class,
+        () -> {
+          documentService.getDocumentAttributeDefinition(documentAttributeDefinition.getCode());
+        });
+  }
+
+  private void compareDocumentAttributeDefinitions(
+      DocumentAttributeDefinition documentAttributeDefinition1,
+      DocumentAttributeDefinition documentAttributeDefinition2) {
+    assertEquals(
+        documentAttributeDefinition1.getCode(),
+        documentAttributeDefinition2.getCode(),
+        "The code values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.getDescription(),
+        documentAttributeDefinition2.getDescription(),
+        "The description values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.getDocumentDefinitionId(),
+        documentAttributeDefinition2.getDocumentDefinitionId(),
+        "The document definition ID values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.isRequired(),
+        documentAttributeDefinition2.isRequired(),
+        "The required values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.getTenantId(),
+        documentAttributeDefinition2.getTenantId(),
+        "The tenant ID values for the document attribute definitions do not match");
   }
 
   private void compareDocumentDefinitionCategories(

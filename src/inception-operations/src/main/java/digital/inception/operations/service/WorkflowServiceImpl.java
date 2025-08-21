@@ -41,6 +41,7 @@ import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentAttribute;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
@@ -1429,7 +1430,23 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       UUID tenantId, String workflowDefinitionId, String attributeCode)
       throws ServiceUnavailableException {
     try {
-      return true;
+      List<WorkflowAttributeDefinition> workflowAttributeDefinitions =
+          getWorkflowService().getWorkflowAttributeDefinitions(tenantId);
+
+      for (WorkflowAttributeDefinition workflowAttributeDefinition : workflowAttributeDefinitions) {
+        if ((workflowAttributeDefinition.getWorkflowDefinitionId() == null)
+            || (StringUtil.equalsIgnoreCase(
+            workflowAttributeDefinition.getWorkflowDefinitionId(), workflowDefinitionId))) {
+          if ((workflowAttributeDefinition.getTenantId() == null)
+              || (workflowAttributeDefinition.getTenantId().equals(tenantId))) {
+            if (workflowAttributeDefinition.getCode().equals(attributeCode)) {
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the workflow attribute ("

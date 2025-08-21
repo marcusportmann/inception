@@ -20,6 +20,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.util.StringUtil;
 import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -81,6 +82,9 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
   /** The Document Store. */
   private final DocumentStore documentStore;
+
+  /** The internal reference to the Document Service to enable caching. */
+  private DocumentService documentService;
 
   /** The maximum number of filtered document notes that will be returned by the service. */
   @Value("${inception.operations.max-filtered-document-notes:#{100}}")
@@ -790,7 +794,23 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       UUID tenantId, String documentDefinitionId, String attributeCode)
       throws ServiceUnavailableException {
     try {
-      return true;
+      List<DocumentAttributeDefinition> documentAttributeDefinitions =
+          getDocumentService().getDocumentAttributeDefinitions(tenantId);
+
+      for (DocumentAttributeDefinition documentAttributeDefinition : documentAttributeDefinitions) {
+        if ((documentAttributeDefinition.getDocumentDefinitionId() == null)
+            || (StringUtil.equalsIgnoreCase(
+                documentAttributeDefinition.getDocumentDefinitionId(), documentDefinitionId))) {
+          if ((documentAttributeDefinition.getTenantId() == null)
+              || (documentAttributeDefinition.getTenantId().equals(tenantId))) {
+            if (documentAttributeDefinition.getCode().equals(attributeCode)) {
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the document attribute ("
@@ -972,5 +992,18 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + ")",
           e);
     }
+  }
+
+  /**
+   * Returns the internal reference to the Document Service to enable caching.
+   *
+   * @return the internal reference to the Document Service to enable caching.
+   */
+  private DocumentService getDocumentService() {
+    if (documentService == null) {
+      documentService = getApplicationContext().getBean(DocumentService.class);
+    }
+
+    return documentService;
   }
 }

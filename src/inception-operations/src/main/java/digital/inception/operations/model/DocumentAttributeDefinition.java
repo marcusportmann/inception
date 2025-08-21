@@ -117,45 +117,22 @@ public class DocumentAttributeDefinition implements Serializable {
    * Constructs a new {@code DocumentAttributeDefinition}.
    *
    * @param code the code for the document attribute
-   */
-  public DocumentAttributeDefinition(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Constructs a new {@code DocumentAttributeDefinition}.
-   *
-   * @param code the code for the document attribute
-   * @param documentDefinitionId the ID for the document definition the document attribute
-   *     definition is specific to
-   */
-  public DocumentAttributeDefinition(String code, String documentDefinitionId) {
-    this.code = code;
-    this.documentDefinitionId = documentDefinitionId;
-  }
-
-  /**
-   * Constructs a new {@code DocumentAttributeDefinition}.
-   *
-   * @param code the code for the document attribute
+   * @param description the description for the document attribute
+   * @param required is the document attribute required
    * @param documentDefinitionId the ID for the document definition the document attribute
    *     definition is specific to
    * @param tenantId the ID for the tenant the document attribute definition is specific to
    */
-  public DocumentAttributeDefinition(String code, String documentDefinitionId, UUID tenantId) {
+  public DocumentAttributeDefinition(
+      String code,
+      String description,
+      boolean required,
+      String documentDefinitionId,
+      UUID tenantId) {
     this.code = code;
+    this.description = description;
+    this.required = required;
     this.documentDefinitionId = documentDefinitionId;
-    this.tenantId = tenantId;
-  }
-
-  /**
-   * Constructs a new {@code DocumentAttributeDefinition}.
-   *
-   * @param code the code for the document attribute
-   * @param tenantId the ID for the tenant the document attribute definition is specific to
-   */
-  public DocumentAttributeDefinition(String code, UUID tenantId) {
-    this.code = code;
     this.tenantId = tenantId;
   }
 

@@ -180,7 +180,7 @@
 
     <createTable tableName="operations_workflow_attribute_definitions" remarks="Workflow Attribute Definitions">
       <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" unique="true"/>
       </column>
       <column name="workflow_definition_id" type="nvarchar(50)"
         remarks="The ID for the workflow definition the workflow attribute definition is specific to"/>
@@ -299,7 +299,7 @@
 
     <createTable tableName="operations_document_attribute_definitions" remarks="Document Attribute Definitions">
       <column name="code" type="nvarchar(50)" remarks="The code for the document attribute">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" unique="true"/>
       </column>
       <column name="document_definition_id" type="nvarchar(50)"
         remarks="The ID for the document definition the document attribute definition is specific to"/>

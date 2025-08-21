@@ -33,6 +33,7 @@ import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
@@ -61,6 +62,7 @@ import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
+import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -212,6 +214,18 @@ public class EndToEndTests {
     //  | |_| | (_) | (__| |_| | | | | | |  __/ | | | |_   ___) |  __/ |_| |_| | |_) |
     //  |____/ \___/ \___|\__,_|_| |_| |_|\___|_| |_|\__| |____/ \___|\__|\__,_| .__/
     //                                                                         |_|
+
+    // Create the document attribute definition
+    DocumentAttributeDefinition documentAttributeDefinition =
+        new DocumentAttributeDefinition(
+            "test_document_attribute_code",
+            "Test Document Attribute",
+            true,
+            null,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
+
     // Create the document definition category
     DocumentDefinitionCategory documentDefinitionCategory =
         new DocumentDefinitionCategory(
@@ -242,6 +256,18 @@ public class EndToEndTests {
     //    \ V  V / (_) | |  |   <|  _| | (_) \ V  V /   ___) |  __/ |_| |_| | |_) |
     //     \_/\_/ \___/|_|  |_|\_\_| |_|\___/ \_/\_/   |____/ \___|\__|\__,_| .__/
     //                                                                      |_|
+
+    // Create the workflow attribute definition
+    WorkflowAttributeDefinition workflowAttributeDefinition =
+        new WorkflowAttributeDefinition(
+            "test_workflow_attribute_code",
+            "Test Workflow Attribute",
+            true,
+            null,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    workflowService.createWorkflowAttributeDefinition(workflowAttributeDefinition);
+
     // Create the workflow definition category
     WorkflowDefinitionCategory workflowDefinitionCategory =
         new WorkflowDefinitionCategory(
@@ -410,7 +436,7 @@ public class EndToEndTests {
             UUID.randomUUID().toString(),
             List.of(
                 new WorkflowAttribute(
-                    "test_workflow_attribute_name", "test_workflow_attribute_value")),
+                    "test_workflow_attribute_code", "test_workflow_attribute_value")),
             List.of(new InitiateWorkflowInteractionLink(firstInteractionId)),
             workflowDataJson);
 
@@ -582,6 +608,8 @@ public class EndToEndTests {
       workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategoryId);
     }
 
+    workflowService.deleteWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
+
     //   ____                                        _      ____ _
     //  |  _ \  ___   ___ _   _ _ __ ___   ___ _ __ | |_   / ___| | ___  __ _ _ __  _   _ _ __
     //  | | | |/ _ \ / __| | | | '_ ` _ \ / _ \ '_ \| __| | |   | |/ _ \/ _` | '_ \| | | | '_ \
@@ -607,6 +635,8 @@ public class EndToEndTests {
       // Delete the document definition category
       documentService.deleteDocumentDefinitionCategory(documentDefinitionCategoryId);
     }
+
+    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinition.getCode());
 
     //   ___       _                      _   _                ____ _
     //  |_ _|_ __ | |_ ___ _ __ __ _  ___| |_(_) ___  _ __    / ___| | ___  __ _ _ __  _   _ _ __

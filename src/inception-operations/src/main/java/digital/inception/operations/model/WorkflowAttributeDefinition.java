@@ -117,45 +117,22 @@ public class WorkflowAttributeDefinition implements Serializable {
    * Constructs a new {@code WorkflowAttributeDefinition}.
    *
    * @param code the code for the workflow attribute
-   */
-  public WorkflowAttributeDefinition(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Constructs a new {@code WorkflowAttributeDefinition}.
-   *
-   * @param code the code for the workflow attribute
-   * @param workflowDefinitionId the ID for the workflow definition the workflow attribute
-   *     definition is specific to
-   */
-  public WorkflowAttributeDefinition(String code, String workflowDefinitionId) {
-    this.code = code;
-    this.workflowDefinitionId = workflowDefinitionId;
-  }
-
-  /**
-   * Constructs a new {@code WorkflowAttributeDefinition}.
-   *
-   * @param code the code for the workflow attribute
+   * @param description the description for the workflow attribute
+   * @param required is the workflow attribute required
    * @param workflowDefinitionId the ID for the workflow definition the workflow attribute
    *     definition is specific to
    * @param tenantId the ID for the tenant the workflow attribute definition is specific to
    */
-  public WorkflowAttributeDefinition(String code, String workflowDefinitionId, UUID tenantId) {
+  public WorkflowAttributeDefinition(
+      String code,
+      String description,
+      boolean required,
+      String workflowDefinitionId,
+      UUID tenantId) {
     this.code = code;
+    this.description = description;
+    this.required = required;
     this.workflowDefinitionId = workflowDefinitionId;
-    this.tenantId = tenantId;
-  }
-
-  /**
-   * Constructs a new {@code WorkflowAttributeDefinition}.
-   *
-   * @param code the code for the workflow attribute
-   * @param tenantId the ID for the tenant the workflow attribute definition is specific to
-   */
-  public WorkflowAttributeDefinition(String code, UUID tenantId) {
-    this.code = code;
     this.tenantId = tenantId;
   }
 
