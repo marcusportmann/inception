@@ -41,15 +41,14 @@ import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
-import digital.inception.operations.model.InitiateWorkflowAttribute;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
-import digital.inception.operations.model.ProvideWorkflowDocumentAttribute;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
@@ -62,6 +61,7 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -234,16 +234,13 @@ public class WorkflowServiceTests {
 
     String testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
 
-    List<InitiateWorkflowAttribute> initiateWorkflowAttributes =
-        List.of(
-            new InitiateWorkflowAttribute(
-                "test_workflow_attribute_name", "test_workflow_attribute_value"));
-
     InitiateWorkflowRequest initiateWorkflowRequest =
         new InitiateWorkflowRequest(
             workflowDefinition.getId(),
             UUID.randomUUID().toString(),
-            initiateWorkflowAttributes,
+            List.of(
+                new WorkflowAttribute(
+                    "test_workflow_attribute_name", "test_workflow_attribute_value")),
             testWorkflowDataJson);
 
     Workflow workflow =
@@ -353,17 +350,14 @@ public class WorkflowServiceTests {
     // Provide a workflow document
     byte[] multiPagePdfData = ResourceUtil.getClasspathResource("MultiPagePdf.pdf");
 
-    List<ProvideWorkflowDocumentAttribute> provideWorkflowDocumentAttributes =
-        List.of(
-            new ProvideWorkflowDocumentAttribute(
-                "test_document_attribute_name", "test_document_attribute_value"));
-
     ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest =
         new ProvideWorkflowDocumentRequest(
             retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getId(),
             FileType.PDF,
             "MultiPagePdf.pdf",
-            provideWorkflowDocumentAttributes,
+            List.of(
+                new DocumentAttribute(
+                    "test_document_attribute_name", "test_document_attribute_value")),
             multiPagePdfData);
 
     provideWorkflowDocumentRequest.setExternalReference(UUID.randomUUID().toString());

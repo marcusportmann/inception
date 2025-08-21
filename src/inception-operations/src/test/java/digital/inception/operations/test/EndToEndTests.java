@@ -38,7 +38,6 @@ import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
-import digital.inception.operations.model.InitiateWorkflowAttribute;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
@@ -61,6 +60,7 @@ import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -404,16 +404,13 @@ public class EndToEndTests {
 
     String workflowDataJson = objectMapper.writeValueAsString(workflowData);
 
-    List<InitiateWorkflowAttribute> initiateWorkflowAttributes =
-        List.of(
-            new InitiateWorkflowAttribute(
-                "test_workflow_attribute_name", "test_workflow_attribute_value"));
-
     InitiateWorkflowRequest initiateWorkflowRequest =
         new InitiateWorkflowRequest(
             workflowDefinition.getId(),
             UUID.randomUUID().toString(),
-            initiateWorkflowAttributes,
+            List.of(
+                new WorkflowAttribute(
+                    "test_workflow_attribute_name", "test_workflow_attribute_value")),
             List.of(new InitiateWorkflowInteractionLink(firstInteractionId)),
             workflowDataJson);
 

@@ -31,6 +31,7 @@ import digital.inception.operations.exception.DuplicateDocumentDefinitionExcepti
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
@@ -141,6 +142,25 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentDefinitionNotFoundException(createDocumentRequest.getDefinitionId());
       }
 
+      // Validate the document attributes
+      for (DocumentAttribute documentAttribute : createDocumentRequest.getAttributes()) {
+        if (!isValidDocumentAttribute(
+            tenantId, createDocumentRequest.getDefinitionId(), documentAttribute.getCode())) {
+          log.warn(
+              "Invalid document attribute ("
+                  + documentAttribute.getCode()
+                  + ") when creating a document with definition ID ("
+                  + createDocumentRequest.getDefinitionId()
+                  + ") for the tenant ("
+                  + tenantId
+                  + ")");
+
+          throw new InvalidArgumentException(
+              "createDocumentRequest.attributes.code",
+              "the document attribute (" + documentAttribute.getCode() + ") is invalid");
+        }
+      }
+
       Document document = new Document(createDocumentRequest.getDefinitionId());
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(createdBy);
@@ -155,7 +175,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setTenantId(tenantId);
 
       return documentStore.createDocument(tenantId, document);
-    } catch (DocumentDefinitionNotFoundException e) {
+    } catch (InvalidArgumentException | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -798,6 +818,27 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       Document document =
           documentStore.getDocument(tenantId, updateDocumentRequest.getDocumentId());
 
+      // Validate the document attributes
+      for (DocumentAttribute documentAttribute : updateDocumentRequest.getAttributes()) {
+        if (!isValidDocumentAttribute(
+            tenantId, document.getDefinitionId(), documentAttribute.getCode())) {
+          log.warn(
+              "Invalid document attribute ("
+                  + documentAttribute.getCode()
+                  + ") when updating the document ("
+                  + document.getId()
+                  + ") with definition ID ("
+                  + document.getDefinitionId()
+                  + ") for the tenant ("
+                  + tenantId
+                  + ")");
+
+          throw new InvalidArgumentException(
+              "updateDocumentRequest.attributes.code",
+              "the document attribute (" + documentAttribute.getCode() + ") is invalid");
+        }
+      }
+
       document.setData(updateDocumentRequest.getData());
       document.setExpiryDate(updateDocumentRequest.getExpiryDate());
       document.setExternalReference(updateDocumentRequest.getExternalReference());
@@ -809,7 +850,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setUpdatedBy(updatedBy);
 
       return documentStore.updateDocument(tenantId, document);
-    } catch (DocumentNotFoundException e) {
+    } catch (InvalidArgumentException | DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

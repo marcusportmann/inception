@@ -25,11 +25,13 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
@@ -37,6 +39,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -54,6 +58,7 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
+  "attributes",
   "data"
 })
 @XmlRootElement(name = "UpdateDocumentRequest", namespace = "https://inception.digital/operations")
@@ -68,6 +73,7 @@ import java.util.UUID;
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
+      "attributes",
       "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -75,6 +81,14 @@ import java.util.UUID;
 public class UpdateDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the document. */
+  @Schema(description = "The attributes for the document")
+  @JsonProperty
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  @Valid
+  private List<DocumentAttribute> attributes = new ArrayList<>();
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -147,6 +161,15 @@ public class UpdateDocumentRequest implements Serializable {
   public UpdateDocumentRequest() {}
 
   /**
+   * Returns the attributes for the document.
+   *
+   * @return the attributes for the document
+   */
+  public List<DocumentAttribute> getAttributes() {
+    return attributes;
+  }
+
+  /**
    * Returns the data for the document.
    *
    * @return the data for the document
@@ -216,6 +239,15 @@ public class UpdateDocumentRequest implements Serializable {
    */
   public UUID getSourceDocumentId() {
     return sourceDocumentId;
+  }
+
+  /**
+   * Set the attributes for the document.
+   *
+   * @param attributes the attributes for the document
+   */
+  public void setAttributes(List<DocumentAttribute> attributes) {
+    this.attributes = attributes;
   }
 
   /**

@@ -40,16 +40,15 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
-import digital.inception.operations.model.InitiateWorkflowAttribute;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
-import digital.inception.operations.model.ProvideWorkflowDocumentAttribute;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
@@ -1271,13 +1270,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
 
       // Validate the workflow attributes
-      for (InitiateWorkflowAttribute initiateWorkflowAttribute :
+      for (WorkflowAttribute workflowAttribute :
           initiateWorkflowRequest.getAttributes()) {
         if (!isValidWorkflowAttribute(
-            tenantId, workflowDefinition.getId(), initiateWorkflowAttribute.getCode())) {
+            tenantId, workflowDefinition.getId(), workflowAttribute.getCode())) {
           log.warn(
               "Invalid workflow attribute ("
-                  + initiateWorkflowAttribute.getCode()
+                  + workflowAttribute.getCode()
                   + ") provided when initiating a workflow with the workflow definition ("
                   + workflowDefinition.getId()
                   + ") version ("
@@ -1288,7 +1287,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
           throw new InvalidArgumentException(
               "initiateWorkflowRequest.attributes.code",
-              "the workflow attribute (" + initiateWorkflowAttribute.getCode() + ") is invalid");
+              "the workflow attribute (" + workflowAttribute.getCode() + ") is invalid");
         }
       }
 
@@ -1313,15 +1312,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
-      List<WorkflowAttribute> workflowAttributes =
-          initiateWorkflowRequest.getAttributes().stream()
-              .map(
-                  initiateWorkflowAttribute ->
-                      new WorkflowAttribute(
-                          initiateWorkflowAttribute.getCode(),
-                          initiateWorkflowAttribute.getValue()))
-              .toList();
-
       Workflow workflow =
           new Workflow(
               tenantId,
@@ -1331,7 +1321,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               initiateWorkflowRequest.getPendWorkflow()
                   ? WorkflowStatus.PENDING
                   : WorkflowStatus.ACTIVE,
-              workflowAttributes,
+              initiateWorkflowRequest.getAttributes(),
               initiateWorkflowRequest.getData(),
               now,
               initiatedBy);
@@ -1517,13 +1507,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               tenantId, provideWorkflowDocumentRequest.getWorkflowDocumentId());
 
       // Validate the document attributes
-      for (ProvideWorkflowDocumentAttribute provideWorkflowDocumentAttribute :
+      for (DocumentAttribute documentAttribute :
           provideWorkflowDocumentRequest.getAttributes()) {
         if (!documentService.isValidDocumentAttribute(
-            tenantId, documentDefinitionId, provideWorkflowDocumentAttribute.getCode())) {
+            tenantId, documentDefinitionId, documentAttribute.getCode())) {
           log.warn(
               "Invalid document attribute ("
-                  + provideWorkflowDocumentAttribute.getCode()
+                  + documentAttribute.getCode()
                   + ") provided for workflow document ("
                   + provideWorkflowDocumentRequest.getWorkflowDocumentId()
                   + ") for the tenant ("
@@ -1533,7 +1523,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           throw new InvalidArgumentException(
               "provideWorkflowDocumentRequest.attributes.code",
               "the document attribute ("
-                  + provideWorkflowDocumentAttribute.getCode()
+                  + documentAttribute.getCode()
                   + ") is invalid");
         }
       }

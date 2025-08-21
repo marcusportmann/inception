@@ -91,7 +91,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  private List<ProvideWorkflowDocumentAttribute> attributes = new ArrayList<>();
+  private List<DocumentAttribute> attributes = new ArrayList<>();
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -194,7 +194,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
       UUID workflowDocumentId,
       FileType fileType,
       String name,
-      List<ProvideWorkflowDocumentAttribute> attributes,
+      List<DocumentAttribute> attributes,
       byte[] data) {
     this.workflowDocumentId = workflowDocumentId;
     this.fileType = fileType;
@@ -235,7 +235,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
       UUID workflowDocumentId,
       FileType fileType,
       String name,
-      List<ProvideWorkflowDocumentAttribute> attributes,
+      List<DocumentAttribute> attributes,
       byte[] data,
       String description) {
     this.workflowDocumentId = workflowDocumentId;
@@ -254,7 +254,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
    *
    * @return the attributes for the document
    */
-  public List<ProvideWorkflowDocumentAttribute> getAttributes() {
+  public List<DocumentAttribute> getAttributes() {
     return attributes;
   }
 
@@ -344,7 +344,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
    *
    * @param attributes the attributes for the document
    */
-  public void setAttributes(List<ProvideWorkflowDocumentAttribute> attributes) {
+  public void setAttributes(List<DocumentAttribute> attributes) {
     this.attributes = attributes;
   }
 

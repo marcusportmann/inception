@@ -1090,14 +1090,9 @@ public class InternalWorkflowStore implements WorkflowStore {
         }
       }
 
-      List<DocumentAttribute> documentAttributes =
-          provideWorkflowDocumentRequest.getAttributes().stream()
-              .map(attr -> new DocumentAttribute(attr.getCode(), attr.getValue()))
-              .toList();
-
       // Create the new document
       document = new Document(workflowDocument.getDocumentDefinitionId());
-      document.setAttributes(documentAttributes);
+      document.setAttributes(provideWorkflowDocumentRequest.getAttributes());
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(providedBy);
       document.setData(provideWorkflowDocumentRequest.getData());

@@ -78,7 +78,7 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  private List<InitiateWorkflowAttribute> attributes = new ArrayList<>();
+  private List<WorkflowAttribute> attributes = new ArrayList<>();
 
   /** The data for the workflow. */
   @Schema(description = "The data for the workflow")
@@ -145,7 +145,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param data the data for the workflow
    */
   public InitiateWorkflowRequest(
-      String definitionId, List<InitiateWorkflowAttribute> attributes, String data) {
+      String definitionId, List<WorkflowAttribute> attributes, String data) {
     this.definitionId = definitionId;
     this.attributes = attributes;
     this.data = data;
@@ -163,7 +163,7 @@ public class InitiateWorkflowRequest implements Serializable {
   public InitiateWorkflowRequest(
       String definitionId,
       String externalReference,
-      List<InitiateWorkflowAttribute> attributes,
+      List<WorkflowAttribute> attributes,
       String data) {
     this.definitionId = definitionId;
     this.externalReference = externalReference;
@@ -180,7 +180,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param data the data for the workflow
    */
   public InitiateWorkflowRequest(
-      UUID parentId, String definitionId, List<InitiateWorkflowAttribute> attributes, String data) {
+      UUID parentId, String definitionId, List<WorkflowAttribute> attributes, String data) {
     this.parentId = parentId;
     this.definitionId = definitionId;
     this.attributes = attributes;
@@ -201,7 +201,7 @@ public class InitiateWorkflowRequest implements Serializable {
       UUID parentId,
       String definitionId,
       String externalReference,
-      List<InitiateWorkflowAttribute> attributes,
+      List<WorkflowAttribute> attributes,
       String data) {
     this.parentId = parentId;
     this.definitionId = definitionId;
@@ -220,7 +220,7 @@ public class InitiateWorkflowRequest implements Serializable {
    */
   public InitiateWorkflowRequest(
       String definitionId,
-      List<InitiateWorkflowAttribute> attributes,
+      List<WorkflowAttribute> attributes,
       List<InitiateWorkflowInteractionLink> interactionLinks,
       String data) {
     this.definitionId = definitionId;
@@ -242,7 +242,7 @@ public class InitiateWorkflowRequest implements Serializable {
   public InitiateWorkflowRequest(
       String definitionId,
       String externalReference,
-      List<InitiateWorkflowAttribute> attributes,
+      List<WorkflowAttribute> attributes,
       List<InitiateWorkflowInteractionLink> interactionLinks,
       String data) {
     this.definitionId = definitionId;
@@ -264,7 +264,7 @@ public class InitiateWorkflowRequest implements Serializable {
   public InitiateWorkflowRequest(
       UUID parentId,
       String definitionId,
-      List<InitiateWorkflowAttribute> attributes,
+      List<WorkflowAttribute> attributes,
       List<InitiateWorkflowInteractionLink> interactionLinks,
       String data) {
     this.parentId = parentId;
@@ -289,7 +289,7 @@ public class InitiateWorkflowRequest implements Serializable {
       UUID parentId,
       String definitionId,
       String externalReference,
-      List<InitiateWorkflowAttribute> attributes,
+      List<WorkflowAttribute> attributes,
       List<InitiateWorkflowInteractionLink> interactionLinks,
       String data) {
     this.parentId = parentId;
@@ -305,7 +305,7 @@ public class InitiateWorkflowRequest implements Serializable {
    *
    * @return the attributes for the workflow
    */
-  public List<InitiateWorkflowAttribute> getAttributes() {
+  public List<WorkflowAttribute> getAttributes() {
     return attributes;
   }
 
@@ -378,7 +378,7 @@ public class InitiateWorkflowRequest implements Serializable {
    *
    * @param attributes the attributes for the workflow
    */
-  public void setAttributes(List<InitiateWorkflowAttribute> attributes) {
+  public void setAttributes(List<WorkflowAttribute> attributes) {
     this.attributes = attributes;
   }
 

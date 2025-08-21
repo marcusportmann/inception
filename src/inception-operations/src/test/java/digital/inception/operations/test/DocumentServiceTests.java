@@ -36,6 +36,7 @@ import digital.inception.operations.exception.DuplicateDocumentDefinitionExcepti
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
@@ -557,6 +558,10 @@ public class DocumentServiceTests {
 
     CreateDocumentRequest createDocumentRequest = new CreateDocumentRequest();
 
+    createDocumentRequest.setAttributes(
+        List.of(
+            new DocumentAttribute(
+                "test_document_attribute_code", "test_document_attribute_value")));
     createDocumentRequest.setData(data);
     createDocumentRequest.setDefinitionId(documentDefinitionId);
     createDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(6));
@@ -575,6 +580,10 @@ public class DocumentServiceTests {
 
     UpdateDocumentRequest updateDocumentRequest = new UpdateDocumentRequest();
 
+    updateDocumentRequest.setAttributes(
+        List.of(
+            new DocumentAttribute(
+                "test_document_attribute_code", "test_document_attribute_value")));
     updateDocumentRequest.setData(data);
     updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
     updateDocumentRequest.setExternalReference(UUID.randomUUID().toString());
