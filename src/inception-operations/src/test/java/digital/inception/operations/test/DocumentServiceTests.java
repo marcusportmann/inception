@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.file.FileType;
@@ -56,6 +57,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -551,6 +553,30 @@ public class DocumentServiceTests {
         document1.getUpdatedBy(),
         document2.getUpdatedBy(),
         "The updated by values for the documents do not match");
+
+    assertEquals(
+        document1.getAttributes().size(),
+        document2.getAttributes().size(),
+        "The number of attributes for the workflows do not match");
+
+    document1
+        .getAttributes()
+        .forEach(
+            documentAttribute1 -> {
+              boolean foundAttribute =
+                  document2.getAttributes().stream()
+                      .anyMatch(
+                          documentAttribute2 ->
+                              Objects.equals(documentAttribute1, documentAttribute2));
+              if (!foundAttribute) {
+                fail(
+                    "Failed to find the attribute ("
+                        + documentAttribute1.getCode()
+                        + ") for the document ("
+                        + document1.getId()
+                        + ")");
+              }
+            });
   }
 
   private CreateDocumentRequest getCreateDocumentRequest(String documentDefinitionId) {
