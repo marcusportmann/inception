@@ -557,7 +557,7 @@ public class DocumentServiceTests {
     assertEquals(
         document1.getAttributes().size(),
         document2.getAttributes().size(),
-        "The number of attributes for the workflows do not match");
+        "The number of attributes for the documents do not match");
 
     document1
         .getAttributes()
