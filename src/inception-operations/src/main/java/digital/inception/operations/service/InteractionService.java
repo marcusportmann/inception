@@ -47,6 +47,7 @@ import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
+import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import java.util.List;
 import java.util.Optional;
@@ -494,6 +495,19 @@ public interface InteractionService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Check whether the interaction source exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the ID for the interaction source
+   * @return {@code true} if the interaction source exists or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the existence of the interaction source could not be
+   *     determined
+   */
+  boolean interactionSourceExists(UUID tenantId, UUID interactionSourceId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Link a party to an interaction.
    *
    * @param tenantId the ID for the tenant
@@ -545,6 +559,24 @@ public interface InteractionService {
    */
   int synchronizeInteractionSource(InteractionSource interactionSource)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Transfer an interaction to an interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param transferInteractionRequest the request to transfer an interaction to an interaction
+   *     source
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the interaction could not be transferred to the
+   *     interaction source
+   */
+  void transferInteraction(UUID tenantId, TransferInteractionRequest transferInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException;
 
   /** Trigger the interaction processing. */
   void triggerInteractionProcessing();

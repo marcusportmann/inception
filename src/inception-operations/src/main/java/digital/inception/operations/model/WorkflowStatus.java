@@ -62,7 +62,11 @@ public enum WorkflowStatus implements CodeEnum {
 
   /** Failed. */
   @XmlEnumValue("Failed")
-  FAILED("failed", "Failed");
+  FAILED("failed", "Failed"),
+
+  /** Unknown. */
+  @XmlEnumValue("Unknown")
+  UNKNOWN("unknown", "Unknown");
 
   private final String code;
 

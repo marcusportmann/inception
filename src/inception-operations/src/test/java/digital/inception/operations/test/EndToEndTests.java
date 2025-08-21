@@ -319,7 +319,7 @@ public class EndToEndTests {
             false));
 
     workflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
+        new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 

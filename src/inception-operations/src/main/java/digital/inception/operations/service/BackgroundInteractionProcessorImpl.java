@@ -137,7 +137,11 @@ public class BackgroundInteractionProcessorImpl
     return running.get() || interactionProcessor.isTerminating();
   }
 
-  /** Process the interactions. */
+  /**
+   * Process the interactions.
+   *
+   * @return the number of processed interactions
+   */
   @Scheduled(cron = "0 * * * * *")
   public int processInteractions() {
     if (!executing.compareAndSet(false, true)) {

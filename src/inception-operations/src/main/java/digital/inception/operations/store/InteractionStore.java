@@ -48,7 +48,7 @@ import java.util.UUID;
 public interface InteractionStore {
 
   /**
-   * Assign the interaction to a user.
+   * Assign the interaction to the user.
    *
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
@@ -359,6 +359,20 @@ public interface InteractionStore {
    */
   void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
       throws ServiceUnavailableException;
+
+  /**
+   * Transfer the interaction to the interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param interactionSourceId the ID for the interaction source the interaction should be
+   *     transferred to
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be transferred to the
+   *     interaction source
+   */
+  void transferInteraction(UUID tenantId, UUID interactionId, UUID interactionSourceId)
+      throws InteractionNotFoundException, ServiceUnavailableException;
 
   /**
    * Unlock a locked interaction.

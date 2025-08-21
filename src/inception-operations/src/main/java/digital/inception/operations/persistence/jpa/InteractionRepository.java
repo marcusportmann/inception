@@ -42,7 +42,7 @@ public interface InteractionRepository
     extends JpaRepository<Interaction, UUID>, JpaSpecificationExecutor<Interaction> {
 
   /**
-   * Assign the interaction to a user.
+   * Assign the interaction to the user.
    *
    * @param interactionId the ID for the interaction
    * @param assigned the date and time the interaction was assigned
@@ -205,6 +205,21 @@ public interface InteractionRepository
       @Param("status") InteractionStatus status,
       @Param("newStatus") InteractionStatus newStatus,
       @Param("lockName") String lockName);
+
+  /**
+   * Transfer the interaction to the interaction source.
+   *
+   * @param interactionId the ID for the interaction
+   * @param interactionSourceId the ID for the interaction source the interaction should be
+   *     transferred to
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      "update Interaction i set i.sourceId = :interactionSourceId " + "where i.id = :interactionId")
+  void transferInteraction(
+      @Param("interactionId") UUID interactionId,
+      @Param("interactionSourceId") UUID interactionSourceId);
 
   /**
    * Unlock the interaction.

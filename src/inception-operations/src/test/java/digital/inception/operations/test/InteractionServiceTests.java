@@ -56,6 +56,7 @@ import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.InteractionService;
@@ -240,6 +241,30 @@ public class InteractionServiceTests {
 
     assertEquals(6, retrievedInteractionSourcePermissions.size());
 
+    InteractionSource anotherInteractionSource =
+        InteractionSource.createVirtualInteractionSource(
+            UUID.randomUUID(),
+            TenantUtil.DEFAULT_TENANT_ID,
+            "Another Virtual Interaction Source " + randomId());
+
+    anotherInteractionSource.setPermissions(
+        List.of(
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.ASSIGN_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.CREATE_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.DELETE_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.RETRIEVE_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.TRANSFER_INTERACTION),
+            new InteractionSourcePermission(
+                "Administrator", InteractionPermissionType.UPDATE_INTERACTION)));
+
+    interactionService.createInteractionSource(
+        TenantUtil.DEFAULT_TENANT_ID, anotherInteractionSource);
+
     Interaction interaction =
         new Interaction(
             UUID.randomUUID(),
@@ -272,6 +297,15 @@ public class InteractionServiceTests {
     assertNotNull(retrievedInteraction.getAssigned());
     assertEquals("TEST2", retrievedInteraction.getAssignedTo());
 
+    interactionService.transferInteraction(
+        TenantUtil.DEFAULT_TENANT_ID,
+        new TransferInteractionRequest(interaction.getId(), anotherInteractionSource.getId()));
+
+    retrievedInteraction =
+        interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction.getId());
+
+    assertEquals(retrievedInteraction.getSourceId(), anotherInteractionSource.getId());
+
     interactionService.deleteInteraction(
         TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getId());
 
@@ -288,6 +322,9 @@ public class InteractionServiceTests {
             TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());
 
     compareInteractionSources(interactionSource, retrievedInteractionSource);
+
+    interactionService.deleteInteractionSource(
+        TenantUtil.DEFAULT_TENANT_ID, anotherInteractionSource.getId());
 
     interactionService.deleteInteractionSource(
         TenantUtil.DEFAULT_TENANT_ID, interactionSource.getId());

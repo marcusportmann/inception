@@ -160,6 +160,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
@@ -1141,6 +1142,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {

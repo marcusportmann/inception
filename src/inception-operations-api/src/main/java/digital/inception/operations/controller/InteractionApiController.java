@@ -40,6 +40,7 @@ import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
+import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -80,7 +81,9 @@ public interface InteractionApiController {
    * @throws InteractionNotFoundException if the interaction could not be found
    * @throws ServiceUnavailableException if the interaction could not be assigned to the user
    */
-  @Operation(summary = "Assign interaction to user", description = "Assign interaction to user")
+  @Operation(
+      summary = "Assign an interaction to a user",
+      description = "Assign an interaction to a user")
   @ApiResponses(
       value = {
         @ApiResponse(
@@ -1176,6 +1179,83 @@ public interface InteractionApiController {
       throws InvalidArgumentException,
           InteractionNotFoundException,
           PartyNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Transfer an interaction to an interaction source.
+   *
+   * @param tenantId the ID for the tenant
+   * @param transferInteractionRequest the request to transfer an interaction to an interaction
+   *     source
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws InteractionSourceNotFoundException if the interaction source could not be found
+   * @throws ServiceUnavailableException if the interaction could not be transferred to the
+   *     interaction source
+   */
+  @Operation(
+      summary = "Transfer an interaction to an interaction source",
+      description = "Transfer an interaction to an interaction source")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The interaction was transferred to the interaction source"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction or interaction source could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/transfer-interaction",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void transferInteraction(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to transfer an interaction to another interaction source",
+              required = true)
+          @RequestBody
+          TransferInteractionRequest transferInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionSourceNotFoundException,
           ServiceUnavailableException;
 
   /**

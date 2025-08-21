@@ -122,14 +122,16 @@ public interface WorkflowService {
    *     exists
    * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
    *     not be found
+   * @throws WorkflowEngineNotFoundException if the workflow engine could not be found
    * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
-   *     * definition version could not be found
+   *     definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be created
    */
   void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
@@ -884,14 +886,16 @@ public interface WorkflowService {
    *     not be found
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
    *     be found
+   * @throws WorkflowEngineNotFoundException if the workflow engine could not be found
    * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
-   *     * definition version could not be found
+   *     definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be updated
    */
   void updateWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 

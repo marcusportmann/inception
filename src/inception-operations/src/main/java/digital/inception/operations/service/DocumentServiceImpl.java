@@ -20,7 +20,6 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.util.StringUtil;
 import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -52,7 +51,9 @@ import digital.inception.operations.store.DocumentStore;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -832,20 +833,18 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       List<DocumentAttributeDefinition> documentAttributeDefinitions =
           getDocumentService().getDocumentAttributeDefinitions(tenantId);
 
-      for (DocumentAttributeDefinition documentAttributeDefinition : documentAttributeDefinitions) {
-        if ((documentAttributeDefinition.getDocumentDefinitionId() == null)
-            || (StringUtil.equalsIgnoreCase(
-                documentAttributeDefinition.getDocumentDefinitionId(), documentDefinitionId))) {
-          if ((documentAttributeDefinition.getTenantId() == null)
-              || (documentAttributeDefinition.getTenantId().equals(tenantId))) {
-            if (documentAttributeDefinition.getCode().equals(attributeCode)) {
-              return true;
-            }
-          }
-        }
-      }
-
-      return false;
+      return documentAttributeDefinitions.stream()
+          .filter(
+              documentAttributeDefinition ->
+                  (documentAttributeDefinition.getDocumentDefinitionId() == null
+                          || documentAttributeDefinition
+                              .getDocumentDefinitionId()
+                              .equals(documentDefinitionId))
+                      && (documentAttributeDefinition.getTenantId() == null
+                          || documentAttributeDefinition.getTenantId().equals(tenantId)))
+          .anyMatch(
+              documentAttributeDefinition ->
+                  documentAttributeDefinition.getCode().equals(attributeCode));
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the document attribute ("
@@ -1047,28 +1046,32 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       List<DocumentAttributeDefinition> requiredDocumentAttributeDefinitions =
           getDocumentService().getRequiredDocumentAttributeDefinitions(tenantId);
 
-      for (DocumentAttributeDefinition requiredDocumentAttributeDefinition :
-          requiredDocumentAttributeDefinitions) {
-        if ((requiredDocumentAttributeDefinition.getDocumentDefinitionId() == null)
-            || (StringUtil.equalsIgnoreCase(
-                requiredDocumentAttributeDefinition.getDocumentDefinitionId(),
-                documentDefinitionId))) {
-          if ((requiredDocumentAttributeDefinition.getTenantId() == null)
-              || (requiredDocumentAttributeDefinition.getTenantId().equals(tenantId))) {
-            if (documentAttributes.stream()
-                .noneMatch(
-                    documentAttribute ->
-                        StringUtil.equalsIgnoreCase(
-                            requiredDocumentAttributeDefinition.getCode(),
-                            documentAttribute.getCode()))) {
-              throw new InvalidArgumentException(
-                  parameter,
-                  "the document attribute ("
-                      + requiredDocumentAttributeDefinition.getCode()
-                      + ") is required");
-            }
-          }
-        }
+      // Early exit if no required document attribute definitions exist
+      if (requiredDocumentAttributeDefinitions.isEmpty()) {
+        return;
+      }
+
+      // Create a Set for O(1) lookup performance instead of O(n) stream operations
+      Set<String> providedDocumentAttributeCodes =
+          documentAttributes.stream().map(DocumentAttribute::getCode).collect(Collectors.toSet());
+
+      // Filter and validate in a single pass
+      String missingDocumentAttributeCode =
+          requiredDocumentAttributeDefinitions.stream()
+              .filter(
+                  definition ->
+                      (definition.getDocumentDefinitionId() == null
+                              || definition.getDocumentDefinitionId().equals(documentDefinitionId))
+                          && (definition.getTenantId() == null
+                              || definition.getTenantId().equals(tenantId)))
+              .map(DocumentAttributeDefinition::getCode)
+              .filter(code -> providedDocumentAttributeCodes.stream().noneMatch(code::equals))
+              .findFirst()
+              .orElse(null);
+
+      if (missingDocumentAttributeCode != null) {
+        throw new InvalidArgumentException(
+            parameter, "the document attribute (" + missingDocumentAttributeCode + ") is required");
       }
     } catch (InvalidArgumentException e) {
       throw e;

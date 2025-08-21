@@ -172,7 +172,7 @@ public class WorkflowServiceTests {
             false));
 
     workflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
+        new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 
@@ -333,7 +333,7 @@ public class WorkflowServiceTests {
             false));
 
     workflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_id", UUID.randomUUID().toString()));
+        new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 
@@ -973,6 +973,9 @@ public class WorkflowServiceTests {
             workflowEngine.getId(),
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+
+    sharedWorkflowDefinition.addAttribute(
+        new WorkflowDefinitionAttribute("process_definition_key", "process_definition_key_value"));
 
     sharedWorkflowDefinition.addDocumentDefinition(
         sharedDocumentDefinition.getId(), true, true, true);

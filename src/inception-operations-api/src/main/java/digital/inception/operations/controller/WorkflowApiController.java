@@ -243,6 +243,7 @@ public interface WorkflowApiController {
    *     exists
    * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
    *     not be found
+   * @throws WorkflowEngineNotFoundException if the workflow engine could not be found
    * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
    *     definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be created
@@ -272,7 +273,7 @@ public interface WorkflowApiController {
         @ApiResponse(
             responseCode = "404",
             description =
-                "The workflow definition category or a document definition reference by the workflow definition version could not be found",
+                "The workflow definition category, workflow engine, or a document definition reference by the workflow definition version could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -315,6 +316,7 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
@@ -3395,6 +3397,7 @@ public interface WorkflowApiController {
    *     not be found
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
    *     be found
+   * @throws WorkflowEngineNotFoundException if the workflow engine could not be found
    * @throws DocumentDefinitionNotFoundException if a document definition reference by the workflow
    *     definition version could not be found
    * @throws ServiceUnavailableException if the workflow definition version could not be updated
@@ -3424,7 +3427,7 @@ public interface WorkflowApiController {
         @ApiResponse(
             responseCode = "404",
             description =
-                "The workflow definition category, workflow definition version or a document definition referenced by the workflow definition version could not be found",
+                "The workflow definition category, workflow definition version, workflow engine or a document definition referenced by the workflow definition version could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -3473,6 +3476,7 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 

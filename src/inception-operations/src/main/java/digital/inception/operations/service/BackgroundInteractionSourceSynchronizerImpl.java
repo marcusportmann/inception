@@ -48,7 +48,7 @@ public class BackgroundInteractionSourceSynchronizerImpl
   /** The Interaction Service. */
   private final InteractionService interactionService;
 
-  /** Is the Background Interaction Processor running. */
+  /** Is the Background Interaction Source Synchronizer running. */
   private final AtomicBoolean running = new AtomicBoolean(false);
 
   /**
@@ -85,7 +85,11 @@ public class BackgroundInteractionSourceSynchronizerImpl
     }
   }
 
-  /** Synchronize the interaction sources. */
+  /**
+   * Synchronize the interaction sources.
+   *
+   * @return the number of new interactions
+   */
   @Scheduled(cron = "0 * * * * *")
   public int synchronizeInteractionSources() {
     if (!executing.compareAndSet(false, true)) {

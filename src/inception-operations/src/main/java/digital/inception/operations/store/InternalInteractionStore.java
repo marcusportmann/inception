@@ -839,6 +839,30 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
+  public void transferInteraction(UUID tenantId, UUID interactionId, UUID interactionSourceId)
+      throws InteractionNotFoundException, ServiceUnavailableException {
+    try {
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      interactionRepository.transferInteraction(interactionId, interactionSourceId);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to transfer the interaction ("
+              + interactionId
+              + ") to the interaction source ("
+              + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void unlockInteraction(UUID tenantId, UUID interactionId, InteractionStatus status)
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {

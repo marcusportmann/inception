@@ -176,12 +176,15 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
-  public void cancelWorkflow(UUID tenantId, UUID workflowId, String canceledBy, String cancellationReason)
+  public void cancelWorkflow(
+      UUID tenantId, UUID workflowId, String canceledBy, String cancellationReason)
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
       OffsetDateTime now = OffsetDateTime.now();
 
-      if (workflowRepository.cancelWorkflow(tenantId, workflowId, now, canceledBy, cancellationReason) <= 0) {
+      if (workflowRepository.cancelWorkflow(
+              tenantId, workflowId, now, canceledBy, cancellationReason)
+          <= 0) {
         throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 

@@ -43,6 +43,7 @@ import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
+import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.InteractionService;
 import java.util.ArrayList;
@@ -409,6 +410,24 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     interactionService.linkPartyToInteraction(tenantId, linkPartyToInteractionRequest);
+  }
+
+  @Override
+  public void transferInteraction(
+      UUID tenantId, TransferInteractionRequest transferInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    interactionService.transferInteraction(tenantId, transferInteractionRequest);
   }
 
   @Override

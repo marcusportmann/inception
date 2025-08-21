@@ -16,11 +16,13 @@
 
 package digital.inception.operations.connector;
 
+import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowFormType;
+import digital.inception.operations.model.WorkflowStatus;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -49,14 +51,49 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   public void cancelWorkflow(
       UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
       throws WorkflowEngineConnectorException {
-    throw new WorkflowEngineConnectorException("Not Implemented");
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to cancel the workflow ("
+              + workflow.getId()
+              + ") with the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<ValidWorkflowDefinitionAttribute> getValidWorkflowDefinitionAttributes() {
+    return List.of(
+        new ValidWorkflowDefinitionAttribute(
+            "process_definition_key", "Process Definition Key", true));
   }
 
   @Override
   public byte[] getWorkflowData(
       UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
       throws WorkflowEngineConnectorException {
-    throw new WorkflowEngineConnectorException("Not Implemented");
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to retrieve the data for the workflow ("
+              + workflow.getId()
+              + ") with the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -66,7 +103,37 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
       Workflow workflow,
       WorkflowFormType workflowFormType)
       throws WorkflowEngineConnectorException {
-    throw new WorkflowEngineConnectorException("Not Implemented");
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to retrieve the workflow form for the workflow ("
+              + workflow.getId()
+              + ") with the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public WorkflowStatus getWorkflowStatus(UUID tenantId, Workflow workflow)
+      throws WorkflowEngineConnectorException {
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to retrieve the status for the workflow ("
+              + workflow.getStatus()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -76,27 +143,81 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
       List<WorkflowAttribute> attributes,
       String data)
       throws WorkflowEngineConnectorException {
-    throw new WorkflowEngineConnectorException("Not Implemented");
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to initiate the workflow with the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
   public void suspendWorkflow(
       UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
       throws WorkflowEngineConnectorException {
-    throw new WorkflowEngineConnectorException("Not Implemented");
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to suspend the workflow ("
+              + workflow.getId()
+              + ") with the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
   public void unsuspendWorkflow(
       UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
       throws WorkflowEngineConnectorException {
-    throw new WorkflowEngineConnectorException("Not Implemented");
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to unsuspend the workflow ("
+              + workflow.getId()
+              + ") with the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
   public void updateWorkflowData(
       UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow, String data)
       throws WorkflowEngineConnectorException {
-    throw new WorkflowEngineConnectorException("Not Implemented");
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to update the data for the workflow ("
+              + workflow.getId()
+              + ") with the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 }

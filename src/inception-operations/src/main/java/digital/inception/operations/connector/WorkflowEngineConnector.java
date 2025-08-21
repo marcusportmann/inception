@@ -16,10 +16,12 @@
 
 package digital.inception.operations.connector;
 
+import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowFormType;
+import digital.inception.operations.model.WorkflowStatus;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +43,13 @@ public interface WorkflowEngineConnector {
    */
   void cancelWorkflow(UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
       throws WorkflowEngineConnectorException;
+
+  /**
+   * Returns the valid workflow definition attributes for the workflow engine connector.
+   *
+   * @return the valid workflow definition attributes for the workflow engine connector
+   */
+  List<ValidWorkflowDefinitionAttribute> getValidWorkflowDefinitionAttributes();
 
   /**
    * Retrieve the data for a workflow.
@@ -70,6 +79,18 @@ public interface WorkflowEngineConnector {
       WorkflowDefinition workflowDefinition,
       Workflow workflow,
       WorkflowFormType workflowFormType)
+      throws WorkflowEngineConnectorException;
+
+  /**
+   * Retrieve the status of the workflow from the workflow engine.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflow the workflow
+   * @return the status of the workflow retrieved from the workflow engine
+   * @throws WorkflowEngineConnectorException if the status of the workflow could not be retrieved
+   *     from the workflow engine
+   */
+  WorkflowStatus getWorkflowStatus(UUID tenantId, Workflow workflow)
       throws WorkflowEngineConnectorException;
 
   /**

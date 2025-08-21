@@ -60,6 +60,7 @@ import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.MailboxInteractionSourceAttributeName;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.persistence.jpa.InteractionSourceRepository;
 import digital.inception.operations.persistence.jpa.InteractionSourceSummaryRepository;
@@ -1040,6 +1041,30 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  public boolean interactionSourceExists(UUID tenantId, UUID interactionSourceId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionSourceId == null) {
+      throw new InvalidArgumentException("interactionSourceId");
+    }
+
+    try {
+      return interactionSourceRepository.existsByTenantIdAndId(tenantId, interactionSourceId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the interaction source ("
+              + interactionSourceId
+              + ") exists for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void linkPartyToInteraction(
       UUID tenantId, LinkPartyToInteractionRequest linkPartyToInteractionRequest)
       throws InvalidArgumentException,
@@ -1117,6 +1142,45 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + ") with the unsupported type ("
               + interactionSource.getType()
               + ")");
+    }
+  }
+
+  @Override
+  public void transferInteraction(
+      UUID tenantId, TransferInteractionRequest transferInteractionRequest)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionSourceNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("transferInteractionRequest", transferInteractionRequest);
+
+    try {
+      if (!interactionSourceRepository.existsByTenantIdAndId(
+          tenantId, transferInteractionRequest.getInteractionSourceId())) {
+        throw new InteractionSourceNotFoundException(
+            tenantId, transferInteractionRequest.getInteractionSourceId());
+      }
+
+      interactionStore.transferInteraction(
+          tenantId,
+          transferInteractionRequest.getInteractionId(),
+          transferInteractionRequest.getInteractionSourceId());
+    } catch (InteractionNotFoundException | InteractionSourceNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to transfer the interaction ("
+              + transferInteractionRequest.getInteractionId()
+              + ") to the interaction source ("
+              + transferInteractionRequest.getInteractionSourceId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 

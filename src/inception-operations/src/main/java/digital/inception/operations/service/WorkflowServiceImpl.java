@@ -20,7 +20,6 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.util.StringUtil;
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowAttributeDefinitionException;
@@ -62,11 +61,13 @@ import digital.inception.operations.model.UnsuspendWorkflowRequest;
 import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
+import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
+import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
@@ -96,8 +97,10 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -285,33 +288,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
+          WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     validateArgument("workflowDefinition", workflowDefinition);
 
     try {
-      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinition.getCategoryId())) {
-        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinition.getCategoryId());
-      }
-
       if (workflowDefinitionRepository.existsByIdAndVersion(
           workflowDefinition.getId(), workflowDefinition.getVersion())) {
         throw new DuplicateWorkflowDefinitionVersionException(
             workflowDefinition.getId(), workflowDefinition.getVersion());
       }
 
-      for (WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition :
-          workflowDefinition.getDocumentDefinitions()) {
-        if (!documentService.documentDefinitionExists(
-            workflowDefinitionDocumentDefinition.getDocumentDefinitionId())) {
-          throw new DocumentDefinitionNotFoundException(
-              workflowDefinitionDocumentDefinition.getDocumentDefinitionId());
-        }
-      }
+      validateWorkflowDefinition(workflowDefinition);
 
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
     } catch (DuplicateWorkflowDefinitionVersionException
         | WorkflowDefinitionCategoryNotFoundException
+        | WorkflowEngineNotFoundException
         | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1477,8 +1471,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       boolean foundWorkflowStepDefinition = false;
       for (WorkflowStepDefinition stepDefinition : stepDefinitions) {
-        if (StringUtil.equalsIgnoreCase(
-            initiateWorkflowStepRequest.getStep(), stepDefinition.getCode())) {
+        if (stepDefinition.getCode().equals(initiateWorkflowStepRequest.getStep())) {
           foundWorkflowStepDefinition = true;
           break;
         }
@@ -1515,20 +1508,18 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       List<WorkflowAttributeDefinition> workflowAttributeDefinitions =
           getWorkflowService().getWorkflowAttributeDefinitions(tenantId);
 
-      for (WorkflowAttributeDefinition workflowAttributeDefinition : workflowAttributeDefinitions) {
-        if ((workflowAttributeDefinition.getWorkflowDefinitionId() == null)
-            || (StringUtil.equalsIgnoreCase(
-                workflowAttributeDefinition.getWorkflowDefinitionId(), workflowDefinitionId))) {
-          if ((workflowAttributeDefinition.getTenantId() == null)
-              || (workflowAttributeDefinition.getTenantId().equals(tenantId))) {
-            if (workflowAttributeDefinition.getCode().equals(attributeCode)) {
-              return true;
-            }
-          }
-        }
-      }
-
-      return false;
+      return workflowAttributeDefinitions.stream()
+          .filter(
+              workflowAttributeDefinition ->
+                  (workflowAttributeDefinition.getWorkflowDefinitionId() == null
+                          || workflowAttributeDefinition
+                              .getWorkflowDefinitionId()
+                              .equals(workflowDefinitionId))
+                      && (workflowAttributeDefinition.getTenantId() == null
+                          || workflowAttributeDefinition.getTenantId().equals(tenantId)))
+          .anyMatch(
+              workflowAttributeDefinition ->
+                  workflowAttributeDefinition.getCode().equals(attributeCode));
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the workflow attribute ("
@@ -2019,23 +2010,25 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
+          WorkflowEngineNotFoundException,
+          DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     validateArgument("workflowDefinition", workflowDefinition);
 
     try {
-      if (!workflowDefinitionCategoryRepository.existsById(workflowDefinition.getCategoryId())) {
-        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinition.getCategoryId());
-      }
-
       if (!workflowDefinitionRepository.existsByIdAndVersion(
           workflowDefinition.getId(), workflowDefinition.getVersion())) {
         throw new WorkflowDefinitionVersionNotFoundException(
             workflowDefinition.getId(), workflowDefinition.getVersion());
       }
 
+      validateWorkflowDefinition(workflowDefinition);
+
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
     } catch (WorkflowDefinitionCategoryNotFoundException
-        | WorkflowDefinitionVersionNotFoundException e) {
+        | WorkflowDefinitionVersionNotFoundException
+        | WorkflowEngineNotFoundException
+        | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -2138,28 +2131,32 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       List<WorkflowAttributeDefinition> requiredWorkflowAttributeDefinitions =
           getWorkflowService().getRequiredWorkflowAttributeDefinitions(tenantId);
 
-      for (WorkflowAttributeDefinition requiredWorkflowAttributeDefinition :
-          requiredWorkflowAttributeDefinitions) {
-        if ((requiredWorkflowAttributeDefinition.getWorkflowDefinitionId() == null)
-            || (StringUtil.equalsIgnoreCase(
-                requiredWorkflowAttributeDefinition.getWorkflowDefinitionId(),
-                workflowDefinitionId))) {
-          if ((requiredWorkflowAttributeDefinition.getTenantId() == null)
-              || (requiredWorkflowAttributeDefinition.getTenantId().equals(tenantId))) {
-            if (workflowAttributes.stream()
-                .noneMatch(
-                    workflowAttribute ->
-                        StringUtil.equalsIgnoreCase(
-                            requiredWorkflowAttributeDefinition.getCode(),
-                            workflowAttribute.getCode()))) {
-              throw new InvalidArgumentException(
-                  parameter,
-                  "the workflow attribute ("
-                      + requiredWorkflowAttributeDefinition.getCode()
-                      + ") is required");
-            }
-          }
-        }
+      // Early exit if no required workflow attribute definitions exist
+      if (requiredWorkflowAttributeDefinitions.isEmpty()) {
+        return;
+      }
+
+      // Create a Set for O(1) lookup performance instead of O(n) stream operations
+      Set<String> providedWorkflowAttributeCodes =
+          workflowAttributes.stream().map(WorkflowAttribute::getCode).collect(Collectors.toSet());
+
+      // Filter and validate in a single pass
+      String missingWorkflowAttributeCode =
+          requiredWorkflowAttributeDefinitions.stream()
+              .filter(
+                  definition ->
+                      (definition.getWorkflowDefinitionId() == null
+                              || definition.getWorkflowDefinitionId().equals(workflowDefinitionId))
+                          && (definition.getTenantId() == null
+                              || definition.getTenantId().equals(tenantId)))
+              .map(WorkflowAttributeDefinition::getCode)
+              .filter(code -> providedWorkflowAttributeCodes.stream().noneMatch(code::equals))
+              .findFirst()
+              .orElse(null);
+
+      if (missingWorkflowAttributeCode != null) {
+        throw new InvalidArgumentException(
+            parameter, "the workflow attribute (" + missingWorkflowAttributeCode + ") is required");
       }
     } catch (InvalidArgumentException e) {
       throw e;
@@ -2451,5 +2448,71 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     return workflowService;
+  }
+
+  private void validateWorkflowDefinition(WorkflowDefinition workflowDefinition)
+      throws InvalidArgumentException,
+          WorkflowDefinitionCategoryNotFoundException,
+          WorkflowEngineNotFoundException,
+          DocumentDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!workflowDefinitionCategoryRepository.existsById(workflowDefinition.getCategoryId())) {
+      throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinition.getCategoryId());
+    }
+
+    if (!workflowEngineRepository.existsById(workflowDefinition.getEngineId())) {
+      throw new WorkflowEngineNotFoundException(workflowDefinition.getEngineId());
+    }
+
+    List<ValidWorkflowDefinitionAttribute> validWorkflowDefinitionAttributes =
+        getWorkflowEngineConnector(workflowDefinition.getEngineId())
+            .getValidWorkflowDefinitionAttributes();
+
+    // Create lookup sets for efficient comparison
+    Set<String> validWorkflowDefinitionAttributeCodes =
+        validWorkflowDefinitionAttributes.stream()
+            .map(ValidWorkflowDefinitionAttribute::getCode)
+            .collect(Collectors.toSet());
+
+    Set<String> providedWorkflowDefinitionAttributeCodes =
+        workflowDefinition.getAttributes().stream()
+            .map(WorkflowDefinitionAttribute::getCode)
+            .collect(Collectors.toSet());
+
+    // Check for missing required workflow definition attributes
+    String missingRequiredAttribute =
+        validWorkflowDefinitionAttributes.stream()
+            .filter(ValidWorkflowDefinitionAttribute::isRequired)
+            .map(ValidWorkflowDefinitionAttribute::getCode)
+            .filter(code -> !providedWorkflowDefinitionAttributeCodes.contains(code))
+            .findFirst()
+            .orElse(null);
+
+    if (missingRequiredAttribute != null) {
+      throw new InvalidArgumentException(
+          "workflowDefinition",
+          "the workflow definition attribute (" + missingRequiredAttribute + ") is required");
+    }
+
+    // Check for invalid workflow definition attributes
+    String invalidAttribute =
+        providedWorkflowDefinitionAttributeCodes.stream()
+            .filter(code -> !validWorkflowDefinitionAttributeCodes.contains(code))
+            .findFirst()
+            .orElse(null);
+
+    if (invalidAttribute != null) {
+      throw new InvalidArgumentException(
+          "workflowDefinition",
+          "the workflow definition attribute (" + invalidAttribute + ") is invalid");
+    }
+
+    // Validate document definitions if they exist
+    for (WorkflowDefinitionDocumentDefinition documentDefinition :
+        workflowDefinition.getDocumentDefinitions()) {
+      if (!documentService.documentDefinitionExists(documentDefinition.getDocumentDefinitionId())) {
+        throw new DocumentDefinitionNotFoundException(documentDefinition.getDocumentDefinitionId());
+      }
+    }
   }
 }
