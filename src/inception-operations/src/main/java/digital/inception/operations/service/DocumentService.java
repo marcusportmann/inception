@@ -423,6 +423,18 @@ public interface DocumentService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Retrieve the required document attribute definitions.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the required document attribute definitions
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the required document attribute definitions could not be
+   *     retrieved
+   */
+  List<DocumentAttributeDefinition> getRequiredDocumentAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Check whether a document attribute with the specified code is valid for a document.
    *
    * @param tenantId the ID for the tenant

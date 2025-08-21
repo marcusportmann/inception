@@ -328,6 +328,18 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the required workflow attribute definitions.
+   *
+   * @param tenantId the ID for the tenant
+   * @return the required workflow attribute definitions
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the required workflow attribute definitions could not be
+   *     retrieved
+   */
+  List<WorkflowAttributeDefinition> getRequiredWorkflowAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant

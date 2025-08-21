@@ -41,7 +41,6 @@ import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentAttribute;
-import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
@@ -724,6 +723,30 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  @Cacheable(cacheNames = "workflowAttributeDefinitions", key = "#tenantId.toString + '-REQUIRED'")
+  public List<WorkflowAttributeDefinition> getRequiredWorkflowAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    try {
+      List<WorkflowAttributeDefinition> workflowAttributeDefinitions =
+          getWorkflowService().getWorkflowAttributeDefinitions(tenantId);
+
+      return workflowAttributeDefinitions.stream()
+          .filter(WorkflowAttributeDefinition::isRequired)
+          .toList();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the required workflow attribute definitions for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public Workflow getWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -776,9 +799,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  @Cacheable(cacheNames = "workflowAttributeDefinitions", key = "'ALL'")
+  @Cacheable(cacheNames = "workflowAttributeDefinitions", key = "#tenantId")
   public List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       return workflowAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
     } catch (Throwable e) {
@@ -1271,8 +1298,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
 
       // Validate the workflow attributes
-      for (WorkflowAttribute workflowAttribute :
-          initiateWorkflowRequest.getAttributes()) {
+      for (WorkflowAttribute workflowAttribute : initiateWorkflowRequest.getAttributes()) {
         if (!isValidWorkflowAttribute(
             tenantId, workflowDefinition.getId(), workflowAttribute.getCode())) {
           log.warn(
@@ -1436,7 +1462,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       for (WorkflowAttributeDefinition workflowAttributeDefinition : workflowAttributeDefinitions) {
         if ((workflowAttributeDefinition.getWorkflowDefinitionId() == null)
             || (StringUtil.equalsIgnoreCase(
-            workflowAttributeDefinition.getWorkflowDefinitionId(), workflowDefinitionId))) {
+                workflowAttributeDefinition.getWorkflowDefinitionId(), workflowDefinitionId))) {
           if ((workflowAttributeDefinition.getTenantId() == null)
               || (workflowAttributeDefinition.getTenantId().equals(tenantId))) {
             if (workflowAttributeDefinition.getCode().equals(attributeCode)) {
@@ -1524,8 +1550,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               tenantId, provideWorkflowDocumentRequest.getWorkflowDocumentId());
 
       // Validate the document attributes
-      for (DocumentAttribute documentAttribute :
-          provideWorkflowDocumentRequest.getAttributes()) {
+      for (DocumentAttribute documentAttribute : provideWorkflowDocumentRequest.getAttributes()) {
         if (!documentService.isValidDocumentAttribute(
             tenantId, documentDefinitionId, documentAttribute.getCode())) {
           log.warn(
@@ -1539,9 +1564,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
           throw new InvalidArgumentException(
               "provideWorkflowDocumentRequest.attributes.code",
-              "the document attribute ("
-                  + documentAttribute.getCode()
-                  + ") is invalid");
+              "the document attribute (" + documentAttribute.getCode() + ") is invalid");
         }
       }
 

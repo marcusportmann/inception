@@ -565,9 +565,13 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  @Cacheable(cacheNames = "documentAttributeDefinitions", key = "'ALL'")
+  @Cacheable(cacheNames = "documentAttributeDefinitions", key = "#tenantId")
   public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       return documentAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
     } catch (Throwable e) {
@@ -785,6 +789,30 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "documentAttributeDefinitions", key = "#tenantId.toString + '-REQUIRED'")
+  public List<DocumentAttributeDefinition> getRequiredDocumentAttributeDefinitions(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    try {
+      List<DocumentAttributeDefinition> documentAttributeDefinitions =
+          getDocumentService().getDocumentAttributeDefinitions(tenantId);
+
+      return documentAttributeDefinitions.stream()
+          .filter(DocumentAttributeDefinition::isRequired)
+          .toList();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the required document attribute definitions for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
