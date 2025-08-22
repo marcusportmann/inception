@@ -47,7 +47,7 @@ public interface WorkflowRepository
   /**
    * Cancel a workflow instance.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the workflow ID
    * @param canceled the date and time the workflow was canceled
    * @param canceledBy the person or system that canceled the workflow
@@ -80,7 +80,7 @@ public interface WorkflowRepository
   /**
    * Returns whether a workflow with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @return {@code true} if a workflow with the specified tenant ID and ID exists or {@code false}
    *     otherwise
@@ -90,7 +90,7 @@ public interface WorkflowRepository
   /**
    * Finalize a workflow instance.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the workflow ID
    * @param status the final status for the workflow
    * @param finalized the date and time the workflow was finalized
@@ -141,7 +141,7 @@ public interface WorkflowRepository
   /**
    * Retrieve the workflow.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @return an Optional containing the workflow or an empty Optional if the workflow could not be
    *     found
@@ -171,7 +171,7 @@ public interface WorkflowRepository
   /**
    * Suspend a workflow instance.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the workflow ID
    * @param suspended the date and time the workflow was suspended
    * @param suspendedBy the person or system that suspended the workflow
@@ -202,7 +202,7 @@ public interface WorkflowRepository
   /**
    * Unsuspend a workflow instance.
    *
-   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the workflow ID
    * @return the number of rows that were updated (0 or 1)
    */
@@ -227,7 +227,7 @@ public interface WorkflowRepository
   //  /**
   //   * Complete a workflow instance.
   //   *
-  //   * @param tenantId the ID for the tenant the workflow is associated with
+  //   * @param tenantId the ID for the tenant
   //   * @param workflowId the workflow ID
   //   * @param completed the date and time the workflow was completed
   //   * @param completedBy the person or system that completed the workflow

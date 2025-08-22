@@ -38,7 +38,7 @@ public interface WorkflowNoteRepository
   /**
    * Returns whether a workflow note with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowNoteId the ID for the workflow note
    * @return {@code true} if a workflow note with the specified tenant ID and ID exists or {@code
    *     false} otherwise
@@ -48,8 +48,8 @@ public interface WorkflowNoteRepository
   /**
    * Returns whether a workflow note with the specified tenant ID, workflow ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
-   * @param workflowId the ID for the workflow the workflow note is associated with
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
    * @param workflowNoteId the ID for the workflow note
    * @return {@code true} if a workflow note with the specified tenant ID, workflow ID and ID exists
    *     or {@code false} otherwise
@@ -59,7 +59,7 @@ public interface WorkflowNoteRepository
   /**
    * Retrieve the workflow note.
    *
-   * @param tenantId the ID for the tenant the workflow note is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowNoteId the ID for the workflow note
    * @return an Optional containing the workflow note or an empty Optional if the workflow note
    *     could not be found

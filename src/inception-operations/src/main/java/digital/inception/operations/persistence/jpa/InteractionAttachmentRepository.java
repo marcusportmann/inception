@@ -35,7 +35,7 @@ public interface InteractionAttachmentRepository
   /**
    * Returns whether an interaction attachment with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the interaction attachment is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionAttachmentId the ID for the interaction attachment
    * @return {@code true} if an interaction attachment with the specified tenant ID and ID exists or
    *     {@code false} otherwise
@@ -45,7 +45,7 @@ public interface InteractionAttachmentRepository
   /**
    * Retrieve the interaction attachment.
    *
-   * @param tenantId the ID for the tenant the interaction attachment is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionAttachmentId the ID for the interaction attachment
    * @return an Optional containing the interaction attachment or an empty Optional if the
    *     interaction attachment could not be found
@@ -55,9 +55,8 @@ public interface InteractionAttachmentRepository
   /**
    * Retrieve the ID for the interaction attachment with the specified interaction ID and hash.
    *
-   * @param tenantId the ID for the tenant the interaction attachment is associated with
-   * @param interactionId the ID for the interaction that the interaction attachment is associated
-   *     with
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
    * @param hash the hash for interaction attachment
    * @return an Optional containing the ID for the interaction attachment with the specified
    *     interaction ID and hash or an empty optional if the interaction attachment could not be

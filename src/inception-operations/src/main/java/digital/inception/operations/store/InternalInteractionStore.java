@@ -621,6 +621,56 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
+  public UUID getInteractionSourceIdForInteraction(UUID tenantId, UUID interactionId)
+      throws InteractionNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<UUID> interactionSourceIdOptional =
+          interactionRepository.getInteractionSourceIdByTenantIdAndInteractionId(
+              tenantId, interactionId);
+
+      if (interactionSourceIdOptional.isEmpty()) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      return interactionSourceIdOptional.get();
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction source ID for the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public UUID getInteractionSourceIdForInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InteractionNoteNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<UUID> interactionSourceIdOptional =
+          interactionNoteRepository.getInteractionSourceIdByTenantIdAndInteractionNoteId(
+              tenantId, interactionNoteId);
+
+      if (interactionSourceIdOptional.isEmpty()) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
+      }
+
+      return interactionSourceIdOptional.get();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction source ID for the interaction note ("
+              + interactionNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public InteractionSummaries getInteractionSummaries(
       UUID tenantId,
       UUID interactionSourceId,

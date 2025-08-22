@@ -41,13 +41,25 @@ public enum InteractionPermissionType implements CodeEnum {
   @XmlEnumValue("CreateInteraction")
   CREATE_INTERACTION("create_interaction", "Create Interaction"),
 
+  /** Create Interaction Note. */
+  @XmlEnumValue("CreateInteractionNote")
+  CREATE_INTERACTION_NOTE("create_interaction_note", "Create Interaction Note"),
+
   /** Delete Interaction. */
   @XmlEnumValue("DeleteInteraction")
   DELETE_INTERACTION("delete_interaction", "Delete Interaction"),
 
+  /** Link Party To Interaction. */
+  @XmlEnumValue("LinkPartyToInteraction")
+  LINK_PARTY_TO_INTERACTION("link_party_to_interaction", "Link Party To Interaction"),
+
   /** Retrieve Interaction. */
   @XmlEnumValue("RetrieveInteraction")
   RETRIEVE_INTERACTION("retrieve_interaction", "Retrieve Interaction"),
+
+  /** Retrieve Interaction Note. */
+  @XmlEnumValue("RetrieveInteractionNote")
+  RETRIEVE_INTERACTION_NOTE("retrieve_interaction_note", "Retrieve Interaction Note"),
 
   /** Transfer Interaction. */
   @XmlEnumValue("TransferInteraction")
@@ -55,7 +67,11 @@ public enum InteractionPermissionType implements CodeEnum {
 
   /** Update Interaction. */
   @XmlEnumValue("UpdateInteraction")
-  UPDATE_INTERACTION("update_interaction", "Update Interaction");
+  UPDATE_INTERACTION("update_interaction", "Update Interaction"),
+
+  /** Update Interaction Note. */
+  @XmlEnumValue("UpdateInteractionNote")
+  UPDATE_INTERACTION_NOTE("update_interaction_note", "Update Interaction Note");
 
   private final String code;
 

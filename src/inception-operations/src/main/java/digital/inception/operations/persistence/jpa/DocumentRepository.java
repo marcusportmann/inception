@@ -32,7 +32,7 @@ public interface DocumentRepository extends JpaRepository<Document, UUID> {
   /**
    * Returns whether a document with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the document is associated with
+   * @param tenantId the ID for the tenant
    * @param documentId the ID for the document
    * @return {@code true} if a document with the specified tenant ID and ID exists or {@code false}
    *     otherwise
@@ -42,7 +42,7 @@ public interface DocumentRepository extends JpaRepository<Document, UUID> {
   /**
    * Retrieve the document.
    *
-   * @param tenantId the ID for the tenant the document is associated with
+   * @param tenantId the ID for the tenant
    * @param documentId the ID for the document
    * @return an Optional containing the document or an empty Optional if the document could not be
    *     found

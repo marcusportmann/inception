@@ -53,7 +53,7 @@ public interface WorkflowDocumentRepository
   /**
    * Delete the workflow document.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
    * @return the number of workflow documents deleted
    */
@@ -63,7 +63,7 @@ public interface WorkflowDocumentRepository
   /**
    * Returns whether a workflow document with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
    * @return {@code true} if a workflow document with the specified tenant ID and ID exists or
    *     {@code false} otherwise
@@ -73,7 +73,7 @@ public interface WorkflowDocumentRepository
   /**
    * Returns whether a workflow document with the specified tenant ID, workflow ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow document is associated with
    * @param workflowDocumentId the ID for the workflow document
    * @return {@code true} if a workflow document with the specified tenant ID, workflow ID and ID
@@ -85,7 +85,7 @@ public interface WorkflowDocumentRepository
   /**
    * Retrieve the workflow document.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
    * @return an Optional containing the workflow document or an empty Optional if the workflow
    *     document could not be found
@@ -95,7 +95,7 @@ public interface WorkflowDocumentRepository
   /**
    * Retrieve the document definition ID for the workflow document.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
    * @return an Optional containing the document definition ID or an empty Optional if the workflow
    *     * document could not be found
@@ -140,7 +140,7 @@ public interface WorkflowDocumentRepository
   /**
    * Retrieve the workflow ID for the workflow document.
    *
-   * @param tenantId the ID for the tenant the workflow document is associated with
+   * @param tenantId the ID for the tenant
    * @param workflowDocumentId the workflow document ID
    * @return an Optional containing the ID for workflow for the workflow document with the specified
    *     tenant ID and ID or an empty Optional if the workflow document could not be found

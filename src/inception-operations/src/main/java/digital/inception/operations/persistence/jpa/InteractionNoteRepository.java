@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * The {@code InteractionNoteRepository} interface provides the persistence operations for the
@@ -36,22 +38,22 @@ public interface InteractionNoteRepository
     extends JpaRepository<InteractionNote, UUID>, JpaSpecificationExecutor<InteractionNote> {
 
   /**
-   * Returns whether a interaction note with the specified tenant ID and ID exists.
+   * Returns whether an interaction note with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the interaction note is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionNoteId the ID for the interaction note
-   * @return {@code true} if a interaction note with the specified tenant ID and ID exists or {@code
-   *     false} otherwise
+   * @return {@code true} if an interaction note with the specified tenant ID and ID exists or
+   *     {@code false} otherwise
    */
   boolean existsByTenantIdAndId(UUID tenantId, UUID interactionNoteId);
 
   /**
-   * Returns whether a interaction note with the specified tenant ID, interaction ID and ID exists.
+   * Returns whether an interaction note with the specified tenant ID, interaction ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the interaction note is associated with
-   * @param interactionId the ID for the interaction the interaction note is associated with
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
    * @param interactionNoteId the ID for the interaction note
-   * @return {@code true} if a interaction note with the specified tenant ID, interaction ID and ID
+   * @return {@code true} if an interaction note with the specified tenant ID, interaction ID and ID
    *     exists or {@code false} otherwise
    */
   boolean existsByTenantIdAndInteractionIdAndId(
@@ -60,10 +62,32 @@ public interface InteractionNoteRepository
   /**
    * Retrieve the interaction note.
    *
-   * @param tenantId the ID for the tenant the interaction note is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionNoteId the ID for the interaction note
    * @return an Optional containing the interaction note or an empty Optional if the interaction
    *     note could not be found
    */
   Optional<InteractionNote> findByTenantIdAndId(UUID tenantId, UUID interactionNoteId);
+
+  /**
+   * Retrieve the ID for the interaction source the interaction note is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionNoteId the ID for the interaction note
+   * @return an Optional containing the ID for the interaction source the interaction note is
+   *     associated with or an empty Optional if the interaction note could not be found
+   */
+  @Query(
+      """
+      select i.sourceId
+      from Interaction i
+      where i.id = (
+        select n.interactionId
+        from InteractionNote n
+        where n.tenantId = :tenantId
+          and n.id = :interactionNoteId
+      )
+      """)
+  Optional<UUID> getInteractionSourceIdByTenantIdAndInteractionNoteId(
+      @Param("tenantId") UUID tenantId, @Param("interactionNoteId") UUID interactionNoteId);
 }

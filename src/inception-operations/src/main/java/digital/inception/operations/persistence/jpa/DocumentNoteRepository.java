@@ -38,8 +38,8 @@ public interface DocumentNoteRepository
   /**
    * Returns whether a document note with the specified tenant ID, document ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the document note is associated with
-   * @param documentId the ID for the document the document note is associated with
+   * @param tenantId the ID for the tenant
+   * @param documentId the ID for the document
    * @param documentNoteId the ID for the document note
    * @return {@code true} if a document note with the specified tenant ID, document ID and ID exists
    *     or {@code false} otherwise
@@ -49,7 +49,7 @@ public interface DocumentNoteRepository
   /**
    * Returns whether a document note with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the document note is associated with
+   * @param tenantId the ID for the tenant
    * @param documentNoteId the ID for the document note
    * @return {@code true} if a document note with the specified tenant ID and ID exists or {@code
    *     false} otherwise
@@ -59,7 +59,7 @@ public interface DocumentNoteRepository
   /**
    * Retrieve the document note.
    *
-   * @param tenantId the ID for the tenant the document note is associated with
+   * @param tenantId the ID for the tenant
    * @param documentNoteId the ID for the document note
    * @return an Optional containing the document note or an empty Optional if the document note
    *     could not be found

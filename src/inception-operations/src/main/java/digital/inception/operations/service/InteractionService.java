@@ -310,6 +310,36 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the ID for the interaction source the interaction is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @return the ID for the interaction source the interaction is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the ID for the interaction source could not be retrieved
+   *     for the interaction
+   */
+  UUID getInteractionSourceIdForInteraction(UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the ID for the interaction source the interaction note is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionNoteId the ID for the interaction note
+   * @return the ID for the interaction source the interaction note is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNoteNotFoundException if the interaction note could not be found
+   * @throws ServiceUnavailableException if the ID for the interaction source could not be retrieved
+   *     for the interaction note
+   */
+  UUID getInteractionSourceIdForInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InvalidArgumentException,
+          InteractionNoteNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Retrieve the permissions for the interaction source.
    *
    * @param tenantId the ID for the tenant

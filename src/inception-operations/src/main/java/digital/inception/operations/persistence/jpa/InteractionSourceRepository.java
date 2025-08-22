@@ -37,7 +37,7 @@ public interface InteractionSourceRepository extends JpaRepository<InteractionSo
   /**
    * Returns whether an interaction source with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the interaction source is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionSourceId the ID for the interaction source
    * @return {@code true} if an interaction source with the specified tenant ID and ID exists or
    *     {@code false} otherwise

@@ -93,6 +93,18 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(
+            tenantId, assignInteractionRequest.getInteractionId());
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.ASSIGN_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
+    }
+
     interactionService.assignInteraction(tenantId, assignInteractionRequest);
   }
 
@@ -105,6 +117,14 @@ public class InteractionApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interaction.getSourceId(), InteractionPermissionType.ASSIGN_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interaction.getSourceId() + ")");
     }
 
     interactionService.createInteraction(tenantId, interaction);
@@ -120,6 +140,18 @@ public class InteractionApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(
+            tenantId, createInteractionNoteRequest.getInteractionId());
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.CREATE_INTERACTION_NOTE))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
     InteractionNote interactionNote =
@@ -156,6 +188,17 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(tenantId, interactionId);
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.DELETE_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
+    }
+
     interactionService.deleteInteraction(tenantId, interactionId);
   }
 
@@ -185,6 +228,18 @@ public class InteractionApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(
+            tenantId, delinkPartyFromInteractionRequest.getInteractionId());
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.LINK_PARTY_TO_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
     interactionService.delinkPartyFromInteraction(tenantId, delinkPartyFromInteractionRequest);
@@ -229,15 +284,22 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    try {
-      if (!interactionService.interactionExists(tenantId, interactionId)) {
-        throw new InteractionNotFoundException(tenantId, interactionId);
-      }
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(tenantId, interactionId);
 
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.RETRIEVE_INTERACTION_NOTE))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
+    }
+
+    try {
       if (!interactionService.interactionNoteExists(tenantId, interactionId, interactionNoteId)) {
         throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
       }
-    } catch (InteractionNotFoundException | InteractionNoteNotFoundException e) {
+    } catch (InteractionNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -270,6 +332,17 @@ public class InteractionApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(tenantId, interactionId);
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.RETRIEVE_INTERACTION_NOTE))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
     return interactionService.getInteractionNotes(
@@ -331,21 +404,7 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    List<InteractionSource> filteredInteractionSources = new ArrayList<>();
-
-    for (InteractionSource interactionSource : interactionService.getInteractionSources(tenantId)) {
-      if ((hasAccessToFunction("Operations.OperationsAdministration"))
-          || (hasAccessToFunction("Operations.InteractionAdministration"))
-          || (hasInteractionSourcePermission(
-              tenantId,
-              interactionSource.getId(),
-              InteractionPermissionType.RETRIEVE_INTERACTION))) {
-
-        filteredInteractionSources.add(interactionSource);
-      }
-    }
-
-    return filteredInteractionSources;
+    return interactionService.getInteractionSources(tenantId);
   }
 
   @Override
@@ -409,6 +468,18 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(
+            tenantId, linkPartyToInteractionRequest.getInteractionId());
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.LINK_PARTY_TO_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
+    }
+
     interactionService.linkPartyToInteraction(tenantId, linkPartyToInteractionRequest);
   }
 
@@ -425,6 +496,18 @@ public class InteractionApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(
+            tenantId, transferInteractionRequest.getInteractionId());
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.TRANSFER_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
     interactionService.transferInteraction(tenantId, transferInteractionRequest);
@@ -449,6 +532,17 @@ public class InteractionApiControllerImpl extends SecureApiController
       throw new InvalidArgumentException("interaction.id");
     }
 
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(tenantId, interactionId);
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.UPDATE_INTERACTION))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
+    }
+
     interactionService.updateInteraction(tenantId, interaction);
   }
 
@@ -464,6 +558,18 @@ public class InteractionApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteractionNote(
+            tenantId, updateInteractionNoteRequest.getInteractionNoteId());
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId, interactionSourceId, InteractionPermissionType.UPDATE_INTERACTION_NOTE))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
     InteractionNote interactionNote =

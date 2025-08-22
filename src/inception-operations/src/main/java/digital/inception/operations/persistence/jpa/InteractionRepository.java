@@ -91,7 +91,7 @@ public interface InteractionRepository
   /**
    * Returns whether an interaction with the specified tenant ID and ID exists.
    *
-   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
    * @return {@code true} if an interaction with the specified tenant ID and ID exists or {@code
    *     false} otherwise
@@ -101,7 +101,7 @@ public interface InteractionRepository
   /**
    * Retrieve the interaction.
    *
-   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
    * @return an Optional containing the interaction or an empty Optional if the interaction could
    *     not be found
@@ -126,7 +126,7 @@ public interface InteractionRepository
   /**
    * Retrieve the ID for the interaction with the specified source reference and source ID.
    *
-   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference
    * @return an Optional containing the ID for the interaction with the specified source reference
@@ -139,6 +139,19 @@ public interface InteractionRepository
       @Param("tenantId") UUID tenantId,
       @Param("sourceId") UUID sourceId,
       @Param("sourceReference") String sourceReference);
+
+  /**
+   * Retrieve the ID for the interaction source the interaction is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @return an Optional containing the ID for the interaction source the interaction is associated
+   *     with or an empty Optional if the interaction could not be found
+   */
+  @Query(
+      "select i.sourceId from Interaction i where i.tenantId = :tenantId and i.id = :interactionId")
+  Optional<UUID> getInteractionSourceIdByTenantIdAndInteractionId(
+      @Param("tenantId") UUID tenantId, @Param("interactionId") UUID interactionId);
 
   /**
    * Retrieve the subject for the interaction.

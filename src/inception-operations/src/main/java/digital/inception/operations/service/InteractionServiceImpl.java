@@ -714,6 +714,60 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  public UUID getInteractionSourceIdForInteraction(UUID tenantId, UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    try {
+      return interactionStore.getInteractionSourceIdForInteraction(tenantId, interactionId);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction source ID for the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public UUID getInteractionSourceIdForInteractionNote(UUID tenantId, UUID interactionNoteId)
+      throws InvalidArgumentException,
+          InteractionNoteNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (interactionNoteId == null) {
+      throw new InvalidArgumentException("interactionNoteId");
+    }
+
+    try {
+      return interactionStore.getInteractionSourceIdForInteractionNote(tenantId, interactionNoteId);
+    } catch (InteractionNoteNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction source ID for the interaction note ("
+              + interactionNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   @Cacheable(cacheNames = "interactionSourcePermissions", key = "#interactionSourceId")
   public List<InteractionSourcePermission> getInteractionSourcePermissions(
       UUID tenantId, UUID interactionSourceId)
