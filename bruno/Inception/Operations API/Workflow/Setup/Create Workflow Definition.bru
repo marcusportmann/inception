@@ -20,7 +20,7 @@ body:json {
     "engineId": "test_workflow_engine",
     "attributes": [
       {
-        "code": "process_id",
+        "code": "process_definition_key",
         "value": "test_process"
       }
     ],
@@ -58,6 +58,12 @@ body:json {
         "description": "The description for Test Workflow Step 3",
         "external": false,
         "internal": false
+      }
+    ],
+    "permissions": [
+      {
+        "roleCode": "Administrator",
+        "type": "initiate_workflow"
       }
     ],
     "validationSchemaType": "json",
