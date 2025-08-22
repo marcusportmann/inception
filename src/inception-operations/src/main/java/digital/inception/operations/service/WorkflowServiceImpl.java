@@ -687,6 +687,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     validateArgument("finalizeWorkflowRequest", finalizeWorkflowRequest);
 
+    if (!StringUtils.hasText(finalizedBy)) {
+      throw new InvalidArgumentException("finalizedBy");
+    }
+
     try {
       workflowStore.finalizeWorkflow(
           tenantId,
@@ -732,6 +736,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + finalizeWorkflowStepRequest.getWorkflowId()
               + ") for the tenant ("
               + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowEngineId)) {
+      throw new InvalidArgumentException("workflowEngineId");
+    }
+
+    try {
+      return workflowStore.getActiveWorkflowIdsForWorkflowEngine(workflowEngineId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the IDs for the active workflows for the workflow engine ("
+              + workflowEngineId
               + ")",
           e);
     }
@@ -807,6 +829,23 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
           e);
+    }
+  }
+
+  @Override
+  public Workflow getWorkflow(UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (workflowId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
+    try {
+      return workflowStore.getWorkflow(workflowId);
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow (" + workflowId + ")", e);
     }
   }
 
@@ -971,6 +1010,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new InvalidArgumentException("workflowDefinitionId");
     }
 
+    if (workflowDefinitionVersion <= 0) {
+      throw new InvalidArgumentException("workflowDefinitionVersion");
+    }
+
     try {
       if (!workflowDefinitionRepository.existsById(
           new WorkflowDefinitionId(workflowDefinitionId, workflowDefinitionVersion))) {
@@ -1000,6 +1043,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
       throw new InvalidArgumentException("workflowDefinitionCategoryId");
     }
@@ -1157,6 +1204,73 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow engine (" + workflowEngineId + ")", e);
+    }
+  }
+
+  @Override
+  public WorkflowEngineConnector getWorkflowEngineConnector(String workflowEngineId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(workflowEngineId)) {
+      throw new InvalidArgumentException("workflowEngineId");
+    }
+
+    WorkflowEngineConnector workflowEngineConnector =
+        workflowEngineConnectors.get(workflowEngineId);
+
+    if (workflowEngineConnector == null) {
+      try {
+        WorkflowEngine workflowEngine = getWorkflowEngine(workflowEngineId);
+
+        Class<?> clazz =
+            Thread.currentThread()
+                .getContextClassLoader()
+                .loadClass(workflowEngine.getConnectorClassName());
+
+        Constructor<?> constructor;
+
+        try {
+          constructor = clazz.getConstructor(ApplicationContext.class, WorkflowEngine.class);
+        } catch (NoSuchMethodException e) {
+          constructor = null;
+        }
+
+        if (constructor != null) {
+          // Create an instance of the workflow engine connector
+          workflowEngineConnector =
+              (WorkflowEngineConnector)
+                  constructor.newInstance(getApplicationContext(), workflowEngine);
+
+          // Perform dependency injection on the workflow engine connector
+          getApplicationContext()
+              .getAutowireCapableBeanFactory()
+              .autowireBean(workflowEngineConnector);
+
+          // Cache the workflow engine connector
+          workflowEngineConnectors.put(workflowEngineId, workflowEngineConnector);
+        } else {
+          throw new RuntimeException(
+              "Failed to initialize the workflow engine connector for the workflow engine ("
+                  + workflowEngineId
+                  + "): The workflow engine connector class does not provide a constructor with the required signature");
+        }
+      } catch (Throwable e) {
+        throw new ServiceUnavailableException(
+            "Failed to retrieve the workflow engine connector for the workflow engine ("
+                + workflowEngineId
+                + ")",
+            e);
+      }
+    }
+
+    return workflowEngineConnector;
+  }
+
+  @Override
+  public List<String> getWorkflowEngineIds() throws ServiceUnavailableException {
+    try {
+      return workflowEngineRepository.findAllIds();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the workflow engine IDs", e);
     }
   }
 
@@ -1326,6 +1440,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     validateArgument("initiateWorkflowRequest", initiateWorkflowRequest);
 
+    if (!StringUtils.hasText(initiatedBy)) {
+      throw new InvalidArgumentException("initiatedBy");
+    }
+
     try {
       OffsetDateTime now = OffsetDateTime.now();
 
@@ -1408,7 +1526,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       if (!initiateWorkflowRequest.getPendWorkflow()) {
         String engineInstanceId =
             getWorkflowEngineConnector(workflowDefinition.getEngineId())
-                .initiateWorkflow(
+                .startWorkflow(
                     tenantId,
                     workflowDefinition,
                     initiateWorkflowRequest.getAttributes(),
@@ -1503,7 +1621,19 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   @Override
   public boolean isValidWorkflowAttribute(
       UUID tenantId, String workflowDefinitionId, String attributeCode)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (!StringUtils.hasText(workflowDefinitionId)) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    if (!StringUtils.hasText(attributeCode)) {
+      throw new InvalidArgumentException("attributeCode");
+    }
+
     try {
       List<WorkflowAttributeDefinition> workflowAttributeDefinitions =
           getWorkflowService().getWorkflowAttributeDefinitions(tenantId);
@@ -1546,11 +1676,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new InvalidArgumentException("tenantId");
     }
 
+    validateArgument("linkInteractionToWorkflowRequest", linkInteractionToWorkflowRequest);
+
     if (!StringUtils.hasText(linkedBy)) {
       throw new InvalidArgumentException("linkedBy");
     }
-
-    validateArgument("linkInteractionToWorkflowRequest", linkInteractionToWorkflowRequest);
 
     try {
       workflowStore.linkInteractionToWorkflow(
@@ -1585,11 +1715,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new InvalidArgumentException("tenantId");
     }
 
+    validateArgument("provideWorkflowDocumentRequest", provideWorkflowDocumentRequest);
+
     if (!StringUtils.hasText(providedBy)) {
       throw new InvalidArgumentException("providedBy");
     }
-
-    validateArgument("provideWorkflowDocumentRequest", provideWorkflowDocumentRequest);
 
     try {
       String documentDefinitionId =
@@ -1667,11 +1797,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new InvalidArgumentException("tenantId");
     }
 
+    validateArgument("rejectWorkflowDocumentRequest", rejectWorkflowDocumentRequest);
+
     if (!StringUtils.hasText(rejectedBy)) {
       throw new InvalidArgumentException("rejectedBy");
     }
-
-    validateArgument("rejectWorkflowDocumentRequest", rejectWorkflowDocumentRequest);
 
     try {
       workflowStore.rejectWorkflowDocument(tenantId, rejectWorkflowDocumentRequest, rejectedBy);
@@ -1700,11 +1830,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new InvalidArgumentException("tenantId");
     }
 
+    validateArgument("requestWorkflowDocumentRequest", requestWorkflowDocumentRequest);
+
     if (!StringUtils.hasText(requestedBy)) {
       throw new InvalidArgumentException("requestedBy");
     }
-
-    validateArgument("requestWorkflowDocumentRequest", requestWorkflowDocumentRequest);
 
     try {
       if (!documentService.documentDefinitionExists(
@@ -1731,6 +1861,38 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public void setWorkflowStatus(UUID tenantId, UUID workflowId, WorkflowStatus status)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (workflowId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
+    if (status == null) {
+      throw new InvalidArgumentException("status");
+    }
+
+    try {
+      workflowStore.setWorkflowStatus(tenantId, workflowId, status);
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to set the status for the workflow ("
+              + workflowId
+              + ") to ("
+              + status
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void startWorkflow(
       UUID tenantId, StartWorkflowRequest startWorkflowRequest, String startedBy)
       throws InvalidArgumentException,
@@ -1743,6 +1905,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     validateArgument("startWorkflowRequest", startWorkflowRequest);
 
+    if (!StringUtils.hasText(startedBy)) {
+      throw new InvalidArgumentException("startedBy");
+    }
+
     try {
       Workflow workflow = workflowStore.getWorkflow(tenantId, startWorkflowRequest.getWorkflowId());
 
@@ -1750,8 +1916,21 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new InvalidWorkflowStatusException(startWorkflowRequest.getWorkflowId());
       }
 
-      // TODO: Start the workflow
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(
+                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
 
+      // Start the workflow
+      String engineInstanceId =
+          getWorkflowEngineConnector(workflowDefinition.getEngineId())
+              .startWorkflow(
+                  tenantId, workflowDefinition, workflow.getAttributes(), workflow.getData());
+
+      workflow.setEngineInstanceId(engineInstanceId);
+      workflow.setStatus(WorkflowStatus.ACTIVE);
+
+      workflowStore.updateWorkflow(tenantId, workflow);
     } catch (InvalidWorkflowStatusException | WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1774,6 +1953,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     validateArgument("suspendWorkflowRequest", suspendWorkflowRequest);
+
+    if (!StringUtils.hasText(suspendedBy)) {
+      throw new InvalidArgumentException("suspendedBy");
+    }
 
     try {
       Workflow workflow = getWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId());
@@ -1903,6 +2086,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     validateArgument("updateWorkflowRequest", updateWorkflowRequest);
+
+    if (!StringUtils.hasText(updatedBy)) {
+      throw new InvalidArgumentException("updatedBy");
+    }
 
     try {
       Workflow workflow =
@@ -2098,6 +2285,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     validateArgument("updateWorkflowNoteRequest", updateWorkflowNoteRequest);
 
+    if (!StringUtils.hasText(updatedBy)) {
+      throw new InvalidArgumentException("updatedBy");
+    }
+
     try {
       WorkflowNote workflowNote =
           workflowStore.getWorkflowNote(tenantId, updateWorkflowNoteRequest.getWorkflowNoteId());
@@ -2179,11 +2370,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new InvalidArgumentException("tenantId");
     }
 
+    validateArgument("verifyWorkflowDocumentRequest", verifyWorkflowDocumentRequest);
+
     if (!StringUtils.hasText(verifiedBy)) {
       throw new InvalidArgumentException("verifiedBy");
     }
-
-    validateArgument("verifyWorkflowDocumentRequest", verifyWorkflowDocumentRequest);
 
     try {
       workflowStore.verifyWorkflowDocument(tenantId, verifyWorkflowDocumentRequest, verifiedBy);
@@ -2383,58 +2574,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + ")",
           e);
     }
-  }
-
-  private WorkflowEngineConnector getWorkflowEngineConnector(String engineId)
-      throws ServiceUnavailableException {
-    WorkflowEngineConnector workflowEngineConnector = workflowEngineConnectors.get(engineId);
-
-    if (workflowEngineConnector == null) {
-      try {
-        WorkflowEngine workflowEngine = getWorkflowEngine(engineId);
-
-        Class<?> clazz =
-            Thread.currentThread()
-                .getContextClassLoader()
-                .loadClass(workflowEngine.getConnectorClassName());
-
-        Constructor<?> constructor;
-
-        try {
-          constructor = clazz.getConstructor(ApplicationContext.class, WorkflowEngine.class);
-        } catch (NoSuchMethodException e) {
-          constructor = null;
-        }
-
-        if (constructor != null) {
-          // Create an instance of the workflow engine connector
-          workflowEngineConnector =
-              (WorkflowEngineConnector)
-                  constructor.newInstance(getApplicationContext(), workflowEngine);
-
-          // Perform dependency injection on the workflow engine connector
-          getApplicationContext()
-              .getAutowireCapableBeanFactory()
-              .autowireBean(workflowEngineConnector);
-
-          // Cache the workflow engine connector
-          workflowEngineConnectors.put(engineId, workflowEngineConnector);
-        } else {
-          throw new RuntimeException(
-              "Failed to initialize the workflow engine connector for the workflow engine ("
-                  + engineId
-                  + "): The workflow engine connector class does not provide a constructor with the required signature");
-        }
-      } catch (Throwable e) {
-        throw new ServiceUnavailableException(
-            "Failed to retrieve the workflow engine connector for the workflow engine ("
-                + engineId
-                + ")",
-            e);
-      }
-    }
-
-    return workflowEngineConnector;
   }
 
   /**

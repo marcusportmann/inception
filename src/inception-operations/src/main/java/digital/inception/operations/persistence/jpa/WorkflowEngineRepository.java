@@ -17,7 +17,10 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.WorkflowEngine;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The {@code WorkflowEngineRepository} interface provides the persistence operations for the {@link
@@ -28,4 +31,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface WorkflowEngineRepository extends JpaRepository<WorkflowEngine, String> {}
+public interface WorkflowEngineRepository extends JpaRepository<WorkflowEngine, String> {
+
+  /**
+   * Returns the IDs for all workflow engines.
+   *
+   * @return the list of workflow engine IDs
+   */
+  @Transactional(readOnly = true)
+  @Query("select we.id from WorkflowEngine we order by we.id")
+  List<String> findAllIds();
+}

@@ -189,6 +189,17 @@ public interface WorkflowStore {
       throws WorkflowStepNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the IDs for the active workflows for the workflow engine.
+   *
+   * @param workflowEngineId the ID for the workflow engine
+   * @return the IDs for the active workflows for the workflow engine
+   * @throws ServiceUnavailableException if the IDs for the active workflows for the workflow engine
+   *     could not be retrieved
+   */
+  List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve the document definition ID for the workflow document.
    *
    * @param tenantId the ID for the tenant
@@ -225,6 +236,17 @@ public interface WorkflowStore {
    * @throws ServiceUnavailableException if the workflow could not be retrieved
    */
   Workflow getWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow.
+   *
+   * @param workflowId the ID for the workflow
+   * @return the workflow
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be retrieved
+   */
+  Workflow getWorkflow(UUID workflowId)
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -429,6 +451,19 @@ public interface WorkflowStore {
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
       throws DocumentDefinitionNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Set the status for the workflow and, if applicable, the status for any associated workflow
+   * steps.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param status the new status for the workflow
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the status for the workflow could not be set
+   */
+  void setWorkflowStatus(UUID tenantId, UUID workflowId, WorkflowStatus status)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Suspend the workflow.

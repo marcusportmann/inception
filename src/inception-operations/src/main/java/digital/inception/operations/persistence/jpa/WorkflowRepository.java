@@ -20,6 +20,7 @@ import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowStatus;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -120,6 +121,24 @@ public interface WorkflowRepository
       @Param("finalizedBy") String finalizedBy);
 
   /**
+   * Retrieve the IDs for the active workflows for the workflow engine.
+   *
+   * @param workflowEngineId the ID for the workflow engine
+   * @return the IDs for the active workflows for the workflow engine
+   */
+  @Query(
+      """
+      select w.id
+        from Workflow w
+        join WorkflowDefinition d
+          on d.id = w.definitionId and d.version = w.definitionVersion
+       where w.status = digital.inception.operations.model.WorkflowStatus.ACTIVE
+         and d.engineId = :workflowEngineId
+      """)
+  List<UUID> findActiveWorkflowIdsForWorkflowEngine(
+      @Param("workflowEngineId") String workflowEngineId);
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant the workflow is associated with
@@ -204,4 +223,35 @@ public interface WorkflowRepository
          and w.id                 = :workflowId
       """)
   int unsuspendWorkflow(@Param("tenantId") UUID tenantId, @Param("workflowId") UUID workflowId);
+
+  //  /**
+  //   * Complete a workflow instance.
+  //   *
+  //   * @param tenantId the ID for the tenant the workflow is associated with
+  //   * @param workflowId the workflow ID
+  //   * @param completed the date and time the workflow was completed
+  //   * @param completedBy the person or system that completed the workflow
+  //   * @return the number of rows that were updated (0 or 1)
+  //   */
+  //  @Transactional
+  //  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  //  @Query(
+  //      """
+  //      update Workflow w
+  //         set w.suspended          = null,
+  //             w.suspendedBy        = null,
+  //             w.finalized          = :completed,
+  //             w.finalizedBy        = :completedBy,
+  //             w.canceled           = null,
+  //             w.canceledBy         = null,
+  //             w.cancellationReason = null,
+  //             w.status             = digital.inception.operations.model.WorkflowStatus.COMPLETED
+  //       where w.tenantId           = :tenantId
+  //         and w.id                 = :workflowId
+  //      """)
+  //  int completeWorkflow(
+  //      @Param("tenantId") UUID tenantId,
+  //      @Param("workflowId") UUID workflowId,
+  //      @Param("completed") OffsetDateTime completed,
+  //      @Param("completedBy") String completedBy);
 }

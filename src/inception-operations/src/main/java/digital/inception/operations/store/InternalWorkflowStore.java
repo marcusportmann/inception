@@ -423,6 +423,20 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+      throws ServiceUnavailableException {
+    try {
+      return workflowRepository.findActiveWorkflowIdsForWorkflowEngine(workflowEngineId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the IDs for the active workflows for the workflow engine ("
+              + workflowEngineId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public String getDocumentDefinitionIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
       throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
     try {
@@ -491,6 +505,25 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
           e);
+    }
+  }
+
+  @Override
+  public Workflow getWorkflow(UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<Workflow> workflowOptional = workflowRepository.findById(workflowId);
+
+      if (workflowOptional.isEmpty()) {
+        throw new WorkflowNotFoundException(workflowId);
+      }
+
+      return workflowOptional.get();
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow (" + workflowId + ")", e);
     }
   }
 
@@ -1253,6 +1286,85 @@ public class InternalWorkflowStore implements WorkflowStore {
               + requestWorkflowDocumentRequest.getDocumentDefinitionId()
               + ") for the workflow ("
               + requestWorkflowDocumentRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void setWorkflowStatus(UUID tenantId, UUID workflowId, WorkflowStatus status)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      OffsetDateTime now = OffsetDateTime.now();
+
+      if (status == WorkflowStatus.COMPLETED) {
+        if (workflowRepository.finalizeWorkflow(
+                tenantId, workflowId, WorkflowStatus.COMPLETED, now, "SYSTEM")
+            <= 0) {
+          throw new WorkflowNotFoundException(tenantId, workflowId);
+        }
+
+        // Complete all the active workflow steps
+        List<WorkflowStep> activeWorkflowSteps =
+            workflowStepRepository.findByWorkflowIdAndStatus(workflowId, WorkflowStepStatus.ACTIVE);
+
+        for (WorkflowStep activeWorkflowStep : activeWorkflowSteps) {
+          workflowStepRepository.finalizeWorkflowStep(
+              workflowId, activeWorkflowStep.getCode(), WorkflowStepStatus.COMPLETED, now);
+        }
+      } else if (status == WorkflowStatus.SUSPENDED) {
+        if (workflowRepository.suspendWorkflow(tenantId, workflowId, now, "SYSTEM") <= 0) {
+          throw new WorkflowNotFoundException(tenantId, workflowId);
+        }
+
+        // Suspend all the active workflow steps
+        List<WorkflowStep> activeWorkflowSteps =
+            workflowStepRepository.findByWorkflowIdAndStatus(workflowId, WorkflowStepStatus.ACTIVE);
+
+        for (WorkflowStep activeWorkflowStep : activeWorkflowSteps) {
+          workflowStepRepository.suspendWorkflowStep(workflowId, activeWorkflowStep.getCode(), now);
+        }
+      } else if (status == WorkflowStatus.TERMINATED) {
+        if (workflowRepository.finalizeWorkflow(
+                tenantId, workflowId, WorkflowStatus.TERMINATED, now, "SYSTEM")
+            <= 0) {
+          throw new WorkflowNotFoundException(tenantId, workflowId);
+        }
+
+        // Terminate all the active workflow steps
+        List<WorkflowStep> activeWorkflowSteps =
+            workflowStepRepository.findByWorkflowIdAndStatus(workflowId, WorkflowStepStatus.ACTIVE);
+
+        for (WorkflowStep activeWorkflowStep : activeWorkflowSteps) {
+          workflowStepRepository.finalizeWorkflowStep(
+              workflowId, activeWorkflowStep.getCode(), WorkflowStepStatus.TERMINATED, now);
+        }
+      } else if (status == WorkflowStatus.FAILED) {
+        if (workflowRepository.finalizeWorkflow(
+                tenantId, workflowId, WorkflowStatus.FAILED, now, "SYSTEM")
+            <= 0) {
+          throw new WorkflowNotFoundException(tenantId, workflowId);
+        }
+
+        // Fail all the active workflow steps
+        List<WorkflowStep> activeWorkflowSteps =
+            workflowStepRepository.findByWorkflowIdAndStatus(workflowId, WorkflowStepStatus.ACTIVE);
+
+        for (WorkflowStep activeWorkflowStep : activeWorkflowSteps) {
+          workflowStepRepository.finalizeWorkflowStep(
+              workflowId, activeWorkflowStep.getCode(), WorkflowStepStatus.FAILED, now);
+        }
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to set the status for the workflow ("
+              + workflowId
+              + ") to ("
+              + status
               + ") for the tenant ("
               + tenantId
               + ")",

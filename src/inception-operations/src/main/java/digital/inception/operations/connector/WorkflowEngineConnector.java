@@ -94,21 +94,30 @@ public interface WorkflowEngineConnector {
       throws WorkflowEngineConnectorException;
 
   /**
-   * Initiate a workflow.
+   * Start a workflow.
    *
    * @param tenantId the ID for the tenant
    * @param workflowDefinition the workflow definition
    * @param attributes the workflow attributes
    * @param data the XML or JSON data for the workflow
    * @return the ID of the corresponding process or case instance in the workflow engine
-   * @throws WorkflowEngineConnectorException if the workflow could not be initiated
+   * @throws WorkflowEngineConnectorException if the workflow could not be started
    */
-  String initiateWorkflow(
+  String startWorkflow(
       UUID tenantId,
       WorkflowDefinition workflowDefinition,
       List<WorkflowAttribute> attributes,
       String data)
       throws WorkflowEngineConnectorException;
+
+  /**
+   * Indicates whether the workflow engine connector can fetch a workflow’s current status from the
+   * underlying workflow engine.
+   *
+   * @return {@code true} if workflow status retrieval from the workflow engine is supported or
+   *     {@code false} otherwise
+   */
+  boolean supportsWorkflowStatusRetrieval();
 
   /**
    * Suspend a workflow.

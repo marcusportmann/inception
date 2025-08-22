@@ -54,4 +54,13 @@ public class WorkflowNotFoundException extends ServiceException {
   public WorkflowNotFoundException(UUID tenantId, UUID workflowId) {
     super("The workflow (" + workflowId + ") could not be found for the tenant (" + tenantId + ")");
   }
+
+  /**
+   * Constructs a new {@code WorkflowNotFoundException}.
+   *
+   * @param workflowId the ID for the workflow
+   */
+  public WorkflowNotFoundException(UUID workflowId) {
+    super("The workflow (" + workflowId + ") could not be found");
+  }
 }

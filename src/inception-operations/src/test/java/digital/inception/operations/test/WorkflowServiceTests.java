@@ -88,6 +88,7 @@ import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
+import digital.inception.operations.service.BackgroundWorkflowStatusVerifier;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.WorkflowService;
 import digital.inception.test.InceptionExtension;
@@ -131,6 +132,9 @@ public class WorkflowServiceTests {
 
   /** The secure random number generator. */
   private static final SecureRandom secureRandom = new SecureRandom();
+
+  /** The Workflow Service. */
+  @Autowired private BackgroundWorkflowStatusVerifier backgroundWorkflowStatusVerifier;
 
   /** The Document Service. */
   @Autowired private DocumentService documentService;
@@ -773,6 +777,9 @@ public class WorkflowServiceTests {
     assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
     assertEquals(WorkflowStepStatus.COMPLETED, retrievedWorkflow.getSteps().getFirst().getStatus());
     assertNotNull(retrievedWorkflow.getSteps().getFirst().getFinalized());
+
+    // Verify the workflow statuses
+    backgroundWorkflowStatusVerifier.verifyWorkflowStatuses();
 
     // Finalize the workflow
     workflowService.finalizeWorkflow(

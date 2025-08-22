@@ -19,6 +19,7 @@ package digital.inception.operations.service;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
@@ -330,6 +331,18 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the IDs for the active workflows for the workflow engine.
+   *
+   * @param workflowEngineId the ID for the workflow engine
+   * @return the IDs for the active workflows for the workflow engine
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the IDs for the active workflows for the workflow engine
+   *     could not be retrieved
+   */
+  List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Retrieve the outstanding workflow documents for the workflow.
    *
    * @param tenantId the ID for the tenant
@@ -367,6 +380,18 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the workflow could not be retrieved
    */
   Workflow getWorkflow(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow.
+   *
+   * @param workflowId the ID for the workflow
+   * @return the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be retrieved
+   */
+  Workflow getWorkflow(UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -563,6 +588,25 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowEngineNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow engine connector for the workflow engine with the specified ID.
+   *
+   * @param workflowEngineId the ID for the workflow engine
+   * @return the workflow engine connector for the workflow engine with the specified ID
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the workflow engine connector could not be retrieved
+   */
+  WorkflowEngineConnector getWorkflowEngineConnector(String workflowEngineId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the IDs for the workflow engines.
+   *
+   * @return the IDs for the workflow engines
+   * @throws ServiceUnavailableException if the IDs for the workflow engines could not be retrieved
+   */
+  List<String> getWorkflowEngineIds() throws ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow engines.
    *
    * @return the workflow engines
@@ -693,11 +737,12 @@ public interface WorkflowService {
    * @param attributeCode the code for the workflow attribute
    * @return {@code true} if a workflow attribute with the specified code is valid or {@code false}
    *     otherwise
+   * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the validity of the workflow attribute code could not be
    *     verified
    */
   boolean isValidWorkflowAttribute(UUID tenantId, String workflowDefinitionId, String attributeCode)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Link an interaction to a workflow.
@@ -771,6 +816,20 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Set the status for the workflow and, if applicable, the status for any associated workflow
+   * steps.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @param status the new status for the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the status for the workflow could not be set
+   */
+  void setWorkflowStatus(UUID tenantId, UUID workflowId, WorkflowStatus status)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Start an existing workflow.

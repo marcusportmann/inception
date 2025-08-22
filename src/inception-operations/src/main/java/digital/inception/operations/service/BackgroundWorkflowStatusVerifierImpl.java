@@ -16,7 +16,11 @@
 
 package digital.inception.operations.service;
 
+import digital.inception.operations.connector.WorkflowEngineConnector;
+import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowStatus;
 import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +94,59 @@ public class BackgroundWorkflowStatusVerifierImpl
     }
 
     try {
+      for (String workflowEngineId : workflowService.getWorkflowEngineIds()) {
+
+        WorkflowEngineConnector workflowEngineConnector =
+            workflowService.getWorkflowEngineConnector(workflowEngineId);
+
+        if (workflowEngineConnector.supportsWorkflowStatusRetrieval()) {
+
+          for (UUID workflowId :
+              workflowService.getActiveWorkflowIdsForWorkflowEngine(workflowEngineId)) {
+            // Stop here if the Background Workflow Status Verifier is being shutdown
+            if (!isRunning()) {
+              return;
+            }
+
+            Workflow workflow = workflowService.getWorkflow(workflowId);
+
+            WorkflowStatus workflowStatus =
+                workflowEngineConnector.getWorkflowStatus(workflow.getTenantId(), workflow);
+
+            if ((workflowStatus != WorkflowStatus.UNKNOWN)
+                && (workflowStatus != workflow.getStatus())) {
+              log.info(
+                  "The workflow status ("
+                      + workflowStatus
+                      + ") returned by the workflow engine ("
+                      + workflowEngineId
+                      + ") for the workflow ("
+                      + workflowId
+                      + ") does not match the expected workflow status ("
+                      + workflow.getStatus()
+                      + ") and will be updated");
+
+              if (workflowStatus == WorkflowStatus.ACTIVE) {
+                // Do nothing
+              } else if (workflowStatus == WorkflowStatus.COMPLETED) {
+                workflowService.setWorkflowStatus(
+                    workflow.getTenantId(), workflow.getId(), WorkflowStatus.COMPLETED);
+              } else if (workflowStatus == WorkflowStatus.SUSPENDED) {
+                workflowService.setWorkflowStatus(
+                    workflow.getTenantId(), workflow.getId(), WorkflowStatus.SUSPENDED);
+              } else if (workflowStatus == WorkflowStatus.TERMINATED) {
+                workflowService.setWorkflowStatus(
+                    workflow.getTenantId(), workflow.getId(), WorkflowStatus.TERMINATED);
+              } else if (workflowStatus == WorkflowStatus.FAILED) {
+                workflowService.setWorkflowStatus(
+                    workflow.getTenantId(), workflow.getId(), WorkflowStatus.FAILED);
+              }
+            }
+          }
+        }
+      }
+    } catch (Throwable e) {
+      log.error("Failed to verify the workflow statuses", e);
     } finally {
       executing.set(false);
     }

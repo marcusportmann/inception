@@ -100,7 +100,7 @@ public class DummyWorkflowEngineConnector extends AbstractWorkflowEngineConnecto
   }
 
   @Override
-  public String initiateWorkflow(
+  public String startWorkflow(
       UUID tenantId,
       WorkflowDefinition workflowDefinition,
       List<WorkflowAttribute> attributes,
@@ -109,7 +109,7 @@ public class DummyWorkflowEngineConnector extends AbstractWorkflowEngineConnecto
     String engineWorkflowId = UUID.randomUUID().toString();
 
     log.info(
-        "Initiated the workflow ("
+        "Starting the workflow ("
             + engineWorkflowId
             + ") with the workflow definition ("
             + workflowDefinition.getId()
@@ -120,6 +120,11 @@ public class DummyWorkflowEngineConnector extends AbstractWorkflowEngineConnecto
             + ")");
 
     return engineWorkflowId;
+  }
+
+  @Override
+  public boolean supportsWorkflowStatusRetrieval() {
+    return true;
   }
 
   @Override

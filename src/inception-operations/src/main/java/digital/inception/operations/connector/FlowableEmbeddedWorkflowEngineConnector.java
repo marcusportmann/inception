@@ -137,7 +137,7 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public String initiateWorkflow(
+  public String startWorkflow(
       UUID tenantId,
       WorkflowDefinition workflowDefinition,
       List<WorkflowAttribute> attributes,
@@ -147,7 +147,7 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
       throw new RuntimeException("Not Implemented");
     } catch (Throwable e) {
       throw new WorkflowEngineConnectorException(
-          "Failed to initiate the workflow with the workflow definition ("
+          "Failed to start the workflow with the workflow definition ("
               + workflowDefinition.getId()
               + ") version ("
               + workflowDefinition.getVersion()
@@ -156,6 +156,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
               + ")",
           e);
     }
+  }
+
+  @Override
+  public boolean supportsWorkflowStatusRetrieval() {
+    return true;
   }
 
   @Override
