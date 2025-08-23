@@ -149,7 +149,7 @@ public interface WorkflowRepository
   Optional<Workflow> findByTenantIdAndId(UUID tenantId, UUID workflowId);
 
   /**
-   * Returns the ID (composite key) of the workflow definition version for the workflow with the
+   * Find the ID (composite key) of the workflow definition version for the workflow with the
    * specified ID.
    *
    * @param workflowId the ID for the workflow

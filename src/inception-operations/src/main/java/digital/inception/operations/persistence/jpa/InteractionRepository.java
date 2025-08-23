@@ -109,6 +109,36 @@ public interface InteractionRepository
   Optional<Interaction> findByTenantIdAndId(UUID tenantId, UUID interactionId);
 
   /**
+   * Find the ID for the interaction with the specified source reference and source ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param sourceId the ID for the interaction source the interaction is associated with
+   * @param sourceReference the interaction source specific reference
+   * @return an Optional containing the ID for the interaction with the specified source reference
+   *     and source ID or an empty optional if the interaction could not be found
+   */
+  @Query(
+      "select i.id from Interaction i where i.tenantId = :tenantId and i.sourceId = :sourceId "
+          + "and i.sourceReference = :sourceReference")
+  Optional<UUID> findIdByTenantIdAndSourceIdAndSourceReference(
+      @Param("tenantId") UUID tenantId,
+      @Param("sourceId") UUID sourceId,
+      @Param("sourceReference") String sourceReference);
+
+  /**
+   * Find the ID for the interaction source the interaction is associated with.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @return an Optional containing the ID for the interaction source the interaction is associated
+   *     with or an empty Optional if the interaction could not be found
+   */
+  @Query(
+      "select i.sourceId from Interaction i where i.tenantId = :tenantId and i.id = :interactionId")
+  Optional<UUID> findInteractionSourceIdByTenantIdAndInteractionId(
+      @Param("tenantId") UUID tenantId, @Param("interactionId") UUID interactionId);
+
+  /**
    * Find the interactions queued for processing.
    *
    * @param lastProcessedBefore the date and time used to select failed interactions for
@@ -124,36 +154,6 @@ public interface InteractionRepository
       @Param("lastProcessedBefore") OffsetDateTime lastProcessedBefore, Pageable pageable);
 
   /**
-   * Find the ID for the interaction with the specified source reference and source ID.
-   *
-   * @param tenantId the ID for the tenant
-   * @param sourceId the ID for the interaction source the interaction is associated with
-   * @param sourceReference the interaction source specific reference
-   * @return an Optional containing the ID for the interaction with the specified source reference
-   *     and source ID or an empty optional if the interaction could not be found
-   */
-  @Query(
-      "select i.id from Interaction i where i.tenantId = :tenantId and i.sourceId = :sourceId "
-          + "and i.sourceReference = :sourceReference")
-  Optional<UUID> getIdByTenantIdAndSourceIdAndSourceReference(
-      @Param("tenantId") UUID tenantId,
-      @Param("sourceId") UUID sourceId,
-      @Param("sourceReference") String sourceReference);
-
-  /**
-   * Find the ID for the interaction source the interaction is associated with.
-   *
-   * @param tenantId the ID for the tenant
-   * @param interactionId the ID for the interaction
-   * @return an Optional containing the ID for the interaction source the interaction is associated
-   *     with or an empty Optional if the interaction could not be found
-   */
-  @Query(
-      "select i.sourceId from Interaction i where i.tenantId = :tenantId and i.id = :interactionId")
-  Optional<UUID> getInteractionSourceIdByTenantIdAndInteractionId(
-      @Param("tenantId") UUID tenantId, @Param("interactionId") UUID interactionId);
-
-  /**
    * Find the subject for the interaction.
    *
    * @param interactionId the ID for the interaction
@@ -161,7 +161,7 @@ public interface InteractionRepository
    *     interaction could not be found
    */
   @Query("select i.subject from Interaction i where i.id = :interactionId")
-  Optional<String> getSubjectById(@Param("interactionId") UUID interactionId);
+  Optional<String> findSubjectById(@Param("interactionId") UUID interactionId);
 
   /**
    * Link the party to the interaction.

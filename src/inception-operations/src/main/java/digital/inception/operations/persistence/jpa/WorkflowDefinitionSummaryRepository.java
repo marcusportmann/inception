@@ -34,7 +34,7 @@ public interface WorkflowDefinitionSummaryRepository
     extends JpaRepository<WorkflowDefinitionSummary, WorkflowDefinitionSummaryId> {
 
   /**
-   * Returns the latest versions of all the workflow definitions that are associated with the
+   * Find the latest versions of all the workflow definitions that are associated with the
    * workflow definition category with the specified ID and either
    *
    * <ul>

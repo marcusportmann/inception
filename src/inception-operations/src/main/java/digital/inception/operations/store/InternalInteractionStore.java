@@ -368,7 +368,7 @@ public class InternalInteractionStore implements InteractionStore {
   public Optional<UUID> getInteractionAttachmentIdByInteractionIdAndHash(
       UUID tenantId, UUID interactionId, String hash) throws ServiceUnavailableException {
     try {
-      return interactionAttachmentRepository.getIdByTenantIdAndInteractionIdAndHash(
+      return interactionAttachmentRepository.findIdByTenantIdAndInteractionIdAndHash(
           tenantId, interactionId, hash);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -464,7 +464,7 @@ public class InternalInteractionStore implements InteractionStore {
   public Optional<UUID> getInteractionIdBySourceIdAndSourceReference(
       UUID tenantId, UUID sourceId, String sourceReference) throws ServiceUnavailableException {
     try {
-      return interactionRepository.getIdByTenantIdAndSourceIdAndSourceReference(
+      return interactionRepository.findIdByTenantIdAndSourceIdAndSourceReference(
           tenantId, sourceId, sourceReference);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -625,7 +625,7 @@ public class InternalInteractionStore implements InteractionStore {
       throws InteractionNotFoundException, ServiceUnavailableException {
     try {
       Optional<UUID> interactionSourceIdOptional =
-          interactionRepository.getInteractionSourceIdByTenantIdAndInteractionId(
+          interactionRepository.findInteractionSourceIdByTenantIdAndInteractionId(
               tenantId, interactionId);
 
       if (interactionSourceIdOptional.isEmpty()) {

@@ -85,8 +85,8 @@ public interface WorkflowDefinitionRepository
       @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
 
   /**
-   * Returns the latest versions of all the workflow definitions that are associated with the
-   * workflow definition category with the specified ID and either
+   * Find the latest versions of all the workflow definitions that are associated with the workflow
+   * definition category with the specified ID and either
    *
    * <ul>
    *   <li>specific to the given tenant ({@code tenantId} matches), or
@@ -129,8 +129,18 @@ public interface WorkflowDefinitionRepository
       @Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
-   * Find the workflow definition permissions for the workflow definition with the specified ID
-   * and version.
+   * Find the next version of the workflow definition with the specified ID.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @return the next version of the workflow definition with the specified ID
+   */
+  @Query(
+      "select coalesce(max(wd.version), 0) + 1 from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
+  Integer findNextVersionById(@Param("workflowDefinitionId") String workflowDefinitionId);
+
+  /**
+   * Find the workflow definition permissions for the workflow definition with the specified ID and
+   * version.
    *
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version of the workflow definition
@@ -172,14 +182,4 @@ public interface WorkflowDefinitionRepository
   List<WorkflowStepDefinition> findStepDefinitionsByWorkflowDefinitionIdAndVersion(
       @Param("workflowDefinitionId") String workflowDefinitionId,
       @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
-
-  /**
-   * Find the next version of the workflow definition with the specified ID.
-   *
-   * @param workflowDefinitionId the ID for the workflow definition
-   * @return the next version of the workflow definition with the specified ID
-   */
-  @Query(
-      "select coalesce(max(wd.version), 0) + 1 from WorkflowDefinition wd where wd.id = :workflowDefinitionId")
-  Integer getNextVersionById(@Param("workflowDefinitionId") String workflowDefinitionId);
 }

@@ -65,7 +65,7 @@ public interface InteractionAttachmentRepository
   @Query(
       "select ia.id from InteractionAttachment ia where ia.tenantId = :tenantId and "
           + "ia.interactionId = :interactionId and ia.hash = :hash")
-  Optional<UUID> getIdByTenantIdAndInteractionIdAndHash(
+  Optional<UUID> findIdByTenantIdAndInteractionIdAndHash(
       @Param("tenantId") UUID tenantId,
       @Param("interactionId") UUID interactionId,
       @Param("hash") String hash);

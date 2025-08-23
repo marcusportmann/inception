@@ -33,7 +33,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface WorkflowEngineRepository extends JpaRepository<WorkflowEngine, String> {
 
   /**
-   * Returns the IDs for all workflow engines.
+   * Find the IDs for all workflow engines.
    *
    * @return the list of workflow engine IDs
    */

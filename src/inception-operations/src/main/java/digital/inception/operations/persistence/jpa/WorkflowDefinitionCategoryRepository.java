@@ -33,7 +33,7 @@ public interface WorkflowDefinitionCategoryRepository
     extends JpaRepository<WorkflowDefinitionCategory, String> {
 
   /**
-   * Returns all the workflow definition categories that are either
+   * Find all the workflow definition categories that are either
    *
    * <ul>
    *   <li>specific to the given tenant ({@code tenantId} matches), or

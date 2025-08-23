@@ -33,7 +33,7 @@ public interface DocumentDefinitionCategoryRepository
     extends JpaRepository<DocumentDefinitionCategory, String> {
 
   /**
-   * Returns all the document definition categories that are either
+   * Find all the document definition categories that are either
    *
    * <ul>
    *   <li>specific to the given tenant ({@code tenantId} matches), or

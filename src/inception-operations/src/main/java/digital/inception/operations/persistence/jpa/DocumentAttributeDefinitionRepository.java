@@ -33,7 +33,7 @@ public interface DocumentAttributeDefinitionRepository
     extends JpaRepository<DocumentAttributeDefinition, String> {
 
   /**
-   * Returns all the document attribute definitions that are
+   * Find all the document attribute definitions that are
    *
    * <ul>
    *   <li>specific to the given document definition ({@code documentDefinitionId} matches), or
@@ -59,7 +59,7 @@ public interface DocumentAttributeDefinitionRepository
       @Param("documentDefinitionId") String documentDefinitionId, @Param("tenantId") UUID tenantId);
 
   /**
-   * Returns all the document attribute definitions that are specific to the given tenant ({@code
+   * Find all the document attribute definitions that are specific to the given tenant ({@code
    * tenantId} matches), or global (the document attribute definition’s {@code tenantId} is {@code
    * null}).
    *

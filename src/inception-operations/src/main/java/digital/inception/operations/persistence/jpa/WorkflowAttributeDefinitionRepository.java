@@ -33,7 +33,7 @@ public interface WorkflowAttributeDefinitionRepository
     extends JpaRepository<WorkflowAttributeDefinition, String> {
 
   /**
-   * Returns all the workflow attribute definitions that are specific to the given tenant ({@code
+   * Find all the workflow attribute definitions that are specific to the given tenant ({@code
    * tenantId} matches), or global (the workflow attribute definition’s {@code tenantId} is {@code
    * null}).
    *
@@ -50,7 +50,7 @@ public interface WorkflowAttributeDefinitionRepository
   List<WorkflowAttributeDefinition> findForTenantOrGlobal(@Param("tenantId") UUID tenantId);
 
   /**
-   * Returns all the workflow attribute definitions that are
+   * Find all the workflow attribute definitions that are
    *
    * <ul>
    *   <li>specific to the given workflow definition ({@code workflowDefinitionId} matches), or

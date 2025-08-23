@@ -43,7 +43,7 @@ public interface DocumentDefinitionRepository extends JpaRepository<DocumentDefi
   boolean existsByCategoryIdAndId(String categoryId, String id);
 
   /**
-   * Returns all the document definitions that are associated with the document definition category
+   * Find all the document definitions that are associated with the document definition category
    * with the specified ID and either
    *
    * <ul>
