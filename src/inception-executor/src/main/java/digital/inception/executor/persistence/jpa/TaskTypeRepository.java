@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TaskTypeRepository extends JpaRepository<TaskType, String> {
 
   /**
-   * Retrieve the task types ordered by name ascending.
+   * Find the task types ordered by name ascending.
    *
    * @return the task types ordered by name ascending
    */

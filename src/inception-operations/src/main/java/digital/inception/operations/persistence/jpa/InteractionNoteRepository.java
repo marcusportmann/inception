@@ -60,7 +60,7 @@ public interface InteractionNoteRepository
       UUID tenantId, UUID interactionId, UUID interactionNoteId);
 
   /**
-   * Retrieve the interaction note.
+   * Find the interaction note.
    *
    * @param tenantId the ID for the tenant
    * @param interactionNoteId the ID for the interaction note
@@ -70,7 +70,7 @@ public interface InteractionNoteRepository
   Optional<InteractionNote> findByTenantIdAndId(UUID tenantId, UUID interactionNoteId);
 
   /**
-   * Retrieve the ID for the interaction source the interaction note is associated with.
+   * Find the ID for the interaction source the interaction note is associated with.
    *
    * @param tenantId the ID for the tenant
    * @param interactionNoteId the ID for the interaction note

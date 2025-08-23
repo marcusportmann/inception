@@ -43,7 +43,7 @@ public interface WorkflowDocumentRepository
     extends JpaRepository<WorkflowDocument, UUID>, JpaSpecificationExecutor<WorkflowDocument> {
 
   /**
-   * Retrieve the number of workflow documents associated with the document with specified ID.
+   * Find the number of workflow documents associated with the document with specified ID.
    *
    * @param documentId the ID for the document
    * @return the number of workflow documents associated with the document with specified ID.
@@ -83,7 +83,7 @@ public interface WorkflowDocumentRepository
       UUID tenantId, UUID workflowId, UUID workflowDocumentId);
 
   /**
-   * Retrieve the workflow document.
+   * Find the workflow document.
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
@@ -93,7 +93,7 @@ public interface WorkflowDocumentRepository
   Optional<WorkflowDocument> findByTenantIdAndId(UUID tenantId, UUID workflowDocumentId);
 
   /**
-   * Retrieve the document definition ID for the workflow document.
+   * Find the document definition ID for the workflow document.
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
@@ -110,7 +110,7 @@ public interface WorkflowDocumentRepository
       @Param("tenantId") UUID tenantId, @Param("workflowDocumentId") UUID workflowDocumentId);
 
   /**
-   * Retrieve the outstanding workflow documents for the workflow.
+   * Find the outstanding workflow documents for the workflow.
    *
    * @param workflowId the ID for the workflow the outstanding workflow documents are associated
    *     with
@@ -138,7 +138,7 @@ public interface WorkflowDocumentRepository
       @Param("workflowId") UUID workflowId);
 
   /**
-   * Retrieve the workflow ID for the workflow document.
+   * Find the workflow ID for the workflow document.
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocumentId the workflow document ID

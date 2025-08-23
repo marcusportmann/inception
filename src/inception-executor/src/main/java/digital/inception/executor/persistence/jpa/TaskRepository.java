@@ -170,7 +170,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   int countByBatchId(String batchId);
 
   /**
-   * Retrieve the number of tasks with the specified task type that are currently queued or
+   * Find the number of tasks with the specified task type that are currently queued or
    * executing.
    *
    * @param taskTypeCode the code for the task type
@@ -226,7 +226,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       @Param("failure") String failure);
 
   /**
-   * Retrieve the task with the specified external reference.
+   * Find the task with the specified external reference.
    *
    * @param externalReference the external reference for the task
    * @return an Optional containing the task or an empty Optional if the task could not be found
@@ -263,7 +263,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   Page<Task> findByStatusIn(@Param("statuses") List<TaskStatus> statuses, Pageable pageable);
 
   /**
-   * Retrieve the tasks queued for execution.
+   * Find the tasks queued for execution.
    *
    * @param currentTimestamp the current date and time
    * @param pageable the pagination information
@@ -280,7 +280,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       @Param("currentTimestamp") OffsetDateTime currentTimestamp, Pageable pageable);
 
   /**
-   * Retrieve the tasks to archive and delete.
+   * Find the tasks to archive and delete.
    *
    * @param executedBefore the date and time used to select the tasks to be archived or deleted
    * @param pageable the pagination information
@@ -296,7 +296,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       @Param("executedBefore") OffsetDateTime executedBefore, Pageable pageable);
 
   /**
-   * Retrieve the status of the task.
+   * Find the status of the task.
    *
    * @param taskId the ID for the task
    * @return an Optional containing the status of the task or an empty Optional if the task could

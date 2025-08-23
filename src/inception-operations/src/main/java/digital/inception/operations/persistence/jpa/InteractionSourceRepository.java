@@ -45,7 +45,7 @@ public interface InteractionSourceRepository extends JpaRepository<InteractionSo
   boolean existsByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
 
   /**
-   * Retrieve the interaction source.
+   * Find the interaction source.
    *
    * @param tenantId the ID for the tenant
    * @param interactionSourceId the ID for the interaction source
@@ -55,7 +55,7 @@ public interface InteractionSourceRepository extends JpaRepository<InteractionSo
   Optional<InteractionSource> findByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
 
   /**
-   * Retrieve the interaction sources with the specified type ordered by name ascending.
+   * Find the interaction sources with the specified type ordered by name ascending.
    *
    * @param tenantId the ID for the tenant
    * @param interactionSourceType the interaction source type for the interaction sources
@@ -65,7 +65,7 @@ public interface InteractionSourceRepository extends JpaRepository<InteractionSo
       UUID tenantId, InteractionSourceType interactionSourceType);
 
   /**
-   * Retrieve the interaction sources ordered by name ascending.
+   * Find the interaction sources ordered by name ascending.
    *
    * @param tenantId the ID for the tenant
    * @return the interaction sources ordered by name ascending
@@ -73,7 +73,7 @@ public interface InteractionSourceRepository extends JpaRepository<InteractionSo
   List<InteractionSource> findByTenantIdOrderByNameAsc(UUID tenantId);
 
   /**
-   * Retrieve the interaction source permissions for the interaction source with the specified ID.
+   * Find the interaction source permissions for the interaction source with the specified ID.
    *
    * @param interactionSourceId the ID for the interaction source
    * @return the interaction source permissions for the interaction source with the specified ID

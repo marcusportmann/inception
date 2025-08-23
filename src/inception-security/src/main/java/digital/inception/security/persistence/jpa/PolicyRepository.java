@@ -40,14 +40,14 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the policies ordered by name ascending.
+   * Find the policies ordered by name ascending.
    *
    * @return the policies ordered by name ascending
    */
   List<Policy> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the name of the policy.
+   * Find the name of the policy.
    *
    * @param policyId the ID for the policy
    * @return an Optional containing the name of the policy or an empty Optional if the policy could

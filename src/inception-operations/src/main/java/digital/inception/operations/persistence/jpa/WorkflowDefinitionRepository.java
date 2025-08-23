@@ -115,7 +115,7 @@ public interface WorkflowDefinitionRepository
       @Param("categoryId") String categoryId, @Param("tenantId") UUID tenantId);
 
   /**
-   * Retrieve the latest version of the workflow definition with the specified ID.
+   * Find the latest version of the workflow definition with the specified ID.
    *
    * @param workflowDefinitionId the ID for the workflow definition
    * @return the latest version of the workflow definition with the specified ID or an empty
@@ -129,7 +129,7 @@ public interface WorkflowDefinitionRepository
       @Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
-   * Retrieve the workflow definition permissions for the workflow definition with the specified ID
+   * Find the workflow definition permissions for the workflow definition with the specified ID
    * and version.
    *
    * @param workflowDefinitionId the ID for the workflow definition
@@ -151,7 +151,7 @@ public interface WorkflowDefinitionRepository
       @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
 
   /**
-   * Retrieve the workflow step definitions for the workflow definition with the specified ID and
+   * Find the workflow step definitions for the workflow definition with the specified ID and
    * version.
    *
    * @param workflowDefinitionId the ID for the workflow definition
@@ -174,7 +174,7 @@ public interface WorkflowDefinitionRepository
       @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
 
   /**
-   * Retrieve the next version of the workflow definition with the specified ID.
+   * Find the next version of the workflow definition with the specified ID.
    *
    * @param workflowDefinitionId the ID for the workflow definition
    * @return the next version of the workflow definition with the specified ID

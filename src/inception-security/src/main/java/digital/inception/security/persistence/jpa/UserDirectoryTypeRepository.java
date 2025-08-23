@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserDirectoryTypeRepository extends JpaRepository<UserDirectoryType, String> {
 
   /**
-   * Retrieve the user directory types ordered by name ascending.
+   * Find the user directory types ordered by name ascending.
    *
    * @return the user directory types ordered by name ascending
    */

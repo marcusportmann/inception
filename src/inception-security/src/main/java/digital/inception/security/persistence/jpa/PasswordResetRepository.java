@@ -53,7 +53,7 @@ public interface PasswordResetRepository extends JpaRepository<PasswordReset, UU
       @Param("requestedBefore") OffsetDateTime requestedBefore);
 
   /**
-   * Retrieve the password reset with the specified status for the user.
+   * Find the password reset with the specified status for the user.
    *
    * @param username the username for the user
    * @param status the password reset status

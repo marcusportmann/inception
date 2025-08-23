@@ -43,14 +43,14 @@ public interface TokenRepository extends JpaRepository<Token, String> {
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the tokens ordered by name ascending.
+   * Find the tokens ordered by name ascending.
    *
    * @return the tokens ordered by name ascending
    */
   List<Token> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the name of the token.
+   * Find the name of the token.
    *
    * @param tokenId the ID for the token
    * @return an Optional containing the name of the token or an empty Optional if the token could
@@ -60,7 +60,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
   Optional<String> getNameById(@Param("tokenId") String tokenId);
 
   /**
-   * Retrieve the revoked tokens.
+   * Find the revoked tokens.
    *
    * @return the revoked tokens
    */

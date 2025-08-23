@@ -89,7 +89,7 @@ public interface WorkflowStepRepository extends JpaRepository<WorkflowStep, Work
       @Param("finalized") OffsetDateTime finalized);
 
   /**
-   * Retrieve the workflow steps with the specified status for the workflow with the specified ID.
+   * Find the workflow steps with the specified status for the workflow with the specified ID.
    *
    * @param workflowId the ID for the workflow
    * @param status the status of the workflow steps

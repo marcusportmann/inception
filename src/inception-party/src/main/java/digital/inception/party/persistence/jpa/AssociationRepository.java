@@ -56,7 +56,7 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the association.
+   * Find the association.
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the association
@@ -66,7 +66,7 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
   Optional<Association> findByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the associations for the party.
+   * Find the associations for the party.
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party

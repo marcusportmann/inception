@@ -40,7 +40,7 @@ public interface DocumentRepository extends JpaRepository<Document, UUID> {
   boolean existsByTenantIdAndId(UUID tenantId, UUID documentId);
 
   /**
-   * Retrieve the document.
+   * Find the document.
    *
    * @param tenantId the ID for the tenant
    * @param documentId the ID for the document

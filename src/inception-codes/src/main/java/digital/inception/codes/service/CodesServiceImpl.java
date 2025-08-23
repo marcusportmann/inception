@@ -334,7 +334,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
     }
 
     try {
-      Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
+      Optional<String> dataOptional = codeCategoryRepository.findDataById(codeCategoryId);
 
       if (dataOptional.isPresent()) {
         return dataOptional.get();
@@ -367,7 +367,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
     }
 
     try {
-      Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
+      Optional<String> dataOptional = codeCategoryRepository.findDataById(codeCategoryId);
 
       if (dataOptional.isPresent()) {
         return dataOptional.get();
@@ -401,7 +401,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
 
     try {
       Optional<OffsetDateTime> lastModifiedOptional =
-          codeCategoryRepository.getLastModifiedById(codeCategoryId);
+          codeCategoryRepository.findLastModifiedById(codeCategoryId);
 
       if (lastModifiedOptional.isPresent()) {
         return lastModifiedOptional.get();
@@ -434,7 +434,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
     }
 
     try {
-      Optional<String> nameOptional = codeCategoryRepository.getNameById(codeCategoryId);
+      Optional<String> nameOptional = codeCategoryRepository.findNameById(codeCategoryId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();
@@ -478,7 +478,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
     }
 
     try {
-      Optional<String> nameOptional = codeRepository.getNameByCodeCategoryIdAndId(codeCategoryId, codeId);
+      Optional<String> nameOptional = codeRepository.findNameByCodeCategoryIdAndId(codeCategoryId, codeId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();

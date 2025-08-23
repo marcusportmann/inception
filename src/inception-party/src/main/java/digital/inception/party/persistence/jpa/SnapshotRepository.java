@@ -32,7 +32,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SnapshotRepository extends JpaRepository<Snapshot, UUID> {
 
   /**
-   * Retrieve the snapshots for the entity.
+   * Find the snapshots for the entity.
    *
    * @param tenantId the ID for the tenant
    * @param entityType the type of entity

@@ -57,7 +57,7 @@ public interface DocumentNoteRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID documentNoteId);
 
   /**
-   * Retrieve the document note.
+   * Find the document note.
    *
    * @param tenantId the ID for the tenant
    * @param documentNoteId the ID for the document note

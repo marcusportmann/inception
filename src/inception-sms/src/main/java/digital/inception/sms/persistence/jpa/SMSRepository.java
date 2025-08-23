@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SMSRepository extends JpaRepository<SMS, UUID> {
 
   /**
-   * Retrieve the SMSs queued for sending.
+   * Find the SMSs queued for sending.
    *
    * @param lastProcessedBefore the date and time used to select failed SMSs for sending
    * @param pageable the pagination information

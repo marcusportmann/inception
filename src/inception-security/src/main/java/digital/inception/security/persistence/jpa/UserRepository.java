@@ -77,7 +77,7 @@ public interface UserRepository
   boolean existsByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   /**
-   * Retrieve the users for the user directory.
+   * Find the users for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @return the users for the user directory
@@ -85,7 +85,7 @@ public interface UserRepository
   List<User> findByUserDirectoryId(UUID userDirectoryId);
 
   /**
-   * Retrieve the user with the specified username for the user directory.
+   * Find the user with the specified username for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username
@@ -94,7 +94,7 @@ public interface UserRepository
   Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   /**
-   * Retrieve the function codes for the user.
+   * Find the function codes for the user.
    *
    * @param userId the ID for the user
    * @return the function codes for the user
@@ -105,7 +105,7 @@ public interface UserRepository
   List<String> getFunctionCodesByUserId(@Param("userId") UUID userId);
 
   /**
-   * Retrieve the group names for the user
+   * Find the group names for the user
    *
    * @param userId the ID for the user
    * @return the group names for the user
@@ -114,7 +114,7 @@ public interface UserRepository
   List<String> getGroupNamesByUserId(@Param("userId") UUID userId);
 
   /**
-   * Retrieve the groups for the user.
+   * Find the groups for the user.
    *
    * @param userId the ID for the user
    * @return the groups for the user
@@ -123,7 +123,7 @@ public interface UserRepository
   List<Group> getGroupsByUserId(@Param("userId") UUID userId);
 
   /**
-   * Retrieve the ID for the user with the specified username for the user directory.
+   * Find the ID for the user with the specified username for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username
@@ -137,7 +137,7 @@ public interface UserRepository
       @Param("userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
   /**
-   * Retrieve the name for the user with the specified username for the user directory.
+   * Find the name for the user with the specified username for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username
@@ -151,7 +151,7 @@ public interface UserRepository
       @Param("userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
   /**
-   * Retrieve the password history for the user.
+   * Find the password history for the user.
    *
    * @param userId the ID for the user
    * @param after the date and time after which password history entries will be retrieved
@@ -166,7 +166,7 @@ public interface UserRepository
       @Param("userId") UUID userId, @Param("after") OffsetDateTime after);
 
   /**
-   * Retrieve the role codes for the user.
+   * Find the role codes for the user.
    *
    * @param userId the ID for the user
    * @return the role codes for the user
@@ -175,7 +175,7 @@ public interface UserRepository
   List<String> getRoleCodesByUserId(@Param("userId") UUID userId);
 
   /**
-   * Retrieve the ID for the user directory for the user with the specified username.
+   * Find the ID for the user directory for the user with the specified username.
    *
    * @param username the username
    * @return an Optional containing the ID for the user directory for the user with the specified

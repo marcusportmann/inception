@@ -44,14 +44,14 @@ public interface UserDirectoryRepository
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the user directories ordered by name ascending.
+   * Find the user directories ordered by name ascending.
    *
    * @return the user directories ordered by name ascending
    */
   List<UserDirectory> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the user directories for the tenant.
+   * Find the user directories for the tenant.
    *
    * @param tenantId the ID for the tenant
    * @return the user directories for the tenant
@@ -60,7 +60,7 @@ public interface UserDirectoryRepository
   List<UserDirectory> findAllByTenantId(@Param("tenantId") UUID tenantId);
 
   /**
-   * Retrieve the name of the user directory.
+   * Find the name of the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @return an Optional containing the name of the user directory or an empty Optional if the user
@@ -70,7 +70,7 @@ public interface UserDirectoryRepository
   Optional<String> getNameById(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
-   * Retrieve the IDs for the tenants for the user directory.
+   * Find the IDs for the tenants for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @return the IDs for the tenants for the user directory
@@ -79,7 +79,7 @@ public interface UserDirectoryRepository
   List<UUID> getTenantIdsById(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
-   * Retrieve the type for the user directory.
+   * Find the type for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @return an Optional containing the type for the user directory or an empty Optional if the user

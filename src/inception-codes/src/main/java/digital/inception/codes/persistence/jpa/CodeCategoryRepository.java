@@ -35,41 +35,41 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CodeCategoryRepository extends JpaRepository<CodeCategory, String> {
 
   /**
-   * Retrieve the code categories ordered by name ascending.
+   * Find the code categories ordered by name ascending.
    *
    * @return the code categories ordered by name ascending
    */
   List<CodeCategory> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the data for the code category.
+   * Find the data for the code category.
    *
    * @param codeCategoryId the ID for the code category
    * @return an Optional containing the data for the code category or an empty Optional if the code
    *     category could not be found
    */
   @Query("select cc.data from CodeCategory cc where cc.id = :codeCategoryId")
-  Optional<String> getDataById(@Param("codeCategoryId") String codeCategoryId);
+  Optional<String> findDataById(@Param("codeCategoryId") String codeCategoryId);
 
   /**
-   * Retrieve the date and time the code category was last modified.
+   * Find the date and time the code category was last modified.
    *
    * @param codeCategoryId the ID for the code category
    * @return an Optional containing the date and time the code category was last modified or an
    *     empty Optional if the code category could not be found
    */
   @Query("select cc.lastModified from CodeCategory cc where cc.id = :codeCategoryId")
-  Optional<OffsetDateTime> getLastModifiedById(@Param("codeCategoryId") String codeCategoryId);
+  Optional<OffsetDateTime> findLastModifiedById(@Param("codeCategoryId") String codeCategoryId);
 
   /**
-   * Retrieve the name for the code category.
+   * Find the name for the code category.
    *
    * @param codeCategoryId the ID for the code category
    * @return an Optional containing the name for the code category or an empty Optional if the code
    *     category could not be found
    */
   @Query("select cc.name from CodeCategory cc where cc.id = :codeCategoryId")
-  Optional<String> getNameById(@Param("codeCategoryId") String codeCategoryId);
+  Optional<String> findNameById(@Param("codeCategoryId") String codeCategoryId);
 
   /**
    * Set the data and the date and time the code category was last modified.

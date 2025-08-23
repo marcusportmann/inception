@@ -33,14 +33,14 @@ import org.springframework.data.repository.query.Param;
 public interface MailTemplateRepository extends JpaRepository<MailTemplate, String> {
 
   /**
-   * Retrieve the mail templates ordered by name ascending.
+   * Find the mail templates ordered by name ascending.
    *
    * @return the mail templates ordered by name ascending
    */
   List<MailTemplate> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the date and time the mail template was last modified.
+   * Find the date and time the mail template was last modified.
    *
    * @param mailTemplateId the ID for the mail template
    * @return an Optional containing the date and time the mail template was last modified or an
@@ -50,7 +50,7 @@ public interface MailTemplateRepository extends JpaRepository<MailTemplate, Stri
   Optional<OffsetDateTime> getLastModifiedById(@Param("mailTemplateId") String mailTemplateId);
 
   /**
-   * Retrieve the name of the mail template.
+   * Find the name of the mail template.
    *
    * @param mailTemplateId the ID for the mail template
    * @return an Optional containing the name for the mail template or an empty Optional if the mail

@@ -43,7 +43,7 @@ public interface InteractionAttachmentRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID interactionAttachmentId);
 
   /**
-   * Retrieve the interaction attachment.
+   * Find the interaction attachment.
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachmentId the ID for the interaction attachment
@@ -53,7 +53,7 @@ public interface InteractionAttachmentRepository
   Optional<InteractionAttachment> findByTenantIdAndId(UUID tenantId, UUID interactionAttachmentId);
 
   /**
-   * Retrieve the ID for the interaction attachment with the specified interaction ID and hash.
+   * Find the ID for the interaction attachment with the specified interaction ID and hash.
    *
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction

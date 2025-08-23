@@ -61,14 +61,14 @@ public interface TenantRepository
   boolean existsByNameIgnoreCase(String name);
 
   /**
-   * Retrieve the tenants ordered by name ascending.
+   * Find the tenants ordered by name ascending.
    *
    * @return the tenants ordered by name ascending
    */
   List<Tenant> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the tenants for the user directory.
+   * Find the tenants for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @return the tenants for the user directory
@@ -77,7 +77,7 @@ public interface TenantRepository
   List<Tenant> findAllByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
-   * Retrieve the name of the tenant.
+   * Find the name of the tenant.
    *
    * @param tenantId the ID for the tenant
    * @return an Optional containing the name of the tenant or an empty Optional if the tenant could
@@ -87,7 +87,7 @@ public interface TenantRepository
   Optional<String> getNameById(@Param("tenantId") UUID tenantId);
 
   /**
-   * Retrieve the IDs for the user directories for the tenant.
+   * Find the IDs for the user directories for the tenant.
    *
    * @param tenantId the ID for the tenant
    * @return the IDs for the user directories for the tenant

@@ -54,7 +54,7 @@ public interface PersonRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the person.
+   * Find the person.
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the person

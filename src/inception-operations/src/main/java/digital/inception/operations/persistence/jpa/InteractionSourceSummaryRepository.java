@@ -31,7 +31,7 @@ public interface InteractionSourceSummaryRepository
     extends JpaRepository<InteractionSourceSummary, UUID> {
 
   /**
-   * Retrieve the summaries for the interaction sources ordered by name ascending.
+   * Find the summaries for the interaction sources ordered by name ascending.
    *
    * @param tenantId the ID for the tenant
    * @return the summaries for the interaction sources ordered by name ascending

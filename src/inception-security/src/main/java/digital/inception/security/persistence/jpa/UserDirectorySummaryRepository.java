@@ -35,7 +35,7 @@ public interface UserDirectorySummaryRepository
         JpaSpecificationExecutor<UserDirectorySummary> {
 
   /**
-   * Retrieve the user directory summaries for the tenant.
+   * Find the user directory summaries for the tenant.
    *
    * @param tenantId the ID for the tenant
    * @return the user directory summaries for the tenant

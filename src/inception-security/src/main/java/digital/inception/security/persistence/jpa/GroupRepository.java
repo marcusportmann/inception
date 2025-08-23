@@ -84,7 +84,7 @@ public interface GroupRepository
   boolean existsByUserDirectoryIdAndNameIgnoreCase(UUID userDirectoryId, String name);
 
   /**
-   * Retrieve the groups for the user directory.
+   * Find the groups for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @return the groups for the user directory
@@ -92,7 +92,7 @@ public interface GroupRepository
   List<Group> findByUserDirectoryId(UUID userDirectoryId);
 
   /**
-   * Retrieve the groups for the user directory.
+   * Find the groups for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @param pageable the pagination information
@@ -101,7 +101,7 @@ public interface GroupRepository
   Page<Group> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
 
   /**
-   * Retrieve the group.
+   * Find the group.
    *
    * @param userDirectoryId the ID for the user directory
    * @param name the name of the group
@@ -110,7 +110,7 @@ public interface GroupRepository
   Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(UUID userDirectoryId, String name);
 
   /**
-   * Retrieve the filtered usernames for the group.
+   * Find the filtered usernames for the group.
    *
    * @param userDirectoryId the ID for the user directory
    * @param groupId the ID for the group
@@ -128,7 +128,7 @@ public interface GroupRepository
       Pageable pageable);
 
   /**
-   * Retrieve the codes for the functions associated with the groups for the user directory.
+   * Find the codes for the functions associated with the groups for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @param groupNames the group names
@@ -140,7 +140,7 @@ public interface GroupRepository
       @Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
 
   /**
-   * Retrieve the ID for the group with the specified name for the user directory.
+   * Find the ID for the group with the specified name for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @param name the group name
@@ -154,7 +154,7 @@ public interface GroupRepository
       @Param("userDirectoryId") UUID userDirectoryId, @Param("name") String name);
 
   /**
-   * Retrieve the group names for the user directory.
+   * Find the group names for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    * @return the group names for the user directory
@@ -163,7 +163,7 @@ public interface GroupRepository
   List<String> getNamesByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
-   * Retrieve the number of users for the group.
+   * Find the number of users for the group.
    *
    * @param groupId the ID for the group
    * @return the number of users for the group
@@ -172,7 +172,7 @@ public interface GroupRepository
   int getNumberOfUsersForGroup(@Param("groupId") UUID groupId);
 
   /**
-   * Retrieve the role codes for the group.
+   * Find the role codes for the group.
    *
    * @param groupId the ID for the group
    * @return the role codes for the group
@@ -181,7 +181,7 @@ public interface GroupRepository
   List<String> getRoleCodesByGroupId(@Param("groupId") UUID groupId);
 
   /**
-   * Retrieve the codes for the roles associated with the groups for the user directory.
+   * Find the codes for the roles associated with the groups for the user directory.
    *
    * @param userDirectoryId the ID for the group
    * @param groupNames the group names
@@ -193,7 +193,7 @@ public interface GroupRepository
       @Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
 
   /**
-   * Retrieve the usernames for the group.
+   * Find the usernames for the group.
    *
    * @param userDirectoryId the ID for the user directory
    * @param groupId the ID for the group
@@ -206,7 +206,7 @@ public interface GroupRepository
       @Param("userDirectoryId") UUID userDirectoryId, @Param("groupId") UUID groupId);
 
   /**
-   * Retrieve the usernames for the group.
+   * Find the usernames for the group.
    *
    * @param userDirectoryId the ID for the user directory
    * @param groupId the ID for the group

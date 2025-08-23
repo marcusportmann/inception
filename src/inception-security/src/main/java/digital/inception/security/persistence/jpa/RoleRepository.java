@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RoleRepository extends JpaRepository<Role, String> {
 
   /**
-   * Retrieve the roles ordered by name ascending.
+   * Find the roles ordered by name ascending.
    *
    * @return the roles ordered by name ascending
    */

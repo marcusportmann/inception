@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {
   /**
-   * Retrieve the mail template summaries ordered by name ascending.
+   * Find the mail template summaries ordered by name ascending.
    *
    * @return the mail template summaries ordered by name ascending
    */

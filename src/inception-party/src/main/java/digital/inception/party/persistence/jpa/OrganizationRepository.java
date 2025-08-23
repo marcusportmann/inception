@@ -54,7 +54,7 @@ public interface OrganizationRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the organization.
+   * Find the organization.
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the organization

@@ -36,7 +36,7 @@ public interface ConfigSummaryRepository extends JpaRepository<ConfigSummary, St
   List<ConfigSummary> findAllByOrderByIdAsc();
 
   /**
-   * Retrieve the filtered config summaries.
+   * Find the filtered config summaries.
    *
    * @param filter the filter to apply to the IDs for the config summaries
    * @return the filtered config summaries

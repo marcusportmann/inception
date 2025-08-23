@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String> {
 
   /**
-   * Retrieve the code category summaries ordered by name ascending.
+   * Find the code category summaries ordered by name ascending.
    *
    * @return the code category summaries ordered by name ascending
    */

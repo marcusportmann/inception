@@ -56,7 +56,7 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the mandate.
+   * Find the mandate.
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the mandate
@@ -66,7 +66,7 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
   Optional<Mandate> findByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the mandates for the party.
+   * Find the mandates for the party.
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party

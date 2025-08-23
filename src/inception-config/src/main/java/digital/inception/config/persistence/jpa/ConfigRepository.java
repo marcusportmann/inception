@@ -58,7 +58,7 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   List<Config> findAllByOrderByIdAsc();
 
   /**
-   * Retrieve the config.
+   * Find the config.
    *
    * @param configId the ID for the config
    * @return an Optional containing the config or an empty Optional if the config could not be found
@@ -66,7 +66,7 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   Optional<Config> findByIdIgnoreCase(String configId);
 
   /**
-   * Retrieve the filtered configs.
+   * Find the filtered configs.
    *
    * @param filter the filter to apply to the IDs for the configs
    * @return the filtered configs
@@ -74,7 +74,7 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   List<Config> findByIdIgnoreCaseContaining(String filter);
 
   /**
-   * Retrieve the value for the config.
+   * Find the value for the config.
    *
    * @param configId the ID for the config
    * @return an Optional containing the value for the config or an empty Optional if the config

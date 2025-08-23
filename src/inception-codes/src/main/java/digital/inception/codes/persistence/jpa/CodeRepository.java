@@ -46,7 +46,7 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
       @Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
 
   /**
-   * Retrieve the codes for the code category.
+   * Find the codes for the code category.
    *
    * @param codeCategoryId the ID for the code category the codes are associated with
    * @return the codes for the code category
@@ -54,7 +54,7 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
   List<Code> findByCodeCategoryId(String codeCategoryId);
 
   /**
-   * Retrieve the name for the code.
+   * Find the name for the code.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
@@ -62,6 +62,6 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
    *     be found
    */
   @Query("select c.name from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
-  Optional<String> getNameByCodeCategoryIdAndId(
+  Optional<String> findNameByCodeCategoryIdAndId(
       @Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
 }

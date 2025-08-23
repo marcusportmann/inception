@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FunctionRepository extends JpaRepository<Function, String> {
 
   /**
-   * Retrieve the functions ordered by name ascending.
+   * Find the functions ordered by name ascending.
    *
    * @return the functions ordered by name ascending
    */

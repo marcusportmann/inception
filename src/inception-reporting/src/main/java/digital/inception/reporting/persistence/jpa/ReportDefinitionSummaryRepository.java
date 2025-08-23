@@ -30,7 +30,7 @@ public interface ReportDefinitionSummaryRepository
     extends JpaRepository<ReportDefinitionSummary, String> {
 
   /**
-   * Retrieve the report definition summaries ordered by name ascending.
+   * Find the report definition summaries ordered by name ascending.
    *
    * @return the report definition summaries ordered by name ascending
    */

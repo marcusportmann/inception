@@ -56,7 +56,7 @@ public interface PartyRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the party.
+   * Find the party.
    *
    * @param tenantId the ID for the tenant
    * @param id the ID for the party
@@ -65,7 +65,7 @@ public interface PartyRepository
   Optional<Party> findByTenantIdAndId(UUID tenantId, UUID id);
 
   /**
-   * Retrieve the ID for the tenant the party is associated with.
+   * Find the ID for the tenant the party is associated with.
    *
    * @param partyId the ID for the party
    * @return an Optional containing the ID for the tenant the party is associated with or an empty
@@ -75,7 +75,7 @@ public interface PartyRepository
   Optional<UUID> getTenantIdByPartyId(@Param("partyId") UUID partyId);
 
   /**
-   * Retrieve the party type for the party.
+   * Find the party type for the party.
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party

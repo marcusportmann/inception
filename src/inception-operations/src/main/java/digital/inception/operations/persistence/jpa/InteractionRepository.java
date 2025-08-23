@@ -99,7 +99,7 @@ public interface InteractionRepository
   boolean existsByTenantIdAndId(UUID tenantId, UUID interactionId);
 
   /**
-   * Retrieve the interaction.
+   * Find the interaction.
    *
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
@@ -109,7 +109,7 @@ public interface InteractionRepository
   Optional<Interaction> findByTenantIdAndId(UUID tenantId, UUID interactionId);
 
   /**
-   * Retrieve the interactions queued for processing.
+   * Find the interactions queued for processing.
    *
    * @param lastProcessedBefore the date and time used to select failed interactions for
    *     re-processing
@@ -124,7 +124,7 @@ public interface InteractionRepository
       @Param("lastProcessedBefore") OffsetDateTime lastProcessedBefore, Pageable pageable);
 
   /**
-   * Retrieve the ID for the interaction with the specified source reference and source ID.
+   * Find the ID for the interaction with the specified source reference and source ID.
    *
    * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interaction is associated with
@@ -141,7 +141,7 @@ public interface InteractionRepository
       @Param("sourceReference") String sourceReference);
 
   /**
-   * Retrieve the ID for the interaction source the interaction is associated with.
+   * Find the ID for the interaction source the interaction is associated with.
    *
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
@@ -154,7 +154,7 @@ public interface InteractionRepository
       @Param("tenantId") UUID tenantId, @Param("interactionId") UUID interactionId);
 
   /**
-   * Retrieve the subject for the interaction.
+   * Find the subject for the interaction.
    *
    * @param interactionId the ID for the interaction
    * @return an Optional containing the subject for the interaction or an empty Optional if the

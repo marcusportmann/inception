@@ -121,7 +121,7 @@ public interface WorkflowRepository
       @Param("finalizedBy") String finalizedBy);
 
   /**
-   * Retrieve the IDs for the active workflows for the workflow engine.
+   * Find the IDs for the active workflows for the workflow engine.
    *
    * @param workflowEngineId the ID for the workflow engine
    * @return the IDs for the active workflows for the workflow engine
@@ -139,7 +139,7 @@ public interface WorkflowRepository
       @Param("workflowEngineId") String workflowEngineId);
 
   /**
-   * Retrieve the workflow.
+   * Find the workflow.
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow

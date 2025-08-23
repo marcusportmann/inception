@@ -30,7 +30,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TaskEventRepository extends JpaRepository<TaskEvent, UUID> {
 
   /**
-   * Retrieve the task events for the task.
+   * Find the task events for the task.
    *
    * @param taskId the ID for the task
    * @return the task events

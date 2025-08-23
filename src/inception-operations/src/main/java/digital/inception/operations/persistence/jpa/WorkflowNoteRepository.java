@@ -57,7 +57,7 @@ public interface WorkflowNoteRepository
   boolean existsByTenantIdAndWorkflowIdAndId(UUID tenantId, UUID workflowId, UUID workflowNoteId);
 
   /**
-   * Retrieve the workflow note.
+   * Find the workflow note.
    *
    * @param tenantId the ID for the tenant
    * @param workflowNoteId the ID for the workflow note

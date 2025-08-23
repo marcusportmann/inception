@@ -32,14 +32,14 @@ import org.springframework.data.repository.query.Param;
 public interface ReportDefinitionRepository extends JpaRepository<ReportDefinition, String> {
 
   /**
-   * Retrieve the report definitions ordered by name ascending.
+   * Find the report definitions ordered by name ascending.
    *
    * @return the report definitions ordered by name ascending
    */
   List<ReportDefinition> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the name for the report definition.
+   * Find the name for the report definition.
    *
    * @param reportDefinitionId the ID for the report definition
    * @return an Optional containing the name for the report definition or an empty Optional if the

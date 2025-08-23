@@ -39,14 +39,14 @@ import org.springframework.transaction.annotation.Transactional;
 public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificationExecutor<Job> {
 
   /**
-   * Retrieve the jobs ordered by name ascending.
+   * Find the jobs ordered by name ascending.
    *
    * @return the jobs ordered by name ascending
    */
   List<Job> findAllByOrderByNameAsc();
 
   /**
-   * Retrieve the jobs scheduled for execution.
+   * Find the jobs scheduled for execution.
    *
    * @param lastExecutedBefore the date and time used to select failed jobs for reprocessing
    * @param currentTimestamp the current date and time
@@ -65,7 +65,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
       Pageable pageable);
 
   /**
-   * Retrieve the unscheduled jobs.
+   * Find the unscheduled jobs.
    *
    * @return the unscheduled jobs
    */
@@ -87,7 +87,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
   List<Job> findUnscheduledJobsForWrite(Pageable pageable);
 
   /**
-   * Retrieve the name for the job.
+   * Find the name for the job.
    *
    * @param jobId the ID for the job
    * @return an Optional containing the name for the job or an empty Optional if the job could not
