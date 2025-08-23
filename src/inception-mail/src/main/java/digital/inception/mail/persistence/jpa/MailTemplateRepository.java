@@ -47,7 +47,7 @@ public interface MailTemplateRepository extends JpaRepository<MailTemplate, Stri
    *     empty Optional if the mail template could not be found
    */
   @Query("select mt.lastModified from MailTemplate mt where mt.id = :mailTemplateId")
-  Optional<OffsetDateTime> getLastModifiedById(@Param("mailTemplateId") String mailTemplateId);
+  Optional<OffsetDateTime> findLastModifiedById(@Param("mailTemplateId") String mailTemplateId);
 
   /**
    * Find the name of the mail template.
@@ -57,5 +57,5 @@ public interface MailTemplateRepository extends JpaRepository<MailTemplate, Stri
    *     template could not be found
    */
   @Query("select mt.name from MailTemplate mt where mt.id = :mailTemplateId")
-  Optional<String> getNameById(@Param("mailTemplateId") String mailTemplateId);
+  Optional<String> findNameById(@Param("mailTemplateId") String mailTemplateId);
 }

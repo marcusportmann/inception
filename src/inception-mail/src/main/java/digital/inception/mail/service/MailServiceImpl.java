@@ -191,7 +191,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
 
     try {
       Optional<OffsetDateTime> updatedOptional =
-          mailTemplateRepository.getLastModifiedById(mailTemplateId);
+          mailTemplateRepository.findLastModifiedById(mailTemplateId);
 
       if (updatedOptional.isPresent()) {
         return updatedOptional.get();
@@ -217,7 +217,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
     }
 
     try {
-      Optional<String> nameOptional = mailTemplateRepository.getNameById(mailTemplateId);
+      Optional<String> nameOptional = mailTemplateRepository.findNameById(mailTemplateId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();
