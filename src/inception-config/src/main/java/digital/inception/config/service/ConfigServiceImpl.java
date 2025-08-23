@@ -92,7 +92,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Base64.getDecoder().decode(valueOptional.get());
@@ -115,7 +115,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       return valueOptional.map(Base64.getDecoder()::decode).orElse(defaultValue);
     } catch (Throwable e) {
@@ -132,7 +132,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Boolean.parseBoolean(valueOptional.get());
@@ -155,7 +155,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       return valueOptional.map(Boolean::parseBoolean).orElse(defaultValue);
     } catch (Throwable e) {
@@ -213,7 +213,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Double.parseDouble(valueOptional.get());
@@ -236,7 +236,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       return valueOptional.map(Double::parseDouble).orElse(defaultValue);
     } catch (Throwable e) {
@@ -282,7 +282,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Integer.parseInt(valueOptional.get());
@@ -305,7 +305,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       return valueOptional.map(Integer::parseInt).orElse(defaultValue);
     } catch (Throwable e) {
@@ -322,7 +322,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return Long.parseLong(valueOptional.get());
@@ -345,7 +345,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       return valueOptional.map(Long::parseLong).orElse(defaultValue);
     } catch (Throwable e) {
@@ -362,7 +362,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       if (valueOptional.isPresent()) {
         return valueOptional.get();
@@ -385,7 +385,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     }
 
     try {
-      Optional<String> valueOptional = configRepository.getValueByIdIgnoreCase(id);
+      Optional<String> valueOptional = configRepository.findValueByIdIgnoreCase(id);
 
       return valueOptional.orElse(defaultValue);
     } catch (Throwable e) {

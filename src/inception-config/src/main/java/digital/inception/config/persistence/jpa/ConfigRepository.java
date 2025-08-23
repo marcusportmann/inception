@@ -51,7 +51,7 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   boolean existsByIdIgnoreCase(String configId);
 
   /**
-   * Retrieve all the configs ordered by ID ascending.
+   * Find all the configs ordered by ID ascending.
    *
    * @return all the configs ordered by ID ascending
    */
@@ -81,5 +81,5 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
    *     could not be found
    */
   @Query("select c.value from Config c where lower(c.id) = lower(:configId)")
-  Optional<String> getValueByIdIgnoreCase(@Param("configId") String configId);
+  Optional<String> findValueByIdIgnoreCase(@Param("configId") String configId);
 }

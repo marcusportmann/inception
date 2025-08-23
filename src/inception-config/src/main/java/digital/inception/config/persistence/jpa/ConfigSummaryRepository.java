@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ConfigSummaryRepository extends JpaRepository<ConfigSummary, String> {
 
   /**
-   * Retrieve all the config summaries ordered by ID ascending.
+   * Find all the config summaries ordered by ID ascending.
    *
    * @return all the config summaries ordered by ID ascending
    */
