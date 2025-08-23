@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface StatusTypeRepository extends JpaRepository<StatusType, StatusTypeId> {
 
   /**
-   * Retrieve all the status types sorted by locale ID, sort index, and name.
+   * Find all the status types sorted by locale ID, sort index, and name.
    *
    * @return all the status types sorted by locale ID, sort index, and name.
    */
   @Query("select st from StatusType st order by st.localeId, st.sortIndex DESC, st.name")
-  List<StatusType> getAllStatusTypes();
+  List<StatusType> findAllStatusTypes();
 }

@@ -32,10 +32,10 @@ public interface ResidentialTypeRepository
     extends JpaRepository<ResidentialType, ResidentialTypeId> {
 
   /**
-   * Retrieve all the residential types sorted by locale ID, sort index, and name.
+   * Find all the residential types sorted by locale ID, sort index, and name.
    *
    * @return all the residential types sorted by locale ID, sort index, and name.
    */
   @Query("select rt from ResidentialType rt order by rt.localeId, rt.sortIndex DESC, rt.name")
-  List<ResidentialType> getAllResidentialTypes();
+  List<ResidentialType> findAllResidentialTypes();
 }

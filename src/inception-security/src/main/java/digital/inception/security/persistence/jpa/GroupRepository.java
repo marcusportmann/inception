@@ -121,7 +121,7 @@ public interface GroupRepository
   @Query(
       "select u.username from Group g join g.users as u where g.userDirectoryId = "
           + ":userDirectoryId and g.id = :groupId and (lower(u.username) like lower(:filter))")
-  Page<String> getFilteredUsernamesForGroup(
+  Page<String> findFilteredUsernamesForGroup(
       @Param("userDirectoryId") UUID userDirectoryId,
       @Param("groupId") UUID groupId,
       @Param("filter") String filter,
@@ -136,7 +136,7 @@ public interface GroupRepository
    */
   @Query(
       "select distinct f.code from Group g join g.roles as r join r.functions as f where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
-  List<String> getFunctionCodesByUserDirectoryIdAndGroupNames(
+  List<String> findFunctionCodesByUserDirectoryIdAndGroupNames(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
 
   /**
@@ -150,7 +150,7 @@ public interface GroupRepository
   @Query(
       "select g.id from Group g where g.userDirectoryId = :userDirectoryId and "
           + "lower(g.name) like lower(:name)")
-  Optional<UUID> getIdByUserDirectoryIdAndNameIgnoreCase(
+  Optional<UUID> findIdByUserDirectoryIdAndNameIgnoreCase(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("name") String name);
 
   /**
@@ -160,7 +160,7 @@ public interface GroupRepository
    * @return the group names for the user directory
    */
   @Query("select g.name from Group g where g.userDirectoryId = :userDirectoryId")
-  List<String> getNamesByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
+  List<String> findNamesByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
    * Find the number of users for the group.
@@ -169,7 +169,7 @@ public interface GroupRepository
    * @return the number of users for the group
    */
   @Query("select count(u.id) from Group g join g.users as u where g.id = :groupId")
-  int getNumberOfUsersForGroup(@Param("groupId") UUID groupId);
+  int findNumberOfUsersForGroup(@Param("groupId") UUID groupId);
 
   /**
    * Find the role codes for the group.
@@ -178,7 +178,7 @@ public interface GroupRepository
    * @return the role codes for the group
    */
   @Query("select r.code from Group g join g.roles as r where g.id = :groupId")
-  List<String> getRoleCodesByGroupId(@Param("groupId") UUID groupId);
+  List<String> findRoleCodesByGroupId(@Param("groupId") UUID groupId);
 
   /**
    * Find the codes for the roles associated with the groups for the user directory.
@@ -189,7 +189,7 @@ public interface GroupRepository
    */
   @Query(
       "select distinct r.code from Group g join g.roles as r where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
-  List<String> getRoleCodesByUserDirectoryIdAndGroupNames(
+  List<String> findRoleCodesByUserDirectoryIdAndGroupNames(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
 
   /**
@@ -202,7 +202,7 @@ public interface GroupRepository
   @Query(
       "select u.username from Group g join g.users as u "
           + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")
-  List<String> getUsernamesForGroup(
+  List<String> findUsernamesForGroup(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("groupId") UUID groupId);
 
   /**
@@ -216,7 +216,7 @@ public interface GroupRepository
   @Query(
       "select u.username from Group g join g.users as u "
           + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")
-  Page<String> getUsernamesForGroup(
+  Page<String> findUsernamesForGroup(
       @Param("userDirectoryId") UUID userDirectoryId,
       @Param("groupId") UUID groupId,
       Pageable pageable);

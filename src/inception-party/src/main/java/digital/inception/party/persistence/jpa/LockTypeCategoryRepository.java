@@ -32,10 +32,10 @@ public interface LockTypeCategoryRepository
     extends JpaRepository<LockTypeCategory, LockTypeCategoryId> {
 
   /**
-   * Retrieve all the lock type categories sorted by locale ID, sort index, and name.
+   * Find all the lock type categories sorted by locale ID, sort index, and name.
    *
    * @return all the lock type categories sorted by locale ID, sort index, and name.
    */
   @Query("select ltc from LockTypeCategory ltc order by ltc.localeId, ltc.sortIndex DESC, ltc.name")
-  List<LockTypeCategory> getAllLockTypeCategories();
+  List<LockTypeCategory> findAllLockTypeCategories();
 }

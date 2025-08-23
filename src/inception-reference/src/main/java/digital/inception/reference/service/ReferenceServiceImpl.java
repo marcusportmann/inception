@@ -105,7 +105,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   @Cacheable(cacheNames = "reference", key = "'countries.ALL'")
   public List<Country> getCountries() throws ServiceUnavailableException {
     try {
-      return countryRepository.getAllCountries();
+      return countryRepository.findAllCountries();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the country reference data", e);
     }
@@ -130,7 +130,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   @Cacheable(cacheNames = "reference", key = "'languages.ALL'")
   public List<Language> getLanguages() throws ServiceUnavailableException {
     try {
-      return languageRepository.getAllLanguages();
+      return languageRepository.findAllLanguages();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the language reference data", e);
     }
@@ -156,7 +156,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   @Cacheable(cacheNames = "reference", key = "'measurementSystems.ALL'")
   public List<MeasurementSystem> getMeasurementSystems() throws ServiceUnavailableException {
     try {
-      return measurementSystemRepository.getAllMeasurementSystems();
+      return measurementSystemRepository.findAllMeasurementSystems();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the measurement system reference data", e);
@@ -183,7 +183,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   @Cacheable(cacheNames = "reference", key = "'measurementUnitTypes.ALL'")
   public List<MeasurementUnitType> getMeasurementUnitTypes() throws ServiceUnavailableException {
     try {
-      return measurementUnitTypeRepository.getAllMeasurementUnitTypes();
+      return measurementUnitTypeRepository.findAllMeasurementUnitTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the measurement unit type reference data", e);
@@ -210,7 +210,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   @Cacheable(cacheNames = "reference", key = "'measurementUnits.ALL'")
   public List<MeasurementUnit> getMeasurementUnits() throws ServiceUnavailableException {
     try {
-      return measurementUnitRepository.getAllMeasurementUnits();
+      return measurementUnitRepository.findAllMeasurementUnits();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the measurement unit reference data", e);
@@ -237,7 +237,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   @Cacheable(cacheNames = "reference", key = "'regions.ALL'")
   public List<Region> getRegions() throws ServiceUnavailableException {
     try {
-      return regionRepository.getAllRegions();
+      return regionRepository.findAllRegions();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the region reference data", e);
     }

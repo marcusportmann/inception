@@ -150,7 +150,8 @@ public class PartyServiceTests {
         fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
 
     return new Person(
-        TenantUtil.DEFAULT_TENANT_ID, generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
+        TenantUtil.DEFAULT_TENANT_ID,
+        generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
   }
 
   private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
@@ -465,7 +466,8 @@ public class PartyServiceTests {
 
     Company generatedCompany = generatedPerson.getCompany();
 
-    Organization organization = new Organization(TenantUtil.DEFAULT_TENANT_ID, generatedCompany.getName());
+    Organization organization =
+        new Organization(TenantUtil.DEFAULT_TENANT_ID, generatedCompany.getName());
 
     organization.setIdentificationType("za_company_registration_certificate");
     organization.setIdentificationNumber("2006/123456/23");
@@ -497,7 +499,8 @@ public class PartyServiceTests {
   private static synchronized Party getTestPartyDetails() {
     partyCount++;
 
-    return new Party(TenantUtil.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
+    return new Party(
+        TenantUtil.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
   }
 
   /** Test the association functionality. */
@@ -596,7 +599,8 @@ public class PartyServiceTests {
 
     partyService.updateAssociation(TenantUtil.DEFAULT_TENANT_ID, association);
 
-    retrievedAssociation = partyService.getAssociation(TenantUtil.DEFAULT_TENANT_ID, association.getId());
+    retrievedAssociation =
+        partyService.getAssociation(TenantUtil.DEFAULT_TENANT_ID, association.getId());
 
     assertEquals(
         4,
@@ -677,7 +681,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -686,7 +691,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -875,7 +881,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -889,7 +896,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1077,7 +1085,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1088,7 +1097,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1199,7 +1209,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1213,7 +1224,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -1229,7 +1241,10 @@ public class PartyServiceTests {
 
     Association association =
         new Association(
-            TenantUtil.DEFAULT_TENANT_ID, "test_association_type", firstPerson.getId(), secondPerson.getId());
+            TenantUtil.DEFAULT_TENANT_ID,
+            "test_association_type",
+            firstPerson.getId(),
+            secondPerson.getId());
 
     // Test setters
     association.setFirstPartyId(firstPerson.getId());
@@ -1260,7 +1275,8 @@ public class PartyServiceTests {
     association.addProperty(
         new AssociationProperty("test_string_property", "Invalid String Value!"));
 
-    constraintViolations = partyService.validateAssociation(TenantUtil.DEFAULT_TENANT_ID, association);
+    constraintViolations =
+        partyService.validateAssociation(TenantUtil.DEFAULT_TENANT_ID, association);
 
     assertEquals(
         2,
@@ -1717,7 +1733,8 @@ public class PartyServiceTests {
   /** Test the invalid mandate property functionality. */
   @Test
   public void invalidMandatePropertyTest() throws Exception {
-    Mandate mandate = new Mandate(TenantUtil.DEFAULT_TENANT_ID, "test_mandate_type", RequiredMandataries.ALL);
+    Mandate mandate =
+        new Mandate(TenantUtil.DEFAULT_TENANT_ID, "test_mandate_type", RequiredMandataries.ALL);
 
     // Test null properties
     mandate.addProperty(new MandateProperty("test_boolean_property"));
@@ -1841,7 +1858,8 @@ public class PartyServiceTests {
     organization.setIdentificationNumber("XXX");
     organization.setIdentificationCountryOfIssue("ZA");
 
-    constraintViolations = partyService.validateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
+    constraintViolations =
+        partyService.validateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
         1,
@@ -2437,7 +2455,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -2445,7 +2464,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -2507,7 +2527,8 @@ public class PartyServiceTests {
 
     compareMandates(mandate, mandatesForParty.getMandates().getFirst());
 
-    Mandate retrievedMandate = partyService.getMandate(TenantUtil.DEFAULT_TENANT_ID, mandate.getId());
+    Mandate retrievedMandate =
+        partyService.getMandate(TenantUtil.DEFAULT_TENANT_ID, mandate.getId());
 
     assertEquals(
         6,
@@ -2612,7 +2633,12 @@ public class PartyServiceTests {
 
     Organizations filteredOrganizations =
         partyService.getOrganizations(
-            TenantUtil.DEFAULT_TENANT_ID, "", OrganizationSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+            TenantUtil.DEFAULT_TENANT_ID,
+            "",
+            OrganizationSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -2719,7 +2745,12 @@ public class PartyServiceTests {
 
     filteredOrganizations =
         partyService.getOrganizations(
-            TenantUtil.DEFAULT_TENANT_ID, "", OrganizationSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+            TenantUtil.DEFAULT_TENANT_ID,
+            "",
+            OrganizationSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -2981,7 +3012,12 @@ public class PartyServiceTests {
 
     filteredPersons =
         partyService.getPersons(
-            TenantUtil.DEFAULT_TENANT_ID, "Updated", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+            TenantUtil.DEFAULT_TENANT_ID,
+            "Updated",
+            PersonSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -3103,7 +3139,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3111,7 +3148,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3290,7 +3328,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3299,7 +3338,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3368,7 +3408,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3376,7 +3417,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3481,7 +3523,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3494,7 +3537,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3645,7 +3689,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3653,7 +3698,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3722,7 +3768,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 
@@ -3730,7 +3777,8 @@ public class PartyServiceTests {
 
     partyService.updateOrganization(TenantUtil.DEFAULT_TENANT_ID, organization);
 
-    retrievedOrganization = partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
+    retrievedOrganization =
+        partyService.getOrganization(TenantUtil.DEFAULT_TENANT_ID, organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
 

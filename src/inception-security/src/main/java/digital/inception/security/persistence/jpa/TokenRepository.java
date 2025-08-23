@@ -57,7 +57,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    *     not be found
    */
   @Query("select t.name from Token t where t.id = :tokenId")
-  Optional<String> getNameById(@Param("tokenId") String tokenId);
+  Optional<String> findNameById(@Param("tokenId") String tokenId);
 
   /**
    * Find the revoked tokens.
@@ -68,7 +68,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
       "select new digital.inception.security.model.RevokedToken(t.id, t.type, t.name, t.issued, "
           + "t.validFromDate, t.expiryDate, t.revocationDate) from Token t "
           + "where t.revocationDate is not null order by t.revocationDate desc")
-  List<RevokedToken> getRevokedTokens();
+  List<RevokedToken> findRevokedTokens();
 
   /**
    * Reinstate the token.

@@ -40,30 +40,30 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
    * Delete the association.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the association
+   * @param associationId the ID for the association
    */
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
-  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+  void deleteByTenantIdAndId(UUID tenantId, UUID associationId);
 
   /**
    * Check whether the association exists.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the association
+   * @param associationId the ID for the association
    * @return {@code true} if the association exists or {@code false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID id);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID associationId);
 
   /**
    * Find the association.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the association
+   * @param associationId the ID for the association
    * @return an Optional containing the association or an empty Optional if the association could
    *     not be found
    */
-  Optional<Association> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Association> findByTenantIdAndId(UUID tenantId, UUID associationId);
 
   /**
    * Find the associations for the party.

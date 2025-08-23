@@ -46,5 +46,5 @@ public interface ReportDefinitionRepository extends JpaRepository<ReportDefiniti
    *     report definition could not be found
    */
   @Query("select rd.name from ReportDefinition rd where rd.id = :reportDefinitionId")
-  Optional<String> getNameById(@Param("reportDefinitionId") String reportDefinitionId);
+  Optional<String> findNameById(@Param("reportDefinitionId") String reportDefinitionId);
 }

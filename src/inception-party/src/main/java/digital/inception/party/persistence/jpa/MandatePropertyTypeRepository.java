@@ -32,11 +32,11 @@ public interface MandatePropertyTypeRepository
     extends JpaRepository<MandatePropertyType, MandatePropertyTypeId> {
 
   /**
-   * Retrieve all the mandate property types sorted by locale ID, sort index, and name.
+   * Find all the mandate property types sorted by locale ID, sort index, and name.
    *
    * @return all the mandate property types sorted by locale ID, sort index, and name.
    */
   @Query(
       "select mpt from MandatePropertyType mpt order by mpt.localeId, mpt.sortIndex DESC, mpt.name")
-  List<MandatePropertyType> getAllMandatePropertyTypes();
+  List<MandatePropertyType> findAllMandatePropertyTypes();
 }

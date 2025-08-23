@@ -32,10 +32,10 @@ public interface AssociationTypeRepository
     extends JpaRepository<AssociationType, AssociationTypeId> {
 
   /**
-   * Retrieve all the association types sorted by locale ID, sort index, and name.
+   * Find all the association types sorted by locale ID, sort index, and name.
    *
    * @return all the association types sorted by locale ID, sort index, and name.
    */
   @Query("select at from AssociationType at order by at.localeId, at.sortIndex DESC, at.name")
-  List<AssociationType> getAllAssociationTypes();
+  List<AssociationType> findAllAssociationTypes();
 }

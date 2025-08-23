@@ -102,10 +102,7 @@ public class Job implements Serializable {
   @XmlElementWrapper(name = "Parameters")
   @XmlElement(name = "Parameter")
   @Valid
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @JoinColumn(name = "job_id", insertable = false, updatable = false)
   private final List<JobParameter> parameters = new ArrayList<>();
 

@@ -32,10 +32,10 @@ public interface MeasurementSystemRepository
     extends JpaRepository<MeasurementSystem, MeasurementSystemId> {
 
   /**
-   * Retrieve all the measurement systems sorted by locale ID, sort index, and name.
+   * Find all the measurement systems sorted by locale ID, sort index, and name.
    *
    * @return all the measurement systems sorted by locale ID, sort index, and name.
    */
   @Query("select ms from MeasurementSystem ms order by ms.localeId, ms.sortIndex DESC, ms.name")
-  List<MeasurementSystem> getAllMeasurementSystems();
+  List<MeasurementSystem> findAllMeasurementSystems();
 }

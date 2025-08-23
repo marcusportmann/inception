@@ -1361,7 +1361,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   @Override
   public List<RevokedToken> getRevokedTokens() throws ServiceUnavailableException {
     try {
-      return tokenRepository.getRevokedTokens();
+      return tokenRepository.findRevokedTokens();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the revoked tokens", e);
     }
@@ -1479,7 +1479,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
-      return userDirectoryRepository.getTenantIdsById(userDirectoryId);
+      return userDirectoryRepository.findTenantIdsById(userDirectoryId);
     } catch (UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1499,7 +1499,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
     }
 
     try {
-      Optional<String> nameOptional = tenantRepository.getNameById(tenantId);
+      Optional<String> nameOptional = tenantRepository.findNameById(tenantId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();
@@ -1644,7 +1644,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
     }
 
     try {
-      Optional<String> nameOptional = tokenRepository.getNameById(tokenId);
+      Optional<String> nameOptional = tokenRepository.findNameById(tokenId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();
@@ -1986,7 +1986,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         throw new TenantNotFoundException(tenantId);
       }
 
-      return tenantRepository.getUserDirectoryIdsById(tenantId);
+      return tenantRepository.findUserDirectoryIdsById(tenantId);
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -2051,7 +2051,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
     }
 
     try {
-      Optional<String> nameOptional = userDirectoryRepository.getNameById(userDirectoryId);
+      Optional<String> nameOptional = userDirectoryRepository.findNameById(userDirectoryId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();
@@ -2159,7 +2159,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
 
     try {
       Optional<String> typeOptional =
-          userDirectoryRepository.getTypeForUserDirectoryById(userDirectoryId);
+          userDirectoryRepository.findTypeForUserDirectoryById(userDirectoryId);
 
       if (typeOptional.isEmpty()) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -2832,7 +2832,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   private Optional<UUID> getInternalUserDirectoryIdForUser(String username)
       throws ServiceUnavailableException {
     try {
-      return userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
+      return userRepository.findUserDirectoryIdByUsernameIgnoreCase(username);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the ID for the internal user directory for the internal user ("

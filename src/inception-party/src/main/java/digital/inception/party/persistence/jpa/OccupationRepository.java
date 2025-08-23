@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface OccupationRepository extends JpaRepository<Occupation, OccupationId> {
 
   /**
-   * Retrieve all the occupations sorted by locale ID, sort index, and name.
+   * Find all the occupations sorted by locale ID, sort index, and name.
    *
    * @return all the occupations sorted by locale ID, sort index, and name.
    */
   @Query("select o from Occupation o order by o.localeId, o.sortIndex DESC, o.name")
-  List<Occupation> getAllOccupations();
+  List<Occupation> findAllOccupations();
 }

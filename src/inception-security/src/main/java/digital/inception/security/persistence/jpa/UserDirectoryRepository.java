@@ -67,7 +67,7 @@ public interface UserDirectoryRepository
    *     directory could not be found
    */
   @Query("select ud.name from UserDirectory ud where ud.id = :userDirectoryId")
-  Optional<String> getNameById(@Param("userDirectoryId") UUID userDirectoryId);
+  Optional<String> findNameById(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
    * Find the IDs for the tenants for the user directory.
@@ -76,7 +76,7 @@ public interface UserDirectoryRepository
    * @return the IDs for the tenants for the user directory
    */
   @Query("select t.id from Tenant t join t.userDirectories as ud where ud.id = :userDirectoryId")
-  List<UUID> getTenantIdsById(@Param("userDirectoryId") UUID userDirectoryId);
+  List<UUID> findTenantIdsById(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
    * Find the type for the user directory.
@@ -86,5 +86,5 @@ public interface UserDirectoryRepository
    *     directory could not be found
    */
   @Query("select ud.type from UserDirectory ud where ud.id = :userDirectoryId")
-  Optional<String> getTypeForUserDirectoryById(@Param("userDirectoryId") UUID userDirectoryId);
+  Optional<String> findTypeForUserDirectoryById(@Param("userDirectoryId") UUID userDirectoryId);
 }

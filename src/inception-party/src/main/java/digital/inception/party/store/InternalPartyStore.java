@@ -812,7 +812,7 @@ public class InternalPartyStore implements PartyStore {
   @Override
   public Optional<UUID> getTenantIdForParty(UUID partyId) throws ServiceUnavailableException {
     try {
-      return partyRepository.getTenantIdByPartyId(partyId);
+      return partyRepository.findTenantIdById(partyId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the tenant ID for the party (" + partyId + ")", e);
@@ -823,7 +823,7 @@ public class InternalPartyStore implements PartyStore {
   public Optional<PartyType> getTypeForParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, ServiceUnavailableException {
     try {
-      return partyRepository.getTypeByTenantIdAndPartyId(tenantId, partyId);
+      return partyRepository.findTypeByTenantIdAndId(tenantId, partyId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the type for the party ("

@@ -32,11 +32,11 @@ public interface ContactMechanismPurposeRepository
     extends JpaRepository<ContactMechanismPurpose, ContactMechanismPurposeId> {
 
   /**
-   * Retrieve all the contact mechanism purposes sorted by locale ID, sort index, and name.
+   * Find all the contact mechanism purposes sorted by locale ID, sort index, and name.
    *
    * @return all the contact mechanism purposes sorted by locale ID, sort index, and name.
    */
   @Query(
       "select cmp from ContactMechanismPurpose cmp order by cmp.localeId, cmp.sortIndex DESC, cmp.name")
-  List<ContactMechanismPurpose> getAllContactMechanismPurposes();
+  List<ContactMechanismPurpose> findAllContactMechanismPurposes();
 }

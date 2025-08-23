@@ -32,11 +32,11 @@ public interface IndustryClassificationRepository
     extends JpaRepository<IndustryClassification, IndustryClassificationId> {
 
   /**
-   * Retrieve all the industry classifications sorted by locale ID, sort index, and name.
+   * Find all the industry classifications sorted by locale ID, sort index, and name.
    *
    * @return all the industry classifications sorted by locale ID, sort index, and name.
    */
   @Query(
       "select ic from IndustryClassification ic order by ic.localeId, ic.sortIndex DESC, ic.name")
-  List<IndustryClassification> getAllIndustryClassifications();
+  List<IndustryClassification> findAllIndustryClassifications();
 }

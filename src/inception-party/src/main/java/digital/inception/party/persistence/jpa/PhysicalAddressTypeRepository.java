@@ -32,11 +32,11 @@ public interface PhysicalAddressTypeRepository
     extends JpaRepository<PhysicalAddressType, PhysicalAddressTypeId> {
 
   /**
-   * Retrieve all the physical address types sorted by locale ID, sort index, and name.
+   * Find all the physical address types sorted by locale ID, sort index, and name.
    *
    * @return all the physical address types sorted by locale ID, sort index, and name.
    */
   @Query(
       "select pat from PhysicalAddressType pat order by pat.localeId, pat.sortIndex DESC, pat.name")
-  List<PhysicalAddressType> getAllPhysicalAddressTypes();
+  List<PhysicalAddressType> findAllPhysicalAddressTypes();
 }

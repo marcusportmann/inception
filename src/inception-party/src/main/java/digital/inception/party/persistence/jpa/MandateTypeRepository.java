@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface MandateTypeRepository extends JpaRepository<MandateType, MandateTypeId> {
 
   /**
-   * Retrieve all the mandate types sorted by locale ID, sort index, and name.
+   * Find all the mandate types sorted by locale ID, sort index, and name.
    *
    * @return all the mandate types sorted by locale ID, sort index, and name.
    */
   @Query("select mt from MandateType mt order by mt.localeId, mt.sortIndex DESC, mt.name")
-  List<MandateType> getAllMandateTypes();
+  List<MandateType> findAllMandateTypes();
 }

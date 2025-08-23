@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface RolePurposeRepository extends JpaRepository<RolePurpose, RolePurposeId> {
 
   /**
-   * Retrieve all the role purposes sorted by locale ID, sort index, and name.
+   * Find all the role purposes sorted by locale ID, sort index, and name.
    *
    * @return all the role purposes sorted by locale ID, sort index, and name.
    */
   @Query("select rp from RolePurpose rp order by rp.localeId, rp.sortIndex DESC, rp.name")
-  List<RolePurpose> getAllRolePurposes();
+  List<RolePurpose> findAllRolePurposes();
 }

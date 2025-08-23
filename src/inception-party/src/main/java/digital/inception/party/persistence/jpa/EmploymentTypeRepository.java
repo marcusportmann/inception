@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface EmploymentTypeRepository extends JpaRepository<EmploymentType, EmploymentTypeId> {
 
   /**
-   * Retrieve all the employment types sorted by locale ID, sort index, and name.
+   * Find all the employment types sorted by locale ID, sort index, and name.
    *
    * @return all the employment types sorted by locale ID, sort index, and name.
    */
   @Query("select et from EmploymentType et order by et.localeId, et.sortIndex DESC, et.name")
-  List<EmploymentType> getAllEmploymentTypes();
+  List<EmploymentType> findAllEmploymentTypes();
 }

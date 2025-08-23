@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface SegmentRepository extends JpaRepository<Segment, SegmentId> {
 
   /**
-   * Retrieve all the segments sorted by locale ID, sort index, and name.
+   * Find all the segments sorted by locale ID, sort index, and name.
    *
    * @return all the segments sorted by locale ID, sort index, and name.
    */
   @Query("select s from Segment s order by s.localeId, s.sortIndex DESC, s.type, s.name")
-  List<Segment> getAllSegments();
+  List<Segment> findAllSegments();
 }

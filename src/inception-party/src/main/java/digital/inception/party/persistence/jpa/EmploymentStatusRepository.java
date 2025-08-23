@@ -32,10 +32,10 @@ public interface EmploymentStatusRepository
     extends JpaRepository<EmploymentStatus, EmploymentStatusId> {
 
   /**
-   * Retrieve all the employment statuses sorted by locale ID, sort index, and name.
+   * Find all the employment statuses sorted by locale ID, sort index, and name.
    *
    * @return all the employment statuses sorted by locale ID, sort index, and name.
    */
   @Query("select es from EmploymentStatus es order by es.localeId, es.sortIndex DESC, es.name")
-  List<EmploymentStatus> getAllEmploymentStatuses();
+  List<EmploymentStatus> findAllEmploymentStatuses();
 }

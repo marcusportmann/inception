@@ -38,28 +38,28 @@ public interface OrganizationRepository
    * Delete the organization.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the organization
+   * @param organizationId the ID for the organization
    */
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
-  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+  void deleteByTenantIdAndId(UUID tenantId, UUID organizationId);
 
   /**
    * Check whether the organization exists.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the organization
+   * @param organizationId the ID for the organization
    * @return {@code true} if the organization exists or {@code false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID id);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID organizationId);
 
   /**
    * Find the organization.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the organization
+   * @param organizationId the ID for the organization
    * @return an Optional containing the organization or an empty Optional if the organization could
    *     not be found
    */
-  Optional<Organization> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Organization> findByTenantIdAndId(UUID tenantId, UUID organizationId);
 }

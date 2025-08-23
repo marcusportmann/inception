@@ -464,7 +464,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isPresent()) {
         groupId = groupIdOptional.get();
@@ -962,7 +962,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
       // Delete the corresponding group in the database
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       groupIdOptional.ifPresent(uuid -> getGroupRepository().deleteById(uuid));
     } catch (GroupNotFoundException | ExistingGroupMembersException e) {
@@ -1168,7 +1168,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
       }
 
       return getGroupRepository()
-          .getFunctionCodesByUserDirectoryIdAndGroupNames(getUserDirectoryId(), groupNames);
+          .findFunctionCodesByUserDirectoryIdAndGroupNames(getUserDirectoryId(), groupNames);
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1708,10 +1708,10 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isPresent()) {
-        return getGroupRepository().getRoleCodesByGroupId(groupIdOptional.get());
+        return getGroupRepository().findRoleCodesByGroupId(groupIdOptional.get());
       } else {
         return new ArrayList<>();
       }
@@ -1772,7 +1772,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
       }
 
       return getGroupRepository()
-          .getRoleCodesByUserDirectoryIdAndGroupNames(getUserDirectoryId(), groupNames);
+          .findRoleCodesByUserDirectoryIdAndGroupNames(getUserDirectoryId(), groupNames);
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1805,12 +1805,12 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       List<GroupRole> groupRoles = new ArrayList<>();
 
       if (groupIdOptional.isPresent()) {
-        for (String roleCode : getGroupRepository().getRoleCodesByGroupId(groupIdOptional.get())) {
+        for (String roleCode : getGroupRepository().findRoleCodesByGroupId(groupIdOptional.get())) {
           groupRoles.add(new GroupRole(getUserDirectoryId(), groupName, roleCode));
         }
       }
@@ -2153,7 +2153,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isPresent()) {
         if (getGroupRepository().removeRoleFromGroup(groupIdOptional.get(), roleCode) == 0) {
@@ -2334,7 +2334,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
       // Update the corresponding group in the database
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), group.getName());
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), group.getName());
 
       if (groupIdOptional.isEmpty()) {
         group.setId(UuidCreator.getTimeOrderedEpoch());

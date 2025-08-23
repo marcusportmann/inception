@@ -303,7 +303,7 @@ public class ReportingServiceImpl extends AbstractServiceBase implements Reporti
     }
 
     try {
-      Optional<String> nameOptional = reportDefinitionRepository.getNameById(reportDefinitionId);
+      Optional<String> nameOptional = reportDefinitionRepository.findNameById(reportDefinitionId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();

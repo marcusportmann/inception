@@ -32,11 +32,11 @@ public interface ContactMechanismTypeRepository
     extends JpaRepository<ContactMechanismType, ContactMechanismTypeId> {
 
   /**
-   * Retrieve all the contact mechanism types sorted by locale ID, sort index, and name.
+   * Find all the contact mechanism types sorted by locale ID, sort index, and name.
    *
    * @return all the contact mechanism types sorted by locale ID, sort index, and name.
    */
   @Query(
       "select cmt from ContactMechanismType cmt order by cmt.localeId, cmt.sortIndex DESC, cmt.name")
-  List<ContactMechanismType> getAllContactMechanismTypes();
+  List<ContactMechanismType> findAllContactMechanismTypes();
 }

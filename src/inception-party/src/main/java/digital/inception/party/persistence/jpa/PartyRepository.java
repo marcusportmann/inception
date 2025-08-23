@@ -40,29 +40,29 @@ public interface PartyRepository
    * Delete the party.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the party
+   * @param partyId the ID for the party
    */
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
-  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+  void deleteByTenantIdAndId(UUID tenantId, UUID partyId);
 
   /**
    * Check whether the party exists.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the party
+   * @param partyId the ID for the party
    * @return {@code true} if the party exists or {@code false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID id);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID partyId);
 
   /**
    * Find the party.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the party
+   * @param partyId the ID for the party
    * @return an Optional containing the party or an empty Optional if the party could not be found
    */
-  Optional<Party> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Party> findByTenantIdAndId(UUID tenantId, UUID partyId);
 
   /**
    * Find the ID for the tenant the party is associated with.
@@ -72,7 +72,7 @@ public interface PartyRepository
    *     Optional if the party could not be found
    */
   @Query("select p.tenantId from Party p where p.id = :partyId")
-  Optional<UUID> getTenantIdByPartyId(@Param("partyId") UUID partyId);
+  Optional<UUID> findTenantIdById(@Param("partyId") UUID partyId);
 
   /**
    * Find the party type for the party.
@@ -83,6 +83,6 @@ public interface PartyRepository
    *     could not be found
    */
   @Query("select p.type from Party p where p.tenantId = :tenantId and p.id = :partyId")
-  Optional<PartyType> getTypeByTenantIdAndPartyId(
+  Optional<PartyType> findTypeByTenantIdAndId(
       @Param("tenantId") UUID tenantId, @Param("partyId") UUID partyId);
 }

@@ -54,5 +54,5 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
    *     not be found
    */
   @Query("select p.name from Policy p where p.id = :policyId")
-  Optional<String> getNameById(@Param("policyId") String policyId);
+  Optional<String> findNameById(@Param("policyId") String policyId);
 }

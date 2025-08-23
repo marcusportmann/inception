@@ -510,7 +510,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<AssociationPropertyType> getAssociationPropertyTypes()
       throws ServiceUnavailableException {
     try {
-      return associationPropertyTypeRepository.getAllAssociationPropertyTypes();
+      return associationPropertyTypeRepository.findAllAssociationPropertyTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the association property type reference data", e);
@@ -564,7 +564,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'associationTypes.ALL'")
   public List<AssociationType> getAssociationTypes() throws ServiceUnavailableException {
     try {
-      return associationTypeRepository.getAllAssociationTypes();
+      return associationTypeRepository.findAllAssociationTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the association type reference data", e);
@@ -617,7 +617,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<AttributeTypeCategory> getAttributeTypeCategories()
       throws ServiceUnavailableException {
     try {
-      return attributeTypeCategoryRepository.getAllAttributeTypeCategories();
+      return attributeTypeCategoryRepository.findAllAttributeTypeCategories();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the attribute type category reference data", e);
@@ -671,7 +671,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'attributeTypes.ALL'")
   public List<AttributeType> getAttributeTypes() throws ServiceUnavailableException {
     try {
-      return attributeTypeRepository.getAllAttributeTypes();
+      return attributeTypeRepository.findAllAttributeTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the attribute type reference data", e);
@@ -709,7 +709,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'consentTypes.ALL'")
   public List<ConsentType> getConsentTypes() throws ServiceUnavailableException {
     try {
-      return consentTypeRepository.getAllConsentTypes();
+      return consentTypeRepository.findAllConsentTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the consent type reference data", e);
@@ -748,7 +748,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<ContactMechanismPurpose> getContactMechanismPurposes()
       throws ServiceUnavailableException {
     try {
-      return contactMechanismPurposeRepository.getAllContactMechanismPurposes();
+      return contactMechanismPurposeRepository.findAllContactMechanismPurposes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the contact mechanism purpose reference data", e);
@@ -806,7 +806,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'contactMechanismRoles.ALL'")
   public List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException {
     try {
-      return contactMechanismRoleRepository.getAllContactMechanismRoles();
+      return contactMechanismRoleRepository.findAllContactMechanismRoles();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the contact mechanism role reference data", e);
@@ -856,7 +856,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'contactMechanismTypes.ALL'")
   public List<ContactMechanismType> getContactMechanismTypes() throws ServiceUnavailableException {
     try {
-      return contactMechanismTypeRepository.getAllContactMechanismTypes();
+      return contactMechanismTypeRepository.findAllContactMechanismTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the contact mechanism type reference data", e);
@@ -894,7 +894,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'employmentStatuses.ALL'")
   public List<EmploymentStatus> getEmploymentStatuses() throws ServiceUnavailableException {
     try {
-      return employmentStatusRepository.getAllEmploymentStatuses();
+      return employmentStatusRepository.findAllEmploymentStatuses();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the employment status reference data", e);
@@ -932,7 +932,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'employmentTypes.ALL'")
   public List<EmploymentType> getEmploymentTypes() throws ServiceUnavailableException {
     try {
-      return employmentTypeRepository.getAllEmploymentTypes();
+      return employmentTypeRepository.findAllEmploymentTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the employment type reference data", e);
@@ -971,7 +971,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<ExternalReferenceType> getExternalReferenceTypes()
       throws ServiceUnavailableException {
     try {
-      return externalReferenceTypeRepository.getAllExternalReferenceTypes();
+      return externalReferenceTypeRepository.findAllExternalReferenceTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the external reference type reference data", e);
@@ -1009,7 +1009,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'fieldsOfStudy.ALL'")
   public List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException {
     try {
-      return fieldOfStudyRepository.getAllFieldsOfStudy();
+      return fieldOfStudyRepository.findAllFieldsOfStudy();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the fields of study reference data", e);
@@ -1046,7 +1046,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'genders.ALL'")
   public List<Gender> getGenders() throws ServiceUnavailableException {
     try {
-      return genderRepository.getAllGenders();
+      return genderRepository.findAllGenders();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the gender reference data", e);
     }
@@ -1082,7 +1082,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'identificationTypes.ALL'")
   public List<IdentificationType> getIdentificationTypes() throws ServiceUnavailableException {
     try {
-      return identificationTypeRepository.getAllIdentificationTypes();
+      return identificationTypeRepository.findAllIdentificationTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the identification type reference data", e);
@@ -1130,7 +1130,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<IndustryClassificationCategory> getIndustryClassificationCategories()
       throws ServiceUnavailableException {
     try {
-      return industryClassificationCategoryRepository.getAllIndustryClassificationCategories();
+      return industryClassificationCategoryRepository.findAllIndustryClassificationCategories();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the industry classification category reference data", e);
@@ -1167,7 +1167,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<IndustryClassificationSystem> getIndustryClassificationSystems()
       throws ServiceUnavailableException {
     try {
-      return industryClassificationSystemRepository.getAllIndustryClassificationSystems();
+      return industryClassificationSystemRepository.findAllIndustryClassificationSystems();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the industry classification system reference data", e);
@@ -1204,7 +1204,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<IndustryClassification> getIndustryClassifications()
       throws ServiceUnavailableException {
     try {
-      return industryClassificationRepository.getAllIndustryClassifications();
+      return industryClassificationRepository.findAllIndustryClassifications();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the industry classification reference data", e);
@@ -1231,7 +1231,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'linkTypes.ALL'")
   public List<LinkType> getLinkTypes() throws ServiceUnavailableException {
     try {
-      return linkTypeRepository.getAllLinkTypes();
+      return linkTypeRepository.findAllLinkTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the link type reference data", e);
     }
@@ -1268,7 +1268,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'lockTypeCategories.ALL'")
   public List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException {
     try {
-      return lockTypeCategoryRepository.getAllLockTypeCategories();
+      return lockTypeCategoryRepository.findAllLockTypeCategories();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the lock type category reference data", e);
@@ -1306,7 +1306,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'lockTypes.ALL'")
   public List<LockType> getLockTypes() throws ServiceUnavailableException {
     try {
-      return lockTypeRepository.getAllLockTypes();
+      return lockTypeRepository.findAllLockTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the lock type reference data", e);
     }
@@ -1343,7 +1343,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'mandataryRoles.ALL'")
   public List<MandataryRole> getMandataryRoles() throws ServiceUnavailableException {
     try {
-      return mandataryRoleRepository.getAllMandataryRoles();
+      return mandataryRoleRepository.findAllMandataryRoles();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the mandatary role reference data", e);
@@ -1399,7 +1399,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'mandatePropertyTypes.ALL'")
   public List<MandatePropertyType> getMandatePropertyTypes() throws ServiceUnavailableException {
     try {
-      return mandatePropertyTypeRepository.getAllMandatePropertyTypes();
+      return mandatePropertyTypeRepository.findAllMandatePropertyTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the mandate property type reference data", e);
@@ -1437,7 +1437,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'mandateTypes.ALL'")
   public List<MandateType> getMandateTypes() throws ServiceUnavailableException {
     try {
-      return mandateTypeRepository.getAllMandateTypes();
+      return mandateTypeRepository.findAllMandateTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the mandate type reference data", e);
@@ -1475,7 +1475,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'maritalStatuses.ALL'")
   public List<MaritalStatus> getMaritalStatuses() throws ServiceUnavailableException {
     try {
-      return maritalStatusRepository.getAllMaritalStatuses();
+      return maritalStatusRepository.findAllMaritalStatuses();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the marital status reference data", e);
@@ -1513,7 +1513,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'marriageTypes.ALL'")
   public List<MarriageType> getMarriageTypes() throws ServiceUnavailableException {
     try {
-      return marriageTypeRepository.getAllMarriageTypes();
+      return marriageTypeRepository.findAllMarriageTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the marriage type reference data", e);
@@ -1551,7 +1551,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'nextOfKinTypes.ALL'")
   public List<NextOfKinType> getNextOfKinTypes() throws ServiceUnavailableException {
     try {
-      return nextOfKinTypeRepository.getAllNextOfKinTypes();
+      return nextOfKinTypeRepository.findAllNextOfKinTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the next of kin type reference data", e);
@@ -1589,7 +1589,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'occupations.ALL'")
   public List<Occupation> getOccupations() throws ServiceUnavailableException {
     try {
-      return occupationRepository.getAllOccupations();
+      return occupationRepository.findAllOccupations();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the occupation reference data", e);
     }
@@ -1627,7 +1627,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes()
       throws ServiceUnavailableException {
     try {
-      return physicalAddressPurposeRepository.getAllPhysicalAddressPurposes();
+      return physicalAddressPurposeRepository.findAllPhysicalAddressPurposes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the physical address purpose reference data", e);
@@ -1665,7 +1665,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'physicalAddressRoles.ALL'")
   public List<PhysicalAddressRole> getPhysicalAddressRoles() throws ServiceUnavailableException {
     try {
-      return physicalAddressRoleRepository.getAllPhysicalAddressRoles();
+      return physicalAddressRoleRepository.findAllPhysicalAddressRoles();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the physical address role reference data", e);
@@ -1703,7 +1703,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'physicalAddressTypes.ALL'")
   public List<PhysicalAddressType> getPhysicalAddressTypes() throws ServiceUnavailableException {
     try {
-      return physicalAddressTypeRepository.getAllPhysicalAddressTypes();
+      return physicalAddressTypeRepository.findAllPhysicalAddressTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the physical address type reference data", e);
@@ -1756,7 +1756,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<PreferenceTypeCategory> getPreferenceTypeCategories()
       throws ServiceUnavailableException {
     try {
-      return preferenceTypeCategoryRepository.getAllPreferenceTypeCategories();
+      return preferenceTypeCategoryRepository.findAllPreferenceTypeCategories();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the preference type category reference data", e);
@@ -1794,7 +1794,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'preferenceTypes.ALL'")
   public List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
     try {
-      return preferenceTypeRepository.getAllPreferenceTypes();
+      return preferenceTypeRepository.findAllPreferenceTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the preference type reference data", e);
@@ -1832,7 +1832,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'qualificationTypes.ALL'")
   public List<QualificationType> getQualificationTypes() throws ServiceUnavailableException {
     try {
-      return qualificationTypeRepository.getAllQualificationTypes();
+      return qualificationTypeRepository.findAllQualificationTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the qualification type reference data", e);
@@ -1868,7 +1868,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'races.ALL'")
   public List<Race> getRaces() throws ServiceUnavailableException {
     try {
-      return raceRepository.getAllRaces();
+      return raceRepository.findAllRaces();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the race reference data", e);
     }
@@ -1903,7 +1903,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'residencePermitTypes.ALL'")
   public List<ResidencePermitType> getResidencePermitTypes() throws ServiceUnavailableException {
     try {
-      return residencePermitTypeRepository.getAllResidencePermitTypes();
+      return residencePermitTypeRepository.findAllResidencePermitTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the residence permit type reference data", e);
@@ -1941,7 +1941,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'residencyStatuses.ALL'")
   public List<ResidencyStatus> getResidencyStatuses() throws ServiceUnavailableException {
     try {
-      return residencyStatusRepository.getAllResidencyStatuses();
+      return residencyStatusRepository.findAllResidencyStatuses();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the residency status reference data", e);
@@ -1979,7 +1979,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'residentialTypes.ALL'")
   public List<ResidentialType> getResidentialTypes() throws ServiceUnavailableException {
     try {
-      return residentialTypeRepository.getAllResidentialTypes();
+      return residentialTypeRepository.findAllResidentialTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the residential type reference data", e);
@@ -2017,7 +2017,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'rolePurposes.ALL'")
   public List<RolePurpose> getRolePurposes() throws ServiceUnavailableException {
     try {
-      return rolePurposeRepository.getAllRolePurposes();
+      return rolePurposeRepository.findAllRolePurposes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the role purpose reference data", e);
@@ -2117,7 +2117,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'roleTypes.ALL'")
   public List<RoleType> getRoleTypes() throws ServiceUnavailableException {
     try {
-      return roleTypeRepository.getAllRoleTypes();
+      return roleTypeRepository.findAllRoleTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the role type reference data", e);
     }
@@ -2166,7 +2166,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   public List<SegmentationType> getSegmentationTypes()
       throws InvalidArgumentException, ServiceUnavailableException {
     try {
-      return segmentationTypeRepository.getAllSegmentationTypes();
+      return segmentationTypeRepository.findAllSegmentationTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the segmentation type reference data", e);
@@ -2192,7 +2192,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'segments.ALL'")
   public List<Segment> getSegments() throws ServiceUnavailableException {
     try {
-      return segmentRepository.getAllSegments();
+      return segmentRepository.findAllSegments();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the segment reference data", e);
     }
@@ -2229,7 +2229,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'skillTypes.ALL'")
   public List<SkillType> getSkillTypes() throws ServiceUnavailableException {
     try {
-      return skillTypeRepository.getAllSkillTypes();
+      return skillTypeRepository.findAllSkillTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the skill type reference data", e);
     }
@@ -2266,7 +2266,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'sourceOfFundsTypes.ALL'")
   public List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException {
     try {
-      return sourceOfFundsTypeRepository.getAllSourceOfFundsTypes();
+      return sourceOfFundsTypeRepository.findAllSourceOfFundsTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the source of funds type reference data", e);
@@ -2304,7 +2304,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'sourceOfWealthTypes.ALL'")
   public List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException {
     try {
-      return sourceOfWealthTypeRepository.getAllSourceOfWealthTypes();
+      return sourceOfWealthTypeRepository.findAllSourceOfWealthTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the source of wealth type reference data", e);
@@ -2342,7 +2342,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'statusTypeCategories.ALL'")
   public List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException {
     try {
-      return statusTypeCategoryRepository.getAllStatusTypeCategories();
+      return statusTypeCategoryRepository.findAllStatusTypeCategories();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the status type category reference data", e);
@@ -2380,7 +2380,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'statusTypes.ALL'")
   public List<StatusType> getStatusTypes() throws ServiceUnavailableException {
     try {
-      return statusTypeRepository.getAllStatusTypes();
+      return statusTypeRepository.findAllStatusTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the status type reference data", e);
     }
@@ -2417,7 +2417,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'taxNumberTypes.ALL'")
   public List<TaxNumberType> getTaxNumberTypes() throws ServiceUnavailableException {
     try {
-      return taxNumberTypeRepository.getAllTaxNumberTypes();
+      return taxNumberTypeRepository.findAllTaxNumberTypes();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the tax number type reference data", e);
@@ -2455,7 +2455,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'timesToContact.ALL'")
   public List<TimeToContact> getTimesToContact() throws ServiceUnavailableException {
     try {
-      return timeToContactRepository.getAllTimesToContact();
+      return timeToContactRepository.findAllTimesToContact();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the times to contact reference data", e);
@@ -2492,7 +2492,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   @Cacheable(cacheNames = "reference", key = "'titles.ALL'")
   public List<Title> getTitles() throws ServiceUnavailableException {
     try {
-      return titleRepository.getAllTitles();
+      return titleRepository.findAllTitles();
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the title reference data", e);
     }

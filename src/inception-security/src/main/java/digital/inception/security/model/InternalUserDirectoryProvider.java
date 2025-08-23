@@ -195,7 +195,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
@@ -231,7 +231,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
@@ -239,7 +239,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
@@ -273,7 +273,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
@@ -520,13 +520,13 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (getGroupRepository().getNumberOfUsersForGroup(groupIdOptional.get()) > 0) {
+      if (getGroupRepository().findNumberOfUsersForGroup(groupIdOptional.get()) > 0) {
         throw new ExistingGroupMembersException(groupName);
       }
 
@@ -550,7 +550,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
@@ -624,13 +624,13 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
-      return getUserRepository().getFunctionCodesByUserId(userIdOptional.get());
+      return getUserRepository().findFunctionCodesByUserId(userIdOptional.get());
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -673,7 +673,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
   @Override
   public List<String> getGroupNames() throws ServiceUnavailableException {
     try {
-      return getGroupRepository().getNamesByUserDirectoryId(getUserDirectoryId());
+      return getGroupRepository().findNamesByUserDirectoryId(getUserDirectoryId());
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the group names for the user directory ("
@@ -689,13 +689,13 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
-      return getUserRepository().getGroupNamesByUserId(userIdOptional.get());
+      return getUserRepository().findGroupNamesByUserId(userIdOptional.get());
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -784,13 +784,13 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
-      return getUserRepository().getGroupsByUserId(userIdOptional.get());
+      return getUserRepository().findGroupsByUserId(userIdOptional.get());
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -810,14 +810,14 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
       List<String> usernames =
-          getGroupRepository().getUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get());
+          getGroupRepository().findUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get());
 
       List<GroupMember> groupMembers = new ArrayList<>();
 
@@ -851,7 +851,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
@@ -873,12 +873,12 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
       if (StringUtils.hasText(filter)) {
         usernamesForGroupPage =
             getGroupRepository()
-                .getFilteredUsernamesForGroup(
+                .findFilteredUsernamesForGroup(
                     getUserDirectoryId(), groupIdOptional.get(), "%" + filter + "%", pageRequest);
       } else {
         usernamesForGroupPage =
             getGroupRepository()
-                .getUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get(), pageRequest);
+                .findUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get(), pageRequest);
       }
 
       List<GroupMember> groupMembers = new ArrayList<>();
@@ -922,13 +922,13 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
-      return getGroupRepository().getRoleCodesByGroupId(groupIdOptional.get());
+      return getGroupRepository().findRoleCodesByGroupId(groupIdOptional.get());
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -948,13 +948,13 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
-      return getUserRepository().getRoleCodesByUserId(userIdOptional.get());
+      return getUserRepository().findRoleCodesByUserId(userIdOptional.get());
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -974,7 +974,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
@@ -982,7 +982,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
       List<GroupRole> groupRoles = new ArrayList<>();
 
-      for (String roleCode : getGroupRepository().getRoleCodesByGroupId(groupIdOptional.get())) {
+      for (String roleCode : getGroupRepository().findRoleCodesByGroupId(groupIdOptional.get())) {
         groupRoles.add(new GroupRole(getUserDirectoryId(), groupName, roleCode));
       }
 
@@ -1031,7 +1031,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<String> userNameOptional =
           getUserRepository()
-              .getNameByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findNameByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userNameOptional.isPresent()) {
         return userNameOptional.get();
@@ -1160,7 +1160,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
@@ -1168,7 +1168,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
@@ -1211,7 +1211,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
@@ -1241,7 +1241,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
+              .findIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
@@ -1249,7 +1249,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
       Optional<UUID> userIdOptional =
           getUserRepository()
-              .getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
+              .findIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
@@ -1429,7 +1429,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
     after = after.minusMonths(passwordHistoryMonths);
 
     for (String historicalPassword :
-        getUserRepository().getPasswordHistory(userId, after.toOffsetDateTime())) {
+        getUserRepository().findPasswordHistory(userId, after.toOffsetDateTime())) {
       if (passwordEncoder.matches(password, historicalPassword)) {
         return true;
       }

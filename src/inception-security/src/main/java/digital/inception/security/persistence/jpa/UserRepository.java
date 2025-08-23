@@ -102,7 +102,7 @@ public interface UserRepository
   @Query(
       "select f.code from User u join u.groups as g join g.roles as r join r.functions as f "
           + "where u.id = :userId")
-  List<String> getFunctionCodesByUserId(@Param("userId") UUID userId);
+  List<String> findFunctionCodesByUserId(@Param("userId") UUID userId);
 
   /**
    * Find the group names for the user
@@ -111,7 +111,7 @@ public interface UserRepository
    * @return the group names for the user
    */
   @Query("select g.name from User u join u.groups as g where u.id = :userId")
-  List<String> getGroupNamesByUserId(@Param("userId") UUID userId);
+  List<String> findGroupNamesByUserId(@Param("userId") UUID userId);
 
   /**
    * Find the groups for the user.
@@ -120,7 +120,7 @@ public interface UserRepository
    * @return the groups for the user
    */
   @Query("select g from User u join u.groups as g where u.id = :userId")
-  List<Group> getGroupsByUserId(@Param("userId") UUID userId);
+  List<Group> findGroupsByUserId(@Param("userId") UUID userId);
 
   /**
    * Find the ID for the user with the specified username for the user directory.
@@ -133,7 +133,7 @@ public interface UserRepository
   @Query(
       "select u.id from User u where u.userDirectoryId = :userDirectoryId and lower(u.username) "
           + "like lower(:username)")
-  Optional<UUID> getIdByUserDirectoryIdAndUsernameIgnoreCase(
+  Optional<UUID> findIdByUserDirectoryIdAndUsernameIgnoreCase(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
   /**
@@ -147,7 +147,7 @@ public interface UserRepository
   @Query(
       "select u.name from User u where ((lower(u.username) = lower(:username)) "
           + "and u.userDirectoryId = :userDirectoryId)")
-  Optional<String> getNameByUserDirectoryIdAndUsernameIgnoreCase(
+  Optional<String> findNameByUserDirectoryIdAndUsernameIgnoreCase(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
   /**
@@ -162,7 +162,7 @@ public interface UserRepository
           "select encoded_password from security_users_password_history "
               + "where user_id = :userId and changed > :after",
       nativeQuery = true)
-  List<String> getPasswordHistory(
+  List<String> findPasswordHistory(
       @Param("userId") UUID userId, @Param("after") OffsetDateTime after);
 
   /**
@@ -172,7 +172,7 @@ public interface UserRepository
    * @return the role codes for the user
    */
   @Query("select r.code from User u join u.groups as g join g.roles as r where u.id = :userId")
-  List<String> getRoleCodesByUserId(@Param("userId") UUID userId);
+  List<String> findRoleCodesByUserId(@Param("userId") UUID userId);
 
   /**
    * Find the ID for the user directory for the user with the specified username.
@@ -182,7 +182,7 @@ public interface UserRepository
    *     username or an empty Optional if the user could not be found
    */
   @Query("select u.userDirectoryId from User u where lower(u.username) = lower(:username)")
-  Optional<UUID> getUserDirectoryIdByUsernameIgnoreCase(@Param("username") String username);
+  Optional<UUID> findUserDirectoryIdByUsernameIgnoreCase(@Param("username") String username);
 
   /**
    * Increment the password attempts for the user.
@@ -238,7 +238,7 @@ public interface UserRepository
   /**
    * Save the encoded password in the password history for the user.
    *
-   * @param id the ID for the password history
+   * @param usersPasswordHistoryId the ID for the password history
    * @param userId the ID for the user
    * @param encodedPassword the encoded password
    */
@@ -247,10 +247,10 @@ public interface UserRepository
   @Query(
       value =
           "insert into security_users_password_history(id, user_id, changed, encoded_password) "
-              + "values (:id, :userId, current_timestamp, :encodedPassword)",
+              + "values (:usersPasswordHistoryId, :userId, current_timestamp, :encodedPassword)",
       nativeQuery = true)
   void savePasswordInPasswordHistory(
-      @Param("id") UUID id,
+      @Param("usersPasswordHistoryId") UUID usersPasswordHistoryId,
       @Param("userId") UUID userId,
       @Param("encodedPassword") String encodedPassword);
 }

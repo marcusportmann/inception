@@ -40,30 +40,30 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
    * Delete the mandate.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the mandate
+   * @param mandateId the ID for the mandate
    */
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
-  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+  void deleteByTenantIdAndId(UUID tenantId, UUID mandateId);
 
   /**
    * Check whether the mandate exists.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the mandate
+   * @param mandateId the ID for the mandate
    * @return {@code true} if the mandate exists or {@code false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID id);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID mandateId);
 
   /**
    * Find the mandate.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the mandate
+   * @param mandateId the ID for the mandate
    * @return an Optional containing the mandate or an empty Optional if the mandate could not be
    *     found
    */
-  Optional<Mandate> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Mandate> findByTenantIdAndId(UUID tenantId, UUID mandateId);
 
   /**
    * Find the mandates for the party.

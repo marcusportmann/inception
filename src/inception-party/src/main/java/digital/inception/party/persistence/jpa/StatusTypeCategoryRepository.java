@@ -32,11 +32,11 @@ public interface StatusTypeCategoryRepository
     extends JpaRepository<StatusTypeCategory, StatusTypeCategoryId> {
 
   /**
-   * Retrieve all the status type categories sorted by locale ID, sort index, and name.
+   * Find all the status type categories sorted by locale ID, sort index, and name.
    *
    * @return all the status type categories sorted by locale ID, sort index, and name.
    */
   @Query(
       "select stc from StatusTypeCategory stc order by stc.localeId, stc.sortIndex DESC, stc.name")
-  List<StatusTypeCategory> getAllStatusTypeCategories();
+  List<StatusTypeCategory> findAllStatusTypeCategories();
 }

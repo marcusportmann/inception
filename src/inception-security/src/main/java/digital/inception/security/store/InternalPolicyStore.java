@@ -130,7 +130,7 @@ public class InternalPolicyStore implements PolicyStore {
   public String getPolicyName(String policyId)
       throws PolicyNotFoundException, ServiceUnavailableException {
     try {
-      Optional<String> nameOptional = policyRepository.getNameById(policyId);
+      Optional<String> nameOptional = policyRepository.findNameById(policyId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();

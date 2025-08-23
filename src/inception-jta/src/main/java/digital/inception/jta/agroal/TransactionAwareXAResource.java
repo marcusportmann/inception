@@ -25,8 +25,8 @@ import javax.transaction.xa.Xid;
 /**
  * The {@code TransactionAwareXAResource} class provides a wrapper for a transactional resource,
  * which is represented as both a XAResource object and an Agroal transaction-aware connection
- * resource. The wrapper ensures that transactional behavior, i.e., start, commit, rollback, etc., is
- * propagated to both the underlying XAResource object and the TransactionAware object.
+ * resource. The wrapper ensures that transactional behavior, i.e., start, commit, rollback, etc.,
+ * is propagated to both the underlying XAResource object and the TransactionAware object.
  *
  * @author Marcus Portmann
  * @see <a

@@ -84,7 +84,7 @@ public interface TenantRepository
    *     not be found
    */
   @Query("select t.name from Tenant t where t.id = :tenantId")
-  Optional<String> getNameById(@Param("tenantId") UUID tenantId);
+  Optional<String> findNameById(@Param("tenantId") UUID tenantId);
 
   /**
    * Find the IDs for the user directories for the tenant.
@@ -93,7 +93,7 @@ public interface TenantRepository
    * @return the IDs for the user directories for the tenant
    */
   @Query("select ud.id from UserDirectory ud join ud.tenants as o where o.id = :tenantId")
-  List<UUID> getUserDirectoryIdsById(@Param("tenantId") UUID tenantId);
+  List<UUID> findUserDirectoryIdsById(@Param("tenantId") UUID tenantId);
 
   /**
    * Remove the user directory from the tenant

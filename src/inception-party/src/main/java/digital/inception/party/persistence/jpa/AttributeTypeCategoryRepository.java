@@ -32,10 +32,10 @@ public interface AttributeTypeCategoryRepository
     extends JpaRepository<AttributeTypeCategory, AttributeTypeCategoryId> {
 
   /**
-   * Retrieve all the attribute type categories sorted by locale ID, sort index, and name.
+   * Find all the attribute type categories sorted by locale ID, sort index, and name.
    *
    * @return all the attribute type categories sorted by locale ID, sort index, and name.
    */
   @Query("select atc from AttributeTypeCategory atc order by atc.sortIndex DESC, atc.name")
-  List<AttributeTypeCategory> getAllAttributeTypeCategories();
+  List<AttributeTypeCategory> findAllAttributeTypeCategories();
 }

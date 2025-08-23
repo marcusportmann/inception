@@ -32,11 +32,11 @@ public interface IdentificationTypeRepository
     extends JpaRepository<IdentificationType, IdentificationTypeId> {
 
   /**
-   * Retrieve all the identification types sorted by locale ID, sort index, and name.
+   * Find all the identification types sorted by locale ID, sort index, and name.
    *
    * @return all the identification types sorted by locale ID, sort index, and name.
    */
   @Query(
       "select idt from IdentificationType idt order by idt.localeId, idt.sortIndex DESC, idt.name")
-  List<IdentificationType> getAllIdentificationTypes();
+  List<IdentificationType> findAllIdentificationTypes();
 }

@@ -32,11 +32,11 @@ public interface ExternalReferenceTypeRepository
     extends JpaRepository<ExternalReferenceType, ExternalReferenceTypeId> {
 
   /**
-   * Retrieve all the external reference types sorted by locale ID, sort index, and name.
+   * Find all the external reference types sorted by locale ID, sort index, and name.
    *
    * @return all the external reference types sorted by locale ID, sort index, and name.
    */
   @Query(
       "select ert from ExternalReferenceType ert order by ert.localeId, ert.sortIndex DESC, ert.name")
-  List<ExternalReferenceType> getAllExternalReferenceTypes();
+  List<ExternalReferenceType> findAllExternalReferenceTypes();
 }

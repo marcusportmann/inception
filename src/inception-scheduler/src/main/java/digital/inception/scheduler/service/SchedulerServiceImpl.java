@@ -246,7 +246,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
     }
 
     try {
-      Optional<String> nameOptional = jobRepository.getNameById(jobId);
+      Optional<String> nameOptional = jobRepository.findNameById(jobId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();

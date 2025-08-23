@@ -30,10 +30,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface RaceRepository extends JpaRepository<Race, RaceId> {
 
   /**
-   * Retrieve all the races sorted by locale ID, sort index, and name.
+   * Find all the races sorted by locale ID, sort index, and name.
    *
    * @return all the races sorted by locale ID, sort index, and name.
    */
   @Query("select r from Race r order by r.localeId, r.sortIndex DESC, r.name")
-  List<Race> getAllRaces();
+  List<Race> findAllRaces();
 }

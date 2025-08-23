@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface RegionRepository extends JpaRepository<Region, RegionId> {
 
   /**
-   * Retrieve all the regions sorted by locale ID, sort index, and name.
+   * Find all the regions sorted by locale ID, sort index, and name.
    *
    * @return all the regions sorted by locale ID, sort index, and name.
    */
   @Query("select r from Region r order by r.localeId, r.sortIndex DESC, r.name")
-  List<Region> getAllRegions();
+  List<Region> findAllRegions();
 }

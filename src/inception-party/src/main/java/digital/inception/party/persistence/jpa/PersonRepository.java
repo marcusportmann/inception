@@ -38,27 +38,27 @@ public interface PersonRepository
    * Delete the person.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the person
+   * @param personId the ID for the person
    */
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
-  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+  void deleteByTenantIdAndId(UUID tenantId, UUID personId);
 
   /**
    * Check whether the person exists.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the person
+   * @param personId the ID for the person
    * @return {@code true} if the person exists or {@code false} otherwise
    */
-  boolean existsByTenantIdAndId(UUID tenantId, UUID id);
+  boolean existsByTenantIdAndId(UUID tenantId, UUID personId);
 
   /**
    * Find the person.
    *
    * @param tenantId the ID for the tenant
-   * @param id the ID for the person
+   * @param personId the ID for the person
    * @return an Optional containing the person or an empty Optional if the person could not be found
    */
-  Optional<Person> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Person> findByTenantIdAndId(UUID tenantId, UUID personId);
 }

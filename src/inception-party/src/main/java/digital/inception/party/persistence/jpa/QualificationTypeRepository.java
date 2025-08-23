@@ -32,10 +32,10 @@ public interface QualificationTypeRepository
     extends JpaRepository<QualificationType, QualificationTypeId> {
 
   /**
-   * Retrieve all the qualification types sorted by locale ID, sort index, and name.
+   * Find all the qualification types sorted by locale ID, sort index, and name.
    *
    * @return all the qualification types sorted by locale ID, sort index, and name.
    */
   @Query("select qt from QualificationType qt order by qt.localeId, qt.sortIndex DESC, qt.name")
-  List<QualificationType> getAllQualificationTypes();
+  List<QualificationType> findAllQualificationTypes();
 }

@@ -478,7 +478,8 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
     }
 
     try {
-      Optional<String> nameOptional = codeRepository.findNameByCodeCategoryIdAndId(codeCategoryId, codeId);
+      Optional<String> nameOptional =
+          codeRepository.findNameByCodeCategoryIdAndId(codeCategoryId, codeId);
 
       if (nameOptional.isPresent()) {
         return nameOptional.get();

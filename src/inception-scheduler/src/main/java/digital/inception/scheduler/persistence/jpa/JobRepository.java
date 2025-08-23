@@ -65,6 +65,16 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
       Pageable pageable);
 
   /**
+   * Find the name for the job.
+   *
+   * @param jobId the ID for the job
+   * @return an Optional containing the name for the job or an empty Optional if the job could not
+   *     be found
+   */
+  @Query("select j.name from Job j where j.id = :jobId")
+  Optional<String> findNameById(@Param("jobId") String jobId);
+
+  /**
    * Find the unscheduled jobs.
    *
    * @return the unscheduled jobs
@@ -85,16 +95,6 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
       "select j from Job j where j.enabled = true and "
           + "j.status = digital.inception.scheduler.model.JobStatus.UNSCHEDULED")
   List<Job> findUnscheduledJobsForWrite(Pageable pageable);
-
-  /**
-   * Find the name for the job.
-   *
-   * @param jobId the ID for the job
-   * @return an Optional containing the name for the job or an empty Optional if the job could not
-   *     be found
-   */
-  @Query("select j.name from Job j where j.id = :jobId")
-  Optional<String> getNameById(@Param("jobId") String jobId);
 
   /**
    * Lock the job for execution.

@@ -32,11 +32,11 @@ public interface ResidencePermitTypeRepository
     extends JpaRepository<ResidencePermitType, ResidencePermitTypeId> {
 
   /**
-   * Retrieve all the residence permit types sorted by locale ID, sort index, and name.
+   * Find all the residence permit types sorted by locale ID, sort index, and name.
    *
    * @return all the residence permit types sorted by locale ID, sort index, and name.
    */
   @Query(
       "select rpt from ResidencePermitType rpt order by rpt.localeId, rpt.sortIndex DESC, rpt.name")
-  List<ResidencePermitType> getAllResidencePermitTypes();
+  List<ResidencePermitType> findAllResidencePermitTypes();
 }

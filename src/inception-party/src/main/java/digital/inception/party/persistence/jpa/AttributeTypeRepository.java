@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface AttributeTypeRepository extends JpaRepository<AttributeType, AttributeTypeId> {
 
   /**
-   * Retrieve all the attribute types sorted by locale ID, sort index, and name.
+   * Find all the attribute types sorted by locale ID, sort index, and name.
    *
    * @return all the attribute types sorted by locale ID, sort index, and name.
    */
   @Query("select at from AttributeType at order by at.localeId, at.sortIndex DESC, at.name")
-  List<AttributeType> getAllAttributeTypes();
+  List<AttributeType> findAllAttributeTypes();
 }
