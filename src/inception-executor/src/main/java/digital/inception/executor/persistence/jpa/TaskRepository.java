@@ -170,8 +170,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   int countByBatchId(String batchId);
 
   /**
-   * Find the number of tasks with the specified task type that are currently queued or
-   * executing.
+   * Find the number of tasks with the specified task type that are currently queued or executing.
    *
    * @param taskTypeCode the code for the task type
    * @return the number of tasks with the specified task type that are currently queued or executing
@@ -234,7 +233,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   Optional<Task> findByExternalReference(String externalReference);
 
   /**
-   * Retrieves a task by its ID with a "SELECT FOR UPDATE" lock to prevent other transactions from
+   * Find a task by its ID with a "SELECT FOR UPDATE" lock to prevent other transactions from
    * modifying or deleting the task until the current transaction completes.
    *
    * <p>This method is intended for use in scenarios where a pessimistic lock is required to ensure
@@ -253,7 +252,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   Task findByIdForUpdate(@Param("taskId") UUID taskId);
 
   /**
-   * Retrieve all tasks with the specified statuses.
+   * Find all tasks with the specified statuses.
    *
    * @param statuses the statuses
    * @param pageable the pagination information
@@ -261,6 +260,16 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    */
   @Query("SELECT t FROM Task t WHERE t.status IN :statuses")
   Page<Task> findByStatusIn(@Param("statuses") List<TaskStatus> statuses, Pageable pageable);
+
+  /**
+   * Find the status of the task.
+   *
+   * @param taskId the ID for the task
+   * @return an Optional containing the status of the task or an empty Optional if the task could
+   *     not be found
+   */
+  @Query("SELECT t.status FROM Task t WHERE t.id = :taskId")
+  Optional<TaskStatus> findTaskStatus(@Param("taskId") UUID taskId);
 
   /**
    * Find the tasks queued for execution.
@@ -294,16 +303,6 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
           + "(t.status = digital.inception.executor.model.TaskStatus.CANCELED))")
   Page<Task> findTasksToArchiveAndDelete(
       @Param("executedBefore") OffsetDateTime executedBefore, Pageable pageable);
-
-  /**
-   * Find the status of the task.
-   *
-   * @param taskId the ID for the task
-   * @return an Optional containing the status of the task or an empty Optional if the task could
-   *     not be found
-   */
-  @Query("SELECT t.status FROM Task t WHERE t.id = :taskId")
-  Optional<TaskStatus> getTaskStatus(@Param("taskId") UUID taskId);
 
   /**
    * Lock the task for execution.

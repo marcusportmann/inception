@@ -655,7 +655,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
     }
 
     try {
-      Optional<TaskStatus> taskStatusOptional = taskRepository.getTaskStatus(taskId);
+      Optional<TaskStatus> taskStatusOptional = taskRepository.findTaskStatus(taskId);
 
       if (taskStatusOptional.isPresent()) {
         return taskStatusOptional.get();
