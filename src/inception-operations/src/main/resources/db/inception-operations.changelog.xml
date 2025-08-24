@@ -1300,7 +1300,7 @@
   </changeSet>
 
   <changeSet id="inception-operations-postgresql-1.0.0" author="Marcus Portmann" dbms="postgresql" runInTransaction="false">
-    <comment>inception-operations-postgresql-oracle-1.0.0</comment>
+    <comment>inception-operations-postgresql-1.0.0</comment>
 
     <!-- Enable pg_trgm (safe if already present) -->
     <sql>CREATE EXTENSION IF NOT EXISTS pg_trgm;</sql>
