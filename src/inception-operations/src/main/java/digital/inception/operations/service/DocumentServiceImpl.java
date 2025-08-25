@@ -872,33 +872,37 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       Document document =
           documentStore.getDocument(tenantId, updateDocumentRequest.getDocumentId());
 
-      // Validate the document attributes
-      for (DocumentAttribute documentAttribute : updateDocumentRequest.getAttributes()) {
-        if (!isValidDocumentAttribute(
-            tenantId, document.getDefinitionId(), documentAttribute.getCode())) {
-          log.warn(
-              "Invalid document attribute ("
-                  + documentAttribute.getCode()
-                  + ") when updating the document ("
-                  + document.getId()
-                  + ") with definition ID ("
-                  + document.getDefinitionId()
-                  + ") for the tenant ("
-                  + tenantId
-                  + ")");
+      if (updateDocumentRequest.getAttributes() != null) {
+        // Validate the document attributes
+        for (DocumentAttribute documentAttribute : updateDocumentRequest.getAttributes()) {
+          if (!isValidDocumentAttribute(
+              tenantId, document.getDefinitionId(), documentAttribute.getCode())) {
+            log.warn(
+                "Invalid document attribute ("
+                    + documentAttribute.getCode()
+                    + ") when updating the document ("
+                    + document.getId()
+                    + ") with definition ID ("
+                    + document.getDefinitionId()
+                    + ") for the tenant ("
+                    + tenantId
+                    + ")");
 
-          throw new InvalidArgumentException(
-              "updateDocumentRequest.attributes.code",
-              "the document attribute (" + documentAttribute.getCode() + ") is invalid");
+            throw new InvalidArgumentException(
+                "updateDocumentRequest.attributes.code",
+                "the document attribute (" + documentAttribute.getCode() + ") is invalid");
+          }
+
+          document.setAttributes(updateDocumentRequest.getAttributes());
         }
-      }
 
-      // Validate the required document attributes
-      validateRequiredDocumentAttributes(
-          tenantId,
-          "updateDocumentRequest.attributes",
-          document.getDefinitionId(),
-          updateDocumentRequest.getAttributes());
+        // Validate the required document attributes
+        validateRequiredDocumentAttributes(
+            tenantId,
+            "updateDocumentRequest.attributes",
+            document.getDefinitionId(),
+            updateDocumentRequest.getAttributes());
+      }
 
       document.setData(updateDocumentRequest.getData());
       document.setExpiryDate(updateDocumentRequest.getExpiryDate());

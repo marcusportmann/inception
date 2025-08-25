@@ -110,6 +110,23 @@ public interface WorkflowDocumentRepository
       @Param("tenantId") UUID tenantId, @Param("workflowDocumentId") UUID workflowDocumentId);
 
   /**
+   * Find the document ID for the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return an Optional containing the document ID or an empty Optional if the workflow * document
+   *     could not be found
+   */
+  @Query(
+      """
+         select wd.documentId
+         from WorkflowDocument wd
+         where wd.tenantId = :tenantId and wd.id = :workflowDocumentId
+         """)
+  Optional<UUID> findDocumentIdByTenantIdAndId(
+      @Param("tenantId") UUID tenantId, @Param("workflowDocumentId") UUID workflowDocumentId);
+
+  /**
    * Find the outstanding workflow documents for the workflow.
    *
    * @param workflowId the ID for the workflow the outstanding workflow documents are associated

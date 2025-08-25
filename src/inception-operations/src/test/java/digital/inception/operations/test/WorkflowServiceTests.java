@@ -802,10 +802,6 @@ public class WorkflowServiceTests {
           workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
         });
 
-    // Delete the document linked to the workflow document
-    documentService.deleteDocument(
-        TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getDocumentId());
-
     // Delete the workflow
     workflowService.deleteWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 

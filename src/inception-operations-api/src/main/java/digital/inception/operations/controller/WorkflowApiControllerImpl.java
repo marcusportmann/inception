@@ -898,7 +898,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void provideWorkflowDocument(
+  public UUID provideWorkflowDocument(
       UUID tenantId, ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest)
       throws InvalidArgumentException,
           WorkflowDocumentNotFoundException,
@@ -911,7 +911,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    workflowService.provideWorkflowDocument(
+    return workflowService.provideWorkflowDocument(
         tenantId, provideWorkflowDocumentRequest, getAuthenticationName());
   }
 

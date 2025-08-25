@@ -1704,7 +1704,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public void provideWorkflowDocument(
+  public UUID provideWorkflowDocument(
       UUID tenantId,
       ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest,
       String providedBy)
@@ -1779,7 +1779,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
-      workflowStore.provideWorkflowDocument(tenantId, provideWorkflowDocumentRequest, providedBy);
+      return workflowStore.provideWorkflowDocument(
+          tenantId, provideWorkflowDocumentRequest, providedBy);
     } catch (InvalidArgumentException | WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {

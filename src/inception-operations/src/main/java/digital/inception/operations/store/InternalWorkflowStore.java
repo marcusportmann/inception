@@ -19,6 +19,7 @@ package digital.inception.operations.store;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
+import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowException;
 import digital.inception.operations.exception.DuplicateWorkflowNoteException;
@@ -301,9 +302,22 @@ public class InternalWorkflowStore implements WorkflowStore {
        * ensure that the workflow document not only exists, but is also associated with the
        * specified tenant.
        */
-      if (workflowDocumentRepository.deleteByTenantIdAndId(tenantId, workflowDocumentId) == 0) {
+      Optional<UUID> documentIdOptional =
+          workflowDocumentRepository.findDocumentIdByTenantIdAndId(tenantId, workflowDocumentId);
+
+      if (documentIdOptional.isEmpty()) {
         throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
       }
+      UUID documentId = documentIdOptional.get();
+
+      if (workflowDocumentRepository.countByDocumentId(documentId) == 1L) {
+        try {
+          documentStore.deleteDocument(tenantId, documentId);
+        } catch (DocumentNotFoundException ignored) {
+        }
+      }
+
+      workflowDocumentRepository.deleteById(workflowDocumentId);
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1121,7 +1135,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
-  public void provideWorkflowDocument(
+  public UUID provideWorkflowDocument(
       UUID tenantId,
       ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest,
       String providedBy)
@@ -1196,6 +1210,8 @@ public class InternalWorkflowStore implements WorkflowStore {
       }
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
+
+      return document.getId();
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1279,7 +1295,7 @@ public class InternalWorkflowStore implements WorkflowStore {
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
 
-      return workflowDocument.getWorkflowId();
+      return workflowDocument.getId();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to request the workflow document with the document definition ("

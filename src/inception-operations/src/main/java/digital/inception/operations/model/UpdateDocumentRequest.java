@@ -88,7 +88,7 @@ public class UpdateDocumentRequest implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  private List<DocumentAttribute> attributes = new ArrayList<>();
+  private List<DocumentAttribute> attributes;
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)

@@ -60,7 +60,7 @@ public class UpdateWorkflowRequest implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  private List<WorkflowAttribute> attributes = new ArrayList<>();
+  private List<WorkflowAttribute> attributes;
 
   /** The updated XML or JSON data for the workflow. */
   @Schema(description = "The updated XML or JSON data for the workflow")

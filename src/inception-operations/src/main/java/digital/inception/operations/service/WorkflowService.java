@@ -770,11 +770,12 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param provideWorkflowDocumentRequest the request to provide a workflow document
    * @param providedBy the person or system providing the workflow document
+   * @return the ID for the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
    * @throws ServiceUnavailableException if the workflow document could not be provided
    */
-  void provideWorkflowDocument(
+  UUID provideWorkflowDocument(
       UUID tenantId,
       ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest,
       String providedBy)

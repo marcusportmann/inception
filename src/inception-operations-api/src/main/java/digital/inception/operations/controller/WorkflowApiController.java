@@ -2690,6 +2690,7 @@ public interface WorkflowApiController {
    *
    * @param tenantId the ID for the tenant
    * @param provideWorkflowDocumentRequest the request to provide a workflow document
+   * @return the ID for the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
    * @throws ServiceUnavailableException if the workflow document could not be provided
@@ -2735,7 +2736,7 @@ public interface WorkflowApiController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  void provideWorkflowDocument(
+  UUID provideWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",
