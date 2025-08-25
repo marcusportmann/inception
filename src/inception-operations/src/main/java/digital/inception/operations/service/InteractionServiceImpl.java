@@ -838,6 +838,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
+  @Cacheable(cacheNames = "interactionSources", key = "'ALL'")
   public List<InteractionSource> getInteractionSources() throws ServiceUnavailableException {
     try {
       return interactionSourceRepository.findAll();

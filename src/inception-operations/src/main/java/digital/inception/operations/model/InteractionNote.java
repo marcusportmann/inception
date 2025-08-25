@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The {@code InteractionNote} class holds the information for a interaction note.
+ * The {@code InteractionNote} class holds the information for an interaction note.
  *
  * @author Marcus Portmann
  */

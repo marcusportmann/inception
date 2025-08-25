@@ -48,15 +48,18 @@ public class WorkflowStepNotFoundException extends ServiceException {
   /**
    * Constructs a new {@code WorkflowStepNotFoundException}.
    *
+   * @param tenantId the ID for the tenant the workflow step is associated with
    * @param workflowId the ID for the workflow the workflow step is associated with
    * @param step the code for the workflow step
    */
-  public WorkflowStepNotFoundException(UUID workflowId, String step) {
+  public WorkflowStepNotFoundException(UUID tenantId, UUID workflowId, String step) {
     super(
         "The workflow step ("
             + step
             + ") for the workflow ("
             + workflowId
-            + ") could not be found");
+            + ") could not be found for the tenant ("
+            + tenantId
+            + ")");
   }
 }

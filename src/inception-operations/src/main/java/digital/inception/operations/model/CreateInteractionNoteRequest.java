@@ -32,11 +32,11 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The {@code CreateInteractionNoteRequest} class represents a request to create a interaction note.
+ * The {@code CreateInteractionNoteRequest} class represents a request to create an interaction note.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A request to create a interaction note")
+@Schema(description = "A request to create an interaction note")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"interactionId", "content"})
 @XmlRootElement(

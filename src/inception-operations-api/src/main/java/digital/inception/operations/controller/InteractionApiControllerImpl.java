@@ -644,6 +644,8 @@ public class InteractionApiControllerImpl extends SecureApiController
               + permissionType.code()
               + ") for the interaction source ("
               + interactionSourceId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }

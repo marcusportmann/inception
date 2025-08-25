@@ -34,13 +34,13 @@ import java.util.UUID;
 
 /**
  * The {@code InteractionNotes} class holds the results of a request to retrieve a list of
- * interaction notes for a interaction.
+ * interaction notes for an interaction.
  *
  * @author Marcus Portmann
  */
 @Schema(
     description =
-        "The results of a request to retrieve a list of interaction notes for a interaction")
+        "The results of a request to retrieve a list of interaction notes for an interaction")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "tenantId",

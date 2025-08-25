@@ -48,15 +48,19 @@ public class WorkflowInteractionLinkNotFoundException extends ServiceException {
   /**
    * Constructs a new {@code WorkflowInteractionLinkNotFoundException}.
    *
+   * @param tenantId the ID for the tenant the workflow interaction link is associated with
    * @param workflowId the ID for the workflow
    * @param interactionId the ID for the interaction
    */
-  public WorkflowInteractionLinkNotFoundException(UUID workflowId, UUID interactionId) {
+  public WorkflowInteractionLinkNotFoundException(
+      UUID tenantId, UUID workflowId, UUID interactionId) {
     super(
         "The link between the workflow ("
             + workflowId
             + ") and the interaction ("
             + interactionId
-            + ") could not be found");
+            + ") could not be found for the tenant ("
+            + tenantId
+            + ")");
   }
 }

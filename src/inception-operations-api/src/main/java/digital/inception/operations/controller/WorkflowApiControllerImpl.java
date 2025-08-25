@@ -1336,6 +1336,8 @@ public class WorkflowApiControllerImpl extends SecureApiController
               + permissionType.code()
               + ") for the workflow ("
               + workflowId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }

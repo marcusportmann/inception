@@ -593,7 +593,7 @@ public class InteractionServiceTests {
             retrievedInteraction.getId(),
             retrievedInteractionAttachment.getHash()));
 
-    // Create a interaction note for the interaction
+    // Create an interaction note for the interaction
     CreateInteractionNoteRequest createInteractionNoteRequest =
         new CreateInteractionNoteRequest(
             retrievedInteraction.getId(), "This is the interaction note content.");

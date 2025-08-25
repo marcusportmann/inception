@@ -356,7 +356,7 @@ public class InternalWorkflowStore implements WorkflowStore {
 
       if (!workflowInteractionLinkRepository.existsById(
           new WorkflowInteractionLinkId(workflowId, interactionId))) {
-        throw new WorkflowInteractionLinkNotFoundException(workflowId, interactionId);
+        throw new WorkflowInteractionLinkNotFoundException(tenantId, workflowId, interactionId);
       }
 
       workflowInteractionLinkRepository.deleteById(
@@ -405,7 +405,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       if (workflowStepRepository.finalizeWorkflowStep(
               workflowId, step, status, OffsetDateTime.now())
           <= 0) {
-        throw new WorkflowStepNotFoundException(workflowId, step);
+        throw new WorkflowStepNotFoundException(tenantId, workflowId, step);
       }
     } catch (WorkflowStepNotFoundException e) {
       throw e;
@@ -1403,7 +1403,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowStepNotFoundException, ServiceUnavailableException {
     try {
       if (workflowStepRepository.suspendWorkflowStep(workflowId, step, OffsetDateTime.now()) <= 0) {
-        throw new WorkflowStepNotFoundException(workflowId, step);
+        throw new WorkflowStepNotFoundException(tenantId, workflowId, step);
       }
     } catch (WorkflowStepNotFoundException e) {
       throw e;
@@ -1451,7 +1451,7 @@ public class InternalWorkflowStore implements WorkflowStore {
       throws WorkflowStepNotFoundException, ServiceUnavailableException {
     try {
       if (workflowStepRepository.unsuspendWorkflowStep(workflowId, step) <= 0) {
-        throw new WorkflowStepNotFoundException(workflowId, step);
+        throw new WorkflowStepNotFoundException(tenantId, workflowId, step);
       }
     } catch (WorkflowStepNotFoundException e) {
       throw e;

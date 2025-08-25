@@ -106,7 +106,7 @@ public interface InteractionService {
    * Create the interaction note.
    *
    * @param tenantId the ID for the tenant
-   * @param createInteractionNoteRequest the request to create a interaction note
+   * @param createInteractionNoteRequest the request to create an interaction note
    * @param createdBy the person or system that created the interaction note
    * @return the interaction note
    * @throws InvalidArgumentException if an argument is invalid
@@ -660,7 +660,7 @@ public interface InteractionService {
    * Update the interaction note.
    *
    * @param tenantId the ID for the tenant
-   * @param updateInteractionNoteRequest the request to update a interaction note
+   * @param updateInteractionNoteRequest the request to update an interaction note
    * @param updatedBy the person or system updating the interaction note
    * @return the updated interaction note
    * @throws InvalidArgumentException if an argument is invalid

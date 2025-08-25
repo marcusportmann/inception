@@ -250,13 +250,4 @@ public class DocumentNotes implements Serializable {
   public long getTotal() {
     return total;
   }
-
-  /**
-   * Set the ID for the document the document notes are associated with.
-   *
-   * @param documentId the ID for the document the document notes are associated with
-   */
-  public void setDocumentId(UUID documentId) {
-    this.documentId = documentId;
-  }
 }
