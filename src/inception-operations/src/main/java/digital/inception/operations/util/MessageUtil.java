@@ -161,6 +161,32 @@ public final class MessageUtil {
   }
 
   /**
+   * Is the message an auto-response email?
+   *
+   * @param message the message
+   * @return {@code true} if the message is an auto-response email or {@code false} otherwise
+   */
+  public static boolean isAutoResponseEmail(Message message) {
+    try {
+      String[] xMsExchangeInboxRulesLoopHeaders =
+          message.getHeader("X-MS-Exchange-Inbox-Rules-Loop");
+      String[] autoSubmittedHeaders = message.getHeader("Auto-Submitted");
+
+      boolean exchangeAutoReply =
+          ((xMsExchangeInboxRulesLoopHeaders != null)
+              && (xMsExchangeInboxRulesLoopHeaders.length > 0));
+      boolean rfcAuto =
+          ((autoSubmittedHeaders != null)
+              && (autoSubmittedHeaders.length > 0)
+              && (!autoSubmittedHeaders[1].equalsIgnoreCase("no")));
+
+      return exchangeAutoReply || rfcAuto;
+    } catch (Throwable e) {
+      throw new MessageException("Failed to determine if the message is an auto response email", e);
+    }
+  }
+
+  /**
    * Returns whether the body part is HTML.
    *
    * @param bodyPart the body part

@@ -456,6 +456,10 @@
       tableName="operations_workflows">
       <column name="parent_id"/>
     </createIndex>
+    <createIndex indexName="workflows_party_id_ix"
+      tableName="operations_workflows">
+      <column name="party_id"/>
+    </createIndex>
     <createIndex indexName="operations_workflows_tenant_id_ix"
       tableName="operations_workflows">
       <column name="tenant_id"/>
@@ -749,6 +753,10 @@
     <createIndex indexName="operations_workflow_documents_tenant_id_ix"
       tableName="operations_workflow_documents">
       <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_documents_requested_from_party_id_ix"
+      tableName="operations_workflow_documents">
+      <column name="requested_from_party_id"/>
     </createIndex>
     <createIndex indexName="operations_workflow_documents_workflow_id_ix"
       tableName="operations_workflow_documents">
@@ -1171,6 +1179,8 @@
 
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_documents"/>
       <dropIndex tableName="operations_documents"
+        indexName="operations_workflow_documents_requested_from_party_id_ix"/>
+      <dropIndex tableName="operations_documents"
         indexName="operations_workflow_documents_workflow_id_ix"/>
       <dropIndex tableName="operations_documents"
         indexName="operations_workflow_documents_tenant_id_ix"/>
@@ -1216,6 +1226,8 @@
       <dropAllForeignKeyConstraints baseTableName="operations_workflows"/>
       <dropIndex tableName="operations_workflows"
         indexName="operations_workflows_tenant_id_ix"/>
+      <dropIndex tableName="operations_workflows"
+        indexName="operations_workflows_party_id_ix"/>
       <dropIndex tableName="operations_workflows"
         indexName="operations_workflows_parent_id_ix"/>
       <dropIndex tableName="operations_workflows"

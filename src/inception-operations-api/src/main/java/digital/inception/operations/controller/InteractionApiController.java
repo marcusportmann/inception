@@ -22,6 +22,7 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
+import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InteractionNoteNotFoundException;
 import digital.inception.operations.exception.InteractionSourceNotFoundException;
@@ -30,6 +31,9 @@ import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
+import digital.inception.operations.model.InteractionAttachment;
+import digital.inception.operations.model.InteractionAttachmentSortBy;
+import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
@@ -627,6 +631,191 @@ public interface InteractionApiController {
               required = true)
           @PathVariable
           UUID interactionId)
+      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the interaction attachment.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param interactionAttachmentId the ID for the interaction attachment
+   * @return the interaction attachment
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws InteractionAttachmentNotFoundException if the interaction attachment could not be found
+   * @throws ServiceUnavailableException if the interaction could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the interaction attachment",
+      description = "Retrieve the interaction attachment")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The interaction attachment was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction or interaction attachment could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interactions/{interactionId}/attachments/{interactionAttachmentId}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  InteractionAttachment getInteractionAttachment(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionId",
+              description = "The ID for the interaction",
+              required = true)
+          @PathVariable
+          UUID interactionId,
+      @Parameter(
+              name = "interactionAttachmentId",
+              description = "The ID for the interaction attachment",
+              required = true)
+          @PathVariable
+          UUID interactionAttachmentId)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionAttachmentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the interaction attachments for the interaction.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param filter the filter to apply to the interaction attachment summaries
+   * @param sortBy the method used to sort the interaction attachment summaries e.g. by name
+   * @param sortDirection the sort direction to apply to the interaction attachment summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the interaction attachments for the interaction
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the summaries for the interaction attachments for the interaction",
+      description = "Retrieve the summaries for the interaction attachments for the interaction")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description =
+                "The summaries for the interaction attachments for the interaction were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interactions/{interactionId}/attachment-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  InteractionAttachmentSummaries getInteractionAttachmentSummaries(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionId",
+              description = "The ID for the interaction",
+              required = true)
+          @PathVariable
+          UUID interactionId,
+      @Parameter(
+              name = "filter",
+              description = "The filter to apply to the interaction attachment summaries")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description =
+                  "The method used to sort the interaction attachment summaries e.g. by name")
+          @RequestParam(value = "sortBy", required = false)
+          InteractionAttachmentSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the interaction attachment summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
 
   /**

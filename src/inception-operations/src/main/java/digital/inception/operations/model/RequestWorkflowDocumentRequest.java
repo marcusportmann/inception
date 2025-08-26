@@ -39,14 +39,14 @@ import java.util.UUID;
  */
 @Schema(description = "A request to request a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "documentDefinitionId", "description"})
+@JsonPropertyOrder({"workflowId", "documentDefinitionId", "requestedFromPartyId", "description"})
 @XmlRootElement(
     name = "RequestWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "RequestWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "documentDefinitionId", "description"})
+    propOrder = {"workflowId", "documentDefinitionId", "requestedFromPartyId", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class RequestWorkflowDocumentRequest implements Serializable {

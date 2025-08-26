@@ -1765,6 +1765,18 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
         // Process each message
         for (Message message : messages) {
+          if (MessageUtil.isAutoResponseEmail(message)) {
+            log.info(
+                "Skipping auto-response email ("
+                + message.getSubject()
+                + ") for the mailbox interaction source ("
+                + interactionSource.getId()
+                + ") for the tenant ("
+                + interactionSource.getTenantId()
+                + ")");
+            continue;
+          }
+
           Interaction interaction = createEmailInteraction(interactionSource, message);
 
           Optional<UUID> interactionIdOptional =
