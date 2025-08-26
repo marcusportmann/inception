@@ -723,6 +723,7 @@ public class EndToEndTests {
         UUID.randomUUID(),
         TenantUtil.DEFAULT_TENANT_ID,
         "FitLife Customer Service Mailbox",
+        true,
         ENABLE_GREEN_MAIL_SECURITY ? MailboxProtocol.STANDARD_IMAPS : MailboxProtocol.STANDARD_IMAP,
         "localhost",
         ENABLE_GREEN_MAIL_SECURITY ? 3993 : 3143,

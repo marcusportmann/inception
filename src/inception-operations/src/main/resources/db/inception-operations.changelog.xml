@@ -778,6 +778,9 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the interaction source">
         <constraints nullable="false"/>
       </column>
+      <column name="enabled" type="boolean" remarks="Is the interaction source enabled">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
     <createIndex indexName="operations_interaction_sources_type_ix"
       tableName="operations_interaction_sources">

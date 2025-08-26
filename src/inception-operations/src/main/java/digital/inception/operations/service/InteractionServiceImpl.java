@@ -1188,6 +1188,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throws InvalidArgumentException, ServiceUnavailableException {
     validateArgument("interactionSource", interactionSource);
 
+    if (!interactionSource.isEnabled()) {
+      return 0;
+    }
+
     if (interactionSource.getType() == InteractionSourceType.MAILBOX) {
       return synchronizeMailboxInteractionSource(interactionSource);
     } else {

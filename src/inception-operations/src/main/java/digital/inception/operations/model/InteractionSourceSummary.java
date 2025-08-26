@@ -44,20 +44,34 @@ import java.util.UUID;
  */
 @Schema(description = "An interaction source summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "tenantId", "name", "type"})
+@JsonPropertyOrder({"id", "tenantId", "name", "type", "enabled"})
 @XmlRootElement(
     name = "InteractionSourceSummary",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionSourceSummary",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "tenantId", "name", "type"})
+    propOrder = {"id", "tenantId", "name", "type", "enabled"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_sources")
 public class InteractionSourceSummary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /**
+   * Is the interaction source enabled?
+   *
+   * <p>If the interaction source is not enabled, it will not be synchronized.
+   */
+  @Schema(
+      description = "Is the interaction source enabled",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Enabled", required = true)
+  @NotNull
+  @Column(name = "enabled", nullable = false)
+  private boolean enabled;
 
   /** The ID for the interaction source. */
   @Schema(
@@ -109,12 +123,15 @@ public class InteractionSourceSummary implements Serializable {
    * @param tenantId the ID for the tenant the interaction source is associated with
    * @param type the interaction source type
    * @param name the name of the interaction source
+   * @param enabled is the interaction source enabled
    */
-  public InteractionSourceSummary(UUID id, UUID tenantId, InteractionSourceType type, String name) {
+  public InteractionSourceSummary(
+      UUID id, UUID tenantId, InteractionSourceType type, String name, boolean enabled) {
     this.id = id;
     this.tenantId = tenantId;
     this.type = type;
     this.name = name;
+    this.enabled = enabled;
   }
 
   /**
@@ -186,5 +203,14 @@ public class InteractionSourceSummary implements Serializable {
   @Override
   public int hashCode() {
     return ((id == null) ? 0 : id.hashCode());
+  }
+
+  /**
+   * Returns whether the interaction source is enabled.
+   *
+   * @return {@code true} if the interaction source is enabled or {@code} false otherwise
+   */
+  public boolean isEnabled() {
+    return enabled;
   }
 }

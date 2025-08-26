@@ -55,12 +55,12 @@ import java.util.UUID;
  */
 @Schema(description = "An interaction source")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "tenantId", "name", "type", "attributes", "permissions"})
+@JsonPropertyOrder({"id", "tenantId", "name", "type", "enabled", "attributes", "permissions"})
 @XmlRootElement(name = "InteractionSource", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionSource",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "tenantId", "name", "type", "attributes", "permissions"})
+    propOrder = {"id", "tenantId", "name", "type", "enabled", "attributes", "permissions"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interaction_sources")
@@ -91,6 +91,20 @@ public class InteractionSource implements Serializable {
   @OrderBy("roleCode")
   @JoinColumn(name = "source_id", insertable = false, updatable = false)
   private final List<InteractionSourcePermission> permissions = new ArrayList<>();
+
+  /**
+   * Is the interaction source enabled?
+   *
+   * <p>If the interaction source is not enabled, it will not be synchronized.
+   */
+  @Schema(
+      description = "Is the interaction source enabled",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Enabled", required = true)
+  @NotNull
+  @Column(name = "enabled", nullable = false)
+  private boolean enabled;
 
   /** The ID for the interaction source. */
   @Schema(
@@ -135,8 +149,6 @@ public class InteractionSource implements Serializable {
   /** Constructs a new {@code InteractionSource}. */
   public InteractionSource() {}
 
-  // TODO: ADD AUDIT CAPABILIGTIES For all interaction-related operations
-
   /**
    * Constructs a new {@code InteractionSource}.
    *
@@ -144,6 +156,7 @@ public class InteractionSource implements Serializable {
    * @param tenantId the ID for the tenant the interaction source is associated with
    * @param name the name of the interaction source
    * @param type the interaction source type
+   * @param enabled is the interaction source enabled
    * @param attributes the attributes for the interaction source
    */
   public InteractionSource(
@@ -151,11 +164,13 @@ public class InteractionSource implements Serializable {
       UUID tenantId,
       String name,
       InteractionSourceType type,
+      boolean enabled,
       List<InteractionSourceAttribute> attributes) {
     this.id = id;
     this.tenantId = tenantId;
     this.name = name;
     this.type = type;
+    this.enabled = enabled;
     setAttributes(attributes);
   }
 
@@ -165,6 +180,7 @@ public class InteractionSource implements Serializable {
    * @param id the ID for the mailbox interaction source
    * @param tenantId the ID for the tenant the mailbox interaction source is associated with
    * @param name the name of the mailbox interaction source
+   * @param enabled is the interaction source enabled
    * @param protocol the service provider and email protocol for the service hosting the mailbox
    * @param host the hostname or IP address for the service hosting the mailbox
    * @param port the network port for the service hosting the mailbox
@@ -182,6 +198,7 @@ public class InteractionSource implements Serializable {
       UUID id,
       UUID tenantId,
       String name,
+      boolean enabled,
       MailboxProtocol protocol,
       String host,
       int port,
@@ -196,6 +213,7 @@ public class InteractionSource implements Serializable {
         tenantId,
         name,
         InteractionSourceType.MAILBOX,
+        enabled,
         List.of(
             new InteractionSourceAttribute(
                 MailboxInteractionSourceAttributeName.PROTOCOL.code(), protocol.code()),
@@ -218,6 +236,8 @@ public class InteractionSource implements Serializable {
                 MailboxInteractionSourceAttributeName.DEBUG.code(), String.valueOf(debug))));
   }
 
+  // TODO: ADD AUDIT CAPABILIGTIES For all interaction-related operations
+
   /**
    * Constructs a new virtual {@code InteractionSource}.
    *
@@ -228,7 +248,8 @@ public class InteractionSource implements Serializable {
    */
   public static InteractionSource createVirtualInteractionSource(
       UUID id, UUID tenantId, String name) {
-    return new InteractionSource(id, tenantId, name, InteractionSourceType.VIRTUAL, List.of());
+    return new InteractionSource(
+        id, tenantId, name, InteractionSourceType.VIRTUAL, true, List.of());
   }
 
   /**
@@ -237,16 +258,18 @@ public class InteractionSource implements Serializable {
    * @param id the ID for the WhatsApp interaction source
    * @param tenantId the ID for the tenant the WhatsApp interaction source is associated with
    * @param name the name of the WhatsApp interaction source
+   * @param enabled is the interaction source enabled
    * @param debug is debugging enabled for the WhatsApp interaction source
    * @return the WhatsApp {@code InteractionSource}
    */
   public static InteractionSource createWhatsAppInteractionSource(
-      UUID id, UUID tenantId, String name, boolean debug) {
+      UUID id, UUID tenantId, String name, boolean enabled, boolean debug) {
     return new InteractionSource(
         id,
         tenantId,
         name,
         InteractionSourceType.WHATSAPP,
+        enabled,
         List.of(
             new InteractionSourceAttribute(
                 WhatsAppInteractionSourceAttributeName.DEBUG.code(), String.valueOf(debug))));
@@ -398,6 +421,15 @@ public class InteractionSource implements Serializable {
   }
 
   /**
+   * Returns whether the interaction source is enabled.
+   *
+   * @return {@code true} if the interaction source is enabled or {@code} false otherwise
+   */
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  /**
    * Remove the attribute with the specified code for the interaction source.
    *
    * @param code the code for the attribute
@@ -430,6 +462,15 @@ public class InteractionSource implements Serializable {
     attributes.forEach(attribute -> attribute.setInteractionSource(this));
     this.attributes.clear();
     this.attributes.addAll(attributes);
+  }
+
+  /**
+   * Set whether the interaction source is enabled.
+   *
+   * @param enabled {@code true} if the interaction source is enabled or {@code false otherwise}
+   */
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   /**
