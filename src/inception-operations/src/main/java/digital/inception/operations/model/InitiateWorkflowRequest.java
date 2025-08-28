@@ -49,6 +49,7 @@ import java.util.UUID;
   "externalReference",
   "pendWorkflow",
   "attributes",
+  "variables",
   "data"
 })
 @XmlRootElement(
@@ -64,6 +65,7 @@ import java.util.UUID;
       "externalReference",
       "pendWorkflow",
       "attributes",
+      "variables",
       "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -133,6 +135,47 @@ public class InitiateWorkflowRequest implements Serializable {
   @JsonProperty
   @XmlElement(name = "PendWorkflow")
   private boolean pendWorkflow;
+
+  /** The variables for the workflow. */
+  @Schema(description = "The variables for the workflow")
+  @JsonProperty
+  @XmlElementWrapper(name = "Variables")
+  @XmlElement(name = "Variable")
+  @Valid
+  private List<WorkflowVariable> variables = new ArrayList<>();
+
+  /**
+   * Constructs a new {@code InitiateWorkflowRequest}.
+   *
+   * @param parentId the ID for the parent workflow
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param attributes the attributes for the workflow
+   * @param variables the variables for the workflow
+   */
+  public InitiateWorkflowRequest(
+      UUID parentId,
+      String definitionId,
+      List<WorkflowAttribute> attributes,
+      List<WorkflowVariable> variables) {
+    this.parentId = parentId;
+    this.definitionId = definitionId;
+    this.attributes = attributes;
+    this.variables = variables;
+  }
+
+  /**
+   * Constructs a new {@code InitiateWorkflowRequest}.
+   *
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param attributes the attributes for the workflow
+   * @param variables the variables for the workflow
+   */
+  public InitiateWorkflowRequest(
+      String definitionId, List<WorkflowAttribute> attributes, List<WorkflowVariable> variables) {
+    this.definitionId = definitionId;
+    this.attributes = attributes;
+    this.variables = variables;
+  }
 
   /** Constructs a new {@code InitiateWorkflowRequest}. */
   public InitiateWorkflowRequest() {}
@@ -374,6 +417,15 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
+   * Returns the variables for the workflow.
+   *
+   * @return the variables for the workflow
+   */
+  public List<WorkflowVariable> getVariables() {
+    return variables;
+  }
+
+  /**
    * Set the attributes for the workflow.
    *
    * @param attributes the attributes for the workflow
@@ -445,5 +497,14 @@ public class InitiateWorkflowRequest implements Serializable {
    */
   public void setPendWorkflow(boolean pendWorkflow) {
     this.pendWorkflow = pendWorkflow;
+  }
+
+  /**
+   * Set the variables for the workflow.
+   *
+   * @param variables the variables for the workflow
+   */
+  public void setVariables(List<WorkflowVariable> variables) {
+    this.variables = variables;
   }
 }

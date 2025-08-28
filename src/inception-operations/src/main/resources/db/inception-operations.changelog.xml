@@ -169,7 +169,8 @@
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_workflow_definition_permissions_workflow_definition_fk"
-      baseTableName="operations_workflow_definition_permissions" baseColumnNames="definition_id,definition_version"
+      baseTableName="operations_workflow_definition_permissions"
+      baseColumnNames="definition_id,definition_version"
       referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version"
       onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_definition_permissions_definition_ix"
@@ -178,7 +179,8 @@
       <column name="definition_version"/>
     </createIndex>
 
-    <createTable tableName="operations_workflow_attribute_definitions" remarks="Workflow Attribute Definitions">
+    <createTable tableName="operations_workflow_attribute_definitions"
+      remarks="Workflow Attribute Definitions">
       <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
         <constraints primaryKey="true" nullable="false" unique="true"/>
       </column>
@@ -202,7 +204,7 @@
     <createIndex indexName="operations_workflow_attribute_definitions_tenant_id_ix"
       tableName="operations_workflow_attribute_definitions">
       <column name="tenant_id"/>
-    </createIndex>    
+    </createIndex>
 
     <createTable tableName="operations_workflow_step_definitions"
       remarks="Workflow Step Definitions">
@@ -246,6 +248,37 @@
       onDelete="CASCADE"/>
     <createIndex indexName="operations_workflow_step_definitions_definition_ix"
       tableName="operations_workflow_step_definitions">
+      <column name="definition_id"/>
+      <column name="definition_version"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_variable_definitions"
+      remarks="Workflow Variable Definitions">
+      <column name="definition_id" type="nvarchar(50)"
+        remarks="The ID for the workflow definition the workflow variable definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="definition_version" type="integer"
+        remarks="The version of the workflow definition the workflow variable definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow variable">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="required" type="boolean"
+        remarks="Is the workflow variable required">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" remarks="The description for the workflow variable"/>
+    </createTable>
+    <addForeignKeyConstraint
+      constraintName="operations_workflow_variable_definitions_workflow_definition_fk"
+      baseTableName="operations_workflow_variable_definitions"
+      baseColumnNames="definition_id,definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version"
+      onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_variable_definitions_definition_ix"
+      tableName="operations_workflow_variable_definitions">
       <column name="definition_id"/>
       <column name="definition_version"/>
     </createIndex>
@@ -297,7 +330,8 @@
       <column name="tenant_id"/>
     </createIndex>
 
-    <createTable tableName="operations_document_attribute_definitions" remarks="Document Attribute Definitions">
+    <createTable tableName="operations_document_attribute_definitions"
+      remarks="Document Attribute Definitions">
       <column name="code" type="nvarchar(50)" remarks="The code for the document attribute">
         <constraints primaryKey="true" nullable="false" unique="true"/>
       </column>
@@ -484,7 +518,7 @@
       tableName="operations_workflow_attributes">
       <column name="workflow_id"/>
     </createIndex>
-    <createIndex indexName="operations_workflow_attributes_valued_ix"
+    <createIndex indexName="operations_workflow_attributes_value_ix"
       tableName="operations_workflow_attributes">
       <column name="value"/>
     </createIndex>
@@ -560,6 +594,33 @@
       <column name="workflow_id"/>
     </createIndex>
 
+    <createTable tableName="operations_workflow_variables" remarks="Workflow Variables">
+      <column name="workflow_id" type="uuid"
+        remarks="The ID for the workflow the workflow variable is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(255)" remarks="The name of the workflow variable">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="boolean_value" type="boolean" remarks="The boolean value for the workflow variable"/>
+      <column name="date_value" type="date" remarks="The date value for the workflow variable"/>
+      <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the workflow variable"/>
+      <column name="double_value" type="double" remarks="The double value for the workflow variable"/>
+      <column name="integer_value" type="int" remarks="The integer value for the workflow variable"/>
+      <column name="string_value" type="nvarchar(4000)" remarks="The string value for the workflow variable"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="operations_workflow_variables_workflow_fk"
+      baseTableName="operations_workflow_variables" baseColumnNames="workflow_id"
+      referencedTableName="operations_workflows" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_variables_workflow_id_ix"
+      tableName="operations_workflow_variables">
+      <column name="workflow_id"/>
+    </createIndex>
+    <createIndex indexName="operations_workflow_variables_name_ix"
+      tableName="operations_workflow_variables">
+      <column name="name"/>
+    </createIndex>    
+
     <createTable tableName="operations_documents" remarks="Documents">
       <column name="id" type="uuid" remarks="The ID for the document">
         <constraints primaryKey="true" nullable="false"/>
@@ -620,7 +681,7 @@
       tableName="operations_documents">
       <column name="tenant_id"/>
     </createIndex>
-    
+
     <createTable tableName="operations_document_attributes" remarks="Document Attributes">
       <column name="document_id" type="uuid"
         remarks="The ID for the document the document attribute is associated with">
@@ -640,11 +701,11 @@
       tableName="operations_document_attributes">
       <column name="document_id"/>
     </createIndex>
-    <createIndex indexName="operations_document_attributes_valued_ix"
+    <createIndex indexName="operations_document_attributes_value_ix"
       tableName="operations_document_attributes">
       <column name="value"/>
     </createIndex>
-    
+
     <createTable tableName="operations_document_notes" remarks="Document Notes">
       <column name="id" type="uuid" remarks="The ID for the document note">
         <constraints primaryKey="true" nullable="false"/>
@@ -1059,7 +1120,8 @@
       <column name="tenant_id"/>
     </createIndex>
 
-    <createTable tableName="operations_workflow_interaction_links" remarks="Workflow Interaction Links">
+    <createTable tableName="operations_workflow_interaction_links"
+      remarks="Workflow Interaction Links">
       <column name="workflow_id" type="uuid"
         remarks="The ID for the workflow the workflow interaction link is associated with">
         <constraints primaryKey="true" nullable="false"/>
@@ -1209,6 +1271,13 @@
         indexName="operations_documents_definition_id_ix"/>
       <dropTable tableName="operations_documents"/>
 
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_variables"/>
+      <dropIndex tableName="operations_workflow_variables"
+        indexName="operations_workflow_variables_workflow_id_ix"/>
+      <dropIndex tableName="operations_workflow_variables"
+        indexName="operations_workflow_variables_name_ix"/>
+      <dropTable tableName="operations_workflow_variables"/>
+
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_steps"/>
       <dropIndex tableName="operations_workflow_steps"
         indexName="operations_workflow_steps_workflow_id_ix"/>
@@ -1224,6 +1293,8 @@
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_attributes"/>
       <dropIndex tableName="operations_workflow_attributes"
         indexName="operations_workflow_attributes_workflow_id_ix"/>
+      <dropIndex tableName="operations_workflow_attributes"
+        indexName="operations_workflow_attributes_value_ix"/>
       <dropTable tableName="operations_workflow_attributes"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_workflows"/>
@@ -1270,6 +1341,11 @@
         indexName="operations_document_definition_categories_tenant_id_ix"/>
       <dropTable tableName="operations_document_definition_categories"/>
 
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_variable_definitions"/>
+      <dropIndex tableName="operations_workflow_variable_definitions"
+        indexName="operations_workflow_variable_definitions_definition_ix"/>
+      <dropTable tableName="operations_workflow_variable_definitions"/>
+
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_step_definitions"/>
       <dropIndex tableName="operations_workflow_step_definitions"
         indexName="operations_workflow_step_definitions_definition_ix"/>
@@ -1314,7 +1390,8 @@
     </rollback>
   </changeSet>
 
-  <changeSet id="inception-operations-postgresql-1.0.0" author="Marcus Portmann" dbms="postgresql" runInTransaction="false">
+  <changeSet id="inception-operations-postgresql-1.0.0" author="Marcus Portmann" dbms="postgresql"
+    runInTransaction="false">
     <comment>inception-operations-postgresql-1.0.0</comment>
 
     <!-- Enable pg_trgm (safe if already present) -->
@@ -1348,16 +1425,20 @@
         v_exists NUMBER;
       BEGIN
         -- Drop if exists to allow idempotence across environments
-        SELECT COUNT(*) INTO v_exists
+        SELECT COUNT(*)
+        INTO v_exists
         FROM ctx_preferences
         WHERE PRE_NAME = 'OPERATIONS_DOCUMENT_ATTRIBUTES_VALUE_WORDLIST';
         IF v_exists > 0 THEN
           ctx_ddl.drop_preference('operations_document_attributes_value_wordlist');
         END IF;
 
-        ctx_ddl.create_preference('operations_document_attributes_value_wordlist', 'BASIC_WORDLIST');
-        ctx_ddl.set_attribute('operations_document_attributes_value_wordlist', 'SUBSTRING_INDEX', 'TRUE');
-        ctx_ddl.set_attribute('operations_document_attributes_value_wordlist', 'WILDCARD_INDEX', 'TRUE');
+        ctx_ddl.create_preference('operations_document_attributes_value_wordlist',
+                                  'BASIC_WORDLIST');
+        ctx_ddl.set_attribute('operations_document_attributes_value_wordlist', 'SUBSTRING_INDEX',
+                              'TRUE');
+        ctx_ddl.set_attribute('operations_document_attributes_value_wordlist', 'WILDCARD_INDEX',
+                              'TRUE');
         -- Optional guardrails:
         -- ctx_ddl.set_attribute('operations_document_attributes_value_wordlist', 'WILDCARD_MAXTERMS', '5000');
       END;
@@ -1366,7 +1447,7 @@
     <!-- CONTEXT index on VALUE; ON COMMIT keeps it up to date -->
     <sql><![CDATA[
       CREATE INDEX operations_document_attributes_value_ctx_idx
-        ON operations_document_attributes(value)
+        ON operations_document_attributes (value)
         INDEXTYPE IS CTXSYS.CONTEXT
         PARAMETERS (
         'WORDLIST operations_document_attributes_value_wordlist
@@ -1380,16 +1461,20 @@
         v_exists NUMBER;
       BEGIN
         -- Drop if exists to allow idempotence across environments
-        SELECT COUNT(*) INTO v_exists
+        SELECT COUNT(*)
+        INTO v_exists
         FROM ctx_preferences
         WHERE PRE_NAME = 'OPERATIONS_WORKFLOW_ATTRIBUTES_VALUE_WORDLIST';
         IF v_exists > 0 THEN
           ctx_ddl.drop_preference('operations_workflow_attributes_value_wordlist');
         END IF;
 
-        ctx_ddl.create_preference('operations_workflow_attributes_value_wordlist', 'BASIC_WORDLIST');
-        ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'SUBSTRING_INDEX', 'TRUE');
-        ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'WILDCARD_INDEX', 'TRUE');
+        ctx_ddl.create_preference('operations_workflow_attributes_value_wordlist',
+                                  'BASIC_WORDLIST');
+        ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'SUBSTRING_INDEX',
+                              'TRUE');
+        ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'WILDCARD_INDEX',
+                              'TRUE');
         -- Optional guardrails:
         -- ctx_ddl.set_attribute('operations_workflow_attributes_value_wordlist', 'WILDCARD_MAXTERMS', '5000');
       END;
@@ -1398,7 +1483,7 @@
     <!-- CONTEXT index on VALUE; ON COMMIT keeps it up to date -->
     <sql><![CDATA[
       CREATE INDEX operations_workflow_attributes_value_ctx_idx
-        ON operations_workflow_attributes(value)
+        ON operations_workflow_attributes (value)
         INDEXTYPE IS CTXSYS.CONTEXT
         PARAMETERS (
         'WORDLIST operations_workflow_attributes_value_wordlist

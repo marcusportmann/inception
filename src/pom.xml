@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.7</version>
+    <version>3.5.5</version>
   </parent>
 
   <repositories>
@@ -98,34 +98,35 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>21</java.version>
 
-    <agroal-pool.version>2.7.1</agroal-pool.version>
+    <agroal-pool.version>2.8</agroal-pool.version>
     <apache-poi.version>5.4.1</apache-poi.version>
     <archunit.version>1.4.1</archunit.version>
     <authzforce-ce-core-pdp-engine.version>21.0.1</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.12.0</avro.version>
-    <azure-identity.version>1.16.2</azure-identity.version>
-    <bucket4j_jdk17-core.version>8.14.0</bucket4j_jdk17-core.version>
+    <azure-identity.version>1.17.0</azure-identity.version>
+    <bucket4j_jdk17-core.version>8.15.0</bucket4j_jdk17-core.version>
     <com.ibm.icu.icu4j.version>77.1</com.ibm.icu.icu4j.version>
     <commons-beanutils.version>1.11.0</commons-beanutils.version>
-    <commons-io.version>2.19.0</commons-io.version>
+    <commons-io.version>2.20.0</commons-io.version>
+    <!-- NOTE: Version of Apache CXF compatible with jaxb-xew-plugin -->
     <cxf.version>4.0.2</cxf.version>
-    <de.flapdoodle.embed.mongo.version>4.20.1</de.flapdoodle.embed.mongo.version>
+    <de.flapdoodle.embed.mongo.version>4.21.0</de.flapdoodle.embed.mongo.version>
     <easymock.version>5.6.0</easymock.version>
     <flowable.version>7.1.0</flowable.version>
     <freemarker.version>2.3.34</freemarker.version>
-    <greenmail.version>2.1.3</greenmail.version>
-    <groovy.version>4.0.27</groovy.version>
-    <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
+    <greenmail.version>2.1.5</greenmail.version>
+    <groovy.version>4.0.28</groovy.version>
+    <hibernate-validator.version>8.0.3.Final</hibernate-validator.version>
     <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
     <jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
     <jakarta.xml.ws-api.version>4.0.2</jakarta.xml.ws-api.version>
     <jasperreports.version>7.0.3</jasperreports.version>
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.1.Final</jboss-transaction-spi.version>
-    <jsoup.version>1.21.1</jsoup.version>
+    <jsoup.version>1.21.2</jsoup.version>
     <liquibase-slf4j.version>5.1.0</liquibase-slf4j.version>
     <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
-    <mssql-jdbc.version>12.10.0.jre11</mssql-jdbc.version>
+    <mssql-jdbc.version>12.10.1.jre11</mssql-jdbc.version>
     <narayana.version>7.2.2.Final</narayana.version>
     <ognl.version>3.4.7</ognl.version>
     <ojdbc11.version>23.4.0.24.05</ojdbc11.version>
@@ -137,11 +138,11 @@
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.7</postgresql.version>
     <r2dbc-h2.version>1.0.0.RELEASE</r2dbc-h2.version>
-    <spring-shell-starter.version>3.4.0</spring-shell-starter.version>
-    <springdoc-openapi.version>2.8.6</springdoc-openapi.version>
+    <spring-shell-starter.version>3.4.1</spring-shell-starter.version>
+    <springdoc-openapi.version>2.8.11</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
-    <swagger.version>2.2.30</swagger.version>
-    <uuid-creator.version>6.0.0</uuid-creator.version>
+    <swagger.version>2.2.36</swagger.version>
+    <uuid-creator.version>6.1.1</uuid-creator.version>
     <wss4j-ws-security-common.version>3.0.4</wss4j-ws-security-common.version>
 
     <node.version>v21.7.3</node.version>

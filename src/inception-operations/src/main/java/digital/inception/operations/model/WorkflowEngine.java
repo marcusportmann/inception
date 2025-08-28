@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
@@ -69,6 +70,7 @@ public class WorkflowEngine implements Serializable {
   /** The attributes for the workflow engine. */
   @Schema(description = "The attributes for the workflow engine")
   @JsonProperty
+  @JsonManagedReference("workflowEngineAttributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid

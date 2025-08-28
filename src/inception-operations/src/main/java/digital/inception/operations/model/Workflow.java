@@ -73,6 +73,7 @@ import java.util.UUID;
   "engineInstanceId",
   "attributes",
   "steps",
+  "variables",
   "data",
   "initiated",
   "initiatedBy",
@@ -102,6 +103,7 @@ import java.util.UUID;
       "engineInstanceId",
       "attributes",
       "steps",
+      "variables",
       "data",
       "initiated",
       "initiatedBy",
@@ -167,6 +169,22 @@ public class Workflow implements Serializable {
   @OrderBy("initiated")
   @JoinColumn(name = "workflow_id", insertable = false, updatable = false)
   private final List<WorkflowStep> steps = new ArrayList<>();
+
+  /** The variables for the workflow. */
+  @Schema(description = "The variables for the workflow")
+  @JsonProperty
+  @JsonManagedReference("workflowVariableReference")
+  @XmlElementWrapper(name = "Variables")
+  @XmlElement(name = "Variable")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("name")
+  @JoinColumn(
+      name = "workflow_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private final List<WorkflowVariable> variables = new ArrayList<>();
 
   /** The date and time the workflow was canceled. */
   @Schema(description = "The date and time the workflow was canceled")
@@ -431,6 +449,129 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Constructs a new {@code Workflow}.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param parentId the ID for the parent workflow
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param definitionVersion the version of the workflow definition the workflow is associated with
+   * @param status the status of the workflow
+   * @param attributes the attributes for the workflow
+   * @param variables the variables for the workflow
+   * @param data the XML or JSON data for the workflow
+   * @param initiated the date and time the workflow was initiated
+   * @param initiatedBy the person or system that initiated the workflow
+   */
+  public Workflow(
+      UUID tenantId,
+      UUID parentId,
+      String definitionId,
+      int definitionVersion,
+      WorkflowStatus status,
+      List<WorkflowAttribute> attributes,
+      List<WorkflowVariable> variables,
+      String data,
+      OffsetDateTime initiated,
+      String initiatedBy) {
+    this.id = UuidCreator.getTimeOrderedEpoch();
+    this.tenantId = tenantId;
+    this.parentId = parentId;
+    this.definitionId = definitionId;
+    this.definitionVersion = definitionVersion;
+    this.status = status;
+    this.data = data;
+    this.initiated = initiated;
+    this.initiatedBy = initiatedBy;
+
+    for (WorkflowAttribute attribute : attributes) {
+      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+    }
+
+    for (WorkflowVariable variable : variables) {
+      addVariable(variable.cloneWorkflowVariable());
+    }
+  }
+
+  /**
+   * Constructs a new {@code Workflow}.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param definitionVersion the version of the workflow definition the workflow is associated with
+   * @param status the status of the workflow
+   * @param attributes the attributes for the workflow
+   * @param variables the variables for the workflow
+   * @param initiated the date and time the workflow was initiated
+   * @param initiatedBy the person or system that initiated the workflow
+   */
+  public Workflow(
+      UUID tenantId,
+      String definitionId,
+      int definitionVersion,
+      WorkflowStatus status,
+      List<WorkflowAttribute> attributes,
+      List<WorkflowVariable> variables,
+      OffsetDateTime initiated,
+      String initiatedBy) {
+    this.id = UuidCreator.getTimeOrderedEpoch();
+    this.tenantId = tenantId;
+    this.definitionId = definitionId;
+    this.definitionVersion = definitionVersion;
+    this.status = status;
+    this.initiated = initiated;
+    this.initiatedBy = initiatedBy;
+
+    for (WorkflowAttribute attribute : attributes) {
+      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+    }
+
+    for (WorkflowVariable variable : variables) {
+      addVariable(variable.cloneWorkflowVariable());
+    }
+  }
+
+  /**
+   * Constructs a new {@code Workflow}.
+   *
+   * @param tenantId the ID for the tenant the workflow is associated with
+   * @param parentId the ID for the parent workflow
+   * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param definitionVersion the version of the workflow definition the workflow is associated with
+   * @param status the status of the workflow
+   * @param attributes the attributes for the workflow
+   * @param variables the variables for the workflow
+   * @param initiated the date and time the workflow was initiated
+   * @param initiatedBy the person or system that initiated the workflow
+   */
+  public Workflow(
+      UUID tenantId,
+      UUID parentId,
+      String definitionId,
+      int definitionVersion,
+      WorkflowStatus status,
+      List<WorkflowAttribute> attributes,
+      List<WorkflowVariable> variables,
+      OffsetDateTime initiated,
+      String initiatedBy) {
+    this.id = UuidCreator.getTimeOrderedEpoch();
+    this.tenantId = tenantId;
+    this.parentId = parentId;
+    this.definitionId = definitionId;
+    this.definitionVersion = definitionVersion;
+    this.status = status;
+    this.initiated = initiated;
+    this.initiatedBy = initiatedBy;
+
+    for (WorkflowAttribute attribute : attributes) {
+      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+    }
+
+    for (WorkflowVariable variable : variables) {
+      addVariable(variable.cloneWorkflowVariable());
+    }
+  }
+
+  /**
    * Add the attribute for the workflow.
    *
    * @param attribute the attribute
@@ -473,6 +614,21 @@ public class Workflow implements Serializable {
     step.setWorkflow(this);
 
     steps.add(step);
+  }
+
+  /**
+   * Add the variable for the workflow.
+   *
+   * @param variable the variable
+   */
+  public void addVariable(WorkflowVariable variable) {
+    variables.removeIf(
+        existingVariable ->
+            StringUtil.equalsIgnoreCase(existingVariable.getName(), variable.getName()));
+
+    variable.setWorkflow(this);
+
+    variables.add(variable);
   }
 
   /**
@@ -730,6 +886,28 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Retrieve the variable with the specified name for the workflow.
+   *
+   * @param name the name of the workflow variable
+   * @return an Optional containing the variable with the specified name for the workflow or an
+   *     empty Optional if the variable could not be found
+   */
+  public Optional<WorkflowVariable> getVariable(String name) {
+    return variables.stream()
+        .filter(variable -> StringUtil.equalsIgnoreCase(variable.getName(), name))
+        .findFirst();
+  }
+
+  /**
+   * Returns the variables for the workflow.
+   *
+   * @return the variables for the workflow
+   */
+  public List<WorkflowVariable> getVariables() {
+    return variables;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -758,6 +936,16 @@ public class Workflow implements Serializable {
     interactionLinks.removeIf(
         existingInteractionLink ->
             Objects.equals(existingInteractionLink.getInteractionId(), interactionId));
+  }
+
+  /**
+   * Remove the variable with the specified name for the workflow.
+   *
+   * @param name the name of the workflow variable
+   */
+  public void removeVariable(String name) {
+    variables.removeIf(
+        existingVariable -> StringUtil.equalsIgnoreCase(existingVariable.getName(), name));
   }
 
   /**
@@ -982,5 +1170,16 @@ public class Workflow implements Serializable {
    */
   public void setUpdatedBy(String updatedBy) {
     this.updatedBy = updatedBy;
+  }
+
+  /**
+   * Set the variables for the workflow.
+   *
+   * @param variables the variables for the workflow
+   */
+  public void setVariables(List<WorkflowVariable> variables) {
+    variables.forEach(variable -> variable.setWorkflow(this));
+    this.variables.clear();
+    this.variables.addAll(variables);
   }
 }

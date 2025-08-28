@@ -16,6 +16,7 @@
 
 package digital.inception.operations.util;
 
+import digital.inception.core.file.FileType;
 import digital.inception.core.util.MimeData;
 import jakarta.mail.Address;
 import jakarta.mail.BodyPart;
@@ -68,6 +69,10 @@ public final class MessageUtil {
   /** The supported text attachment MIME types. */
   public static final List<String> SUPPORTED_TEXT_ATTACHMENT_MIME_TYPES =
       Arrays.asList("text/plain", "text/xml", "text/csv");
+
+  /** The supported ZIP-compressed attachment MIME types. */
+  public static final List<String> SUPPORTED_ZIP_COMPRESSED_ATTACHMENT_MIME_TYPES =
+      Arrays.asList("application/zip", "application/x-zip-compressed", "multipart/x-zip");
 
   /** Private constructor to prevent instantiation. */
   private MessageUtil() {}
@@ -272,6 +277,20 @@ public final class MessageUtil {
   }
 
   /**
+   * Returns whether the body part is a supported ZIP-compressed attachment.
+   *
+   * @param bodyPart the body part
+   * @return {@code true} if the body part is a supported ZIP-compressed attachment or {@code false}
+   *     otherwise
+   * @throws MessagingException if an error occurs while checking the body part
+   */
+  public static boolean isSupportedZipCompressedAttachment(BodyPart bodyPart)
+      throws MessagingException {
+    return SUPPORTED_ZIP_COMPRESSED_ATTACHMENT_MIME_TYPES.contains(
+        bodyPart.getContentType().split(";")[0].toLowerCase());
+  }
+
+  /**
    * Returns a string representation of the message.
    *
    * @param message the message
@@ -359,6 +378,11 @@ public final class MessageUtil {
       } else if (isPDF(bodyPart) || isMicrosoftOfficeFile(bodyPart)) {
         try (InputStream inputStream = bodyPart.getInputStream()) {
           MimeData attachment = new MimeData(bodyPart.getContentType(), inputStream.readAllBytes());
+          attachments.add(attachment);
+        }
+      } else if (isSupportedZipCompressedAttachment(bodyPart)) {
+        try (InputStream inputStream = bodyPart.getInputStream()) {
+          MimeData attachment = new MimeData(FileType.ZIP.mimeType(), inputStream.readAllBytes());
           attachments.add(attachment);
         }
       }

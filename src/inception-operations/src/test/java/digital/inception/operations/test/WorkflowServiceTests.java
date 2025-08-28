@@ -88,6 +88,8 @@ import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
+import digital.inception.operations.model.WorkflowVariable;
+import digital.inception.operations.model.WorkflowVariableDefinition;
 import digital.inception.operations.service.BackgroundWorkflowStatusVerifier;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.WorkflowService;
@@ -336,6 +338,9 @@ public class WorkflowServiceTests {
             false,
             false));
 
+    workflowDefinition.addVariableDefinition(
+        new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
+
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
 
@@ -360,6 +365,9 @@ public class WorkflowServiceTests {
                 new WorkflowAttribute(
                     "test_workflow_attribute_code", "test_workflow_attribute_value")),
             testWorkflowDataJson);
+
+    initiateWorkflowRequest.setVariables(
+        List.of(new WorkflowVariable("testVariableName", "testVariableValue")));
 
     Workflow workflow =
         workflowService.initiateWorkflow(
@@ -1039,6 +1047,9 @@ public class WorkflowServiceTests {
             false,
             false));
 
+    tenantWorkflowDefinition.addVariableDefinition(
+        new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
+
     tenantWorkflowDefinition.addDocumentDefinition(
         tenantDocumentDefinition.getId(), true, false, true);
     tenantWorkflowDefinition.addDocumentDefinition(
@@ -1429,6 +1440,47 @@ public class WorkflowServiceTests {
                         }
                       });
             });
+
+    assertEquals(
+        workflowDefinition1.getVariableDefinitions().size(),
+        workflowDefinition2.getVariableDefinitions().size(),
+        "The number of variable definitions for the workflow definitions do not match");
+    workflowDefinition1
+        .getVariableDefinitions()
+        .forEach(
+            workflowVariableDefinition1 -> {
+              boolean foundVariableDefinition =
+                  workflowDefinition2.getVariableDefinitions().stream()
+                      .anyMatch(
+                          workflowVariableDefinition2 ->
+                              Objects.equals(
+                                  workflowVariableDefinition1, workflowVariableDefinition2));
+              if (!foundVariableDefinition) {
+                fail(
+                    "Failed to find the workflow variable definition ("
+                        + workflowVariableDefinition1.getName()
+                        + ") for the workflow definition ("
+                        + workflowDefinition1.getId()
+                        + ") version ("
+                        + workflowDefinition1.getVersion()
+                        + ")");
+              }
+            });
+    workflowDefinition1
+        .getVariableDefinitions()
+        .forEach(
+            workflowVariableDefinition1 -> {
+              workflowDefinition2
+                  .getVariableDefinitions()
+                  .forEach(
+                      workflowVariableDefinition2 -> {
+                        if (Objects.equals(
+                            workflowVariableDefinition1, workflowVariableDefinition2)) {
+                          compareWorkflowVariableDefinitions(
+                              workflowVariableDefinition1, workflowVariableDefinition2);
+                        }
+                      });
+            });
   }
 
   private void compareWorkflowEngines(
@@ -1520,6 +1572,23 @@ public class WorkflowServiceTests {
         workflowStepDefinition1.getTimeToComplete(),
         workflowStepDefinition2.getTimeToComplete(),
         "The time to complete values for the workflow step definitions do not match");
+  }
+
+  private void compareWorkflowVariableDefinitions(
+      WorkflowVariableDefinition workflowVariableDefinition1,
+      WorkflowVariableDefinition workflowVariableDefinition2) {
+    assertEquals(
+        workflowVariableDefinition1.getName(),
+        workflowVariableDefinition2.getName(),
+        "The name values for the workflow variable definitions do not match");
+    assertEquals(
+        workflowVariableDefinition1.getDescription(),
+        workflowVariableDefinition2.getDescription(),
+        "The description values for the workflow variable definitions do not match");
+    assertEquals(
+        workflowVariableDefinition1.isRequired(),
+        workflowVariableDefinition2.isRequired(),
+        "The required values for the workflow variable definitions do not match");
   }
 
   private void compareWorkflows(Workflow workflow1, Workflow workflow2) {
@@ -1623,6 +1692,29 @@ public class WorkflowServiceTests {
                 fail(
                     "Failed to find the attribute ("
                         + workflowAttribute1.getCode()
+                        + ") for the workflow ("
+                        + workflow1.getId()
+                        + ")");
+              }
+            });
+
+    assertEquals(
+        workflow1.getVariables().size(),
+        workflow2.getVariables().size(),
+        "The number of variables for the workflows do not match");
+    workflow1
+        .getVariables()
+        .forEach(
+            workflowVariable1 -> {
+              boolean foundVariable =
+                  workflow2.getVariables().stream()
+                      .anyMatch(
+                          workflowVariable2 ->
+                              Objects.equals(workflowVariable1, workflowVariable2));
+              if (!foundVariable) {
+                fail(
+                    "Failed to find the variable ("
+                        + workflowVariable1.getName()
                         + ") for the workflow ("
                         + workflow1.getId()
                         + ")");

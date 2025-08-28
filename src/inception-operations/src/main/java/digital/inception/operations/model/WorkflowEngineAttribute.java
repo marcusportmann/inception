@@ -80,7 +80,7 @@ public class WorkflowEngineAttribute implements Serializable {
   @JsonIgnore
   @XmlTransient
   @Id
-  @Column(name = "engine_id", nullable = false)
+  @Column(name = "engine_id", length = 50, nullable = false)
   private String engineId;
 
   /** The value for the workflow engine attribute. */

@@ -86,6 +86,8 @@ import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowSummaries;
+import digital.inception.operations.model.WorkflowVariable;
+import digital.inception.operations.model.WorkflowVariableDefinition;
 import digital.inception.operations.persistence.jpa.WorkflowAttributeDefinitionRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
@@ -200,6 +202,61 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     this.documentService = documentService;
     this.workflowDataValidationService = workflowDataValidationService;
     this.interactionService = interactionService;
+  }
+
+  private static void validateRequiredWorkflowVariables(
+      String parameter,
+      List<WorkflowVariable> workflowVariables,
+      WorkflowDefinition workflowDefinition)
+      throws InvalidArgumentException {
+    if (!workflowDefinition.getVariableDefinitions().isEmpty()) {
+      // Create a Set of provided variable names for O(1) lookup
+      Set<String> providedVariableNames =
+          workflowVariables.stream()
+              .map(WorkflowVariable::getName)
+              .map(String::toLowerCase)
+              .collect(Collectors.toSet());
+
+      // Find the first missing required variable
+      Optional<String> missingRequiredVariable =
+          workflowDefinition.getVariableDefinitions().stream()
+              .filter(WorkflowVariableDefinition::isRequired)
+              .map(WorkflowVariableDefinition::getName)
+              .filter(name -> !providedVariableNames.contains(name.toLowerCase()))
+              .findFirst();
+
+      if (missingRequiredVariable.isPresent()) {
+        throw new InvalidArgumentException(
+            parameter, "the workflow variable (" + missingRequiredVariable.get() + ") is required");
+      }
+    }
+  }
+
+  private static void validateWorkflowVariables(
+      String parameter,
+      List<WorkflowVariable> workflowVariables,
+      WorkflowDefinition workflowDefinition)
+      throws InvalidArgumentException {
+    if (!workflowDefinition.getVariableDefinitions().isEmpty()) {
+      // Create a Set of valid variable names for O(1) lookup
+      Set<String> validVariableNames =
+          workflowDefinition.getVariableDefinitions().stream()
+              .map(WorkflowVariableDefinition::getName)
+              .map(String::toLowerCase)
+              .collect(Collectors.toSet());
+
+      // Find the first invalid variable using Stream API
+      Optional<String> invalidVariableName =
+          workflowVariables.stream()
+              .map(WorkflowVariable::getName)
+              .filter(name -> !validVariableNames.contains(name.toLowerCase()))
+              .findFirst();
+
+      if (invalidVariableName.isPresent()) {
+        throw new InvalidArgumentException(
+            parameter, "the workflow variable (" + invalidVariableName.get() + ") is invalid");
+      }
+    }
   }
 
   @Override
@@ -1478,6 +1535,18 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           initiateWorkflowRequest.getDefinitionId(),
           initiateWorkflowRequest.getAttributes());
 
+      // Validate the workflow variables
+      validateWorkflowVariables(
+          "initiateWorkflowRequest.variables.name",
+          initiateWorkflowRequest.getVariables(),
+          workflowDefinition);
+
+      // Validate the required workflow variables
+      validateRequiredWorkflowVariables(
+          "initiateWorkflowRequest.variables",
+          initiateWorkflowRequest.getVariables(),
+          workflowDefinition);
+
       // Validate the workflow data if we have a validation schema
       if ((workflowDefinition.getValidationSchemaType() != null)
           && (StringUtils.hasText(workflowDefinition.getValidationSchema()))) {
@@ -1509,6 +1578,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                   ? WorkflowStatus.PENDING
                   : WorkflowStatus.ACTIVE,
               initiateWorkflowRequest.getAttributes(),
+              initiateWorkflowRequest.getVariables(),
               initiateWorkflowRequest.getData(),
               now,
               initiatedBy);
@@ -2111,6 +2181,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       }
 
       if (updateWorkflowRequest.getAttributes() != null) {
+        // Validate the workflow attributes
+        for (WorkflowAttribute workflowAttribute : updateWorkflowRequest.getAttributes()) {
+          if (!isValidWorkflowAttribute(tenantId, workflowDefinition.getId(), workflowAttribute.getCode())) {
+            log.warn(
+                "Invalid workflow attribute ("
+                + workflowAttribute.getCode()
+                + ") provided when updating a workflow with the workflow definition ("
+                + workflowDefinition.getId()
+                + ") version ("
+                + workflowDefinition.getVersion()
+                + ") for the tenant (" + tenantId + ")");
+
+            throw new InvalidArgumentException(
+                "updateWorkflowRequest.attributes.code",
+                "the workflow attribute (" + workflowAttribute.getCode() + ") is invalid");
+          }
+        }
+
         // Validate the required workflow attributes
         validateRequiredWorkflowAttributes(
             tenantId,
@@ -2119,6 +2207,22 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             updateWorkflowRequest.getAttributes());
 
         workflow.setAttributes(updateWorkflowRequest.getAttributes());
+      }
+
+      // Validate the workflow variables
+      if (updateWorkflowRequest.getVariables() != null) {
+        validateWorkflowVariables(
+            "updateWorkflowRequest.variables.name",
+            updateWorkflowRequest.getVariables(),
+            workflowDefinition);
+
+        // Validate the required workflow variables
+        validateRequiredWorkflowVariables(
+            "updateWorkflowRequest.variables",
+            updateWorkflowRequest.getVariables(),
+            workflowDefinition);
+
+        workflow.setVariables(updateWorkflowRequest.getVariables());
       }
 
       if (StringUtils.hasText(updateWorkflowRequest.getData())) {

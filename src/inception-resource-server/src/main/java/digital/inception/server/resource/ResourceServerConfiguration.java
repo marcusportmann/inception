@@ -17,7 +17,7 @@
 package digital.inception.server.resource;
 
 import static org.springframework.security.web.access.IpAddressAuthorizationManager.hasIpAddress;
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import static org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher.withDefaults;
 
 import digital.inception.core.util.ResourceUtil;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPublicKey;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -74,8 +73,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
@@ -395,6 +394,9 @@ public class ResourceServerConfiguration implements InitializingBean {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
+    // Use the new path-pattern builder once and reuse it everywhere
+    PathPatternRequestMatcher.Builder pathPatternRequestMatcherBuilder = withDefaults();
+
     // Define reusable authorization manager for internal network access
     AuthorizationManager<RequestAuthorizationContext> internalNetworkAccess =
         AuthorizationManagers.anyOf(
@@ -418,8 +420,8 @@ public class ResourceServerConfiguration implements InitializingBean {
 
             authorizeRequests
                 .requestMatchers(
-                    antMatcher("/api/security/policies"),
-                    antMatcher("/api/security/revoked-tokens"))
+                    pathPatternRequestMatcherBuilder.matcher("/api/security/policies"),
+                    pathPatternRequestMatcherBuilder.matcher("/api/security/revoked-tokens"))
                 .access(internalNetworkAccess);
           } catch (Throwable ignored) {
           }
@@ -427,19 +429,28 @@ public class ResourceServerConfiguration implements InitializingBean {
           /*
            * Enable non-authenticated access to SOAP-based web services.
            */
-          authorizeRequests.requestMatchers(antMatcher("/service/**")).permitAll();
+          authorizeRequests
+              .requestMatchers(pathPatternRequestMatcherBuilder.matcher("/service/**"))
+              .permitAll();
 
           /*
            * Enable non-authenticated access to the OAuth endpoints.
            */
-          authorizeRequests.requestMatchers(antMatcher("/oauth/**")).permitAll();
-          authorizeRequests.requestMatchers(antMatcher("/api/**/oauth")).permitAll();
+          authorizeRequests
+              .requestMatchers(pathPatternRequestMatcherBuilder.matcher("/oauth/**"))
+              .permitAll();
+          authorizeRequests
+              .requestMatchers(new RegexRequestMatcher("^/api(?:/[^/]+)*/oauth$", null))
+              .permitAll();
 
           // Enable non-authenticated access to API endpoints if API security is disabled, or we are
           // running in debug mode, otherwise require authenticated access using a JWT bearer token.
           if ((!apiSecurityEnabled) || inDebugMode) {
             authorizeRequests
-                .requestMatchers(antMatcher("/api/**"), antMatcher("/csrf/**"))
+                .requestMatchers(
+                    pathPatternRequestMatcherBuilder.matcher("/api/**"),
+                    pathPatternRequestMatcherBuilder.matcher("/csrf/**"),
+                    pathPatternRequestMatcherBuilder.matcher("/realtime/**"))
                 .access(
                     new AuthorizationManager<RequestAuthorizationContext>() {
                       @Override
@@ -452,30 +463,34 @@ public class ResourceServerConfiguration implements InitializingBean {
           } else {
             authorizeRequests
                 .requestMatchers(
-                    antMatcher("/api/**"), antMatcher("/csrf/**"), antMatcher("/realtime/**"))
+                    pathPatternRequestMatcherBuilder.matcher("/api/**"),
+                    pathPatternRequestMatcherBuilder.matcher("/csrf/**"))
                 .authenticated();
           }
 
           // Static resources authorization rules
           authorizeRequests
               .requestMatchers(
-                  getStaticResourcesUriPatterns().stream()
-                      .map(AntPathRequestMatcher::antMatcher)
-                      .toArray(RequestMatcher[]::new))
+                  pathPatternRequestMatcherBuilder.matcher("/"),
+                  pathPatternRequestMatcherBuilder.matcher("/webjars/**"),
+                  new RegexRequestMatcher("^/(?:[^/]+/)*[^/]+\\.(?:js|css|html|png|jpg|svg|ico)$", null)
+                  )
               .permitAll();
 
           // Enable non-authenticated internal network access to the actuator endpoints
           authorizeRequests
-              .requestMatchers(antMatcher("/actuator/**"), antMatcher("/realtime/**"))
+              .requestMatchers(
+                  pathPatternRequestMatcherBuilder.matcher("/actuator/**"),
+                  pathPatternRequestMatcherBuilder.matcher("/realtime/**"))
               .access(internalNetworkAccess);
 
           // Enable non-authenticated internal network access to the Swagger endpoints
           authorizeRequests
               .requestMatchers(
-                  antMatcher("/swagger-ui/**"),
-                  antMatcher("/swagger-ui.html"),
-                  antMatcher("/v3/api-docs/swagger-config"),
-                  antMatcher("/v3/api-docs/**"))
+                  pathPatternRequestMatcherBuilder.matcher("/swagger-ui/**"),
+                  pathPatternRequestMatcherBuilder.matcher("/swagger-ui.html"),
+                  pathPatternRequestMatcherBuilder.matcher("/v3/api-docs/swagger-config"),
+                  pathPatternRequestMatcherBuilder.matcher("/v3/api-docs/**"))
               .access(internalNetworkAccess);
 
           // Deny all other requests
@@ -518,10 +533,10 @@ public class ResourceServerConfiguration implements InitializingBean {
             csrf -> {
               // Configure CSRF to ignore all endpoints except /csrf/token
               csrf.ignoringRequestMatchers(
-                      AntPathRequestMatcher.antMatcher("/api/**"),
-                      AntPathRequestMatcher.antMatcher("/service/**"),
-                      AntPathRequestMatcher.antMatcher("/oauth/**"),
-                      AntPathRequestMatcher.antMatcher("/actuator/**"))
+                      pathPatternRequestMatcherBuilder.matcher("/api/**"),
+                      pathPatternRequestMatcherBuilder.matcher("/service/**"),
+                      pathPatternRequestMatcherBuilder.matcher("/oauth/**"),
+                      pathPatternRequestMatcherBuilder.matcher("/actuator/**"))
                   .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                   .csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler());
             });
@@ -590,20 +605,6 @@ public class ResourceServerConfiguration implements InitializingBean {
 
   private Converter<Jwt, Collection<GrantedAuthority>> getJwtGrantedAuthoritiesConverter() {
     return new JwtGrantedAuthoritiesConverter();
-  }
-
-  private List<String> getStaticResourcesUriPatterns() {
-    List<String> defaultStaticResourcesUriPatterns =
-        List.of("/", "/**/*.{js,css,html,png,jpg,svg,ico}", "/webjars/**");
-
-    // Combine the default static resources URI patterns with additional patterns (if present)
-    List<String> staticResourcesUriPatterns = new ArrayList<>(defaultStaticResourcesUriPatterns);
-    if (additionalStaticResourceUriPatterns != null
-        && !additionalStaticResourceUriPatterns.isEmpty()) {
-      staticResourcesUriPatterns.addAll(additionalStaticResourceUriPatterns);
-    }
-
-    return staticResourcesUriPatterns;
   }
 
   /**

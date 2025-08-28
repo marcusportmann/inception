@@ -72,6 +72,7 @@ import org.springframework.util.StringUtils;
   "attributes",
   "documentDefinitions",
   "stepDefinitions",
+  "variableDefinitions",
   "permissions",
   "validationSchemaType",
   "validationSchema"
@@ -91,6 +92,7 @@ import org.springframework.util.StringUtils;
       "attributes",
       "documentDefinitions",
       "stepDefinitions",
+      "variableDefinitions",
       "permissions",
       "validationSchemaType",
       "validationSchema"
@@ -196,6 +198,29 @@ public class WorkflowDefinition implements Serializable {
         updatable = false)
   })
   private final List<WorkflowStepDefinition> stepDefinitions = new ArrayList<>();
+
+  /** The workflow variable definitions for the workflow definition. */
+  @Schema(description = "The workflow variable definitions for the workflow definition")
+  @JsonProperty
+  @JsonManagedReference("workflowVariableDefinitionReference")
+  @XmlElementWrapper(name = "VariableDefinitions")
+  @XmlElement(name = "VariableDefinition")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("name")
+  @JoinColumns({
+    @JoinColumn(
+        name = "definition_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false),
+    @JoinColumn(
+        name = "definition_version",
+        referencedColumnName = "version",
+        insertable = false,
+        updatable = false)
+  })
+  private final List<WorkflowVariableDefinition> variableDefinitions = new ArrayList<>();
 
   /** The ID for the workflow definition category the workflow definition is associated with. */
   @Schema(
@@ -638,6 +663,22 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Add the workflow variable definition for the workflow definition.
+   *
+   * @param variableDefinition the workflow variable definition
+   */
+  public void addVariableDefinition(WorkflowVariableDefinition variableDefinition) {
+    variableDefinitions.removeIf(
+        existingVariableDefinition ->
+            StringUtil.equalsIgnoreCase(
+                existingVariableDefinition.getName(), variableDefinition.getName()));
+
+    variableDefinition.setWorkflowDefinition(this);
+
+    variableDefinitions.add(variableDefinition);
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -786,6 +827,15 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the workflow variable definitions for the workflow definition.
+   *
+   * @return the workflow variable definitions for the workflow definition
+   */
+  public List<WorkflowVariableDefinition> getVariableDefinitions() {
+    return variableDefinitions;
+  }
+
+  /**
    * Returns the version of the workflow definition.
    *
    * @return the version of the workflow definition
@@ -861,6 +911,17 @@ public class WorkflowDefinition implements Serializable {
     stepDefinitions.removeIf(
         existingStepDefinition ->
             StringUtil.equalsIgnoreCase(existingStepDefinition.getCode(), code));
+  }
+
+  /**
+   * Remove the workflow variable definition with the specified name for the workflow definition.
+   *
+   * @param name the name of the workflow variable
+   */
+  public void removeVariableDefinition(String name) {
+    variableDefinitions.removeIf(
+        existingVariableDefinition ->
+            StringUtil.equalsIgnoreCase(existingVariableDefinition.getName(), name));
   }
 
   /**
@@ -986,6 +1047,18 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Set the workflow variable definitions for the workflow definition.
+   *
+   * @param variableDefinitions the workflow variable definitions for the workflow definition
+   */
+  public void setVariableDefinitions(List<WorkflowVariableDefinition> variableDefinitions) {
+    variableDefinitions.forEach(
+        variableDefinition -> variableDefinition.setWorkflowDefinition(this));
+    this.variableDefinitions.clear();
+    this.variableDefinitions.addAll(variableDefinitions);
+  }
+
+  /**
    * Set the version of the workflow definition.
    *
    * @param version the version of the workflow definition
@@ -1002,7 +1075,14 @@ public class WorkflowDefinition implements Serializable {
             workflowDefinitionDocumentDefinition.setWorkflowDefinition(this));
 
     // Update the version on the step definitions
+    permissions.forEach(permission -> permission.setWorkflowDefinition(this));
+
+    // Update the version on the step definitions
     stepDefinitions.forEach(
         workflowStepDefinition -> workflowStepDefinition.setWorkflowDefinition(this));
+
+    // Update the version on the variable definitions
+    variableDefinitions.forEach(
+        workflowVariableDefinition -> workflowVariableDefinition.setWorkflowDefinition(this));
   }
 }

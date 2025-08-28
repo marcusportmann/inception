@@ -42,12 +42,12 @@ import java.util.UUID;
  */
 @Schema(description = "A request to update a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "status", "attributes", "data"})
+@JsonPropertyOrder({"workflowId", "status", "attributes", "variables", "data"})
 @XmlRootElement(name = "UpdateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "UpdateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "status", "attributes", "data"})
+    propOrder = {"workflowId", "status", "attributes", "variables", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UpdateWorkflowRequest implements Serializable {
@@ -75,6 +75,14 @@ public class UpdateWorkflowRequest implements Serializable {
   @XmlElement(name = "Status")
   private WorkflowStatus status;
 
+  /** The variables for the workflow. */
+  @Schema(description = "The variables for the workflow")
+  @JsonProperty
+  @XmlElementWrapper(name = "Variables")
+  @XmlElement(name = "Variable")
+  @Valid
+  private List<WorkflowVariable> variables;
+
   /** The ID for the workflow. */
   @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -94,6 +102,20 @@ public class UpdateWorkflowRequest implements Serializable {
   public UpdateWorkflowRequest(UUID workflowId, String data) {
     this.workflowId = workflowId;
     this.data = data;
+  }
+
+  /**
+   * Constructs a new {@code UpdateWorkflowRequest}.
+   *
+   * @param workflowId the ID for the workflow
+   * @param attributes the attributes for the workflow
+   * @param variables the variables for the workflow
+   */
+  public UpdateWorkflowRequest(
+      UUID workflowId, List<WorkflowAttribute> attributes, List<WorkflowVariable> variables) {
+    this.workflowId = workflowId;
+    this.attributes = attributes;
+    this.variables = variables;
   }
 
   /**
@@ -162,6 +184,15 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
+   * Returns the variables for the workflow.
+   *
+   * @return the variables for the workflow
+   */
+  public List<WorkflowVariable> getVariables() {
+    return variables;
+  }
+
+  /**
    * Returns the ID for the workflow.
    *
    * @return the ID for the workflow
@@ -195,6 +226,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public void setStatus(WorkflowStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Set the variables for the workflow.
+   *
+   * @param variables the variables for the workflow
+   */
+  public void setVariables(List<WorkflowVariable> variables) {
+    this.variables = variables;
   }
 
   /**
