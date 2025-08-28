@@ -25,7 +25,6 @@ import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
 /**
  * The {@code ValidDocumentValidator} class implements the custom constraint validator for
@@ -97,18 +96,7 @@ public class ValidDocumentValidator implements ConstraintValidator<ValidDocument
                   isValid = false;
                 }
               }
-              case EXTERNAL_REFERENCE -> {
-                if (!StringUtils.hasText(document.getExternalReference())) {
-                  hibernateConstraintValidatorContext
-                      .addMessageParameter("documentDefinitionId", document.getDefinitionId())
-                      .buildConstraintViolationWithTemplate(
-                          "{digital.inception.operations.constraint.ValidDocument.externalReferenceRequired.message}")
-                      .addPropertyNode("externalReference")
-                      .addConstraintViolation();
 
-                  isValid = false;
-                }
-              }
               case ISSUE_DATE -> {
                 if (document.getIssueDate() == null) {
                   hibernateConstraintValidatorContext

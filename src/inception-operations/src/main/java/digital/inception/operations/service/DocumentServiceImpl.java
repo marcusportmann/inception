@@ -178,7 +178,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setCreatedBy(createdBy);
       document.setData(createDocumentRequest.getData());
       document.setExpiryDate(createDocumentRequest.getExpiryDate());
-      document.setExternalReference(createDocumentRequest.getExternalReference());
       document.setFileType(createDocumentRequest.getFileType());
       document.setHash(calculateDocumentDataHash(createDocumentRequest.getData()));
       document.setIssueDate(createDocumentRequest.getIssueDate());
@@ -906,7 +905,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
       document.setData(updateDocumentRequest.getData());
       document.setExpiryDate(updateDocumentRequest.getExpiryDate());
-      document.setExternalReference(updateDocumentRequest.getExternalReference());
       document.setFileType(updateDocumentRequest.getFileType());
       document.setIssueDate(updateDocumentRequest.getIssueDate());
       document.setName(updateDocumentRequest.getName());

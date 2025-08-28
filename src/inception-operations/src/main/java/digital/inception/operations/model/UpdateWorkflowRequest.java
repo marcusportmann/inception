@@ -31,7 +31,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,12 +41,19 @@ import java.util.UUID;
  */
 @Schema(description = "A request to update a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "status", "attributes", "variables", "data"})
+@JsonPropertyOrder({
+  "workflowId",
+  "status",
+  "externalReferences",
+  "attributes",
+  "variables",
+  "data"
+})
 @XmlRootElement(name = "UpdateWorkflowRequest", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "UpdateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "status", "attributes", "variables", "data"})
+    propOrder = {"workflowId", "status", "externalReferences", "attributes", "variables", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UpdateWorkflowRequest implements Serializable {
@@ -68,6 +74,14 @@ public class UpdateWorkflowRequest implements Serializable {
   @XmlElement(name = "Data")
   @Size(min = 1, max = 10485760)
   private String data;
+
+  /** The external references for the workflow. */
+  @Schema(description = "The external reference for the workflow")
+  @JsonProperty
+  @XmlElementWrapper(name = "ExternalReferences")
+  @XmlElement(name = "ExternalReference")
+  @Valid
+  private List<WorkflowExternalReference> externalReferences;
 
   /** The updated status of the workflow. */
   @Schema(description = "The updated status of the workflow")
@@ -97,62 +111,24 @@ public class UpdateWorkflowRequest implements Serializable {
    * Constructs a new {@code UpdateWorkflowRequest}.
    *
    * @param workflowId the ID for the workflow
-   * @param data the updated XML or JSON data for the workflow
-   */
-  public UpdateWorkflowRequest(UUID workflowId, String data) {
-    this.workflowId = workflowId;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code UpdateWorkflowRequest}.
-   *
-   * @param workflowId the ID for the workflow
+   * @param status the updated status of the workflow
+   * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
    * @param variables the variables for the workflow
-   */
-  public UpdateWorkflowRequest(
-      UUID workflowId, List<WorkflowAttribute> attributes, List<WorkflowVariable> variables) {
-    this.workflowId = workflowId;
-    this.attributes = attributes;
-    this.variables = variables;
-  }
-
-  /**
-   * Constructs a new {@code UpdateWorkflowRequest}.
-   *
-   * @param workflowId the ID for the workflow
-   * @param status the updated status of the workflow
-   */
-  public UpdateWorkflowRequest(UUID workflowId, WorkflowStatus status) {
-    this.workflowId = workflowId;
-    this.status = status;
-  }
-
-  /**
-   * Constructs a new {@code UpdateWorkflowRequest}.
-   *
-   * @param workflowId the ID for the workflow
-   * @param attributes the attributes for the workflow
-   */
-  public UpdateWorkflowRequest(UUID workflowId, List<WorkflowAttribute> attributes) {
-    this.workflowId = workflowId;
-    this.attributes = attributes;
-  }
-
-  /**
-   * Constructs a new {@code UpdateWorkflowRequest}.
-   *
-   * @param workflowId the ID for the workflow
-   * @param status the updated status of the workflow
-   * @param attributes the attributes for the workflow
    * @param data the updated XML or JSON data for the workflow
    */
   public UpdateWorkflowRequest(
-      UUID workflowId, WorkflowStatus status, List<WorkflowAttribute> attributes, String data) {
+      UUID workflowId,
+      WorkflowStatus status,
+      List<WorkflowExternalReference> externalReferences,
+      List<WorkflowAttribute> attributes,
+      List<WorkflowVariable> variables,
+      String data) {
     this.workflowId = workflowId;
     this.status = status;
+    this.externalReferences = externalReferences;
     this.attributes = attributes;
+    this.variables = variables;
     this.data = data;
   }
 
@@ -172,6 +148,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public String getData() {
     return data;
+  }
+
+  /**
+   * Returns the external references for the workflow.
+   *
+   * @return the external references for the workflow
+   */
+  public List<WorkflowExternalReference> getExternalReferences() {
+    return externalReferences;
   }
 
   /**
@@ -217,6 +202,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public void setData(String data) {
     this.data = data;
+  }
+
+  /**
+   * Set the external references for the workflow.
+   *
+   * @param externalReferences the external references for the workflow
+   */
+  public void setExternalReferences(List<WorkflowExternalReference> externalReferences) {
+    this.externalReferences = externalReferences;
   }
 
   /**

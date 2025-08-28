@@ -71,6 +71,7 @@ import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowExternalReference;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowStepStatus;
@@ -433,11 +434,18 @@ public class EndToEndTests {
     InitiateWorkflowRequest initiateWorkflowRequest =
         new InitiateWorkflowRequest(
             workflowDefinition.getId(),
-            UUID.randomUUID().toString(),
+            null,
+            UUID.randomUUID(),
+            false,
+            List.of(
+                new WorkflowExternalReference(
+                    "test_workflow_external_reference_code",
+                    "test_workflow_external_reference_value")),
             List.of(
                 new WorkflowAttribute(
                     "test_workflow_attribute_code", "test_workflow_attribute_value")),
             List.of(new InitiateWorkflowInteractionLink(firstInteractionId)),
+            null,
             workflowDataJson);
 
     Workflow workflow =

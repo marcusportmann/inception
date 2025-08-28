@@ -1172,7 +1172,6 @@ public class InternalWorkflowStore implements WorkflowStore {
       document.setCreatedBy(providedBy);
       document.setData(provideWorkflowDocumentRequest.getData());
       document.setExpiryDate(provideWorkflowDocumentRequest.getExpiryDate());
-      document.setExternalReference(provideWorkflowDocumentRequest.getExternalReference());
       document.setFileType(provideWorkflowDocumentRequest.getFileType());
       document.setHash(
           documentStore.calculateDocumentDataHash(provideWorkflowDocumentRequest.getData()));

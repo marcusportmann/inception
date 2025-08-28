@@ -1577,6 +1577,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               initiateWorkflowRequest.getPendWorkflow()
                   ? WorkflowStatus.PENDING
                   : WorkflowStatus.ACTIVE,
+              initiateWorkflowRequest.getExternalReferences(),
               initiateWorkflowRequest.getAttributes(),
               initiateWorkflowRequest.getVariables(),
               initiateWorkflowRequest.getData(),
@@ -1590,7 +1591,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                 initiateWorkflowInteractionLink.getInteractionId(), now, initiatedBy));
       }
 
-      workflow.setExternalReference(initiateWorkflowRequest.getExternalReference());
       workflow.setPartyId(initiateWorkflowRequest.getPartyId());
 
       if (!initiateWorkflowRequest.getPendWorkflow()) {
@@ -1832,12 +1832,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             case EXPIRY_DATE -> {
               if (provideWorkflowDocumentRequest.getExpiryDate() == null) {
                 throw new InvalidArgumentException("provideWorkflowDocumentRequest.expiryDate");
-              }
-            }
-            case EXTERNAL_REFERENCE -> {
-              if (provideWorkflowDocumentRequest.getExternalReference() == null) {
-                throw new InvalidArgumentException(
-                    "provideWorkflowDocumentRequest.externalReference");
               }
             }
             case ISSUE_DATE -> {
@@ -2180,18 +2174,25 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
+      if (updateWorkflowRequest.getExternalReferences() != null) {
+        workflow.setExternalReferences(updateWorkflowRequest.getExternalReferences());
+      }
+
       if (updateWorkflowRequest.getAttributes() != null) {
         // Validate the workflow attributes
         for (WorkflowAttribute workflowAttribute : updateWorkflowRequest.getAttributes()) {
-          if (!isValidWorkflowAttribute(tenantId, workflowDefinition.getId(), workflowAttribute.getCode())) {
+          if (!isValidWorkflowAttribute(
+              tenantId, workflowDefinition.getId(), workflowAttribute.getCode())) {
             log.warn(
                 "Invalid workflow attribute ("
-                + workflowAttribute.getCode()
-                + ") provided when updating a workflow with the workflow definition ("
-                + workflowDefinition.getId()
-                + ") version ("
-                + workflowDefinition.getVersion()
-                + ") for the tenant (" + tenantId + ")");
+                    + workflowAttribute.getCode()
+                    + ") provided when updating a workflow with the workflow definition ("
+                    + workflowDefinition.getId()
+                    + ") version ("
+                    + workflowDefinition.getVersion()
+                    + ") for the tenant ("
+                    + tenantId
+                    + ")");
 
             throw new InvalidArgumentException(
                 "updateWorkflowRequest.attributes.code",

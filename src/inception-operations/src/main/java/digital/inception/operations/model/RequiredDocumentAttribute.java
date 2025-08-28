@@ -37,10 +37,6 @@ public enum RequiredDocumentAttribute implements CodeEnum {
   @XmlEnumValue("ExpiryDate")
   EXPIRY_DATE("expiry_date", "Expiry Date"),
 
-  /** External Reference. */
-  @XmlEnumValue("ExternalReference")
-  EXTERNAL_REFERENCE("external_reference", "External Reference"),
-
   /** Issue Date. */
   @XmlEnumValue("IssueDate")
   ISSUE_DATE("issue_date", "Issue Date");

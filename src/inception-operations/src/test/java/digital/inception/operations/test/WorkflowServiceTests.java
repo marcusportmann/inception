@@ -78,6 +78,7 @@ import digital.inception.operations.model.WorkflowDocumentStatus;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
+import digital.inception.operations.model.WorkflowExternalReference;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
@@ -196,7 +197,12 @@ public class WorkflowServiceTests {
     InitiateWorkflowRequest initiateWorkflowRequest =
         new InitiateWorkflowRequest(
             workflowDefinition.getId(),
-            UUID.randomUUID().toString(),
+            null,
+            UUID.randomUUID(),
+            false,
+            List.of(),
+            List.of(),
+            List.of(),
             List.of(),
             testWorkflowDataJson);
 
@@ -265,7 +271,6 @@ public class WorkflowServiceTests {
             "Test Document Definition",
             List.of(
                 RequiredDocumentAttribute.EXPIRY_DATE,
-                RequiredDocumentAttribute.EXTERNAL_REFERENCE,
                 RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(documentDefinition);
@@ -360,14 +365,19 @@ public class WorkflowServiceTests {
     InitiateWorkflowRequest initiateWorkflowRequest =
         new InitiateWorkflowRequest(
             workflowDefinition.getId(),
-            UUID.randomUUID().toString(),
+            null,
+            UUID.randomUUID(),
+            false,
+            List.of(
+                new WorkflowExternalReference(
+                    "test_workflow_external_reference_code",
+                    "test_workflow_external_reference_value")),
             List.of(
                 new WorkflowAttribute(
                     "test_workflow_attribute_code", "test_workflow_attribute_value")),
-            testWorkflowDataJson);
-
-    initiateWorkflowRequest.setVariables(
-        List.of(new WorkflowVariable("testVariableName", "testVariableValue")));
+            List.of(),
+            List.of(new WorkflowVariable("testVariableName", "testVariableValue")),
+            null);
 
     Workflow workflow =
         workflowService.initiateWorkflow(
@@ -407,10 +417,6 @@ public class WorkflowServiceTests {
         retrievedWorkflow.getDefinitionVersion(),
         workflowSummary.getDefinitionVersion(),
         "Invalid value for the \"workflowDefinitionVersion\" workflow summary property");
-    assertEquals(
-        retrievedWorkflow.getExternalReference(),
-        workflowSummary.getExternalReference(),
-        "Invalid value for the \"externalReference\" workflow summary property");
     assertEquals(
         retrievedWorkflow.getId(),
         workflowSummary.getId(),
@@ -465,9 +471,11 @@ public class WorkflowServiceTests {
         new UpdateWorkflowRequest(
             workflow.getId(),
             WorkflowStatus.COMPLETED,
+            null,
             List.of(
                 new WorkflowAttribute(
                     "test_workflow_attribute_code", "test_workflow_attribute_value_updated")),
+            null,
             testWorkflowDataJson);
 
     Workflow updatedWorkflow =
@@ -495,7 +503,6 @@ public class WorkflowServiceTests {
                     "test_document_attribute_code", "test_document_attribute_value")),
             multiPagePdfData);
 
-    provideWorkflowDocumentRequest.setExternalReference(UUID.randomUUID().toString());
     provideWorkflowDocumentRequest.setIssueDate(LocalDate.of(2015, 10, 10));
     provideWorkflowDocumentRequest.setExpiryDate(LocalDate.of(2050, 11, 11));
     provideWorkflowDocumentRequest.setDescription("The provide workflow document description.");
@@ -920,7 +927,6 @@ public class WorkflowServiceTests {
             "Test Shared Document Definition",
             List.of(
                 RequiredDocumentAttribute.EXPIRY_DATE,
-                RequiredDocumentAttribute.EXTERNAL_REFERENCE,
                 RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
@@ -1628,10 +1634,6 @@ public class WorkflowServiceTests {
         workflow1.getEngineInstanceId(),
         workflow2.getEngineInstanceId(),
         "The engine instance ID values for the workflows do not match");
-    assertEquals(
-        workflow1.getExternalReference(),
-        workflow2.getExternalReference(),
-        "The external reference values for the workflows do not match");
     assertEquals(
         workflow1.getFinalized(),
         workflow2.getFinalized(),

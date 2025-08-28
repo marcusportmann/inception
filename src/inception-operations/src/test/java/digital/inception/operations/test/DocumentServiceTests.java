@@ -193,7 +193,6 @@ public class DocumentServiceTests {
             "Test Shared Document Definition",
             List.of(
                 RequiredDocumentAttribute.EXPIRY_DATE,
-                RequiredDocumentAttribute.EXTERNAL_REFERENCE,
                 RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
@@ -212,7 +211,7 @@ public class DocumentServiceTests {
     assertTrue(
         retrievedDocumentDefinition
             .getRequiredDocumentAttributes()
-            .contains(RequiredDocumentAttribute.EXTERNAL_REFERENCE));
+            .contains(RequiredDocumentAttribute.EXPIRY_DATE));
 
     compareDocumentDefinitions(sharedDocumentDefinition, retrievedDocumentDefinition);
 
@@ -305,10 +304,6 @@ public class DocumentServiceTests {
         retrievedDocument.getExpiryDate(),
         "Invalid value for the \"expiryDate\" document property");
     assertEquals(
-        updateDocumentRequest.getExternalReference(),
-        retrievedDocument.getExternalReference(),
-        "Invalid value for the \"externalReference\" document property");
-    assertEquals(
         updateDocumentRequest.getFileType(),
         retrievedDocument.getFileType(),
         "Invalid value for the \"fileType\" document property");
@@ -347,10 +342,6 @@ public class DocumentServiceTests {
         retrievedDocument.getExpiryDate(),
         documentSummary.getExpiryDate(),
         "Invalid value for the \"expiryDate\" document summary property");
-    assertEquals(
-        retrievedDocument.getExternalReference(),
-        documentSummary.getExternalReference(),
-        "Invalid value for the \"externalReference\" document summary property");
     assertEquals(
         retrievedDocument.getFileType(),
         documentSummary.getFileType(),
@@ -589,10 +580,6 @@ public class DocumentServiceTests {
         document2.getExpiryDate(),
         "The expiry date values for the documents do not match");
     assertEquals(
-        document1.getExternalReference(),
-        document2.getExternalReference(),
-        "The external reference values for the documents do not match");
-    assertEquals(
         document1.getFileType(),
         document2.getFileType(),
         "The file type values for the documents do not match");
@@ -681,7 +668,6 @@ public class DocumentServiceTests {
                 "test_document_attribute_code", "test_document_attribute_value")));
     updateDocumentRequest.setData(data);
     updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
-    updateDocumentRequest.setExternalReference(UUID.randomUUID().toString());
     updateDocumentRequest.setFileType(FileType.HTML);
     updateDocumentRequest.setDocumentId(document.getId());
     updateDocumentRequest.setIssueDate(LocalDate.of(2017, 8, 17));

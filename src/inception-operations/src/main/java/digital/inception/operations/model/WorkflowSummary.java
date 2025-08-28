@@ -61,7 +61,6 @@ import java.util.UUID;
   "definitionId",
   "definitionVersion",
   "status",
-  "externalReference",
   "initiated",
   "initiatedBy",
   "updated",
@@ -80,7 +79,6 @@ import java.util.UUID;
       "definitionId",
       "definitionVersion",
       "status",
-      "externalReference",
       "initiated",
       "initiatedBy",
       "updated",
@@ -134,14 +132,6 @@ public class WorkflowSummary implements Serializable {
   @NotNull
   @Column(name = "definition_version", nullable = false)
   private int definitionVersion;
-
-  /** The external reference used to link this workflow to an external system. */
-  @Schema(description = "The external reference used to link this workflow to an external system")
-  @JsonProperty
-  @XmlElement(name = "ExternalReference")
-  @Size(max = 100)
-  @Column(name = "external_reference", length = 100)
-  private String externalReference;
 
   /** The date and time the workflow was finalized. */
   @Schema(description = "The date and time the workflow was finalized")
@@ -278,15 +268,6 @@ public class WorkflowSummary implements Serializable {
    */
   public int getDefinitionVersion() {
     return definitionVersion;
-  }
-
-  /**
-   * Returns the external reference for the workflow.
-   *
-   * @return the external reference for the workflow
-   */
-  public String getExternalReference() {
-    return externalReference;
   }
 
   /**

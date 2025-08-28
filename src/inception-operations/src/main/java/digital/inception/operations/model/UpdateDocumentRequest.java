@@ -39,7 +39,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +53,6 @@ import java.util.UUID;
   "documentId",
   "fileType",
   "name",
-  "externalReference",
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
@@ -69,7 +67,6 @@ import java.util.UUID;
       "documentId",
       "fileType",
       "name",
-      "externalReference",
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
@@ -114,13 +111,6 @@ public class UpdateDocumentRequest implements Serializable {
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
   private LocalDate expiryDate;
-
-  /** The external reference used to link this document to an external system. */
-  @Schema(description = "The external reference used to link this document to an external system")
-  @JsonProperty
-  @XmlElement(name = "ExternalReference")
-  @Size(max = 100)
-  private String externalReference;
 
   /** The file type for the document. */
   @Schema(
@@ -197,15 +187,6 @@ public class UpdateDocumentRequest implements Serializable {
   }
 
   /**
-   * Returns the external reference used to link this document to an external system.
-   *
-   * @return the external reference used to link this document to an external system
-   */
-  public String getExternalReference() {
-    return externalReference;
-  }
-
-  /**
    * Returns the file type for the document.
    *
    * @return the file type for the document
@@ -275,16 +256,6 @@ public class UpdateDocumentRequest implements Serializable {
    */
   public void setExpiryDate(LocalDate expiryDate) {
     this.expiryDate = expiryDate;
-  }
-
-  /**
-   * Set the external reference used to link this document to an external system.
-   *
-   * @param externalReference the external reference used to link this document to an external
-   *     system
-   */
-  public void setExternalReference(String externalReference) {
-    this.externalReference = externalReference;
   }
 
   /**

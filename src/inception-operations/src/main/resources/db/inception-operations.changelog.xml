@@ -18,6 +18,34 @@
   <changeSet id="inception-operations-1.0.0" author="Marcus Portmann">
     <comment>inception-operations-1.0.0</comment>
 
+    <createTable tableName="operations_external_references" remarks="External References">
+      <column name="object_id" type="uuid" remarks="The ID for the object the external reference is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="object_type" type="nvarchar(50)" remarks="The type of object the external reference is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)" remarks="The code for the external reference type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="value" type="nvarchar(200)" remarks="The value for the external reference">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="operations_external_references_object_ix"
+      tableName="operations_external_references">
+      <column name="object_id"/>
+      <column name="object_type"/>
+    </createIndex>
+    <createIndex indexName="operations_external_references_object_id_ix"
+      tableName="operations_external_references">
+      <column name="object_id"/>
+    </createIndex>
+    <createIndex indexName="operations_external_references_value_ix"
+      tableName="operations_external_references">
+      <column name="value"/>
+    </createIndex>
+
     <createTable tableName="operations_workflow_engines" remarks="Workflow Engines">
       <column name="id" type="nvarchar(50)" remarks="The ID for the workflow engine">
         <constraints primaryKey="true" nullable="false"/>
@@ -432,8 +460,6 @@
       </column>
       <column name="party_id" type="uuid"
         remarks="The ID for the party the workflow is associated with"/>
-      <column name="external_reference" type="nvarchar(100)"
-        remarks="The external reference for the workflow"/>
       <column name="engine_instance_id" type="nvarchar(100)"
         remarks="The ID of the corresponding process or case instance in the workflow engine"/>
       <column name="data" type="clob"
@@ -481,10 +507,6 @@
     <createIndex indexName="operations_workflows_engine_instance_id_ix"
       tableName="operations_workflows">
       <column name="engine_instance_id"/>
-    </createIndex>
-    <createIndex indexName="operations_workflows_external_reference_ix"
-      tableName="operations_workflows">
-      <column name="external_reference"/>
     </createIndex>
     <createIndex indexName="operations_workflows_parent_id_ix"
       tableName="operations_workflows">
@@ -646,8 +668,6 @@
       </column>
       <column name="issue_date" type="date" remarks="The issue date for the document"/>
       <column name="expiry_date" type="date" remarks="The expiry date for the document"/>
-      <column name="external_reference" type="nvarchar(100)"
-        remarks="The external reference for the document"/>
       <column name="source_document_id" type="uuid"
         remarks="The ID for the source document that was split to create this document"/>
       <column name="data" type="${blob_type}"
@@ -672,10 +692,6 @@
     <createIndex indexName="operations_documents_definition_id_ix"
       tableName="operations_documents">
       <column name="definition_id"/>
-    </createIndex>
-    <createIndex indexName="operations_documents_external_reference_ix"
-      tableName="operations_documents">
-      <column name="external_reference"/>
     </createIndex>
     <createIndex indexName="operations_documents_tenant_id_ix"
       tableName="operations_documents">
@@ -1266,8 +1282,6 @@
       <dropIndex tableName="operations_documents"
         indexName="operations_documents_tenant_id_ix"/>
       <dropIndex tableName="operations_documents"
-        indexName="operations_documents_external_reference_ix"/>
-      <dropIndex tableName="operations_documents"
         indexName="operations_documents_definition_id_ix"/>
       <dropTable tableName="operations_documents"/>
 
@@ -1304,8 +1318,6 @@
         indexName="operations_workflows_party_id_ix"/>
       <dropIndex tableName="operations_workflows"
         indexName="operations_workflows_parent_id_ix"/>
-      <dropIndex tableName="operations_workflows"
-        indexName="operations_workflows_external_reference_ix"/>
       <dropIndex tableName="operations_workflows"
         indexName="operations_workflows_engine_instance_id_ix"/>
       <dropIndex tableName="operations_workflows"
@@ -1387,6 +1399,15 @@
 
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_engines"/>
       <dropTable tableName="operations_workflow_engines"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_external_references"/>
+      <dropIndex tableName="operations_external_references"
+        indexName="operations_external_references_value_ix"/>
+      <dropIndex tableName="operations_external_references"
+        indexName="operations_external_references_object_id_ix"/>
+      <dropIndex tableName="operations_external_references"
+        indexName="operations_external_references_object_ix"/>
+      <dropTable tableName="operations_external_references"/>
     </rollback>
   </changeSet>
 

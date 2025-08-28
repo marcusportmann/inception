@@ -69,10 +69,10 @@ import java.util.UUID;
   "definitionVersion",
   "status",
   "partyId",
-  "externalReference",
   "engineInstanceId",
   "attributes",
   "steps",
+  "interactionLinks",
   "variables",
   "data",
   "initiated",
@@ -99,10 +99,10 @@ import java.util.UUID;
       "definitionVersion",
       "status",
       "partyId",
-      "externalReference",
       "engineInstanceId",
       "attributes",
       "steps",
+      "interactionLinks",
       "variables",
       "data",
       "initiated",
@@ -141,6 +141,22 @@ public class Workflow implements Serializable {
       insertable = false,
       updatable = false)
   private final List<WorkflowAttribute> attributes = new ArrayList<>();
+
+  /** The external references for the workflow. */
+  @Schema(description = "The external references for the workflow")
+  @JsonProperty
+  @JsonManagedReference("workflowExternalReferenceReference")
+  @XmlElementWrapper(name = "ExternalReferences")
+  @XmlElement(name = "ExternalReference")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("type")
+  @JoinColumn(
+      name = "object_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private final List<WorkflowExternalReference> externalReferences = new ArrayList<>();
 
   /** The interaction links for the workflow. */
   @Schema(description = "The interaction links for the workflow")
@@ -248,14 +264,6 @@ public class Workflow implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "engine_instance_id", length = 100)
   private String engineInstanceId;
-
-  /** The external reference used to link this workflow to an external system. */
-  @Schema(description = "The external reference used to link this workflow to an external system")
-  @JsonProperty
-  @XmlElement(name = "ExternalReference")
-  @Size(max = 100)
-  @Column(name = "external_reference", length = 100)
-  private String externalReference;
 
   /** The date and time the workflow was finalized. */
   @Schema(description = "The date and time the workflow was finalized")
@@ -379,83 +387,11 @@ public class Workflow implements Serializable {
    * Constructs a new {@code Workflow}.
    *
    * @param tenantId the ID for the tenant the workflow is associated with
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param definitionVersion the version of the workflow definition the workflow is associated with
-   * @param status the status of the workflow
-   * @param attributes the attributes for the workflow
-   * @param data the XML or JSON data for the workflow
-   * @param initiated the date and time the workflow was initiated
-   * @param initiatedBy the person or system that initiated the workflow
-   */
-  public Workflow(
-      UUID tenantId,
-      String definitionId,
-      int definitionVersion,
-      WorkflowStatus status,
-      List<WorkflowAttribute> attributes,
-      String data,
-      OffsetDateTime initiated,
-      String initiatedBy) {
-    this.id = UuidCreator.getTimeOrderedEpoch();
-    this.tenantId = tenantId;
-    this.definitionId = definitionId;
-    this.definitionVersion = definitionVersion;
-    this.status = status;
-    this.data = data;
-    this.initiated = initiated;
-    this.initiatedBy = initiatedBy;
-
-    for (WorkflowAttribute attribute : attributes) {
-      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
-    }
-  }
-
-  /**
-   * Constructs a new {@code Workflow}.
-   *
-   * @param tenantId the ID for the tenant the workflow is associated with
    * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
-   * @param attributes the attributes for the workflow
-   * @param data the XML or JSON data for the workflow
-   * @param initiated the date and time the workflow was initiated
-   * @param initiatedBy the person or system that initiated the workflow
-   */
-  public Workflow(
-      UUID tenantId,
-      UUID parentId,
-      String definitionId,
-      int definitionVersion,
-      WorkflowStatus status,
-      List<WorkflowAttribute> attributes,
-      String data,
-      OffsetDateTime initiated,
-      String initiatedBy) {
-    this.id = UuidCreator.getTimeOrderedEpoch();
-    this.tenantId = tenantId;
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.definitionVersion = definitionVersion;
-    this.status = status;
-    this.data = data;
-    this.initiated = initiated;
-    this.initiatedBy = initiatedBy;
-
-    for (WorkflowAttribute attribute : attributes) {
-      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
-    }
-  }
-
-  /**
-   * Constructs a new {@code Workflow}.
-   *
-   * @param tenantId the ID for the tenant the workflow is associated with
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param definitionVersion the version of the workflow definition the workflow is associated with
-   * @param status the status of the workflow
+   * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
    * @param variables the variables for the workflow
    * @param data the XML or JSON data for the workflow
@@ -468,6 +404,7 @@ public class Workflow implements Serializable {
       String definitionId,
       int definitionVersion,
       WorkflowStatus status,
+      List<WorkflowExternalReference> externalReferences,
       List<WorkflowAttribute> attributes,
       List<WorkflowVariable> variables,
       String data,
@@ -483,12 +420,24 @@ public class Workflow implements Serializable {
     this.initiated = initiated;
     this.initiatedBy = initiatedBy;
 
-    for (WorkflowAttribute attribute : attributes) {
-      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+    if ((externalReferences != null) && (!externalReferences.isEmpty())) {
+      for (WorkflowExternalReference externalReference : externalReferences) {
+        addExternalReference(
+            new WorkflowExternalReference(
+                externalReference.getType(), externalReference.getValue()));
+      }
     }
 
-    for (WorkflowVariable variable : variables) {
-      addVariable(variable.cloneWorkflowVariable());
+    if ((attributes != null) && (!attributes.isEmpty())) {
+      for (WorkflowAttribute attribute : attributes) {
+        addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+      }
+    }
+
+    if ((variables != null) && (!variables.isEmpty())) {
+      for (WorkflowVariable variable : variables) {
+        addVariable(variable.cloneWorkflowVariable());
+      }
     }
   }
 
@@ -584,6 +533,22 @@ public class Workflow implements Serializable {
     attribute.setWorkflow(this);
 
     attributes.add(attribute);
+  }
+
+  /**
+   * Add the external reference for the workflow.
+   *
+   * @param externalReference the external reference
+   */
+  public void addExternalReference(WorkflowExternalReference externalReference) {
+    externalReferences.removeIf(
+        existingExternalReference ->
+            StringUtil.equalsIgnoreCase(
+                existingExternalReference.getType(), externalReference.getType()));
+
+    externalReference.setWorkflow(this);
+
+    externalReferences.add(externalReference);
   }
 
   /**
@@ -742,12 +707,25 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the external reference used to link this workflow to an external system.
+   * Retrieve the external reference with the specified type for the workflow.
    *
-   * @return the external reference used to link this workflow to an external system
+   * @param type the code for the external reference type
+   * @return an Optional containing the external reference with the specified type for the workflow
+   *     or an empty Optional if the external reference could not be found
    */
-  public String getExternalReference() {
-    return externalReference;
+  public Optional<WorkflowExternalReference> getExternalReference(String type) {
+    return externalReferences.stream()
+        .filter(externalReference -> StringUtil.equalsIgnoreCase(externalReference.getType(), type))
+        .findFirst();
+  }
+
+  /**
+   * Returns the external references for the workflow.
+   *
+   * @return the external references for the workflow
+   */
+  public List<WorkflowExternalReference> getExternalReferences() {
+    return externalReferences;
   }
 
   /**
@@ -928,6 +906,16 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Remove the external reference with the specified type for the workflow.
+   *
+   * @param type the code for the external reference type
+   */
+  public void removeExternalReference(String type) {
+    externalReferences.removeIf(
+        externalReference -> Objects.equals(externalReference.getType(), type));
+  }
+
+  /**
    * Remove the interaction link with the specified ID for the workflow.
    *
    * @param interactionId the ID for the interaction
@@ -1024,13 +1012,14 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the external reference used to link this workflow to an external system.
+   * Set the external references for the workflow.
    *
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
+   * @param externalReferences the external references for the workflow
    */
-  public void setExternalReference(String externalReference) {
-    this.externalReference = externalReference;
+  public void setExternalReferences(List<WorkflowExternalReference> externalReferences) {
+    externalReferences.forEach(externalReference -> externalReference.setWorkflow(this));
+    this.externalReferences.clear();
+    this.externalReferences.addAll(externalReferences);
   }
 
   /**

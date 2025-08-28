@@ -56,7 +56,6 @@ import java.util.UUID;
   "fileType",
   "name",
   "hash",
-  "externalReference",
   "sourceDocumentId",
   "issueDate",
   "expiryDate"
@@ -72,7 +71,6 @@ import java.util.UUID;
       "fileType",
       "name",
       "hash",
-      "externalReference",
       "sourceDocumentId",
       "issueDate",
       "expiryDate"
@@ -105,14 +103,6 @@ public class DocumentSummary implements Serializable {
   @XmlSchemaType(name = "date")
   @Column(name = "expiry_date")
   private LocalDate expiryDate;
-
-  /** The external reference used to link this document to an external system. */
-  @Schema(description = "The external reference used to link this document to an external system")
-  @JsonProperty
-  @XmlElement(name = "ExternalReference")
-  @Size(max = 100)
-  @Column(name = "external_reference", length = 100)
-  private String externalReference;
 
   /** The file type for the document. */
   @Schema(
@@ -213,15 +203,6 @@ public class DocumentSummary implements Serializable {
    */
   public LocalDate getExpiryDate() {
     return expiryDate;
-  }
-
-  /**
-   * Returns the external reference used to link this document to an external system.
-   *
-   * @return the external reference used to link this document to an external system
-   */
-  public String getExternalReference() {
-    return externalReference;
   }
 
   /**

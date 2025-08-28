@@ -46,9 +46,10 @@ import java.util.UUID;
   "definitionId",
   "parentId",
   "partyId",
-  "externalReference",
   "pendWorkflow",
+  "externalReferences",
   "attributes",
+  "interactionLinks",
   "variables",
   "data"
 })
@@ -62,9 +63,10 @@ import java.util.UUID;
       "definitionId",
       "parentId",
       "partyId",
-      "externalReference",
       "pendWorkflow",
+      "externalReferences",
       "attributes",
+      "interactionLinks",
       "variables",
       "data"
     })
@@ -99,12 +101,13 @@ public class InitiateWorkflowRequest implements Serializable {
   @Size(min = 1, max = 50)
   private String definitionId;
 
-  /** The external reference used to link this workflow to an external system. */
-  @Schema(description = "The external reference used to link this workflow to an external system")
+  /** The external references for the workflow. */
+  @Schema(description = "The external reference for the workflow")
   @JsonProperty
+  @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Size(max = 100)
-  private String externalReference;
+  @Valid
+  private List<WorkflowExternalReference> externalReferences = new ArrayList<>();
 
   /** The interaction links for the workflow. */
   @Schema(description = "The interaction links for the workflow")
@@ -147,199 +150,33 @@ public class InitiateWorkflowRequest implements Serializable {
   /**
    * Constructs a new {@code InitiateWorkflowRequest}.
    *
-   * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
+   * @param parentId the ID for the parent workflow
+   * @param partyId the ID for the party the workflow is associated with
+   * @param pendWorkflow pend the workflow
+   * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
+   * @param interactionLinks the interaction links for the workflow
    * @param variables the variables for the workflow
+   * @param data the XML or JSON data for the workflow
    */
   public InitiateWorkflowRequest(
-      UUID parentId,
       String definitionId,
+      UUID parentId,
+      UUID partyId,
+      boolean pendWorkflow,
+      List<WorkflowExternalReference> externalReferences,
       List<WorkflowAttribute> attributes,
-      List<WorkflowVariable> variables) {
-    this.parentId = parentId;
+      List<InitiateWorkflowInteractionLink> interactionLinks,
+      List<WorkflowVariable> variables,
+      String data) {
     this.definitionId = definitionId;
+    this.parentId = parentId;
+    this.partyId = partyId;
+    this.pendWorkflow = pendWorkflow;
     this.attributes = attributes;
+    this.interactionLinks = interactionLinks;
     this.variables = variables;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param attributes the attributes for the workflow
-   * @param variables the variables for the workflow
-   */
-  public InitiateWorkflowRequest(
-      String definitionId, List<WorkflowAttribute> attributes, List<WorkflowVariable> variables) {
-    this.definitionId = definitionId;
-    this.attributes = attributes;
-    this.variables = variables;
-  }
-
-  /** Constructs a new {@code InitiateWorkflowRequest}. */
-  public InitiateWorkflowRequest() {}
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param attributes the attributes for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      String definitionId, List<WorkflowAttribute> attributes, String data) {
-    this.definitionId = definitionId;
-    this.attributes = attributes;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
-   * @param attributes the attributes for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      String definitionId,
-      String externalReference,
-      List<WorkflowAttribute> attributes,
-      String data) {
-    this.definitionId = definitionId;
-    this.externalReference = externalReference;
-    this.attributes = attributes;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param attributes the attributes for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      UUID parentId, String definitionId, List<WorkflowAttribute> attributes, String data) {
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.attributes = attributes;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
-   * @param attributes the attributes for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      UUID parentId,
-      String definitionId,
-      String externalReference,
-      List<WorkflowAttribute> attributes,
-      String data) {
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.externalReference = externalReference;
-    this.attributes = attributes;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param attributes the attributes for the workflow
-   * @param interactionLinks the interaction links for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      String definitionId,
-      List<WorkflowAttribute> attributes,
-      List<InitiateWorkflowInteractionLink> interactionLinks,
-      String data) {
-    this.definitionId = definitionId;
-    this.attributes = attributes;
-    this.interactionLinks = interactionLinks;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
-   * @param attributes the attributes for the workflow
-   * @param interactionLinks the interaction links for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      String definitionId,
-      String externalReference,
-      List<WorkflowAttribute> attributes,
-      List<InitiateWorkflowInteractionLink> interactionLinks,
-      String data) {
-    this.definitionId = definitionId;
-    this.externalReference = externalReference;
-    this.attributes = attributes;
-    this.interactionLinks = interactionLinks;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param attributes the attributes for the workflow
-   * @param interactionLinks the interaction links for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      UUID parentId,
-      String definitionId,
-      List<WorkflowAttribute> attributes,
-      List<InitiateWorkflowInteractionLink> interactionLinks,
-      String data) {
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.attributes = attributes;
-    this.interactionLinks = interactionLinks;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code InitiateWorkflowRequest}.
-   *
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
-   * @param attributes the attributes for the workflow
-   * @param interactionLinks the interaction links for the workflow
-   * @param data the XML or JSON data for the workflow
-   */
-  public InitiateWorkflowRequest(
-      UUID parentId,
-      String definitionId,
-      String externalReference,
-      List<WorkflowAttribute> attributes,
-      List<InitiateWorkflowInteractionLink> interactionLinks,
-      String data) {
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.externalReference = externalReference;
-    this.attributes = attributes;
-    this.interactionLinks = interactionLinks;
     this.data = data;
   }
 
@@ -371,12 +208,12 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the external reference used to link this workflow to an external system.
+   * Returns the external references for the workflow.
    *
-   * @return the external reference used to link this workflow to an external system
+   * @return the external references for the workflow
    */
-  public String getExternalReference() {
-    return externalReference;
+  public List<WorkflowExternalReference> getExternalReferences() {
+    return externalReferences;
   }
 
   /**
@@ -453,13 +290,12 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the external reference used to link this workflow to an external system.
+   * Set the external references for the workflow.
    *
-   * @param externalReference the external reference used to link this workflow to an external
-   *     system
+   * @param externalReferences the external references for the workflow
    */
-  public void setExternalReference(String externalReference) {
-    this.externalReference = externalReference;
+  public void setExternalReferences(List<WorkflowExternalReference> externalReferences) {
+    this.externalReferences = externalReferences;
   }
 
   /**
