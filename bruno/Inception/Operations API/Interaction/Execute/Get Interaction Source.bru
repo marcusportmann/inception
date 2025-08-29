@@ -18,6 +18,10 @@ vars:pre-request {
   interactionSourceId: 11111111-1111-1111-1111-111111111111
 }
 
+assert {
+  res.status: eq 200
+}
+
 settings {
   encodeUrl: true
 }

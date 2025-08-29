@@ -15,13 +15,22 @@ body:json {
     "definitionId": "test_document_definition",
     "fileType": "text",
     "name": "test.txt",
-    "externalReference": "test_external_reference",
+    "externalReferences": [
+      {
+        "type": "test_document_external_reference_code",
+        "value": "test_document_external_reference_value"
+      }
+    ],
     "data": "VGhpcyBpcyBzb21lIHRlc3QgdGV4dC4="
   }
 }
 
 vars:post-response {
   documentId: res.body
+}
+
+assert {
+  res.status: eq 200
 }
 
 settings {

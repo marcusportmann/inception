@@ -21,6 +21,10 @@ vars:post-response {
   documentNoteId: res.body
 }
 
+assert {
+  res.status: eq 200
+}
+
 settings {
   encodeUrl: true
 }

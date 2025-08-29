@@ -14,6 +14,10 @@ vars:pre-request {
   documentDefinitionCategoryId: test_document_definition_category
 }
 
+assert {
+  res.status: eq 200
+}
+
 settings {
   encodeUrl: true
 }

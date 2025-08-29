@@ -1,7 +1,7 @@
 meta {
   name: Delete Document Definition
   type: http
-  seq: 9
+  seq: 11
 }
 
 delete {
@@ -13,6 +13,10 @@ delete {
 vars:pre-request {
   documentDefinitionCategoryId: test_document_definition_category
   documentDefinitionId: test_document_definition
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

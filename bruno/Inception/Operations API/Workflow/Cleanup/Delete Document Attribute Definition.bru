@@ -1,7 +1,7 @@
 meta {
   name: Delete Document Attribute Definition
   type: http
-  seq: 11
+  seq: 13
 }
 
 delete {
@@ -12,6 +12,10 @@ delete {
 
 vars:pre-request {
   documentAttributeDefinitionCode: test_document_attribute_code
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

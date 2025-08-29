@@ -1,7 +1,7 @@
 meta {
   name: Delete Workflow Definition Category
   type: http
-  seq: 6
+  seq: 7
 }
 
 delete {
@@ -12,6 +12,10 @@ delete {
 
 vars:pre-request {
   workflowDefinitionCategoryId: test_workflow_definition_category
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

@@ -15,6 +15,10 @@ params:query {
   sortDirection: asc
 }
 
+assert {
+  res.status: eq 200
+}
+
 settings {
   encodeUrl: true
 }

@@ -1,7 +1,7 @@
 meta {
   name: Delete Workflow Engine
   type: http
-  seq: 8
+  seq: 9
 }
 
 delete {
@@ -12,6 +12,10 @@ delete {
 
 vars:pre-request {
   workflowEngineId: test_workflow_engine
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

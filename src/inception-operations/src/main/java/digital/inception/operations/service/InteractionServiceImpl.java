@@ -332,7 +332,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   @Override
   @Transactional
   @Caching(
-      put = {@CachePut(cacheNames = "interactionSource", key = "#interactionSource.id")},
       evict = {
         @CacheEvict(cacheNames = "interactionSourcePermissions", key = "#interactionSource.id"),
         @CacheEvict(
@@ -1370,7 +1369,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   @Override
   @Caching(
-      put = {@CachePut(cacheNames = "interactionSource", key = "#interactionSource.id")},
       evict = {
         @CacheEvict(cacheNames = "interactionSourcePermissions", key = "#interactionSource.id"),
         @CacheEvict(
@@ -1772,12 +1770,12 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           if (MessageUtil.isAutoResponseEmail(message)) {
             log.info(
                 "Skipping auto-response email ("
-                + message.getSubject()
-                + ") for the mailbox interaction source ("
-                + interactionSource.getId()
-                + ") for the tenant ("
-                + interactionSource.getTenantId()
-                + ")");
+                    + message.getSubject()
+                    + ") for the mailbox interaction source ("
+                    + interactionSource.getId()
+                    + ") for the tenant ("
+                    + interactionSource.getTenantId()
+                    + ")");
             continue;
           }
 

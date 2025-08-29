@@ -15,9 +15,18 @@ body:json {
     "documentId": "{{documentId}}",
     "fileType": "text",
     "name": "test.txt",
-    "externalReference": "test_external_reference_updated",
+    "externalReferences": [
+      {
+        "type": "test_document_external_reference_code",
+        "value": "test_document_external_reference_value_updated"
+      }
+    ],
     "data": "VGhpcyBpcyBzb21lIHVwZGF0ZWQgdGVzdCB0ZXh0Lg=="
   }
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

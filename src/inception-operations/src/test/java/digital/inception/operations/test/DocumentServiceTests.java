@@ -43,6 +43,7 @@ import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
+import digital.inception.operations.model.DocumentExternalReference;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
@@ -191,9 +192,7 @@ public class DocumentServiceTests {
             "test_shared_document_definition_" + randomId(),
             sharedDocumentDefinitionCategory.getId(),
             "Test Shared Document Definition",
-            List.of(
-                RequiredDocumentAttribute.EXPIRY_DATE,
-                RequiredDocumentAttribute.ISSUE_DATE));
+            List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
 
@@ -647,7 +646,11 @@ public class DocumentServiceTests {
     createDocumentRequest.setData(data);
     createDocumentRequest.setDefinitionId(documentDefinitionId);
     createDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(6));
-    createDocumentRequest.setExternalReference(UUID.randomUUID().toString());
+    createDocumentRequest.setExternalReferences(
+        List.of(
+            new DocumentExternalReference(
+                "test_workflow_external_reference_code",
+                "test_workflow_external_reference_value")));
     createDocumentRequest.setFileType(FileType.TEXT);
     createDocumentRequest.setIssueDate(LocalDate.of(2016, 7, 16));
     createDocumentRequest.setName("test.txt");
@@ -668,6 +671,11 @@ public class DocumentServiceTests {
                 "test_document_attribute_code", "test_document_attribute_value")));
     updateDocumentRequest.setData(data);
     updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
+    updateDocumentRequest.setExternalReferences(
+        List.of(
+            new DocumentExternalReference(
+                "test_workflow_external_reference_code",
+                "test_workflow_external_reference_value")));
     updateDocumentRequest.setFileType(FileType.HTML);
     updateDocumentRequest.setDocumentId(document.getId());
     updateDocumentRequest.setIssueDate(LocalDate.of(2017, 8, 17));

@@ -31,7 +31,6 @@ import digital.inception.operations.exception.DuplicateDocumentDefinitionExcepti
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
@@ -51,9 +50,7 @@ import digital.inception.operations.store.DocumentStore;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -84,6 +81,9 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   /** The Document Store. */
   private final DocumentStore documentStore;
 
+  /** The Validation Service. */
+  private final ValidationService validationService;
+
   /** The internal reference to the Document Service to enable caching. */
   private DocumentService documentService;
 
@@ -104,6 +104,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
    * @param documentDefinitionCategoryRepository the Document Definition Category Repository
    * @param documentDefinitionRepository the Document Definition Repository
    * @param documentDefinitionSummaryRepository the Document Definition Summary Repository
+   * @param validationService the Validation Service
    */
   public DocumentServiceImpl(
       ApplicationContext applicationContext,
@@ -111,7 +112,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       DocumentAttributeDefinitionRepository documentAttributeDefinitionRepository,
       DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository,
       DocumentDefinitionRepository documentDefinitionRepository,
-      DocumentDefinitionSummaryRepository documentDefinitionSummaryRepository) {
+      DocumentDefinitionSummaryRepository documentDefinitionSummaryRepository,
+      ValidationService validationService) {
     super(applicationContext);
 
     this.documentStore = documentStore;
@@ -119,6 +121,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     this.documentDefinitionCategoryRepository = documentDefinitionCategoryRepository;
     this.documentDefinitionRepository = documentDefinitionRepository;
     this.documentDefinitionSummaryRepository = documentDefinitionSummaryRepository;
+    this.validationService = validationService;
   }
 
   @Override
@@ -147,33 +150,30 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentDefinitionNotFoundException(createDocumentRequest.getDefinitionId());
       }
 
-      // Validate the document attributes
-      for (DocumentAttribute documentAttribute : createDocumentRequest.getAttributes()) {
-        if (!isValidDocumentAttribute(
-            tenantId, createDocumentRequest.getDefinitionId(), documentAttribute.getCode())) {
-          log.warn(
-              "Invalid document attribute ("
-                  + documentAttribute.getCode()
-                  + ") when creating a document with definition ID ("
-                  + createDocumentRequest.getDefinitionId()
-                  + ") for the tenant ("
-                  + tenantId
-                  + ")");
+      Document document = new Document(createDocumentRequest.getDefinitionId());
 
-          throw new InvalidArgumentException(
-              "createDocumentRequest.attributes.code",
-              "the document attribute (" + documentAttribute.getCode() + ") is invalid");
-        }
+      if (createDocumentRequest.getExternalReferences() != null) {
+        document.setExternalReferences(createDocumentRequest.getExternalReferences());
       }
 
-      // Validate the required document attributes
-      validateRequiredDocumentAttributes(
-          tenantId,
-          "createDocumentRequest.attributes",
-          createDocumentRequest.getDefinitionId(),
-          createDocumentRequest.getAttributes());
+      if (createDocumentRequest.getAttributes() != null) {
+        // Validate the allowed document attributes
+        validationService.validateAllowedDocumentAttributes(
+            tenantId,
+            "createDocumentRequest.attributes",
+            createDocumentRequest.getDefinitionId(),
+            createDocumentRequest.getAttributes());
 
-      Document document = new Document(createDocumentRequest.getDefinitionId());
+        // Validate the required document attributes
+        validationService.validateRequiredDocumentAttributes(
+            tenantId,
+            "createDocumentRequest.attributes",
+            createDocumentRequest.getDefinitionId(),
+            createDocumentRequest.getAttributes());
+
+        document.setAttributes(createDocumentRequest.getAttributes());
+      }
+
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(createdBy);
       document.setData(createDocumentRequest.getData());
@@ -825,39 +825,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public boolean isValidDocumentAttribute(
-      UUID tenantId, String documentDefinitionId, String attributeCode)
-      throws ServiceUnavailableException {
-    try {
-      List<DocumentAttributeDefinition> documentAttributeDefinitions =
-          getDocumentService().getDocumentAttributeDefinitions(tenantId);
-
-      return documentAttributeDefinitions.stream()
-          .filter(
-              documentAttributeDefinition ->
-                  (documentAttributeDefinition.getDocumentDefinitionId() == null
-                          || documentAttributeDefinition
-                              .getDocumentDefinitionId()
-                              .equals(documentDefinitionId))
-                      && (documentAttributeDefinition.getTenantId() == null
-                          || documentAttributeDefinition.getTenantId().equals(tenantId)))
-          .anyMatch(
-              documentAttributeDefinition ->
-                  documentAttributeDefinition.getCode().equals(attributeCode));
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to validate the document attribute ("
-              + attributeCode
-              + ") for the document with the document definition ("
-              + documentDefinitionId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
   public Document updateDocument(
       UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
@@ -871,36 +838,26 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       Document document =
           documentStore.getDocument(tenantId, updateDocumentRequest.getDocumentId());
 
+      if (updateDocumentRequest.getExternalReferences() != null) {
+        document.setExternalReferences(updateDocumentRequest.getExternalReferences());
+      }
+
       if (updateDocumentRequest.getAttributes() != null) {
-        // Validate the document attributes
-        for (DocumentAttribute documentAttribute : updateDocumentRequest.getAttributes()) {
-          if (!isValidDocumentAttribute(
-              tenantId, document.getDefinitionId(), documentAttribute.getCode())) {
-            log.warn(
-                "Invalid document attribute ("
-                    + documentAttribute.getCode()
-                    + ") when updating the document ("
-                    + document.getId()
-                    + ") with definition ID ("
-                    + document.getDefinitionId()
-                    + ") for the tenant ("
-                    + tenantId
-                    + ")");
-
-            throw new InvalidArgumentException(
-                "updateDocumentRequest.attributes.code",
-                "the document attribute (" + documentAttribute.getCode() + ") is invalid");
-          }
-
-          document.setAttributes(updateDocumentRequest.getAttributes());
-        }
-
-        // Validate the required document attributes
-        validateRequiredDocumentAttributes(
+        // Validate the allowed document attributes
+        validationService.validateAllowedDocumentAttributes(
             tenantId,
             "updateDocumentRequest.attributes",
             document.getDefinitionId(),
             updateDocumentRequest.getAttributes());
+
+        // Validate the required document attributes
+        validationService.validateRequiredDocumentAttributes(
+            tenantId,
+            "updateDocumentRequest.attributes",
+            document.getDefinitionId(),
+            updateDocumentRequest.getAttributes());
+
+        document.setAttributes(updateDocumentRequest.getAttributes());
       }
 
       document.setData(updateDocumentRequest.getData());
@@ -1032,55 +989,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + updateDocumentNoteRequest.getDocumentNoteId()
               + ") for the tenant ("
               + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void validateRequiredDocumentAttributes(
-      UUID tenantId,
-      String parameter,
-      String documentDefinitionId,
-      List<DocumentAttribute> documentAttributes)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    try {
-      List<DocumentAttributeDefinition> requiredDocumentAttributeDefinitions =
-          getDocumentService().getRequiredDocumentAttributeDefinitions(tenantId);
-
-      // Early exit if no required document attribute definitions exist
-      if (requiredDocumentAttributeDefinitions.isEmpty()) {
-        return;
-      }
-
-      // Create a Set for O(1) lookup performance instead of O(n) stream operations
-      Set<String> providedDocumentAttributeCodes =
-          documentAttributes.stream().map(DocumentAttribute::getCode).collect(Collectors.toSet());
-
-      // Filter and validate in a single pass
-      String missingDocumentAttributeCode =
-          requiredDocumentAttributeDefinitions.stream()
-              .filter(
-                  definition ->
-                      (definition.getDocumentDefinitionId() == null
-                              || definition.getDocumentDefinitionId().equals(documentDefinitionId))
-                          && (definition.getTenantId() == null
-                              || definition.getTenantId().equals(tenantId)))
-              .map(DocumentAttributeDefinition::getCode)
-              .filter(code -> providedDocumentAttributeCodes.stream().noneMatch(code::equals))
-              .findFirst()
-              .orElse(null);
-
-      if (missingDocumentAttributeCode != null) {
-        throw new InvalidArgumentException(
-            parameter, "the document attribute (" + missingDocumentAttributeCode + ") is required");
-      }
-    } catch (InvalidArgumentException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to validate the required document attributes for the document definition ("
-              + documentDefinitionId
               + ")",
           e);
     }

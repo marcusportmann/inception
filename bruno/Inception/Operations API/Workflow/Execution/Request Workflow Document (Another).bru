@@ -18,7 +18,11 @@ body:json {
 }
 
 vars:post-response {
-  workflowDocumentId: res.body
+  anotherWorkflowDocumentId: res.body
+}
+
+assert {
+  res.status: eq 200
 }
 
 settings {

@@ -93,7 +93,6 @@ public class WorkflowDefinitionSummary implements Serializable {
       description = "The document definitions associated with the workflow definition",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @JsonManagedReference("workflowDefinitionDocumentDefinitionReference")
   @XmlElementWrapper(name = "DocumentDefinitions", required = true)
   @XmlElement(name = "DocumentDefinition", required = true)
   @Valid

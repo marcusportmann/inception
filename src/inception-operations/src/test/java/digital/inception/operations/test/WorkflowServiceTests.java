@@ -269,9 +269,7 @@ public class WorkflowServiceTests {
             "test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
             "Test Document Definition",
-            List.of(
-                RequiredDocumentAttribute.EXPIRY_DATE,
-                RequiredDocumentAttribute.ISSUE_DATE));
+            List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(documentDefinition);
 
@@ -925,9 +923,7 @@ public class WorkflowServiceTests {
             "test_shared_document_definition_" + randomId(),
             sharedDocumentDefinitionCategory.getId(),
             "Test Shared Document Definition",
-            List.of(
-                RequiredDocumentAttribute.EXPIRY_DATE,
-                RequiredDocumentAttribute.ISSUE_DATE));
+            List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
 

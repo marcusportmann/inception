@@ -16,6 +16,10 @@ vars:pre-request {
   workflowDefinitionVersion: 1
 }
 
+assert {
+  res.status: eq 204
+}
+
 settings {
   encodeUrl: true
 }

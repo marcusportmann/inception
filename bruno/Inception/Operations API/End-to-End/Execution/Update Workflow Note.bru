@@ -21,6 +21,10 @@ vars:pre-request {
   workflowNoteId: 019890d1-26f7-729f-b26a-9522c81b6dfc
 }
 
+assert {
+  res.status: eq 204
+}
+
 settings {
   encodeUrl: true
 }

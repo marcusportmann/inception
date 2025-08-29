@@ -18,6 +18,7 @@ package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
@@ -38,7 +39,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +57,7 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
+  "externalReferences",
   "attributes",
   "data"
 })
@@ -68,10 +69,10 @@ import java.util.UUID;
       "definitionId",
       "fileType",
       "name",
-      "externalReference",
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
+      "externalReferences",
       "attributes",
       "data"
     })
@@ -87,7 +88,7 @@ public class CreateDocumentRequest implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  private List<DocumentAttribute> attributes = new ArrayList<>();
+  private List<DocumentAttribute> attributes;
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -116,12 +117,13 @@ public class CreateDocumentRequest implements Serializable {
   @XmlSchemaType(name = "date")
   private LocalDate expiryDate;
 
-  /** The external reference used to link this document to an external system. */
-  @Schema(description = "The external reference used to link this document to an external system")
+  /** The external references for the document. */
+  @Schema(description = "The external references for the document")
   @JsonProperty
+  @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Size(max = 100)
-  private String externalReference;
+  @Valid
+  private List<DocumentExternalReference> externalReferences;
 
   /** The file type for the document. */
   @Schema(
@@ -198,12 +200,12 @@ public class CreateDocumentRequest implements Serializable {
   }
 
   /**
-   * Returns the external reference used to link this document to an external system.
+   * Returns the external references for the document.
    *
-   * @return the external reference used to link this document to an external system
+   * @return the external references for the document
    */
-  public String getExternalReference() {
-    return externalReference;
+  public List<DocumentExternalReference> getExternalReferences() {
+    return externalReferences;
   }
 
   /**
@@ -279,13 +281,12 @@ public class CreateDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the external reference used to link this document to an external system.
+   * Set the external references for the document.
    *
-   * @param externalReference the external reference used to link this document to an external
-   *     system
+   * @param externalReferences the external references for the document
    */
-  public void setExternalReference(String externalReference) {
-    this.externalReference = externalReference;
+  public void setExternalReferences(List<DocumentExternalReference> externalReferences) {
+    this.externalReferences = externalReferences;
   }
 
   /**

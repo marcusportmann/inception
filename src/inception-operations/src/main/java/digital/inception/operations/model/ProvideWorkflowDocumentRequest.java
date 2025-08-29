@@ -18,6 +18,7 @@ package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
@@ -37,7 +38,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +57,7 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
+  "externalReferences",
   "attributes",
   "description",
   "data"
@@ -90,7 +91,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  private List<DocumentAttribute> attributes = new ArrayList<>();
+  private List<DocumentAttribute> attributes;
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -115,6 +116,14 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
   private LocalDate expiryDate;
+
+  /** The external references for the document. */
+  @Schema(description = "The external references for the document")
+  @JsonProperty
+  @XmlElementWrapper(name = "ExternalReferences")
+  @XmlElement(name = "ExternalReference")
+  @Valid
+  private List<DocumentExternalReference> externalReferences;
 
   /** The file type for the document. */
   @Schema(
@@ -278,6 +287,15 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
+   * Returns the external references for the document.
+   *
+   * @return the external references for the document
+   */
+  public List<DocumentExternalReference> getExternalReferences() {
+    return externalReferences;
+  }
+
+  /**
    * Returns the file type for the document.
    *
    * @return the file type for the document
@@ -356,6 +374,15 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
    */
   public void setExpiryDate(LocalDate expiryDate) {
     this.expiryDate = expiryDate;
+  }
+
+  /**
+   * Set the external references for the document.
+   *
+   * @param externalReferences the external references for the document
+   */
+  public void setExternalReferences(List<DocumentExternalReference> externalReferences) {
+    this.externalReferences = externalReferences;
   }
 
   /**

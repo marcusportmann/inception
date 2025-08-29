@@ -65,7 +65,7 @@ public class WorkflowVariableId implements Serializable {
     WorkflowVariableId other = (WorkflowVariableId) object;
 
     return Objects.equals(workflowId, other.workflowId)
-           && StringUtil.equalsIgnoreCase(name, other.name);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -76,6 +76,6 @@ public class WorkflowVariableId implements Serializable {
   @Override
   public int hashCode() {
     return ((workflowId == null) ? 0 : workflowId.hashCode())
-           + ((name == null) ? 0 : name.hashCode());
+        + ((name == null) ? 0 : name.hashCode());
   }
 }

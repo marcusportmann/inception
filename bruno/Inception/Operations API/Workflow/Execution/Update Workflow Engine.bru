@@ -32,6 +32,10 @@ vars:pre-request {
   workflowEngineId: test_workflow_engine
 }
 
+assert {
+  res.status: eq 204
+}
+
 settings {
   encodeUrl: true
 }

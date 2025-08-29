@@ -31,7 +31,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,7 +81,7 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
   @Valid
-  private List<WorkflowAttribute> attributes = new ArrayList<>();
+  private List<WorkflowAttribute> attributes;
 
   /** The XML or JSON data for the workflow. */
   @Schema(description = "The XML or JSON data for the workflow")
@@ -107,7 +106,7 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
   @Valid
-  private List<WorkflowExternalReference> externalReferences = new ArrayList<>();
+  private List<WorkflowExternalReference> externalReferences;
 
   /** The interaction links for the workflow. */
   @Schema(description = "The interaction links for the workflow")
@@ -115,7 +114,7 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElementWrapper(name = "InteractionLinks")
   @XmlElement(name = "InteractionLink")
   @Valid
-  private List<InitiateWorkflowInteractionLink> interactionLinks = new ArrayList<>();
+  private List<InitiateWorkflowInteractionLink> interactionLinks;
 
   /** The ID for the parent workflow. */
   @Schema(description = "The ID for the parent workflow")
@@ -145,7 +144,10 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElementWrapper(name = "Variables")
   @XmlElement(name = "Variable")
   @Valid
-  private List<WorkflowVariable> variables = new ArrayList<>();
+  private List<WorkflowVariable> variables;
+
+  /** Constructs a new {@code InitiateWorkflowRequest}. */
+  public InitiateWorkflowRequest() {}
 
   /**
    * Constructs a new {@code InitiateWorkflowRequest}.

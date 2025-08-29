@@ -1167,7 +1167,6 @@ public class InternalWorkflowStore implements WorkflowStore {
 
       // Create the new document
       document = new Document(workflowDocument.getDocumentDefinitionId());
-      document.setAttributes(provideWorkflowDocumentRequest.getAttributes());
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(providedBy);
       document.setData(provideWorkflowDocumentRequest.getData());
@@ -1179,6 +1178,14 @@ public class InternalWorkflowStore implements WorkflowStore {
       document.setName(provideWorkflowDocumentRequest.getName());
       document.setSourceDocumentId(provideWorkflowDocumentRequest.getSourceDocumentId());
       document.setTenantId(tenantId);
+
+      if (provideWorkflowDocumentRequest.getAttributes() != null) {
+        document.setAttributes(provideWorkflowDocumentRequest.getAttributes());
+      }
+
+      if (provideWorkflowDocumentRequest.getExternalReferences() != null) {
+        document.setExternalReferences(provideWorkflowDocumentRequest.getExternalReferences());
+      }
 
       documentStore.createDocument(tenantId, document);
 

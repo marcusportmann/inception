@@ -58,7 +58,6 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
-import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -730,21 +729,6 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
-   * Check whether a workflow attribute with the specified code is valid for a workflow.
-   *
-   * @param tenantId the ID for the tenant
-   * @param workflowDefinitionId the ID for the workflow definition the workflow is associated with
-   * @param attributeCode the code for the workflow attribute
-   * @return {@code true} if a workflow attribute with the specified code is valid or {@code false}
-   *     otherwise
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the validity of the workflow attribute code could not be
-   *     verified
-   */
-  boolean isValidWorkflowAttribute(UUID tenantId, String workflowDefinitionId, String attributeCode)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
    * Link an interaction to a workflow.
    *
    * @param tenantId the ID for the tenant
@@ -998,25 +982,6 @@ public interface WorkflowService {
   WorkflowNote updateWorkflowNote(
       UUID tenantId, UpdateWorkflowNoteRequest updateWorkflowNoteRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Validate whether the required workflow attributes have been provided for the workflow
-   * definition.
-   *
-   * @param tenantId the ID for the tenant
-   * @param parameter the parameter path to the attributes being validated, e.g.
-   *     initiateWorkflowRequest.attributes
-   * @param workflowDefinitionId the ID for the workflow definition
-   * @param workflowAttributes the workflow attributes to validate
-   * @throws InvalidArgumentException if a required workflow attribute has not been provided
-   * @throws ServiceUnavailableException if the required workflow attributes could not be validated
-   */
-  void validateRequiredWorkflowAttributes(
-      UUID tenantId,
-      String parameter,
-      String workflowDefinitionId,
-      List<WorkflowAttribute> workflowAttributes)
-      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Verify a workflow document.

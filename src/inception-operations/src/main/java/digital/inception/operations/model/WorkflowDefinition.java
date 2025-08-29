@@ -179,7 +179,7 @@ public class WorkflowDefinition implements Serializable {
   /** The workflow step definitions for the workflow definition. */
   @Schema(description = "The workflow step definitions for the workflow definition")
   @JsonProperty
-  @JsonManagedReference("workflowStepDefinitionReference")
+  @JsonManagedReference("workflowDefinitionStepDefinitionReference")
   @XmlElementWrapper(name = "StepDefinitions")
   @XmlElement(name = "StepDefinition")
   @Valid
@@ -202,7 +202,7 @@ public class WorkflowDefinition implements Serializable {
   /** The workflow variable definitions for the workflow definition. */
   @Schema(description = "The workflow variable definitions for the workflow definition")
   @JsonProperty
-  @JsonManagedReference("workflowVariableDefinitionReference")
+  @JsonManagedReference("workflowDefinitionVariableDefinitionReference")
   @XmlElementWrapper(name = "VariableDefinitions")
   @XmlElement(name = "VariableDefinition")
   @Valid

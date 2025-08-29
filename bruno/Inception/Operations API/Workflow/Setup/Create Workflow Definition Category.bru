@@ -1,7 +1,7 @@
 meta {
   name: Create Workflow Definition Category
   type: http
-  seq: 6
+  seq: 7
 }
 
 post {
@@ -16,6 +16,10 @@ body:json {
     "name": "Test Workflow Definition Category",
     "tenantId": "00000000-0000-0000-0000-000000000000"
   }
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

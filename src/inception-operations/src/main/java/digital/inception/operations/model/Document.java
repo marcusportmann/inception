@@ -75,6 +75,7 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
+  "externalReferences",
   "data",
   "created",
   "createdBy",
@@ -125,6 +126,22 @@ public class Document implements Serializable {
       insertable = false,
       updatable = false)
   private final List<DocumentAttribute> attributes = new ArrayList<>();
+
+  /** The external references for the document. */
+  @Schema(description = "The external references for the document")
+  @JsonProperty
+  @JsonManagedReference("documentExternalReferenceReference")
+  @XmlElementWrapper(name = "ExternalReferences")
+  @XmlElement(name = "ExternalReference")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("type")
+  @JoinColumn(
+      name = "object_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
+  private final List<DocumentExternalReference> externalReferences = new ArrayList<>();
 
   /** The date and time the document was created. */
   @Schema(
@@ -288,6 +305,22 @@ public class Document implements Serializable {
   }
 
   /**
+   * Add the external reference for the document.
+   *
+   * @param externalReference the external reference
+   */
+  public void addExternalReference(DocumentExternalReference externalReference) {
+    externalReferences.removeIf(
+        existingExternalReference ->
+            StringUtil.equalsIgnoreCase(
+                existingExternalReference.getType(), externalReference.getType()));
+
+    externalReference.setDocument(this);
+
+    externalReferences.add(externalReference);
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -377,6 +410,28 @@ public class Document implements Serializable {
    */
   public LocalDate getExpiryDate() {
     return expiryDate;
+  }
+
+  /**
+   * Retrieve the external reference with the specified type for the document.
+   *
+   * @param type the code for the external reference type
+   * @return an Optional containing the external reference with the specified type for the document
+   *     or an empty Optional if the external reference could not be found
+   */
+  public Optional<DocumentExternalReference> getExternalReference(String type) {
+    return externalReferences.stream()
+        .filter(externalReference -> StringUtil.equalsIgnoreCase(externalReference.getType(), type))
+        .findFirst();
+  }
+
+  /**
+   * Returns the external references for the document.
+   *
+   * @return the external references for the document
+   */
+  public List<DocumentExternalReference> getExternalReferences() {
+    return externalReferences;
   }
 
   /**
@@ -471,6 +526,16 @@ public class Document implements Serializable {
   }
 
   /**
+   * Remove the external reference with the specified type for the document.
+   *
+   * @param type the code for the external reference type
+   */
+  public void removeExternalReference(String type) {
+    externalReferences.removeIf(
+        externalReference -> Objects.equals(externalReference.getType(), type));
+  }
+
+  /**
    * Set the attributes for the document.
    *
    * @param attributes the attributes for the document
@@ -524,6 +589,17 @@ public class Document implements Serializable {
    */
   public void setExpiryDate(LocalDate expiryDate) {
     this.expiryDate = expiryDate;
+  }
+
+  /**
+   * Set the external references for the document.
+   *
+   * @param externalReferences the external references for the document
+   */
+  public void setExternalReferences(List<DocumentExternalReference> externalReferences) {
+    externalReferences.forEach(externalReference -> externalReference.setDocument(this));
+    this.externalReferences.clear();
+    this.externalReferences.addAll(externalReferences);
   }
 
   /**

@@ -1,7 +1,7 @@
 meta {
   name: Create Invalid Workflow Definition Category
   type: http
-  seq: 9
+  seq: 10
 }
 
 post {
@@ -13,6 +13,10 @@ post {
 body:json {
   {
   }
+}
+
+assert {
+  res.status: eq 400
 }
 
 settings {

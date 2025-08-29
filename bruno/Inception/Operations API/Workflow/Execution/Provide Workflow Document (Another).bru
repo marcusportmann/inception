@@ -12,12 +12,16 @@ post {
 
 body:json {
   {
-    "workflowDocumentId": "{{workflowDocumentId}}",
+    "workflowDocumentId": "{{anotherWorkflowDocumentId}}",
     "fileType": "text",
     "name": "anothertest.txt",
     "externalReference": "another_test_external_reference",
     "data": "VGhpcyBpcyBzb21lIHRlc3QgdGV4dC4="
   }
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

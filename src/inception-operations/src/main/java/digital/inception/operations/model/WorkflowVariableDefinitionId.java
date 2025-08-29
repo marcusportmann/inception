@@ -66,8 +66,8 @@ public class WorkflowVariableDefinitionId implements Serializable {
     WorkflowVariableDefinitionId other = (WorkflowVariableDefinitionId) object;
 
     return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
-           && definitionVersion == other.definitionVersion
-           && StringUtil.equalsIgnoreCase(name, other.name);
+        && definitionVersion == other.definitionVersion
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -78,7 +78,7 @@ public class WorkflowVariableDefinitionId implements Serializable {
   @Override
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
-           + (Integer.hashCode(definitionVersion))
-           + ((name == null) ? 0 : name.hashCode());
+        + (Integer.hashCode(definitionVersion))
+        + ((name == null) ? 0 : name.hashCode());
   }
 }

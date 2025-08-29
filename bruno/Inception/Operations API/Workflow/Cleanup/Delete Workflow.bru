@@ -1,13 +1,17 @@
 meta {
   name: Delete Workflow
   type: http
-  seq: 3
+  seq: 4
 }
 
 delete {
   url: {{baseURL}}/api/operations/workflows/{{workflowId}}
   body: none
   auth: inherit
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

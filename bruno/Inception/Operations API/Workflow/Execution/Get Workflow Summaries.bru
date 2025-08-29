@@ -14,6 +14,10 @@ params:query {
   definitionId: test_workflow_definition
 }
 
+assert {
+  res.status: eq 200
+}
+
 settings {
   encodeUrl: true
 }

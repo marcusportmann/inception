@@ -32,7 +32,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The {@code CreateInteractionNoteRequest} class represents a request to create an interaction note.
+ * The {@code CreateInteractionNoteRequest} class represents a request to create an interaction
+ * note.
  *
  * @author Marcus Portmann
  */

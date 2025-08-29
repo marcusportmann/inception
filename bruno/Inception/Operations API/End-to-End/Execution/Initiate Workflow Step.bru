@@ -17,6 +17,10 @@ body:json {
   }
 }
 
+assert {
+  res.status: eq 204
+}
+
 settings {
   encodeUrl: true
 }

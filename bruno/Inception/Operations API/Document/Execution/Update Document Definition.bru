@@ -28,6 +28,10 @@ vars:pre-request {
   documentDefinitionId: test_document_definition
 }
 
+assert {
+  res.status: eq 204
+}
+
 settings {
   encodeUrl: true
 }

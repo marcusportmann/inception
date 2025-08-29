@@ -41,7 +41,6 @@ import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
-import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
@@ -64,7 +63,6 @@ import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
-import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
@@ -86,8 +84,6 @@ import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowSummaries;
-import digital.inception.operations.model.WorkflowVariable;
-import digital.inception.operations.model.WorkflowVariableDefinition;
 import digital.inception.operations.persistence.jpa.WorkflowAttributeDefinitionRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository;
@@ -125,6 +121,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   private final DocumentService documentService;
 
   private final InteractionService interactionService;
+
+  /** The Validation Service. */
+  private final ValidationService validationService;
 
   /** The Workflow Attribute Definition Repository. */
   private final WorkflowAttributeDefinitionRepository workflowAttributeDefinitionRepository;
@@ -179,6 +178,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    * @param documentService the Document Service
    * @param workflowDataValidationService the Workflow Data Validation Service
    * @param interactionService the Interaction Service
+   * @param validationService the Validation Service
    */
   public WorkflowServiceImpl(
       ApplicationContext applicationContext,
@@ -190,7 +190,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowEngineRepository workflowEngineRepository,
       DocumentService documentService,
       WorkflowDataValidationService workflowDataValidationService,
-      InteractionService interactionService) {
+      InteractionService interactionService,
+      ValidationService validationService) {
     super(applicationContext);
 
     this.workflowStore = workflowStore;
@@ -202,61 +203,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     this.documentService = documentService;
     this.workflowDataValidationService = workflowDataValidationService;
     this.interactionService = interactionService;
-  }
-
-  private static void validateRequiredWorkflowVariables(
-      String parameter,
-      List<WorkflowVariable> workflowVariables,
-      WorkflowDefinition workflowDefinition)
-      throws InvalidArgumentException {
-    if (!workflowDefinition.getVariableDefinitions().isEmpty()) {
-      // Create a Set of provided variable names for O(1) lookup
-      Set<String> providedVariableNames =
-          workflowVariables.stream()
-              .map(WorkflowVariable::getName)
-              .map(String::toLowerCase)
-              .collect(Collectors.toSet());
-
-      // Find the first missing required variable
-      Optional<String> missingRequiredVariable =
-          workflowDefinition.getVariableDefinitions().stream()
-              .filter(WorkflowVariableDefinition::isRequired)
-              .map(WorkflowVariableDefinition::getName)
-              .filter(name -> !providedVariableNames.contains(name.toLowerCase()))
-              .findFirst();
-
-      if (missingRequiredVariable.isPresent()) {
-        throw new InvalidArgumentException(
-            parameter, "the workflow variable (" + missingRequiredVariable.get() + ") is required");
-      }
-    }
-  }
-
-  private static void validateWorkflowVariables(
-      String parameter,
-      List<WorkflowVariable> workflowVariables,
-      WorkflowDefinition workflowDefinition)
-      throws InvalidArgumentException {
-    if (!workflowDefinition.getVariableDefinitions().isEmpty()) {
-      // Create a Set of valid variable names for O(1) lookup
-      Set<String> validVariableNames =
-          workflowDefinition.getVariableDefinitions().stream()
-              .map(WorkflowVariableDefinition::getName)
-              .map(String::toLowerCase)
-              .collect(Collectors.toSet());
-
-      // Find the first invalid variable using Stream API
-      Optional<String> invalidVariableName =
-          workflowVariables.stream()
-              .map(WorkflowVariable::getName)
-              .filter(name -> !validVariableNames.contains(name.toLowerCase()))
-              .findFirst();
-
-      if (invalidVariableName.isPresent()) {
-        throw new InvalidArgumentException(
-            parameter, "the workflow variable (" + invalidVariableName.get() + ") is invalid");
-      }
-    }
+    this.validationService = validationService;
   }
 
   @Override
@@ -327,11 +274,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
   @Override
   @Caching(
-      put = {
-        @CachePut(
-            cacheNames = "workflowDefinition",
-            key = "#workflowDefinition.id + '-' + #workflowDefinition.version")
-      },
       evict = {
         @CacheEvict(cacheNames = "latestWorkflowDefinition", key = "#workflowDefinition.id"),
         @CacheEvict(
@@ -1507,45 +1449,35 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowDefinition workflowDefinition =
           getWorkflowService().getWorkflowDefinition(initiateWorkflowRequest.getDefinitionId());
 
-      // Validate the workflow attributes
-      for (WorkflowAttribute workflowAttribute : initiateWorkflowRequest.getAttributes()) {
-        if (!isValidWorkflowAttribute(
-            tenantId, workflowDefinition.getId(), workflowAttribute.getCode())) {
-          log.warn(
-              "Invalid workflow attribute ("
-                  + workflowAttribute.getCode()
-                  + ") provided when initiating a workflow with the workflow definition ("
-                  + workflowDefinition.getId()
-                  + ") version ("
-                  + workflowDefinition.getVersion()
-                  + ") for the tenant ("
-                  + tenantId
-                  + ")");
+      if (initiateWorkflowRequest.getAttributes() != null) {
+        // Validate the allowed workflow attributes
+        validationService.validateAllowedWorkflowAttributes(
+            tenantId,
+            "initiateWorkflowRequest.attributes",
+            initiateWorkflowRequest.getDefinitionId(),
+            initiateWorkflowRequest.getAttributes());
 
-          throw new InvalidArgumentException(
-              "initiateWorkflowRequest.attributes.code",
-              "the workflow attribute (" + workflowAttribute.getCode() + ") is invalid");
-        }
+        // Validate the required workflow attributes
+        validationService.validateRequiredWorkflowAttributes(
+            tenantId,
+            "initiateWorkflowRequest.attributes",
+            initiateWorkflowRequest.getDefinitionId(),
+            initiateWorkflowRequest.getAttributes());
       }
 
-      // Validate the required workflow attributes
-      validateRequiredWorkflowAttributes(
-          tenantId,
-          "initiateWorkflowRequest.attributes",
-          initiateWorkflowRequest.getDefinitionId(),
-          initiateWorkflowRequest.getAttributes());
+      if (initiateWorkflowRequest.getVariables() != null) {
+        // Validate the allowed workflow variables
+        validationService.validateAllowedWorkflowVariables(
+            "initiateWorkflowRequest.variables",
+            workflowDefinition.getId(),
+            initiateWorkflowRequest.getVariables());
 
-      // Validate the workflow variables
-      validateWorkflowVariables(
-          "initiateWorkflowRequest.variables.name",
-          initiateWorkflowRequest.getVariables(),
-          workflowDefinition);
-
-      // Validate the required workflow variables
-      validateRequiredWorkflowVariables(
-          "initiateWorkflowRequest.variables",
-          initiateWorkflowRequest.getVariables(),
-          workflowDefinition);
+        // Validate the required workflow variables
+        validationService.validateRequiredWorkflowVariables(
+            "initiateWorkflowRequest.variables",
+            workflowDefinition.getId(),
+            initiateWorkflowRequest.getVariables());
+      }
 
       // Validate the workflow data if we have a validation schema
       if ((workflowDefinition.getValidationSchemaType() != null)
@@ -1558,13 +1490,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
-      // Validate the interaction links
-      for (InitiateWorkflowInteractionLink initiateWorkflowInteractionLink :
-          initiateWorkflowRequest.getInteractionLinks()) {
-        if (!interactionService.interactionExists(
-            tenantId, initiateWorkflowInteractionLink.getInteractionId())) {
-          throw new InteractionNotFoundException(
-              tenantId, initiateWorkflowInteractionLink.getInteractionId());
+      if (initiateWorkflowRequest.getInteractionLinks() != null) {
+        // Validate the interaction links
+        for (InitiateWorkflowInteractionLink initiateWorkflowInteractionLink :
+            initiateWorkflowRequest.getInteractionLinks()) {
+          if (!interactionService.interactionExists(
+              tenantId, initiateWorkflowInteractionLink.getInteractionId())) {
+            throw new InteractionNotFoundException(
+                tenantId, initiateWorkflowInteractionLink.getInteractionId());
+          }
         }
       }
 
@@ -1584,11 +1518,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               now,
               initiatedBy);
 
-      for (InitiateWorkflowInteractionLink initiateWorkflowInteractionLink :
-          initiateWorkflowRequest.getInteractionLinks()) {
-        workflow.addInteractionLink(
-            new WorkflowInteractionLink(
-                initiateWorkflowInteractionLink.getInteractionId(), now, initiatedBy));
+      if (initiateWorkflowRequest.getInteractionLinks() != null) {
+        for (InitiateWorkflowInteractionLink initiateWorkflowInteractionLink :
+            initiateWorkflowRequest.getInteractionLinks()) {
+          workflow.addInteractionLink(
+              new WorkflowInteractionLink(
+                  initiateWorkflowInteractionLink.getInteractionId(), now, initiatedBy));
+        }
       }
 
       workflow.setPartyId(initiateWorkflowRequest.getPartyId());
@@ -1689,51 +1625,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public boolean isValidWorkflowAttribute(
-      UUID tenantId, String workflowDefinitionId, String attributeCode)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if (!StringUtils.hasText(workflowDefinitionId)) {
-      throw new InvalidArgumentException("workflowDefinitionId");
-    }
-
-    if (!StringUtils.hasText(attributeCode)) {
-      throw new InvalidArgumentException("attributeCode");
-    }
-
-    try {
-      List<WorkflowAttributeDefinition> workflowAttributeDefinitions =
-          getWorkflowService().getWorkflowAttributeDefinitions(tenantId);
-
-      return workflowAttributeDefinitions.stream()
-          .filter(
-              workflowAttributeDefinition ->
-                  (workflowAttributeDefinition.getWorkflowDefinitionId() == null
-                          || workflowAttributeDefinition
-                              .getWorkflowDefinitionId()
-                              .equals(workflowDefinitionId))
-                      && (workflowAttributeDefinition.getTenantId() == null
-                          || workflowAttributeDefinition.getTenantId().equals(tenantId)))
-          .anyMatch(
-              workflowAttributeDefinition ->
-                  workflowAttributeDefinition.getCode().equals(attributeCode));
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to validate the workflow attribute ("
-              + attributeCode
-              + ") for the workflow with the workflow definition ("
-              + workflowDefinitionId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
   public void linkInteractionToWorkflow(
       UUID tenantId,
       LinkInteractionToWorkflowRequest linkInteractionToWorkflowRequest,
@@ -1796,31 +1687,21 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.getDocumentDefinitionIdForWorkflowDocument(
               tenantId, provideWorkflowDocumentRequest.getWorkflowDocumentId());
 
-      // Validate the document attributes
-      for (DocumentAttribute documentAttribute : provideWorkflowDocumentRequest.getAttributes()) {
-        if (!documentService.isValidDocumentAttribute(
-            tenantId, documentDefinitionId, documentAttribute.getCode())) {
-          log.warn(
-              "Invalid document attribute ("
-                  + documentAttribute.getCode()
-                  + ") provided for workflow document ("
-                  + provideWorkflowDocumentRequest.getWorkflowDocumentId()
-                  + ") for the tenant ("
-                  + tenantId
-                  + ")");
+      if (provideWorkflowDocumentRequest.getAttributes() != null) {
+        // Validate the allowed document attributes
+        validationService.validateAllowedDocumentAttributes(
+            tenantId,
+            "provideWorkflowDocumentRequest.attributes",
+            documentDefinitionId,
+            provideWorkflowDocumentRequest.getAttributes());
 
-          throw new InvalidArgumentException(
-              "provideWorkflowDocumentRequest.attributes.code",
-              "the document attribute (" + documentAttribute.getCode() + ") is invalid");
-        }
+        // Validate the required document attributes
+        validationService.validateRequiredDocumentAttributes(
+            tenantId,
+            "provideWorkflowDocumentRequest.attributes",
+            documentDefinitionId,
+            provideWorkflowDocumentRequest.getAttributes());
       }
-
-      // Validate the required document attributes
-      documentService.validateRequiredDocumentAttributes(
-          tenantId,
-          "provideWorkflowDocumentRequest.attributes",
-          documentDefinitionId,
-          provideWorkflowDocumentRequest.getAttributes());
 
       DocumentDefinition documentDefinition =
           documentService.getDocumentDefinition(documentDefinitionId);
@@ -2161,7 +2042,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.getWorkflow(tenantId, updateWorkflowRequest.getWorkflowId());
 
       WorkflowDefinition workflowDefinition =
-          getWorkflowDefinitionVersion(workflow.getDefinitionId(), workflow.getDefinitionVersion());
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(
+                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
 
       // Validate the workflow data if we have a validation schema
       if ((workflowDefinition.getValidationSchemaType() != null)
@@ -2179,49 +2062,35 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       }
 
       if (updateWorkflowRequest.getAttributes() != null) {
-        // Validate the workflow attributes
-        for (WorkflowAttribute workflowAttribute : updateWorkflowRequest.getAttributes()) {
-          if (!isValidWorkflowAttribute(
-              tenantId, workflowDefinition.getId(), workflowAttribute.getCode())) {
-            log.warn(
-                "Invalid workflow attribute ("
-                    + workflowAttribute.getCode()
-                    + ") provided when updating a workflow with the workflow definition ("
-                    + workflowDefinition.getId()
-                    + ") version ("
-                    + workflowDefinition.getVersion()
-                    + ") for the tenant ("
-                    + tenantId
-                    + ")");
-
-            throw new InvalidArgumentException(
-                "updateWorkflowRequest.attributes.code",
-                "the workflow attribute (" + workflowAttribute.getCode() + ") is invalid");
-          }
-        }
-
-        // Validate the required workflow attributes
-        validateRequiredWorkflowAttributes(
+        // Validate the allowed workflow attributes
+        validationService.validateAllowedWorkflowAttributes(
             tenantId,
             "updateWorkflowRequest.attributes",
-            workflowDefinition.getId(),
+            workflow.getDefinitionId(),
+            updateWorkflowRequest.getAttributes());
+
+        // Validate the required workflow attributes
+        validationService.validateRequiredWorkflowAttributes(
+            tenantId,
+            "updateWorkflowRequest.attributes",
+            workflow.getDefinitionId(),
             updateWorkflowRequest.getAttributes());
 
         workflow.setAttributes(updateWorkflowRequest.getAttributes());
       }
 
-      // Validate the workflow variables
       if (updateWorkflowRequest.getVariables() != null) {
-        validateWorkflowVariables(
-            "updateWorkflowRequest.variables.name",
-            updateWorkflowRequest.getVariables(),
-            workflowDefinition);
+        // Validate the allowed workflow variables
+        validationService.validateAllowedWorkflowVariables(
+            "initiateWorkflowRequest.variables",
+            workflowDefinition.getId(),
+            updateWorkflowRequest.getVariables());
 
         // Validate the required workflow variables
-        validateRequiredWorkflowVariables(
-            "updateWorkflowRequest.variables",
-            updateWorkflowRequest.getVariables(),
-            workflowDefinition);
+        validationService.validateRequiredWorkflowVariables(
+            "initiateWorkflowRequest.variables",
+            workflowDefinition.getId(),
+            updateWorkflowRequest.getVariables());
 
         workflow.setVariables(updateWorkflowRequest.getVariables());
       }
@@ -2285,11 +2154,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
   @Override
   @Caching(
-      put = {
-        @CachePut(
-            cacheNames = "workflowDefinition",
-            key = "#workflowDefinition.id + '-' + #workflowDefinition.version")
-      },
       evict = {
         @CacheEvict(cacheNames = "latestWorkflowDefinition", key = "#workflowDefinition.id"),
         @CacheEvict(
@@ -2412,55 +2276,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + updateWorkflowNoteRequest.getWorkflowNoteId()
               + ") for the tenant ("
               + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void validateRequiredWorkflowAttributes(
-      UUID tenantId,
-      String parameter,
-      String workflowDefinitionId,
-      List<WorkflowAttribute> workflowAttributes)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    try {
-      List<WorkflowAttributeDefinition> requiredWorkflowAttributeDefinitions =
-          getWorkflowService().getRequiredWorkflowAttributeDefinitions(tenantId);
-
-      // Early exit if no required workflow attribute definitions exist
-      if (requiredWorkflowAttributeDefinitions.isEmpty()) {
-        return;
-      }
-
-      // Create a Set for O(1) lookup performance instead of O(n) stream operations
-      Set<String> providedWorkflowAttributeCodes =
-          workflowAttributes.stream().map(WorkflowAttribute::getCode).collect(Collectors.toSet());
-
-      // Filter and validate in a single pass
-      String missingWorkflowAttributeCode =
-          requiredWorkflowAttributeDefinitions.stream()
-              .filter(
-                  definition ->
-                      (definition.getWorkflowDefinitionId() == null
-                              || definition.getWorkflowDefinitionId().equals(workflowDefinitionId))
-                          && (definition.getTenantId() == null
-                              || definition.getTenantId().equals(tenantId)))
-              .map(WorkflowAttributeDefinition::getCode)
-              .filter(code -> providedWorkflowAttributeCodes.stream().noneMatch(code::equals))
-              .findFirst()
-              .orElse(null);
-
-      if (missingWorkflowAttributeCode != null) {
-        throw new InvalidArgumentException(
-            parameter, "the workflow attribute (" + missingWorkflowAttributeCode + ") is required");
-      }
-    } catch (InvalidArgumentException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to validate the required workflow attributes for the workflow definition ("
-              + workflowDefinitionId
               + ")",
           e);
     }

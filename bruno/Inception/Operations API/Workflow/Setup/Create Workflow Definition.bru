@@ -1,7 +1,7 @@
 meta {
   name: Create Workflow Definition
   type: http
-  seq: 7
+  seq: 8
 }
 
 post {
@@ -73,6 +73,10 @@ body:json {
 
 vars:pre-request {
   workflowDefinitionCategoryId: test_workflow_definition_category
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

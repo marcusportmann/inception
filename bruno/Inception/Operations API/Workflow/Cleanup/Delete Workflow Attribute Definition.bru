@@ -1,7 +1,7 @@
 meta {
   name: Delete Workflow Attribute Definition
   type: http
-  seq: 7
+  seq: 8
 }
 
 delete {
@@ -12,6 +12,10 @@ delete {
 
 vars:pre-request {
   workflowAttributeDefinitionCode: test_workflow_attribute_code
+}
+
+assert {
+  res.status: eq 204
 }
 
 settings {

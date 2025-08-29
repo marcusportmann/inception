@@ -18,6 +18,7 @@ package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
@@ -56,6 +57,7 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
+  "externalReferences",
   "attributes",
   "data"
 })
@@ -70,6 +72,7 @@ import java.util.UUID;
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
+      "externalReferences",
       "attributes",
       "data"
     })
@@ -111,6 +114,14 @@ public class UpdateDocumentRequest implements Serializable {
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
   private LocalDate expiryDate;
+
+  /** The external references for the document. */
+  @Schema(description = "The external references for the document")
+  @JsonProperty
+  @XmlElementWrapper(name = "ExternalReferences")
+  @XmlElement(name = "ExternalReference")
+  @Valid
+  private List<DocumentExternalReference> externalReferences;
 
   /** The file type for the document. */
   @Schema(
@@ -187,6 +198,15 @@ public class UpdateDocumentRequest implements Serializable {
   }
 
   /**
+   * Returns the external references for the document.
+   *
+   * @return the external references for the document
+   */
+  public List<DocumentExternalReference> getExternalReferences() {
+    return externalReferences;
+  }
+
+  /**
    * Returns the file type for the document.
    *
    * @return the file type for the document
@@ -256,6 +276,15 @@ public class UpdateDocumentRequest implements Serializable {
    */
   public void setExpiryDate(LocalDate expiryDate) {
     this.expiryDate = expiryDate;
+  }
+
+  /**
+   * Set the external references for the document.
+   *
+   * @param externalReferences the external references for the document
+   */
+  public void setExternalReferences(List<DocumentExternalReference> externalReferences) {
+    this.externalReferences = externalReferences;
   }
 
   /**

@@ -425,7 +425,7 @@ public class WorkflowStepDefinition implements Serializable {
    * @param workflowDefinition the workflow definition the workflow step definition is associated
    *     with
    */
-  @JsonBackReference("workflowStepDefinitionReference")
+  @JsonBackReference("workflowDefinitionStepDefinitionReference")
   @Schema(hidden = true)
   public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
     if (workflowDefinition != null) {

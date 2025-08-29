@@ -10,6 +10,10 @@ delete {
   auth: inherit
 }
 
+assert {
+  res.status: eq 204
+}
+
 settings {
   encodeUrl: true
 }

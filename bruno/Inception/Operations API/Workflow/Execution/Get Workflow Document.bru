@@ -10,9 +10,8 @@ get {
   auth: inherit
 }
 
-vars:pre-request {
-  workflowId: 019890c4-c4bc-775e-879c-e77f3d578ac4
-  workflowDocumentId: 019890c4-c4c3-7c4f-ac03-e4c13fb89de9
+assert {
+  res.status: eq 200
 }
 
 settings {

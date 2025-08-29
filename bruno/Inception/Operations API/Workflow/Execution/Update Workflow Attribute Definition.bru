@@ -24,6 +24,10 @@ vars:pre-request {
   workflowAttributeDefinitionCode: test_workflow_attribute_code
 }
 
+assert {
+  res.status: eq 204
+}
+
 settings {
   encodeUrl: true
 }

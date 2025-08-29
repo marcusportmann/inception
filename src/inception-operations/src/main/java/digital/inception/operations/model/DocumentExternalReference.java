@@ -35,39 +35,39 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The {@code WorkflowExternalReference} class holds the information for an external reference for a
- * workflow.
+ * The {@code DocumentExternalReference} class holds the information for an external reference for a
+ * document.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "An external reference for a workflow")
+@Schema(description = "An external reference for a document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "value"})
 @XmlRootElement(
-    name = "WorkflowExternalReference",
+    name = "DocumentExternalReference",
     namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "WorkflowExternalReference",
+    name = "DocumentExternalReference",
     namespace = "https://inception.digital/operations",
     propOrder = {"type", "value"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
-@DiscriminatorValue("workflow")
+@DiscriminatorValue("document")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class WorkflowExternalReference extends ExternalReference implements Serializable {
+public class DocumentExternalReference extends ExternalReference implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new {@code WorkflowExternalReference}. */
-  public WorkflowExternalReference() {}
+  /** Constructs a new {@code DocumentExternalReference}. */
+  public DocumentExternalReference() {}
 
   /**
-   * Constructs a new {@code WorkflowExternalReference}.
+   * Constructs a new {@code DocumentExternalReference}.
    *
    * @param type the code for the external reference type
    * @param value the value for the external reference
    */
-  public WorkflowExternalReference(String type, String value) {
+  public DocumentExternalReference(String type, String value) {
     super(type, value);
   }
 
@@ -104,6 +104,21 @@ public class WorkflowExternalReference extends ExternalReference implements Seri
   }
 
   /**
+   * Set the document the document external reference is associated with.
+   *
+   * @param document the document the document external reference is associated with
+   */
+  @JsonBackReference("documentExternalReferenceReference")
+  @Schema(hidden = true)
+  public void setDocument(Document document) {
+    if (document != null) {
+      this.objectId = document.getId();
+    } else {
+      this.objectId = null;
+    }
+  }
+
+  /**
    * Set the code for the external reference type.
    *
    * @param type the code for the external reference type
@@ -122,21 +137,6 @@ public class WorkflowExternalReference extends ExternalReference implements Seri
   }
 
   /**
-   * Set the workflow the workflow external reference is associated with.
-   *
-   * @param workflow the workflow the workflow external reference is associated with
-   */
-  @JsonBackReference("workflowExternalReferenceReference")
-  @Schema(hidden = true)
-  public void setWorkflow(Workflow workflow) {
-    if (workflow != null) {
-      this.objectId = workflow.getId();
-    } else {
-      this.objectId = null;
-    }
-  }
-
-  /**
    * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
    * before it is added to its parent.
    *
@@ -145,8 +145,8 @@ public class WorkflowExternalReference extends ExternalReference implements Seri
    */
   @SuppressWarnings("unused")
   private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
-    if (parentObject instanceof Workflow parent) {
-      setWorkflow(parent);
+    if (parentObject instanceof Document parent) {
+      setDocument(parent);
     }
   }
 }

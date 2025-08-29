@@ -30,7 +30,6 @@ import digital.inception.operations.exception.DuplicateDocumentDefinitionExcepti
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
@@ -436,20 +435,6 @@ public interface DocumentService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether a document attribute with the specified code is valid for a document.
-   *
-   * @param tenantId the ID for the tenant
-   * @param documentDefinitionId the ID for the document definition the document is associated with
-   * @param attributeCode the code for the document attribute
-   * @return {@code true} if a document attribute with the specified code is valid or {@code false}
-   *     otherwise
-   * @throws ServiceUnavailableException if the validity of the document attribute code could not be
-   *     verified
-   */
-  boolean isValidDocumentAttribute(UUID tenantId, String documentDefinitionId, String attributeCode)
-      throws ServiceUnavailableException;
-
-  /**
    * Update the document.
    *
    * @param tenantId the ID for the tenant
@@ -522,23 +507,4 @@ public interface DocumentService {
   DocumentNote updateDocumentNote(
       UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Validate whether the required document attributes have been provided for the document
-   * definition.
-   *
-   * @param tenantId the ID for the tenant
-   * @param parameter the parameter path to the attributes being validated, e.g.
-   *     initiateDocumentRequest.attributes
-   * @param documentDefinitionId the ID for the document definition
-   * @param documentAttributes the document attributes to validate
-   * @throws InvalidArgumentException if a required document attribute has not been provided
-   * @throws ServiceUnavailableException if the required document attributes could not be validated
-   */
-  void validateRequiredDocumentAttributes(
-      UUID tenantId,
-      String parameter,
-      String documentDefinitionId,
-      List<DocumentAttribute> documentAttributes)
-      throws InvalidArgumentException, ServiceUnavailableException;
 }

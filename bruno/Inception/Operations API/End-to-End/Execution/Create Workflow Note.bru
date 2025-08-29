@@ -21,6 +21,10 @@ vars:post-response {
   workflowNoteId: res.body
 }
 
+assert {
+  res.status: eq 200
+}
+
 settings {
   encodeUrl: true
 }

@@ -13,7 +13,6 @@ post {
 body:json {
   {
     "definitionId": "test_workflow_definition",
-    "externalReference": "external_reference",
     "startWorkflow": true,
     "attributes": [
       {
@@ -27,6 +26,10 @@ body:json {
 
 vars:post-response {
   workflowId: res.body
+}
+
+assert {
+  res.status: eq 200
 }
 
 settings {
