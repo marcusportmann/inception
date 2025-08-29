@@ -209,7 +209,7 @@ public interface WorkflowService {
    * @param workflowDefinitionId the ID for the workflow definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
-   * @throws ServiceUnavailableException if the workflow could not be deleted
+   * @throws ServiceUnavailableException if the workflow definition could not be deleted
    */
   void deleteWorkflowDefinition(String workflowDefinitionId)
       throws InvalidArgumentException,
@@ -525,7 +525,7 @@ public interface WorkflowService {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition could not be
    *     found
-   * @throws ServiceUnavailableException if the latest workflow definition version could not be
+   * @throws ServiceUnavailableException if the workflow definition version could not be
    *     retrieved
    */
   WorkflowDefinition getWorkflowDefinitionVersion(
@@ -901,7 +901,7 @@ public interface WorkflowService {
    * @return the updated workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
-   * @throws ServiceUnavailableException if the workflow could not be created
+   * @throws ServiceUnavailableException if the workflow could not be updated
    */
   Workflow updateWorkflow(
       UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest, String updatedBy)
