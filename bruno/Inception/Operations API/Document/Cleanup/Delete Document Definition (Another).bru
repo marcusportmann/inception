@@ -1,0 +1,24 @@
+meta {
+  name: Delete Document Definition (Another)
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseURL}}/api/operations/document-definition-categories/{{documentDefinitionCategoryId}}/document-definitions/{{documentDefinitionId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  documentDefinitionCategoryId: test_document_definition_category
+  documentDefinitionId: another_test_document_definition
+}
+
+assert {
+  res.status: eq 204
+}
+
+settings {
+  encodeUrl: true
+}
