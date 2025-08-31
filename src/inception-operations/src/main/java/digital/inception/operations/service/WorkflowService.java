@@ -525,8 +525,7 @@ public interface WorkflowService {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition could not be
    *     found
-   * @throws ServiceUnavailableException if the workflow definition version could not be
-   *     retrieved
+   * @throws ServiceUnavailableException if the workflow definition version could not be retrieved
    */
   WorkflowDefinition getWorkflowDefinitionVersion(
       String workflowDefinitionId, int workflowDefinitionVersion)

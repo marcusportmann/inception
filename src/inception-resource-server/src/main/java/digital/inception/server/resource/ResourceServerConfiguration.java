@@ -473,8 +473,8 @@ public class ResourceServerConfiguration implements InitializingBean {
               .requestMatchers(
                   pathPatternRequestMatcherBuilder.matcher("/"),
                   pathPatternRequestMatcherBuilder.matcher("/webjars/**"),
-                  new RegexRequestMatcher("^/(?:[^/]+/)*[^/]+\\.(?:js|css|html|png|jpg|svg|ico)$", null)
-                  )
+                  new RegexRequestMatcher(
+                      "^/(?:[^/]+/)*[^/]+\\.(?:js|css|html|png|jpg|svg|ico)$", null))
               .permitAll();
 
           // Enable non-authenticated internal network access to the actuator endpoints

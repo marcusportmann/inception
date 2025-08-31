@@ -25,8 +25,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * The {@code ExternalReferenceTypeRepository} interface declares the persistence for the
- * {@code ExternalReferenceType} domain type.
+ * The {@code ExternalReferenceTypeRepository} interface declares the persistence for the {@code
+ * ExternalReferenceType} domain type.
  *
  * @author Marcus Portmann
  */
@@ -38,9 +38,8 @@ public interface ExternalReferenceTypeRepository
    * Find all the external reference types that are
    *
    * <ul>
-   *   <li>specific to the given object type ({@code objectType} matches), or
-   *       global (the external reference type’s {@code objectType} is {@code
-   *       null}).
+   *   <li>specific to the given object type ({@code objectType} matches), or global (the external
+   *       reference type’s {@code objectType} is {@code null}).
    *   <li>specific to the given tenant ({@code tenantId} matches), or global (the document
    *       attribute definition’s {@code tenantId} is {@code null}).
    * </ul>
@@ -61,9 +60,8 @@ public interface ExternalReferenceTypeRepository
       @Param("objectType") String objectType, @Param("tenantId") UUID tenantId);
 
   /**
-   * Find all the external reference types that are specific to the given tenant ({@code
-   * tenantId} matches), or global (the external reference type’s {@code tenantId} is {@code
-   * null}).
+   * Find all the external reference types that are specific to the given tenant ({@code tenantId}
+   * matches), or global (the external reference type’s {@code tenantId} is {@code null}).
    *
    * @param tenantId the ID for the tenant
    * @return the matching external reference types, ordered by code
