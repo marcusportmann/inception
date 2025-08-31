@@ -18,6 +18,24 @@
   <changeSet id="inception-operations-1.0.0" author="Marcus Portmann">
     <comment>inception-operations-1.0.0</comment>
 
+    <createTable tableName="operations_external_reference_types" remarks="External Reference Types">
+      <column name="code" type="nvarchar(50)" remarks="The code for the external reference type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="object_type" type="nvarchar(50)" remarks="The type of object the external reference type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the external reference type is specific to"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the external reference type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the external reference type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="operations_external_reference_types_tenant_id_ix"
+      tableName="operations_external_reference_types">
+      <column name="tenant_id"/>
+    </createIndex>
+
     <createTable tableName="operations_external_references" remarks="External References">
       <column name="object_id" type="uuid" remarks="The ID for the object the external reference is associated with">
         <constraints primaryKey="true" nullable="false"/>
@@ -1408,6 +1426,11 @@
       <dropIndex tableName="operations_external_references"
         indexName="operations_external_references_object_ix"/>
       <dropTable tableName="operations_external_references"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_external_reference_types"/>
+      <dropIndex tableName="operations_external_reference_types"
+        indexName="operations_external_reference_types_tenant_id_ix"/>
+      <dropTable tableName="operations_external_reference_types"/>
     </rollback>
   </changeSet>
 

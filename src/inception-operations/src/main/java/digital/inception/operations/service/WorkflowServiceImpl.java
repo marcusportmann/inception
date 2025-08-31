@@ -42,12 +42,14 @@ import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
+import digital.inception.operations.model.ExternalReference;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
+import digital.inception.operations.model.OperationsObjectType;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -1449,6 +1451,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowDefinition workflowDefinition =
           getWorkflowService().getWorkflowDefinition(initiateWorkflowRequest.getDefinitionId());
 
+      if (initiateWorkflowRequest.getExternalReferences() != null) {
+        // Validate the external references
+        validationService.validateExternalReferences(
+            tenantId,
+            "initiateWorkflowRequest.externalReferences",
+            OperationsObjectType.WORKFLOW,
+            initiateWorkflowRequest.getExternalReferences());
+      }
+
       if (initiateWorkflowRequest.getAttributes() != null) {
         // Validate the allowed workflow attributes
         validationService.validateAllowedWorkflowAttributes(
@@ -1686,6 +1697,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       String documentDefinitionId =
           workflowStore.getDocumentDefinitionIdForWorkflowDocument(
               tenantId, provideWorkflowDocumentRequest.getWorkflowDocumentId());
+
+      if (provideWorkflowDocumentRequest.getExternalReferences() != null) {
+        // Validate the external references
+        validationService.validateExternalReferences(
+            tenantId,
+            "provideWorkflowDocumentRequest.externalReferences",
+            OperationsObjectType.DOCUMENT,
+            provideWorkflowDocumentRequest.getExternalReferences());
+      }
 
       if (provideWorkflowDocumentRequest.getAttributes() != null) {
         // Validate the allowed document attributes
@@ -2058,6 +2078,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       }
 
       if (updateWorkflowRequest.getExternalReferences() != null) {
+        // Validate the external references
+        validationService.validateExternalReferences(
+            tenantId,
+            "updateWorkflowRequest.externalReferences",
+            OperationsObjectType.WORKFLOW,
+            updateWorkflowRequest.getExternalReferences());
+
         workflow.setExternalReferences(updateWorkflowRequest.getExternalReferences());
       }
 

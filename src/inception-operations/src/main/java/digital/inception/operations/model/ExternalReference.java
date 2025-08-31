@@ -82,4 +82,58 @@ public class ExternalReference implements Serializable {
     this.type = type;
     this.value = value;
   }
+
+  /**
+   * Returns the ID for the object the external reference is associated with.
+   *
+   * @return the ID for the object the external reference is associated with
+   */
+  public UUID getObjectId() {
+    return objectId;
+  }
+
+  /**
+   * Returns the code for the external reference type.
+   *
+   * @return the code for the external reference type
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * Returns the value for the external reference.
+   *
+   * @return the value for the external reference
+   */
+  public String getValue() {
+    return value;
+  }
+
+  /**
+   * Set the ID for the object the external reference is associated with.
+   *
+   * @param objectId the ID for the object the external reference is associated with
+   */
+  public void setObjectId(UUID objectId) {
+    this.objectId = objectId;
+  }
+
+  /**
+   * Set the code for the external reference type.
+   *
+   * @param type the code for the external reference type
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  /**
+   * Set the value for the external reference.
+   *
+   * @param value the value for the external reference
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 }

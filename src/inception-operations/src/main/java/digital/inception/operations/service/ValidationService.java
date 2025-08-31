@@ -19,6 +19,8 @@ package digital.inception.operations.service;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.operations.model.DocumentAttribute;
+import digital.inception.operations.model.ExternalReference;
+import digital.inception.operations.model.OperationsObjectType;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowVariable;
 import java.util.List;
@@ -112,6 +114,24 @@ public interface ValidationService {
    */
   void validateAllowedWorkflowVariables(
       String parameter, String workflowDefinitionId, List<WorkflowVariable> workflowVariables)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Validate the external references.
+   *
+   * @param tenantId the ID for the tenant
+   * @param parameter the parameter path to the external references being validated, e.g.
+   *     initiateWorkflowRequest.externalReferences
+   * @param objectType the type of object the external references are associated with
+   * @param externalReferences the external references to validate
+   * @throws InvalidArgumentException if an external reference is not valid
+   * @throws ServiceUnavailableException if the external references could not be validated
+   */
+  void validateExternalReferences(
+      UUID tenantId,
+      String parameter,
+      OperationsObjectType objectType,
+      List<? extends ExternalReference> externalReferences)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

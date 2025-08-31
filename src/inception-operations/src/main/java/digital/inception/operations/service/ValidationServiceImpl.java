@@ -21,6 +21,9 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
+import digital.inception.operations.model.ExternalReference;
+import digital.inception.operations.model.ExternalReferenceType;
+import digital.inception.operations.model.OperationsObjectType;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
@@ -44,6 +47,9 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   /** The Document Service. */
   private DocumentService documentService;
+
+  /** The Operations Reference Service. */
+  private OperationsReferenceService operationsReferenceService;
 
   /** The Workflow Service. */
   private WorkflowService workflowService;
@@ -130,6 +136,11 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       String documentDefinitionId,
       List<DocumentAttribute> documentAttributes)
       throws InvalidArgumentException, ServiceUnavailableException {
+    // Early exit if no document attributes to validate
+    if (documentAttributes == null || documentAttributes.isEmpty()) {
+      return;
+    }
+
     for (DocumentAttribute documentAttribute : documentAttributes) {
       if (!isValidDocumentAttribute(tenantId, documentDefinitionId, documentAttribute.getCode())) {
         throw new InvalidArgumentException(
@@ -145,6 +156,11 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       String workflowDefinitionId,
       List<WorkflowAttribute> workflowAttributes)
       throws InvalidArgumentException, ServiceUnavailableException {
+    // Early exit if no workflow attributes to validate
+    if (workflowAttributes == null || workflowAttributes.isEmpty()) {
+      return;
+    }
+
     for (WorkflowAttribute workflowAttribute : workflowAttributes) {
       if (!isValidWorkflowAttribute(tenantId, workflowDefinitionId, workflowAttribute.getCode())) {
         throw new InvalidArgumentException(
@@ -157,6 +173,11 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
   public void validateAllowedWorkflowVariables(
       String parameter, String workflowDefinitionId, List<WorkflowVariable> workflowVariables)
       throws InvalidArgumentException, ServiceUnavailableException {
+    // Early exit if no workflow variables to validate
+    if (workflowVariables == null || workflowVariables.isEmpty()) {
+      return;
+    }
+
     try {
       WorkflowDefinition workflowDefinition =
           getWorkflowService().getWorkflowDefinition(workflowDefinitionId);
@@ -188,6 +209,59 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       throw new ServiceUnavailableException(
           "Failed to validate the allowed workflow variables for the workflow definition ("
               + workflowDefinitionId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void validateExternalReferences(
+      UUID tenantId,
+      String parameter,
+      OperationsObjectType objectType,
+      List<? extends ExternalReference> externalReferences)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    // Early exit if no external references to validate
+    if (externalReferences == null || externalReferences.isEmpty()) {
+      return;
+    }
+
+    try {
+      List<ExternalReferenceType> externalReferenceTypes =
+          getOperationsReferenceService().getExternalReferenceTypes(tenantId);
+
+      // Create a Set of valid reference type codes for O(1) lookup instead of O(n) nested loops
+      Set<String> validReferenceCodes =
+          externalReferenceTypes.stream()
+              .filter(type -> objectType == type.getObjectType())
+              .map(ExternalReferenceType::getCode)
+              .map(String::toLowerCase) // Normalize for case-insensitive comparison
+              .collect(Collectors.toSet());
+
+      // Find the first invalid external reference using Stream API
+      Optional<String> invalidReferenceType =
+          externalReferences.stream()
+              .map(ExternalReference::getType)
+              .filter(type -> !validReferenceCodes.contains(type.toLowerCase()))
+              .findFirst();
+
+      if (invalidReferenceType.isPresent()) {
+        throw new InvalidArgumentException(
+            parameter,
+            "the external reference type ("
+                + invalidReferenceType.get()
+                + ") is invalid for the object type ("
+                + objectType
+                + ")");
+      }
+    } catch (InvalidArgumentException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to validate the external references for the object type ("
+              + objectType
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -295,7 +369,6 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
   public void validateRequiredWorkflowVariables(
       String parameter, String workflowDefinitionId, List<WorkflowVariable> workflowVariables)
       throws InvalidArgumentException, ServiceUnavailableException {
-
     try {
       WorkflowDefinition workflowDefinition =
           getWorkflowService().getWorkflowDefinition(workflowDefinitionId);
@@ -345,6 +418,20 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     }
 
     return documentService;
+  }
+
+  /**
+   * Returns the lazily evaluated Operations Reference Service to avoid circular references.
+   *
+   * @return the lazily evaluated Operations Reference Service to avoid circular references.
+   */
+  private OperationsReferenceService getOperationsReferenceService() {
+    if (operationsReferenceService == null) {
+      operationsReferenceService =
+          getApplicationContext().getBean(OperationsReferenceService.class);
+    }
+
+    return operationsReferenceService;
   }
 
   /**

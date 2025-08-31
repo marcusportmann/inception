@@ -21,6 +21,7 @@ import digital.inception.party.model.ExternalReferenceTypeId;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 /**
  * The {@code ExternalReferenceTypeRepository} interface declares the persistence for the {@code
@@ -28,6 +29,7 @@ import org.springframework.data.jpa.repository.Query;
  *
  * @author Marcus Portmann
  */
+@Repository("partyExternalReferenceTypeRepository")
 public interface ExternalReferenceTypeRepository
     extends JpaRepository<ExternalReferenceType, ExternalReferenceTypeId> {
 

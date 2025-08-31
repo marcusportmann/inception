@@ -38,6 +38,8 @@ import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
+import digital.inception.operations.model.DocumentExternalReference;
+import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
@@ -55,6 +57,7 @@ import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.OperationsObjectType;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -78,6 +81,7 @@ import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.InteractionService;
+import digital.inception.operations.service.OperationsReferenceService;
 import digital.inception.operations.service.WorkflowService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
@@ -156,6 +160,9 @@ public class EndToEndTests {
   /** The Jackson Object Mapper. */
   @Autowired private ObjectMapper objectMapper;
 
+  /** The Operations Reference Service. */
+  @Autowired private OperationsReferenceService operationsReferenceService;
+
   /** The Workflow Service. */
   @Autowired private WorkflowService workflowService;
 
@@ -217,6 +224,16 @@ public class EndToEndTests {
     //  |____/ \___/ \___|\__,_|_| |_| |_|\___|_| |_|\__| |____/ \___|\__|\__,_| .__/
     //                                                                         |_|
 
+    // Create the document external reference type
+    ExternalReferenceType documentExternalReferenceType =
+        new ExternalReferenceType(
+            "test_document_external_reference_code",
+            "Test Document External Reference",
+            "Test Document External Reference Description",
+            OperationsObjectType.DOCUMENT);
+
+    operationsReferenceService.createExternalReferenceType(documentExternalReferenceType);
+
     // Create the document attribute definition
     DocumentAttributeDefinition documentAttributeDefinition =
         new DocumentAttributeDefinition(
@@ -258,6 +275,17 @@ public class EndToEndTests {
     //    \ V  V / (_) | |  |   <|  _| | (_) \ V  V /   ___) |  __/ |_| |_| | |_) |
     //     \_/\_/ \___/|_|  |_|\_\_| |_|\___/ \_/\_/   |____/ \___|\__|\__,_| .__/
     //                                                                      |_|
+
+    // Create the workflow external reference type
+    ExternalReferenceType workflowExternalReferenceType =
+        new ExternalReferenceType(
+            "test_workflow_external_reference_code",
+            "Test Workflow External Reference",
+            "Test Workflow External Reference Description",
+            OperationsObjectType.WORKFLOW,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    operationsReferenceService.createExternalReferenceType(workflowExternalReferenceType);
 
     // Create the workflow attribute definition
     WorkflowAttributeDefinition workflowAttributeDefinition =
@@ -475,9 +503,17 @@ public class EndToEndTests {
               outstandingWorkflowDocument.getId(),
               FileType.PDF,
               "MultiPagePdf.pdf",
+              null,
+              null,
+              null,
+              List.of(
+                  new DocumentExternalReference(
+                      "test_document_external_reference_code",
+                      "test_document_external_reference_value")),
               List.of(
                   new DocumentAttribute(
                       "test_document_attribute_code", "test_document_attribute_value")),
+              null,
               multiPagePdfData);
 
       workflowService.provideWorkflowDocument(
@@ -621,6 +657,8 @@ public class EndToEndTests {
 
     workflowService.deleteWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
 
+    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
+
     //   ____                                        _      ____ _
     //  |  _ \  ___   ___ _   _ _ __ ___   ___ _ __ | |_   / ___| | ___  __ _ _ __  _   _ _ __
     //  | | | |/ _ \ / __| | | | '_ ` _ \ / _ \ '_ \| __| | |   | |/ _ \/ _` | '_ \| | | | '_ \
@@ -648,6 +686,8 @@ public class EndToEndTests {
     }
 
     documentService.deleteDocumentAttributeDefinition(documentAttributeDefinition.getCode());
+
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
 
     //   ___       _                      _   _                ____ _
     //  |_ _|_ __ | |_ ___ _ __ __ _  ___| |_(_) ___  _ __    / ___| | ___  __ _ _ __  _   _ _ __

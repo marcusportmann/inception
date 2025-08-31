@@ -47,10 +47,13 @@ import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentExternalReference;
+import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.OperationsObjectType;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -93,6 +96,7 @@ import digital.inception.operations.model.WorkflowVariable;
 import digital.inception.operations.model.WorkflowVariableDefinition;
 import digital.inception.operations.service.BackgroundWorkflowStatusVerifier;
 import digital.inception.operations.service.DocumentService;
+import digital.inception.operations.service.OperationsReferenceService;
 import digital.inception.operations.service.WorkflowService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
@@ -144,6 +148,9 @@ public class WorkflowServiceTests {
 
   /** The Jackson Object Mapper. */
   @Autowired private ObjectMapper objectMapper;
+
+  /** The Operations Reference Service. */
+  @Autowired private OperationsReferenceService operationsReferenceService;
 
   /** The Workflow Service. */
   @Autowired private WorkflowService workflowService;
@@ -245,6 +252,26 @@ public class WorkflowServiceTests {
   /** Test the JSON workflow functionality. */
   @Test
   public void jsonWorkflowTest() throws Exception {
+    ExternalReferenceType documentExternalReferenceType =
+        new ExternalReferenceType(
+            "test_document_external_reference_code",
+            "Test Document External Reference",
+            "Test Document External Reference Description",
+            OperationsObjectType.DOCUMENT,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    operationsReferenceService.createExternalReferenceType(documentExternalReferenceType);
+
+    ExternalReferenceType workflowReferenceType =
+        new ExternalReferenceType(
+            "test_workflow_external_reference_code",
+            "Test Workflow External Reference",
+            "Test Workflow External Reference Description",
+            OperationsObjectType.WORKFLOW,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    operationsReferenceService.createExternalReferenceType(workflowReferenceType);
+
     // Create the document attribute definition
     DocumentAttributeDefinition documentAttributeDefinition =
         new DocumentAttributeDefinition(
@@ -496,9 +523,17 @@ public class WorkflowServiceTests {
             retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getId(),
             FileType.PDF,
             "MultiPagePdf.pdf",
+            null,
+            null,
+            null,
+            List.of(
+                new DocumentExternalReference(
+                    "test_document_external_reference_code",
+                    "test_document_external_reference_value")),
             List.of(
                 new DocumentAttribute(
                     "test_document_attribute_code", "test_document_attribute_value")),
+            null,
             multiPagePdfData);
 
     provideWorkflowDocumentRequest.setIssueDate(LocalDate.of(2015, 10, 10));
@@ -835,11 +870,62 @@ public class WorkflowServiceTests {
 
     // Delete the document attribute definition
     documentService.deleteDocumentAttributeDefinition(documentAttributeDefinition.getCode());
+
+    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
+
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
   }
 
   /** Test the workflow service functionality. */
   @Test
   public void workflowServiceTest() throws Exception {
+    ExternalReferenceType documentExternalReferenceType =
+        new ExternalReferenceType(
+            "test_document_external_reference_code",
+            "Test Document External Reference",
+            "Test Document External Reference Description",
+            OperationsObjectType.DOCUMENT,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    operationsReferenceService.createExternalReferenceType(documentExternalReferenceType);
+
+    ExternalReferenceType workflowExternalReferenceType =
+        new ExternalReferenceType(
+            "test_workflow_external_reference_code",
+            "Test Workflow External Reference",
+            "Test Workflow External Reference Description",
+            OperationsObjectType.WORKFLOW,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    operationsReferenceService.createExternalReferenceType(workflowExternalReferenceType);
+
+    List<ExternalReferenceType> retrievedExternalReferenceTypes =
+        operationsReferenceService.getExternalReferenceTypes();
+
+    assertEquals(2, retrievedExternalReferenceTypes.size());
+
+    retrievedExternalReferenceTypes =
+        operationsReferenceService.getExternalReferenceTypes(TenantUtil.DEFAULT_TENANT_ID);
+
+    assertEquals(2, retrievedExternalReferenceTypes.size());
+
+    retrievedExternalReferenceTypes =
+        operationsReferenceService.getExternalReferenceTypes(UUID.randomUUID());
+
+    assertEquals(0, retrievedExternalReferenceTypes.size());
+
+    ExternalReferenceType retrievedExternalReferenceType =
+        operationsReferenceService.getExternalReferenceType(
+            "test_workflow_external_reference_code");
+
+    assertEquals("test_workflow_external_reference_code", retrievedExternalReferenceType.getCode());
+    assertEquals("Test Workflow External Reference", retrievedExternalReferenceType.getName());
+    assertEquals(
+        "Test Workflow External Reference Description",
+        retrievedExternalReferenceType.getDescription());
+    assertEquals(OperationsObjectType.WORKFLOW, retrievedExternalReferenceType.getObjectType());
+    assertEquals(TenantUtil.DEFAULT_TENANT_ID, retrievedExternalReferenceType.getTenantId());
+
     WorkflowAttributeDefinition workflowAttributeDefinition =
         new WorkflowAttributeDefinition(
             "test_workflow_attribute_code",
@@ -1225,6 +1311,10 @@ public class WorkflowServiceTests {
         () -> {
           workflowService.getWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
         });
+
+    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
+
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
   }
 
   private void compareWorkflowAttributeDefinitions(

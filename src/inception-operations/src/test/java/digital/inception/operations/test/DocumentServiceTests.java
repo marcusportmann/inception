@@ -50,10 +50,13 @@ import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.DocumentSummary;
+import digital.inception.operations.model.ExternalReferenceType;
+import digital.inception.operations.model.OperationsObjectType;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.service.DocumentService;
+import digital.inception.operations.service.OperationsReferenceService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.nio.charset.StandardCharsets;
@@ -101,9 +104,50 @@ public class DocumentServiceTests {
   /** The Jackson Object Mapper. */
   @Autowired private ObjectMapper objectMapper;
 
+  /** The Operations Reference Service. */
+  @Autowired private OperationsReferenceService operationsReferenceService;
+
   /** Test the document service functionality. */
   @Test
   public void documentServiceTest() throws Exception {
+
+    ExternalReferenceType externalReferenceType =
+        new ExternalReferenceType(
+            "test_document_external_reference_code",
+            "Test Document External Reference",
+            "Test Document External Reference Description",
+            OperationsObjectType.DOCUMENT,
+            TenantUtil.DEFAULT_TENANT_ID);
+
+    operationsReferenceService.createExternalReferenceType(externalReferenceType);
+
+    List<ExternalReferenceType> retrievedExternalReferenceTypes =
+        operationsReferenceService.getExternalReferenceTypes();
+
+    assertEquals(1, retrievedExternalReferenceTypes.size());
+
+    retrievedExternalReferenceTypes =
+        operationsReferenceService.getExternalReferenceTypes(TenantUtil.DEFAULT_TENANT_ID);
+
+    assertEquals(1, retrievedExternalReferenceTypes.size());
+
+    retrievedExternalReferenceTypes =
+        operationsReferenceService.getExternalReferenceTypes(UUID.randomUUID());
+
+    assertEquals(0, retrievedExternalReferenceTypes.size());
+
+    ExternalReferenceType retrievedExternalReferenceType =
+        operationsReferenceService.getExternalReferenceType(
+            "test_document_external_reference_code");
+
+    assertEquals("test_document_external_reference_code", retrievedExternalReferenceType.getCode());
+    assertEquals("Test Document External Reference", retrievedExternalReferenceType.getName());
+    assertEquals(
+        "Test Document External Reference Description",
+        retrievedExternalReferenceType.getDescription());
+    assertEquals(OperationsObjectType.DOCUMENT, retrievedExternalReferenceType.getObjectType());
+    assertEquals(TenantUtil.DEFAULT_TENANT_ID, retrievedExternalReferenceType.getTenantId());
+
     DocumentAttributeDefinition documentAttributeDefinition =
         new DocumentAttributeDefinition(
             "test_document_attribute_code",
@@ -459,6 +503,8 @@ public class DocumentServiceTests {
         () -> {
           documentService.getDocumentAttributeDefinition(documentAttributeDefinition.getCode());
         });
+
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
   }
 
   private void compareDocumentAttributeDefinitions(
@@ -649,8 +695,8 @@ public class DocumentServiceTests {
     createDocumentRequest.setExternalReferences(
         List.of(
             new DocumentExternalReference(
-                "test_workflow_external_reference_code",
-                "test_workflow_external_reference_value")));
+                "test_document_external_reference_code",
+                "test_document_external_reference_value")));
     createDocumentRequest.setFileType(FileType.TEXT);
     createDocumentRequest.setIssueDate(LocalDate.of(2016, 7, 16));
     createDocumentRequest.setName("test.txt");
@@ -668,14 +714,14 @@ public class DocumentServiceTests {
     updateDocumentRequest.setAttributes(
         List.of(
             new DocumentAttribute(
-                "test_document_attribute_code", "test_document_attribute_value")));
+                "test_document_attribute_code", "test_document_attribute_upated_value")));
     updateDocumentRequest.setData(data);
     updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
     updateDocumentRequest.setExternalReferences(
         List.of(
             new DocumentExternalReference(
-                "test_workflow_external_reference_code",
-                "test_workflow_external_reference_value")));
+                "test_document_external_reference_code",
+                "test_document_external_reference_updated_value")));
     updateDocumentRequest.setFileType(FileType.HTML);
     updateDocumentRequest.setDocumentId(document.getId());
     updateDocumentRequest.setIssueDate(LocalDate.of(2017, 8, 17));

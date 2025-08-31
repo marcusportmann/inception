@@ -18,7 +18,6 @@ package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
@@ -53,7 +52,6 @@ import java.util.UUID;
   "workflowDocumentId",
   "fileType",
   "name",
-  "externalReference",
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
@@ -75,6 +73,7 @@ import java.util.UUID;
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
+      "externalReferences",
       "attributes",
       "description",
       "data"
@@ -172,79 +171,35 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
    * @param workflowDocumentId the ID for the workflow document
    * @param fileType the file type for the document
    * @param name the name of the document
-   * @param data the data for the document
-   */
-  public ProvideWorkflowDocumentRequest(
-      UUID workflowDocumentId, FileType fileType, String name, byte[] data) {
-    this.workflowDocumentId = workflowDocumentId;
-    this.fileType = fileType;
-    this.name = name;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code ProvideWorkflowDocumentRequest}.
-   *
-   * @param workflowDocumentId the ID for the workflow document
-   * @param fileType the file type for the document
-   * @param name the name of the document
+   * @param sourceDocumentId the ID for the source document that was split to create this document
+   * @param issueDate the issue date for the document
+   * @param expiryDate the expiry date for the document
+   * @param externalReferences the external references for the document
    * @param attributes the attributes for the document
+   * @param description the description for the workflow document
    * @param data the data for the document
    */
   public ProvideWorkflowDocumentRequest(
       UUID workflowDocumentId,
       FileType fileType,
       String name,
+      UUID sourceDocumentId,
+      LocalDate issueDate,
+      LocalDate expiryDate,
+      List<DocumentExternalReference> externalReferences,
       List<DocumentAttribute> attributes,
+      String description,
       byte[] data) {
     this.workflowDocumentId = workflowDocumentId;
     this.fileType = fileType;
     this.name = name;
+    this.sourceDocumentId = sourceDocumentId;
+    this.issueDate = issueDate;
+    this.expiryDate = expiryDate;
+    this.externalReferences = externalReferences;
     this.attributes = attributes;
-    this.data = data;
-  }
-
-  /**
-   * Constructs a new {@code ProvideWorkflowDocumentRequest}.
-   *
-   * @param workflowDocumentId the ID for the workflow document
-   * @param fileType the file type for the document
-   * @param name the name of the document
-   * @param data the data for the document
-   * @param description the description for the workflow document
-   */
-  public ProvideWorkflowDocumentRequest(
-      UUID workflowDocumentId, FileType fileType, String name, byte[] data, String description) {
-    this.workflowDocumentId = workflowDocumentId;
-    this.fileType = fileType;
-    this.name = name;
-    this.data = data;
     this.description = description;
-  }
-
-  /**
-   * Constructs a new {@code ProvideWorkflowDocumentRequest}.
-   *
-   * @param workflowDocumentId the ID for the workflow document
-   * @param fileType the file type for the document
-   * @param name the name of the document
-   * @param attributes the attributes for the document
-   * @param data the data for the document
-   * @param description the description for the workflow document
-   */
-  public ProvideWorkflowDocumentRequest(
-      UUID workflowDocumentId,
-      FileType fileType,
-      String name,
-      List<DocumentAttribute> attributes,
-      byte[] data,
-      String description) {
-    this.workflowDocumentId = workflowDocumentId;
-    this.fileType = fileType;
-    this.name = name;
-    this.attributes = attributes;
     this.data = data;
-    this.description = description;
   }
 
   /** Constructs a new {@code ProvideWorkflowDocumentRequest}. */

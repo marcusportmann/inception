@@ -176,6 +176,7 @@ public class InitiateWorkflowRequest implements Serializable {
     this.parentId = parentId;
     this.partyId = partyId;
     this.pendWorkflow = pendWorkflow;
+    this.externalReferences = externalReferences;
     this.attributes = attributes;
     this.interactionLinks = interactionLinks;
     this.variables = variables;
