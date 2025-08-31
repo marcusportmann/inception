@@ -233,7 +233,8 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       // Create a Set of valid reference type codes for O(1) lookup instead of O(n) nested loops
       Set<String> validReferenceCodes =
           externalReferenceTypes.stream()
-              .filter(type -> objectType == type.getObjectType())
+              .filter(
+                  type -> ((type.getObjectType() == null) || (objectType == type.getObjectType())))
               .map(ExternalReferenceType::getCode)
               .map(String::toLowerCase) // Normalize for case-insensitive comparison
               .collect(Collectors.toSet());
