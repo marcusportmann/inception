@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <changeSet id="demo-operations-data-1.0.0" author="Marcus Portmann">
+    <comment>demo-operations-data-1.0.0</comment>
+
+    <insert tableName="operations_external_reference_types">
+      <column name="code" value="test_document_external_reference_code"/>
+      <column name="object_type" value="document"/>
+      <column name="name" value="Test Document External Reference"/>
+      <column name="description" value="Test Document External Reference Description"/>
+    </insert>
+
+    <insert tableName="operations_external_reference_types">
+      <column name="code" value="test_workflow_external_reference_code"/>
+      <column name="object_type" value="workflow"/>
+      <column name="name" value="Test Workflow External Reference"/>
+      <column name="description" value="Test Workflow External Description"/>
+    </insert>
+
+    <rollback>
+      <delete tableName="operations_external_reference_types">
+        <where>code = 'test_workflow_external_reference_code'</where>
+      </delete>
+      <delete tableName="operations_external_reference_types">
+        <where>code = 'test_document_external_reference_code'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>
