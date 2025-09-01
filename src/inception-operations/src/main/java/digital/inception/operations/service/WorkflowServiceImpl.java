@@ -54,6 +54,7 @@ import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
+import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowStepRequest;
@@ -1821,6 +1822,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + tenantId
               + ")",
           e);
+    }
+  }
+
+  @Override
+  public WorkflowSummaries searchWorkflows(
+      UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("searchWorkflowsRequest", searchWorkflowsRequest);
+
+    try {
+      return workflowStore.searchWorkflows(tenantId, searchWorkflowsRequest);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to search for workflows for the tenant (" + tenantId + ")", e);
     }
   }
 

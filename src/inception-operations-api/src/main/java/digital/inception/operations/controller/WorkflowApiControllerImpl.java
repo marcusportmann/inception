@@ -50,6 +50,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowStepRequest;
@@ -949,6 +950,21 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     return workflowService.requestWorkflowDocument(
         tenantId, requestWorkflowDocumentRequest, getAuthenticationName());
+  }
+
+  @Override
+  public WorkflowSummaries searchWorkflows(
+      UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return workflowService.searchWorkflows(tenantId, searchWorkflowsRequest);
   }
 
   @Override

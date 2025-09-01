@@ -41,6 +41,7 @@ import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.persistence.jpa.DocumentAttributeDefinitionRepository;
@@ -829,6 +830,24 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + tenantId
               + ")",
           e);
+    }
+  }
+
+  @Override
+  public DocumentSummaries searchDocuments(
+      UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("searchDocumentsRequest", searchDocumentsRequest);
+
+    try {
+      return documentStore.searchDocuments(tenantId, searchDocumentsRequest);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to search for documents for the tenant (" + tenantId + ")", e);
     }
   }
 

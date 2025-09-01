@@ -16,6 +16,7 @@
 
 package digital.inception.operations.store;
 
+import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -33,6 +34,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinitionId;
@@ -452,6 +454,17 @@ public interface WorkflowStore {
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
       throws DocumentDefinitionNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Search for workflows.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchWorkflowsRequest the request to search for workflows matching specific criteria
+   * @return the summaries for the workflows matching the search criteria
+   * @throws ServiceUnavailableException if the workflow search failed
+   */
+  WorkflowSummaries searchWorkflows(UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
+      throws ServiceUnavailableException;
 
   /**
    * Set the status for the workflow and, if applicable, the status for any associated workflow

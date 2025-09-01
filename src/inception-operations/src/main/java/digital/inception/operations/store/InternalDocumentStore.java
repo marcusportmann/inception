@@ -29,6 +29,7 @@ import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.DocumentSummary;
+import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.persistence.jpa.DocumentNoteRepository;
 import digital.inception.operations.persistence.jpa.DocumentRepository;
 import digital.inception.operations.persistence.jpa.DocumentSummaryRepository;
@@ -460,6 +461,13 @@ public class InternalDocumentStore implements DocumentStore {
           "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
           e);
     }
+  }
+
+  @Override
+  public DocumentSummaries searchDocuments(
+      UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
+      throws ServiceUnavailableException {
+    throw new ServiceUnavailableException("Not Implemented");
   }
 
   @Override

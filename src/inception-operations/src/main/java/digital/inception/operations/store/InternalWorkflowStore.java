@@ -34,6 +34,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
@@ -1313,6 +1314,13 @@ public class InternalWorkflowStore implements WorkflowStore {
               + ")",
           e);
     }
+  }
+
+  @Override
+  public WorkflowSummaries searchWorkflows(
+      UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
+      throws ServiceUnavailableException {
+    throw new ServiceUnavailableException("Not Implemented");
   }
 
   @Override

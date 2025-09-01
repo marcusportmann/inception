@@ -49,6 +49,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowStepRequest;
@@ -3751,4 +3752,72 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowDocumentNotFoundException,
           ServiceUnavailableException;
+
+
+
+
+
+
+
+
+  /**
+   * Search for workflows.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchWorkflowsRequest the request to search for workflows matching specific criteria
+   * @return the summaries for the workflows matching the search criteria
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the workflow search failed
+   */
+  @Operation(summary = "Search for workflows", description = "Search for workflows")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "200", description = "The workflow summaries were retrieved"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/search-workflows",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  WorkflowSummaries searchWorkflows(
+      @Parameter(
+          name = "Tenant-ID",
+          description = "The ID for the tenant",
+          example = "00000000-0000-0000-0000-000000000000")
+      @RequestHeader(
+          name = "Tenant-ID",
+          defaultValue = "00000000-0000-0000-0000-000000000000",
+          required = false)
+      UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+          description = "The request to search for workflows matching specific criteria",
+          required = true)
+      @RequestBody
+      SearchWorkflowsRequest searchWorkflowsRequest)
+      throws InvalidArgumentException,
+      ServiceUnavailableException;
 }

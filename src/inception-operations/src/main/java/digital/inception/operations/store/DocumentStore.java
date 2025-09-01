@@ -16,6 +16,7 @@
 
 package digital.inception.operations.store;
 
+import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentNotFoundException;
@@ -28,6 +29,7 @@ import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.SearchDocumentsRequest;
 import java.util.UUID;
 
 /**
@@ -189,6 +191,17 @@ public interface DocumentStore {
       Integer pageIndex,
       Integer pageSize,
       int maxResults)
+      throws ServiceUnavailableException;
+
+  /**
+   * Search for documents.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchDocumentsRequest the request to search for documents matching specific criteria
+   * @return the summaries for the documents matching the search criteria
+   * @throws ServiceUnavailableException if the document search failed
+   */
+  DocumentSummaries searchDocuments(UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
       throws ServiceUnavailableException;
 
   /**
