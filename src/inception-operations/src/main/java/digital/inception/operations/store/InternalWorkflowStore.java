@@ -43,6 +43,7 @@ import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocumentStatus;
 import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowInteractionLink;
 import digital.inception.operations.model.WorkflowInteractionLinkId;
 import digital.inception.operations.model.WorkflowNote;
@@ -734,6 +735,31 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public WorkflowEngineIds getWorkflowEngineIdsForWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<WorkflowEngineIds> workflowEngineIdsOptional =
+          workflowRepository.findWorkflowEngineIdsForWorkflow(workflowId);
+
+      if (workflowEngineIdsOptional.isEmpty()) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      return workflowEngineIdsOptional.get();
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow engine IDs for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public UUID getWorkflowIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
       throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
     try {
@@ -1136,7 +1162,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
-  public UUID provideWorkflowDocument(
+  public WorkflowDocument provideWorkflowDocument(
       UUID tenantId,
       ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest,
       String providedBy)
@@ -1218,7 +1244,7 @@ public class InternalWorkflowStore implements WorkflowStore {
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
 
-      return document.getId();
+      return workflowDocument;
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1280,7 +1306,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
-  public UUID requestWorkflowDocument(
+  public WorkflowDocument requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
@@ -1302,7 +1328,7 @@ public class InternalWorkflowStore implements WorkflowStore {
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
 
-      return workflowDocument.getId();
+      return workflowDocument;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to request the workflow document with the document definition ("

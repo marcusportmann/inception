@@ -101,4 +101,22 @@ public class OperationsConfiguration {
     threadPoolTaskExecutor.initialize();
     return threadPoolTaskExecutor;
   }
+
+  /**
+   * Returns the dedicated {@code ThreadPoolTaskExecutor} used to process workflow document events
+   * asynchronously.
+   *
+   * @return the dedicated {@code ThreadPoolTaskExecutor} used to process workflow document events
+   *     asynchronously
+   */
+  @Bean
+  public Executor workflowDocumentEventExecutor() {
+    ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    threadPoolTaskExecutor.setCorePoolSize(1);
+    threadPoolTaskExecutor.setMaxPoolSize(5);
+    threadPoolTaskExecutor.setQueueCapacity(1000);
+    threadPoolTaskExecutor.setThreadNamePrefix("workflow-document-event-task-");
+    threadPoolTaskExecutor.initialize();
+    return threadPoolTaskExecutor;
+  }
 }

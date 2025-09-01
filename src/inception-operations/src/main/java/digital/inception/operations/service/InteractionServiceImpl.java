@@ -1896,10 +1896,4 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           e);
     }
   }
-
-  /** The {@code TriggerInteractionProcessingEvent} record. */
-  public record TriggerInteractionProcessingEvent() {}
-
-  /** The {@code TriggerInteractionSourceSynchronizationEvent} record. */
-  public record TriggerInteractionSourceSynchronizationEvent() {}
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.operations.service;
 
-import digital.inception.operations.service.InteractionServiceImpl.TriggerInteractionProcessingEvent;
+import digital.inception.operations.service.InteractionService.TriggerInteractionProcessingEvent;
 import java.util.concurrent.RejectedExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

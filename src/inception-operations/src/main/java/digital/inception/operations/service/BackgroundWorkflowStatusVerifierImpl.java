@@ -111,7 +111,8 @@ public class BackgroundWorkflowStatusVerifierImpl
             Workflow workflow = workflowService.getWorkflow(workflowId);
 
             WorkflowStatus workflowStatus =
-                workflowEngineConnector.getWorkflowStatus(workflow.getTenantId(), workflow);
+                workflowEngineConnector.getWorkflowStatus(
+                    workflow.getTenantId(), workflow.getId(), workflow.getEngineInstanceId());
 
             if ((workflowStatus != WorkflowStatus.UNKNOWN)
                 && (workflowStatus != workflow.getStatus())) {

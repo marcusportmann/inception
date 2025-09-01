@@ -523,8 +523,6 @@ public interface DocumentService {
       UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
 
-
-
   /**
    * Search for documents.
    *
@@ -534,9 +532,6 @@ public interface DocumentService {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the document search failed
    */
-    DocumentSummaries searchDocuments(
-      UUID tenantId,
-      SearchDocumentsRequest searchDocumentsRequest)
-      throws InvalidArgumentException,
-      ServiceUnavailableException;
+  DocumentSummaries searchDocuments(UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

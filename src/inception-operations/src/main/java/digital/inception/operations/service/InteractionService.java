@@ -687,4 +687,10 @@ public interface InteractionService {
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;
+
+  /** The {@code TriggerInteractionProcessingEvent} record. */
+  record TriggerInteractionProcessingEvent() {}
+
+  /** The {@code TriggerInteractionSourceSynchronizationEvent} record. */
+  record TriggerInteractionSourceSynchronizationEvent() {}
 }

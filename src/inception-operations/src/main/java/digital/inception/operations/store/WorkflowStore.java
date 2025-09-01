@@ -16,7 +16,6 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -41,6 +40,7 @@ import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
@@ -304,6 +304,19 @@ public interface WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow engine IDs for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the workflow engine IDs for the workflow
+   * @throws WorkflowNotFoundException if the workflow could be found
+   * @throws ServiceUnavailableException if the workflow engine IDs could not be retrieved for the
+   *     workflow
+   */
+  WorkflowEngineIds getWorkflowEngineIdsForWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow ID for the workflow document.
    *
    * @param tenantId the ID for the tenant
@@ -416,11 +429,11 @@ public interface WorkflowStore {
    * @param tenantId the ID for the tenant
    * @param provideWorkflowDocumentRequest the request to provide a workflow document
    * @param providedBy the person or system providing the workflow document
-   * @return the ID for the document
+   * @return the workflow document that was provided
    * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
    * @throws ServiceUnavailableException if the workflow document could not be provided
    */
-  UUID provideWorkflowDocument(
+  WorkflowDocument provideWorkflowDocument(
       UUID tenantId,
       ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest,
       String providedBy)
@@ -445,11 +458,11 @@ public interface WorkflowStore {
    * @param tenantId the ID for the tenant
    * @param requestWorkflowDocumentRequest the request to request a workflow document
    * @param requestedBy the person or system requesting the workflow document
-   * @return the ID for the workflow document
+   * @return the workflow document
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the workflow document could not be requested
    */
-  UUID requestWorkflowDocument(
+  WorkflowDocument requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)

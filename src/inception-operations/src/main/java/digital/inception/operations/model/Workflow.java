@@ -258,9 +258,9 @@ public class Workflow implements Serializable {
   @Column(name = "definition_version", nullable = false)
   private int definitionVersion;
 
-  /** The ID of the corresponding process or case instance in the workflow engine. */
+  /** The ID for the corresponding process or case instance in the workflow engine. */
   @Schema(
-      description = "The ID of the corresponding process or case instance in the workflow engine")
+      description = "The ID for the corresponding process or case instance in the workflow engine")
   @JsonProperty
   @XmlElement(name = "EngineInstanceId")
   @Size(min = 1, max = 100)
@@ -700,9 +700,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the ID of the corresponding process or case instance in the workflow engine.
+   * Returns the ID for the corresponding process or case instance in the workflow engine.
    *
-   * @return the ID of the corresponding process or case instance in the workflow engine
+   * @return the ID for the corresponding process or case instance in the workflow engine
    */
   public String getEngineInstanceId() {
     return engineInstanceId;
@@ -1004,9 +1004,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the ID of the corresponding process or case instance in the workflow engine.
+   * Set the ID for the corresponding process or case instance in the workflow engine.
    *
-   * @param engineInstanceId the ID of the corresponding process or case instance in the workflow
+   * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
    *     engine
    */
   public void setEngineInstanceId(String engineInstanceId) {

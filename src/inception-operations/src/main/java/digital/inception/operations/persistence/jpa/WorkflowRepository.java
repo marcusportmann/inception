@@ -18,6 +18,7 @@ package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinitionId;
+import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowStatus;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -130,10 +131,10 @@ public interface WorkflowRepository
       """
       select w.id
         from Workflow w
-        join WorkflowDefinition d
-          on d.id = w.definitionId and d.version = w.definitionVersion
+        join WorkflowDefinition wd
+          on wd.id = w.definitionId and wd.version = w.definitionVersion
        where w.status = digital.inception.operations.model.WorkflowStatus.ACTIVE
-         and d.engineId = :workflowEngineId
+         and wd.engineId = :workflowEngineId
       """)
   List<UUID> findActiveWorkflowIdsForWorkflowEngine(
       @Param("workflowEngineId") String workflowEngineId);
@@ -166,6 +167,24 @@ public interface WorkflowRepository
          where w.id = :workflowId
          """)
   Optional<WorkflowDefinitionId> findWorkflowDefinitionIdByWorkflowId(
+      @Param("workflowId") UUID workflowId);
+
+  /**
+   * Find the workflow engine IDs for the workflow.
+   *
+   * @param workflowId the ID for the workflow
+   * @return the optional containing the workflow engine IDs for the workflow or an empty Optional
+   *     if the workflow could not be found
+   */
+  @Query(
+      """
+      select new digital.inception.operations.model.WorkflowEngineIds(wd.engineId, w.engineInstanceId)
+        from Workflow w
+        join WorkflowDefinition wd
+          on wd.id = w.definitionId and wd.version = w.definitionVersion
+       where w.id = :workflowId
+      """)
+  Optional<WorkflowEngineIds> findWorkflowEngineIdsForWorkflow(
       @Param("workflowId") UUID workflowId);
 
   /**
@@ -223,35 +242,4 @@ public interface WorkflowRepository
          and w.id                 = :workflowId
       """)
   int unsuspendWorkflow(@Param("tenantId") UUID tenantId, @Param("workflowId") UUID workflowId);
-
-  //  /**
-  //   * Complete a workflow instance.
-  //   *
-  //   * @param tenantId the ID for the tenant
-  //   * @param workflowId the workflow ID
-  //   * @param completed the date and time the workflow was completed
-  //   * @param completedBy the person or system that completed the workflow
-  //   * @return the number of rows that were updated (0 or 1)
-  //   */
-  //  @Transactional
-  //  @Modifying(clearAutomatically = true, flushAutomatically = true)
-  //  @Query(
-  //      """
-  //      update Workflow w
-  //         set w.suspended          = null,
-  //             w.suspendedBy        = null,
-  //             w.finalized          = :completed,
-  //             w.finalizedBy        = :completedBy,
-  //             w.canceled           = null,
-  //             w.canceledBy         = null,
-  //             w.cancellationReason = null,
-  //             w.status             = digital.inception.operations.model.WorkflowStatus.COMPLETED
-  //       where w.tenantId           = :tenantId
-  //         and w.id                 = :workflowId
-  //      """)
-  //  int completeWorkflow(
-  //      @Param("tenantId") UUID tenantId,
-  //      @Param("workflowId") UUID workflowId,
-  //      @Param("completed") OffsetDateTime completed,
-  //      @Param("completedBy") String completedBy);
 }

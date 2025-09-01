@@ -20,12 +20,13 @@ import digital.inception.operations.connector.AbstractWorkflowEngineConnectorBas
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.connector.WorkflowEngineConnectorException;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
-import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowStatus;
+import digital.inception.operations.model.WorkflowVariable;
+import digital.inception.operations.service.WorkflowService.WorkflowDocumentEvent;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -51,19 +52,9 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   }
 
   @Override
-  public void cancelWorkflow(
-      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+  public void cancelWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
       throws WorkflowEngineConnectorException {
-    log.info(
-        "Cancelling the workflow ("
-            + workflow.getId()
-            + ") with the workflow definition ("
-            + workflowDefinition.getId()
-            + ") version ("
-            + workflowDefinition.getVersion()
-            + ") for the tenant ("
-            + tenantId
-            + ")");
+    log.info("Cancelling the workflow (" + workflowId + ") for the tenant (" + tenantId + ")");
   }
 
   @Override
@@ -77,26 +68,41 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   }
 
   @Override
-  public byte[] getWorkflowData(
-      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+  public byte[] getWorkflowData(UUID tenantId, UUID workflowId, String engineInstanceId)
       throws WorkflowEngineConnectorException {
     return new byte[0];
   }
 
   @Override
   public byte[] getWorkflowForm(
-      UUID tenantId,
-      WorkflowDefinition workflowDefinition,
-      Workflow workflow,
-      WorkflowFormType workflowFormType)
+      UUID tenantId, UUID workflowId, String engineInstanceId, WorkflowFormType workflowFormType)
       throws WorkflowEngineConnectorException {
     return new byte[0];
   }
 
   @Override
-  public WorkflowStatus getWorkflowStatus(UUID tenantId, Workflow workflow)
+  public WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId, String engineInstanceId)
       throws WorkflowEngineConnectorException {
     return WorkflowStatus.UNKNOWN;
+  }
+
+  @Override
+  public void processWorkflowDocumentEvent(
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId,
+      WorkflowDocumentEvent workflowDocumentEvent)
+      throws WorkflowEngineConnectorException {
+    log.info(
+        "Processing the workflow document event ("
+            + workflowDocumentEvent.workflowDocumentEventType()
+            + ") for the workflow document ("
+            + workflowDocumentEvent.workflowDocumentId()
+            + ") for the workflow ("
+            + workflowId
+            + ") for the tenant ("
+            + tenantId
+            + ")");
   }
 
   @Override
@@ -104,6 +110,7 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
       UUID tenantId,
       WorkflowDefinition workflowDefinition,
       List<WorkflowAttribute> attributes,
+      List<WorkflowVariable> variables,
       String data)
       throws WorkflowEngineConnectorException {
     String engineWorkflowId = UUID.randomUUID().toString();
@@ -128,48 +135,24 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   }
 
   @Override
-  public void suspendWorkflow(
-      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+  public void suspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
       throws WorkflowEngineConnectorException {
-    log.info(
-        "Suspending the workflow ("
-            + workflow.getId()
-            + ") with the workflow definition ("
-            + workflowDefinition.getId()
-            + ") version ("
-            + workflowDefinition.getVersion()
-            + ") for the tenant ("
-            + tenantId
-            + ")");
+    log.info("Suspending the workflow (" + workflowId + ") for the tenant (" + tenantId + ")");
   }
 
   @Override
-  public void unsuspendWorkflow(
-      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow)
+  public void unsuspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
       throws WorkflowEngineConnectorException {
-    log.info(
-        "Unsuspending the workflow ("
-            + workflow.getId()
-            + ") with the workflow definition ("
-            + workflowDefinition.getId()
-            + ") version ("
-            + workflowDefinition.getVersion()
-            + ") for the tenant ("
-            + tenantId
-            + ")");
+    log.info("Unsuspending the workflow (" + workflowId + ") for the tenant (" + tenantId + ")");
   }
 
   @Override
   public void updateWorkflowData(
-      UUID tenantId, WorkflowDefinition workflowDefinition, Workflow workflow, String data)
+      UUID tenantId, UUID workflowId, String engineInstanceId, String data)
       throws WorkflowEngineConnectorException {
     log.info(
         "Updating the data for the workflow ("
-            + workflow.getId()
-            + ") with the workflow definition ("
-            + workflowDefinition.getId()
-            + ") version ("
-            + workflowDefinition.getVersion()
+            + workflowId
             + ") for the tenant ("
             + tenantId
             + ")");

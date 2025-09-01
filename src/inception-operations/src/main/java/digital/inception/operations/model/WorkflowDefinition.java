@@ -717,6 +717,19 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Retrieve the value for the attribute with the specified code for the workflow definition.
+   *
+   * @param code the code for the attribute
+   * @return an Optional containing the value for the attribute with the specified code for the
+   *     workflow definition or an empty Optional if the attribute could not be found
+   */
+  public Optional<String> getAttributeValue(String code) {
+    Optional<WorkflowDefinitionAttribute> attribute = getAttribute(code);
+
+    return attribute.map(WorkflowDefinitionAttribute::getValue);
+  }
+
+  /**
    * Returns the attributes for the workflow definition.
    *
    * @return the attributes for the workflow definition

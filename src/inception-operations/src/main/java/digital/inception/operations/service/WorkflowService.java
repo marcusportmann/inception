@@ -16,7 +16,6 @@
 
 package digital.inception.operations.service;
 
-import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -67,9 +66,11 @@ import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
+import digital.inception.operations.model.WorkflowDocumentEventType;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
+import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
@@ -77,21 +78,8 @@ import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The {@code WorkflowService} interface defines the functionality provided by a Workflow Service
@@ -620,6 +608,19 @@ public interface WorkflowService {
   List<String> getWorkflowEngineIds() throws ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow engine IDs for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the workflow engine IDs for the workflow
+   * @throws WorkflowNotFoundException if the workflow could be found
+   * @throws ServiceUnavailableException if the workflow engine IDs could not be retrieved for the
+   *     workflow
+   */
+  WorkflowEngineIds getWorkflowEngineIdsForWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow engines.
    *
    * @return the workflow engines
@@ -815,6 +816,18 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Search for workflows.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchWorkflowsRequest the request to search for workflows matching specific criteria
+   * @return the summaries for the workflows matching the search criteria
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the workflow search failed
+   */
+  WorkflowSummaries searchWorkflows(UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Set the status for the workflow and, if applicable, the status for any associated workflow
@@ -1112,22 +1125,15 @@ public interface WorkflowService {
   boolean workflowNoteExists(UUID tenantId, UUID workflowId, UUID workflowNoteId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
-
-
-
-
   /**
-   * Search for workflows.
+   * The {@code WorkflowDocumentEvent} record.
    *
    * @param tenantId the ID for the tenant
-   * @param searchWorkflowsRequest the request to search for workflows matching specific criteria
-   * @return the summaries for the workflows matching the search criteria
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the workflow search failed
+   * @param workflowDocumentEventType the workflow document event type
+   * @param workflowDocumentId the ID for the workflow document
    */
-   WorkflowSummaries searchWorkflows(
+  record WorkflowDocumentEvent(
       UUID tenantId,
-      SearchWorkflowsRequest searchWorkflowsRequest)
-      throws InvalidArgumentException,
-      ServiceUnavailableException;
+      WorkflowDocumentEventType workflowDocumentEventType,
+      UUID workflowDocumentId) {}
 }

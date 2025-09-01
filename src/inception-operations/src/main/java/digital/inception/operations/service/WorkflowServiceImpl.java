@@ -74,9 +74,11 @@ import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
+import digital.inception.operations.model.WorkflowDocumentEventType;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
+import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowInteractionLink;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -106,6 +108,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -117,6 +120,9 @@ import org.springframework.util.StringUtils;
 @Service
 @SuppressWarnings("unused")
 public class WorkflowServiceImpl extends AbstractServiceBase implements WorkflowService {
+
+  /** The Application Event Publisher. */
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   /** The Document Service. */
   private final DocumentService documentService;
@@ -170,6 +176,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    * Constructs a new {@code WorkflowServiceImpl}.
    *
    * @param applicationContext the Spring application context
+   * @param applicationEventPublisher the application event publisher
    * @param workflowStore the Workflow Store
    * @param workflowAttributeDefinitionRepository the Workflow Attribute Definition Repository
    * @param workflowDefinitionCategoryRepository the Workflow Definition Category Repository
@@ -183,6 +190,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    */
   public WorkflowServiceImpl(
       ApplicationContext applicationContext,
+      ApplicationEventPublisher applicationEventPublisher,
       WorkflowStore workflowStore,
       WorkflowAttributeDefinitionRepository workflowAttributeDefinitionRepository,
       WorkflowDefinitionCategoryRepository workflowDefinitionCategoryRepository,
@@ -195,6 +203,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       ValidationService validationService) {
     super(applicationContext);
 
+    this.applicationEventPublisher = applicationEventPublisher;
     this.workflowStore = workflowStore;
     this.workflowAttributeDefinitionRepository = workflowAttributeDefinitionRepository;
     this.workflowDefinitionCategoryRepository = workflowDefinitionCategoryRepository;
@@ -218,15 +227,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("cancelWorkflowRequest", cancelWorkflowRequest);
 
     try {
-      Workflow workflow = getWorkflow(tenantId, cancelWorkflowRequest.getWorkflowId());
+      WorkflowEngineIds workflowEngineIds =
+          workflowStore.getWorkflowEngineIdsForWorkflow(
+              tenantId, cancelWorkflowRequest.getWorkflowId());
 
-      WorkflowDefinition workflowDefinition =
-          getWorkflowService()
-              .getWorkflowDefinitionVersion(
-                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
-
-      getWorkflowEngineConnector(workflowDefinition.getEngineId())
-          .cancelWorkflow(tenantId, workflowDefinition, workflow);
+      getWorkflowEngineConnector(workflowEngineIds.getEngineId())
+          .cancelWorkflow(
+              tenantId,
+              cancelWorkflowRequest.getWorkflowId(),
+              workflowEngineIds.getEngineInstanceId());
 
       workflowStore.cancelWorkflow(
           tenantId,
@@ -1275,6 +1284,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public WorkflowEngineIds getWorkflowEngineIdsForWorkflow(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      return workflowStore.getWorkflowEngineIdsForWorkflow(tenantId, workflowId);
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow engine IDs for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public List<WorkflowEngine> getWorkflowEngines() throws ServiceUnavailableException {
     try {
       return workflowEngineRepository.findAll();
@@ -1546,6 +1573,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                     tenantId,
                     workflowDefinition,
                     initiateWorkflowRequest.getAttributes(),
+                    initiateWorkflowRequest.getVariables(),
                     initiateWorkflowRequest.getData());
 
         workflow.setEngineInstanceId(engineInstanceId);
@@ -1743,8 +1771,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
-      return workflowStore.provideWorkflowDocument(
-          tenantId, provideWorkflowDocumentRequest, providedBy);
+      WorkflowDocument workflowDocument =
+          workflowStore.provideWorkflowDocument(
+              tenantId, provideWorkflowDocumentRequest, providedBy);
+
+      publishWorkflowDocumentEvent(
+          tenantId, WorkflowDocumentEventType.DOCUMENT_PROVIDED, workflowDocument.getId());
+
+      return workflowDocument.getDocumentId();
     } catch (InvalidArgumentException | WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1770,6 +1804,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     try {
       workflowStore.rejectWorkflowDocument(tenantId, rejectWorkflowDocumentRequest, rejectedBy);
+
+      publishWorkflowDocumentEvent(
+          tenantId,
+          WorkflowDocumentEventType.DOCUMENT_REJECTED,
+          rejectWorkflowDocumentRequest.getWorkflowDocumentId());
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1808,8 +1847,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             requestWorkflowDocumentRequest.getDocumentDefinitionId());
       }
 
-      return workflowStore.requestWorkflowDocument(
-          tenantId, requestWorkflowDocumentRequest, requestedBy);
+      WorkflowDocument workflowDocument =
+          workflowStore.requestWorkflowDocument(
+              tenantId, requestWorkflowDocumentRequest, requestedBy);
+
+      publishWorkflowDocumentEvent(
+          tenantId, WorkflowDocumentEventType.DOCUMENT_REQUESTED, workflowDocument.getId());
+
+      return workflowDocument.getId();
     } catch (DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1908,7 +1953,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       String engineInstanceId =
           getWorkflowEngineConnector(workflowDefinition.getEngineId())
               .startWorkflow(
-                  tenantId, workflowDefinition, workflow.getAttributes(), workflow.getData());
+                  tenantId,
+                  workflowDefinition,
+                  workflow.getAttributes(),
+                  workflow.getVariables(),
+                  workflow.getData());
 
       workflow.setEngineInstanceId(engineInstanceId);
       workflow.setStatus(WorkflowStatus.ACTIVE);
@@ -1942,15 +1991,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     try {
-      Workflow workflow = getWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId());
+      WorkflowEngineIds workflowEngineIds =
+          workflowStore.getWorkflowEngineIdsForWorkflow(
+              tenantId, suspendWorkflowRequest.getWorkflowId());
 
-      WorkflowDefinition workflowDefinition =
-          getWorkflowService()
-              .getWorkflowDefinitionVersion(
-                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
-
-      getWorkflowEngineConnector(workflowDefinition.getEngineId())
-          .suspendWorkflow(tenantId, workflowDefinition, workflow);
+      getWorkflowEngineConnector(workflowEngineIds.getEngineId())
+          .suspendWorkflow(
+              tenantId,
+              suspendWorkflowRequest.getWorkflowId(),
+              workflowEngineIds.getEngineInstanceId());
 
       workflowStore.suspendWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId(), suspendedBy);
     } catch (WorkflowNotFoundException e) {
@@ -2006,15 +2055,15 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("unsuspendWorkflowRequest", unsuspendWorkflowRequest);
 
     try {
-      Workflow workflow = getWorkflow(tenantId, unsuspendWorkflowRequest.getWorkflowId());
+      WorkflowEngineIds workflowEngineIds =
+          workflowStore.getWorkflowEngineIdsForWorkflow(
+              tenantId, unsuspendWorkflowRequest.getWorkflowId());
 
-      WorkflowDefinition workflowDefinition =
-          getWorkflowService()
-              .getWorkflowDefinitionVersion(
-                  workflow.getDefinitionId(), workflow.getDefinitionVersion());
-
-      getWorkflowEngineConnector(workflowDefinition.getEngineId())
-          .suspendWorkflow(tenantId, workflowDefinition, workflow);
+      getWorkflowEngineConnector(workflowEngineIds.getEngineId())
+          .unsuspendWorkflow(
+              tenantId,
+              unsuspendWorkflowRequest.getWorkflowId(),
+              workflowEngineIds.getEngineInstanceId());
 
       workflowStore.unsuspendWorkflow(tenantId, unsuspendWorkflowRequest.getWorkflowId());
     } catch (WorkflowNotFoundException e) {
@@ -2144,7 +2193,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
         getWorkflowEngineConnector(workflowDefinition.getEngineId())
             .updateWorkflowData(
-                tenantId, workflowDefinition, workflow, updateWorkflowRequest.getData());
+                tenantId,
+                workflow.getId(),
+                workflow.getEngineInstanceId(),
+                updateWorkflowRequest.getData());
       }
 
       if (updateWorkflowRequest.getStatus() != null) {
@@ -2343,6 +2395,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     try {
       workflowStore.verifyWorkflowDocument(tenantId, verifyWorkflowDocumentRequest, verifiedBy);
+
+      publishWorkflowDocumentEvent(
+          tenantId,
+          WorkflowDocumentEventType.DOCUMENT_VERIFIED,
+          verifyWorkflowDocumentRequest.getWorkflowDocumentId());
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -2552,6 +2609,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     return workflowService;
+  }
+
+  private void publishWorkflowDocumentEvent(
+      UUID tenantId, WorkflowDocumentEventType workflowDocumentEventType, UUID workflowDocumentId) {
+    applicationEventPublisher.publishEvent(
+        new WorkflowDocumentEvent(tenantId, workflowDocumentEventType, workflowDocumentId));
   }
 
   private void validateWorkflowDefinition(WorkflowDefinition workflowDefinition)
