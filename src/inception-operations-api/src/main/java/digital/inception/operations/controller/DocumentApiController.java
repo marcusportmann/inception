@@ -41,10 +41,8 @@ import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.SearchDocumentsRequest;
-import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
-import digital.inception.operations.model.WorkflowSummaries;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -1480,6 +1478,66 @@ public interface DocumentApiController {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Search for documents.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchDocumentsRequest the request to search for documents matching specific criteria
+   * @return the summaries for the documents matching the search criteria
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the document search failed
+   */
+  @Operation(summary = "Search for documents", description = "Search for documents")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The document summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/search-documents",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  DocumentSummaries searchDocuments(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to search for documents matching specific criteria",
+              required = true)
+          @RequestBody
+          SearchDocumentsRequest searchDocumentsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Update the document.
    *
    * @param tenantId the ID for the tenant
@@ -1834,77 +1892,4 @@ public interface DocumentApiController {
           @RequestBody
           UpdateDocumentNoteRequest updateDocumentNoteRequest)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /**
-   * Search for documents.
-   *
-   * @param tenantId the ID for the tenant
-   * @param searchDocumentsRequest the request to search for documents matching specific criteria
-   * @return the summaries for the documents matching the search criteria
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the document search failed
-   */
-  @Operation(summary = "Search for documents", description = "Search for documents")
-  @ApiResponses(
-      value = {
-          @ApiResponse(responseCode = "200", description = "The document summaries were retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/search-documents",
-      method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  DocumentSummaries searchDocuments(
-      @Parameter(
-          name = "Tenant-ID",
-          description = "The ID for the tenant",
-          example = "00000000-0000-0000-0000-000000000000")
-      @RequestHeader(
-          name = "Tenant-ID",
-          defaultValue = "00000000-0000-0000-0000-000000000000",
-          required = false)
-      UUID tenantId,
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "The request to search for documents matching specific criteria",
-          required = true)
-      @RequestBody
-      SearchDocumentsRequest searchDocumentsRequest)
-      throws InvalidArgumentException,
-      ServiceUnavailableException;
 }
