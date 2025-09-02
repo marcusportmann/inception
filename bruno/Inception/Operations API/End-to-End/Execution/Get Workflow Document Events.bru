@@ -1,0 +1,19 @@
+meta {
+  name: Get Workflow Document Events
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}/documents/{{workflowDocumentId}}/events
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+}
