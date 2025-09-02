@@ -23,58 +23,57 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code WorkflowDocumentEventType} enumeration defines the possible workflow document event
- * types.
+ * The {@code EventType} enumeration defines the possible event types.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The workflow document event type")
+@Schema(description = "The event type")
 @XmlEnum
-@XmlType(name = "WorkflowDocumentEventType", namespace = "https://inception.digital/operations")
-public enum WorkflowDocumentEventType implements CodeEnum {
+@XmlType(name = "EventType", namespace = "https://inception.digital/operations")
+public enum EventType implements CodeEnum {
 
-  /** Document Requested. */
-  @XmlEnumValue("DocumentRequested")
-  DOCUMENT_REQUESTED("document_requested", "Document Requested"),
+  /** Workflow Document Requested. */
+  @XmlEnumValue("WorkflowDocumentRequested")
+  WORKFLOW_DOCUMENT_REQUESTED("workflow_document_requested", "Workflow Document Requested"),
 
-  /** Document Provided. */
-  @XmlEnumValue("DocumentProvided")
-  DOCUMENT_PROVIDED("document_provided", "Document Provided"),
+  /** Workflow Document Provided. */
+  @XmlEnumValue("WorkflowDocumentProvided")
+  WORKFLOW_DOCUMENT_PROVIDED("workflow_document_provided", "Workflow Document Provided"),
 
-  /** Document Rejected. */
-  @XmlEnumValue("DocumentRejected")
-  DOCUMENT_REJECTED("document_rejected", "Document Rejected"),
+  /** Workflow Document Rejected. */
+  @XmlEnumValue("WorkflowDocumentRejected")
+  WORKFLOW_DOCUMENT_REJECTED("workflow_document_rejected", "Workflow Document Rejected"),
 
-  /** Document Verified. */
-  @XmlEnumValue("Document Verified")
-  DOCUMENT_VERIFIED("document_verified", "Document Verified"),
+  /** Workflow Document Verified. */
+  @XmlEnumValue("WorkflowDocumentVerified")
+  WORKFLOW_DOCUMENT_VERIFIED("workflow_document_verified", "Workflow Document Verified"),
 
-  /** Document Waived. */
-  @XmlEnumValue("DocumentWaived")
-  DOCUMENT_WAIVED("document_waived", "Document Waived");
+  /** Workflow Document Waived. */
+  @XmlEnumValue("WorkflowDocumentWaived")
+  WORKFLOW_DOCUMENT_WAIVED("workflow_document_waived", "Workflow Document Waived");
 
   private final String code;
 
   private final String description;
 
-  WorkflowDocumentEventType(String code, String description) {
+  EventType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the workflow document event type.
+   * Returns the code for the event type.
    *
-   * @return the code for the workflow document event type
+   * @return the code for the event type
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the workflow document event type.
+   * Returns the description for the event type.
    *
-   * @return the description for the workflow document event type
+   * @return the description for the event type
    */
   public String description() {
     return description;

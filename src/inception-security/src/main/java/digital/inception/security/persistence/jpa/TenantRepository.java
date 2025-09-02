@@ -77,6 +77,14 @@ public interface TenantRepository
   List<Tenant> findAllByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
 
   /**
+   * Find the tenants ordered by name ascending.
+   *
+   * @return the tenants ordered by name ascending
+   */
+  @Query("select t.id from Tenant t")
+  List<UUID> findIds();
+
+  /**
    * Find the name of the tenant.
    *
    * @param tenantId the ID for the tenant

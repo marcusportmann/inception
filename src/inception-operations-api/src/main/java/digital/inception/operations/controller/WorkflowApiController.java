@@ -40,6 +40,7 @@ import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
@@ -1984,6 +1985,88 @@ public interface WorkflowApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowDocument getWorkflowDocument(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
+          @PathVariable
+          UUID workflowId,
+      @Parameter(
+              name = "workflowDocumentId",
+              description = "The ID for the workflow document",
+              required = true)
+          @PathVariable
+          UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the events for the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow document is associated with
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the events for the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the events for the workflow document could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the events for the workflow document",
+      description = "Retrieve the events for the workflow document")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The events for the workflow document were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow or workflow document could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflows/{workflowId}/documents/{workflowDocumentId}/events",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  List<Event> getWorkflowDocumentEvents(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",

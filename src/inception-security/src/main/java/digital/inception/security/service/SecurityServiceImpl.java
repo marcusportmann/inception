@@ -1468,6 +1468,15 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   }
 
   @Override
+  public List<UUID> getTenantIds() throws ServiceUnavailableException {
+    try {
+      return tenantRepository.findIds();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the IDs for the tenants", e);
+    }
+  }
+
+  @Override
   public List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {

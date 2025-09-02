@@ -42,13 +42,15 @@ import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
+import digital.inception.operations.model.Event;
+import digital.inception.operations.model.EventType;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -74,7 +76,6 @@ import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
-import digital.inception.operations.model.WorkflowDocumentEventType;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
@@ -127,6 +128,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   /** The Document Service. */
   private final DocumentService documentService;
 
+  /** The Event Service. */
+  private final EventService eventService;
+
   private final InteractionService interactionService;
 
   /** The Validation Service. */
@@ -134,9 +138,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
   /** The Workflow Attribute Definition Repository. */
   private final WorkflowAttributeDefinitionRepository workflowAttributeDefinitionRepository;
-
-  /** The Workflow Data Validation Service. */
-  private final WorkflowDataValidationService workflowDataValidationService;
 
   /** The Workflow Definition Category Repository. */
   private final WorkflowDefinitionCategoryRepository workflowDefinitionCategoryRepository;
@@ -184,7 +185,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
    * @param workflowDefinitionSummaryRepository the Workflow Definition Summary Repository
    * @param workflowEngineRepository the Workflow Engine Repository
    * @param documentService the Document Service
-   * @param workflowDataValidationService the Workflow Data Validation Service
+   * @param eventService the Event Service
    * @param interactionService the Interaction Service
    * @param validationService the Validation Service
    */
@@ -198,7 +199,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       WorkflowDefinitionSummaryRepository workflowDefinitionSummaryRepository,
       WorkflowEngineRepository workflowEngineRepository,
       DocumentService documentService,
-      WorkflowDataValidationService workflowDataValidationService,
+      EventService eventService,
       InteractionService interactionService,
       ValidationService validationService) {
     super(applicationContext);
@@ -211,7 +212,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     this.workflowDefinitionSummaryRepository = workflowDefinitionSummaryRepository;
     this.workflowEngineRepository = workflowEngineRepository;
     this.documentService = documentService;
-    this.workflowDataValidationService = workflowDataValidationService;
+    this.eventService = eventService;
     this.interactionService = interactionService;
     this.validationService = validationService;
   }
@@ -1150,6 +1151,39 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public List<Event> getWorkflowDocumentEvents(UUID tenantId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (workflowDocumentId == null) {
+      throw new InvalidArgumentException("workflowDocumentId");
+    }
+
+    try {
+      if (!workflowStore.workflowDocumentExists(tenantId, workflowDocumentId)) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      }
+
+      return eventService.getEventsForObject(
+          tenantId, ObjectType.WORKFLOW_DOCUMENT, workflowDocumentId);
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the events for the workflow document ("
+              + workflowDocumentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowDocuments getWorkflowDocuments(
       UUID tenantId,
       UUID workflowId,
@@ -1482,7 +1516,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         validationService.validateExternalReferences(
             tenantId,
             "initiateWorkflowRequest.externalReferences",
-            OperationsObjectType.WORKFLOW,
+            ObjectType.WORKFLOW,
             initiateWorkflowRequest.getExternalReferences());
       }
 
@@ -1519,7 +1553,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       // Validate the workflow data if we have a validation schema
       if ((workflowDefinition.getValidationSchemaType() != null)
           && (StringUtils.hasText(workflowDefinition.getValidationSchema()))) {
-        if (!workflowDataValidationService.validateWorkflowData(
+        if (!validationService.validateWorkflowData(
             workflowDefinition.getValidationSchemaType(),
             workflowDefinition.getValidationSchema(),
             initiateWorkflowRequest.getData())) {
@@ -1730,7 +1764,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         validationService.validateExternalReferences(
             tenantId,
             "provideWorkflowDocumentRequest.externalReferences",
-            OperationsObjectType.DOCUMENT,
+            ObjectType.DOCUMENT,
             provideWorkflowDocumentRequest.getExternalReferences());
       }
 
@@ -1775,8 +1809,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.provideWorkflowDocument(
               tenantId, provideWorkflowDocumentRequest, providedBy);
 
-      publishWorkflowDocumentEvent(
-          tenantId, WorkflowDocumentEventType.DOCUMENT_PROVIDED, workflowDocument.getId());
+      eventService.publishEvent(
+          tenantId,
+          EventType.WORKFLOW_DOCUMENT_PROVIDED,
+          ObjectType.WORKFLOW_DOCUMENT,
+          workflowDocument.getId(),
+          providedBy);
 
       return workflowDocument.getDocumentId();
     } catch (InvalidArgumentException | WorkflowDocumentNotFoundException e) {
@@ -1805,10 +1843,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       workflowStore.rejectWorkflowDocument(tenantId, rejectWorkflowDocumentRequest, rejectedBy);
 
-      publishWorkflowDocumentEvent(
+      eventService.publishEvent(
           tenantId,
-          WorkflowDocumentEventType.DOCUMENT_REJECTED,
-          rejectWorkflowDocumentRequest.getWorkflowDocumentId());
+          EventType.WORKFLOW_DOCUMENT_REJECTED,
+          ObjectType.WORKFLOW_DOCUMENT,
+          rejectWorkflowDocumentRequest.getWorkflowDocumentId(),
+          rejectedBy);
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1851,8 +1891,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.requestWorkflowDocument(
               tenantId, requestWorkflowDocumentRequest, requestedBy);
 
-      publishWorkflowDocumentEvent(
-          tenantId, WorkflowDocumentEventType.DOCUMENT_REQUESTED, workflowDocument.getId());
+      eventService.publishEvent(
+          tenantId,
+          EventType.WORKFLOW_DOCUMENT_REQUESTED,
+          ObjectType.WORKFLOW_DOCUMENT,
+          workflowDocument.getId(),
+          requestedBy);
 
       return workflowDocument.getId();
     } catch (DocumentDefinitionNotFoundException e) {
@@ -2135,7 +2179,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       // Validate the workflow data if we have a validation schema
       if ((workflowDefinition.getValidationSchemaType() != null)
           && (StringUtils.hasText(workflowDefinition.getValidationSchema()))) {
-        if (!workflowDataValidationService.validateWorkflowData(
+        if (!validationService.validateWorkflowData(
             workflowDefinition.getValidationSchemaType(),
             workflowDefinition.getValidationSchema(),
             updateWorkflowRequest.getData())) {
@@ -2148,7 +2192,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         validationService.validateExternalReferences(
             tenantId,
             "updateWorkflowRequest.externalReferences",
-            OperationsObjectType.WORKFLOW,
+            ObjectType.WORKFLOW,
             updateWorkflowRequest.getExternalReferences());
 
         workflow.setExternalReferences(updateWorkflowRequest.getExternalReferences());
@@ -2396,10 +2440,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       workflowStore.verifyWorkflowDocument(tenantId, verifyWorkflowDocumentRequest, verifiedBy);
 
-      publishWorkflowDocumentEvent(
+      eventService.publishEvent(
           tenantId,
-          WorkflowDocumentEventType.DOCUMENT_VERIFIED,
-          verifyWorkflowDocumentRequest.getWorkflowDocumentId());
+          EventType.WORKFLOW_DOCUMENT_VERIFIED,
+          ObjectType.WORKFLOW_DOCUMENT,
+          verifyWorkflowDocumentRequest.getWorkflowDocumentId(),
+          verifiedBy);
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -2609,12 +2655,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     return workflowService;
-  }
-
-  private void publishWorkflowDocumentEvent(
-      UUID tenantId, WorkflowDocumentEventType workflowDocumentEventType, UUID workflowDocumentId) {
-    applicationEventPublisher.publishEvent(
-        new WorkflowDocumentEvent(tenantId, workflowDocumentEventType, workflowDocumentId));
   }
 
   private void validateWorkflowDefinition(WorkflowDefinition workflowDefinition)

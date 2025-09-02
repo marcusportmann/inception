@@ -51,7 +51,7 @@ import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.DocumentSummary;
 import digital.inception.operations.model.ExternalReferenceType;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
@@ -116,7 +116,7 @@ public class DocumentServiceTests {
             "test_document_external_reference_code",
             "Test Document External Reference",
             "Test Document External Reference Description",
-            OperationsObjectType.DOCUMENT,
+            ObjectType.DOCUMENT,
             TenantUtil.DEFAULT_TENANT_ID);
 
     operationsReferenceService.createExternalReferenceType(externalReferenceType);
@@ -145,7 +145,7 @@ public class DocumentServiceTests {
     assertEquals(
         "Test Document External Reference Description",
         retrievedExternalReferenceType.getDescription());
-    assertEquals(OperationsObjectType.DOCUMENT, retrievedExternalReferenceType.getObjectType());
+    assertEquals(ObjectType.DOCUMENT, retrievedExternalReferenceType.getObjectType());
     assertEquals(TenantUtil.DEFAULT_TENANT_ID, retrievedExternalReferenceType.getTenantId());
 
     DocumentAttributeDefinition documentAttributeDefinition =

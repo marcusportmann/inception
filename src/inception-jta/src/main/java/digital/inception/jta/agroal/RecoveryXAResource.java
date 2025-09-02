@@ -54,7 +54,8 @@ public class RecoveryXAResource implements AutoCloseable, XAResource {
         xaConnection.close();
       }
     } catch (Throwable e) {
-      XAExceptionUtil.xaException(XAException.XAER_RMFAIL, "Failed to close the XAConnection", e);
+      throw XAExceptionUtil.xaException(
+          XAException.XAER_RMFAIL, "Failed to close the XAConnection", e);
     } finally {
       xaConnection = null;
       xaResource = null;
@@ -111,7 +112,7 @@ public class RecoveryXAResource implements AutoCloseable, XAResource {
           }
         }
 
-        XAExceptionUtil.xaException(
+        throw XAExceptionUtil.xaException(
             XAException.XAER_RMFAIL,
             "Failed to retrieve the recovery XAConnection from the ResourceRecoveryFactory",
             e);

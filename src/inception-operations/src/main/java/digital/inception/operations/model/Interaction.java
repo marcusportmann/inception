@@ -322,10 +322,13 @@ public class Interaction implements Serializable {
   private String subject;
 
   /** The ID for the tenant the interaction is associated with. */
-  @Schema(description = "The ID for the tenant the interaction is associated with")
-  @JsonProperty
-  @XmlElement(name = "TenantId")
-  @Column(name = "tenant_id")
+  @Schema(
+      description = "The ID for the tenant the interaction is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
   /** The type of interaction. */

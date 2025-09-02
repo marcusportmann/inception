@@ -41,6 +41,7 @@ import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
@@ -701,6 +702,46 @@ public class WorkflowApiControllerImpl extends SecureApiController
     }
 
     return workflowService.getWorkflowDocument(tenantId, workflowDocumentId);
+  }
+
+  @Override
+  public List<Event> getWorkflowDocumentEvents(
+      UUID tenantId, UUID workflowId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, workflowId)) {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+      if (!workflowService.workflowDocumentExists(tenantId, workflowId, workflowDocumentId)) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      }
+    } catch (WorkflowNotFoundException | WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the events for the workflow document ("
+              + workflowDocumentId
+              + ") for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+
+    return workflowService.getWorkflowDocumentEvents(tenantId, workflowDocumentId);
   }
 
   @Override

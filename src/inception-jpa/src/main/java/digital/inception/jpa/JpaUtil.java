@@ -78,7 +78,12 @@ public final class JpaUtil {
 
       entityManagerFactoryBean.setPersistenceUnitName(persistenceUnitName);
 
-      entityManagerFactoryBean.setJtaDataSource(dataSource);
+      // Use JTA or local datasource based on the active PlatformTransactionManager
+      if (platformTransactionManager instanceof JtaTransactionManager) {
+        entityManagerFactoryBean.setJtaDataSource(dataSource);
+      } else {
+        entityManagerFactoryBean.setDataSource(dataSource);
+      }
 
       // Merge the provided packages with the additional package.
       // NOTE: The package below is required to enable the AttributeConverters for the common

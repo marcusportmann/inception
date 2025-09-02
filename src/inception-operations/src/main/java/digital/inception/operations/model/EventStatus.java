@@ -19,48 +19,68 @@ package digital.inception.operations.model;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code OperationsObjectType} enumeration defines the possible operations object types.
+ * The {@code EventStatus} enumeration defines the possible statuses for an event.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The operations object type")
+@Schema(description = "The event status")
 @XmlEnum
-@XmlType(name = "OperationsObjectType", namespace = "https://inception.digital/operations")
-public enum OperationsObjectType implements CodeEnum {
+@XmlType(name = "EventStatus", namespace = "https://inception.digital/operations")
+public enum EventStatus implements CodeEnum {
 
-  /** Document. */
-  DOCUMENT("document", "Document"),
+  /** Queued. */
+  @XmlEnumValue("Queued")
+  QUEUED("queued", "Queued"),
 
-  /** Workflow. */
-  WORKFLOW("workflow", "Workflow");
+  /** Processing. */
+  @XmlEnumValue("Processing")
+  PROCESSING("processing", "Processing"),
+
+  /** Processed. */
+  @XmlEnumValue("Processed")
+  PROCESSED("processed", "Processed"),
+
+  /** Failed. */
+  @XmlEnumValue("Failed")
+  FAILED("failed", "Failed");
 
   private final String code;
 
   private final String description;
 
-  OperationsObjectType(String code, String description) {
+  EventStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the operations object type.
+   * Returns the code for the event status.
    *
-   * @return the code for the operations object type
+   * @return the code for the event status
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the operations object type.
+   * Returns the description for the event status.
    *
-   * @return the description for the operations object type
+   * @return the description for the event status
    */
   public String description() {
+    return description;
+  }
+
+  /**
+   * Returns the string representation of the enumeration value.
+   *
+   * @return the string representation of the enumeration value
+   */
+  public String toString() {
     return description;
   }
 }

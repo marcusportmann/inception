@@ -57,7 +57,7 @@ import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.MailboxProtocol;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -230,7 +230,7 @@ public class EndToEndTests {
             "test_document_external_reference_code",
             "Test Document External Reference",
             "Test Document External Reference Description",
-            OperationsObjectType.DOCUMENT);
+            ObjectType.DOCUMENT);
 
     operationsReferenceService.createExternalReferenceType(documentExternalReferenceType);
 
@@ -282,7 +282,7 @@ public class EndToEndTests {
             "test_workflow_external_reference_code",
             "Test Workflow External Reference",
             "Test Workflow External Reference Description",
-            OperationsObjectType.WORKFLOW,
+            ObjectType.WORKFLOW,
             TenantUtil.DEFAULT_TENANT_ID);
 
     operationsReferenceService.createExternalReferenceType(workflowExternalReferenceType);
@@ -519,6 +519,8 @@ public class EndToEndTests {
       workflowService.provideWorkflowDocument(
           TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest, "TEST1");
     }
+
+    Thread.sleep(2000L);
 
     outstandingWorkflowDocuments =
         workflowService.getOutstandingWorkflowDocuments(

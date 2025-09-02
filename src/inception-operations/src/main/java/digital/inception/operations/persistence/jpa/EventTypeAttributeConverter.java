@@ -17,21 +17,20 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.jpa.AbstractCodeEnumAttributeConverter;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.EventType;
 import jakarta.persistence.Converter;
 
 /**
- * The {@code OperationsObjectTypeAttributeConverter} class implements the custom JPA attribute
- * converter for the {@code OperationsObjectType} enumeration.
+ * The {@code EventTypeAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code EventType} enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class OperationsObjectTypeAttributeConverter
-    extends AbstractCodeEnumAttributeConverter<OperationsObjectType> {
+public class EventTypeAttributeConverter extends AbstractCodeEnumAttributeConverter<EventType> {
 
-  /** Constructs a new {@code OperationsObjectTypeAttributeConverter}. */
-  public OperationsObjectTypeAttributeConverter() {
-    super(OperationsObjectType.class);
+  /** Constructs a new {@code EventTypeAttributeConverter}. */
+  public EventTypeAttributeConverter() {
+    super(EventType.class);
   }
 }

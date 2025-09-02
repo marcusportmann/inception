@@ -67,6 +67,24 @@ public class OperationsConfiguration {
   }
 
   /**
+   * Returns the dedicated {@code ThreadPoolTaskExecutor} used to trigger event processing
+   * asynchronously.
+   *
+   * @return the dedicated {@code ThreadPoolTaskExecutor} used to trigger event processing
+   *     asynchronously
+   */
+  @Bean
+  public Executor triggerEventProcessingExecutor() {
+    ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    threadPoolTaskExecutor.setCorePoolSize(1);
+    threadPoolTaskExecutor.setMaxPoolSize(2);
+    threadPoolTaskExecutor.setQueueCapacity(100);
+    threadPoolTaskExecutor.setThreadNamePrefix("trigger-event-processing-task-");
+    threadPoolTaskExecutor.initialize();
+    return threadPoolTaskExecutor;
+  }
+
+  /**
    * Returns the dedicated {@code ThreadPoolTaskExecutor} used to trigger interaction processing
    * asynchronously.
    *

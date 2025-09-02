@@ -16,6 +16,7 @@
 
 package digital.inception.operations.connector;
 
+import digital.inception.operations.model.EventType;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
@@ -23,7 +24,6 @@ import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowVariable;
-import digital.inception.operations.service.WorkflowService.WorkflowDocumentEvent;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
@@ -121,7 +121,8 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
       UUID tenantId,
       UUID workflowId,
       String engineInstanceId,
-      WorkflowDocumentEvent workflowDocumentEvent)
+      UUID workflowDocumentId,
+      EventType eventType)
       throws WorkflowEngineConnectorException {
 
     try {
@@ -129,9 +130,9 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
     } catch (Throwable e) {
       throw new WorkflowEngineConnectorException(
           "Failed to process the workflow document event ("
-              + workflowDocumentEvent.workflowDocumentEventType()
+              + eventType
               + ") for the workflow document ("
-              + workflowDocumentEvent.workflowDocumentId()
+              + workflowDocumentId
               + ") for the workflow ("
               + workflowId
               + ") for the tenant ("

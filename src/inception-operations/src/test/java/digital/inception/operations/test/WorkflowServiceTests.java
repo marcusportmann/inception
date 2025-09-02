@@ -53,7 +53,7 @@ import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
@@ -257,7 +257,7 @@ public class WorkflowServiceTests {
             "test_document_external_reference_code",
             "Test Document External Reference",
             "Test Document External Reference Description",
-            OperationsObjectType.DOCUMENT,
+            ObjectType.DOCUMENT,
             TenantUtil.DEFAULT_TENANT_ID);
 
     operationsReferenceService.createExternalReferenceType(documentExternalReferenceType);
@@ -267,7 +267,7 @@ public class WorkflowServiceTests {
             "test_workflow_external_reference_code",
             "Test Workflow External Reference",
             "Test Workflow External Reference Description",
-            OperationsObjectType.WORKFLOW,
+            ObjectType.WORKFLOW,
             TenantUtil.DEFAULT_TENANT_ID);
 
     operationsReferenceService.createExternalReferenceType(workflowReferenceType);
@@ -884,7 +884,7 @@ public class WorkflowServiceTests {
             "test_document_external_reference_code",
             "Test Document External Reference",
             "Test Document External Reference Description",
-            OperationsObjectType.DOCUMENT,
+            ObjectType.DOCUMENT,
             TenantUtil.DEFAULT_TENANT_ID);
 
     operationsReferenceService.createExternalReferenceType(documentExternalReferenceType);
@@ -894,7 +894,7 @@ public class WorkflowServiceTests {
             "test_workflow_external_reference_code",
             "Test Workflow External Reference",
             "Test Workflow External Reference Description",
-            OperationsObjectType.WORKFLOW,
+            ObjectType.WORKFLOW,
             TenantUtil.DEFAULT_TENANT_ID);
 
     operationsReferenceService.createExternalReferenceType(workflowExternalReferenceType);
@@ -923,7 +923,7 @@ public class WorkflowServiceTests {
     assertEquals(
         "Test Workflow External Reference Description",
         retrievedExternalReferenceType.getDescription());
-    assertEquals(OperationsObjectType.WORKFLOW, retrievedExternalReferenceType.getObjectType());
+    assertEquals(ObjectType.WORKFLOW, retrievedExternalReferenceType.getObjectType());
     assertEquals(TenantUtil.DEFAULT_TENANT_ID, retrievedExternalReferenceType.getTenantId());
 
     WorkflowAttributeDefinition workflowAttributeDefinition =

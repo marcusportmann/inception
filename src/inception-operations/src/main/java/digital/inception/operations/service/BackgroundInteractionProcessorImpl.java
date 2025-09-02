@@ -19,8 +19,10 @@ package digital.inception.operations.service;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionStatus;
+import digital.inception.security.service.SecurityService;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -56,6 +58,9 @@ public class BackgroundInteractionProcessorImpl
   /** Is the Background Interaction Processor running. */
   private final AtomicBoolean running = new AtomicBoolean(false);
 
+  /** The Security Service. */
+  private final SecurityService securityService;
+
   /** The number of interaction processing threads to start initially. */
   @Value("${inception.operations.initial-interaction-processing-threads:#{1}}")
   private int initialInteractionProcessingThreads;
@@ -88,9 +93,12 @@ public class BackgroundInteractionProcessorImpl
    * Constructs a new {@code BackgroundInteractionProcessorImpl}.
    *
    * @param interactionService the Interaction Service
+   * @param securityService the Security Service
    */
-  public BackgroundInteractionProcessorImpl(InteractionService interactionService) {
+  public BackgroundInteractionProcessorImpl(
+      InteractionService interactionService, SecurityService securityService) {
     this.interactionService = interactionService;
+    this.securityService = securityService;
   }
 
   /** Initialize the Background Interaction Processor. */
@@ -118,10 +126,15 @@ public class BackgroundInteractionProcessorImpl
 
       // Reset any locks for interactions that were previously being processed
       try {
-        log.info("Resetting the locks for the interactions being processed");
+        for (UUID tenantId : securityService.getTenantIds()) {
+          log.info(
+              "Resetting the locks for the interactions being processed for the tenant ("
+                  + tenantId
+                  + ")");
 
-        interactionService.resetInteractionLocks(
-            InteractionStatus.PROCESSING, InteractionStatus.QUEUED);
+          interactionService.resetInteractionLocks(
+              tenantId, InteractionStatus.PROCESSING, InteractionStatus.QUEUED);
+        }
       } catch (Throwable e) {
         log.error("Failed to reset the locks for the interactions being processed", e);
       }
@@ -144,45 +157,23 @@ public class BackgroundInteractionProcessorImpl
    */
   @Scheduled(cron = "0 * * * * *")
   public int processInteractions() {
+    int numberOfProcessedInteractions = 0;
+
     if (!executing.compareAndSet(false, true)) {
       return 0;
     }
 
     try {
-      int numberOfProcessedInteractions = 0;
-
-      while (running.get()) {
-        // Retrieve the next interaction queued for processing
-        try {
-          if (interactionProcessor.getQueue().remainingCapacity() == 0) {
-            if (log.isDebugEnabled()) {
-              log.debug(
-                  "The maximum number of interactions queued for processing has been reached ("
-                      + maximumInteractionProcessingQueueLength
-                      + ")");
-            }
-          }
-
-          Optional<Interaction> interactionOptional =
-              interactionService.getNextInteractionQueuedForProcessing();
-
-          if (interactionOptional.isEmpty()) {
-            return numberOfProcessedInteractions;
-          } else {
-            interactionProcessor.execute(
-                new InteractionProcessor(interactionService, interactionOptional.get()));
-
-            numberOfProcessedInteractions++;
-          }
-        } catch (Throwable e) {
-          log.error("Failed to retrieve the next interaction queued for processing", e);
-        }
+      for (UUID tenantId : securityService.getTenantIds()) {
+        numberOfProcessedInteractions += processInteractionsForTenant(tenantId);
       }
-
-      return numberOfProcessedInteractions;
+    } catch (Throwable e) {
+      log.error("Failed to process the interactions", e);
     } finally {
       executing.set(false);
     }
+
+    return numberOfProcessedInteractions;
   }
 
   @Override
@@ -222,6 +213,41 @@ public class BackgroundInteractionProcessorImpl
         log.warn("The shutdown of the Background Interaction Processor was interrupted");
       }
     }
+  }
+
+  private int processInteractionsForTenant(UUID tenantId) {
+
+    int numberOfProcessedInteractionsForTenant = 0;
+
+    while (running.get()) {
+      // Retrieve the next interaction queued for processing
+      try {
+        if (interactionProcessor.getQueue().remainingCapacity() == 0) {
+          if (log.isDebugEnabled()) {
+            log.debug(
+                "The maximum number of interactions queued for processing has been reached ("
+                    + maximumInteractionProcessingQueueLength
+                    + ")");
+          }
+        }
+
+        Optional<Interaction> interactionOptional =
+            interactionService.getNextInteractionQueuedForProcessing(tenantId);
+
+        if (interactionOptional.isEmpty()) {
+          return numberOfProcessedInteractionsForTenant;
+        } else {
+          interactionProcessor.execute(
+              new InteractionProcessor(interactionService, interactionOptional.get()));
+
+          numberOfProcessedInteractionsForTenant++;
+        }
+      } catch (Throwable e) {
+        log.error("Failed to retrieve the next interaction queued for processing", e);
+      }
+    }
+
+    return numberOfProcessedInteractionsForTenant;
   }
 
   /**

@@ -16,7 +16,7 @@
 
 package digital.inception.operations.service;
 
-import digital.inception.operations.service.InteractionService.TriggerInteractionProcessingEvent;
+import digital.inception.operations.service.EventService.TriggerEventProcessingEvent;
 import java.util.concurrent.RejectedExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,42 +25,40 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
- * The {@code TriggerInteractionProcessingEventListener} class.
+ * The {@code TriggerEventProcessingEventListener} class.
  *
  * @author Marcus Portmann
  */
 @Component
-public class TriggerInteractionProcessingEventListener {
+public class TriggerEventProcessingEventListener {
 
   /* Logger */
   private static final Logger log =
-      LoggerFactory.getLogger(TriggerInteractionProcessingEventListener.class);
+      LoggerFactory.getLogger(TriggerEventProcessingEventListener.class);
 
-  /** The Background Interaction Processor. */
-  private final BackgroundInteractionProcessor backgroundInteractionProcessor;
+  /** The Background Event Processor. */
+  private final BackgroundEventProcessor backgroundEventProcessor;
 
   /**
-   * Constructs a new {@code TriggerInteractionProcessingEventListener}
+   * Constructs a new {@code TriggerEventProcessingEventListener}
    *
-   * @param backgroundInteractionProcessor the Background Interaction Processor
+   * @param backgroundEventProcessor the Background Event Processor
    */
-  public TriggerInteractionProcessingEventListener(
-      BackgroundInteractionProcessor backgroundInteractionProcessor) {
-    this.backgroundInteractionProcessor = backgroundInteractionProcessor;
+  public TriggerEventProcessingEventListener(BackgroundEventProcessor backgroundEventProcessor) {
+    this.backgroundEventProcessor = backgroundEventProcessor;
   }
 
   /**
-   * Handle the event to trigger interaction processing.
+   * Handle the event to trigger event processing.
    *
-   * @param triggerInteractionProcessingEvent the event to trigger interaction processing
+   * @param triggerEventProcessingEvent the event to trigger event processing
    */
-  @Async("triggerInteractionProcessingExecutor")
+  @Async("triggerEventProcessingExecutor")
   @EventListener
   @SuppressWarnings("unused")
-  public void onInteractionProcessingTriggered(
-      TriggerInteractionProcessingEvent triggerInteractionProcessingEvent) {
+  public void onEventProcessingTriggered(TriggerEventProcessingEvent triggerEventProcessingEvent) {
     try {
-      backgroundInteractionProcessor.processInteractions();
+      backgroundEventProcessor.processEvents();
     } catch (RejectedExecutionException ignored) {
     }
   }

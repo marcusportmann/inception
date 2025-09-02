@@ -50,7 +50,7 @@ public class TriggerInteractionSourceSynchronizationEventListener {
   }
 
   /**
-   * Handle the event to trigger interaction source synchronization
+   * Handle the event to trigger interaction source synchronization.
    *
    * @param triggerInteractionSourceSynchronizationEvent the event to trigger interaction source
    *     synchronization

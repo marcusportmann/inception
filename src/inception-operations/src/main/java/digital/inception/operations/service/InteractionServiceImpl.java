@@ -948,13 +948,20 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  public Optional<Interaction> getNextInteractionQueuedForProcessing()
-      throws ServiceUnavailableException {
+  public Optional<Interaction> getNextInteractionQueuedForProcessing(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
-      return interactionStore.getNextInteractionQueuedForProcessing();
+      return interactionStore.getNextInteractionQueuedForProcessing(tenantId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the next interaction queued for processing", e);
+          "Failed to retrieve the next interaction queued for processing for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -1157,8 +1164,13 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  public void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
+  public void resetInteractionLocks(
+      UUID tenantId, InteractionStatus status, InteractionStatus newStatus)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (status == null) {
       throw new InvalidArgumentException("status");
     }
@@ -1168,13 +1180,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      interactionStore.resetInteractionLocks(status, newStatus);
+      interactionStore.resetInteractionLocks(tenantId, status, newStatus);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to reset the locks for the interactions with status ("
               + status
               + ") and set their status to ("
               + newStatus
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -1269,6 +1283,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   @Override
   public void unlockInteraction(UUID tenantId, UUID interactionId, InteractionStatus status)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (interactionId == null) {
       throw new InvalidArgumentException("interactionId");
     }

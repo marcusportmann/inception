@@ -96,7 +96,7 @@ public class ExternalReferenceType implements Serializable {
   @JsonProperty
   @XmlElement(name = "ObjectType")
   @Column(name = "object_type")
-  private OperationsObjectType objectType;
+  private ObjectType objectType;
 
   /** The ID for the tenant the external reference type is specific to. */
   @Schema(description = "The ID for the tenant the external reference type is specific to")
@@ -131,11 +131,7 @@ public class ExternalReferenceType implements Serializable {
    * @param tenantId the ID for the tenant the external reference type is specific to
    */
   public ExternalReferenceType(
-      String code,
-      String name,
-      String description,
-      OperationsObjectType objectType,
-      UUID tenantId) {
+      String code, String name, String description, ObjectType objectType, UUID tenantId) {
     this.code = code;
     this.name = name;
     this.description = description;
@@ -152,7 +148,7 @@ public class ExternalReferenceType implements Serializable {
    * @param objectType the type of object the external reference type is specific to
    */
   public ExternalReferenceType(
-      String code, String name, String description, OperationsObjectType objectType) {
+      String code, String name, String description, ObjectType objectType) {
     this.code = code;
     this.name = name;
     this.description = description;
@@ -216,7 +212,7 @@ public class ExternalReferenceType implements Serializable {
    *
    * @return the type of object the external reference type is specific to
    */
-  public OperationsObjectType getObjectType() {
+  public ObjectType getObjectType() {
     return objectType;
   }
 
@@ -271,7 +267,7 @@ public class ExternalReferenceType implements Serializable {
    *
    * @param objectType the type of object the external reference type is specific to
    */
-  public void setObjectType(OperationsObjectType objectType) {
+  public void setObjectType(ObjectType objectType) {
     this.objectType = objectType;
   }
 

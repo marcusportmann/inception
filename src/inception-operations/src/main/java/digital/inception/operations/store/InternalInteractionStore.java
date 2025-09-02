@@ -763,7 +763,7 @@ public class InternalInteractionStore implements InteractionStore {
 
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Optional<Interaction> getNextInteractionQueuedForProcessing()
+  public Optional<Interaction> getNextInteractionQueuedForProcessing(UUID tenantId)
       throws ServiceUnavailableException {
     try {
       // Handle the situation where different time precisions are used in the database
@@ -772,7 +772,8 @@ public class InternalInteractionStore implements InteractionStore {
       PageRequest pageRequest = PageRequest.of(0, 1);
 
       List<Interaction> interactions =
-          interactionRepository.findInteractionsQueuedForProcessingForWrite(now, pageRequest);
+          interactionRepository.findInteractionsQueuedForProcessingForWrite(
+              tenantId, now, pageRequest);
 
       if (!interactions.isEmpty()) {
         Interaction interaction = interactions.getFirst();
@@ -780,7 +781,7 @@ public class InternalInteractionStore implements InteractionStore {
         OffsetDateTime locked = OffsetDateTime.now();
 
         interactionRepository.lockInteractionForProcessing(
-            interaction.getId(), instanceName, locked);
+            tenantId, interaction.getId(), instanceName, locked);
 
         entityManager.detach(interaction);
 
@@ -795,7 +796,10 @@ public class InternalInteractionStore implements InteractionStore {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the next interaction that has been queued for processing", e);
+          "Failed to retrieve the next interaction that has been queued for processing for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -873,16 +877,19 @@ public class InternalInteractionStore implements InteractionStore {
   }
 
   @Override
-  public void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
+  public void resetInteractionLocks(
+      UUID tenantId, InteractionStatus status, InteractionStatus newStatus)
       throws ServiceUnavailableException {
     try {
-      interactionRepository.resetInteractionLocks(status, newStatus, instanceName);
+      interactionRepository.resetInteractionLocks(tenantId, status, newStatus, instanceName);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to reset the locks for the interactions with status ("
               + status
               + ") that have been locked using the lock name ("
               + instanceName
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -920,7 +927,7 @@ public class InternalInteractionStore implements InteractionStore {
         throw new InteractionNotFoundException(tenantId, interactionId);
       }
 
-      interactionRepository.unlockInteraction(interactionId, status);
+      interactionRepository.unlockInteraction(tenantId, interactionId, status);
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {

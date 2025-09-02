@@ -784,6 +784,14 @@ public interface SecurityService {
       throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the IDs for the tenants.
+   *
+   * @return the IDs for the tenants
+   * @throws ServiceUnavailableException if the tenant IDs could not be retrieved
+   */
+  List<UUID> getTenantIds() throws ServiceUnavailableException;
+
+  /**
    * Retrieve the IDs for the tenants the user directory is associated with.
    *
    * @param userDirectoryId the ID for the user directory

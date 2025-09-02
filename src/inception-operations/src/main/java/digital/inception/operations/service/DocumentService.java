@@ -16,7 +16,6 @@
 
 package digital.inception.operations.service;
 
-import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -43,21 +42,8 @@ import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The {@code DocumentService} interface defines the functionality provided by a Document Service
@@ -450,6 +436,18 @@ public interface DocumentService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Search for documents.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchDocumentsRequest the request to search for documents matching specific criteria
+   * @return the summaries for the documents matching the search criteria
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the document search failed
+   */
+  DocumentSummaries searchDocuments(UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Update the document.
    *
    * @param tenantId the ID for the tenant
@@ -522,16 +520,4 @@ public interface DocumentService {
   DocumentNote updateDocumentNote(
       UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Search for documents.
-   *
-   * @param tenantId the ID for the tenant
-   * @param searchDocumentsRequest the request to search for documents matching specific criteria
-   * @return the summaries for the documents matching the search criteria
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the document search failed
-   */
-  DocumentSummaries searchDocuments(UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
-      throws InvalidArgumentException, ServiceUnavailableException;
 }

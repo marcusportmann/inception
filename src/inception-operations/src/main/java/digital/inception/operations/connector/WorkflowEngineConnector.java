@@ -16,13 +16,13 @@
 
 package digital.inception.operations.connector;
 
+import digital.inception.operations.model.EventType;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowVariable;
-import digital.inception.operations.service.WorkflowService.WorkflowDocumentEvent;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,14 +103,16 @@ public interface WorkflowEngineConnector {
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
    *     engine for the workflow
-   * @param workflowDocumentEvent the workflow document event
+   * @param workflowDocumentId the ID for the workflow document
+   * @param eventType the event type
    * @throws WorkflowEngineConnectorException if the workflow document event could not be processed
    */
   void processWorkflowDocumentEvent(
       UUID tenantId,
       UUID workflowId,
       String engineInstanceId,
-      WorkflowDocumentEvent workflowDocumentEvent)
+      UUID workflowDocumentId,
+      EventType eventType)
       throws WorkflowEngineConnectorException;
 
   /**

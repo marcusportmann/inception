@@ -602,6 +602,18 @@ public interface WorkflowStore {
       throws ServiceUnavailableException;
 
   /**
+   * Check whether the workflow document exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return {@code true} if the workflow document exists or {@code false} otherwise
+   * @throws ServiceUnavailableException if the existence of the workflow document could not be
+   *     determined
+   */
+  boolean workflowDocumentExists(UUID tenantId, UUID workflowDocumentId)
+      throws ServiceUnavailableException;
+
+  /**
    * Check whether the workflow exists.
    *
    * @param tenantId the ID for the tenant

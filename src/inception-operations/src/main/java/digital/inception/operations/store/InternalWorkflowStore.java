@@ -1646,6 +1646,22 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public boolean workflowDocumentExists(UUID tenantId, UUID workflowDocumentId)
+      throws ServiceUnavailableException {
+    try {
+      return workflowDocumentRepository.existsByTenantIdAndId(tenantId, workflowDocumentId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the workflow document ("
+              + workflowDocumentId
+              + ") exists for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public boolean workflowExists(UUID tenantId, UUID workflowId) throws ServiceUnavailableException {
     try {
       return workflowRepository.existsByTenantIdAndId(tenantId, workflowId);

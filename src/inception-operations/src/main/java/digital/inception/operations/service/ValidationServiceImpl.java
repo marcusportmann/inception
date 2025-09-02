@@ -19,11 +19,12 @@ package digital.inception.operations.service;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.ExternalReference;
 import digital.inception.operations.model.ExternalReferenceType;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
@@ -218,7 +219,7 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
   public void validateExternalReferences(
       UUID tenantId,
       String parameter,
-      OperationsObjectType objectType,
+      ObjectType objectType,
       List<? extends ExternalReference> externalReferences)
       throws InvalidArgumentException, ServiceUnavailableException {
     // Early exit if no external references to validate
@@ -406,6 +407,13 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
               + ")",
           e);
     }
+  }
+
+  @Override
+  public boolean validateWorkflowData(
+      ValidationSchemaType validationSchemaType, String validationSchema, String workflowData) {
+    // TODO: Implement JSON and XML validation
+    return true;
   }
 
   /**

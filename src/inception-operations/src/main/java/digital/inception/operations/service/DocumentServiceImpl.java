@@ -40,7 +40,7 @@ import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
@@ -159,7 +159,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         validationService.validateExternalReferences(
             tenantId,
             "createDocumentRequest.externalReferences",
-            OperationsObjectType.DOCUMENT,
+            ObjectType.DOCUMENT,
             createDocumentRequest.getExternalReferences());
 
         document.setExternalReferences(createDocumentRequest.getExternalReferences());
@@ -870,7 +870,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         validationService.validateExternalReferences(
             tenantId,
             "updateDocumentRequest.externalReferences",
-            OperationsObjectType.DOCUMENT,
+            ObjectType.DOCUMENT,
             updateDocumentRequest.getExternalReferences());
 
         document.setExternalReferences(updateDocumentRequest.getExternalReferences());

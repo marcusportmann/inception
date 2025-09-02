@@ -40,6 +40,7 @@ import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
+import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.InitiateWorkflowRequest;
@@ -66,7 +67,6 @@ import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
-import digital.inception.operations.model.WorkflowDocumentEventType;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
@@ -547,6 +547,22 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the workflow document could not be retrieved
    */
   WorkflowDocument getWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the events for the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the events for the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the events for the workflow document could not be
+   *     retrieved
+   */
+  List<Event> getWorkflowDocumentEvents(UUID tenantId, UUID workflowDocumentId)
       throws InvalidArgumentException,
           WorkflowDocumentNotFoundException,
           ServiceUnavailableException;
@@ -1124,16 +1140,4 @@ public interface WorkflowService {
    */
   boolean workflowNoteExists(UUID tenantId, UUID workflowId, UUID workflowNoteId)
       throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
-   * The {@code WorkflowDocumentEvent} record.
-   *
-   * @param tenantId the ID for the tenant
-   * @param workflowDocumentEventType the workflow document event type
-   * @param workflowDocumentId the ID for the workflow document
-   */
-  record WorkflowDocumentEvent(
-      UUID tenantId,
-      WorkflowDocumentEventType workflowDocumentEventType,
-      UUID workflowDocumentId) {}
 }

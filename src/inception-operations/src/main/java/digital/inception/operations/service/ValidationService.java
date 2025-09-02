@@ -18,9 +18,10 @@ package digital.inception.operations.service;
 
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.ExternalReference;
-import digital.inception.operations.model.OperationsObjectType;
+import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowVariable;
 import java.util.List;
@@ -130,7 +131,7 @@ public interface ValidationService {
   void validateExternalReferences(
       UUID tenantId,
       String parameter,
-      OperationsObjectType objectType,
+      ObjectType objectType,
       List<? extends ExternalReference> externalReferences)
       throws InvalidArgumentException, ServiceUnavailableException;
 
@@ -186,4 +187,15 @@ public interface ValidationService {
   void validateRequiredWorkflowVariables(
       String parameter, String workflowDefinitionId, List<WorkflowVariable> workflowVariables)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Validate the workflow data using the specified validation schema.
+   *
+   * @param validationSchemaType the validation schema type
+   * @param validationSchema the XML (XSD) or JSON validation schema
+   * @param workflowData the XML or JSON data for the workflow
+   * @return {@code true} if the workflow data was validated successfully or {@code false} otherwise
+   */
+  boolean validateWorkflowData(
+      ValidationSchemaType validationSchemaType, String validationSchema, String workflowData);
 }

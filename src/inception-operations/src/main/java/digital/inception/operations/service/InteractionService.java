@@ -445,12 +445,15 @@ public interface InteractionService {
    *
    * <p>The interaction will be locked to prevent duplicate processing.
    *
+   * @param tenantId the ID for the tenant
    * @return an Optional containing the next interaction queued for processing or an empty Optional
    *     if no interactions are currently queued for processing
+   * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the next interaction queued for processing could not be
    *     retrieved
    */
-  Optional<Interaction> getNextInteractionQueuedForProcessing() throws ServiceUnavailableException;
+  Optional<Interaction> getNextInteractionQueuedForProcessing(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Returns whether an interaction attachment with the specified ID exists.
@@ -568,12 +571,13 @@ public interface InteractionService {
   /**
    * Reset the interaction locks.
    *
+   * @param tenantId the ID for the tenant
    * @param status the current status of the interactions that have been locked
    * @param newStatus the new status for the interactions that have been unlocked
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the interaction locks could not be reset
    */
-  void resetInteractionLocks(InteractionStatus status, InteractionStatus newStatus)
+  void resetInteractionLocks(UUID tenantId, InteractionStatus status, InteractionStatus newStatus)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
