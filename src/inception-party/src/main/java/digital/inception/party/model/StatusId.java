@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code StatusId} class implements the ID class for The {@code Status} class.
@@ -30,8 +31,8 @@ public class StatusId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The party the status is associated with. */
-  private PartyBase party;
+  /** The ID for the party the status is associated with. */
+  private UUID partyId;
 
   /** The code for the status type. */
   private String type;
@@ -61,7 +62,7 @@ public class StatusId implements Serializable {
 
     StatusId other = (StatusId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(partyId, other.partyId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -71,6 +72,6 @@ public class StatusId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((partyId == null) ? 0 : partyId.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

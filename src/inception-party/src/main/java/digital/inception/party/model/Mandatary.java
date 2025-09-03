@@ -16,7 +16,6 @@
 
 package digital.inception.party.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,11 +25,8 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -70,14 +66,6 @@ public class Mandatary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the mandate the mandatary is associated with. */
-  @Schema(hidden = true)
-  @JsonIgnore
-  @XmlTransient
-  @Id
-  @Column(name = "mandate_id", nullable = false)
-  private UUID mandateId;
-
   /** The date the mandatary is effective from. */
   @Schema(description = "The date the mandatary is effective from")
   @JsonProperty
@@ -97,6 +85,14 @@ public class Mandatary implements Serializable {
   @XmlSchemaType(name = "date")
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
+
+  /** The ID for the mandate the mandatary is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "mandate_id", nullable = false)
+  private UUID mandateId;
 
   /** The ID for the party who is the recipient of the mandate. */
   @Schema(

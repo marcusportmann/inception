@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code LanguageProficiencyId} class implements the ID class for the {@code
@@ -34,8 +35,8 @@ public class LanguageProficiencyId implements Serializable {
   /** The ISO 639-1 alpha-2 code for the language. */
   private String language;
 
-  /** The person the language proficiency is associated with. */
-  private Person person;
+  /** The ID for the person the language proficiency is associated with. */
+  private UUID personId;
 
   /** Constructs a new {@code LanguageProficiencyId}. */
   public LanguageProficiencyId() {}
@@ -62,7 +63,7 @@ public class LanguageProficiencyId implements Serializable {
 
     LanguageProficiencyId other = (LanguageProficiencyId) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(language, other.language);
+    return Objects.equals(personId, other.personId) && Objects.equals(language, other.language);
   }
 
   /**
@@ -72,7 +73,7 @@ public class LanguageProficiencyId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode())
+    return ((personId == null) ? 0 : personId.hashCode())
         + ((language == null) ? 0 : language.hashCode());
   }
 }

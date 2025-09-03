@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code ConsentId} class implements the ID class for The {@code Consent} class.
@@ -30,8 +31,8 @@ public class ConsentId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The person the consent is associated with. */
-  private Person person;
+  /** The ID for the person the consent is associated with. */
+  private UUID personId;
 
   /** The code for the consent type. */
   private String type;
@@ -61,7 +62,7 @@ public class ConsentId implements Serializable {
 
     ConsentId other = (ConsentId) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(personId, other.personId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -71,6 +72,6 @@ public class ConsentId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((personId == null) ? 0 : personId.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

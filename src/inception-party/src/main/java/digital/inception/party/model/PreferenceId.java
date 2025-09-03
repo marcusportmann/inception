@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code PreferenceId} class implements the ID class for The {@code Preference} class.
@@ -30,8 +31,8 @@ public class PreferenceId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The party the preference is associated with. */
-  private PartyBase party;
+  /** The ID for the party the preference is associated with. */
+  private UUID partyId;
 
   /** The code for the preference type. */
   private String type;
@@ -61,7 +62,7 @@ public class PreferenceId implements Serializable {
 
     PreferenceId other = (PreferenceId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(partyId, other.partyId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -71,6 +72,6 @@ public class PreferenceId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((partyId == null) ? 0 : partyId.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

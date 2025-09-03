@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -24,14 +25,12 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -144,13 +143,12 @@ public class Education implements Serializable {
   @Column(name = "last_year_attended")
   private Integer lastYearAttended;
 
-  /** The person the education is associated with. */
+  /** The ID for the person the education is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("educationReference")
+  @JsonIgnore
   @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @Column(name = "person_id", nullable = false)
+  private UUID personId;
 
   /** The name of the qualification. */
   @Schema(description = "The name of the qualification")
@@ -365,16 +363,6 @@ public class Education implements Serializable {
   }
 
   /**
-   * Returns the person the education is associated with.
-   *
-   * @return the person the education is associated with
-   */
-  @Schema(hidden = true)
-  public Person getPerson() {
-    return person;
-  }
-
-  /**
    * Returns the name of the qualification.
    *
    * @return the name of the qualification
@@ -471,9 +459,14 @@ public class Education implements Serializable {
    *
    * @param person the person the education is associated with
    */
+  @JsonBackReference("educationReference")
   @Schema(hidden = true)
   public void setPerson(Person person) {
-    this.person = person;
+    if (person != null) {
+      this.personId = person.getId();
+    } else {
+      this.personId = null;
+    }
   }
 
   /**
@@ -501,5 +494,19 @@ public class Education implements Serializable {
    */
   public void setQualificationYear(Integer qualificationYear) {
     this.qualificationYear = qualificationYear;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Person parent) {
+      setPerson(parent);
+    }
   }
 }

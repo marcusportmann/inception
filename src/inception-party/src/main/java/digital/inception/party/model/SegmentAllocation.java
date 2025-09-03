@@ -18,6 +18,7 @@ package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,14 +26,12 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -45,6 +44,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code SegmentAllocation} class holds the information for the allocation of an organization
@@ -88,14 +88,13 @@ public class SegmentAllocation implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The party the segment allocation is associated with. */
+  /** The ID for the party the segment allocation is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("segmentAllocationReference")
+  @JsonIgnore
   @XmlTransient
   @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "party_id")
-  private PartyBase party;
+  @Column(name = "party_id", nullable = false)
+  private UUID partyId;
 
   /** The code for the segment. */
   @Schema(description = "The code for the segment", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -165,7 +164,7 @@ public class SegmentAllocation implements Serializable {
 
     SegmentAllocation other = (SegmentAllocation) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(segment, other.segment);
+    return Objects.equals(partyId, other.partyId) && Objects.equals(segment, other.segment);
   }
 
   /**
@@ -187,16 +186,6 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Returns the party the segment allocation is associated with.
-   *
-   * @return the party the segment allocation is associated with
-   */
-  @Schema(hidden = true)
-  public PartyBase getParty() {
-    return party;
-  }
-
-  /**
    * Returns the code for the segment.
    *
    * @return the code for the segment
@@ -212,7 +201,7 @@ public class SegmentAllocation implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
+    return ((partyId == null) ? 0 : partyId.hashCode())
         + ((segment == null) ? 0 : segment.hashCode());
   }
 
@@ -239,9 +228,14 @@ public class SegmentAllocation implements Serializable {
    *
    * @param party the party the segment allocation is associated with
    */
+  @JsonBackReference("segmentAllocationReference")
   @Schema(hidden = true)
   public void setParty(PartyBase party) {
-    this.party = party;
+    if (party != null) {
+      partyId = party.getId();
+    } else {
+      partyId = null;
+    }
   }
 
   /**
@@ -251,5 +245,19 @@ public class SegmentAllocation implements Serializable {
    */
   public void setSegment(String segment) {
     this.segment = segment;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof PartyBase parent) {
+      setParty(parent);
+    }
   }
 }

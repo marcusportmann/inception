@@ -18,6 +18,7 @@ package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,13 +27,11 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -147,13 +146,12 @@ public class Identification implements Serializable {
   @Column(name = "number", length = 50, nullable = false)
   private String number;
 
-  /** The party the identification is associated with. */
+  /** The ID for the party the identification is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("identificationReference")
+  @JsonIgnore
   @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "party_id")
-  private PartyBase party;
+  @Column(name = "party_id", nullable = false)
+  private UUID partyId;
 
   /** The date the identification was provided. */
   @Schema(description = "The ISO 8601 format date the identification was provided")
@@ -291,16 +289,6 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Returns the party the identification is associated with.
-   *
-   * @return the party the identification is associated with
-   */
-  @Schema(hidden = true)
-  public PartyBase getParty() {
-    return party;
-  }
-
-  /**
    * Returns the date the identification was provided.
    *
    * @return the date the identification was provided
@@ -379,9 +367,14 @@ public class Identification implements Serializable {
    *
    * @param party the party the identification is associated with
    */
+  @JsonBackReference("identificationReference")
   @Schema(hidden = true)
   public void setParty(PartyBase party) {
-    this.party = party;
+    if (party != null) {
+      this.partyId = party.getId();
+    } else {
+      this.partyId = null;
+    }
   }
 
   /**
@@ -400,5 +393,19 @@ public class Identification implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof PartyBase parent) {
+      setParty(parent);
+    }
   }
 }

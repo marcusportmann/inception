@@ -18,6 +18,7 @@ package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,13 +27,11 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -127,13 +126,12 @@ public class ResidencePermit implements Serializable {
   @Column(name = "number", length = 50, nullable = false)
   private String number;
 
-  /** The person the residence permit is associated with. */
+  /** The ID for the person the residence permit is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("residencePermitReference")
+  @JsonIgnore
   @XmlTransient
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @Column(name = "person_id", nullable = false)
+  private UUID personId;
 
   /** The code for the residence permit type. */
   @Schema(
@@ -261,16 +259,6 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Returns the person the residence permit is associated with.
-   *
-   * @return the person the residence permit is associated with
-   */
-  @Schema(hidden = true)
-  public Person getPerson() {
-    return person;
-  }
-
-  /**
    * Returns the code for the residence permit type.
    *
    * @return the code for the residence permit type
@@ -340,9 +328,14 @@ public class ResidencePermit implements Serializable {
    *
    * @param person the person the residence permit is associated with
    */
+  @JsonBackReference("residencePermitReference")
   @Schema(hidden = true)
   public void setPerson(Person person) {
-    this.person = person;
+    if (person != null) {
+      this.personId = person.getId();
+    } else {
+      this.personId = null;
+    }
   }
 
   /**
@@ -352,5 +345,19 @@ public class ResidencePermit implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Person parent) {
+      setPerson(parent);
+    }
   }
 }

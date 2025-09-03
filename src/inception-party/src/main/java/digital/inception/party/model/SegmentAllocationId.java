@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code SegmentAllocationId} class implements the ID class for the {@code SegmentAllocation}
@@ -31,8 +32,8 @@ public class SegmentAllocationId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The party the segment allocation is associated with. */
-  private PartyBase party;
+  /** The ID for the party the segment allocation is associated with. */
+  private UUID partyId;
 
   /** The code for the segment. */
   private String segment;
@@ -62,7 +63,7 @@ public class SegmentAllocationId implements Serializable {
 
     SegmentAllocationId other = (SegmentAllocationId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(segment, other.segment);
+    return Objects.equals(partyId, other.partyId) && Objects.equals(segment, other.segment);
   }
 
   /**
@@ -72,6 +73,7 @@ public class SegmentAllocationId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((segment == null) ? 0 : segment.hashCode());
+    return ((partyId == null) ? 0 : partyId.hashCode())
+        + ((segment == null) ? 0 : segment.hashCode());
   }
 }

@@ -17,20 +17,19 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -40,6 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code ExternalReference} class holds the information for an external reference for an
@@ -63,14 +63,13 @@ public class ExternalReference implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The party the external reference is associated with. */
+  /** The ID for the party the external reference is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("externalReferenceReference")
+  @JsonIgnore
   @XmlTransient
   @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "party_id")
-  private PartyBase party;
+  @Column(name = "party_id", nullable = false)
+  private UUID partyId;
 
   /** The code for the external reference type. */
   @Schema(
@@ -131,17 +130,7 @@ public class ExternalReference implements Serializable {
 
     ExternalReference other = (ExternalReference) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
-  }
-
-  /**
-   * Returns the party the external reference is associated with.
-   *
-   * @return the party the external reference is associated with
-   */
-  @Schema(hidden = true)
-  public PartyBase getParty() {
-    return party;
+    return Objects.equals(partyId, other.partyId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -169,7 +158,7 @@ public class ExternalReference implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((partyId == null) ? 0 : partyId.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 
   /**
@@ -177,9 +166,14 @@ public class ExternalReference implements Serializable {
    *
    * @param party the party the external reference is associated with
    */
+  @JsonBackReference("externalReferenceReference")
   @Schema(hidden = true)
   public void setParty(PartyBase party) {
-    this.party = party;
+    if (party != null) {
+      this.partyId = party.getId();
+    } else {
+      this.partyId = null;
+    }
   }
 
   /**
@@ -198,5 +192,19 @@ public class ExternalReference implements Serializable {
    */
   public void setValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof PartyBase parent) {
+      setParty(parent);
+    }
   }
 }

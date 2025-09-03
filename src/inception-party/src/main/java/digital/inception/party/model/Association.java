@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.jpa.JpaUtil;
 import digital.inception.party.constraint.ValidAssociation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -38,7 +37,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -471,18 +469,5 @@ public class Association implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /**
-   * The callback method in JAXB (Java Architecture for XML Binding) that is invoked after an object
-   * is unmarshalled from XML. This method can be used to perform post-processing on the newly
-   * unmarshalled object. It provides a way to enhance the deserialization process by allowing
-   * additional initialization, validation, or linking of objects within the object graph.
-   *
-   * @param unmarshaller the XML unmarshaller
-   * @param parent the parent object
-   */
-  private void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
-    JpaUtil.linkEntities(this);
   }
 }

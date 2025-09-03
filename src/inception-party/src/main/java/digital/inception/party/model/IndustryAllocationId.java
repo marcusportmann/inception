@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code IndustryAllocationId} class implements the ID class for the {@code IndustryAllocation}
@@ -34,8 +35,8 @@ public class IndustryAllocationId implements Serializable {
   /** The code for the industry classification. */
   private String industry;
 
-  /** The organization the industry allocation is associated with. */
-  private Organization organization;
+  /** The ID for the organization the industry allocation is associated with. */
+  private UUID organizationId;
 
   /** The code for the industry classification system. */
   private String system;
@@ -65,7 +66,7 @@ public class IndustryAllocationId implements Serializable {
 
     IndustryAllocationId other = (IndustryAllocationId) object;
 
-    return Objects.equals(organization, other.organization)
+    return Objects.equals(organizationId, other.organizationId)
         && Objects.equals(system, other.system)
         && Objects.equals(industry, other.industry);
   }
@@ -77,7 +78,7 @@ public class IndustryAllocationId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((organization == null) ? 0 : organization.hashCode())
+    return ((organizationId == null) ? 0 : organizationId.hashCode())
         + ((system == null) ? 0 : system.hashCode())
         + ((industry == null) ? 0 : industry.hashCode());
   }

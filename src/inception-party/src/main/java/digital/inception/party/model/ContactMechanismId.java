@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code ContactMechanismId} class implements the ID class for the {@code ContactMechanism}
@@ -31,8 +32,8 @@ public class ContactMechanismId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The party the contact mechanism is associated with. */
-  private PartyBase party;
+  /** The ID for the party the contact mechanism is associated with. */
+  private UUID partyId;
 
   /** The code for the contact mechanism role. */
   private String role;
@@ -65,7 +66,7 @@ public class ContactMechanismId implements Serializable {
 
     ContactMechanismId other = (ContactMechanismId) object;
 
-    return Objects.equals(party, other.party)
+    return Objects.equals(partyId, other.partyId)
         && Objects.equals(type, other.type)
         && Objects.equals(role, other.role);
   }
@@ -77,7 +78,7 @@ public class ContactMechanismId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
+    return ((partyId == null) ? 0 : partyId.hashCode())
         + ((type == null) ? 0 : type.hashCode())
         + ((role == null) ? 0 : role.hashCode());
   }

@@ -17,20 +17,19 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -40,6 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code LanguageProficiency} class holds the information for a language proficiency for a
@@ -87,14 +87,13 @@ public class LanguageProficiency implements Serializable {
   @Column(name = "listen_level", length = 15, nullable = false)
   private LanguageProficiencyLevel listenLevel;
 
-  /** The person the language proficiency is associated with. */
+  /** The ID for the person the language proficiency is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("languageProficiencyReference")
+  @JsonIgnore
   @XmlTransient
   @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @Column(name = "person_id", nullable = false)
+  private UUID personId;
 
   /** The read proficiency level for the language. */
   @Schema(
@@ -176,7 +175,7 @@ public class LanguageProficiency implements Serializable {
 
     LanguageProficiency other = (LanguageProficiency) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(language, other.language);
+    return Objects.equals(personId, other.personId) && Objects.equals(language, other.language);
   }
 
   /**
@@ -195,16 +194,6 @@ public class LanguageProficiency implements Serializable {
    */
   public LanguageProficiencyLevel getListenLevel() {
     return listenLevel;
-  }
-
-  /**
-   * Returns the person the language proficiency is associated with.
-   *
-   * @return the person the language proficiency is associated with
-   */
-  @Schema(hidden = true)
-  public Person getPerson() {
-    return person;
   }
 
   /**
@@ -241,7 +230,7 @@ public class LanguageProficiency implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
+    return ((personId == null) ? 0 : personId.hashCode())
         + ((language == null) ? 0 : language.hashCode());
   }
 
@@ -268,9 +257,14 @@ public class LanguageProficiency implements Serializable {
    *
    * @param person the person the language proficiency is associated with
    */
+  @JsonBackReference("languageProficiencyReference")
   @Schema(hidden = true)
   public void setPerson(Person person) {
-    this.person = person;
+    if (person != null) {
+      personId = person.getId();
+    } else {
+      personId = null;
+    }
   }
 
   /**
@@ -298,5 +292,19 @@ public class LanguageProficiency implements Serializable {
    */
   public void setWriteLevel(LanguageProficiencyLevel writeLevel) {
     this.writeLevel = writeLevel;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Person parent) {
+      setPerson(parent);
+    }
   }
 }

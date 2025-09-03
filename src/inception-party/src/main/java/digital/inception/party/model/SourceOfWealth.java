@@ -18,6 +18,7 @@ package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,14 +26,12 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -45,6 +44,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code SourceOfWealth} class holds the information for a source of wealth for a person.
@@ -94,14 +94,13 @@ public class SourceOfWealth implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The person the source of wealth is associated with. */
+  /** The ID for the person the source of wealth is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("sourceOfWealthReference")
+  @JsonIgnore
   @XmlTransient
   @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @Column(name = "person_id", nullable = false)
+  private UUID personId;
 
   /** The code for the source of wealth type. */
   @Schema(
@@ -213,7 +212,7 @@ public class SourceOfWealth implements Serializable {
 
     SourceOfWealth other = (SourceOfWealth) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(personId, other.personId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -244,16 +243,6 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Returns the person the source of wealth is associated with.
-   *
-   * @return the person the source of wealth is associated with
-   */
-  @Schema(hidden = true)
-  public Person getPerson() {
-    return person;
-  }
-
-  /**
    * Returns the code for the source of wealth type.
    *
    * @return the code for the source of wealth type
@@ -269,8 +258,7 @@ public class SourceOfWealth implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
-        + ((type == null) ? 0 : type.hashCode());
+    return ((personId == null) ? 0 : personId.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 
   /**
@@ -305,9 +293,14 @@ public class SourceOfWealth implements Serializable {
    *
    * @param person the person the source of wealth is associated with
    */
+  @JsonBackReference("sourceOfWealthReference")
   @Schema(hidden = true)
   public void setPerson(Person person) {
-    this.person = person;
+    if (person != null) {
+      personId = person.getId();
+    } else {
+      personId = null;
+    }
   }
 
   /**
@@ -317,5 +310,19 @@ public class SourceOfWealth implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Person parent) {
+      setPerson(parent);
+    }
   }
 }
