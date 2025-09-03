@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code AssociationPropertyId} class implements the ID class for the {@code
@@ -31,8 +32,8 @@ public class AssociationPropertyId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The association the association property is associated with. */
-  private Association association;
+  /** The ID for the association the association property is associated with. */
+  private UUID associationId;
 
   /** The code for the association property type. */
   private String type;
@@ -62,7 +63,7 @@ public class AssociationPropertyId implements Serializable {
 
     AssociationPropertyId other = (AssociationPropertyId) object;
 
-    return Objects.equals(association, other.association) && Objects.equals(type, other.type);
+    return Objects.equals(associationId, other.associationId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -72,7 +73,7 @@ public class AssociationPropertyId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((association == null) ? 0 : association.hashCode())
+    return ((associationId == null) ? 0 : associationId.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 }

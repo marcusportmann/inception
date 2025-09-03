@@ -26,14 +26,12 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -47,6 +45,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
@@ -87,14 +86,13 @@ public class AssociationProperty implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The association property is associated with. */
+  /** The ID for the association the association property is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("associationPropertyReference")
+  @JsonIgnore
   @XmlTransient
   @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "association_id")
-  private Association association;
+  @Column(name = "association_id", nullable = false)
+  private UUID associationId;
 
   /** The boolean value for the association property. */
   @Schema(description = "The boolean value for the association property")
@@ -254,17 +252,7 @@ public class AssociationProperty implements Serializable {
 
     AssociationProperty other = (AssociationProperty) object;
 
-    return Objects.equals(association, other.association) && Objects.equals(type, other.type);
-  }
-
-  /**
-   * Returns the association the association property is associated with.
-   *
-   * @return the association the association property is associated with
-   */
-  @Schema(hidden = true)
-  public Association getAssociation() {
-    return association;
+    return Objects.equals(associationId, other.associationId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -352,9 +340,7 @@ public class AssociationProperty implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((association == null) || (association.getId() == null))
-            ? 0
-            : association.getId().hashCode())
+    return ((associationId == null) ? 0 : associationId.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
@@ -363,9 +349,14 @@ public class AssociationProperty implements Serializable {
    *
    * @param association the association the association property is associated with
    */
+  @JsonBackReference("associationPropertyReference")
   @Schema(hidden = true)
   public void setAssociation(Association association) {
-    this.association = association;
+    if (association != null) {
+      this.associationId = association.getId();
+    } else {
+      this.associationId = null;
+    }
   }
 
   /**
@@ -462,5 +453,19 @@ public class AssociationProperty implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Association parent) {
+      setAssociation(parent);
+    }
   }
 }

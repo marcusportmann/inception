@@ -19,6 +19,7 @@ package digital.inception.party.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code MandatePropertyId} class implements the ID class for The {@code MandateProperty}
@@ -31,8 +32,8 @@ public class MandatePropertyId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The mandate the mandate property is associated with. */
-  private Mandate mandate;
+  /** The ID for the mandate the mandate property is associated with. */
+  private UUID mandateId;
 
   /** The code for the mandate property type. */
   private String type;
@@ -62,7 +63,7 @@ public class MandatePropertyId implements Serializable {
 
     MandatePropertyId other = (MandatePropertyId) object;
 
-    return Objects.equals(mandate, other.mandate) && Objects.equals(type, other.type);
+    return Objects.equals(mandateId, other.mandateId) && Objects.equals(type, other.type);
   }
 
   /**
@@ -72,6 +73,7 @@ public class MandatePropertyId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((mandate == null) ? 0 : mandate.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((mandateId == null) ? 0 : mandateId.hashCode())
+        + ((type == null) ? 0 : type.hashCode());
   }
 }

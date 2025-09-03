@@ -17,20 +17,19 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -40,6 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The {@code MandateLink} class holds the information for a mandate link identifying an entity a
@@ -65,14 +65,13 @@ public class MandateLink implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The mandate the mandate link is associated with. */
+  /** The ID for the mandate the mandate link is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("mandateLinkReference")
+  @JsonIgnore
   @XmlTransient
   @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandate_id")
-  private Mandate mandate;
+  @Column(name = "mandate_id", nullable = false)
+  private UUID mandateId;
 
   /** The target for the mandate link. */
   @Schema(
@@ -132,19 +131,9 @@ public class MandateLink implements Serializable {
 
     MandateLink other = (MandateLink) object;
 
-    return Objects.equals(mandate, other.mandate)
+    return Objects.equals(mandateId, other.mandateId)
         && Objects.equals(type, other.type)
         && Objects.equals(target, other.target);
-  }
-
-  /**
-   * Returns the mandate the mandate link is associated with.
-   *
-   * @return the mandate the mandate link is associated with
-   */
-  @Schema(hidden = true)
-  public Mandate getMandate() {
-    return mandate;
   }
 
   /**
@@ -172,7 +161,7 @@ public class MandateLink implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((mandate == null) || (mandate.getId() == null)) ? 0 : mandate.getId().hashCode())
+    return ((mandateId == null) ? 0 : mandateId.hashCode())
         + ((type == null) ? 0 : type.hashCode())
         + ((target == null) ? 0 : target.hashCode());
   }
@@ -183,8 +172,13 @@ public class MandateLink implements Serializable {
    * @param mandate the mandate the mandate link is associated with
    */
   @Schema(hidden = true)
+  @JsonBackReference("mandateLinkReference")
   public void setMandate(Mandate mandate) {
-    this.mandate = mandate;
+    if (mandate != null) {
+      this.mandateId = mandate.getId();
+    } else {
+      this.mandateId = null;
+    }
   }
 
   /**
@@ -203,5 +197,19 @@ public class MandateLink implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Mandate parent) {
+      setMandate(parent);
+    }
   }
 }

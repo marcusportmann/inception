@@ -31,7 +31,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -100,11 +102,13 @@ public class Association implements Serializable {
   @XmlElementWrapper(name = "Properties")
   @XmlElement(name = "Property")
   @Valid
-  @OneToMany(
-      mappedBy = "association",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("type")
+  @JoinColumn(
+      name = "association_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false)
   private final List<AssociationProperty> properties = new ArrayList<>();
 
   /** The date the association is effective from. */

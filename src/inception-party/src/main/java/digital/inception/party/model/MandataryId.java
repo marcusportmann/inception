@@ -31,8 +31,8 @@ public class MandataryId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The mandate the mandatary is associated with. */
-  private Mandate mandate;
+  /** The ID for the mandate the mandatary is associated with. */
+  private UUID mandateId;
 
   /** The ID for the party who is the recipient of the mandate. */
   private UUID partyId;
@@ -62,7 +62,7 @@ public class MandataryId implements Serializable {
 
     MandataryId other = (MandataryId) object;
 
-    return Objects.equals(mandate, other.mandate) && Objects.equals(partyId, other.partyId);
+    return Objects.equals(mandateId, other.mandateId) && Objects.equals(partyId, other.partyId);
   }
 
   /**
@@ -72,7 +72,7 @@ public class MandataryId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((mandate == null) ? 0 : mandate.hashCode())
+    return ((mandateId == null) ? 0 : mandateId.hashCode())
         + ((partyId == null) ? 0 : partyId.hashCode());
   }
 }

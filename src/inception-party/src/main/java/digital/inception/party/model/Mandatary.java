@@ -18,6 +18,7 @@ package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -33,6 +34,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -68,6 +70,14 @@ public class Mandatary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
+  /** The ID for the mandate the mandatary is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "mandate_id", nullable = false)
+  private UUID mandateId;
+
   /** The date the mandatary is effective from. */
   @Schema(description = "The date the mandatary is effective from")
   @JsonProperty
@@ -87,15 +97,6 @@ public class Mandatary implements Serializable {
   @XmlSchemaType(name = "date")
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
-
-  /** The mandate the mandatary is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("mandataryReference")
-  @XmlTransient
-  @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandate_id")
-  private Mandate mandate;
 
   /** The ID for the party who is the recipient of the mandate. */
   @Schema(
@@ -155,7 +156,7 @@ public class Mandatary implements Serializable {
 
     Mandatary other = (Mandatary) object;
 
-    return Objects.equals(mandate, other.mandate) && Objects.equals(partyId, other.partyId);
+    return Objects.equals(mandateId, other.mandateId) && Objects.equals(partyId, other.partyId);
   }
 
   /**
@@ -174,16 +175,6 @@ public class Mandatary implements Serializable {
    */
   public LocalDate getEffectiveTo() {
     return effectiveTo;
-  }
-
-  /**
-   * Returns the mandate the mandatary is associated with.
-   *
-   * @return the mandate the mandatary is associated with
-   */
-  @Schema(hidden = true)
-  public Mandate getMandate() {
-    return mandate;
   }
 
   /**
@@ -211,7 +202,7 @@ public class Mandatary implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((mandate == null) || (mandate.getId() == null)) ? 0 : mandate.getId().hashCode())
+    return ((mandateId == null) ? 0 : mandateId.hashCode())
         + ((partyId == null) ? 0 : partyId.hashCode());
   }
 
@@ -240,7 +231,11 @@ public class Mandatary implements Serializable {
    */
   @Schema(hidden = true)
   public void setMandate(Mandate mandate) {
-    this.mandate = mandate;
+    if (mandate != null) {
+      this.mandateId = mandate.getId();
+    } else {
+      this.mandateId = null;
+    }
   }
 
   /**
@@ -259,5 +254,20 @@ public class Mandatary implements Serializable {
    */
   public void setRole(String role) {
     this.role = role;
+  }
+
+
+  /**
+   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * before it is added to its parent.
+   *
+   * @param unmarshaller the JAXB unmarshaller
+   * @param parentObject the parent object
+   */
+  @SuppressWarnings("unused")
+  private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
+    if (parentObject instanceof Mandate parent) {
+      setMandate(parent);
+    }
   }
 }
