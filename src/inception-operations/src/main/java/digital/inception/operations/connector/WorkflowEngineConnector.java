@@ -99,6 +99,7 @@ public interface WorkflowEngineConnector {
   /**
    * Process the workflow document event.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
@@ -108,6 +109,7 @@ public interface WorkflowEngineConnector {
    * @throws WorkflowEngineConnectorException if the workflow document event could not be processed
    */
   void processWorkflowDocumentEvent(
+      WorkflowDefinition workflowDefinition,
       UUID tenantId,
       UUID workflowId,
       String engineInstanceId,
@@ -118,17 +120,19 @@ public interface WorkflowEngineConnector {
   /**
    * Start a workflow.
    *
-   * @param tenantId the ID for the tenant
    * @param workflowDefinition the workflow definition
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
    * @param attributes the workflow attributes
    * @param variables the workflow variables
-   * @param data the XML or JSON data for the workflow
+   * @param data the JSON or XML data for the workflow
    * @return the ID for the corresponding process or case instance in the workflow engine
    * @throws WorkflowEngineConnectorException if the workflow could not be started
    */
   String startWorkflow(
-      UUID tenantId,
       WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
       List<WorkflowAttribute> attributes,
       List<WorkflowVariable> variables,
       String data)
@@ -174,7 +178,7 @@ public interface WorkflowEngineConnector {
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
    *     engine for the workflow
-   * @param data the updated XML or JSON data for the workflow
+   * @param data the updated JSON or XML data for the workflow
    * @throws WorkflowEngineConnectorException if the workflow data could not be updated
    */
   void updateWorkflowData(UUID tenantId, UUID workflowId, String engineInstanceId, String data)

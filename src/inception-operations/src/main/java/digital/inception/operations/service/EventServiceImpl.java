@@ -27,6 +27,8 @@ import digital.inception.operations.model.Event;
 import digital.inception.operations.model.EventStatus;
 import digital.inception.operations.model.EventType;
 import digital.inception.operations.model.ObjectType;
+import digital.inception.operations.model.WorkflowDefinition;
+import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.persistence.jpa.EventRepository;
 import jakarta.persistence.EntityManager;
@@ -317,6 +319,14 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
           getWorkflowService()
               .getWorkflowIdForWorkflowDocument(event.getTenantId(), event.getObjectId());
 
+      WorkflowDefinitionId workflowDefinitionId =
+          getWorkflowService().getWorkflowDefinitionIdForWorkflow(event.getTenantId(), workflowId);
+
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(
+                  workflowDefinitionId.getId(), workflowDefinitionId.getVersion());
+
       WorkflowEngineIds workflowEngineIds =
           getWorkflowService().getWorkflowEngineIdsForWorkflow(event.getTenantId(), workflowId);
 
@@ -324,6 +334,7 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
           getWorkflowService().getWorkflowEngineConnector(workflowEngineIds.getEngineId());
 
       workflowEngineConnector.processWorkflowDocumentEvent(
+          workflowDefinition,
           event.getTenantId(),
           workflowId,
           workflowEngineIds.getEngineInstanceId(),

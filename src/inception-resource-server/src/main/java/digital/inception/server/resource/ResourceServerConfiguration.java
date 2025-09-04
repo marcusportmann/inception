@@ -473,8 +473,12 @@ public class ResourceServerConfiguration implements InitializingBean {
               .requestMatchers(
                   pathPatternRequestMatcherBuilder.matcher("/"),
                   pathPatternRequestMatcherBuilder.matcher("/webjars/**"),
+                  // Explicit permit for media directory (required by libraries like Bootstrap,
+                  // FontAwesome, etc.)
+                  pathPatternRequestMatcherBuilder.matcher("/media/**"),
                   new RegexRequestMatcher(
-                      "^/(?:[^/]+/)*[^/]+\\.(?:js|css|html|png|jpg|svg|ico)$", null))
+                      "^/(?:[^/]+/)*[^/]+\\.(?:js|css|html|png|jpg|svg|ico|woff|woff2|ttf|eot|otf)$",
+                      null))
               .permitAll();
 
           // Enable non-authenticated internal network access to the actuator endpoints

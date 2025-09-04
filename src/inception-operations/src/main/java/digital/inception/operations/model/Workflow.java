@@ -229,8 +229,8 @@ public class Workflow implements Serializable {
   @Column(name = "cancellation_reason", length = 200)
   private String cancellationReason;
 
-  /** The XML or JSON data for the workflow. */
-  @Schema(description = "The XML or JSON data for the workflow")
+  /** The JSON or XML data for the workflow. */
+  @Schema(description = "The JSON or XML data for the workflow")
   @JsonProperty
   @XmlElement(name = "Data")
   @Size(max = 10485760)
@@ -396,7 +396,7 @@ public class Workflow implements Serializable {
    * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
    * @param variables the variables for the workflow
-   * @param data the XML or JSON data for the workflow
+   * @param data the JSON or XML data for the workflow
    * @param initiated the date and time the workflow was initiated
    * @param initiatedBy the person or system that initiated the workflow
    */
@@ -673,9 +673,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Returns the XML or JSON data for the workflow.
+   * Returns the JSON or XML data for the workflow.
    *
-   * @return the XML or JSON data for the workflow
+   * @return the JSON or XML data for the workflow
    */
   public String getData() {
     return data;
@@ -977,9 +977,9 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the XML or JSON data for the workflow.
+   * Set the JSON or XML data for the workflow.
    *
-   * @param data the XML or JSON data for the workflow
+   * @param data the JSON or XML data for the workflow
    */
   public void setData(String data) {
     this.data = data;

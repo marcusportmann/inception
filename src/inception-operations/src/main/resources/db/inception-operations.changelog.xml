@@ -202,7 +202,7 @@
       <column name="validation_schema_type" type="nvarchar(50)"
         remarks="The schema type for the workflow definition"/>
       <column name="validation_schema" type="clob"
-        remarks="The XML (XSD) or JSON schema for the workflow definition"/>
+        remarks="The JSON or XML (XSD) schema for the workflow definition"/>
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_workflow_definitions_workflow_definition_category_fk"

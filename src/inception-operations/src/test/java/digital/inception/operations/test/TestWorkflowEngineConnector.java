@@ -88,6 +88,7 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
 
   @Override
   public void processWorkflowDocumentEvent(
+      WorkflowDefinition workflowDefinition,
       UUID tenantId,
       UUID workflowId,
       String engineInstanceId,
@@ -108,8 +109,9 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
 
   @Override
   public String startWorkflow(
-      UUID tenantId,
       WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
       List<WorkflowAttribute> attributes,
       List<WorkflowVariable> variables,
       String data)

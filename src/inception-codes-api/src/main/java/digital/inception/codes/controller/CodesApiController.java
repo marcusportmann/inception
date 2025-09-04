@@ -473,22 +473,22 @@ public interface CodesApiController {
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the XML or JSON data for a code category.
+   * Retrieve the JSON or XML data for a code category.
    *
    * @param codeCategoryId the ID for the code category
-   * @return the XML or JSON data for the code category
+   * @return the JSON or XML data for the code category
    * @throws InvalidArgumentException if an argument is invalid
    * @throws CodeCategoryNotFoundException if the code category could not be found
    * @throws ServiceUnavailableException if the code category data could not be retrieved
    */
   @Operation(
-      summary = "Retrieve the XML or JSON data for a code category",
-      description = "Retrieve the XML or JSON data for a code category")
+      summary = "Retrieve the JSON or XML data for a code category",
+      description = "Retrieve the JSON or XML data for a code category")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "The XML or JSON data for the code category was retrieved"),
+            description = "The JSON or XML data for the code category was retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

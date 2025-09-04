@@ -82,14 +82,14 @@ public interface CodeProvider {
       throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
-   * Retrieve the XML or JSON data for the code category.
+   * Retrieve the JSON or XML data for the code category.
    *
    * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
    * registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
    * file.
    *
    * @param codeCategoryId the ID for the code category
-   * @return the XML or JSON data for the code category
+   * @return the JSON or XML data for the code category
    * @throws CodeCategoryNotFoundException if the code category could not be found
    * @throws CodeProviderException if the code category data could not be retrieved
    */
@@ -97,7 +97,7 @@ public interface CodeProvider {
       throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
-   * Retrieve the XML or JSON data for the code category using the specified parameters.
+   * Retrieve the JSON or XML data for the code category using the specified parameters.
    *
    * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
    * registered with the Codes Service in the {@code META-INF/code-providers.xml} configuration
@@ -105,7 +105,7 @@ public interface CodeProvider {
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters
-   * @return the XML or JSON data for the code category
+   * @return the JSON or XML data for the code category
    * @throws CodeCategoryNotFoundException if the code category could not be found
    * @throws CodeProviderException if the code category data could not be retrieved
    */

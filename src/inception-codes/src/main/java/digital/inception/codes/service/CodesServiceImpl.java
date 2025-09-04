@@ -651,10 +651,10 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
   }
 
   /**
-   * Update the XML or JSON data for the code category.
+   * Update the JSON or XML data for the code category.
    *
    * @param codeCategoryId the ID for the code category
-   * @param data the updated XML or JSON data
+   * @param data the updated JSON or XML data
    */
   @Override
   public void updateCodeCategoryData(String codeCategoryId, String data)

@@ -288,8 +288,8 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "time_to_complete", length = 50)
   private String timeToComplete;
 
-  /** The XML (XSD) or JSON validation schema for the workflow definition. */
-  @Schema(description = "The XML (XSD) or JSON validation schema for the workflow definition")
+  /** The JSON or XML (XSD) validation schema for the workflow definition. */
+  @Schema(description = "The JSON or XML (XSD) validation schema for the workflow definition")
   @JsonProperty
   @XmlElement(name = "ValidationSchema")
   @Size(min = 1, max = 10485760)
@@ -346,7 +346,7 @@ public class WorkflowDefinition implements Serializable {
    * @param name the name of the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   * @param validationSchema the JSON or XML (XSD) validation schema for the workflow definition
    */
   public WorkflowDefinition(
       String id,
@@ -375,7 +375,7 @@ public class WorkflowDefinition implements Serializable {
    * @param name the name of the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   * @param validationSchema the JSON or XML (XSD) validation schema for the workflow definition
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
   public WorkflowDefinition(
@@ -465,7 +465,7 @@ public class WorkflowDefinition implements Serializable {
    * @param name the name of the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   * @param validationSchema the JSON or XML (XSD) validation schema for the workflow definition
    */
   public WorkflowDefinition(
       String id,
@@ -497,7 +497,7 @@ public class WorkflowDefinition implements Serializable {
    * @param name the name of the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param validationSchemaType the validation schema type for the workflow definition
-   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   * @param validationSchema the JSON or XML (XSD) validation schema for the workflow definition
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
   public WorkflowDefinition(
@@ -822,9 +822,9 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Returns the XML (XSD) or JSON validation schema for the workflow definition.
+   * Returns the JSON or XML (XSD) validation schema for the workflow definition.
    *
-   * @return the XML (XSD) or JSON validation schema for the workflow definition
+   * @return the JSON or XML (XSD) validation schema for the workflow definition
    */
   public String getValidationSchema() {
     return validationSchema;
@@ -1042,9 +1042,9 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the XML (XSD) or JSON schema for the workflow definition.
+   * Set the JSON or XML (XSD) schema for the workflow definition.
    *
-   * @param validationSchema the XML (XSD) or JSON validation schema for the workflow definition
+   * @param validationSchema the JSON or XML (XSD) validation schema for the workflow definition
    */
   public void setValidationSchema(String validationSchema) {
     this.validationSchema = validationSchema;

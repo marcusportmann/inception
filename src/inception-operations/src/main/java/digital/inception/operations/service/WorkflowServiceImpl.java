@@ -1604,8 +1604,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         String engineInstanceId =
             getWorkflowEngineConnector(workflowDefinition.getEngineId())
                 .startWorkflow(
-                    tenantId,
                     workflowDefinition,
+                    tenantId,
+                    workflow.getId(),
                     initiateWorkflowRequest.getAttributes(),
                     initiateWorkflowRequest.getVariables(),
                     initiateWorkflowRequest.getData());
@@ -1997,8 +1998,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       String engineInstanceId =
           getWorkflowEngineConnector(workflowDefinition.getEngineId())
               .startWorkflow(
-                  tenantId,
                   workflowDefinition,
+                  tenantId,
+                  workflow.getId(),
                   workflow.getAttributes(),
                   workflow.getVariables(),
                   workflow.getData());

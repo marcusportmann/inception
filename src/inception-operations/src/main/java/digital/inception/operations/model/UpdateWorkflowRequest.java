@@ -68,8 +68,8 @@ public class UpdateWorkflowRequest implements Serializable {
   @Valid
   private List<WorkflowAttribute> attributes;
 
-  /** The updated XML or JSON data for the workflow. */
-  @Schema(description = "The updated XML or JSON data for the workflow")
+  /** The updated JSON or XML data for the workflow. */
+  @Schema(description = "The updated JSON or XML data for the workflow")
   @JsonProperty
   @XmlElement(name = "Data")
   @Size(min = 1, max = 10485760)
@@ -115,7 +115,7 @@ public class UpdateWorkflowRequest implements Serializable {
    * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
    * @param variables the variables for the workflow
-   * @param data the updated XML or JSON data for the workflow
+   * @param data the updated JSON or XML data for the workflow
    */
   public UpdateWorkflowRequest(
       UUID workflowId,
@@ -142,9 +142,9 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Returns the updated XML or JSON data for the workflow.
+   * Returns the updated JSON or XML data for the workflow.
    *
-   * @return the updated XML or JSON data for the workflow
+   * @return the updated JSON or XML data for the workflow
    */
   public String getData() {
     return data;
@@ -196,9 +196,9 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the updated XML or JSON data for the workflow.
+   * Set the updated JSON or XML data for the workflow.
    *
-   * @param data the updated XML or JSON data for the workflow
+   * @param data the updated JSON or XML data for the workflow
    */
   public void setData(String data) {
     this.data = data;
