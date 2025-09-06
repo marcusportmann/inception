@@ -23,6 +23,8 @@ import digital.inception.core.util.ServiceUtil;
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DuplicateEventException;
 import digital.inception.operations.exception.EventNotFoundException;
+import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
+import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.model.Event;
 import digital.inception.operations.model.EventStatus;
 import digital.inception.operations.model.EventType;
@@ -319,13 +321,8 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
           getWorkflowService()
               .getWorkflowIdForWorkflowDocument(event.getTenantId(), event.getObjectId());
 
-      WorkflowDefinitionId workflowDefinitionId =
-          getWorkflowService().getWorkflowDefinitionIdForWorkflow(event.getTenantId(), workflowId);
-
       WorkflowDefinition workflowDefinition =
-          getWorkflowService()
-              .getWorkflowDefinitionVersion(
-                  workflowDefinitionId.getId(), workflowDefinitionId.getVersion());
+          getWorkflowService().getWorkflowDefinitionForWorkflow(event.getTenantId(), workflowId);
 
       WorkflowEngineIds workflowEngineIds =
           getWorkflowService().getWorkflowEngineIdsForWorkflow(event.getTenantId(), workflowId);
@@ -340,6 +337,8 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
           workflowEngineIds.getEngineInstanceId(),
           event.getObjectId(),
           event.getType());
+    } catch (WorkflowNotFoundException | WorkflowDocumentNotFoundException ignored) {
+      // Ignore the workflow and/or workflow document that has been deleted
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to process the workflow document event ("
